@@ -50,7 +50,7 @@ public final class AttributeInstance {
         this.baseValueBits = new AtomicLong(Double.doubleToLongBits(baseValue));
 
         this.propertyChangeListener = listener;
-        refreshCachedValue();
+        refreshCachedValue(baseValue);
     }
 
     /**
@@ -79,9 +79,10 @@ public final class AttributeInstance {
      * @see #getBaseValue()
      */
     public void setBaseValue(double baseValue) {
-        long baseValueBits = Double.doubleToLongBits(baseValue);
-        if (this.baseValueBits.getAndSet(baseValueBits) != baseValueBits) {
-            refreshCachedValue();
+        long newBits = Double.doubleToLongBits(baseValue);
+        long oldBits = this.baseValueBits.getAndSet(newBits);
+        if (oldBits != newBits) {
+            refreshCachedValue(baseValue);
         }
     }
 
@@ -103,7 +104,7 @@ public final class AttributeInstance {
      */
     public AttributeModifier addModifier(@NotNull AttributeModifier modifier) {
         final AttributeModifier previousModifier = modifiers.put(modifier.id(), modifier);
-        if (!modifier.equals(previousModifier)) refreshCachedValue();
+        if (!modifier.equals(previousModifier)) refreshCachedValue(getBaseValue());
         return previousModifier;
     }
 
@@ -126,7 +127,7 @@ public final class AttributeInstance {
     public AttributeModifier removeModifier(@NotNull NamespaceID id) {
         final AttributeModifier removed = modifiers.remove(id);
         if (removed != null) {
-            refreshCachedValue();
+            refreshCachedValue(getBaseValue());
         }
 
         return removed;
@@ -174,8 +175,8 @@ public final class AttributeInstance {
     /**
      * Recalculate the value of this attribute instance using the modifiers.
      */
-    private void refreshCachedValue() {
-        this.cachedValue = computeValue(getBaseValue());
+    private void refreshCachedValue(double baseValue) {
+        this.cachedValue = computeValue(baseValue);
 
         // Signal entity
         if (propertyChangeListener != null) {
