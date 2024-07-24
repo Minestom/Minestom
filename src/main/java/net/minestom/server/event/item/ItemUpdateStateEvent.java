@@ -1,6 +1,7 @@
 package net.minestom.server.event.item;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Event when a player updates an item state, meaning when they stop using the item.
  */
-public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
+public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
     private final Player.Hand hand;
@@ -17,6 +18,7 @@ public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
 
     private boolean handAnimation;
     private boolean riptideSpinAttack;
+    private boolean cancelled = false;
 
     public ItemUpdateStateEvent(@NotNull Player player, @NotNull Player.Hand hand, @NotNull ItemStack itemStack) {
         this.player = player;
@@ -63,5 +65,15 @@ public class ItemUpdateStateEvent implements PlayerInstanceEvent, ItemEvent {
     @Override
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    @Override
+    public boolean isCancelled() {
+        return cancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 }

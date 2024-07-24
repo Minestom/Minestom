@@ -151,12 +151,14 @@ public final class PlayerDiggingListener {
 
         ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
 
-        player.clearItemUse();
-        player.triggerStatus((byte) 9);
+        if (!itemUpdateStateEvent.isCancelled()) {
+            player.clearItemUse();
+            player.triggerStatus((byte) 9);
 
-        final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-        player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
-                isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
+            final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+            player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
+                    isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
+        }
     }
 
     private static void swapItemHand(Player player) {
