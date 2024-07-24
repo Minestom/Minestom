@@ -9,21 +9,26 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityPositionAndRotationPacket(int entityId, short deltaX, short deltaY, short deltaZ,
                                               float yaw, float pitch, boolean onGround) implements ServerPacket.Play {
-    public EntityPositionAndRotationPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.read(SHORT), reader.read(SHORT), reader.read(SHORT),
-                reader.read(BYTE) * 360f / 256f, reader.read(BYTE) * 360f / 256f, reader.read(BOOLEAN));
-    }
+    public static final NetworkBuffer.Type<EntityPositionAndRotationPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, EntityPositionAndRotationPacket value) {
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(SHORT, value.deltaX);
+            buffer.write(SHORT, value.deltaY);
+            buffer.write(SHORT, value.deltaZ);
+            buffer.write(BYTE, (byte) (value.yaw * 256 / 360));
+            buffer.write(BYTE, (byte) (value.pitch * 256 / 360));
+            buffer.write(BOOLEAN, value.onGround);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, entityId);
-        writer.write(SHORT, deltaX);
-        writer.write(SHORT, deltaY);
-        writer.write(SHORT, deltaZ);
-        writer.write(BYTE, (byte) (yaw * 256 / 360));
-        writer.write(BYTE, (byte) (pitch * 256 / 360));
-        writer.write(BOOLEAN, onGround);
-    }
+        @Override
+        public EntityPositionAndRotationPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntityPositionAndRotationPacket(buffer.read(VAR_INT),
+                    buffer.read(SHORT), buffer.read(SHORT), buffer.read(SHORT),
+                    buffer.read(BYTE) * 360f / 256f, buffer.read(BYTE) * 360f / 256f,
+                    buffer.read(BOOLEAN));
+        }
+    };
 
     public static EntityPositionAndRotationPacket getPacket(int entityId,
                                                             @NotNull Pos newPosition, @NotNull Pos oldPosition,

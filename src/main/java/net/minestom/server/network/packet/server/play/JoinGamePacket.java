@@ -25,56 +25,59 @@ public record JoinGamePacket(
         worlds = List.copyOf(worlds);
     }
 
-    public JoinGamePacket(@NotNull NetworkBuffer reader) {
-        this(
-                reader.read(INT),
-                reader.read(BOOLEAN),
-                reader.readCollection(STRING, MAX_WORLDS),
-                reader.read(VAR_INT),
-                reader.read(VAR_INT),
-                reader.read(VAR_INT),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.read(VAR_INT),
-                reader.read(STRING),
-                reader.read(LONG),
-                GameMode.fromId(reader.read(BYTE)),
-                getNullableGameMode(reader.read(BYTE)),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.readOptional(WorldPos.NETWORK_TYPE),
-                reader.read(VAR_INT),
-                reader.read(BOOLEAN)
-        );
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(INT, entityId);
-        writer.write(BOOLEAN, isHardcore);
-        writer.writeCollection(STRING, worlds);
-        writer.write(VAR_INT, maxPlayers);
-        writer.write(VAR_INT, viewDistance);
-        writer.write(VAR_INT, simulationDistance);
-        writer.write(BOOLEAN, reducedDebugInfo);
-        writer.write(BOOLEAN, enableRespawnScreen);
-        writer.write(BOOLEAN, doLimitedCrafting);
-        writer.write(VAR_INT, dimensionType);
-        writer.write(STRING, world);
-        writer.write(LONG, hashedSeed);
-        writer.write(BYTE, gameMode.id());
-        if (previousGameMode != null) {
-            writer.write(BYTE, previousGameMode.id());
-        } else {
-            writer.write(BYTE, (byte) -1);
+    public static final NetworkBuffer.Type<JoinGamePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, JoinGamePacket value) {
+            buffer.write(INT, value.entityId);
+            buffer.write(BOOLEAN, value.isHardcore);
+            buffer.writeCollection(STRING, value.worlds);
+            buffer.write(VAR_INT, value.maxPlayers);
+            buffer.write(VAR_INT, value.viewDistance);
+            buffer.write(VAR_INT, value.simulationDistance);
+            buffer.write(BOOLEAN, value.reducedDebugInfo);
+            buffer.write(BOOLEAN, value.enableRespawnScreen);
+            buffer.write(BOOLEAN, value.doLimitedCrafting);
+            buffer.write(VAR_INT, value.dimensionType);
+            buffer.write(STRING, value.world);
+            buffer.write(LONG, value.hashedSeed);
+            buffer.write(BYTE, value.gameMode.id());
+            if (value.previousGameMode != null) {
+                buffer.write(BYTE, value.previousGameMode.id());
+            } else {
+                buffer.write(BYTE, (byte) -1);
+            }
+            buffer.write(BOOLEAN, value.isDebug);
+            buffer.write(BOOLEAN, value.isFlat);
+            buffer.writeOptional(WorldPos.NETWORK_TYPE, value.deathLocation);
+            buffer.write(VAR_INT, value.portalCooldown);
+            buffer.write(BOOLEAN, value.enforcesSecureChat);
         }
-        writer.write(BOOLEAN, isDebug);
-        writer.write(BOOLEAN, isFlat);
-        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
-        writer.write(VAR_INT, portalCooldown);
-        writer.write(BOOLEAN, enforcesSecureChat);
-    }
+
+        @Override
+        public JoinGamePacket read(@NotNull NetworkBuffer buffer) {
+            return new JoinGamePacket(
+                    buffer.read(INT),
+                    buffer.read(BOOLEAN),
+                    buffer.readCollection(STRING, MAX_WORLDS),
+                    buffer.read(VAR_INT),
+                    buffer.read(VAR_INT),
+                    buffer.read(VAR_INT),
+                    buffer.read(BOOLEAN),
+                    buffer.read(BOOLEAN),
+                    buffer.read(BOOLEAN),
+                    buffer.read(VAR_INT),
+                    buffer.read(STRING),
+                    buffer.read(LONG),
+                    GameMode.fromId(buffer.read(BYTE)),
+                    getNullableGameMode(buffer.read(BYTE)),
+                    buffer.read(BOOLEAN),
+                    buffer.read(BOOLEAN),
+                    buffer.readOptional(WorldPos.NETWORK_TYPE),
+                    buffer.read(VAR_INT),
+                    buffer.read(BOOLEAN)
+            );
+        }
+    };
 
     /**
      * This method exists in lieu of a NetworkBufferType since -1 is only a
@@ -85,5 +88,4 @@ public record JoinGamePacket(
     private static @Nullable GameMode getNullableGameMode(final byte id) {
         return id == (byte) -1 ? null : GameMode.fromId(id);
     }
-
 }

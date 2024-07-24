@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.registry.DynamicRegistry;
@@ -393,6 +394,27 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record PosType() implements NetworkBufferTypeImpl<Pos> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Pos value) {
+            buffer.write(DOUBLE, value.x());
+            buffer.write(DOUBLE, value.y());
+            buffer.write(DOUBLE, value.z());
+            buffer.write(FLOAT, value.yaw());
+            buffer.write(FLOAT, value.pitch());
+        }
+
+        @Override
+        public Pos read(@NotNull NetworkBuffer buffer) {
+            final double x = buffer.read(DOUBLE);
+            final double y = buffer.read(DOUBLE);
+            final double z = buffer.read(DOUBLE);
+            final float yaw = buffer.read(FLOAT);
+            final float pitch = buffer.read(FLOAT);
+            return new Pos(x, y, z, yaw, pitch);
+        }
+    }
+
     record ByteArrayType() implements NetworkBufferTypeImpl<byte[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, byte[] value) {
@@ -602,7 +624,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to, @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
+                            @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, S value) {
             parent.write(buffer, from.apply(value));
@@ -626,7 +649,20 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record RegistryTypeType<T extends ProtocolObject>(@NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+    record OptionalTypeImpl<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            buffer.writeOptional(parent, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            return buffer.readOptional(parent);
+        }
+    }
+
+    record RegistryTypeType<T extends ProtocolObject>(
+            @NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
