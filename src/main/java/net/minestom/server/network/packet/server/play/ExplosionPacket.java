@@ -5,7 +5,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -58,28 +57,26 @@ public record ExplosionPacket(double x, double y, double z, float radius,
     };
 
     private static byte @NotNull [] readParticleData(@NotNull NetworkBuffer reader, Particle particle) {
-        //Need to do this because particle data isn't at the end of the packet
-        BinaryWriter writer = new BinaryWriter();
-        if (particle.equals(Particle.BLOCK) || particle.equals(Particle.BLOCK_MARKER) || particle.equals(Particle.FALLING_DUST) || particle.equals(Particle.SHRIEK)) {
-            writer.writeVarInt(reader.read(VAR_INT));
-        } else if (particle.equals(Particle.VIBRATION)) {
-            writer.writeVarInt(reader.read(VAR_INT));
-            writer.writeBlockPosition(reader.read(BLOCK_POSITION));
-            writer.writeVarInt(reader.read(VAR_INT));
-            writer.writeFloat(reader.read(FLOAT));
-            writer.writeVarInt(reader.read(VAR_INT));
-        } else if (particle.equals(Particle.SCULK_CHARGE)) {
-            writer.writeFloat(reader.read(FLOAT));
-            return writer.toByteArray();
-        } else if (particle.equals(Particle.ITEM)) {
-            writer.writeItemStack(reader.read(ItemStack.NETWORK_TYPE));
-        } else if (particle.equals(Particle.DUST_COLOR_TRANSITION)) {
-            for (int i = 0; i < 7; i++) writer.writeFloat(reader.read(FLOAT));
-        } else if (particle.equals(Particle.DUST)) {
-            for (int i = 0; i < 4; i++) writer.writeFloat(reader.read(FLOAT));
-        }
-
-        return writer.toByteArray();
+        return NetworkBuffer.makeArray(buffer -> {
+            //Need to do this because particle data isn't at the end of the packet
+            if (particle.equals(Particle.BLOCK) || particle.equals(Particle.BLOCK_MARKER) || particle.equals(Particle.FALLING_DUST) || particle.equals(Particle.SHRIEK)) {
+                buffer.write(VAR_INT, reader.read(VAR_INT));
+            } else if (particle.equals(Particle.VIBRATION)) {
+                buffer.write(VAR_INT, reader.read(VAR_INT));
+                buffer.write(BLOCK_POSITION, reader.read(BLOCK_POSITION));
+                buffer.write(VAR_INT, reader.read(VAR_INT));
+                buffer.write(FLOAT, reader.read(FLOAT));
+                buffer.write(VAR_INT, reader.read(VAR_INT));
+            } else if (particle.equals(Particle.SCULK_CHARGE)) {
+                buffer.write(FLOAT, reader.read(FLOAT));
+            } else if (particle.equals(Particle.ITEM)) {
+                buffer.write(ItemStack.NETWORK_TYPE, reader.read(ItemStack.NETWORK_TYPE));
+            } else if (particle.equals(Particle.DUST_COLOR_TRANSITION)) {
+                for (int i = 0; i < 7; i++) buffer.write(FLOAT, reader.read(FLOAT));
+            } else if (particle.equals(Particle.DUST)) {
+                for (int i = 0; i < 4; i++) buffer.write(FLOAT, reader.read(FLOAT));
+            }
+        });
     }
 
     public ExplosionPacket(double x, double y, double z, float radius, byte @NotNull [] records,
