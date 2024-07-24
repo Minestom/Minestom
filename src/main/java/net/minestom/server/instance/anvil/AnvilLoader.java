@@ -1,6 +1,7 @@
 package net.minestom.server.instance.anvil;
 
 import it.unimi.dsi.fastutil.ints.*;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
@@ -12,7 +13,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
@@ -37,7 +37,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
-    private final static int PLAINS_ID = BIOME_REGISTRY.getId(NamespaceID.from("minecraft:plains"));
+    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Key.key("minecraft:plains"));
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -274,7 +274,7 @@ public class AnvilLoader implements IChunkLoader {
         int[] convertedPalette = new int[paletteTag.size()];
         for (int i = 0; i < convertedPalette.length; i++) {
             final String name = paletteTag.getString(i);
-            int biomeId = BIOME_REGISTRY.getId(NamespaceID.from(name));
+            int biomeId = BIOME_REGISTRY.getId(Key.key(name));
             if (biomeId == -1) biomeId = PLAINS_ID;
             convertedPalette[i] = biomeId;
         }

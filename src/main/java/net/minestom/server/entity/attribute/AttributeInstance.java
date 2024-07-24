@@ -1,7 +1,7 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,7 +28,7 @@ public final class AttributeInstance {
     };
 
     private final Attribute attribute;
-    private final Map<NamespaceID, AttributeModifier> modifiers;
+    private final Map<Key, AttributeModifier> modifiers;
     private final Collection<AttributeModifier> unmodifiableModifiers;
     private double baseValue;
 
@@ -120,7 +120,7 @@ public final class AttributeInstance {
      * @param id The namespace id of the modifier to remove
      * @return the modifier that was removed, or null if none
      */
-    public AttributeModifier removeModifier(@NotNull NamespaceID id) {
+    public AttributeModifier removeModifier(@NotNull Key id) {
         final AttributeModifier removed = modifiers.remove(id);
         if (removed != null) {
             refreshCachedValue();

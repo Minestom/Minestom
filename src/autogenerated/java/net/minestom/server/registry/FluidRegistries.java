@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.fluid.Fluid;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -17,22 +16,14 @@ public final class FluidRegistries {
      * Should only be used for internal code, please use the get* methods.
      */
     @Deprecated
-    public static final HashMap<NamespaceID, Fluid> fluids = new HashMap<>();
+    public static final HashMap<Key, Fluid> fluids = new HashMap<>();
 
     /**
      * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
      */
     @NotNull
     public static Fluid getFluid(String id) {
-        return getFluid(NamespaceID.from(id));
-    }
-
-    /**
-     * Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.
-     */
-    @NotNull
-    public static Fluid getFluid(NamespaceID id) {
-        return fluids.getOrDefault(id, Fluid.EMPTY);
+        return getFluid(Key.key(id));
     }
 
     /**
@@ -40,6 +31,6 @@ public final class FluidRegistries {
      */
     @NotNull
     public static Fluid getFluid(Key key) {
-        return getFluid(NamespaceID.from(key));
+        return fluids.getOrDefault(key, Fluid.EMPTY);
     }
 }

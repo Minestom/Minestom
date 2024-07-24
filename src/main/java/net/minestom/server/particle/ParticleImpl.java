@@ -1,19 +1,19 @@
 package net.minestom.server.particle;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 final class ParticleImpl {
     private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
-            (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id")));
+            (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
     static Particle get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
@@ -31,7 +31,7 @@ final class ParticleImpl {
         return CONTAINER.values();
     }
 
-    private static Particle defaultParticle(@NotNull NamespaceID namespace, int id) {
+    private static Particle defaultParticle(@NotNull Key namespace, int id) {
         return switch (namespace.asString()) {
             case "minecraft:block" -> new Particle.Block(namespace, id, Block.STONE);
             case "minecraft:block_marker" -> new Particle.BlockMarker(namespace, id, Block.STONE);

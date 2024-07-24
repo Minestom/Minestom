@@ -1,14 +1,14 @@
 package net.minestom.server.statistic;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record StatisticTypeImpl(NamespaceID namespace, int id) implements StatisticType {
+record StatisticTypeImpl(Key namespace, int id) implements StatisticType {
     private static final Registry.Container<StatisticType> CONTAINER = Registry.createStaticContainer(Registry.Resource.STATISTICS,
-            (namespace, properties) -> new StatisticTypeImpl(NamespaceID.from(namespace), properties.getInt("id")));
+            (namespace, properties) -> new StatisticTypeImpl(Key.key(namespace), properties.getInt("id")));
 
     static StatisticType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

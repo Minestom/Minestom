@@ -1,15 +1,15 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represent an attribute modifier.
  */
-public record AttributeModifier(@NotNull NamespaceID id, double amount, @NotNull AttributeOperation operation) {
+public record AttributeModifier(@NotNull Key id, double amount, @NotNull AttributeOperation operation) {
     public static final NetworkBuffer.Type<AttributeModifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, AttributeModifier value) {
@@ -20,12 +20,12 @@ public record AttributeModifier(@NotNull NamespaceID id, double amount, @NotNull
 
         @Override
         public AttributeModifier read(@NotNull NetworkBuffer buffer) {
-            return new AttributeModifier(NamespaceID.from(buffer.read(NetworkBuffer.STRING)),
+            return new AttributeModifier(Key.key(buffer.read(NetworkBuffer.STRING)),
                     buffer.read(NetworkBuffer.DOUBLE), buffer.read(AttributeOperation.NETWORK_TYPE));
         }
     };
     public static final BinaryTagSerializer<AttributeModifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new AttributeModifier(NamespaceID.from(tag.getString("id")), tag.getDouble("amount"),
+            tag -> new AttributeModifier(Key.key(tag.getString("id")), tag.getDouble("amount"),
                     AttributeOperation.NBT_TYPE.read(tag.get("operation"))),
             value -> CompoundBinaryTag.builder()
                     .putString("id", value.id.asString())
@@ -42,7 +42,7 @@ public record AttributeModifier(@NotNull NamespaceID id, double amount, @NotNull
      * @param operation the operation to apply this modifier with
      */
     public AttributeModifier(@NotNull String id, double amount, @NotNull AttributeOperation operation) {
-        this(NamespaceID.from(id), amount, operation);
+        this(Key.key(id), amount, operation);
     }
 
 }

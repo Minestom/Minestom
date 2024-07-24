@@ -1,8 +1,8 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -22,8 +22,8 @@ public class SuspiciousGravelBlockHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minecraft:suspicious_gravel");
+    public @NotNull Key getNamespaceId() {
+        return Key.key("minecraft:suspicious_gravel");
     }
 
     @Override

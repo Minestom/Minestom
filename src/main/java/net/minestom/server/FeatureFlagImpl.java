@@ -1,7 +1,7 @@
 package net.minestom.server;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
@@ -22,7 +22,7 @@ record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements F
     }
 
     @Override
-    public @NotNull NamespaceID namespace() {
+    public @NotNull Key namespace() {
         return registry.namespace();
     }
 

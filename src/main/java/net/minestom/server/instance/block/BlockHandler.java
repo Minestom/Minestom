@@ -1,12 +1,12 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -85,7 +85,7 @@ public interface BlockHandler {
      *
      * @return the namespace id of this handler
      */
-    @NotNull NamespaceID getNamespaceId();
+    @NotNull Key getNamespaceId();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
@@ -308,14 +308,14 @@ public interface BlockHandler {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespace;
+        private final Key namespace;
 
         private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+            namespace = Key.key(name);
         }
 
         @Override
-        public @NotNull NamespaceID getNamespaceId() {
+        public @NotNull Key getNamespaceId() {
             return namespace;
         }
     }

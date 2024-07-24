@@ -1,11 +1,11 @@
 package net.minestom.server.instance.block.banner;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -17,7 +17,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
 
     static @NotNull BannerPattern create(
-            @NotNull NamespaceID assetId,
+            @NotNull Key assetId,
             @NotNull String translationKey
     ) {
         return new BannerPatternImpl(assetId, translationKey, null);
@@ -40,21 +40,21 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
         );
     }
 
-    @NotNull NamespaceID assetId();
+    @NotNull Key assetId();
 
     @NotNull String translationKey();
 
     @Nullable Registry.BannerPatternEntry registry();
 
     final class Builder {
-        private NamespaceID assetId;
+        private Key assetId;
         private String translationKey;
 
         private Builder() {
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder assetId(@NotNull NamespaceID assetId) {
+        public @NotNull Builder assetId(@NotNull Key assetId) {
             this.assetId = assetId;
             return this;
         }

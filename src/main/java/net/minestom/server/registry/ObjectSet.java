@@ -1,7 +1,7 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return (ObjectSet<T>) ObjectSetImpl.Empty.INSTANCE;
     }
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<NamespaceID> entries) {
+    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<Key> entries) {
         return new ObjectSetImpl.Entries<>(Set.copyOf(entries));
     }
 
@@ -48,6 +48,6 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return contains(key.namespace());
     }
 
-    boolean contains(@NotNull NamespaceID namespace);
+    boolean contains(@NotNull Key namespace);
 
 }

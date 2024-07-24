@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.coordinate.Pos;
@@ -9,7 +10,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
@@ -63,8 +63,8 @@ public class InstanceBlockPacketIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minecraft:sign");
+            public @NotNull Key getNamespaceId() {
+                return Key.key("minecraft:sign");
             }
         };
 

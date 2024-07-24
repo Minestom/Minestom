@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
@@ -24,7 +25,6 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
@@ -92,7 +92,7 @@ public class InstanceContainer extends Instance {
         this(uniqueId, dimensionType, null, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this(uniqueId, dimensionType, null, dimensionName);
     }
 
@@ -100,7 +100,7 @@ public class InstanceContainer extends Instance {
         this(uniqueId, dimensionType, loader, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, loader, dimensionName);
     }
 
@@ -109,7 +109,7 @@ public class InstanceContainer extends Instance {
             @NotNull UUID uniqueId,
             @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
-            @NotNull NamespaceID dimensionName
+            @NotNull Key dimensionName
     ) {
         super(dimensionTypeRegistry, uniqueId, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);

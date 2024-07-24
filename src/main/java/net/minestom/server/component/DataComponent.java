@@ -1,10 +1,10 @@
 package net.minestom.server.component;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
 
     @ApiStatus.Internal
     static <T> DataComponent<T> createHeadless(
-            int id, @NotNull NamespaceID namespace,
+            int id, @NotNull Key namespace,
             @Nullable NetworkBuffer.Type<T> network,
             @Nullable BinaryTagSerializer<T> nbt
     ) {

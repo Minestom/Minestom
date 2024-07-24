@@ -1,7 +1,7 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,7 +17,7 @@ public sealed interface PotionType extends StaticProtocolObject, PotionTypes per
         return PotionTypeImpl.getSafe(namespaceID);
     }
 
-    static @Nullable PotionType fromNamespaceId(@NotNull NamespaceID namespaceID) {
+    static @Nullable PotionType fromNamespaceId(@NotNull Key namespaceID) {
         return fromNamespaceId(namespaceID.asString());
     }
 

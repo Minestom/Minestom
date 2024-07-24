@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
@@ -9,7 +10,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -33,8 +33,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Key getNamespaceId() {
+                return Key.key("minestom:test");
             }
         };
 
@@ -72,8 +72,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Key getNamespaceId() {
+                return Key.key("minestom:test");
             }
         };
 
@@ -112,8 +112,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Key getNamespaceId() {
+                return Key.key("minestom:test");
             }
         };
 
@@ -160,8 +160,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Key getNamespaceId() {
+                return Key.key("minestom:test");
             }
         };
 

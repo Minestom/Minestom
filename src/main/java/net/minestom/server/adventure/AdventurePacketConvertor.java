@@ -14,7 +14,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.TickUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -111,7 +110,7 @@ public class AdventurePacketConvertor {
      * @return the sound packet
      */
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
-        final NamespaceID soundName = NamespaceID.from(sound.name().asString());
+        final Key soundName = Key.key(sound.name().asString());
         SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
         if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
 
@@ -133,7 +132,7 @@ public class AdventurePacketConvertor {
         if (!(emitter instanceof Entity entity))
             throw new IllegalArgumentException("you can only call this method with entities");
 
-        final NamespaceID soundName = NamespaceID.from(sound.name().asString());
+        final Key soundName = Key.key(sound.name().asString());
         SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
         if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
 

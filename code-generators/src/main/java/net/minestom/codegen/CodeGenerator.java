@@ -102,7 +102,7 @@ public class CodeGenerator {
                     FieldSpec.builder(typedRegistryKeyClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // TypeClass.STONE = NamespaceID.from("minecraft:stone")
+                                    // TypeClass.STONE = Key.key("minecraft:stone")
                                     "$T.of($S)",
                                     registryKeyClass,
                                     namespace

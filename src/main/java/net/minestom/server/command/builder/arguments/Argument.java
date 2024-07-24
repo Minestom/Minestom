@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
@@ -9,7 +10,6 @@ import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -31,9 +31,9 @@ import java.util.function.Supplier;
 public abstract class Argument<T> {
     @ApiStatus.Internal
     public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.COMMAND_ARGUMENTS,
-            (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
+            (namespace, properties) -> new ArgumentImpl(Key.key(namespace), properties.getInt("id")));
 
-    record ArgumentImpl(NamespaceID namespace, int id) implements StaticProtocolObject {
+    record ArgumentImpl(Key namespace, int id) implements StaticProtocolObject {
         @Override
         public String toString() {
             return name();

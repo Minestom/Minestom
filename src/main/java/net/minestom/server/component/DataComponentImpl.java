@@ -1,8 +1,8 @@
 package net.minestom.server.component;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 record DataComponentImpl<T>(
         int id,
-        @NotNull NamespaceID namespace,
+        @NotNull Key namespace,
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
 ) implements DataComponent<T> {

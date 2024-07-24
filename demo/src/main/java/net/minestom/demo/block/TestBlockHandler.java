@@ -1,15 +1,15 @@
 package net.minestom.demo.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 public class TestBlockHandler implements BlockHandler {
     public static final BlockHandler INSTANCE = new TestBlockHandler();
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minestom", "test");
+    public @NotNull Key getNamespaceId() {
+        return Key.key("minestom", "test");
     }
 
     @Override

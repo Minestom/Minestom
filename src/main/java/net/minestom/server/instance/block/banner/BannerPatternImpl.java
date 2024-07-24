@@ -1,15 +1,15 @@
 package net.minestom.server.instance.block.banner;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record BannerPatternImpl(
-        @NotNull NamespaceID assetId,
+        @NotNull Key assetId,
         @NotNull String translationKey,
         @Nullable Registry.BannerPatternEntry registry
 ) implements BannerPattern {

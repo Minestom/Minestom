@@ -1,12 +1,12 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.crossbow.CrossbowChargingSounds;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -59,7 +59,7 @@ public class EffectComponent {
         return NAMESPACES.get(namespaceId);
     }
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
+    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull Key namespaceId) {
         return fromNamespaceId(namespaceId.asString());
     }
 
@@ -72,7 +72,7 @@ public class EffectComponent {
     }
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), null, nbt);
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), null, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;

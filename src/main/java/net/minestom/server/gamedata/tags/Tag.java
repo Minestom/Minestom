@@ -10,7 +10,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.FluidRegistries;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,13 +25,13 @@ import java.util.function.Function;
  * Immutable by design
  */
 public final class Tag implements ProtocolObject, Keyed {
-    private final NamespaceID name;
-    private final Set<NamespaceID> values;
+    private final Key name;
+    private final Set<Key> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name) {
+    public Tag(@NotNull Key name) {
         this.name = name;
         this.values = new HashSet<>();
     }
@@ -40,7 +39,7 @@ public final class Tag implements ProtocolObject, Keyed {
     /**
      * Creates a new tag with the given values. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name, @NotNull Set<NamespaceID> values) {
+    public Tag(@NotNull Key name, @NotNull Set<Key> values) {
         this.name = name;
         this.values = new HashSet<>(values);
     }
@@ -51,7 +50,7 @@ public final class Tag implements ProtocolObject, Keyed {
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
      */
-    public boolean contains(@NotNull NamespaceID id) {
+    public boolean contains(@NotNull Key id) {
         return values.contains(id);
     }
 
@@ -60,11 +59,11 @@ public final class Tag implements ProtocolObject, Keyed {
      *
      * @return immutable set of values present in this tag
      */
-    public @NotNull Set<NamespaceID> getValues() {
+    public @NotNull Set<Key> getValues() {
         return Collections.unmodifiableSet(values);
     }
 
-    public @NotNull NamespaceID namespace() {
+    public @NotNull Key namespace() {
         return name;
     }
 
@@ -83,7 +82,7 @@ public final class Tag implements ProtocolObject, Keyed {
      * Returns the name of this tag
      */
     @Deprecated
-    public NamespaceID getName() {
+    public Key getName() {
         return name;
     }
 
