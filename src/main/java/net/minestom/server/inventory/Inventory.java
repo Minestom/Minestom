@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -156,7 +155,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      * Gets the cursor item of a player.
      *
      * @deprecated normal inventories no longer store cursor items
-     * @see <a href="https://github.com/Minestom/Minestom/pull/2294/files">...</a>
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      */
     @Deprecated
     public @NotNull ItemStack getCursorItem(@NotNull Player player) {
@@ -167,7 +166,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      * Changes the cursor item of a player.
      *
      * @deprecated normal inventories no longer store cursor items
-     * @see <a href="https://github.com/Minestom/Minestom/pull/2294/files">...</a>
+     * @see <a href="https://github.com/Minestom/Minestom/pull/2294">the relevant PR</a>
      */
     @Deprecated
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
