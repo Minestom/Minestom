@@ -39,6 +39,7 @@ public final class NetworkBuffer {
     public static final Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType();
     public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
+    public static final Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     public static final Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     public static final Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();

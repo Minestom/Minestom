@@ -37,7 +37,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * Manages the connected clients.
@@ -288,7 +287,7 @@ public final class ConnectionManager {
             EventDispatcher.call(event);
             if (!player.isOnline()) return; // Player was kicked during config.
 
-            player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::namespace).collect(Collectors.toSet()))); // send player features that were enabled or disabled during async config event
+            player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList())); // send player features that were enabled or disabled during async config event
 
             final Instance spawningInstance = event.getSpawningInstance();
             Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");

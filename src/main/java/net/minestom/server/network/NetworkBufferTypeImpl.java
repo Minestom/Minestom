@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -295,6 +296,27 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             buffer.nioBuffer.get(buffer.readIndex(), bytes);
             buffer.readIndex += length;
             return new String(bytes, StandardCharsets.UTF_8);
+        }
+    }
+
+    record StringTerminatedType() implements NetworkBufferTypeImpl<String> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, String value) {
+            final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
+            byte[] terminated = new byte[bytes.length + 1];
+            System.arraycopy(bytes, 0, terminated, 0, bytes.length);
+            terminated[terminated.length - 1] = 0;
+            buffer.write(RAW_BYTES, terminated);
+        }
+
+        @Override
+        public String read(@NotNull NetworkBuffer buffer) {
+            ByteArrayList bytes = new ByteArrayList();
+            byte b;
+            while ((b = buffer.read(BYTE)) != 0) {
+                bytes.add(b);
+            }
+            return new String(bytes.elements(), StandardCharsets.UTF_8);
         }
     }
 
