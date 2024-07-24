@@ -2,8 +2,8 @@ package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,8 +37,8 @@ public class ArgumentString extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeVarInt(1); // Quotable phrase
+        return NetworkBuffer.makeArray(buffer -> {
+            buffer.write(NetworkBuffer.VAR_INT, 1); // Quotable phrase
         });
     }
 

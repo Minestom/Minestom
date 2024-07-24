@@ -1,11 +1,12 @@
 package net.minestom.server.command.builder.arguments.number;
 
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 
 public class ArgumentInteger extends ArgumentNumber<Integer> {
 
     public ArgumentInteger(String id) {
-        super(id, "brigadier:integer", Integer::parseInt, Integer::parseInt, BinaryWriter::writeInt, Integer::compare);
+        super(id, "brigadier:integer", Integer::parseInt, Integer::parseInt,
+                NetworkBuffer.INT, Integer::compare);
     }
 
     @Override

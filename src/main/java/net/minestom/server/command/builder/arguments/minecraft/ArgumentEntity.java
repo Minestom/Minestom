@@ -5,9 +5,9 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Range;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -78,7 +78,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
+        return NetworkBuffer.makeArray(buffer -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
                 mask |= 0x01;
@@ -86,7 +86,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             if (this.isOnlyPlayers()) {
                 mask |= 0x02;
             }
-            packetWriter.writeByte(mask);
+            buffer.write(NetworkBuffer.BYTE, mask);
         });
     }
 
