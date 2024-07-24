@@ -12,7 +12,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
-import net.minestom.server.event.player.PlayerBlockUpdateEvent;
+import net.minestom.server.event.player.BlockSendEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -217,7 +217,7 @@ public class InstanceContainer extends Instance {
         }
 
         for (Player viewer : chunk.getViewers()) {
-            EventDispatcher.callCancellable(new PlayerBlockUpdateEvent(viewer, block, blockPosition), () -> {
+            EventDispatcher.callCancellable(new BlockSendEvent(viewer, block, blockPosition), () -> {
                 viewer.sendPacket(blockChangePacket);
                 if (blockEntityPacket != null) viewer.sendPacket(blockEntityPacket);
             });

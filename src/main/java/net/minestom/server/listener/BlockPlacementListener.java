@@ -11,7 +11,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
-import net.minestom.server.event.player.PlayerBlockUpdateEvent;
+import net.minestom.server.event.player.BlockSendEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -135,9 +135,8 @@ public class BlockPlacementListener {
             // after rapid invalid block placements
             final Point finalPosition = placementPosition;
             final Block block = instance.getBlock(finalPosition);
-            EventDispatcher.callCancellable(new PlayerBlockUpdateEvent(player, block, finalPosition), () -> {
-                player.sendPacket(new BlockChangePacket(finalPosition, block));
-            });
+            EventDispatcher.callCancellable(new BlockSendEvent(player, block, finalPosition), () ->
+                    player.sendPacket(new BlockChangePacket(finalPosition, block)));
             return;
         }
 
