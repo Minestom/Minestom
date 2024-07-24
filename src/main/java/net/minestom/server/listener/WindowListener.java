@@ -55,7 +55,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
             successful = player.getGameMode() == GameMode.CREATIVE;
             if (successful) {
-                setCursor(player, inventory, packet.clickedItem());
+                player.getInventory().setCursorItem(packet.clickedItem());
             }
         } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
             successful = inventory.drop(player, false, slot, button);
@@ -74,7 +74,8 @@ public class WindowListener {
         }
 
         // Prevent the player from picking a ghost item in cursor
-        refreshCursorItem(player, inventory);
+        ItemStack cursorItem = player.getInventory().getCursorItem();
+        player.sendPacket(SetSlotPacket.createCursorPacket(cursorItem));
 
         // (Why is the ping packet necessary?)
         player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));
@@ -96,30 +97,4 @@ public class WindowListener {
             player.openInventory(newInventory);
     }
 
-    /**
-     * @param player    the player to refresh the cursor item
-     * @param inventory the player open inventory, null if not any (could be player inventory)
-     */
-    private static void refreshCursorItem(Player player, AbstractInventory inventory) {
-        ItemStack cursorItem;
-        if (inventory instanceof PlayerInventory playerInventory) {
-            cursorItem = playerInventory.getCursorItem();
-        } else if (inventory instanceof Inventory standardInventory) {
-            cursorItem = standardInventory.getCursorItem(player);
-        } else {
-            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
-        }
-        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        player.sendPacket(setSlotPacket);
-    }
-
-    private static void setCursor(Player player, AbstractInventory inventory, ItemStack itemStack) {
-        if (inventory instanceof PlayerInventory playerInventory) {
-            playerInventory.setCursorItem(itemStack);
-        } else if (inventory instanceof Inventory standardInventory) {
-            standardInventory.setCursorItem(player, itemStack);
-        } else {
-            throw new RuntimeException("Invalid inventory: " + inventory.getClass());
-        }
-    }
 }

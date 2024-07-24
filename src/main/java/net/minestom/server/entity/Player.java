@@ -1785,14 +1785,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Inventory openInventory = getOpenInventory();
 
         // Drop cursor item when closing inventory
-        ItemStack cursorItem;
-        if (openInventory == null) {
-            cursorItem = getInventory().getCursorItem();
-            getInventory().setCursorItem(ItemStack.AIR);
-        } else {
-            cursorItem = openInventory.getCursorItem(this);
-            openInventory.setCursorItem(this, ItemStack.AIR);
-        }
+        ItemStack cursorItem = getInventory().getCursorItem();
+        getInventory().setCursorItem(ItemStack.AIR);
+
         if (!cursorItem.isAir()) {
             // Add item to inventory if he hasn't been able to drop it
             if (!dropItem(cursorItem)) {
