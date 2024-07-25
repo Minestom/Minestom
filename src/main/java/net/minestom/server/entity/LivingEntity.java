@@ -218,9 +218,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     /**
      * Updates the current attributes of the living entity based on
+     *
      * @param oldItemStack The ItemStack that has been removed, modifiers on this stack will be removed from the entity
      * @param newItemStack The ItemStack that has been added, modifiers on this stack will be added to the entity
-     * @param slot The slot that changed, this will determine what modifiers are actually changed
+     * @param slot         The slot that changed, this will determine what modifiers are actually changed
      */
     @ApiStatus.Internal
     public void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
@@ -380,7 +381,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Damages the entity by a value, the type of the damage also has to be specified.
      *
-     * @param damage  the damage to be applied
+     * @param damage the damage to be applied
      * @return true if damage has been applied, false if it didn't
      */
     public boolean damage(@NotNull Damage damage) {
@@ -522,7 +523,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             // connection null during Player initialization (due to #super call)
             self = playerConnection != null && playerConnection.getConnectionState() == ConnectionState.PLAY;
         }
-        EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(attributeInstance));
+        EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(
+                new EntityAttributesPacket.Property(
+                        attributeInstance.attribute(),
+                        attributeInstance.getValue(),
+                        attributeInstance.getModifiers())
+        ));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
         } else {
@@ -665,7 +671,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return an {@link EntityAttributesPacket} linked to this entity
      */
     protected @NotNull EntityAttributesPacket getPropertiesPacket() {
-        return new EntityAttributesPacket(getEntityId(), List.copyOf(attributeModifiers.values()));
+        List<EntityAttributesPacket.Property> properties = new ArrayList<>();
+        for (AttributeInstance instance : attributeModifiers.values()) {
+            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getValue(), instance.getModifiers()));
+        }
+        return new EntityAttributesPacket(getEntityId(), properties);
     }
 
     /**
