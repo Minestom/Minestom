@@ -8,6 +8,7 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBuffer.Type;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.server.CachedPacket;
@@ -140,30 +141,36 @@ public final class PacketUtils {
         final PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
         final PacketRegistry.PacketInfo<ServerPacket> packetInfo = registry.packetInfo(packet.getClass());
         final int id = packetInfo.id();
-        final NetworkBuffer.Type<ServerPacket> serializer = packetInfo.serializer();
-        writeFramedPacket(buffer, id, serializer, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
+        final Type<ServerPacket> serializer = packetInfo.serializer();
+        writeFramedPacket(buffer, serializer, id, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
-    public static <T> void writeFramedPacket(@NotNull ByteBuffer buffer,
-                                             int id,
-                                             @NotNull NetworkBuffer.Type<T> type,
-                                             @NotNull T packet,
+    public static <T> void writeFramedPacket(@NotNull ByteBuffer buffer, @NotNull Type<T> type,
+                                             int id, @NotNull T packet,
                                              int compressionThreshold) {
         NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
-        if (compressionThreshold <= 0) {
-            // Uncompressed format https://wiki.vg/Protocol#Without_compression
-            final int lengthIndex = networkBuffer.skipWrite(3);
-            networkBuffer.write(NetworkBuffer.VAR_INT, id);
-            type.write(networkBuffer, packet);
-            final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
-            writeVarIntHeader(buffer, lengthIndex, finalSize);
-            buffer.position(networkBuffer.writeIndex());
-            return;
-        }
+        if (compressionThreshold <= 0) writeUncompressedFormat(networkBuffer, type, id, packet);
+        else writeCompressedFormat(buffer, networkBuffer, type, id, packet, compressionThreshold);
+        buffer.position(networkBuffer.writeIndex());
+    }
+
+    private static <T> void writeUncompressedFormat(NetworkBuffer buffer, Type<T> type,
+                                                    int id, T packet) {
+        // Uncompressed format https://wiki.vg/Protocol#Without_compression
+        final int lengthIndex = buffer.skipWrite(3);
+        buffer.write(NetworkBuffer.VAR_INT, id);
+        type.write(buffer, packet);
+        final int finalSize = buffer.writeIndex() - (lengthIndex + 3);
+        writeVarIntHeader(buffer, lengthIndex, finalSize);
+    }
+
+    private static <T> void writeCompressedFormat(ByteBuffer buffer,
+                                                  NetworkBuffer networkBuffer, Type<T> type,
+                                                  int id, T packet,
+                                                  int compressionThreshold) {
         // Compressed format https://wiki.vg/Protocol#With_compression
         final int compressedIndex = networkBuffer.skipWrite(3);
         final int uncompressedIndex = networkBuffer.skipWrite(3);
-
         final int contentStart = networkBuffer.writeIndex();
         networkBuffer.write(NetworkBuffer.VAR_INT, id);
         type.write(networkBuffer, packet);
@@ -183,10 +190,8 @@ public final class PacketUtils {
             }
         }
         // Packet header (Packet + Data Length)
-        writeVarIntHeader(buffer, compressedIndex, networkBuffer.writeIndex() - uncompressedIndex);
-        writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
-
-        buffer.position(networkBuffer.writeIndex());
+        writeVarIntHeader(networkBuffer, compressedIndex, networkBuffer.writeIndex() - uncompressedIndex);
+        writeVarIntHeader(networkBuffer, uncompressedIndex, compressed ? packetSize : 0);
     }
 
     @ApiStatus.Internal
@@ -221,10 +226,13 @@ public final class PacketUtils {
         throw new IllegalStateException(String.format("Packet %s is not valid in state %s (only %s)", packetClass.getSimpleName(), state, expectedStr));
     }
 
-    public static void writeVarIntHeader(@NotNull ByteBuffer buffer, int startIndex, int value) {
-        buffer.put(startIndex, (byte) (value & 0x7F | 0x80));
-        buffer.put(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
-        buffer.put(startIndex + 2, (byte) (value >>> 14));
+    public static void writeVarIntHeader(@NotNull NetworkBuffer buffer, int startIndex, int value) {
+        final int index = buffer.writeIndex();
+        buffer.writeIndex(startIndex);
+        buffer.write(NetworkBuffer.BYTE, (byte) (value & 0x7F | 0x80));
+        buffer.write(NetworkBuffer.BYTE, (byte) ((value >>> 7) & 0x7F | 0x80));
+        buffer.write(NetworkBuffer.BYTE, (byte) (value >>> 14));
+        buffer.writeIndex(index);
     }
 
     public static int readVarInt(ByteBuffer buf) {
