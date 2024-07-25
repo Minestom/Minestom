@@ -111,7 +111,7 @@ public class AdventurePacketConvertor {
      */
     public static @NotNull ServerPacket createSoundPacket(@NotNull Sound sound, double x, double y, double z) {
         final Key soundName = Key.key(sound.name().asString());
-        SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
+        SoundEvent minestomSound = SoundEvent.fromKey(soundName);
         if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
 
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());
@@ -133,7 +133,7 @@ public class AdventurePacketConvertor {
             throw new IllegalArgumentException("you can only call this method with entities");
 
         final Key soundName = Key.key(sound.name().asString());
-        SoundEvent minestomSound = SoundEvent.fromNamespaceId(soundName);
+        SoundEvent minestomSound = SoundEvent.fromKey(soundName);
         if (minestomSound == null) minestomSound = SoundEvent.of(soundName, null);
 
         final long seed = sound.seed().orElse(ThreadLocalRandom.current().nextLong());

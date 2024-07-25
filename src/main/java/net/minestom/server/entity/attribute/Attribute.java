@@ -19,8 +19,8 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     @NotNull Registry.AttributeEntry registry();
 
     @Override
-    default @NotNull Key namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -48,12 +48,12 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
         return AttributeImpl.values();
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull String namespaceID) {
-        return AttributeImpl.getSafe(namespaceID);
+    static @Nullable Attribute fromKey(@NotNull String key) {
+        return AttributeImpl.getSafe(key);
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Attribute fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Attribute fromId(int id) {

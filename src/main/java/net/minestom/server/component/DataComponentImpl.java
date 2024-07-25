@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 record DataComponentImpl<T>(
         int id,
-        @NotNull Key namespace,
+        @NotNull Key key,
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
 ) implements DataComponent<T> {

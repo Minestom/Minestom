@@ -34,7 +34,7 @@ public class CampfireHandler implements BlockHandler {
                 CompoundBinaryTag nbtCompound = (CompoundBinaryTag) childTag;
                 int amount = nbtCompound.getByte("Count");
                 String id = nbtCompound.getString("id");
-                Material material = Material.fromNamespaceId(id);
+                Material material = Material.fromKey(id);
                 result.add(ItemStack.of(material, amount));
             });
             return result;
@@ -65,7 +65,7 @@ public class CampfireHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull Key getNamespaceId() {
+    public @NotNull Key key() {
         return Key.key("minestom:test");
     }
 }

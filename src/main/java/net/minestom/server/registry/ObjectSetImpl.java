@@ -20,7 +20,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         static final Empty<?> INSTANCE = new Empty<>();
 
         @Override
-        public boolean contains(@NotNull Key namespace) {
+        public boolean contains(@NotNull Key key) {
             return false;
         }
     }
@@ -32,8 +32,8 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
 
         @Override
-        public boolean contains(@NotNull Key namespace) {
-            return entries.contains(namespace);
+        public boolean contains(@NotNull Key key) {
+            return entries.contains(key);
         }
     }
 
@@ -70,8 +70,8 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
 
         @Override
-        public boolean contains(@NotNull Key namespace) {
-            return value().contains(namespace);
+        public boolean contains(@NotNull Key key) {
+            return value().contains(key);
         }
     }
 

@@ -84,7 +84,7 @@ public class InstanceBlockIntegrationTest {
     public void handlerPresentInPlacementRuleUpdate(Env env) {
 
         AtomicReference<Block> currentBlock = new AtomicReference<>();
-        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getNamespaceId(), () -> SuspiciousGravelBlockHandler.INSTANCE);
+        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.key(), () -> SuspiciousGravelBlockHandler.INSTANCE);
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
             @Override
             public @Nullable Block blockPlace(@NotNull PlacementState placementState) {

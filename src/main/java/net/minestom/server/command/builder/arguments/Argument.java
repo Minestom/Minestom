@@ -31,9 +31,9 @@ import java.util.function.Supplier;
 public abstract class Argument<T> {
     @ApiStatus.Internal
     public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.COMMAND_ARGUMENTS,
-            (namespace, properties) -> new ArgumentImpl(Key.key(namespace), properties.getInt("id")));
+            (key, properties) -> new ArgumentImpl(Key.key(key), properties.getInt("id")));
 
-    record ArgumentImpl(Key namespace, int id) implements StaticProtocolObject {
+    record ArgumentImpl(Key key, int id) implements StaticProtocolObject {
         @Override
         public String toString() {
             return name();

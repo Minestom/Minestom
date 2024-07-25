@@ -33,7 +33,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
     }
 
     /**
-     * <p>Check if this set contains the given object, tested against its namespace id.</p>
+     * <p>Check if this set contains the given object, tested against its key id.</p>
      *
      * <p>Present for compatibility with non-dynamic registries. Will be removed in the future.</p>
      *
@@ -41,13 +41,13 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
      * @return True if this set contains the object, false otherwise.
      */
     default boolean contains(@NotNull StaticProtocolObject object) {
-        return contains(object.namespace());
+        return contains(object.key());
     }
 
     default boolean contains(@NotNull DynamicRegistry.Key<T> key) {
-        return contains(key.namespace());
+        return contains(key.key());
     }
 
-    boolean contains(@NotNull Key namespace);
+    boolean contains(@NotNull Key key);
 
 }

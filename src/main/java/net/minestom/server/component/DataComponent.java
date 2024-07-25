@@ -48,10 +48,10 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
 
     @ApiStatus.Internal
     static <T> DataComponent<T> createHeadless(
-            int id, @NotNull Key namespace,
+            int id, @NotNull Key key,
             @Nullable NetworkBuffer.Type<T> network,
             @Nullable BinaryTagSerializer<T> nbt
     ) {
-        return new DataComponentImpl<>(id, namespace, network, nbt);
+        return new DataComponentImpl<>(id, key, network, nbt);
     }
 }

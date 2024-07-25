@@ -45,12 +45,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         return ParticleImpl.values();
     }
 
-    static @Nullable Particle fromNamespaceId(@NotNull String namespaceID) {
-        return ParticleImpl.getSafe(namespaceID);
+    static @Nullable Particle fromKey(@NotNull String key) {
+        return ParticleImpl.getSafe(key);
     }
 
-    static @Nullable Particle fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Particle fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Particle fromId(int id) {
@@ -63,7 +63,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     @NotNull CompoundBinaryTag toNbt();
 
-    record Simple(@NotNull Key namespace, int id) implements Particle {
+    record Simple(@NotNull Key key, int id) implements Particle {
         @Override
         public @NotNull Particle readData(@NotNull NetworkBuffer reader) {
             return this;
@@ -76,16 +76,16 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .build();
         }
     }
 
-    record Block(@NotNull Key namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
+    record Block(@NotNull Key key, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Block withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new Block(namespace(), id(), block);
+            return new Block(key(), id(), block);
         }
 
         @Override
@@ -107,11 +107,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record BlockMarker(@NotNull Key namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
+    record BlockMarker(@NotNull Key key, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull BlockMarker withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new BlockMarker(namespace(), id(), block);
+            return new BlockMarker(key(), id(), block);
         }
 
         @Override
@@ -134,11 +134,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     }
 
-    record Dust(@NotNull Key namespace, int id, @NotNull RGBLike color, float scale) implements Particle {
+    record Dust(@NotNull Key key, int id, @NotNull RGBLike color, float scale) implements Particle {
 
         @Contract (pure = true)
         public @NotNull Dust withProperties(@NotNull RGBLike color, float scale) {
-            return new Dust(namespace(), id(), color, scale);
+            return new Dust(key(), id(), color, scale);
         }
 
         @Contract(pure = true)
@@ -177,18 +177,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
                     .build();
 
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("color", colorTag)
                     .putFloat("scale", scale)
                     .build();
         }
     }
 
-    record DustColorTransition(@NotNull Key namespace, int id, @NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) implements Particle {
+    record DustColorTransition(@NotNull Key key, int id, @NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) implements Particle {
 
         @Contract (pure = true)
         public @NotNull DustColorTransition withProperties(@NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) {
-            return new DustColorTransition(namespace, id, color, transitionColor, scale);
+            return new DustColorTransition(key, id, color, transitionColor, scale);
         }
 
         @Contract(pure = true)
@@ -245,7 +245,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
                     .build();
 
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putFloat("scale", scale)
                     .put("from_color", fromColorTag)
                     .put("to_color", toColorTag)
@@ -253,11 +253,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record DustPillar(@NotNull Key namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
+    record DustPillar(@NotNull Key key, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull DustPillar withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new DustPillar(namespace(), id(), block);
+            return new DustPillar(key(), id(), block);
         }
 
         @Override
@@ -280,11 +280,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     }
 
-    record FallingDust(@NotNull Key namespace, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
+    record FallingDust(@NotNull Key key, int id, @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull FallingDust withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new FallingDust(namespace(), id(), block);
+            return new FallingDust(key(), id(), block);
         }
 
         @Override
@@ -307,11 +307,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     }
 
-    record Item(@NotNull Key namespace, int id, @NotNull ItemStack item) implements Particle {
+    record Item(@NotNull Key key, int id, @NotNull ItemStack item) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Item withItem(@NotNull ItemStack item) {
-            return new Item(namespace(), id(), item);
+            return new Item(key(), id(), item);
         }
 
         @Override
@@ -327,27 +327,27 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("item", item.toItemNBT())
                     .build();
         }
     }
 
-    record EntityEffect(@NotNull Key namespace, int id, @NotNull AlphaColor color) implements Particle {
+    record EntityEffect(@NotNull Key key, int id, @NotNull AlphaColor color) implements Particle {
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(@NotNull AlphaColor color) {
-            return new EntityEffect(namespace(), id(), color);
+            return new EntityEffect(key(), id(), color);
         }
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(@NotNull RGBLike color) {
-            return new EntityEffect(namespace(), id(), new AlphaColor(1, color));
+            return new EntityEffect(key(), id(), new AlphaColor(1, color));
         }
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(int alpha, @NotNull RGBLike color) {
-            return new EntityEffect(namespace(), id(), new AlphaColor(alpha, color));
+            return new EntityEffect(key(), id(), new AlphaColor(alpha, color));
         }
 
         @Override
@@ -365,17 +365,17 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             int color = (0xFF << 24) | (color().red() << 16) | (color().green() << 8) | color().blue();
 
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putInt("color", color)
                     .build();
         }
     }
 
-    record SculkCharge(@NotNull Key namespace, int id, float roll) implements Particle {
+    record SculkCharge(@NotNull Key key, int id, float roll) implements Particle {
 
         @Contract(pure = true)
         public @NotNull SculkCharge withRoll(float roll) {
-            return new SculkCharge(namespace(), id(), roll);
+            return new SculkCharge(key(), id(), roll);
         }
 
         @Override
@@ -392,17 +392,17 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putFloat("roll", roll)
                     .build();
         }
     }
 
-    record Shriek(@NotNull Key namespace, int id, int delay) implements Particle {
+    record Shriek(@NotNull Key key, int id, int delay) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Shriek withDelay(int delay) {
-            return new Shriek(namespace(), id(), delay);
+            return new Shriek(key(), id(), delay);
         }
 
         @Override
@@ -418,28 +418,28 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putInt("delay", delay)
                     .build();
         }
     }
 
-    record Vibration(@NotNull Key namespace, int id, @NotNull SourceType sourceType, @Nullable Point sourceBlockPosition, int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) implements Particle {
+    record Vibration(@NotNull Key key, int id, @NotNull SourceType sourceType, @Nullable Point sourceBlockPosition, int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Vibration withProperties(@NotNull SourceType sourceType, @Nullable Point sourceBlockPosition,
                                                          int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
-            return new Vibration(namespace(), id(), sourceType, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), sourceType, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Contract(pure = true)
         public @NotNull Vibration withSourceBlockPosition(@Nullable Point sourceBlockPosition, int travelTicks) {
-            return new Vibration(namespace(), id(), SourceType.BLOCK, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), SourceType.BLOCK, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Contract(pure = true)
         public @NotNull Vibration withSourceEntity(int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
-            return new Vibration(namespace(), id(), SourceType.ENTITY, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), SourceType.ENTITY, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Override

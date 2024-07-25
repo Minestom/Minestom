@@ -69,7 +69,7 @@ public record PotionContents(
         public @NotNull PotionContents read(@NotNull BinaryTag tag) {
             // Can be a string with just a potion effect id
             if (tag instanceof StringBinaryTag string) {
-                return new PotionContents(PotionType.fromNamespaceId(string.value()), null, List.of());
+                return new PotionContents(PotionType.fromKey(string.value()), null, List.of());
             }
 
             // Otherwise must be a compound
@@ -79,7 +79,7 @@ public record PotionContents(
 
             PotionType potion = null;
             if (compound.get("potion") instanceof StringBinaryTag potionTag)
-                potion = PotionType.fromNamespaceId(potionTag.value());
+                potion = PotionType.fromKey(potionTag.value());
 
             Color customColor = null;
             if (compound.get("custom_color") instanceof IntBinaryTag colorTag) {

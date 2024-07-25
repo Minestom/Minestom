@@ -7,14 +7,14 @@ import java.util.Collection;
 
 record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
     private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS,
-            (namespace, properties) -> new PotionEffectImpl(Registry.potionEffect(namespace, properties)));
+            (key, properties) -> new PotionEffectImpl(Registry.potionEffect(key, properties)));
 
-    static PotionEffect get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static PotionEffect get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static PotionEffect getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static PotionEffect getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static PotionEffect getId(int id) {

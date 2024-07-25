@@ -89,7 +89,7 @@ public class InstanceContainer extends Instance {
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uniqueId, dimensionType, null, dimensionType.namespace());
+        this(uniqueId, dimensionType, null, dimensionType.key());
     }
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
@@ -97,7 +97,7 @@ public class InstanceContainer extends Instance {
     }
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
-        this(uniqueId, dimensionType, loader, dimensionType.namespace());
+        this(uniqueId, dimensionType, loader, dimensionType.key());
     }
 
     public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {

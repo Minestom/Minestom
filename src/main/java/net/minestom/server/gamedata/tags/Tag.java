@@ -25,22 +25,22 @@ import java.util.function.Function;
  * Immutable by design
  */
 public final class Tag implements ProtocolObject, Keyed {
-    private final Key name;
+    private final Key key;
     private final Set<Key> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
-    public Tag(@NotNull Key name) {
-        this.name = name;
+    public Tag(@NotNull Key key) {
+        this.key = key;
         this.values = new HashSet<>();
     }
 
     /**
      * Creates a new tag with the given values. This does not cache the tag.
      */
-    public Tag(@NotNull Key name, @NotNull Set<Key> values) {
-        this.name = name;
+    public Tag(@NotNull Key key, @NotNull Set<Key> values) {
+        this.key = key;
         this.values = new HashSet<>(values);
     }
 
@@ -63,38 +63,26 @@ public final class Tag implements ProtocolObject, Keyed {
         return Collections.unmodifiableSet(values);
     }
 
-    public @NotNull Key namespace() {
-        return name;
-    }
-
     @Contract(pure = true)
     public @NotNull String name() {
-        return namespace().asString();
+        return key().asString();
     }
 
     @Override
     @Contract(pure = true)
     public @NotNull Key key() {
-        return namespace();
-    }
-
-    /**
-     * Returns the name of this tag
-     */
-    @Deprecated
-    public Key getName() {
-        return name;
+        return key;
     }
 
     public enum BasicType {
         BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
-                name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(Block.fromKey(name)).id()),
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
-                name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(Material.fromKey(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
-                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(EntityType.fromKey(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data

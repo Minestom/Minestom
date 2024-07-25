@@ -117,7 +117,7 @@ public final class AttributeInstance {
     /**
      * Remove a modifier from this instance.
      *
-     * @param id The namespace id of the modifier to remove
+     * @param id The key id of the modifier to remove
      * @return the modifier that was removed, or null if none
      */
     public AttributeModifier removeModifier(@NotNull Key id) {

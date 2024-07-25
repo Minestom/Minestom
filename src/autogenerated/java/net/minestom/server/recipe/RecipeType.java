@@ -57,16 +57,16 @@ public enum RecipeType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.Enum(RecipeType.class);
 
-    private final Key namespace;
+    private final Key key;
 
-    RecipeType(@NotNull Key namespace) {
-        this.namespace = namespace;
+    RecipeType(@NotNull Key key) {
+        this.key = key;
     }
 
     @NotNull
     @Override
-    public Key namespace() {
-        return this.namespace;
+    public Key key() {
+        return this.key;
     }
 
     @Override

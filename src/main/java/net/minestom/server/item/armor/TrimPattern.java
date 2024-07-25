@@ -40,7 +40,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
-                (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
+                (key, props) -> new TrimPatternImpl(Registry.trimPattern(key, props))
         );
     }
 

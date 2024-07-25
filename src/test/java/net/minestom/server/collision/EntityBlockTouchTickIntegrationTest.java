@@ -33,7 +33,7 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minestom:test");
             }
         };
@@ -72,7 +72,7 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minestom:test");
             }
         };
@@ -112,7 +112,7 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minestom:test");
             }
         };
@@ -160,7 +160,7 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minestom:test");
             }
         };

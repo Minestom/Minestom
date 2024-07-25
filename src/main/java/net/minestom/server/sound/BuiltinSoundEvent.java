@@ -7,16 +7,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record BuiltinSoundEvent(Key namespace, int id) implements StaticProtocolObject, SoundEvent {
+record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject, SoundEvent {
     private static final Registry.Container<BuiltinSoundEvent> CONTAINER = Registry.createStaticContainer(Registry.Resource.SOUNDS,
-            (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id")));
+            (key, properties) -> new BuiltinSoundEvent(Key.key(key), properties.getInt("id")));
 
-    static SoundEvent get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static SoundEvent get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static SoundEvent getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static SoundEvent getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static SoundEvent getId(int id) {
@@ -35,10 +35,5 @@ record BuiltinSoundEvent(Key namespace, int id) implements StaticProtocolObject,
     @Override
     public @NotNull String name() {
         return StaticProtocolObject.super.name();
-    }
-
-    @Override
-    public @NotNull Key key() {
-        return StaticProtocolObject.super.key();
     }
 }

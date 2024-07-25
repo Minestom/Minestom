@@ -149,8 +149,8 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @NotNull Registry.BlockEntry registry();
 
     @Override
-    default @NotNull Key namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -186,12 +186,12 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return BlockImpl.values();
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockImpl.getSafe(namespaceID);
+    static @Nullable Block fromKey(@NotNull String key) {
+        return BlockImpl.getSafe(key);
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Block fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Block fromStateId(int stateId) {

@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
@@ -20,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * Implementations are expected to be thread safe.
  */
-public interface BlockHandler {
+public interface BlockHandler extends Keyed {
 
     /**
      * Called when a block has been placed.
@@ -77,15 +78,6 @@ public interface BlockHandler {
     default byte getBlockEntityAction() {
         return -1;
     }
-
-    /**
-     * Gets the id of this handler.
-     * <p>
-     * Used to write the block entity in the anvil world format.
-     *
-     * @return the namespace id of this handler
-     */
-    @NotNull Key getNamespaceId();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
@@ -297,26 +289,26 @@ public interface BlockHandler {
     }
 
     /**
-     * Handler used for loaded blocks with unknown namespace
+     * Handler used for loaded blocks with unknown key
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
     @ApiStatus.Internal
     final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        public static @NotNull BlockHandler get(@NotNull String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
+        public static @NotNull BlockHandler get(@NotNull String key) {
+            return DUMMY_CACHE.computeIfAbsent(key, Dummy::new);
         }
 
-        private final Key namespace;
+        private final Key key;
 
         private Dummy(String name) {
-            namespace = Key.key(name);
+            key = Key.key(name);
         }
 
         @Override
-        public @NotNull Key getNamespaceId() {
-            return namespace;
+        public @NotNull Key key() {
+            return key;
         }
     }
 }

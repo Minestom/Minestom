@@ -63,7 +63,7 @@ public class InstanceBlockPacketIntegrationTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minecraft:sign");
             }
         };

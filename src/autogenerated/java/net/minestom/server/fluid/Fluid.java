@@ -41,11 +41,6 @@ public enum Fluid implements Keyed {
     }
 
     @NotNull
-    public Key getNamespaceID() {
-        return this.id;
-    }
-
-    @NotNull
     @Override
     public String toString() {
         return "[" + this.id + "]";

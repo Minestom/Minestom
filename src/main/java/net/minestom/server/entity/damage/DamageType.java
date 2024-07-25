@@ -34,7 +34,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
-                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
+                (key, props) -> new DamageTypeImpl(Registry.damageType(key, props))
         );
     }
 

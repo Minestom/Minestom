@@ -36,7 +36,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
-                (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
+                (key, props) -> new BannerPatternImpl(Registry.bannerPattern(key, props))
         );
     }
 

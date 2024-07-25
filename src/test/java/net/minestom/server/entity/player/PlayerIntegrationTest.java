@@ -179,8 +179,8 @@ public class PlayerIntegrationTest {
 
     @Test
     public void deathLocationTest(Env env) {
-        String dimensionNamespace = "minestom:test_dimension";
-        final var testDimension = env.process().dimensionType().register(Key.key(dimensionNamespace), DimensionType.builder().build());
+        String dimensionKey = "minestom:test_dimension";
+        final var testDimension = env.process().dimensionType().register(Key.key(dimensionKey), DimensionType.builder().build());
 
         var instance = env.process().instance().createInstanceContainer(testDimension);
         var connection = env.createConnection();
@@ -190,7 +190,7 @@ public class PlayerIntegrationTest {
         player.damage(DamageType.OUT_OF_WORLD, 30);
 
         assertNotNull(player.getDeathLocation());
-        assertEquals(dimensionNamespace, player.getDeathLocation().dimension());
+        assertEquals(dimensionKey, player.getDeathLocation().dimension());
         assertEquals(5, player.getDeathLocation().blockPosition().x());
     }
 

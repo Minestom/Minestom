@@ -19,8 +19,8 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
     @NotNull Registry.EntityEntry registry();
 
     @Override
-    default @NotNull Key namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -40,12 +40,12 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
         return EntityTypeImpl.values();
     }
 
-    static EntityType fromNamespaceId(@NotNull String namespaceID) {
-        return EntityTypeImpl.getSafe(namespaceID);
+    static EntityType fromKey(@NotNull String key) {
+        return EntityTypeImpl.getSafe(key);
     }
 
-    static EntityType fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static EntityType fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable EntityType fromId(int id) {

@@ -22,7 +22,7 @@ public class SuspiciousGravelBlockHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull Key getNamespaceId() {
+    public @NotNull Key key() {
         return Key.key("minecraft:suspicious_gravel");
     }
 

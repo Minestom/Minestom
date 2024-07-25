@@ -27,16 +27,16 @@ import java.util.concurrent.locks.ReentrantLock;
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
-    record KeyImpl<T>(@NotNull net.kyori.adventure.key.Key namespace) implements Key<T> {
+    record KeyImpl<T>(@NotNull net.kyori.adventure.key.Key key) implements Key<T> {
 
         @Override
         public String toString() {
-            return namespace.asString();
+            return key.asString();
         }
 
         @Override
         public int hashCode() {
-            return namespace.hashCode();
+            return key.hashCode();
         }
 
         @Override
@@ -44,7 +44,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             KeyImpl<?> key = (KeyImpl<?>) obj;
-            return namespace.equals(key.namespace);
+            return key.equals(key.key);
         }
     }
 
@@ -82,8 +82,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @Nullable T get(@NotNull net.kyori.adventure.key.Key namespace) {
-        return entryByName.get(namespace);
+    public @Nullable T get(@NotNull net.kyori.adventure.key.Key key) {
+        return entryByName.get(key);
     }
 
     @Override
@@ -124,7 +124,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key namespaceId, @NotNull T object, @Nullable DataPack pack) {
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key key, @NotNull T object, @Nullable DataPack pack) {
         // This check is disabled in tests because we remake server processes over and over.
         // todo: re-enable this check
 //        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
@@ -135,31 +135,31 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
+            int id = idByName.indexOf(key);
             if (id == -1) id = entryById.size();
 
             entryById.add(id, object);
-            entryByName.put(namespaceId, object);
-            idByName.add(namespaceId);
+            entryByName.put(key, object);
+            idByName.add(key);
             packById.add(id, pack);
             vanillaRegistryDataPacket.invalidate();
-            return Key.of(namespaceId);
+            return Key.of(key);
         } finally {
             lock.unlock();
         }
     }
 
     @Override
-    public boolean remove(@NotNull net.kyori.adventure.key.Key namespaceId) throws UnsupportedOperationException {
+    public boolean remove(@NotNull net.kyori.adventure.key.Key key) throws UnsupportedOperationException {
         if (!ServerFlag.REGISTRY_UNSAFE_OPS) throw UNSAFE_REMOVE_EXCEPTION;
 
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
+            int id = idByName.indexOf(key);
             if (id == -1) return false;
 
             entryById.remove(id);
-            entryByName.remove(namespaceId);
+            entryByName.remove(key);
             idByName.remove(id);
             packById.remove(id);
             vanillaRegistryDataPacket.invalidate();
@@ -205,9 +205,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
         if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
         for (var entry : entries) {
-            final String namespace = entry.getKey();
+            final String key = entry.getKey();
             final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
+            registry.register(key, loader.get(key, properties), DataPack.MINECRAFT_CORE);
         }
     }
 
@@ -222,10 +222,10 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
             final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
             for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
-                final String namespace = entry.getKey();
+                final String key = entry.getKey();
                 final T value = registry.nbtType.read(context, entry.getValue());
-                Check.notNull(value, "Failed to read value for namespace {0}", namespace);
-                registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                Check.notNull(value, "Failed to read value for key {0}", key);
+                registry.register(key, value, DataPack.MINECRAFT_CORE);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

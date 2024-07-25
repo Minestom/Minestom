@@ -119,7 +119,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uniqueId, dimensionType, dimensionType.namespace());
+        this(uniqueId, dimensionType, dimensionType.key());
     }
 
     /**

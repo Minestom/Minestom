@@ -37,7 +37,7 @@ public record AttributeModifier(@NotNull Key id, double amount, @NotNull Attribu
     /**
      * Creates a new modifier with a random id.
      *
-     * @param id        the (namespace) id of this modifier
+     * @param id        the (key) id of this modifier
      * @param amount    the value of this modifier
      * @param operation the operation to apply this modifier with
      */

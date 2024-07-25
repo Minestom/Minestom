@@ -18,8 +18,8 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
     @NotNull Registry.PotionEffectEntry registry();
 
     @Override
-    default @NotNull Key namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -31,12 +31,12 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
         return PotionEffectImpl.values();
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectImpl.getSafe(namespaceID);
+    static @Nullable PotionEffect fromKey(@NotNull String key) {
+        return PotionEffectImpl.getSafe(key);
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable PotionEffect fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable PotionEffect fromId(int id) {

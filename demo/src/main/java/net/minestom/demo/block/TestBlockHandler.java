@@ -8,7 +8,7 @@ public class TestBlockHandler implements BlockHandler {
     public static final BlockHandler INSTANCE = new TestBlockHandler();
 
     @Override
-    public @NotNull Key getNamespaceId() {
+    public @NotNull Key key() {
         return Key.key("minestom", "test");
     }
 

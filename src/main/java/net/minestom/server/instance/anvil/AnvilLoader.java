@@ -246,7 +246,7 @@ public class AnvilLoader implements IChunkLoader {
             if (blockName.equals("minecraft:air")) {
                 convertedPalette[i] = Block.AIR;
             } else {
-                Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName), "Unknown block " + blockName);
+                Block block = Objects.requireNonNull(Block.fromKey(blockName), "Unknown block " + blockName);
                 // Properties
                 final Map<String, String> properties = new HashMap<>();
                 CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("Properties");
@@ -447,7 +447,7 @@ public class AnvilLoader implements IChunkLoader {
                                     blockEntityTag.put(originalNBT);
                                 }
                                 if (handler != null) {
-                                    blockEntityTag.putString("id", handler.getNamespaceId().asString());
+                                    blockEntityTag.putString("id", handler.key().asString());
                                 }
                                 blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
                                 blockEntityTag.putInt("y", y);

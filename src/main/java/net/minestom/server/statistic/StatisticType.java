@@ -13,12 +13,12 @@ public sealed interface StatisticType extends StaticProtocolObject, StatisticTyp
         return StatisticTypeImpl.values();
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull String namespaceID) {
-        return StatisticTypeImpl.getSafe(namespaceID);
+    static @Nullable StatisticType fromKey(@NotNull String key) {
+        return StatisticTypeImpl.getSafe(key);
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull Key namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable StatisticType fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable StatisticType fromId(int id) {

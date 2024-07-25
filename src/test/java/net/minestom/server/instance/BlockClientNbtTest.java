@@ -36,7 +36,7 @@ public class BlockClientNbtTest {
             }
 
             @Override
-            public @NotNull Key getNamespaceId() {
+            public @NotNull Key key() {
                 return Key.key("minestom:test");
             }
         };

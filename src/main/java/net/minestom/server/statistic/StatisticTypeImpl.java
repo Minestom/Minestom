@@ -6,16 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record StatisticTypeImpl(Key namespace, int id) implements StatisticType {
+record StatisticTypeImpl(Key key, int id) implements StatisticType {
     private static final Registry.Container<StatisticType> CONTAINER = Registry.createStaticContainer(Registry.Resource.STATISTICS,
-            (namespace, properties) -> new StatisticTypeImpl(Key.key(namespace), properties.getInt("id")));
+            (key, properties) -> new StatisticTypeImpl(Key.key(key), properties.getInt("id")));
 
-    static StatisticType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static StatisticType get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static StatisticType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static StatisticType getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static StatisticType getId(int id) {

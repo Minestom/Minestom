@@ -34,26 +34,17 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
 
-        static <T> @NotNull Key<T> of(@NotNull String namespace) {
-            return new DynamicRegistryImpl.KeyImpl<>(net.kyori.adventure.key.Key.key(namespace));
+        static <T> @NotNull Key<T> of(@NotNull String key) {
+            return new DynamicRegistryImpl.KeyImpl<>(net.kyori.adventure.key.Key.key(key));
         }
 
-        static <T> @NotNull Key<T> of(@NotNull net.kyori.adventure.key.Key namespace) {
-            return new DynamicRegistryImpl.KeyImpl<>(namespace);
+        static <T> @NotNull Key<T> of(@NotNull net.kyori.adventure.key.Key key) {
+            return new DynamicRegistryImpl.KeyImpl<>(key);
         }
-
-        @Contract(pure = true)
-        @NotNull net.kyori.adventure.key.Key namespace();
 
         @Contract(pure = true)
         default @NotNull String name() {
-            return namespace().asString();
-        }
-
-        @Override
-        @Contract(pure = true)
-        default @NotNull net.kyori.adventure.key.Key key() {
-            return namespace();
+            return key().asString();
         }
     }
 
@@ -117,9 +108,9 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @NotNull String id();
 
     @Nullable T get(int id);
-    @Nullable T get(@NotNull net.kyori.adventure.key.Key namespace);
+    @Nullable T get(@NotNull net.kyori.adventure.key.Key key);
     default @Nullable T get(@NotNull Key<T> key) {
-        return get(key.namespace());
+        return get(key.key());
     }
 
     @Nullable Key<T> getKey(int id);
@@ -144,7 +135,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see #register(net.kyori.adventure.key.Key, T)
      */
     default int getId(@NotNull Key<T> key) {
-        return getId(key.namespace());
+        return getId(key.key());
     }
 
 
@@ -202,11 +193,11 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * <p>Note: the new registry will not be sent to existing players. They must be returned to
      * the configuration phase to receive new registry data. See {@link Player#startConfigurationPhase()}.</p>
      *
-     * @param namespaceId The id of the entry to remove
+     * @param key The id of the entry to remove
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
-    boolean remove(@NotNull net.kyori.adventure.key.Key namespaceId) throws UnsupportedOperationException;
+    boolean remove(@NotNull net.kyori.adventure.key.Key key) throws UnsupportedOperationException;
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to

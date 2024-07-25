@@ -42,14 +42,14 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
     record Tag(@NotNull net.minestom.server.gamedata.tags.Tag tag) implements BlockTypeFilter {
         private static final TagManager TAG_MANAGER = Objects.requireNonNull(MinecraftServer.getTagManager());
 
-        public Tag(@NotNull String namespaceId) {
-            this(Objects.requireNonNull(TAG_MANAGER.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, namespaceId),
-                    "No such block tag: " + namespaceId));
+        public Tag(@NotNull String key) {
+            this(Objects.requireNonNull(TAG_MANAGER.getTag(net.minestom.server.gamedata.tags.Tag.BasicType.BLOCKS, key),
+                    "No such block tag: " + key));
         }
 
         @Override
         public boolean test(Block block) {
-            return tag.contains(block.namespace());
+            return tag.contains(block.key());
         }
     }
 
@@ -107,7 +107,7 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
                     final List<Block> blocks = new ArrayList<>(list.size());
                     for (BinaryTag binaryTag : list) {
                         if (!(binaryTag instanceof StringBinaryTag string)) continue;
-                        blocks.add(Objects.requireNonNull(Block.fromNamespaceId(string.value())));
+                        blocks.add(Objects.requireNonNull(Block.fromKey(string.value())));
                     }
                     yield new Blocks(blocks);
                 }
@@ -117,7 +117,7 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
                     if (value.startsWith("#")) {
                         yield new Tag(value.substring(1));
                     } else {
-                        yield new Blocks(Objects.requireNonNull(Block.fromNamespaceId(value)));
+                        yield new Blocks(Objects.requireNonNull(Block.fromKey(value)));
                     }
                 }
                 default -> throw new IllegalArgumentException("Invalid tag type: " + tag.type());

@@ -57,7 +57,7 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, recipeTypeCN)
                                 .build(),
-                        FieldSpec.builder(keyCN, "namespace", Modifier.PRIVATE, Modifier.FINAL).build()
+                        FieldSpec.builder(keyCN, "key", Modifier.PRIVATE, Modifier.FINAL).build()
                 )
         );
 
@@ -66,15 +66,15 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
                 List.of(
                         // Constructor
                         MethodSpec.constructorBuilder()
-                                .addParameter(ParameterSpec.builder(keyCN, "namespace").addAnnotation(NotNull.class).build())
-                                .addStatement("this.namespace = namespace")
+                                .addParameter(ParameterSpec.builder(keyCN, "key").addAnnotation(NotNull.class).build())
+                                .addStatement("this.key = key")
                                 .build(),
-                        MethodSpec.methodBuilder("namespace")
+                        MethodSpec.methodBuilder("key")
                                 .addModifiers(Modifier.PUBLIC)
                                 .addAnnotation(NotNull.class)
                                 .addAnnotation(Override.class)
                                 .returns(keyCN)
-                                .addStatement("return this.namespace")
+                                .addStatement("return this.key")
                                 .build(),
                         MethodSpec.methodBuilder("id")
                                 .addModifiers(Modifier.PUBLIC)

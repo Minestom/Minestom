@@ -106,7 +106,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
         String id = tag.getString("id");
-        Material material = Material.fromNamespaceId(id);
+        Material material = Material.fromKey(id);
         Check.notNull(material, "Unknown material: {0}", id);
         int count = tag.getInt("count", 1);
 

@@ -104,7 +104,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             return DynamicRegistry.create(
                     "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
-                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props))
+                    (key, props) -> new VariantImpl(Registry.paintingVariant(key, props))
             );
         }
 
