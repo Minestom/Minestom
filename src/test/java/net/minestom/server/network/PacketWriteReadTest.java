@@ -26,15 +26,12 @@ import net.minestom.server.recipe.RecipeCategory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -160,32 +157,28 @@ public class PacketWriteReadTest {
     }
 
     @Test
-    public void serverTest() {
-        SERVER_PACKETS.forEach(PacketWriteReadTest::testPacket);
-    }
-
-    @Test
-    public void clientTest() {
-        CLIENT_PACKETS.forEach(PacketWriteReadTest::testPacket);
-    }
-
-    private static void testPacket(NetworkBuffer.Writer writeable) {
-        try {
-            byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
-            var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
-            NetworkBuffer reader = new NetworkBuffer();
-            reader.write(NetworkBuffer.RAW_BYTES, bytes);
-            var createdPacket = readerConstructor.newInstance(reader);
-            assertEquals(writeable, createdPacket);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
-                 | IllegalAccessException e) {
-            fail(writeable.toString(), e);
+    public void serverTest() throws NoSuchFieldException, IllegalAccessException {
+        for (var packet : SERVER_PACKETS) {
+            var packetClass = packet.getClass();
+            NetworkBuffer.Type<ServerPacket> serializer = (NetworkBuffer.Type<ServerPacket>) packetClass.getField("SERIALIZER").get(packetClass);
+            testPacket(serializer, packet);
         }
     }
 
-    private static byte[] generateByteArray(int size) {
-        byte[] array = new byte[size];
-        ThreadLocalRandom.current().nextBytes(array);
-        return array;
+    @Test
+    public void clientTest() throws NoSuchFieldException, IllegalAccessException {
+        for (var packet : CLIENT_PACKETS) {
+            var packetClass = packet.getClass();
+            NetworkBuffer.Type<ClientPacket> serializer = (NetworkBuffer.Type<ClientPacket>) packetClass.getField("SERIALIZER").get(packetClass);
+            testPacket(serializer, packet);
+        }
+    }
+
+    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
+        byte[] bytes = NetworkBuffer.makeArray(buffer -> networkType.write(buffer, packet));
+        NetworkBuffer reader = new NetworkBuffer();
+        reader.write(NetworkBuffer.RAW_BYTES, bytes);
+        var createdPacket = networkType.read(reader);
+        assertEquals(packet, createdPacket);
     }
 }

@@ -260,10 +260,10 @@ public final class PacketUtils {
         writeFramedPacket(buffer, id, serializer, packet, compression ? MinecraftServer.getCompressionThreshold() : 0);
     }
 
-    public static void writeFramedPacket(@NotNull ByteBuffer buffer,
+    public static <T> void writeFramedPacket(@NotNull ByteBuffer buffer,
                                          int id,
-                                         @NotNull NetworkBuffer.Type<ServerPacket> type,
-                                         @NotNull ServerPacket packet,
+                                         @NotNull NetworkBuffer.Type<T> type,
+                                         @NotNull T packet,
                                          int compressionThreshold) {
         NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
         if (compressionThreshold <= 0) {
