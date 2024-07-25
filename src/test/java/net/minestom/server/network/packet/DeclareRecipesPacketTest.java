@@ -25,6 +25,7 @@ public class DeclareRecipesPacketTest {
                 )
         ));
 
-        assertThrows(IllegalArgumentException.class, () -> NetworkBuffer.makeArray(packet::write));
+        assertThrows(IllegalArgumentException.class, () -> NetworkBuffer.makeArray(networkBuffer ->
+                DeclareRecipesPacket.SERIALIZER.write(networkBuffer, packet)));
     }
 }
