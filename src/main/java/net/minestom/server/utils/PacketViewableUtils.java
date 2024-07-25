@@ -72,6 +72,7 @@ public final class PacketViewableUtils {
         private synchronized void process(Viewable viewable) {
             viewable.getViewers().forEach(player -> processPlayer(player, packets));
             this.entityIdMap.clear();
+            this.packets.clear();
         }
 
         private void processPlayer(Player player, List<ServerPacket> packets) {
