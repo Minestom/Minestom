@@ -24,7 +24,7 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
 
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
@@ -37,7 +37,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -48,8 +48,8 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
-        PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
 
         var wrapper = BinaryBuffer.wrap(buffer);
         wrapper.reset(0, buffer.position());
@@ -62,7 +62,7 @@ public class SocketReadTest {
         assertEquals(2, packets.size());
         for (var rawPacket : packets) {
             assertEquals(0x0A, rawPacket.left());
-            var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
+            var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
             assertEquals("channel", readPacket.channel());
             assertEquals(2000, readPacket.data().length);
         }
@@ -76,7 +76,7 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
         Utils.writeVarInt(buffer, 200); // incomplete 200 bytes packet
 
         var wrapper = BinaryBuffer.wrap(buffer);
@@ -91,7 +91,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -104,7 +104,7 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
         buffer.put((byte) -85); // incomplete var-int length
 
         var wrapper = BinaryBuffer.wrap(buffer);
@@ -119,7 +119,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = new ClientPluginMessagePacket(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }

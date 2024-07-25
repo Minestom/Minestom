@@ -48,7 +48,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_PARTICLE_LIST, ParticleList(List.of()));
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(0, 0, 0));
         EMPTY_VALUES.set(TYPE_OPT_VARINT, OptVarInt(null));
-        EMPTY_VALUES.set(TYPE_POSE, Pose(Entity.Pose.STANDING));
+        EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatMeta.Variant.TABBY));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfMeta.Variant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));

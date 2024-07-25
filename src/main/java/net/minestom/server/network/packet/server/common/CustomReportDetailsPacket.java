@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -12,26 +11,19 @@ public record CustomReportDetailsPacket(
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_DETAILS = 32;
 
+    public static NetworkBuffer.Type<CustomReportDetailsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, CustomReportDetailsPacket packet) {
+            buffer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, packet.details);
+        }
+
+        @Override
+        public CustomReportDetailsPacket read(@NotNull NetworkBuffer buffer) {
+            return new CustomReportDetailsPacket(buffer.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
+        }
+    };
+
     public CustomReportDetailsPacket {
         details = Map.copyOf(details);
-    }
-
-    public CustomReportDetailsPacket(@NotNull NetworkBuffer reader) {
-        this(reader.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, details);
-    }
-
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_CUSTOM_REPORT_DETAILS;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.CUSTOM_REPORT_DETAILS;
     }
 }

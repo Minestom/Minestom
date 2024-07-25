@@ -3,21 +3,18 @@ package net.minestom.server.network.packet.server.play;
 import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
-    public DeleteChatPacket(@NotNull NetworkBuffer reader) {
-        this(new MessageSignature(reader));
-    }
+    public static final NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DeleteChatPacket value) {
+            buffer.write(value.signature);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(signature);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DELETE_CHAT_MESSAGE;
-    }
+        @Override
+        public DeleteChatPacket read(@NotNull NetworkBuffer buffer) {
+            return new DeleteChatPacket(new MessageSignature(buffer));
+        }
+    };
 }

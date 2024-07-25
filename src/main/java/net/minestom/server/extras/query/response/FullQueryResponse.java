@@ -2,9 +2,7 @@ package net.minestom.server.extras.query.response;
 
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.extras.query.Query;
-import net.minestom.server.utils.binary.BinaryWriter;
-import net.minestom.server.utils.binary.Writeable;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -12,7 +10,7 @@ import java.util.*;
 /**
  * A full query response containing a dynamic set of responses.
  */
-public class FullQueryResponse implements Writeable {
+public class FullQueryResponse implements NetworkBuffer.Writer {
     private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -126,23 +124,19 @@ public class FullQueryResponse implements Writeable {
     }
 
     @Override
-    public void write(@NotNull BinaryWriter writer) {
-        writer.writeBytes(PADDING_11);
-
+    public void write(@NotNull NetworkBuffer writer) {
+        writer.write(NetworkBuffer.RAW_BYTES, PADDING_11);
         // key-values
         for (var entry : this.kv.entrySet()) {
-            writer.writeNullTerminatedString(entry.getKey(), Query.CHARSET);
-            writer.writeNullTerminatedString(entry.getValue(), Query.CHARSET);
+            writer.write(NetworkBuffer.STRING_TERMINATED, entry.getKey());
+            writer.write(NetworkBuffer.STRING_TERMINATED, entry.getValue());
         }
-
-        writer.writeNullTerminatedString("", Query.CHARSET);
-        writer.writeBytes(PADDING_10);
-
+        writer.write(NetworkBuffer.STRING_TERMINATED, "");
+        writer.write(NetworkBuffer.RAW_BYTES, PADDING_10);
         // players
         for (String player : this.players) {
-            writer.writeNullTerminatedString(player, Query.CHARSET);
+            writer.write(NetworkBuffer.STRING_TERMINATED, player);
         }
-
-        writer.writeNullTerminatedString("", Query.CHARSET);
+        writer.write(NetworkBuffer.STRING_TERMINATED, "");
     }
 }

@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.chars.CharList;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,9 +70,7 @@ public class ArgumentTime extends Argument<Duration> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeInt(min);
-        });
+        return NetworkBuffer.makeArray(buffer -> buffer.write(NetworkBuffer.INT, min));
     }
 
     @Override

@@ -23,9 +23,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.location.RelativeVec;
-import net.minestom.server.utils.math.FloatRange;
-import net.minestom.server.utils.math.IntRange;
 import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
 
@@ -129,14 +128,14 @@ public class ArgumentTypeTest {
     @Test
     public void testArgumentFloatRange() {
         var arg = ArgumentType.FloatRange("float_range");
-        assertArg(arg, new FloatRange(0f, 50f), "0..50");
-        assertArg(arg, new FloatRange(0f, 0f), "0..0");
-        assertArg(arg, new FloatRange(-50f, 0f), "-50..0");
-        assertArg(arg, new FloatRange(-Float.MAX_VALUE, 50f), "..50");
-        assertArg(arg, new FloatRange(0f, Float.MAX_VALUE), "0..");
-        assertArg(arg, new FloatRange(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
-        assertArg(arg, new FloatRange(0.5f, 24f), "0.5..24");
-        assertArg(arg, new FloatRange(12f, 45.6f), "12..45.6");
+        assertArg(arg, new Range.Float(0f, 50f), "0..50");
+        assertArg(arg, new Range.Float(0f, 0f), "0..0");
+        assertArg(arg, new Range.Float(-50f, 0f), "-50..0");
+        assertArg(arg, new Range.Float(-Float.MAX_VALUE, 50f), "..50");
+        assertArg(arg, new Range.Float(0f, Float.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Float(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
+        assertArg(arg, new Range.Float(0.5f, 24f), "0.5..24");
+        assertArg(arg, new Range.Float(12f, 45.6f), "12..45.6");
         assertInvalidArg(arg, "..");
         assertInvalidArg(arg, "0..50..");
     }
@@ -145,12 +144,12 @@ public class ArgumentTypeTest {
     public void testArgumentIntRange() {
         var arg = ArgumentType.IntRange("int_range");
 
-        assertArg(arg, new IntRange(0, 50), "0..50");
-        assertArg(arg, new IntRange(0, 0), "0..0");
-        assertArg(arg, new IntRange(-50, 0), "-50..0");
-        assertArg(arg, new IntRange(Integer.MIN_VALUE, 50), "..50");
-        assertArg(arg, new IntRange(0, Integer.MAX_VALUE), "0..");
-        assertArg(arg, new IntRange(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
+        assertArg(arg, new Range.Int(0, 50), "0..50");
+        assertArg(arg, new Range.Int(0, 0), "0..0");
+        assertArg(arg, new Range.Int(-50, 0), "-50..0");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, 50), "..50");
+        assertArg(arg, new Range.Int(0, Integer.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Int(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
 
         assertInvalidArg(arg, "..");
         assertInvalidArg(arg, "-2147483649..2147483647");

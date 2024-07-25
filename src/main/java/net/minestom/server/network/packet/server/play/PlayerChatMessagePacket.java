@@ -4,9 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,31 +24,30 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
                                       @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public PlayerChatMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(UUID), reader.read(VAR_INT), reader.readOptional(r -> r.readBytes(256)),
-                new SignedMessageBody.Packed(reader),
-                reader.readOptional(COMPONENT), new FilterMask(reader),
-                reader.read(VAR_INT), reader.read(COMPONENT),
-                reader.readOptional(COMPONENT));
-    }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(UUID, sender);
-        writer.write(VAR_INT, index);
-        writer.writeOptional(RAW_BYTES, signature);
-        writer.write(messageBody);
-        writer.writeOptional(COMPONENT, unsignedContent);
-        writer.write(filterMask);
-        writer.write(VAR_INT, msgTypeId);
-        writer.write(COMPONENT, msgTypeName);
-        writer.writeOptional(COMPONENT, msgTypeTarget);
-    }
+    public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @NotNull PlayerChatMessagePacket value) {
+            buffer.write(UUID, value.sender);
+            buffer.write(VAR_INT, value.index);
+            buffer.writeOptional(RAW_BYTES, value.signature);
+            buffer.write(value.messageBody);
+            buffer.writeOptional(COMPONENT, value.unsignedContent);
+            buffer.write(value.filterMask);
+            buffer.write(VAR_INT, value.msgTypeId);
+            buffer.write(COMPONENT, value.msgTypeName);
+            buffer.writeOptional(COMPONENT, value.msgTypeTarget);
+        }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.PLAYER_CHAT;
-    }
+        @Override
+        public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer buffer) {
+            return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.readOptional(r -> r.readBytes(256)),
+                    new SignedMessageBody.Packed(buffer),
+                    buffer.readOptional(COMPONENT), new FilterMask(buffer),
+                    buffer.read(VAR_INT), buffer.read(COMPONENT),
+                    buffer.readOptional(COMPONENT));
+        }
+    };
 
     @Override
     public @NotNull Collection<Component> components() {

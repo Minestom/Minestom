@@ -11,15 +11,18 @@ public record ClientResourcePackStatusPacket(
         @NotNull UUID id,
         @NotNull ResourcePackStatus status
 ) implements ClientPacket {
-    public ClientResourcePackStatusPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), readStatus(reader));
-    }
+    public static NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ClientResourcePackStatusPacket value) {
+            buffer.write(NetworkBuffer.UUID, value.id);
+            buffer.write(NetworkBuffer.VAR_INT, statusId(value.status));
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, id);
-        writer.writeEnum(ResourcePackStatus.class, status);
-    }
+        @Override
+        public ClientResourcePackStatusPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientResourcePackStatusPacket(buffer.read(NetworkBuffer.UUID), readStatus(buffer));
+        }
+    };
 
     private static @NotNull ResourcePackStatus readStatus(@NotNull NetworkBuffer reader) {
         var ordinal = reader.read(NetworkBuffer.VAR_INT);
@@ -33,6 +36,19 @@ public record ClientResourcePackStatusPacket(
             case 6 -> ResourcePackStatus.FAILED_RELOAD;
             case 7 -> ResourcePackStatus.DISCARDED;
             default -> throw new IllegalStateException("Unexpected resource pack status: " + ordinal);
+        };
+    }
+
+    private static int statusId(@NotNull ResourcePackStatus status) {
+        return switch (status) {
+            case SUCCESSFULLY_LOADED -> 0;
+            case DECLINED -> 1;
+            case FAILED_DOWNLOAD -> 2;
+            case ACCEPTED -> 3;
+            case DOWNLOADED -> 4;
+            case INVALID_URL -> 5;
+            case FAILED_RELOAD -> 6;
+            case DISCARDED -> 7;
         };
     }
 }

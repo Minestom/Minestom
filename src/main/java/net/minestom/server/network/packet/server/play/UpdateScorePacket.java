@@ -3,7 +3,6 @@ package net.minestom.server.network.packet.server.play;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,22 +20,20 @@ public record UpdateScorePacket(
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat
 ) implements ServerPacket.Play {
-    public UpdateScorePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(STRING), reader.read(VAR_INT),
-                reader.readOptional(COMPONENT), reader.readOptional(Sidebar.NumberFormat::new));
-    }
+    public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @NotNull UpdateScorePacket value) {
+            buffer.write(STRING, value.entityName);
+            buffer.write(STRING, value.objectiveName);
+            buffer.write(VAR_INT, value.score);
+            buffer.writeOptional(COMPONENT, value.displayName);
+            buffer.writeOptional(value.numberFormat);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, entityName);
-        writer.write(STRING, objectiveName);
-        writer.write(VAR_INT, score);
-        writer.writeOptional(COMPONENT, displayName);
-        writer.writeOptional(numberFormat);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.UPDATE_SCORE;
-    }
+        @Override
+        public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer buffer) {
+            return new UpdateScorePacket(buffer.read(STRING), buffer.read(STRING), buffer.read(VAR_INT),
+                    buffer.readOptional(COMPONENT), buffer.readOptional(Sidebar.NumberFormat::new));
+        }
+    };
 }

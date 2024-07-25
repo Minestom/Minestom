@@ -1,12 +1,8 @@
 package net.minestom.server.network.packet.server.common;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.EnumMap;
@@ -17,49 +13,39 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record TagsPacket(
         @NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket.Configuration, ServerPacket.Play {
-    @ApiStatus.Internal
-    public static final CachedPacket DEFAULT_TAGS = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
-
     public TagsPacket {
         tagsMap = Map.copyOf(tagsMap);
     }
 
-    public TagsPacket(@NotNull NetworkBuffer reader) {
-        this(readTagsMap(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, tagsMap.size());
-        for (var entry : tagsMap.entrySet()) {
-            final var type = entry.getKey();
-            final var tags = entry.getValue();
-            writer.write(STRING, type.getIdentifier());
-            if (type.getFunction() == null) {
-                writer.write(VAR_INT, 0);
-                continue;
-            }
-            writer.write(VAR_INT, tags.size());
-            for (var tag : tags) {
-                writer.write(STRING, tag.name());
-                final var values = tag.getValues();
-                writer.write(VAR_INT, values.size());
-                for (var name : values) {
-                    writer.write(VAR_INT, type.getFunction().apply(name.asString()));
+    public static NetworkBuffer.Type<TagsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, TagsPacket packet) {
+            buffer.write(VAR_INT, packet.tagsMap.size());
+            for (var entry : packet.tagsMap.entrySet()) {
+                final var type = entry.getKey();
+                final var tags = entry.getValue();
+                buffer.write(STRING, type.getIdentifier());
+                if (type.getFunction() == null) {
+                    buffer.write(VAR_INT, 0);
+                    continue;
+                }
+                buffer.write(VAR_INT, tags.size());
+                for (var tag : tags) {
+                    buffer.write(STRING, tag.name());
+                    final var values = tag.getValues();
+                    buffer.write(VAR_INT, values.size());
+                    for (var name : values) {
+                        buffer.write(VAR_INT, type.getFunction().apply(name.asString()));
+                    }
                 }
             }
         }
-    }
 
-    @Override
-    public int configurationId() {
-        return ServerPacketIdentifier.CONFIGURATION_TAGS;
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.TAGS;
-    }
+        @Override
+        public TagsPacket read(@NotNull NetworkBuffer buffer) {
+            return new TagsPacket(readTagsMap(buffer));
+        }
+    };
 
     private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {
         Map<Tag.BasicType, List<Tag>> tagsMap = new EnumMap<>(Tag.BasicType.class);

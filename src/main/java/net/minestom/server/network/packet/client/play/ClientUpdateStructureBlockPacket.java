@@ -15,14 +15,37 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
                                                Mirror mirror, Rotation rotation,
                                                String metadata, float integrity,
                                                long seed, byte flags) implements ClientPacket {
-    public ClientUpdateStructureBlockPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BLOCK_POSITION), reader.readEnum(Action.class),
-                reader.readEnum(Mode.class), reader.read(STRING),
-                new Vec(reader.read(BYTE), reader.read(BYTE), reader.read(BYTE)), new Vec(reader.read(BYTE), reader.read(BYTE), reader.read(BYTE)),
-                Mirror.values()[reader.read(VAR_INT)], fromRestrictedRotation(reader.read(VAR_INT)),
-                reader.read(STRING), reader.read(FLOAT),
-                reader.read(VAR_LONG), reader.read(BYTE));
-    }
+    public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ClientUpdateStructureBlockPacket value) {
+            buffer.write(BLOCK_POSITION, value.location);
+            buffer.writeEnum(Action.class, value.action);
+            buffer.writeEnum(Mode.class, value.mode);
+            buffer.write(STRING, value.name);
+            buffer.write(BYTE, (byte) value.offset.x());
+            buffer.write(BYTE, (byte) value.offset.y());
+            buffer.write(BYTE, (byte) value.offset.z());
+            buffer.write(BYTE, (byte) value.size.x());
+            buffer.write(BYTE, (byte) value.size.y());
+            buffer.write(BYTE, (byte) value.size.z());
+            buffer.write(VAR_INT, value.mirror.ordinal());
+            buffer.write(VAR_INT, toRestrictedRotation(value.rotation));
+            buffer.write(STRING, value.metadata);
+            buffer.write(FLOAT, value.integrity);
+            buffer.write(VAR_LONG, value.seed);
+            buffer.write(BYTE, value.flags);
+        }
+
+        @Override
+        public ClientUpdateStructureBlockPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientUpdateStructureBlockPacket(buffer.read(BLOCK_POSITION), buffer.readEnum(Action.class),
+                    buffer.readEnum(Mode.class), buffer.read(STRING),
+                    new Vec(buffer.read(BYTE), buffer.read(BYTE), buffer.read(BYTE)), new Vec(buffer.read(BYTE), buffer.read(BYTE), buffer.read(BYTE)),
+                    Mirror.values()[buffer.read(VAR_INT)], fromRestrictedRotation(buffer.read(VAR_INT)),
+                    buffer.read(STRING), buffer.read(FLOAT),
+                    buffer.read(VAR_LONG), buffer.read(BYTE));
+        }
+    };
 
     // Flag values
     public static final byte IGNORE_ENTITIES = 0x1;
@@ -31,26 +54,6 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
      * Requires the player to be in creative and have a permission level higher than 2.
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BLOCK_POSITION, location);
-        writer.writeEnum(Action.class, action);
-        writer.writeEnum(Mode.class, mode);
-        writer.write(STRING, name);
-        writer.write(BYTE, (byte) offset.x());
-        writer.write(BYTE, (byte) offset.y());
-        writer.write(BYTE, (byte) offset.z());
-        writer.write(BYTE, (byte) size.x());
-        writer.write(BYTE, (byte) size.y());
-        writer.write(BYTE, (byte) size.z());
-        writer.write(VAR_INT, mirror.ordinal());
-        writer.write(VAR_INT, toRestrictedRotation(rotation));
-        writer.write(STRING, metadata);
-        writer.write(FLOAT, integrity);
-        writer.write(VAR_LONG, seed);
-        writer.write(BYTE, flags);
-    }
 
     /**
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.

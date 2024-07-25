@@ -1,21 +1,14 @@
 package net.minestom.server.network.packet.client.status;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 public record StatusRequestPacket() implements ClientPacket {
-    public StatusRequestPacket(@NotNull NetworkBuffer reader) {
-        this();
-    }
+    public static final NetworkBuffer.Type<StatusRequestPacket> SERIALIZER = NetworkBufferTemplate.template(StatusRequestPacket::new);
 
     @Override
     public boolean processImmediately() {
         return true;
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        // Empty
     }
 }

@@ -13,34 +13,34 @@ public class ParticleDataTest {
     public void testDustParticleDefault() {
         Particle particle = Particle.DUST;
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
+        assertDoesNotThrow(() -> ParticlePacket.SERIALIZER.write(new NetworkBuffer(), packet));
     }
 
     @Test
     public void testDustParticleInvalid() {
         var particle = Particle.DUST.withProperties(null, 1);
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertThrows(NullPointerException.class, () -> packet.write(new NetworkBuffer()));
+        assertThrows(NullPointerException.class, () -> ParticlePacket.SERIALIZER.write(new NetworkBuffer(), packet));
     }
 
     @Test
     public void testParticleValid() {
         var particle = Particle.ENTITY_EFFECT;
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
+        assertDoesNotThrow(() -> ParticlePacket.SERIALIZER.write(new NetworkBuffer(), packet));
     }
 
     @Test
     public void testParticleData() {
         var particle = Particle.ENTITY_EFFECT;
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertDoesNotThrow(() -> packet.write(new NetworkBuffer()));
+        assertDoesNotThrow(() -> ParticlePacket.SERIALIZER.write(new NetworkBuffer(), packet));
     }
 
     @Test
     public void invalidBlock() {
         var particle = Particle.BLOCK.withBlock(null);
         ParticlePacket packet = new ParticlePacket(particle, true, 0, 0, 0, 0, 0, 0, 0, 0);
-        assertThrows(NullPointerException.class, () -> packet.write(new NetworkBuffer()));
+        assertThrows(NullPointerException.class, () -> ParticlePacket.SERIALIZER.write(new NetworkBuffer(), packet));
     }
 }

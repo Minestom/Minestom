@@ -21,7 +21,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
@@ -108,7 +108,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketUtils.broadcastPlayPacket(PluginMessagePacket.getBrandPacket());
+        PacketUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
     /**
@@ -189,8 +189,8 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.bossBar();
     }
 
-    public static @NotNull PacketProcessor getPacketProcessor() {
-        return serverProcess.packetProcessor();
+    public static @NotNull PacketParser.Client getPacketParser() {
+        return serverProcess.packetParser();
     }
 
     public static boolean isStarted() {

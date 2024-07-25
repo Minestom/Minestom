@@ -5,10 +5,10 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import net.minestom.server.utils.entity.EntityFinder;
-import net.minestom.server.utils.math.IntRange;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -78,7 +78,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
+        return NetworkBuffer.makeArray(buffer -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
                 mask |= 0x01;
@@ -86,7 +86,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             if (this.isOnlyPlayers()) {
                 mask |= 0x02;
             }
-            packetWriter.writeByte(mask);
+            buffer.write(NetworkBuffer.BYTE, mask);
         });
     }
 
@@ -252,7 +252,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "level":
                 try {
-                    final IntRange level = Argument.parse(sender, new ArgumentIntRange(value));
+                    final Range.Int level = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setLevel(level);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);
@@ -260,7 +260,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 break;
             case "distance":
                 try {
-                    final IntRange distance = Argument.parse(sender, new ArgumentIntRange(value));
+                    final Range.Int distance = Argument.parse(sender, new ArgumentIntRange(value));
                     entityFinder.setDistance(distance);
                 } catch (ArgumentSyntaxException e) {
                     throw new ArgumentSyntaxException("Invalid level number", input, INVALID_ARGUMENT_VALUE);

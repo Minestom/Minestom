@@ -24,6 +24,7 @@ import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
@@ -196,7 +197,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private long startItemUseTime;
     private long itemUseTime;
-    private Hand itemUseHand;
+    private PlayerHand itemUseHand;
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
@@ -354,9 +355,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(recipeManager.getDeclareRecipesPacket());
 
             List<String> recipesIdentifier = new ArrayList<>();
-            for (Recipe recipe : recipeManager.getRecipes()) {
-                if (!recipe.shouldShow(this))
-                    continue;
+            for (Recipe recipe : recipeManager.consumeRecipes(this)) {
                 recipesIdentifier.add(recipe.id());
             }
             if (!recipesIdentifier.isEmpty()) {
@@ -442,7 +441,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                final boolean isOffHand = itemUpdateStateEvent.getHand() == PlayerHand.OFF;
                 refreshActiveHand(false, isOffHand, false);
 
                 final ItemStack item = itemUpdateStateEvent.getItemStack();
@@ -527,7 +526,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         refreshHealth();
 
         sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(), 0, gameMode, gameMode,
-                false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
+                false, levelFlat, deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -841,47 +840,47 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     protected void updatePose() {
-        Pose oldPose = getPose();
-        Pose newPose;
+        EntityPose oldPose = getPose();
+        EntityPose newPose;
 
         // Figure out their expected state
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
-            newPose = Pose.FALL_FLYING;
+            newPose = EntityPose.FALL_FLYING;
         } else if (false) { // When should they be sleeping? We don't have any in-bed state...
-            newPose = Pose.SLEEPING;
+            newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
-            newPose = Pose.SWIMMING;
+            newPose = EntityPose.SWIMMING;
         } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.isInRiptideSpinAttack()) {
-            newPose = Pose.SPIN_ATTACK;
+            newPose = EntityPose.SPIN_ATTACK;
         } else if (isSneaking() && !isFlying()) {
-            newPose = Pose.SNEAKING;
+            newPose = EntityPose.SNEAKING;
         } else {
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         // Try to put them in their expected state, or the closest if they don't fit.
         if (canFitWithBoundingBox(newPose)) {
             // Use expected state
-        } else if (canFitWithBoundingBox(Pose.SNEAKING)) {
-            newPose = Pose.SNEAKING;
-        } else if (canFitWithBoundingBox(Pose.SWIMMING)) {
-            newPose = Pose.SWIMMING;
+        } else if (canFitWithBoundingBox(EntityPose.SNEAKING)) {
+            newPose = EntityPose.SNEAKING;
+        } else if (canFitWithBoundingBox(EntityPose.SWIMMING)) {
+            newPose = EntityPose.SWIMMING;
         } else {
             // If they can't fit anywhere, just use standing
-            newPose = Pose.STANDING;
+            newPose = EntityPose.STANDING;
         }
 
         if (newPose != oldPose) setPose(newPose);
     }
 
     /**
-     * Returns true if the player can fit at the current position with the given {@link net.minestom.server.entity.Entity.Pose}, false otherwise.
+     * Returns true if the player can fit at the current position with the given {@link EntityPose}, false otherwise.
      *
      * @param pose The pose to check
      */
-    private boolean canFitWithBoundingBox(@NotNull Pose pose) {
-        BoundingBox bb = pose == Pose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
+    private boolean canFitWithBoundingBox(@NotNull EntityPose pose) {
+        BoundingBox bb = pose == EntityPose.STANDING ? boundingBox : BoundingBox.fromPose(pose);
         if (bb == null) return false;
 
         var position = getPosition();
@@ -1027,7 +1026,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Set book in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, writtenBook));
         // Open the book
-        sendPacket(new OpenBookPacket(Hand.OFF));
+        sendPacket(new OpenBookPacket(PlayerHand.OFF));
         // Restore the item in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
     }
@@ -1145,7 +1144,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the item use hand, null if none
      */
-    public @Nullable Hand getItemUseHand() {
+    public @Nullable PlayerHand getItemUseHand() {
         return itemUseHand;
     }
 
@@ -1219,7 +1218,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
         RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, RespawnPacket.COPY_ALL);
+                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1413,7 +1412,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param entity the entity to spectate
      */
     public void spectate(@NotNull Entity entity) {
-        sendPacket(new CameraPacket(entity));
+        sendPacket(new CameraPacket(entity.getEntityId()));
     }
 
     /**
@@ -1668,7 +1667,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
         refreshClientStateAfterRespawn();
     }
 
@@ -2010,12 +2009,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     public void refreshFlying(boolean flying) {
         //When the player starts or stops flying, their pose needs to change
         if (this.flying != flying) {
-            Pose pose = getPose();
+            EntityPose pose = getPose();
 
-            if (this.isSneaking() && pose == Pose.STANDING) {
-                setPose(Pose.SNEAKING);
-            } else if (pose == Pose.SNEAKING) {
-                setPose(Pose.STANDING);
+            if (this.isSneaking() && pose == EntityPose.STANDING) {
+                setPose(EntityPose.SNEAKING);
+            } else if (pose == EntityPose.SNEAKING) {
+                setPose(EntityPose.STANDING);
             }
         }
 
@@ -2199,7 +2198,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         clearItemUse();
     }
 
-    public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTimeTicks) {
+    public void refreshItemUse(@Nullable PlayerHand itemUseHand, long itemUseTimeTicks) {
         this.itemUseHand = itemUseHand;
         if (itemUseHand != null) {
             this.startItemUseTime = getAliveTicks();
@@ -2219,7 +2218,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the called {@link ItemUpdateStateEvent},
      */
-    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull Hand hand) {
+    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull PlayerHand hand) {
         ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
         EventDispatcher.call(itemUpdateStateEvent);
 
@@ -2417,11 +2416,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
-     * Represents the main or off hand of the player.
+     * Send a {@link Notification} to the player.
+     * @param notification the {@link Notification} to send
      */
-    public enum Hand {
-        MAIN,
-        OFF
+    public void sendNotification(@NotNull Notification notification) {
+        sendPacket(notification.buildAddPacket());
+        sendPacket(notification.buildRemovePacket());
     }
 
     public enum FacePoint {

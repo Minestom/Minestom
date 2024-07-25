@@ -13,22 +13,25 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 public record ClientSignedCommandChatPacket(@NotNull String message, long timestamp,
                                             long salt, @NotNull ArgumentSignatures signatures,
                                             LastSeenMessages.@NotNull Update lastSeenMessages) implements ClientPacket {
+    public static NetworkBuffer.Type<ClientSignedCommandChatPacket> SERIALIZER = new NetworkBuffer.Type<ClientSignedCommandChatPacket>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ClientSignedCommandChatPacket value) {
+            buffer.write(STRING, value.message);
+            buffer.write(LONG, value.timestamp);
+            buffer.write(LONG, value.salt);
+            buffer.write(value.signatures);
+            buffer.write(value.lastSeenMessages);
+        }
+
+        @Override
+        public ClientSignedCommandChatPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientSignedCommandChatPacket(buffer.read(STRING), buffer.read(LONG),
+                    buffer.read(LONG), new ArgumentSignatures(buffer),
+                    new LastSeenMessages.Update(buffer));
+        }
+    };
+
     public ClientSignedCommandChatPacket {
         Check.argCondition(message.length() > 256, "Message length cannot be greater than 256");
-    }
-
-    public ClientSignedCommandChatPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(LONG),
-                reader.read(LONG), new ArgumentSignatures(reader),
-                new LastSeenMessages.Update(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, message);
-        writer.write(LONG, timestamp);
-        writer.write(LONG, salt);
-        writer.write(signatures);
-        writer.write(lastSeenMessages);
     }
 }

@@ -2,9 +2,11 @@ package net.minestom.server.network.socket;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
@@ -15,8 +17,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class Server {
 
@@ -27,7 +27,7 @@ public final class Server {
     private volatile boolean stop;
 
     private final Selector selector = Selector.open();
-    private final PacketProcessor packetProcessor;
+    private final PacketParser.Client packetParser;
     private final List<Worker> workers;
     private int index;
 
@@ -36,8 +36,8 @@ public final class Server {
     private String address;
     private int port;
 
-    public Server(PacketProcessor packetProcessor) throws IOException {
-        this.packetProcessor = packetProcessor;
+    public Server(PacketParser.Client packetParser) throws IOException {
+        this.packetParser = packetParser;
         Worker[] workers = new Worker[ServerFlag.WORKER_COUNT];
         Arrays.setAll(workers, value -> new Worker(this));
         this.workers = List.of(workers);
@@ -106,7 +106,7 @@ public final class Server {
     public void stop() {
         this.stop = true;
         try {
-            if(serverSocket != null) {
+            if (serverSocket != null) {
                 this.serverSocket.close();
             }
 
@@ -127,8 +127,8 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public @NotNull PacketProcessor packetProcessor() {
-        return packetProcessor;
+    public @NotNull PacketParser.Client packetParser() {
+        return packetParser;
     }
 
     public SocketAddress socketAddress() {

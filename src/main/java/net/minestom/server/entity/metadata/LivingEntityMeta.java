@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.MetadataHolder;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.particle.Particle;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,12 +32,12 @@ public class LivingEntityMeta extends EntityMeta {
     }
 
     @NotNull
-    public Player.Hand getActiveHand() {
-        return getMaskBit(OFFSET, ACTIVE_HAND_BIT) ? Player.Hand.OFF : Player.Hand.MAIN;
+    public PlayerHand getActiveHand() {
+        return getMaskBit(OFFSET, ACTIVE_HAND_BIT) ? PlayerHand.OFF : PlayerHand.MAIN;
     }
 
-    public void setActiveHand(@NotNull Player.Hand hand) {
-        setMaskBit(OFFSET, ACTIVE_HAND_BIT, hand == Player.Hand.OFF);
+    public void setActiveHand(@NotNull PlayerHand hand) {
+        setMaskBit(OFFSET, ACTIVE_HAND_BIT, hand == PlayerHand.OFF);
     }
 
     public boolean isInRiptideSpinAttack() {
