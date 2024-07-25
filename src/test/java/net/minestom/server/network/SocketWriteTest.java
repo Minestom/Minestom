@@ -4,7 +4,6 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.Utils;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -17,19 +16,15 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class SocketWriteTest {
 
     record IntPacket(int value) implements ServerPacket.Play {
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(INT, value);
-        }
-
+        public static final NetworkBuffer.Type<IntPacket> SERIALIZER = NetworkBufferTemplate.template(
+                INT, IntPacket::value,
+                IntPacket::new);
     }
 
     record CompressiblePacket(String value) implements ServerPacket.Play {
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, value);
-        }
-
+        public static final NetworkBuffer.Type<CompressiblePacket> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, CompressiblePacket::value,
+                CompressiblePacket::new);
     }
 
     @Test
@@ -37,7 +32,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -49,8 +44,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
-        PacketUtils.writeFramedPacket(buffer, 1, packet, -1);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, -1);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -66,7 +61,7 @@ public class SocketWriteTest {
         var packet = new CompressiblePacket(string);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
+        PacketUtils.writeFramedPacket(buffer, 1, CompressiblePacket.SERIALIZER, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + payload
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -78,7 +73,7 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -90,8 +85,8 @@ public class SocketWriteTest {
         var packet = new IntPacket(5);
 
         var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
-        PacketUtils.writeFramedPacket(buffer, 1, packet, 256);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, 256);
+        PacketUtils.writeFramedPacket(buffer, 1, IntPacket.SERIALIZER, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
