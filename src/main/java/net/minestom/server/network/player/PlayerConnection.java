@@ -65,12 +65,36 @@ public abstract class PlayerConnection {
      */
     public abstract void sendPacket(@NotNull SendablePacket packet);
 
-    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+    public void sendPackets(@NotNull Collection<? extends SendablePacket> packets) {
         packets.forEach(this::sendPacket);
     }
 
     public void sendPackets(@NotNull SendablePacket... packets) {
         sendPackets(List.of(packets));
+    }
+
+    public void sendPackets(@NotNull List<? extends SendablePacket> packets, int[] exceptions) {
+        if (exceptions.length == 0) {
+            sendPackets(packets);
+            return;
+        }
+        // We expect the exception indexes to be sorted
+        int exceptionIndex = 0;
+        int nextException = exceptions[exceptionIndex];
+        for (int i = 0; i < packets.size(); i++) {
+            if (i == nextException) {
+                // Skip this packet
+                if (++exceptionIndex == exceptions.length) {
+                    // No more exception
+                    nextException = -1;
+                } else {
+                    // Next exception
+                    nextException = exceptions[exceptionIndex];
+                }
+            }
+            final SendablePacket packet = packets.get(i);
+            sendPacket(packet);
+        }
     }
 
     /**

@@ -37,7 +37,7 @@ import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
@@ -379,7 +379,7 @@ final class ServerProcessImpl implements ServerProcess {
             scheduler().processTickEnd();
 
             // Flush all waiting packets
-            PacketUtils.flush();
+            PacketViewableUtils.flush();
 
             // Server connection tick
             server().tick();
