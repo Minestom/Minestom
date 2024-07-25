@@ -120,24 +120,16 @@ public final class PacketListenerManager {
             return;
         }
 
+        if (state == ConnectionState.CONFIGURATION) {
+            // So it can process the settings packet
+            Player player = connection.getPlayer();
+            passToAntiCheat(player, packet, ConnectionState.CONFIGURATION);
+        }
+
         // Event
         if (state == ConnectionState.PLAY) {
             Player player = connection.getPlayer();
-            if (player != null && player.getAntiCheat() != null) {
-                AntiCheat.Action result = player.getAntiCheat().consume(packet);
-
-                switch (result) {
-                    case AntiCheat.Action.InvalidCritical action -> {
-                        MinecraftServer.LOGGER.info("Critical: {}", action.message());
-                    }
-                    case AntiCheat.Action.InvalidIgnore action -> {
-                        // TODO: make a anticheat event thing
-                        MinecraftServer.LOGGER.info("Ignoring: {}", action.message());
-                        return;
-                    }
-                    case AntiCheat.Action.Valid ignored -> {}
-                }
-            }
+            passToAntiCheat(player, packet, ConnectionState.PLAY);
 
             PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
             EventDispatcher.call(playerPacketEvent);
@@ -198,6 +190,25 @@ public final class PacketListenerManager {
     @Deprecated
     public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
         setPlayListener(packetClass, consumer);
+    }
+
+    private void passToAntiCheat(Player player, ClientPacket packet, ConnectionState state) {
+        if (player != null && player.getAntiCheat() != null) {
+            AntiCheat.Action result = player.getAntiCheat().consume(packet, state);
+
+            switch (result) {
+                case AntiCheat.Action.InvalidCritical action -> {
+                    MinecraftServer.LOGGER.info("Critical: {}", action.message());
+                }
+                case AntiCheat.Action.InvalidIgnore action -> {
+                    // TODO: make a anticheat event thing
+                    MinecraftServer.LOGGER.info("Ignoring: {}", action.message());
+                    return;
+                }
+                case AntiCheat.Action.Valid ignored -> {
+                }
+            }
+        }
     }
 
 }

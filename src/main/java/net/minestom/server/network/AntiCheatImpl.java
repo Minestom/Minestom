@@ -63,8 +63,8 @@ public class AntiCheatImpl implements AntiCheat {
     }
 
     @Override
-    public Action consume(ClientPacket clientPacket) {
-        if (!joined) return new Action.InvalidCritical("Client packet received before join game packet.");
+    public Action consume(ClientPacket clientPacket, ConnectionState connectionState) {
+        if (!joined && connectionState != ConnectionState.CONFIGURATION) return new Action.InvalidCritical("Client packet received before join game packet.");
 
         return switch (clientPacket) {
             case ClientAnimationPacket packet -> {
@@ -78,6 +78,7 @@ public class AntiCheatImpl implements AntiCheat {
                 yield VALID;
             }
             case ClientSettingsPacket packet -> {
+
                 if (packet.viewDistance() < 2 || packet.viewDistance() > 32) {
                     yield new Action.InvalidIgnore("Invalid view distance.");
                 }
@@ -102,6 +103,16 @@ public class AntiCheatImpl implements AntiCheat {
                 if (jumpBoost != 0 && action != ClientEntityActionPacket.Action.START_JUMP_HORSE) {
                     yield new Action.InvalidCritical("Horse jump boost without starting jump.");
                 }
+
+                switch (action) {
+                    case START_SPRINTING, STOP_SPRINTING -> {
+                        addChange(new Change.SetMovementState(new MovementState(!player.movementState.sprinting, player.movementState.sneaking)));
+                    }
+                    case START_SNEAKING, STOP_SNEAKING -> {
+                        addChange(new Change.SetMovementState(new MovementState(player.movementState.sprinting, !player.movementState.sneaking)));
+                    }
+                }
+
                 yield VALID;
             }
             case ClientSpectatePacket packet -> {
@@ -260,7 +271,7 @@ public class AntiCheatImpl implements AntiCheat {
     ) {
 
         public Player() {
-            this(Integer.MIN_VALUE, null, null, null, null, 0, false, false, false);
+            this(Integer.MIN_VALUE, null, null, new MovementState(false, false), null, 0, false, false, false);
         }
 
         Player merge(List<Change> changes) {
