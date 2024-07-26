@@ -71,6 +71,7 @@ public final class ConnectionManager {
     private volatile UuidProvider uuidProvider = (playerConnection, username) -> UUID.randomUUID();
     // The player provider to have your own Player implementation
     private volatile PlayerProvider playerProvider = Player::new;
+    private volatile AntiCheatProvider antiCheatProvider = (uuid, connection) -> null;
 
     /**
      * Gets the number of "online" players, eg for the query response.
@@ -197,6 +198,20 @@ public final class ConnectionManager {
      */
     public void setPlayerProvider(@Nullable PlayerProvider playerProvider) {
         this.playerProvider = playerProvider != null ? playerProvider : Player::new;
+    }
+
+    /**
+     * Sets the default {@link AntiCheat} provider. Disabled by default.
+     *
+     * @param antiCheatProvider the new {@link AntiCheatProvider}, can return null to disable anticheat for the player
+     */
+    public void setAntiCheatProvider(@NotNull AntiCheatProvider antiCheatProvider) {
+        this.antiCheatProvider = antiCheatProvider;
+    }
+
+    @ApiStatus.Internal
+    public @Nullable AntiCheat getAntiCheat(@NotNull UUID uuid, @NotNull PlayerConnection playerConnection) {
+        return antiCheatProvider.createAntiCheat(uuid, playerConnection);
     }
 
     /**

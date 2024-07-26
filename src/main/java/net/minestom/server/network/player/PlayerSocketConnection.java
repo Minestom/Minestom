@@ -7,6 +7,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.AntiCheat;
 import net.minestom.server.network.PacketProcessor;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
@@ -299,20 +300,31 @@ public class PlayerSocketConnection extends PlayerConnection {
             outgoing.call(event);
             if (event.isCancelled()) return;
         }
+
+        // anti cheat processing can happen after events are handled
+
         // Write packet
-        if (packet instanceof ServerPacket serverPacket) {
-            writeServerPacketSync(serverPacket, compressed);
-        } else if (packet instanceof FramedPacket framedPacket) {
-            var buffer = framedPacket.body();
-            writeBufferSync(buffer, 0, buffer.limit());
-        } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body(getConnectionState());
-            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            writeServerPacketSync(lazyPacket.packet(), compressed);
-        } else {
-            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
+        switch (packet) {
+            case ServerPacket serverPacket -> {
+                // anti cheat processing can happen after events are handled
+                // TODO: we may be able to remove this cause why would it be able to be null but I see check above
+                if (player != null && player.getAntiCheat() != null && packet instanceof ServerPacket.Play playPacket) {
+                    player.getAntiCheat().consume(playPacket);
+                }
+
+                writeServerPacketSync(serverPacket, compressed);
+            }
+            case FramedPacket framedPacket -> {
+                var buffer = framedPacket.body();
+                writeBufferSync(buffer, 0, buffer.limit());
+            }
+            case CachedPacket cachedPacket -> {
+                var buffer = cachedPacket.body(getConnectionState());
+                if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
+                else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
+            }
+            case LazyPacket lazyPacket -> writeServerPacketSync(lazyPacket.packet(), compressed);
+            case null, default -> throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
         }
     }
 

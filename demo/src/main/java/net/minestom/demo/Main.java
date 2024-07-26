@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -11,6 +12,7 @@ import net.minestom.demo.commands.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerAntiCheatFailEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
@@ -19,6 +21,11 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.AntiCheat;
+import net.minestom.server.network.AntiCheatImpl;
+import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeCategory;
@@ -31,6 +38,8 @@ import org.jetbrains.annotations.NotNull;
 import java.time.Duration;
 import java.util.List;
 
+import static net.kyori.adventure.text.Component.text;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -39,6 +48,8 @@ public class Main {
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
+
+        MinecraftServer.getConnectionManager().setAntiCheatProvider((uuid, connection) -> new AntiCheatImpl());
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
@@ -81,8 +92,9 @@ public class Main {
         commandManager.register(new PotionCommand());
         commandManager.register(new CookieCommand());
         commandManager.register(new WorldBorderCommand());
+        commandManager.register(new ChestCommand());
 
-        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
+        commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(text("Unknown command", NamedTextColor.RED)));
 
         MinecraftServer.getBenchmarkManager().enable(Duration.of(10, TimeUnit.SECOND));
 
@@ -99,27 +111,32 @@ public class Main {
 
                 responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
                 String ip = event.getConnection().getServerAddress();
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" IP: ", NamedTextColor.GRAY))
-                        .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" PORT: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getServerPort()))));
-                responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
-                        .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getProtocolVersion()))));
+                responseData.addEntry(NamedAndIdentified.named(text('-', NamedTextColor.DARK_GRAY)
+                        .append(text(" IP: ", NamedTextColor.GRAY))
+                        .append(text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
+                responseData.addEntry(NamedAndIdentified.named(text('-', NamedTextColor.DARK_GRAY)
+                        .append(text(" PORT: ", NamedTextColor.GRAY))
+                        .append(text(event.getConnection().getServerPort()))));
+                responseData.addEntry(NamedAndIdentified.named(text('-', NamedTextColor.DARK_GRAY)
+                        .append(text(" VERSION: ", NamedTextColor.GRAY))
+                        .append(text(event.getConnection().getProtocolVersion()))));
             }
-            responseData.addEntry(NamedAndIdentified.named(Component.text("Time", NamedTextColor.YELLOW)
-                    .append(Component.text(": ", NamedTextColor.GRAY))
-                    .append(Component.text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC)))));
+            responseData.addEntry(NamedAndIdentified.named(text("Time", NamedTextColor.YELLOW)
+                    .append(text(": ", NamedTextColor.GRAY))
+                    .append(text(System.currentTimeMillis(), Style.style(TextDecoration.ITALIC)))));
 
             // components will be converted the legacy section sign format so they are displayed in the client
-            responseData.addEntry(NamedAndIdentified.named(Component.text("You can use ").append(Component.text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
+            responseData.addEntry(NamedAndIdentified.named(text("You can use ").append(text("styling too!", NamedTextColor.RED, TextDecoration.BOLD))));
 
             // the data will be automatically converted to the correct format on response, so you can do RGB and it'll be downsampled!
             // on legacy versions, colors will be converted to the section format so it'll work there too
-            responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
+            responseData.setDescription(text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
+        });
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerAntiCheatFailEvent.class, event -> {
+            Component logFailedMessage = text("§7[§cAntiCheat§7] §f%s §7(%s)".formatted(event.reason(), event.player().getName()));
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> player.sendMessage(logFailedMessage));
         });
 
         var ironBlockRecipe = new ShapedRecipe(
@@ -144,7 +161,7 @@ public class Main {
                         new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.DIRT)))
                 ),
                 ItemStack.builder(Material.GOLD_BLOCK)
-                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .set(ItemComponent.CUSTOM_NAME, text("abc"))
                         .build()
         ) {
             @Override

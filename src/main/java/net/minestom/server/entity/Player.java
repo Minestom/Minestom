@@ -59,6 +59,7 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
+import net.minestom.server.network.AntiCheat;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.PlayerProvider;
@@ -144,6 +145,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
+    private final AntiCheat antiCheat;
 
     private volatile int latency;
     private Component displayName;
@@ -247,6 +249,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.username = username;
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
+        this.antiCheat = MinecraftServer.getConnectionManager().getAntiCheat(uuid, playerConnection);
 
         setRespawnPoint(Pos.ZERO);
 
@@ -1533,6 +1536,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @NotNull PlayerConnection getPlayerConnection() {
         return playerConnection;
+    }
+
+    public @Nullable AntiCheat getAntiCheat() {
+        return antiCheat;
     }
 
     /**
