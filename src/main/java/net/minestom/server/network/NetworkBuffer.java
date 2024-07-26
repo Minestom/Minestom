@@ -40,7 +40,7 @@ public final class NetworkBuffer {
     public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     public static final Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
-    public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
+    public static final Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
 
