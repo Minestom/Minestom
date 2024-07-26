@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 public interface AntiCheat {
     void consume(ServerPacket.Play serverPacket);
 
-    Action consume(ClientPacket clientPacket);
+    Action consume(ClientPacket clientPacket, ConnectionState connectionState);
 
     sealed interface Action {
         /**

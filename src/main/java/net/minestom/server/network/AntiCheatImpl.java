@@ -1,5 +1,6 @@
 package net.minestom.server.network;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -9,14 +10,12 @@ import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
-import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
-import net.minestom.server.network.packet.server.play.JoinGamePacket;
-import net.minestom.server.network.packet.server.play.RespawnPacket;
+import net.minestom.server.network.packet.server.play.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-final class AntiCheatImpl implements AntiCheat {
+public class AntiCheatImpl implements AntiCheat {
     private static final Action VALID = new Action.Valid();
     private boolean joined = false;
 
@@ -45,8 +44,17 @@ final class AntiCheatImpl implements AntiCheat {
                     case CHANGE_GAMEMODE -> {
                         addChange(new Change.SetGameMode(GameMode.fromId((int) changeGameStatePacket.value())));
                     }
-                    default -> throw new IllegalStateException("Unexpected value: " + changeGameStatePacket);
+                    default -> {
+                        // dont throw exception here tf
+                        //throw new IllegalStateException("Unexpected value: " + changeGameStatePacket);
+                    }
                 }
+            }
+            case OpenWindowPacket openWindowPacket -> {
+                addChange(new Change.SetInInventory(true));
+            }
+            case CloseWindowPacket closeWindowPacket -> {
+                addChange(new Change.SetInInventory(false));
             }
             default -> {
                 // Empty
@@ -55,8 +63,8 @@ final class AntiCheatImpl implements AntiCheat {
     }
 
     @Override
-    public Action consume(ClientPacket clientPacket) {
-        if (!joined) return new Action.InvalidCritical("Client packet received before join game packet.");
+    public Action consume(ClientPacket clientPacket, ConnectionState connectionState) {
+        if (!joined && connectionState != ConnectionState.CONFIGURATION) return new Action.InvalidCritical("Client packet received before join game packet.");
 
         return switch (clientPacket) {
             case ClientAnimationPacket packet -> {
@@ -70,6 +78,7 @@ final class AntiCheatImpl implements AntiCheat {
                 yield VALID;
             }
             case ClientSettingsPacket packet -> {
+
                 if (packet.viewDistance() < 2 || packet.viewDistance() > 32) {
                     yield new Action.InvalidIgnore("Invalid view distance.");
                 }
@@ -82,6 +91,10 @@ final class AntiCheatImpl implements AntiCheat {
                 yield VALID;
             }
             case ClientEntityActionPacket packet -> {
+                if (player.inInventory) {
+                    yield new Action.InvalidCritical("Entity action packet received while in window.");
+                }
+
                 var action = packet.action();
                 var jumpBoost = packet.horseJumpBoost();
                 if (jumpBoost < 0 || jumpBoost > 100) {
@@ -90,6 +103,16 @@ final class AntiCheatImpl implements AntiCheat {
                 if (jumpBoost != 0 && action != ClientEntityActionPacket.Action.START_JUMP_HORSE) {
                     yield new Action.InvalidCritical("Horse jump boost without starting jump.");
                 }
+
+                switch (action) {
+                    case START_SPRINTING, STOP_SPRINTING -> {
+                        addChange(new Change.SetMovementState(new MovementState(!player.movementState.sprinting, player.movementState.sneaking)));
+                    }
+                    case START_SNEAKING, STOP_SNEAKING -> {
+                        addChange(new Change.SetMovementState(new MovementState(player.movementState.sprinting, !player.movementState.sneaking)));
+                    }
+                }
+
                 yield VALID;
             }
             case ClientSpectatePacket packet -> {
@@ -99,6 +122,10 @@ final class AntiCheatImpl implements AntiCheat {
                 yield VALID;
             }
             case ClientInteractEntityPacket packet -> {
+                if (player.inInventory) {
+                    yield new Action.InvalidCritical("Interact entity packet received while in window.");
+                }
+
                 if (packet.type() instanceof ClientInteractEntityPacket.Attack) {
                     if (!player.swungHand) {
                         yield new Action.InvalidCritical("Attack packet received while already attacking.");
@@ -125,6 +152,10 @@ final class AntiCheatImpl implements AntiCheat {
             case ClientPlayerRotationPacket packet -> verifyRotationState(packet.pitch(), packet.yaw());
 
             case ClientChatMessagePacket packet -> {
+                if (player.inInventory) {
+                    yield new Action.InvalidCritical("Chat message packet received while in window.");
+                }
+
                 // The vanilla client cannot send a chat message if they do not have chat visible, or if they are sneaking or sprinting.
                 if (settings() == null)
                     yield new Action.InvalidCritical("Chat message packet received before settings packet.");
@@ -138,6 +169,45 @@ final class AntiCheatImpl implements AntiCheat {
             case ClientCreativeInventoryActionPacket packet -> {
                 if (gameMode() != GameMode.CREATIVE)
                     yield new Action.InvalidCritical("Creative inventory action packet received in non-creative game mode.");
+                yield VALID;
+            }
+            case ClientPlayerBlockPlacementPacket packet -> {
+                if (packet.cursorPositionX() > 1.0 || packet.cursorPositionY() > 1.0 || packet.cursorPositionZ() > 1.0)
+                    yield new Action.InvalidCritical("Invalid block cursor position.");
+                if (packet.cursorPositionX() < 0.0 || packet.cursorPositionY() < 0.0 || packet.cursorPositionZ() < 0.0)
+                    yield new Action.InvalidCritical("Invalid block cursor position.");
+
+                yield VALID;
+            }
+            case ClientPlayerPositionPacket packet -> {
+                if (player.position == null) {
+                    addChange(new Change.SetPosition(packet.position()));
+                }
+
+                if (player.inInventory && !player.position.samePoint(packet.position()))
+                    yield new Action.InvalidCritical("Position packet received while in window.");
+
+                addChange(new Change.SetPosition(packet.position()));
+                yield VALID;
+            }
+            case ClientVehicleMovePacket packet -> {
+                // TODO: do the update to set this boolean
+                if (!player.inVehicle) {
+                    yield new Action.InvalidIgnore("Vehicle move packet received while not in vehicle.");
+                }
+
+                yield VALID;
+            }
+            case ClientCloseWindowPacket packet -> {
+                addChange(new Change.SetInInventory(false));
+
+                yield VALID;
+            }
+            case ClientCommandChatPacket packet -> {
+                if (player.inInventory) {
+                    yield new Action.InvalidIgnore("Command packet received while in window.");
+                }
+
                 yield VALID;
             }
             case ClientKeepAlivePacket packet -> {
@@ -193,32 +263,41 @@ final class AntiCheatImpl implements AntiCheat {
             Settings settings,
             GameMode gameMode,
             MovementState movementState,
+            Point position,
             int lastHeldSlot,
-            boolean swungHand
+            boolean swungHand,
+            boolean inVehicle,
+            boolean inInventory
     ) {
 
         public Player() {
-            this(Integer.MIN_VALUE, null, null, null, 0, false);
+            this(Integer.MIN_VALUE, null, null, new MovementState(false, false), null, 0, false, false, false);
         }
 
         Player merge(List<Change> changes) {
             GameMode gameMode = this.gameMode;
             Settings settings = this.settings;
             MovementState movementState = this.movementState;
+            Point position = this.position;
             int lastHeldSlot = this.lastHeldSlot;
             int entityId = this.entityId;
             var swingsArm = this.swungHand;
+            var inVehicle = this.inVehicle;
+            var inInventory = this.inInventory;
             for (Change change : changes) {
                 switch (change) {
                     case Change.SetGameMode setGameMode -> gameMode = setGameMode.gameMode;
                     case Change.SetSettings setSettings ->  settings =setSettings.settings();
                     case Change.SetMovementState setMovementState -> movementState = setMovementState.movementState();
+                    case Change.SetPosition setPosition -> position = setPosition.position();
                     case Change.SetLastHeldSlot setLastHeldSlot -> lastHeldSlot = setLastHeldSlot.slot();
                     case Change.SetEntityId setEntityId -> entityId = setEntityId.entityId();
                     case Change.SetArmSwing setArmSwing -> swingsArm = setArmSwing.swung;
+                    case Change.SetInVehicle setInVehicle -> inVehicle = setInVehicle.inVehicle;
+                    case Change.SetInInventory setInInventory -> inInventory = setInInventory.inInventory;
                 }
             }
-            return new Player(entityId, settings, gameMode, movementState, lastHeldSlot, swingsArm);
+            return new Player(entityId, settings, gameMode, movementState, position, lastHeldSlot, swingsArm, inVehicle, inInventory);
         }
     }
 
@@ -235,5 +314,8 @@ final class AntiCheatImpl implements AntiCheat {
         record SetLastHeldSlot(int slot) implements Change {}
         record SetEntityId(int entityId) implements Change {}
         record SetArmSwing(boolean swung) implements Change {}
+        record SetInVehicle(boolean inVehicle) implements Change {}
+        record SetInInventory(boolean inInventory) implements Change {}
+        record SetPosition(Point position) implements Change {}
     }
 }

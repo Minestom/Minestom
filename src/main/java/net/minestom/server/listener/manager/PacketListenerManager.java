@@ -1,7 +1,9 @@
 package net.minestom.server.listener.manager;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerAntiCheatFailEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.listener.common.*;
@@ -9,6 +11,7 @@ import net.minestom.server.listener.preplay.ConfigListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
+import net.minestom.server.network.AntiCheat;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -118,9 +121,18 @@ public final class PacketListenerManager {
             return;
         }
 
+        if (state == ConnectionState.CONFIGURATION) {
+            // So it can process the settings packet
+            Player player = connection.getPlayer();
+            passToAntiCheat(player, packet, ConnectionState.CONFIGURATION);
+        }
+
         // Event
         if (state == ConnectionState.PLAY) {
-            PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(connection.getPlayer(), packet);
+            Player player = connection.getPlayer();
+            passToAntiCheat(player, packet, ConnectionState.PLAY);
+
+            PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(player, packet);
             EventDispatcher.call(playerPacketEvent);
             if (playerPacketEvent.isCancelled()) {
                 return;
@@ -179,6 +191,23 @@ public final class PacketListenerManager {
     @Deprecated
     public <T extends ClientPacket> void setListener(@NotNull Class<T> packetClass, @NotNull PacketPlayListenerConsumer<T> consumer) {
         setPlayListener(packetClass, consumer);
+    }
+
+    private void passToAntiCheat(Player player, ClientPacket packet, ConnectionState state) {
+        if (player != null && player.getAntiCheat() != null) {
+            AntiCheat.Action result = player.getAntiCheat().consume(packet, state);
+
+            switch (result) {
+                case AntiCheat.Action.InvalidCritical action -> {
+                    PlayerAntiCheatFailEvent event = new PlayerAntiCheatFailEvent(player, action.message());
+                    EventDispatcher.call(event);
+                }
+                case AntiCheat.Action.InvalidIgnore ignored -> {
+                }
+                case AntiCheat.Action.Valid ignored -> {
+                }
+            }
+        }
     }
 
 }
