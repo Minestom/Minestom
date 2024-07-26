@@ -9,6 +9,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -95,6 +96,23 @@ public final class ItemComponent {
     public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
         return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     public static @Nullable DataComponent<?> fromId(int id) {
         return IDS.get(id);

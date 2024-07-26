@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,23 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
     static @Nullable PotionEffect fromKey(@NotNull Key key) {
         return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static PotionEffect fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     static @Nullable PotionEffect fromId(int id) {
         return PotionEffectImpl.getId(id);

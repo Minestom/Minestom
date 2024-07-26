@@ -1,9 +1,12 @@
 package net.minestom.server.entity.attribute;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -54,6 +57,22 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
 
     static @Nullable Attribute fromKey(@NotNull Key key) {
         return fromKey(key.asString());
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static Attribute fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static Attribute fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
     }
 
     static @Nullable Attribute fromId(int id) {

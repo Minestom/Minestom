@@ -14,6 +14,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -145,6 +146,15 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 index++;
             }
             return Key.key(input.substring(start, index));
+        }
+
+        /**
+         * @deprecated use {@link #readKey()}
+         */
+        @NotNull
+        @Deprecated
+        public NamespaceID readNamespaceId() {
+            return NamespaceID.from(readKey());
         }
 
         public @NotNull BinaryTag readTag() {

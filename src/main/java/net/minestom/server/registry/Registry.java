@@ -26,6 +26,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -931,6 +932,14 @@ public final class Registry {
     public interface Entry extends Keyed {
         @ApiStatus.Experimental
         Properties custom();
+
+        /**
+         * @deprecated use {@link #key()}
+         */
+        @Deprecated
+        default NamespaceID namespace() {
+            return NamespaceID.from(key());
+        }
     }
 
     private static Object readObject(JsonReader reader) throws IOException {

@@ -10,6 +10,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.FluidRegistries;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -72,6 +73,24 @@ public final class Tag implements ProtocolObject, Keyed {
     @Contract(pure = true)
     public @NotNull Key key() {
         return key;
+    }
+
+    /**
+     * @deprecated use {@link #key()}
+     */
+    @Deprecated
+    public @NotNull NamespaceID namespace() {
+        return NamespaceID.from(key);
+    }
+
+    /**
+     * Returns the name of this tag
+     *
+     * @deprecated use {@link #key()}
+     */
+    @Deprecated
+    public NamespaceID getName() {
+        return namespace();
     }
 
     public enum BasicType {

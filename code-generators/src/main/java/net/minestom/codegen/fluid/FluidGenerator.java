@@ -84,6 +84,16 @@ public final class FluidGenerator extends MinestomCodeGenerator {
                         .addModifiers(Modifier.PUBLIC)
                         .build()
         );
+        // getNamespaceID method
+        fluidClass.addMethod(
+                MethodSpec.methodBuilder("getNamespaceID")
+                        .returns(ClassName.get("net.minestom.server.utils", "NamespaceID"))
+                        .addAnnotation(NotNull.class)
+                        .addAnnotation(Deprecated.class)
+                        .addStatement("return NamespaceID.from(this.id)")
+                        .addModifiers(Modifier.PUBLIC)
+                        .build()
+        );
         // toString method
         fluidClass.addMethod(
                 MethodSpec.methodBuilder("toString")

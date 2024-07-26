@@ -7,6 +7,7 @@ import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.crossbow.CrossbowChargingSounds;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -62,6 +63,23 @@ public class EffectComponent {
     public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
         return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     public static @Nullable DataComponent<?> fromId(int id) {
         return IDS.get(id);

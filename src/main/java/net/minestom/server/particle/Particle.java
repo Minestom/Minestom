@@ -12,6 +12,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,23 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
     static @Nullable Particle fromKey(@NotNull Key key) {
         return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static Particle fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static Particle fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     static @Nullable Particle fromId(int id) {
         return ParticleImpl.getId(id);

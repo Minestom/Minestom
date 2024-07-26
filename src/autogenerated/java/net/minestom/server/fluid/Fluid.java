@@ -3,6 +3,7 @@ package net.minestom.server.fluid;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.registry.FluidRegistries;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,6 +39,12 @@ public enum Fluid implements Keyed {
 
     public short getId() {
         return (short) ordinal();
+    }
+
+    @NotNull
+    @Deprecated
+    public NamespaceID getNamespaceID() {
+        return NamespaceID.from(this.id);
     }
 
     @NotNull

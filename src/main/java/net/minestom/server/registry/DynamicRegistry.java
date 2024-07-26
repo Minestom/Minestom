@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Keyed;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -45,6 +46,15 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
         @Contract(pure = true)
         default @NotNull String name() {
             return key().asString();
+        }
+
+        /**
+         * @deprecated use {@link #key()}
+         */
+        @Contract(pure = true)
+        @Deprecated
+        default @NotNull NamespaceID namespace() {
+            return NamespaceID.from(key());
         }
     }
 

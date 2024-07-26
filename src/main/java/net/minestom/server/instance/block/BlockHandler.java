@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -77,6 +78,20 @@ public interface BlockHandler extends Keyed {
 
     default byte getBlockEntityAction() {
         return -1;
+    }
+
+    /**
+     * Gets the id of this handler.
+     * <p>
+     * Used to write the block entity in the anvil world format.
+     *
+     * @return the namespace id of this handler
+     *
+     * @deprecated use {@link #key()}
+     */
+    @Deprecated
+    default @NotNull NamespaceID getNamespaceId() {
+        return NamespaceID.from(key());
     }
 
     /**

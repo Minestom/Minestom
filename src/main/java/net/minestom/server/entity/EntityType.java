@@ -1,8 +1,10 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -46,6 +48,22 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
 
     static EntityType fromKey(@NotNull Key key) {
         return fromKey(key.asString());
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static EntityType fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static EntityType fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
     }
 
     static @Nullable EntityType fromId(int id) {
