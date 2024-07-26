@@ -7,7 +7,7 @@ import net.minestom.server.tag.Tag;
 
 public class ConfigCommand extends Command {
     public ConfigCommand() {
-        super("minecraft:config");
+        super("config");
 
         setDefaultExecutor((sender, context) -> {
             if (!(sender instanceof Player player)) return;
