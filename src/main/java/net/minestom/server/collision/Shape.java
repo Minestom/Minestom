@@ -3,10 +3,8 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-@ApiStatus.Experimental
 public interface Shape {
     boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face);
 
@@ -47,7 +45,6 @@ public interface Shape {
      * @param entity the entity to check the bounding box
      * @return true if this bounding box intersects with the entity, false otherwise
      */
-    @ApiStatus.Experimental
     default boolean intersectEntity(@NotNull Point src, @NotNull Entity entity) {
         return intersectBox(src.sub(entity.getPosition()), entity.getBoundingBox());
     }

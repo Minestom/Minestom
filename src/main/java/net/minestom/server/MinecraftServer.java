@@ -131,7 +131,6 @@ public final class MinecraftServer implements MinecraftConstants {
         PacketUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
-    @ApiStatus.Experimental
     public static @UnknownNullability ServerProcess process() {
         return serverProcess;
     }

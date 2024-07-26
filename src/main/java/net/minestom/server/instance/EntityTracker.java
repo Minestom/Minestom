@@ -22,7 +22,6 @@ import java.util.function.Consumer;
  * <p>
  * Implementations are expected to be thread-safe.
  */
-@ApiStatus.Experimental
 public sealed interface EntityTracker permits EntityTrackerImpl {
     static @NotNull EntityTracker newTracker() {
         return new EntityTrackerImpl();

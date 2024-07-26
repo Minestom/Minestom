@@ -17,7 +17,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Function;
 
 @ApiStatus.Internal
-@ApiStatus.Experimental
 public final class CollisionUtils {
 
     /**

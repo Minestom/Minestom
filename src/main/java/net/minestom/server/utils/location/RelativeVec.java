@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +41,6 @@ public final class RelativeVec {
         return coordinateType.convert(vec, origin, relativeX, relativeY, relativeZ);
     }
 
-    @ApiStatus.Experimental
     public Vec fromView(@Nullable Pos point) {
         if (!relativeX && !relativeY && !relativeZ) {
             return vec;
@@ -72,7 +70,6 @@ public final class RelativeVec {
         return from(entityPosition);
     }
 
-    @ApiStatus.Experimental
     public @NotNull Vec fromView(@Nullable Entity entity) {
         final var entityPosition = entity != null ? entity.getPosition() : Pos.ZERO;
         return fromView(entityPosition);

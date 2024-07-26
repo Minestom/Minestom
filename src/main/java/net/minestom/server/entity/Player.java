@@ -2131,7 +2131,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @ApiStatus.Internal
-    @ApiStatus.Experimental
     public void interpretPacketQueue() {
         if (this.packets.size() >= ServerFlag.PLAYER_PACKET_QUEUE_SIZE) {
             kick(Component.text("Too Many Packets", NamedTextColor.RED));

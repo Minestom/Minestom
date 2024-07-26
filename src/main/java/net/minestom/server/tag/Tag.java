@@ -110,7 +110,6 @@ public class Tag<T> {
                 path, null, listScope);
     }
 
-    @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
         var entry = this.entry;
@@ -145,7 +144,6 @@ public class Tag<T> {
                 null, path, co, listScope + 1);
     }
 
-    @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
         if (path == null || path.length == 0) {

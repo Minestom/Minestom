@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +41,6 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    @ApiStatus.Experimental
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
         return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
                 (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
@@ -50,7 +48,6 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
             finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
@@ -63,7 +60,6 @@ public final class BoundingBox implements Shape {
         return false;
     }
 
-    @ApiStatus.Experimental
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }

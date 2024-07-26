@@ -135,7 +135,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     @Contract(pure = true)
-    @ApiStatus.Experimental
     @NotNull Collection<@NotNull Block> possibleStates();
 
     /**
@@ -243,7 +242,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
          * Represents a hint to retrieve blocks more efficiently.
          * Implementing interfaces do not have to honor this.
          */
-        @ApiStatus.Experimental
         enum Condition {
             /**
              * Returns a block no matter what.

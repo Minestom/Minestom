@@ -310,7 +310,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the future called once the instance data has been saved
      */
-    @ApiStatus.Experimental
     public abstract @NotNull CompletableFuture<Void> saveInstance();
 
     /**
@@ -730,7 +729,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return getChunk(point.chunkX(), point.chunkZ());
     }
 
-    @ApiStatus.Experimental
     public EntityTracker getEntityTracker() {
         return entityTracker;
     }
