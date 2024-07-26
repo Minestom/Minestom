@@ -3,6 +3,7 @@ package net.minestom.server.listener.manager;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerAntiCheatFailEvent;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.listener.common.*;
@@ -198,12 +199,10 @@ public final class PacketListenerManager {
 
             switch (result) {
                 case AntiCheat.Action.InvalidCritical action -> {
-                    MinecraftServer.LOGGER.info("Critical: {}", action.message());
+                    PlayerAntiCheatFailEvent event = new PlayerAntiCheatFailEvent(player, action.message());
+                    EventDispatcher.call(event);
                 }
-                case AntiCheat.Action.InvalidIgnore action -> {
-                    // TODO: make a anticheat event thing
-                    MinecraftServer.LOGGER.info("Ignoring: {}", action.message());
-                    return;
+                case AntiCheat.Action.InvalidIgnore ignored -> {
                 }
                 case AntiCheat.Action.Valid ignored -> {
                 }
