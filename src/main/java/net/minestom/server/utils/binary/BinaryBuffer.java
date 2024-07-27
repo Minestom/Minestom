@@ -3,6 +3,7 @@ package net.minestom.server.utils.binary;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
@@ -154,20 +155,14 @@ public final class BinaryBuffer {
             return true; // Nothing to write
         var writeBuffer = nioBuffer.slice(readerOffset, writerOffset - readerOffset);
         final int count = channel.write(writeBuffer);
-        if (count == -1) {
-            // EOS
-            throw new IOException("Disconnected");
-        }
+        if (count == -1) throw new EOFException();
         this.readerOffset += count;
         return writeBuffer.limit() == writeBuffer.position();
     }
 
     public void readChannel(ReadableByteChannel channel) throws IOException {
         final int count = channel.read(nioBuffer.slice(writerOffset, capacity - writerOffset));
-        if (count == -1) {
-            // EOS
-            throw new IOException("Disconnected");
-        }
+        if (count == -1) throw new EOFException();
         this.writerOffset += count;
     }
 

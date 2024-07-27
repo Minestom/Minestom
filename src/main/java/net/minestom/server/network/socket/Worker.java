@@ -12,9 +12,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -102,8 +105,7 @@ public final class Worker extends MinestomThread {
                             readBuffer.readChannel(channel);
                             connection.processPackets(readBuffer, server.packetProcessor());
                         }
-                    } catch (IOException e) {
-                        // TODO print exception? (should ignore disconnection)
+                    } catch (ClosedChannelException | EOFException | SocketException e) {
                         connection.disconnect();
                     } catch (Throwable t) {
                         MinecraftServer.getExceptionManager().handleException(t);
