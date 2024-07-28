@@ -72,6 +72,12 @@ public class ComponentNetworkBufferTypeTest {
         assertWriteReadEquality(comp);
     }
 
+    @Test
+    void hoverAction() {
+        var comp = Component.text("hello").hoverEvent(Component.text("world"));
+        assertWriteReadEquality(comp);
+    }
+
     private static void assertWriteReadEquality(@NotNull Component comp) {
         var array = NetworkBuffer.makeArray(buffer -> buffer.write(COMPONENT, comp));
         var actual = NBT_READER.deserialize(new NetworkBuffer(ByteBuffer.wrap(array)).read(NBT));

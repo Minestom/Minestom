@@ -14,6 +14,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Locale;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
@@ -211,7 +212,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
         buffer.write(BYTE, TAG_STRING);
         writeUtf(buffer, "action");
-        writeUtf(buffer, clickEvent.action().name());
+        writeUtf(buffer, clickEvent.action().name().toLowerCase(Locale.ROOT));
 
         buffer.write(BYTE, TAG_STRING);
         writeUtf(buffer, "value");
@@ -226,7 +227,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
         buffer.write(BYTE, TAG_STRING);
         writeUtf(buffer, "action");
-        writeUtf(buffer, hoverEvent.action().toString());
+        writeUtf(buffer, hoverEvent.action().toString().toLowerCase(Locale.ROOT));
 
         buffer.write(BYTE, TAG_COMPOUND); // Start contents tag
         writeUtf(buffer, "contents");
