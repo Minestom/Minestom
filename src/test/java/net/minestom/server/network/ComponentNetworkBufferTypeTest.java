@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +9,17 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.COMPONENT;
+import static net.minestom.server.network.NetworkBuffer.NBT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ComponentNetworkBufferTypeTest {
     // All of these tests use NbtComponentSerializerImpl as the source of truth. If there is an inaccuracy in that
-    // implementation, these tests will not be accurate.
+    // implementation, these tests will not be accurate. This will be replaced with the adventure serializer once
+    // it is merged into adventure (see https://github.com/KyoriPowered/adventure/pull/1084). This can be considered
+    // a known-good implementation.
+
+    private static final ComponentNetworkBufferTypeImpl WRITER = new ComponentNetworkBufferTypeImpl();
+    private static final NbtComponentSerializer NBT_READER = NbtComponentSerializer.nbt();
 
     @Test
     void empty() {
@@ -67,8 +74,7 @@ public class ComponentNetworkBufferTypeTest {
 
     private static void assertWriteReadEquality(@NotNull Component comp) {
         var array = NetworkBuffer.makeArray(buffer -> buffer.write(COMPONENT, comp));
-        // Reading uses the normal nbt serializer, not the direct one.
-        var actual = new NetworkBuffer(ByteBuffer.wrap(array)).read(COMPONENT);
+        var actual = NBT_READER.deserialize(new NetworkBuffer(ByteBuffer.wrap(array)).read(NBT));
         assertEquals(comp, actual);
     }
 }
