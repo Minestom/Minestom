@@ -22,7 +22,7 @@ public abstract class ShapedRecipe extends Recipe {
                            int width,
                            int height,
                            @NotNull String group,
-                            @NotNull RecipeCategory.Crafting category,
+                           @NotNull RecipeCategory.Crafting category,
                            @Nullable List<DeclareRecipesPacket.Ingredient> ingredients,
                            @NotNull ItemStack result, boolean showNotification) {
         super(RecipeType.SHAPED, recipeId);
