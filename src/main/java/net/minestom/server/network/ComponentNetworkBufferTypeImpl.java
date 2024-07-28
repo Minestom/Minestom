@@ -56,8 +56,8 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             case TranslatableComponent translatable -> {
                 writeUtf(buffer, "translatable");
 
-                buffer.write(BYTE, TAG_STRING); // Start "key" tag
-                writeUtf(buffer, "key");
+                buffer.write(BYTE, TAG_STRING); // Start "translate" tag
+                writeUtf(buffer, "translate");
                 writeUtf(buffer, translatable.key());
 
                 final String fallback = translatable.fallback();
@@ -70,7 +70,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 final List<TranslationArgument> args = translatable.arguments();
                 if (!args.isEmpty()) {
                     buffer.write(BYTE, TAG_LIST);
-                    writeUtf(buffer, "args");
+                    writeUtf(buffer, "with");
                     buffer.write(BYTE, TAG_COMPOUND); // List type
                     buffer.write(INT, args.size());
                     for (final TranslationArgument arg : args)
@@ -81,7 +81,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 writeUtf(buffer, "score");
 
                 buffer.write(BYTE, TAG_COMPOUND); // Start "score" tag
-                writeUtf(buffer, "name");
+                writeUtf(buffer, "score");
                 {
                     buffer.write(BYTE, TAG_STRING);
                     writeUtf(buffer, "name");
@@ -90,13 +90,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                     buffer.write(BYTE, TAG_STRING);
                     writeUtf(buffer, "objective");
                     writeUtf(buffer, score.objective());
-
-                    @SuppressWarnings("deprecation") final String value = score.value();
-                    if (value != null) {
-                        buffer.write(BYTE, TAG_STRING);
-                        writeUtf(buffer, "value");
-                        writeUtf(buffer, value);
-                    }
                 }
                 buffer.write(BYTE, TAG_END); // End "score" tag
 
