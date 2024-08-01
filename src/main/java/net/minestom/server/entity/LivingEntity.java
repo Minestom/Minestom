@@ -526,7 +526,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(
                 new EntityAttributesPacket.Property(
                         attributeInstance.attribute(),
-                        attributeInstance.getValue(),
+                        attributeInstance.getBaseValue(),
                         attributeInstance.getModifiers())
         ));
         if (self) {
@@ -673,7 +673,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected @NotNull EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
-            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getValue(), instance.getModifiers()));
+            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
     }
