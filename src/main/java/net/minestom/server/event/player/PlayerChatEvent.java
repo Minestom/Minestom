@@ -13,7 +13,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Called every time a {@link Player} write and send something in the chat.
+ * Called every time a {@link Player} writes and sends something in the chat.
  * The event can be cancelled to do not send anything, and the format can be changed.
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
