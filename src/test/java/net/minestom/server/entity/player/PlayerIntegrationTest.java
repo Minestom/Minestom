@@ -173,7 +173,7 @@ public class PlayerIntegrationTest {
         // Ensure that the player was sent the permission levels
         for (var statusPacket : trackerStatus.collect()) {
             assertEquals(player.getEntityId(), statusPacket.entityId());
-            assertEquals(24 + TEST_PERMISSION_LEVEL, statusPacket.status()); // TODO: Remove magic value of 24
+            assertEquals(Player.STATUS_PERMISSION_LEVEL_OFFSET + TEST_PERMISSION_LEVEL, statusPacket.status());
         }
     }
 

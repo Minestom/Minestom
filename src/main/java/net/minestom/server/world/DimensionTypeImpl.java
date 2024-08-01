@@ -21,6 +21,8 @@ record DimensionTypeImpl(
         int logicalHeight,
         int minY,
         int height,
+        int monsterSpawnBlockLightLimit,
+        @NotNull IntProvider monsterSpawnLightLevel,
         @NotNull String infiniburn,
         @NotNull String effects,
         @Nullable Registry.DimensionTypeEntry registry
@@ -47,10 +49,8 @@ record DimensionTypeImpl(
                         .putInt("height", dimensionType.height())
                         .putString("infiniburn", dimensionType.infiniburn())
                         .putString("effects", dimensionType.effects())
-
-                        //todo load these from registry
-                        .putInt("monster_spawn_block_light_limit", 0)
-                        .putInt("monster_spawn_light_level", 0);
+                        .putInt("monster_spawn_block_light_limit", dimensionType.monsterSpawnBlockLightLimit())
+                        .put("monster_spawn_light_level", dimensionType.monsterSpawnLightLevel().toBinaryTag());
                 Long fixedTime = dimensionType.fixedTime();
                 if (fixedTime != null) builder.putLong("fixed_time", fixedTime);
                 return builder.build();
@@ -61,7 +61,7 @@ record DimensionTypeImpl(
         this(registry.ultrawarm(), registry.natural(), registry.coordinateScale(),
                 registry.hasSkylight(), registry.hasCeiling(), registry.ambientLight(), registry.fixedTime(),
                 registry.piglinSafe(), registry.bedWorks(), registry.respawnAnchorWorks(), registry.hasRaids(),
-                registry.logicalHeight(), registry.minY(), registry.height(), registry.infiniburn(),
+                registry.logicalHeight(), registry.minY(), registry.height(), registry.monsterSpawnBlockLightLimit(), registry.monsterSpawnLightLevel(), registry.infiniburn(),
                 registry.effects(), registry);
     }
 }
