@@ -136,8 +136,8 @@ public class DynamicChunk extends Chunk {
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome.namespace());
-        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
+        var id = BIOME_REGISTRY.getId(biome.key());
+        if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
                 toSectionRelativeCoordinate(x) / 4,

@@ -25,12 +25,12 @@ public record SelectKnownPacksPacket(
     }
 
     public record Entry(
-            @NotNull String namespace,
+            @NotNull String key,
             @NotNull String id,
             @NotNull String version
     ) {
         public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
-                NetworkBuffer.STRING, Entry::namespace,
+                NetworkBuffer.STRING, Entry::key,
                 NetworkBuffer.STRING, Entry::id,
                 NetworkBuffer.STRING, Entry::version,
                 Entry::new);

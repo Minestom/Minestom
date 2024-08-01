@@ -35,8 +35,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
             int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
             if (id != -1) return BuiltinSoundEvent.getId(id);
 
-            NamespaceID namespace = NamespaceID.from(buffer.read(NetworkBuffer.STRING));
-            return new CustomSoundEvent(namespace, buffer.readOptional(NetworkBuffer.FLOAT));
+            Key key = Key.key(buffer.read(NetworkBuffer.STRING));
+            return new CustomSoundEvent(key, buffer.readOptional(NetworkBuffer.FLOAT));
         }
     };
 
@@ -48,24 +48,41 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
     }
 
     /**
-     * Get a builtin sound event by its namespace ID. Will never return a custom/resource pack sound.
+     * Get a builtin sound event by its key ID. Will never return a custom/resource pack sound.
      *
-     * @param namespaceID the namespace ID of the sound event
+     * @param key the {@link Key} of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromNamespaceId(@NotNull String namespaceID) {
-        return BuiltinSoundEvent.getSafe(namespaceID);
+    static @Nullable SoundEvent fromKey(@NotNull String key) {
+        return BuiltinSoundEvent.getSafe(key);
     }
 
     /**
-     * Get a builtin sound event by its namespace ID. Will never return a custom/resource pack sound.
+     * Get a builtin sound event by its key ID. Will never return a custom/resource pack sound.
      *
-     * @param namespaceID the namespace ID of the sound event
+     * @param key the {@link Key} of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable SoundEvent fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static SoundEvent fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static SoundEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     /**
      * Get a builtin sound event by its protocol ID. Will never return a custom/resource pack sound.
@@ -78,38 +95,40 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
     }
 
     /**
-     * Create a custom sound event. The namespace should match a sound provided in the resource pack.
+     * Create a custom sound event. The key should match a sound provided in the resource pack.
      *
-     * @param namespaceID the namespace ID of the custom sound event
+     * @param key the key ID of the custom sound event
      * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull String namespaceID, @Nullable Float range) {
-        return new CustomSoundEvent(NamespaceID.from(namespaceID), range);
+    static @NotNull SoundEvent of(@NotNull String key, @Nullable Float range) {
+        return new CustomSoundEvent(Key.key(key), range);
     }
 
     /**
-     * Create a custom sound event. The {@link NamespaceID} should match a sound provided in the resource pack.
-     * @param namespaceID the namespace ID of the custom sound event
+     * Create a custom sound event. The {@link Key} should match a sound provided in the resource pack.
+     * @param key the key ID of the custom sound event
      * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
-    static @NotNull SoundEvent of(@NotNull NamespaceID namespaceID, @Nullable Float range) {
-        return new CustomSoundEvent(namespaceID, range);
+    static @NotNull SoundEvent of(@NotNull Key key, @Nullable Float range) {
+        return new CustomSoundEvent(key, range);
     }
-
-    @Contract(pure = true)
-    @NotNull NamespaceID namespace();
 
     @Contract(pure = true)
     default @NotNull String name() {
-        return namespace().asString();
+        return key().asString();
     }
 
-    @Override
+
+
+    /**
+     * @deprecated use {@link #key()}
+     */
+    @Deprecated
     @Contract(pure = true)
-    default @NotNull Key key() {
-        return namespace();
+    default @NotNull NamespaceID namespace() {
+        return NamespaceID.from(key());
     }
 
 }

@@ -1,7 +1,7 @@
 package net.minestom.server.world.biome;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
@@ -45,7 +45,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         NONE, DARK_FOREST, SWAMP;
     }
 
-    public record MoodSound(NamespaceID sound, int tickDelay, int blockSearchExtent, double offset) {
+    public record MoodSound(Key sound, int tickDelay, int blockSearchExtent, double offset) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
                     .put("sound", CompoundBinaryTag.builder()
@@ -58,7 +58,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         }
     }
 
-    public record AdditionsSound(NamespaceID sound, double tickChance) {
+    public record AdditionsSound(Key sound, double tickChance) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
                     .put("sound", CompoundBinaryTag.builder()
@@ -69,8 +69,8 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         }
     }
 
-    public record AmbientSound(NamespaceID sound, Float range) {
-        public AmbientSound(NamespaceID sound) {
+    public record AmbientSound(Key sound, Float range) {
+        public AmbientSound(Key sound) {
             this(sound, null);
         }
 
@@ -83,7 +83,7 @@ public record BiomeEffects(int fogColor, int skyColor, int waterColor, int water
         }
     }
 
-    public record Music(NamespaceID sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
+    public record Music(Key sound, int minDelay, int maxDelay, boolean replaceCurrentMusic) {
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
                     .put("sound", CompoundBinaryTag.builder()

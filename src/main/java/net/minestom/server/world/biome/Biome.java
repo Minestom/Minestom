@@ -24,7 +24,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
-                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
+                (key, props) -> new BiomeImpl(Registry.biome(key, props)),
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
                 (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0

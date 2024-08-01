@@ -30,7 +30,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
-                (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
+                (key, props) -> new ChatTypeImpl(Registry.chatType(key, props))
         );
     }
 

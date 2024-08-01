@@ -1,21 +1,21 @@
 package net.minestom.server.statistic;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record StatisticTypeImpl(NamespaceID namespace, int id) implements StatisticType {
+record StatisticTypeImpl(Key key, int id) implements StatisticType {
     private static final Registry.Container<StatisticType> CONTAINER = Registry.createStaticContainer(Registry.Resource.STATISTICS,
-            (namespace, properties) -> new StatisticTypeImpl(NamespaceID.from(namespace), properties.getInt("id")));
+            (key, properties) -> new StatisticTypeImpl(Key.key(key), properties.getInt("id")));
 
-    static StatisticType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static StatisticType get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static StatisticType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static StatisticType getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static StatisticType getId(int id) {

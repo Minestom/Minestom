@@ -1,13 +1,13 @@
 package net.minestom.server.gamedata;
 
-import net.minestom.server.utils.NamespaceID;
+import net.kyori.adventure.key.Key;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Experimental
 public sealed interface DataPack permits DataPackImpl {
 
-    @NotNull DataPack MINECRAFT_CORE = new DataPackImpl(NamespaceID.from("minecraft:core"), true);
+    @NotNull DataPack MINECRAFT_CORE = new DataPackImpl(Key.key("minecraft:core"), true);
 
     /**
      * <p>Returns true if this data pack is synced with the client. The null data pack is never synced.</p>

@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.gamedata.tags.Tag;
@@ -19,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 public class EffectComponent {
-    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final Map<String, DataComponent<?>> KEYS = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> DAMAGE_PROTECTION = register("damage_protection", ConditionalEffect.nbtType(ValueEffect.NBT_TYPE).list());
@@ -53,27 +54,44 @@ public class EffectComponent {
     public static final DataComponent<Unit> PREVENT_ARMOR_CHANGE = register("prevent_armor_change", BinaryTagSerializer.UNIT);
     public static final DataComponent<ValueEffect> TRIDENT_SPIN_ATTACK_STRENGTH = register("trident_spin_attack_strength", ValueEffect.NBT_TYPE);
 
-    public static final BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.nbtType(EffectComponent::fromId, EffectComponent::fromNamespaceId);
+    public static final BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.nbtType(EffectComponent::fromId, EffectComponent::fromKey);
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return NAMESPACES.get(namespaceId);
+    public static @Nullable DataComponent<?> fromKey(@NotNull String key) {
+        return KEYS.get(key);
     }
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+    public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     public static @Nullable DataComponent<?> fromId(int id) {
         return IDS.get(id);
     }
 
     public static @NotNull Collection<DataComponent<?>> values() {
-        return NAMESPACES.values();
+        return KEYS.values();
     }
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), null, nbt);
-        NAMESPACES.put(impl.name(), impl);
+        DataComponent<T> impl = DataComponent.createHeadless(KEYS.size(), Key.key(name), null, nbt);
+        KEYS.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
     }

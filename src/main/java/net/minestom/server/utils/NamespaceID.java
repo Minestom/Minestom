@@ -11,7 +11,10 @@ import java.util.Objects;
 /**
  * Represents a namespaced ID
  * https://minecraft.wiki/w/Namespaced_ID
+ *
+ * @deprecated use {@link Key#key()}
  */
+@Deprecated
 public final class NamespaceID implements CharSequence, Key {
     private static final String legalLetters = "[0123456789abcdefghijklmnopqrstuvwxyz_-]+";
     private static final String legalPathLetters = "[0123456789abcdefghijklmnopqrstuvwxyz./_-]+";

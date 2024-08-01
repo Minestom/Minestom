@@ -1,5 +1,6 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
@@ -47,7 +48,6 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -117,9 +117,9 @@ public class PlayerInit {
                     static boolean b = false;
                 }
                 if (A.b) {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(NamespaceID.from("test"));
+                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(Key.key("test"));
                 } else {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(NamespaceID.from("test"), 0.5, AttributeOperation.ADD_VALUE));
+                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(Key.key("test"), 0.5, AttributeOperation.ADD_VALUE));
                 }
                 A.b = !A.b;
             })
@@ -237,7 +237,7 @@ public class PlayerInit {
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
 
-//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
+//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, Key.key("minestom:demo"));
 //        instanceManager.registerInstance(i2);
 //        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
 //        i2.setChunkSupplier(LightingChunk::new);

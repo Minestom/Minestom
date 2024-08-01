@@ -7,14 +7,14 @@ import java.util.Collection;
 
 record MaterialImpl(Registry.MaterialEntry registry) implements Material {
     private static final Registry.Container<Material> CONTAINER = Registry.createStaticContainer(Registry.Resource.ITEMS,
-            (namespace, properties) -> new MaterialImpl(Registry.material(namespace, properties)));
+            (key, properties) -> new MaterialImpl(Registry.material(key, properties)));
 
-    static Material get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static Material get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static Material getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static Material getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static Material getId(int id) {

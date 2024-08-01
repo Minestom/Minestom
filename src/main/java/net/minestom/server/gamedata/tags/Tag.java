@@ -26,22 +26,22 @@ import java.util.function.Function;
  * Immutable by design
  */
 public final class Tag implements ProtocolObject, Keyed {
-    private final NamespaceID name;
-    private final Set<NamespaceID> values;
+    private final Key key;
+    private final Set<Key> values;
 
     /**
      * Creates a new empty tag. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name) {
-        this.name = name;
+    public Tag(@NotNull Key key) {
+        this.key = key;
         this.values = new HashSet<>();
     }
 
     /**
      * Creates a new tag with the given values. This does not cache the tag.
      */
-    public Tag(@NotNull NamespaceID name, @NotNull Set<NamespaceID> values) {
-        this.name = name;
+    public Tag(@NotNull Key key, @NotNull Set<Key> values) {
+        this.key = key;
         this.values = new HashSet<>(values);
     }
 
@@ -51,7 +51,7 @@ public final class Tag implements ProtocolObject, Keyed {
      * @param id the id to check against
      * @return 'true' iif this tag contains the given id
      */
-    public boolean contains(@NotNull NamespaceID id) {
+    public boolean contains(@NotNull Key id) {
         return values.contains(id);
     }
 
@@ -60,42 +60,48 @@ public final class Tag implements ProtocolObject, Keyed {
      *
      * @return immutable set of values present in this tag
      */
-    public @NotNull Set<NamespaceID> getValues() {
+    public @NotNull Set<Key> getValues() {
         return Collections.unmodifiableSet(values);
-    }
-
-    public @NotNull NamespaceID namespace() {
-        return name;
     }
 
     @Contract(pure = true)
     public @NotNull String name() {
-        return namespace().asString();
+        return key().asString();
     }
 
     @Override
     @Contract(pure = true)
     public @NotNull Key key() {
-        return namespace();
+        return key;
+    }
+
+    /**
+     * @deprecated use {@link #key()}
+     */
+    @Deprecated
+    public @NotNull NamespaceID namespace() {
+        return NamespaceID.from(key);
     }
 
     /**
      * Returns the name of this tag
+     *
+     * @deprecated use {@link #key()}
      */
     @Deprecated
     public NamespaceID getName() {
-        return name;
+        return namespace();
     }
 
     public enum BasicType {
         BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
-                name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(Block.fromKey(name)).id()),
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
-                name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(Material.fromKey(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
-                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
+                name -> Objects.requireNonNull(EntityType.fromKey(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data

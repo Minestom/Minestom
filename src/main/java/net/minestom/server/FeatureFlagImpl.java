@@ -1,20 +1,20 @@
 package net.minestom.server;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
 
     private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.FEATURE_FLAGS,
-            (namespace, properties) -> new FeatureFlagImpl(Registry.featureFlag(namespace, properties)));
+            (key, properties) -> new FeatureFlagImpl(Registry.featureFlag(key, properties)));
 
-    static FeatureFlag get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static FeatureFlag get(@NotNull String key) {
+        return CONTAINER.get(key);
     }
 
-    static FeatureFlag getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
+    static FeatureFlag getSafe(@NotNull String key) {
+        return CONTAINER.getSafe(key);
     }
 
     static FeatureFlag getId(int id) {
@@ -22,8 +22,8 @@ record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements F
     }
 
     @Override
-    public @NotNull NamespaceID namespace() {
-        return registry.namespace();
+    public @NotNull Key key() {
+        return registry.key();
     }
 
     @Override
