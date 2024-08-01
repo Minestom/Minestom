@@ -3,12 +3,10 @@ package net.minestom.server.command;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
-import net.minestom.server.permission.Permission;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,11 +124,6 @@ public class CommandConditionTest {
     }
 
     private static final class Sender implements CommandSender {
-        @Override
-        public @NotNull Set<Permission> getAllPermissions() {
-            return null;
-        }
-
         @Override
         public @NotNull TagHandler tagHandler() {
             return null;
