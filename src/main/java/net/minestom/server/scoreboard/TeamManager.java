@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.UniqueIdUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public final class TeamManager {
      */
     protected void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
-        PacketUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
+        PacketSendingUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -60,7 +60,7 @@ public final class TeamManager {
      */
     public boolean deleteTeam(@NotNull Team team) {
         // Sends to all online players a team destroy packet
-        PacketUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
+        PacketSendingUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
     }
 

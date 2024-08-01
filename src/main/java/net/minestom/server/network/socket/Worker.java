@@ -4,10 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.thread.MinestomThread;
-import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.binary.BinaryBuffer;
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedXaddArrayQueue;
+import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -31,7 +29,6 @@ public final class Worker extends MinestomThread {
     private final Selector selector;
     private final Map<SocketChannel, PlayerSocketConnection> connectionMap = new ConcurrentHashMap<>();
     private final Server server;
-    private final MpscUnboundedXaddArrayQueue<Runnable> queue = new MpscUnboundedXaddArrayQueue<>(1024);
 
     Worker(Server server) {
         super("Ms-worker-" + COUNTER.getAndIncrement());
@@ -48,11 +45,6 @@ public final class Worker extends MinestomThread {
     }
 
     public void close() {
-        try {
-            this.queue.drain(Runnable::run);
-        } catch (Exception e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-        }
         this.selector.wakeup();
         try {
             this.selector.close();
@@ -66,17 +58,15 @@ public final class Worker extends MinestomThread {
     public void run() {
         while (server.isOpen()) {
             try {
-                try {
-                    this.queue.drain(Runnable::run);
-                } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
                 // Flush all connections if needed
                 for (PlayerSocketConnection connection : connectionMap.values()) {
                     try {
                         connection.flushSync();
                     } catch (Exception e) {
                         connection.disconnect();
+                    }
+                    if (!connection.isOnline()) {
+                        disconnect(connection, connection.getChannel());
                     }
                 }
                 // Wait for an event
@@ -94,12 +84,12 @@ public final class Worker extends MinestomThread {
                         return;
                     }
                     try {
-                        try (var holder = ObjectPool.PACKET_POOL.hold()) {
-                            BinaryBuffer readBuffer = BinaryBuffer.wrap(holder.get());
+                        try (var holder = PacketUtils.PACKET_POOL.hold()) {
+                            ByteBuffer readBuffer = holder.get();
                             // Consume last incomplete packet
                             connection.consumeCache(readBuffer);
                             // Read & process
-                            readBuffer.readChannel(channel);
+                            channel.read(readBuffer);
                             connection.processPackets(readBuffer, server.packetParser());
                         }
                     } catch (IOException e) {
@@ -131,7 +121,7 @@ public final class Worker extends MinestomThread {
     }
 
     void receiveConnection(SocketChannel channel) throws IOException {
-        this.connectionMap.put(channel, new PlayerSocketConnection(this, channel, channel.getRemoteAddress()));
+        this.connectionMap.put(channel, new PlayerSocketConnection(channel, channel.getRemoteAddress()));
         channel.configureBlocking(false);
         channel.register(selector, SelectionKey.OP_READ);
         if (channel.getLocalAddress() instanceof InetSocketAddress) {
@@ -141,9 +131,5 @@ public final class Worker extends MinestomThread {
             socket.setTcpNoDelay(Server.NO_DELAY);
             socket.setSoTimeout(30 * 1000); // 30 seconds
         }
-    }
-
-    public MessagePassingQueue<Runnable> queue() {
-        return queue;
     }
 }
