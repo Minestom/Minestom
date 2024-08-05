@@ -7,6 +7,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.BlockSetEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
@@ -78,6 +80,12 @@ public class DynamicChunk extends Chunk {
             return;
         }
         assertLock();
+
+        // call block event
+        {
+            Instance instance = this.instance;
+            if (instance != null) EventDispatcher.call(new BlockSetEvent(instance, block, new Vec(x, y, z)));
+        }
 
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
