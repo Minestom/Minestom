@@ -133,10 +133,6 @@ public final class NetworkBuffer {
         type.write(this, value);
     }
 
-    public <T> void write(@NotNull Writer writer) {
-        writer.write(this);
-    }
-
     public <T> @UnknownNullability T read(@NotNull Type<T> type) {
         return type.read(this);
     }
@@ -262,11 +258,6 @@ public final class NetworkBuffer {
         default @NotNull Type<T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
-    }
-
-    @FunctionalInterface
-    public interface Writer {
-        void write(@NotNull NetworkBuffer writer);
     }
 
     public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
