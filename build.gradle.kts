@@ -10,7 +10,7 @@ plugins {
 
 group = "net.onelitefeather.microtus"
 
-version = System.getenv("TAG_VERSION") ?: "1.4.3-SNAPSHOT"
+version = System.getenv("TAG_VERSION") ?: "1.4.0-SNAPSHOT"
 
 allprojects {
     group = "net.onelitefeather.microtus"
