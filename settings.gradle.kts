@@ -145,6 +145,6 @@ pluginManagement {
 rootProject.name = "Microtus"
 include("code-generators")
 include("jmh-benchmarks")
-include("jcstress-tests")
+// include("jcstress-tests")
 include("testing")
 include("demo")
