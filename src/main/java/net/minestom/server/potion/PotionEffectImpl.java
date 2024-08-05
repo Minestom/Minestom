@@ -6,8 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
-    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS,
-            (namespace, properties) -> new PotionEffectImpl(Registry.potionEffect(namespace, properties)));
+    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS, PotionEffectImpl::createImpl);
+
+    private static PotionEffect createImpl(String namespace, Registry.Properties properties) {
+        return new PotionEffectImpl(Registry.potionEffect(namespace, properties));
+    }
 
     static PotionEffect get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

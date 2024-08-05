@@ -183,12 +183,11 @@ public class PlayerInit {
 
 
                 if (event.isFirstSpawn()) {
-                    Notification notification = new Notification(
-                            Component.text("Welcome!"),
-                            FrameType.TASK,
-                            Material.IRON_SWORD
-                    );
-                    NotificationCenter.send(notification, event.getPlayer());
+                    Notification notification = Notification.builder()
+                            .frameType(FrameType.TASK)
+                            .title(Component.text("Welcome!"))
+                            .icon(Material.IRON_SWORD).build();
+                    notification.send(player);
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
                 }

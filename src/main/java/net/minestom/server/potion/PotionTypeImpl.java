@@ -7,8 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record PotionTypeImpl(NamespaceID namespace, int id) implements PotionType {
-    private static final Registry.Container<PotionType> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_TYPES,
-            (namespace, properties) -> new PotionTypeImpl(NamespaceID.from(namespace), properties.getInt("id")));
+    private static final Registry.Container<PotionType> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_TYPES, PotionTypeImpl::createImpl);
+
+    private static PotionType createImpl(String namespace, Registry.Properties properties) {
+        return new PotionTypeImpl(NamespaceID.from(namespace), properties.getInt("id"));
+    }
 
     static PotionType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
