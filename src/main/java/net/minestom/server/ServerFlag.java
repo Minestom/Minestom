@@ -57,15 +57,12 @@ public final class ServerFlag {
     // Biomes
     public static final boolean BIOMES_ENABLED = System.getProperty("minestom.attributes.disabled") == null;
 
-    // Attributes
-    public static final boolean ATTRIBUTES_ENABLED = System.getProperty("minestom.attributes.disabled") == null;
-
     // Terminal
     public static final boolean TERMINAL_ENABLED = System.getProperty("minestom.terminal.disabled") == null;
-    public static final boolean TERMINAL_SUPPORT_HEX_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-hex-color", true);
-    public static final boolean TERMINAL_SUPPORT_COLOR = PropertyUtils.getBoolean("minestom.terminal.support-color", true);
+    public static final boolean TERMINAL_SUPPORT_HEX_COLOR = Boolean.getBoolean("minestom.terminal.support-hex-color");
+    public static final boolean TERMINAL_SUPPORT_COLOR = Boolean.getBoolean("minestom.terminal.support-color");
     // Extensions todo use enabled flag
-    public static final boolean EXTENSIONS_ENABLED = PropertyUtils.getBoolean("minestom.extension.enabled", false);
+    public static final boolean EXTENSIONS_ENABLED = Boolean.getBoolean("minestom.extension.enabled");
     public static final @NotNull String EXTENSIONS_FOLDER = System.getProperty("minestom.extension.folder", "extensions");
     public static final @Nullable String EXTENSIONS_DEV_CLASSES = System.getProperty("minestom.extension.indevfolder.classes");
     public static final @Nullable String EXTENSIONS_DEV_RESOURCES = System.getProperty("minestom.extension.indevfolder.resources");
