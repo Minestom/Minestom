@@ -77,7 +77,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
 
         record Exact(@Nullable String value) implements ValuePredicate {
 
-            public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.map(Exact::new, Exact::value);
+            public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.transform(Exact::new, Exact::value);
             public static final BinaryTagSerializer<Exact> NBT_TYPE = BinaryTagSerializer.STRING.map(Exact::new, Exact::value);
 
             @Override

@@ -13,7 +13,7 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
     public static final int DEFAULT_DURATION = 160;
     public static final SuspiciousStewEffects EMPTY = new SuspiciousStewEffects(List.of());
 
-    public static final NetworkBuffer.Type<SuspiciousStewEffects> NETWORK_TYPE = Effect.NETWORK_TYPE.list(Short.MAX_VALUE).map(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
+    public static final NetworkBuffer.Type<SuspiciousStewEffects> NETWORK_TYPE = Effect.NETWORK_TYPE.list(Short.MAX_VALUE).transform(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
     public static final BinaryTagSerializer<SuspiciousStewEffects> NBT_TYPE = Effect.NBT_TYPE.list().map(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
 
     public SuspiciousStewEffects {

@@ -58,9 +58,9 @@ public final class NetworkBuffer {
     public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
     public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
-    public static final Type<BitSet> BITSET = LONG_ARRAY.map(BitSet::valueOf, BitSet::toLongArray);
-    public static final Type<Instant> INSTANT_MS = LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli);
-    public static final Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.map(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
+    public static final Type<BitSet> BITSET = LONG_ARRAY.transform(BitSet::valueOf, BitSet::toLongArray);
+    public static final Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
+    public static final Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
 
     public static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
@@ -176,25 +176,6 @@ public final class NetworkBuffer {
         return values;
     }
 
-    public <K, V> @NotNull Map<K, V> writeMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, @NotNull Map<K, V> map) {
-        write(VAR_INT, map.size());
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            write(keyType, entry.getKey());
-            write(valueType, entry.getValue());
-        }
-        return map;
-    }
-
-    public <K, V> @NotNull Map<K, V> readMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, int maxSize) {
-        final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-        final Map<K, V> map = new HashMap<>(size);
-        for (int i = 0; i < size; i++) {
-            map.put(read(keyType), read(valueType));
-        }
-        return map;
-    }
-
     public void writeFixedBitSet(BitSet set, int length) {
         final int setLength = set.length();
         if (setLength > length) {
@@ -279,8 +260,16 @@ public final class NetworkBuffer {
 
         T read(@NotNull NetworkBuffer buffer);
 
-        default <S> @NotNull Type<S> map(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
-            return new NetworkBufferTypeImpl.MappedType<>(this, to, from);
+        default <S> @NotNull Type<S> transform(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+            return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
+        }
+
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull NetworkBuffer.Type<V> valueType, int maxSize) {
+            return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
+        }
+
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull NetworkBuffer.Type<V> valueType) {
+            return mapValue(valueType, Integer.MAX_VALUE);
         }
 
         default @NotNull Type<List<T>> list(int maxSize) {

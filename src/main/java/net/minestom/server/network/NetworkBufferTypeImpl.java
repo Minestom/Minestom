@@ -20,10 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.BitSet;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -677,8 +674,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
-                            @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+    record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
+                               @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, S value) {
             parent.write(buffer, from.apply(value));
@@ -687,6 +684,30 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public S read(@NotNull NetworkBuffer buffer) {
             return to.apply(parent.read(buffer));
+        }
+    }
+
+    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType, int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Map<K, V> map) {
+            buffer.write(VAR_INT, map.size());
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                buffer.write(parent, entry.getKey());
+                buffer.write(valueType, entry.getValue());
+            }
+        }
+
+        @Override
+        public Map<K, V> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            final Map<K, V> map = new HashMap<>(size);
+            for (int i = 0; i < size; i++) {
+                final K key = buffer.read(parent);
+                final V value = buffer.read(valueType);
+                map.put(key, value);
+            }
+            return map;
         }
     }
 
