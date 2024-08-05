@@ -221,8 +221,8 @@ final class BlockCollision {
                                     @NotNull Vec[] allFaces,
                                     @NotNull SweepResult finalResult) {
         for (Vec point : allFaces) {
-            Vec pointBefore = point.add(entityPosition);
-            Vec pointAfter = pointBefore.add(velocity);
+            final Vec pointBefore = point.add(entityPosition);
+            final Vec pointAfter = pointBefore.add(velocity);
             // Entity can pass through up to 4 blocks. Starting block, Two intermediate blocks, and a final block.
             // This means we must check every combination of block movements when an entity moves over an axis.
             // 000, 001, 010, 011, etc.
