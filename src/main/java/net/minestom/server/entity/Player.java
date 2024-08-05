@@ -2384,16 +2384,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return this.pointers;
     }
 
-    @Override
-    public boolean isPlayer() {
-        return true;
-    }
-
-    @Override
-    public Player asPlayer() {
-        return this;
-    }
-
     protected void sendChunkUpdates(Chunk newChunk) {
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
             final int newX = newChunk.getChunkX();
