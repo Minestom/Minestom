@@ -3,7 +3,6 @@ package net.minestom.server.terminal;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.utils.PropertyUtils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
