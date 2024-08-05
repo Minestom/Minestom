@@ -246,6 +246,10 @@ public class AnvilLoader implements IChunkLoader {
             if (blockName.equals("minecraft:air")) {
                 convertedPalette[i] = Block.AIR;
             } else {
+
+                if (blockName.equals("minecraft:grass")) {
+                    blockName = "minecraft:grass_block";
+                }
                 Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName), "Unknown block " + blockName);
                 // Properties
                 final Map<String, String> properties = new HashMap<>();
