@@ -1,6 +1,7 @@
 package net.minestom.server.tag;
 
 import net.kyori.adventure.nbt.*;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.nbt.BinaryTagUtil;
 
 import java.util.ArrayList;
