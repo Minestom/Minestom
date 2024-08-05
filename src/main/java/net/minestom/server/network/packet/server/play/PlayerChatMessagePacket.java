@@ -30,22 +30,22 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
         public void write(@NotNull NetworkBuffer buffer, @NotNull PlayerChatMessagePacket value) {
             buffer.write(UUID, value.sender);
             buffer.write(VAR_INT, value.index);
-            buffer.writeOptional(RAW_BYTES, value.signature);
+            buffer.write(RAW_BYTES.optional(), value.signature);
             buffer.write(SignedMessageBody.Packed.SERIALIZER, value.messageBody);
-            buffer.writeOptional(COMPONENT, value.unsignedContent);
+            buffer.write(COMPONENT.optional(), value.unsignedContent);
             buffer.write(FilterMask.SERIALIZER, value.filterMask);
             buffer.write(VAR_INT, value.msgTypeId);
             buffer.write(COMPONENT, value.msgTypeName);
-            buffer.writeOptional(COMPONENT, value.msgTypeTarget);
+            buffer.write(COMPONENT.optional(), value.msgTypeTarget);
         }
 
         @Override
         public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer buffer) {
             return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.readOptional(r -> r.readBytes(256)),
                     SignedMessageBody.Packed.SERIALIZER.read(buffer),
-                    buffer.readOptional(COMPONENT), FilterMask.SERIALIZER.read(buffer),
+                    buffer.read(COMPONENT.optional()), FilterMask.SERIALIZER.read(buffer),
                     buffer.read(VAR_INT), buffer.read(COMPONENT),
-                    buffer.readOptional(COMPONENT));
+                    buffer.read(COMPONENT.optional()));
         }
     };
 

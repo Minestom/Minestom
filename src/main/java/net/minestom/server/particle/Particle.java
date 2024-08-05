@@ -444,7 +444,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public @NotNull Vibration readData(@NotNull NetworkBuffer reader) {
-            SourceType type = reader.readEnum(SourceType.class);
+            SourceType type = reader.read(NetworkBuffer.Enum(SourceType.class));
             if (type == SourceType.BLOCK) {
                 return this.withSourceBlockPosition(reader.read(NetworkBuffer.BLOCK_POSITION), reader.read(NetworkBuffer.VAR_INT));
             } else {
@@ -454,7 +454,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.writeEnum(SourceType.class, sourceType);
+            writer.write(NetworkBuffer.Enum(SourceType.class), sourceType);
             if (sourceType == SourceType.BLOCK) {
                 Objects.requireNonNull(sourceBlockPosition);
                 writer.write(NetworkBuffer.BLOCK_POSITION, sourceBlockPosition);

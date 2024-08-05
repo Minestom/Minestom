@@ -73,18 +73,14 @@ public final class NetworkBuffer {
     public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
     public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 
-    public static final Type<@Nullable Component> OPT_CHAT = Optional(COMPONENT);
-    public static final Type<@Nullable Point> OPT_BLOCK_POSITION = Optional(BLOCK_POSITION);
-    public static final Type<@Nullable UUID> OPT_UUID = Optional(UUID);
+    public static final Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();
+    public static final Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
+    public static final Type<@Nullable UUID> OPT_UUID = UUID.optional();
 
     public static final Type<Direction> DIRECTION = new NetworkBufferTypeImpl.EnumType<>(Direction.class);
     public static final Type<EntityPose> POSE = new NetworkBufferTypeImpl.EnumType<>(EntityPose.class);
 
     // Combinators
-
-    public static <T> @NotNull Type<@Nullable T> Optional(@NotNull Type<T> type) {
-        return new NetworkBufferTypeImpl.OptionalType<>(type);
-    }
 
     public static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
         return new NetworkBufferTypeImpl.EnumType<>(enumClass);
@@ -133,22 +129,8 @@ public final class NetworkBuffer {
         writer.write(this);
     }
 
-    public <T> @NotNull T read(@NotNull Type<T> type) {
+    public <T> @UnknownNullability T read(@NotNull Type<T> type) {
         return type.read(this);
-    }
-
-    public <T> void writeOptional(@NotNull Type<T> type, @Nullable T value) {
-        write(BOOLEAN, value != null);
-        if (value != null) write(type, value);
-    }
-
-    public void writeOptional(@Nullable Writer writer) {
-        write(BOOLEAN, writer != null);
-        if (writer != null) write(writer);
-    }
-
-    public <T> @Nullable T readOptional(@NotNull Type<T> type) {
-        return read(BOOLEAN) ? read(type) : null;
     }
 
     public <T> @Nullable T readOptional(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
@@ -221,14 +203,6 @@ public final class NetworkBuffer {
             map.put(read(keyType), read(valueType));
         }
         return map;
-    }
-
-    public <E extends Enum<?>> void writeEnum(@NotNull Class<E> enumClass, @NotNull E value) {
-        write(VAR_INT, value.ordinal());
-    }
-
-    public <E extends Enum<?>> @NotNull E readEnum(@NotNull Class<@NotNull E> enumClass) {
-        return enumClass.getEnumConstants()[read(VAR_INT)];
     }
 
     public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
@@ -344,8 +318,12 @@ public final class NetworkBuffer {
             return new NetworkBufferTypeImpl.ListType<>(this, maxSize);
         }
 
+        default @NotNull Type<List<T>> list() {
+            return list(Integer.MAX_VALUE);
+        }
+
         default @NotNull Type<T> optional() {
-            return new NetworkBufferTypeImpl.OptionalTypeImpl<>(this);
+            return new NetworkBufferTypeImpl.OptionalType<>(this);
         }
     }
 

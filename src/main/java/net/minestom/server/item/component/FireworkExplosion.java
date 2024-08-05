@@ -30,7 +30,7 @@ public record FireworkExplosion(
     public static final NetworkBuffer.Type<FireworkExplosion> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, FireworkExplosion value) {
-            buffer.writeEnum(Shape.class, value.shape);
+            buffer.write(NetworkBuffer.Enum(Shape.class), value.shape);
             buffer.writeCollection(Color.NETWORK_TYPE, value.colors);
             buffer.writeCollection(Color.NETWORK_TYPE, value.fadeColors);
             buffer.write(NetworkBuffer.BOOLEAN, value.hasTrail);
@@ -40,7 +40,7 @@ public record FireworkExplosion(
         @Override
         public FireworkExplosion read(@NotNull NetworkBuffer buffer) {
             return new FireworkExplosion(
-                    buffer.readEnum(Shape.class),
+                    buffer.read(NetworkBuffer.Enum(Shape.class)),
                     buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
                     buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
                     buffer.read(NetworkBuffer.BOOLEAN),

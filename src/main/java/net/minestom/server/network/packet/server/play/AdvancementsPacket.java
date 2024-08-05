@@ -132,7 +132,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
                 buffer.write(COMPONENT, value.title);
                 buffer.write(COMPONENT, value.description);
                 buffer.write(ItemStack.NETWORK_TYPE, value.icon);
-                buffer.writeEnum(FrameType.class, value.frameType);
+                buffer.write(NetworkBuffer.Enum(FrameType.class), value.frameType);
                 buffer.write(INT, value.flags);
                 if ((value.flags & 0x1) != 0) {
                     assert value.backgroundTexture != null;

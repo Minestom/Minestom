@@ -48,7 +48,7 @@ public record JoinGamePacket(
             }
             buffer.write(BOOLEAN, value.isDebug);
             buffer.write(BOOLEAN, value.isFlat);
-            buffer.writeOptional(WorldPos.NETWORK_TYPE, value.deathLocation);
+            buffer.write(WorldPos.NETWORK_TYPE.optional(), value.deathLocation);
             buffer.write(VAR_INT, value.portalCooldown);
             buffer.write(BOOLEAN, value.enforcesSecureChat);
         }
@@ -72,7 +72,7 @@ public record JoinGamePacket(
                     getNullableGameMode(buffer.read(BYTE)),
                     buffer.read(BOOLEAN),
                     buffer.read(BOOLEAN),
-                    buffer.readOptional(WorldPos.NETWORK_TYPE),
+                    buffer.read(WorldPos.NETWORK_TYPE.optional()),
                     buffer.read(VAR_INT),
                     buffer.read(BOOLEAN)
             );

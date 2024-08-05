@@ -62,10 +62,10 @@ public record PlayerInfoUpdatePacket(
                             properties = reader.readCollection(Property.SERIALIZER, GameProfile.MAX_PROPERTIES);
                         }
                         case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(reader);
-                        case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
+                        case UPDATE_GAME_MODE -> gameMode = reader.read(NetworkBuffer.Enum(GameMode.class));
                         case UPDATE_LISTED -> listed = reader.read(BOOLEAN);
                         case UPDATE_LATENCY -> latency = reader.read(VAR_INT);
-                        case UPDATE_DISPLAY_NAME -> displayName = reader.readOptional(COMPONENT);
+                        case UPDATE_DISPLAY_NAME -> displayName = reader.read(COMPONENT.optional());
                     }
                 }
                 return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession);
@@ -103,7 +103,7 @@ public record PlayerInfoUpdatePacket(
         UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, entry.gameMode.ordinal())),
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
-        UPDATE_DISPLAY_NAME((writer, entry) -> writer.writeOptional(COMPONENT, entry.displayName));
+        UPDATE_DISPLAY_NAME((writer, entry) -> writer.write(COMPONENT.optional(), entry.displayName));
 
         final Writer writer;
 

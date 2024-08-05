@@ -6,6 +6,9 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
+
 /**
  * Represents a custom effect in {@link net.minestom.server.item.ItemComponent#POTION_CONTENTS}.
  */
@@ -14,13 +17,13 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
     public static final NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, CustomPotionEffect value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.id.id());
+            buffer.write(VAR_INT, value.id.id());
             buffer.write(Settings.NETWORK_TYPE, value.settings);
         }
 
         @Override
         public CustomPotionEffect read(@NotNull NetworkBuffer buffer) {
-            return new CustomPotionEffect(PotionEffect.fromId(buffer.read(NetworkBuffer.VAR_INT)), buffer.read(Settings.NETWORK_TYPE));
+            return new CustomPotionEffect(PotionEffect.fromId(buffer.read(VAR_INT)), buffer.read(Settings.NETWORK_TYPE));
         }
     };
 
@@ -38,7 +41,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
         this(id, new Settings(amplifier, duration, isAmbient, showParticles, showIcon, null));
     }
 
-    public byte amplifier() {
+    public int amplifier() {
         return settings.amplifier;
     }
 
@@ -59,31 +62,30 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
     }
 
     public record Settings(
-            byte amplifier, int duration,
+            int amplifier, int duration,
             boolean isAmbient, boolean showParticles, boolean showIcon,
             @Nullable Settings hiddenEffect
     ) {
-
         public static final NetworkBuffer.Type<Settings> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Settings value) {
-                buffer.write(NetworkBuffer.VAR_INT, (int) value.amplifier);
-                buffer.write(NetworkBuffer.VAR_INT, value.duration);
-                buffer.write(NetworkBuffer.BOOLEAN, value.isAmbient);
-                buffer.write(NetworkBuffer.BOOLEAN, value.showParticles);
-                buffer.write(NetworkBuffer.BOOLEAN, value.showIcon);
-                buffer.writeOptional(NETWORK_TYPE, value.hiddenEffect);
+                buffer.write(VAR_INT, value.amplifier);
+                buffer.write(VAR_INT, value.duration);
+                buffer.write(BOOLEAN, value.isAmbient);
+                buffer.write(BOOLEAN, value.showParticles);
+                buffer.write(BOOLEAN, value.showIcon);
+                buffer.write(NETWORK_TYPE.optional(), value.hiddenEffect);
             }
 
             @Override
             public Settings read(@NotNull NetworkBuffer buffer) {
                 return new Settings(
-                        buffer.read(NetworkBuffer.VAR_INT).byteValue(),
-                        buffer.read(NetworkBuffer.VAR_INT),
-                        buffer.read(NetworkBuffer.BOOLEAN),
-                        buffer.read(NetworkBuffer.BOOLEAN),
-                        buffer.read(NetworkBuffer.BOOLEAN),
-                        buffer.readOptional(NETWORK_TYPE)
+                        buffer.read(VAR_INT),
+                        buffer.read(VAR_INT),
+                        buffer.read(BOOLEAN),
+                        buffer.read(BOOLEAN),
+                        buffer.read(BOOLEAN),
+                        buffer.read(NETWORK_TYPE.optional())
                 );
             }
         };
@@ -103,7 +105,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                 },
                 value -> {
                     CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-                            .putByte("amplifier", value.amplifier)
+                            .putByte("amplifier", (byte) value.amplifier)
                             .putInt("duration", value.duration)
                             .putBoolean("ambient", value.isAmbient)
                             .putBoolean("show_particles", value.showParticles)

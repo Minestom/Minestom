@@ -19,8 +19,8 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
         @Override
         public void write(@NotNull NetworkBuffer buffer, ClientUpdateStructureBlockPacket value) {
             buffer.write(BLOCK_POSITION, value.location);
-            buffer.writeEnum(Action.class, value.action);
-            buffer.writeEnum(Mode.class, value.mode);
+            buffer.write(NetworkBuffer.Enum(Action.class), value.action);
+            buffer.write(NetworkBuffer.Enum(Mode.class), value.mode);
             buffer.write(STRING, value.name);
             buffer.write(BYTE, (byte) value.offset.x());
             buffer.write(BYTE, (byte) value.offset.y());
@@ -38,8 +38,8 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
 
         @Override
         public ClientUpdateStructureBlockPacket read(@NotNull NetworkBuffer buffer) {
-            return new ClientUpdateStructureBlockPacket(buffer.read(BLOCK_POSITION), buffer.readEnum(Action.class),
-                    buffer.readEnum(Mode.class), buffer.read(STRING),
+            return new ClientUpdateStructureBlockPacket(buffer.read(BLOCK_POSITION), buffer.read(NetworkBuffer.Enum(Action.class)),
+                    buffer.read(NetworkBuffer.Enum(Mode.class)), buffer.read(STRING),
                     new Vec(buffer.read(BYTE), buffer.read(BYTE), buffer.read(BYTE)), new Vec(buffer.read(BYTE), buffer.read(BYTE), buffer.read(BYTE)),
                     Mirror.values()[buffer.read(VAR_INT)], fromRestrictedRotation(buffer.read(VAR_INT)),
                     buffer.read(STRING), buffer.read(FLOAT),

@@ -606,24 +606,26 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record EnumType<E extends Enum<?>>(@NotNull Class<E> enumClass) implements NetworkBufferTypeImpl<E> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, E value) {
-            buffer.writeEnum(enumClass, value);
+            buffer.write(VAR_INT, value.ordinal());
         }
 
         @Override
         public E read(@NotNull NetworkBuffer buffer) {
-            return buffer.readEnum(enumClass);
+            final int ordinal = buffer.read(VAR_INT);
+            return enumClass.getEnumConstants()[ordinal];
         }
     }
 
     record OptionalType<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, T value) {
-            buffer.writeOptional(parent, value);
+            buffer.write(BOOLEAN, value != null);
+            if (value != null) buffer.write(parent, value);
         }
 
         @Override
         public T read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(parent);
+            return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
     }
 
@@ -670,18 +672,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public List<T> read(@NotNull NetworkBuffer buffer) {
             return buffer.readCollection(parent, maxSize);
-        }
-    }
-
-    record OptionalTypeImpl<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<T> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, T value) {
-            buffer.writeOptional(parent, value);
-        }
-
-        @Override
-        public T read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(parent);
         }
     }
 

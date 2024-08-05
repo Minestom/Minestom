@@ -13,14 +13,14 @@ public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
     public static final NetworkBuffer.Type<LodestoneTracker> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, @NotNull LodestoneTracker value) {
-            buffer.writeOptional(WorldPos.NETWORK_TYPE, value.target);
+            buffer.write(WorldPos.NETWORK_TYPE.optional(), value.target);
             buffer.write(NetworkBuffer.BOOLEAN, value.tracked);
         }
 
         @Override
         public @NotNull LodestoneTracker read(@NotNull NetworkBuffer buffer) {
             return new LodestoneTracker(
-                    buffer.readOptional(WorldPos.NETWORK_TYPE),
+                    buffer.read(WorldPos.NETWORK_TYPE.optional()),
                     buffer.read(NetworkBuffer.BOOLEAN)
             );
         }

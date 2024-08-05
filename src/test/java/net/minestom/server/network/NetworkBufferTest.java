@@ -351,12 +351,12 @@ public class NetworkBufferTest {
         assertBufferType(type, value, expected, new Action<T>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
-                buffer.writeOptional(type, value);
+                buffer.write(type.optional(), value);
             }
 
             @Override
             public T read(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type) {
-                return buffer.readOptional(type);
+                return buffer.read(type.optional());
             }
         });
     }

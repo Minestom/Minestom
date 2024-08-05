@@ -63,14 +63,14 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
             public void write(@NotNull NetworkBuffer buffer, Modifier value) {
                 buffer.write(Attribute.NETWORK_TYPE, value.attribute);
                 buffer.write(AttributeModifier.NETWORK_TYPE, value.modifier);
-                buffer.writeEnum(EquipmentSlotGroup.class, value.slot);
+                buffer.write(NetworkBuffer.Enum(EquipmentSlotGroup.class), value.slot);
             }
 
             @Override
             public Modifier read(@NotNull NetworkBuffer buffer) {
                 return new Modifier(buffer.read(Attribute.NETWORK_TYPE),
                         buffer.read(AttributeModifier.NETWORK_TYPE),
-                        buffer.readEnum(EquipmentSlotGroup.class));
+                        buffer.read(NetworkBuffer.Enum(EquipmentSlotGroup.class)));
             }
         };
         public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(

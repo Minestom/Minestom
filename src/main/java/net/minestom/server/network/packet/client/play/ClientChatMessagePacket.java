@@ -19,7 +19,7 @@ public record ClientChatMessagePacket(String message, long timestamp,
             buffer.write(STRING, value.message);
             buffer.write(LONG, value.timestamp);
             buffer.write(LONG, value.salt);
-            buffer.writeOptional(BYTE_ARRAY, value.signature);
+            buffer.write(BYTE_ARRAY.optional(), value.signature);
             buffer.write(VAR_INT, value.ackOffset);
             buffer.write(RAW_BYTES, Arrays.copyOf(value.ackList.toByteArray(), 3));
         }

@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,6 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
+
+import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
@@ -94,19 +97,12 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
          * @param max The max value to match, exclusive
          */
         record Range(@Nullable String min, @Nullable String max) implements ValuePredicate {
+            public static NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
+                    STRING.optional(), Range::min,
+                    STRING.optional(), Range::max,
+                    Range::new
+            );
 
-            public static final NetworkBuffer.Type<Range> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-                @Override
-                public void write(@NotNull NetworkBuffer buffer, Range value) {
-                    buffer.writeOptional(NetworkBuffer.STRING, value.min);
-                    buffer.writeOptional(NetworkBuffer.STRING, value.max);
-                }
-
-                @Override
-                public Range read(@NotNull NetworkBuffer buffer) {
-                    return new Range(buffer.readOptional(NetworkBuffer.STRING), buffer.readOptional(NetworkBuffer.STRING));
-                }
-            };
             public static final BinaryTagSerializer<Range> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                     tag -> new Range(
                             tag.get("min") instanceof StringBinaryTag string ? string.value() : null,

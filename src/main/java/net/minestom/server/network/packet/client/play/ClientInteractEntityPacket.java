@@ -36,12 +36,12 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
 
     public record Interact(@NotNull PlayerHand hand) implements Type {
         public Interact(@NotNull NetworkBuffer reader) {
-            this(reader.readEnum(PlayerHand.class));
+            this(reader.read(NetworkBuffer.Enum(PlayerHand.class)));
         }
 
         @Override
         public void write(@NotNull NetworkBuffer writer) {
-            writer.writeEnum(PlayerHand.class, hand);
+            writer.write(NetworkBuffer.Enum(PlayerHand.class), hand);
         }
 
         @Override
@@ -66,7 +66,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
                              @NotNull PlayerHand hand) implements Type {
         public InteractAt(@NotNull NetworkBuffer reader) {
             this(reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
-                    reader.readEnum(PlayerHand.class));
+                    reader.read(NetworkBuffer.Enum(PlayerHand.class)));
         }
 
         @Override
@@ -74,7 +74,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
             writer.write(FLOAT, targetX);
             writer.write(FLOAT, targetY);
             writer.write(FLOAT, targetZ);
-            writer.writeEnum(PlayerHand.class, hand);
+            writer.write(NetworkBuffer.Enum(PlayerHand.class), hand);
         }
 
         @Override

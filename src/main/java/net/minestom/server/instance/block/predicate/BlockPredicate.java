@@ -25,8 +25,8 @@ import java.util.function.Predicate;
  * is used for matching adventure mode blocks and must line up with client prediction.</p>
  *
  * @param blocks The block names/tags to match.
- * @param state The block properties to match.
- * @param nbt The block nbt to match.
+ * @param state  The block properties to match.
+ * @param nbt    The block nbt to match.
  */
 public record BlockPredicate(
         @Nullable BlockTypeFilter blocks,
@@ -47,17 +47,17 @@ public record BlockPredicate(
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, BlockPredicate value) {
-            buffer.writeOptional(BlockTypeFilter.NETWORK_TYPE, value.blocks);
-            buffer.writeOptional(PropertiesPredicate.NETWORK_TYPE, value.state);
-            buffer.writeOptional(NetworkBuffer.NBT, value.nbt);
+            buffer.write(BlockTypeFilter.NETWORK_TYPE.optional(), value.blocks);
+            buffer.write(PropertiesPredicate.NETWORK_TYPE.optional(), value.state);
+            buffer.write(NetworkBuffer.NBT.optional(), value.nbt);
         }
 
         @Override
         public BlockPredicate read(@NotNull NetworkBuffer buffer) {
             return new BlockPredicate(
-                    buffer.readOptional(BlockTypeFilter.NETWORK_TYPE),
-                    buffer.readOptional(PropertiesPredicate.NETWORK_TYPE),
-                    (CompoundBinaryTag) buffer.readOptional(NetworkBuffer.NBT)
+                    buffer.read(BlockTypeFilter.NETWORK_TYPE.optional()),
+                    buffer.read(PropertiesPredicate.NETWORK_TYPE.optional()),
+                    (CompoundBinaryTag) buffer.read(NetworkBuffer.NBT.optional())
             );
         }
     };

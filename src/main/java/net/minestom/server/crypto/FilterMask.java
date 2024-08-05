@@ -19,7 +19,7 @@ public record FilterMask(@NotNull Type type, @NotNull BitSet mask) {
 
         @Override
         public FilterMask read(@NotNull NetworkBuffer buffer) {
-            Type type = buffer.readEnum(Type.class);
+            Type type = buffer.read(NetworkBuffer.Enum(Type.class));
             BitSet mask = type == Type.PARTIALLY_FILTERED ? buffer.read(BITSET) : new BitSet();
             return new FilterMask(type, mask);
         }

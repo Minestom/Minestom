@@ -66,16 +66,16 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
             @Override
             public void write(@NotNull NetworkBuffer buffer, Rule value) {
                 buffer.write(BlockTypeFilter.NETWORK_TYPE, value.blocks());
-                buffer.writeOptional(NetworkBuffer.FLOAT, value.speed());
-                buffer.writeOptional(NetworkBuffer.BOOLEAN, value.correctForDrops());
+                buffer.write(NetworkBuffer.FLOAT.optional(), value.speed());
+                buffer.write(NetworkBuffer.BOOLEAN.optional(), value.correctForDrops());
             }
 
             @Override
             public Rule read(@NotNull NetworkBuffer buffer) {
                 return new Rule(
                         buffer.read(BlockTypeFilter.NETWORK_TYPE),
-                        buffer.readOptional(NetworkBuffer.FLOAT),
-                        buffer.readOptional(NetworkBuffer.BOOLEAN)
+                        buffer.read(NetworkBuffer.FLOAT.optional()),
+                        buffer.read(NetworkBuffer.BOOLEAN.optional())
                 );
             }
         };
