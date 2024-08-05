@@ -149,7 +149,7 @@ public class InventoryIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
-        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
         player.openInventory(inventory);
         assertSame(inventory, player.getOpenInventory());
         player.closeInventory();
@@ -162,7 +162,7 @@ public class InventoryIntegrationTest {
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
         var listener = env.listen(ItemDropEvent.class);
-        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
         player.openInventory(firstInventory);
         assertSame(firstInventory, player.getOpenInventory());
         player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
@@ -173,7 +173,7 @@ public class InventoryIntegrationTest {
 
         player.openInventory(firstInventory);
         player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
-        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
         listener.followup(event -> event.getPlayer().openInventory(secondInventory));
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());
