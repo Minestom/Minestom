@@ -623,13 +623,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             for (int i = 0; i < values.length; ++i) {
                 bitSet.set(i, value.contains(values[i]));
             }
-            buffer.writeFixedBitSet(bitSet, values.length);
+            final byte[] array = bitSet.toByteArray();
+            buffer.write(RAW_BYTES, array);
         }
 
         @Override
         public EnumSet<E> read(@NotNull NetworkBuffer buffer) {
             final E[] values = enumType.getEnumConstants();
-            BitSet bitSet = buffer.readFixedBitSet(values.length);
+            final byte[] array = buffer.readBytes((values.length + 7) / 8);
+            BitSet bitSet = BitSet.valueOf(array);
             EnumSet<E> enumSet = EnumSet.noneOf(enumType);
             for (int i = 0; i < values.length; ++i) {
                 if (bitSet.get(i)) {
@@ -637,6 +639,25 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 }
             }
             return enumSet;
+        }
+    }
+
+    record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BitSet value) {
+            final int setLength = value.length();
+            if (setLength > length) {
+                throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+            } else {
+                final byte[] array = value.toByteArray();
+                buffer.write(RAW_BYTES, array);
+            }
+        }
+
+        @Override
+        public BitSet read(@NotNull NetworkBuffer buffer) {
+            final byte[] array = buffer.readBytes((length + 7) / 8);
+            return BitSet.valueOf(array);
         }
     }
 
@@ -687,7 +708,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType, int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
+    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType,
+                         int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Map<K, V> map) {
             buffer.write(VAR_INT, map.size());

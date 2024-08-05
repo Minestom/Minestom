@@ -90,6 +90,10 @@ public final class NetworkBuffer {
         return new NetworkBufferTypeImpl.EnumSetType<>(enumClass);
     }
 
+    public static @NotNull Type<BitSet> FixedBitSet(int length) {
+        return new NetworkBufferTypeImpl.FixedBitSetType(length);
+    }
+
     public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
@@ -166,22 +170,6 @@ public final class NetworkBuffer {
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) values.add(function.apply(this));
         return values;
-    }
-
-    public void writeFixedBitSet(BitSet set, int length) {
-        final int setLength = set.length();
-        if (setLength > length) {
-            throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
-        } else {
-            final byte[] array = set.toByteArray();
-            write(RAW_BYTES, array);
-        }
-    }
-
-    @NotNull
-    public BitSet readFixedBitSet(int length) {
-        final byte[] array = readBytes((length + 7) / 8);
-        return BitSet.valueOf(array);
     }
 
     public byte[] readBytes(int length) {

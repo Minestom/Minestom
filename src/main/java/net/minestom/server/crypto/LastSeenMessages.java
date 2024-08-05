@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.BitSet;
 import java.util.List;
 
+import static net.minestom.server.network.NetworkBuffer.FixedBitSet;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries) {
@@ -30,15 +31,11 @@ public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries)
         );
     }
 
-    public record Update(int offset, @NotNull BitSet acknowledged) implements NetworkBuffer.Writer {
-        public Update(@NotNull NetworkBuffer reader) {
-            this(reader.read(VAR_INT), reader.readFixedBitSet(20));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, offset);
-            writer.writeFixedBitSet(acknowledged, 20);
-        }
+    public record Update(int offset, @NotNull BitSet acknowledged) {
+        public static final NetworkBuffer.Type<Update> SERIALIZER = NetworkBufferTemplate.template(
+                VAR_INT, Update::offset,
+                FixedBitSet(20), Update::acknowledged,
+                Update::new
+        );
     }
 }
