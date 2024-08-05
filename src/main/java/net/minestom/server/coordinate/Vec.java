@@ -227,6 +227,10 @@ public record Vec(double x, double y, double z) implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec normalize() {
+        if (length() < EPSILON || isNormalized()) {
+            return this;
+        }
+
         final double length = length();
         return new Vec(x / length, y / length, z / length);
     }
