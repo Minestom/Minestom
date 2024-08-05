@@ -59,7 +59,7 @@ public record PlayerInfoUpdatePacket(
                     switch (action) {
                         case ADD_PLAYER -> {
                             username = reader.read(STRING);
-                            properties = reader.readCollection(Property.SERIALIZER, GameProfile.MAX_PROPERTIES);
+                            properties = reader.read(Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES));
                         }
                         case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(reader);
                         case UPDATE_GAME_MODE -> gameMode = reader.read(NetworkBuffer.Enum(GameMode.class));
@@ -97,7 +97,7 @@ public record PlayerInfoUpdatePacket(
     public enum Action {
         ADD_PLAYER((writer, entry) -> {
             writer.write(STRING, entry.username);
-            writer.writeCollection(Property.SERIALIZER, entry.properties);
+            writer.write(Property.SERIALIZER.list(), entry.properties);
         }),
         INITIALIZE_CHAT((writer, entry) -> writer.write(ChatSession.SERIALIZER.optional(), entry.chatSession)),
         UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, entry.gameMode.ordinal())),

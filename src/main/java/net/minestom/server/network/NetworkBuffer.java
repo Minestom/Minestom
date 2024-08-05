@@ -160,14 +160,6 @@ public final class NetworkBuffer {
         for (T value : values) consumer.accept(this, value);
     }
 
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Type<T> type, int maxSize) {
-        final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-        final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) values.add(read(type));
-        return values;
-    }
-
     public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
         final int size = read(VAR_INT);
         Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
@@ -254,7 +246,6 @@ public final class NetworkBuffer {
         }
     }
 
-
     public interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
 
@@ -288,11 +279,6 @@ public final class NetworkBuffer {
     @FunctionalInterface
     public interface Writer {
         void write(@NotNull NetworkBuffer writer);
-    }
-
-    @FunctionalInterface
-    public interface Reader<T> {
-        @NotNull T read(@NotNull NetworkBuffer reader);
     }
 
     public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {

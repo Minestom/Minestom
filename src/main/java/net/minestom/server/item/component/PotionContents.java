@@ -36,7 +36,7 @@ public record PotionContents(
             return new PotionContents(
                     typeId == null ? null : PotionType.fromId(typeId),
                     buffer.read(Color.NETWORK_TYPE.optional()),
-                    buffer.readCollection(CustomPotionEffect.NETWORK_TYPE, Short.MAX_VALUE)
+                    buffer.read(CustomPotionEffect.NETWORK_TYPE.list(Short.MAX_VALUE))
             );
         }
     };

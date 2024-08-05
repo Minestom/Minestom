@@ -30,7 +30,7 @@ public record JoinGamePacket(
         public void write(@NotNull NetworkBuffer buffer, JoinGamePacket value) {
             buffer.write(INT, value.entityId);
             buffer.write(BOOLEAN, value.isHardcore);
-            buffer.writeCollection(STRING, value.worlds);
+            buffer.write(STRING.list(), value.worlds);
             buffer.write(VAR_INT, value.maxPlayers);
             buffer.write(VAR_INT, value.viewDistance);
             buffer.write(VAR_INT, value.simulationDistance);
@@ -58,7 +58,7 @@ public record JoinGamePacket(
             return new JoinGamePacket(
                     buffer.read(INT),
                     buffer.read(BOOLEAN),
-                    buffer.readCollection(STRING, MAX_WORLDS),
+                    buffer.read(STRING.list(MAX_WORLDS)),
                     buffer.read(VAR_INT),
                     buffer.read(VAR_INT),
                     buffer.read(VAR_INT),

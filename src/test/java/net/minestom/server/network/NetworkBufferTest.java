@@ -282,7 +282,7 @@ public class NetworkBufferTest {
             list.add(true);
         buffer.write(BOOLEAN.list(), list);
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(BOOLEAN, 10));
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(BOOLEAN.list(10)));
         buffer.readIndex(0); // reset
         assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(b -> b.read(BOOLEAN), 10));
     }
@@ -371,7 +371,7 @@ public class NetworkBufferTest {
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
 
-        var actual = buffer.readCollection(type, Integer.MAX_VALUE);
+        var actual = buffer.read(type.list(Integer.MAX_VALUE));
 
         assertEquals(values, actual);
         if (expected != null) assertEquals(expected.length, buffer.readIndex());
