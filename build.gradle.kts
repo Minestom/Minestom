@@ -88,7 +88,6 @@ dependencies {
     api(libs.bundles.adventure)
     implementation(libs.minestomData)
     implementation(libs.minestomData)
-    implementation(libs.dependencyGetter)
 
 
     // Logging
@@ -100,6 +99,9 @@ dependencies {
     implementation(libs.caffeine)
     api(libs.fastutil)
     implementation(libs.bundles.flare)
+    // BStats
+    api(libs.bstats.base)
+
 
     // Libraries
     api(libs.gson)
@@ -112,46 +114,4 @@ dependencies {
     testCompileOnly(libs.mockito.core)
 }
 
-tasks {
-    jar {
-        manifest {
-            attributes("Automatic-Module-Name" to "net.minestom.server")
-        }
-    }
-    withType<Javadoc> {
-        (options as? StandardJavadocDocletOptions)?.apply {
-            encoding = "UTF-8"
-
-            // Custom options
-            addBooleanOption("html5", true)
-            addStringOption("-release", "21")
-            // Links to external javadocs
-            links("https://docs.oracle.com/en/java/javase/21/docs/api/")
-            links("https://jd.adventure.kyori.net/api/${libs.versions.adventure.get()}/")
-        }
-    }
-
-    blossom {
-        val gitFile = "src/main/java/net/minestom/server/Git.java"
-
-    // Adventure, for user-interface
-    api(libs.bundles.adventure)
-
-    // Kotlin Libraries
-    api(libs.bundles.kotlin)
-
-    api(libs.maven.resolver)
-    api(libs.maven.connector)
-    api(libs.maven.transport.http)
-
-    // Minestom Data (From MinestomDataGenerator)
-    implementation(libs.minestomData)
-
-    // NBT parsing/manipulation/saving
-    api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
-    api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
-
-    // BStats
-    api(libs.bstats.base)
-}
 
