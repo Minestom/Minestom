@@ -94,7 +94,7 @@ public class NetworkBufferTest {
         assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
         }));
 
-        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(buffer -> buffer.write(BYTE, (byte) 1)));
+        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(BYTE, (byte) 1));
 
         assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArray(buffer -> {
             buffer.write(BYTE, (byte) 1);
