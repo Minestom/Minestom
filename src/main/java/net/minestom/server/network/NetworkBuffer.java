@@ -43,7 +43,7 @@ public final class NetworkBuffer {
     public static final Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
     public static final Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
     public static final Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
-    public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType();
+    public static final Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     public static final Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     public static final Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
@@ -61,7 +61,6 @@ public final class NetworkBuffer {
     public static final Type<BitSet> BITSET = LONG_ARRAY.transform(BitSet::valueOf, BitSet::toLongArray);
     public static final Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     public static final Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
-
 
     public static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
         return new NetworkBufferTypeImpl.RegistryTypeType<>(selector);
@@ -92,6 +91,10 @@ public final class NetworkBuffer {
 
     public static @NotNull Type<BitSet> FixedBitSet(int length) {
         return new NetworkBufferTypeImpl.FixedBitSetType(length);
+    }
+
+    public static @NotNull Type<byte[]> FixedRawBytes(int length) {
+        return new NetworkBufferTypeImpl.RawBytesType(length);
     }
 
     public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
@@ -137,19 +140,6 @@ public final class NetworkBuffer {
         return type.read(this);
     }
 
-    public <T> @Nullable T readOptional(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function) {
-        return read(BOOLEAN) ? function.apply(this) : null;
-    }
-
-    public <T> void writeCollection(@NotNull Type<T> type, @Nullable Collection<@NotNull T> values) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) write(type, value);
-    }
-
     public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
                                     @NotNull BiConsumer<@NotNull NetworkBuffer, @NotNull T> consumer) {
         if (values == null) {
@@ -166,13 +156,6 @@ public final class NetworkBuffer {
         final List<T> values = new java.util.ArrayList<>(size);
         for (int i = 0; i < size; i++) values.add(function.apply(this));
         return values;
-    }
-
-    public byte[] readBytes(int length) {
-        byte[] bytes = new byte[length];
-        nioBuffer.get(readIndex, bytes, 0, length);
-        readIndex += length;
-        return bytes;
     }
 
     public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {

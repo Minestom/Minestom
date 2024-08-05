@@ -73,7 +73,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
     public record CreateTeamAction(Component displayName, byte friendlyFlags,
                                    NameTagVisibility nameTagVisibility, CollisionRule collisionRule,
                                    NamedTextColor teamColor, Component teamPrefix, Component teamSuffix,
-                                   Collection<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
+                                   List<String> entities) implements Action, ComponentHolder<CreateTeamAction> {
         public CreateTeamAction {
             entities = List.copyOf(entities);
         }
@@ -88,7 +88,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
                 buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
                 buffer.write(COMPONENT, value.teamPrefix);
                 buffer.write(COMPONENT, value.teamSuffix);
-                buffer.writeCollection(STRING, value.entities);
+                buffer.write(STRING.list(), value.entities);
             }
 
             @Override

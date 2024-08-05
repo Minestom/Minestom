@@ -365,9 +365,9 @@ public class NetworkBufferTest {
         assertBufferTypeOptional(type, value, null);
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> values, byte @Nullable [] expected) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> values, byte @Nullable [] expected) {
         var buffer = new NetworkBuffer();
-        buffer.writeCollection(type, values);
+        buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
 
@@ -384,7 +384,7 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> value) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> value) {
         assertBufferTypeCollection(type, value, null);
     }
 

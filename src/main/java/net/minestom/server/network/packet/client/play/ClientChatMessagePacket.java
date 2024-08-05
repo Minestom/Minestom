@@ -27,8 +27,8 @@ public record ClientChatMessagePacket(String message, long timestamp,
         @Override
         public ClientChatMessagePacket read(@NotNull NetworkBuffer buffer) {
             return new ClientChatMessagePacket(buffer.read(STRING), buffer.read(LONG),
-                    buffer.read(LONG), buffer.readOptional(r -> r.readBytes(256)),
-                    buffer.read(VAR_INT), BitSet.valueOf(buffer.readBytes(3)));
+                    buffer.read(LONG), buffer.read(FixedRawBytes(256).optional()),
+                    buffer.read(VAR_INT), BitSet.valueOf(buffer.read(FixedRawBytes(3))));
         }
     };
 }

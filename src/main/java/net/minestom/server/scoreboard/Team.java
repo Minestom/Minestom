@@ -372,7 +372,7 @@ public class Team implements PacketGroupingAudience {
      */
     public @NotNull TeamsPacket createTeamsCreationPacket() {
         final var info = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
-                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.copyOf(members));
         return new TeamsPacket(teamName, info);
     }
 

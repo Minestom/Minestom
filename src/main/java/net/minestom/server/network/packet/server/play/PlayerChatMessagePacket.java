@@ -41,7 +41,7 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
 
         @Override
         public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer buffer) {
-            return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.readOptional(r -> r.readBytes(256)),
+            return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.read(FixedRawBytes(256).optional()),
                     SignedMessageBody.Packed.SERIALIZER.read(buffer),
                     buffer.read(COMPONENT.optional()), FilterMask.SERIALIZER.read(buffer),
                     buffer.read(VAR_INT), buffer.read(COMPONENT),

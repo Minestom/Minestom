@@ -101,7 +101,7 @@ public interface Palette {
                     case PaletteIndirect indirect -> {
                         buffer.write(BYTE, (byte) value.bitsPerEntry());
                         if (indirect.bitsPerEntry() <= indirect.maxBitsPerEntry()) { // Palette index
-                            buffer.writeCollection(VAR_INT, indirect.paletteToValueList);
+                            buffer.write(VAR_INT.list(), indirect.paletteToValueList);
                         }
                         buffer.write(LONG_ARRAY, indirect.values);
                     }
