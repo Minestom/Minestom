@@ -20,6 +20,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -54,6 +55,9 @@ public final class NetworkBuffer {
     public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
     public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
+    public static final Type<Instant> INSTANT_MS = LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli);
+
+
     public static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
         return new NetworkBufferTypeImpl.RegistryTypeType<>(selector);
     }
@@ -84,7 +88,6 @@ public final class NetworkBuffer {
     public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
-
 
     ByteBuffer nioBuffer;
     final boolean resizable;
@@ -357,5 +360,9 @@ public final class NetworkBuffer {
         byte[] bytes = new byte[writer.writeIndex];
         writer.copyTo(0, bytes, 0, bytes.length);
         return bytes;
+    }
+
+    public static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
+        return makeArray(buffer -> buffer.write(type, value));
     }
 }

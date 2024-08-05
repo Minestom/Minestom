@@ -16,14 +16,14 @@ public record ChunkDataPacket(int chunkX, int chunkZ,
         public void write(@NotNull NetworkBuffer buffer, ChunkDataPacket value) {
             buffer.write(INT, value.chunkX);
             buffer.write(INT, value.chunkZ);
-            buffer.write(value.chunkData);
+            buffer.write(ChunkData.NETWORK_TYPE, value.chunkData);
             buffer.write(value.lightData);
         }
 
         @Override
         public ChunkDataPacket read(@NotNull NetworkBuffer buffer) {
             return new ChunkDataPacket(buffer.read(INT), buffer.read(INT),
-                    new ChunkData(buffer),
+                    ChunkData.NETWORK_TYPE.read(buffer),
                     new LightData(buffer));
         }
     };

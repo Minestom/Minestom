@@ -191,7 +191,7 @@ public final class LoginListener {
                 }
                 final int port = ((java.net.InetSocketAddress) socketConnection.getRemoteAddress()).getPort();
                 socketAddress = new InetSocketAddress(address, port);
-                gameProfile = new GameProfile(buffer);
+                gameProfile = GameProfile.SERIALIZER.read(buffer);
             }
         }
 

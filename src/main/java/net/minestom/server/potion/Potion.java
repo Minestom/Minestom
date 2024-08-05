@@ -19,8 +19,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements NetworkBuffer.Writer {
+public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -72,11 +71,6 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      */
     public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
-    }
-
-    public Potion(@NotNull NetworkBuffer reader) {
-        this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
-                reader.read(VAR_INT), reader.read(BYTE));
     }
 
     /**
@@ -144,11 +138,19 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, effect.id());
-        writer.write(BYTE, amplifier);
-        writer.write(VAR_INT, duration);
-        writer.write(BYTE, flags);
-    }
+    public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Potion value) {
+            buffer.write(VAR_INT, value.effect.id());
+            buffer.write(BYTE, value.amplifier);
+            buffer.write(VAR_INT, value.duration);
+            buffer.write(BYTE, value.flags);
+        }
+
+        @Override
+        public Potion read(@NotNull NetworkBuffer buffer) {
+            return new Potion(Objects.requireNonNull(PotionEffect.fromId(buffer.read(VAR_INT))), buffer.read(BYTE),
+                    buffer.read(VAR_INT), buffer.read(BYTE));
+        }
+    };
 }

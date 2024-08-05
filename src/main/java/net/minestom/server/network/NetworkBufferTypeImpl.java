@@ -8,7 +8,6 @@ import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
@@ -546,18 +545,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             value[1] = buffer.read(VAR_INT);
             value[2] = buffer.read(VAR_INT);
             return value;
-        }
-    }
-
-    record DeathLocationType() implements NetworkBufferTypeImpl<WorldPos> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, WorldPos value) {
-            buffer.writeOptional(value);
-        }
-
-        @Override
-        public WorldPos read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(WorldPos::new);
         }
     }
 

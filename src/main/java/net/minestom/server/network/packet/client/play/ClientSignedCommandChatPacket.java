@@ -19,14 +19,14 @@ public record ClientSignedCommandChatPacket(@NotNull String message, long timest
             buffer.write(STRING, value.message);
             buffer.write(LONG, value.timestamp);
             buffer.write(LONG, value.salt);
-            buffer.write(value.signatures);
+            buffer.write(ArgumentSignatures.SERIALIZER, value.signatures);
             buffer.write(value.lastSeenMessages);
         }
 
         @Override
         public ClientSignedCommandChatPacket read(@NotNull NetworkBuffer buffer) {
             return new ClientSignedCommandChatPacket(buffer.read(STRING), buffer.read(LONG),
-                    buffer.read(LONG), new ArgumentSignatures(buffer),
+                    buffer.read(LONG), ArgumentSignatures.SERIALIZER.read(buffer),
                     new LastSeenMessages.Update(buffer));
         }
     };
