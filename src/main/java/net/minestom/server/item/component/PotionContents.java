@@ -27,7 +27,7 @@ public record PotionContents(
             Integer typeId = value.potion == null ? null : value.potion.id();
             buffer.write(NetworkBuffer.VAR_INT.optional(), typeId);
             buffer.write(Color.NETWORK_TYPE.optional(), value.customColor);
-            buffer.writeCollection(CustomPotionEffect.NETWORK_TYPE, value.customEffects);
+            buffer.write(CustomPotionEffect.NETWORK_TYPE.list(), value.customEffects);
         }
 
         @Override

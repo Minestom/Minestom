@@ -14,26 +14,18 @@ import java.util.List;
 import java.util.UUID;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.UUID;
 
 public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull List<Property> properties) {
     public static final HeadProfile EMPTY = new HeadProfile(null, null, List.of());
 
-    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, HeadProfile value) {
-            buffer.write(NetworkBuffer.STRING.optional(), value.name);
-            buffer.write(NetworkBuffer.UUID.optional(), value.uuid);
-            buffer.writeCollection(Property.NETWORK_TYPE, value.properties);
-        }
+    public static NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = NetworkBufferTemplate.template(
+            STRING.optional(), HeadProfile::name,
+            UUID.optional(), HeadProfile::uuid,
+            Property.NETWORK_TYPE.list(Short.MAX_VALUE), HeadProfile::properties,
+            HeadProfile::new
+    );
 
-        @Override
-        public HeadProfile read(@NotNull NetworkBuffer buffer) {
-            return new HeadProfile(
-                    buffer.read(NetworkBuffer.STRING.optional()),
-                    buffer.read(NetworkBuffer.UUID.optional()),
-                    buffer.readCollection(Property.NETWORK_TYPE, Short.MAX_VALUE));
-        }
-    };
     public static final BinaryTagSerializer<HeadProfile> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> new HeadProfile(
                     tag.get("name") instanceof StringBinaryTag string ? string.value() : null,

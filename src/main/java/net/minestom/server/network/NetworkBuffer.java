@@ -146,11 +146,6 @@ public final class NetworkBuffer {
         for (T value : values) write(type, value);
     }
 
-    @SafeVarargs
-    public final <T> void writeCollection(@NotNull Type<T> type, @NotNull T @Nullable ... values) {
-        writeCollection(type, values == null ? null : List.of(values));
-    }
-
     public <T extends Writer> void writeCollection(@Nullable Collection<@NotNull T> values) {
         if (values == null) {
             write(BYTE, (byte) 0);

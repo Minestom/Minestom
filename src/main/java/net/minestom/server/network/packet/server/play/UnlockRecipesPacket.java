@@ -36,9 +36,9 @@ public record UnlockRecipesPacket(int mode,
             buffer.write(BOOLEAN, value.smokerRecipeBookOpen);
             buffer.write(BOOLEAN, value.smokerRecipeBookFilterActive);
 
-            buffer.writeCollection(STRING, value.recipeIds);
+            buffer.write(STRING.list(), value.recipeIds);
             if (value.mode == 0) {
-                buffer.writeCollection(STRING, value.initRecipeIds);
+                buffer.write(STRING.list(), value.initRecipeIds);
             }
         }
 

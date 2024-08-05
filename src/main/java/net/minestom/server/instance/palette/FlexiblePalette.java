@@ -212,7 +212,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     public void write(@NotNull NetworkBuffer writer) {
         writer.write(BYTE, bitsPerEntry);
         if (bitsPerEntry <= maxBitsPerEntry()) { // Palette index
-            writer.writeCollection(VAR_INT, paletteToValueList);
+            writer.write(VAR_INT.list(), paletteToValueList);
         }
         writer.write(LONG_ARRAY, values);
     }

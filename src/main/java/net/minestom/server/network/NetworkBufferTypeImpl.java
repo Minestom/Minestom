@@ -665,13 +665,22 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, List<T> value) {
-            buffer.writeCollection(parent, value);
+        public void write(@NotNull NetworkBuffer buffer, List<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
         }
 
         @Override
         public List<T> read(@NotNull NetworkBuffer buffer) {
-            return buffer.readCollection(parent, maxSize);
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            final List<T> values = new java.util.ArrayList<>(size);
+            for (int i = 0; i < size; i++) values.add(buffer.read(parent));
+            return values;
         }
     }
 

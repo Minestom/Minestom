@@ -280,7 +280,7 @@ public class NetworkBufferTest {
         var list = new ArrayList<Boolean>();
         for (int i = 0; i < 1000; i++)
             list.add(true);
-        buffer.writeCollection(BOOLEAN, list);
+        buffer.write(BOOLEAN.list(), list);
 
         assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(BOOLEAN, 10));
         buffer.readIndex(0); // reset
