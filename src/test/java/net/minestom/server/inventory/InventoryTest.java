@@ -89,7 +89,7 @@ class InventoryTest {
 
     @Test
     public void testStackSize99() {
-        var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        var inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
         var item = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
 
         assertTrue(inventory.addItemStack(item, TransactionOption.ALL_OR_NOTHING));
@@ -98,7 +98,7 @@ class InventoryTest {
 
     @Test
     public void testStackSize99OnSmaller() {
-        var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        var inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("title"));
         var item44 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 44).amount(43).build();
         var item99 = ItemStack.builder(Material.DIAMOND).set(ItemComponent.MAX_STACK_SIZE, 99).amount(99).build();
 
