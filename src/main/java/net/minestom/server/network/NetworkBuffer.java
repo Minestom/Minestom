@@ -55,6 +55,7 @@ public final class NetworkBuffer {
     public static final Type<int[]> VAR_INT_ARRAY = new NetworkBufferTypeImpl.VarIntArrayType();
     public static final Type<long[]> VAR_LONG_ARRAY = new NetworkBufferTypeImpl.VarLongArrayType();
 
+    public static final Type<BitSet> BITSET = LONG_ARRAY.map(BitSet::valueOf, BitSet::toLongArray);
     public static final Type<Instant> INSTANT_MS = LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli);
 
 
