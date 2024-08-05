@@ -87,8 +87,6 @@ dependencies {
     api(libs.jetbrainsAnnotations)
     api(libs.bundles.adventure)
     implementation(libs.minestomData)
-    implementation(libs.minestomData)
-
 
     // Logging
     implementation(libs.bundles.logging)
@@ -101,7 +99,10 @@ dependencies {
     implementation(libs.bundles.flare)
     // BStats
     api(libs.bstats.base)
-
+    // Maven
+    api(libs.maven.resolver)
+    api(libs.maven.connector)
+    api(libs.maven.transport.http)
 
     // Libraries
     api(libs.gson)
