@@ -54,6 +54,7 @@ dependencyResolutionManagement {
 
             // Libs
             library("adventure-api", "net.kyori", "adventure-api").versionRef("adventure")
+            library("adventure-nbt", "net.kyori", "adventure-nbt").versionRef("adventure")
             library("adventure-serializer-gson", "net.kyori", "adventure-text-serializer-gson").versionRef("adventure")
             library("adventure-serializer-legacy", "net.kyori", "adventure-text-serializer-legacy").versionRef("adventure")
             library("adventure-serializer-plain", "net.kyori", "adventure-text-serializer-plain").versionRef("adventure")
@@ -119,7 +120,7 @@ dependencyResolutionManagement {
 
             bundle("kotlin", listOf("kotlin-stdlib-jdk8", "kotlin-reflect"))
             bundle("flare", listOf("flare", "flare-fastutil"))
-            bundle("adventure", listOf("adventure-api", "adventure-mini-message", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"))
+            bundle("adventure", listOf("adventure-api", "adventure-nbt", "adventure-mini-message", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"))
             bundle("logging", listOf("tinylog-api", "tinylog-impl", "tinylog-slf4j"))
             bundle("terminal", listOf("jline", "jline-jansi"))
             bundle("logback", listOf("logback-core", "logback-classic"))
