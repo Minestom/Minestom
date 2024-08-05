@@ -34,7 +34,7 @@ public record PlayerInfoUpdatePacket(
     public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer writer, PlayerInfoUpdatePacket value) {
-            writer.writeEnumSet(value.actions, Action.class);
+            writer.write(EnumSet(Action.class), value.actions);
             writer.writeCollection(value.entries, (buffer, entry) -> {
                 buffer.write(NetworkBuffer.UUID, entry.uuid);
                 for (Action action : value.actions) {
@@ -45,7 +45,7 @@ public record PlayerInfoUpdatePacket(
 
         @Override
         public PlayerInfoUpdatePacket read(@NotNull NetworkBuffer reader) {
-            var actions = reader.readEnumSet(Action.class);
+            var actions = reader.read(EnumSet(Action.class));
             var entries = reader.readCollection(buffer -> {
                 UUID uuid = buffer.read(NetworkBuffer.UUID);
                 String username = "";

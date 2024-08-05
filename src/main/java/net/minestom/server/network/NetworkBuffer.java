@@ -86,6 +86,10 @@ public final class NetworkBuffer {
         return new NetworkBufferTypeImpl.EnumType<>(enumClass);
     }
 
+    public static <E extends Enum<E>> @NotNull Type<EnumSet<E>> EnumSet(@NotNull Class<E> enumClass) {
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass);
+    }
+
     public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
@@ -146,15 +150,6 @@ public final class NetworkBuffer {
         for (T value : values) write(type, value);
     }
 
-    public <T extends Writer> void writeCollection(@Nullable Collection<@NotNull T> values) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) write(value);
-    }
-
     public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
                                     @NotNull BiConsumer<@NotNull NetworkBuffer, @NotNull T> consumer) {
         if (values == null) {
@@ -198,27 +193,6 @@ public final class NetworkBuffer {
             map.put(read(keyType), read(valueType));
         }
         return map;
-    }
-
-    public <E extends Enum<E>> void writeEnumSet(EnumSet<E> enumSet, Class<E> enumType) {
-        final E[] values = enumType.getEnumConstants();
-        BitSet bitSet = new BitSet(values.length);
-        for (int i = 0; i < values.length; ++i) {
-            bitSet.set(i, enumSet.contains(values[i]));
-        }
-        writeFixedBitSet(bitSet, values.length);
-    }
-
-    public <E extends Enum<E>> @NotNull EnumSet<E> readEnumSet(Class<E> enumType) {
-        final E[] values = enumType.getEnumConstants();
-        BitSet bitSet = readFixedBitSet(values.length);
-        EnumSet<E> enumSet = EnumSet.noneOf(enumType);
-        for (int i = 0; i < values.length; ++i) {
-            if (bitSet.get(i)) {
-                enumSet.add(values[i]);
-            }
-        }
-        return enumSet;
     }
 
     public void writeFixedBitSet(BitSet set, int length) {

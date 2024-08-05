@@ -20,6 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.BitSet;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.UUID;
 import java.util.function.Function;
@@ -613,6 +615,31 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public E read(@NotNull NetworkBuffer buffer) {
             final int ordinal = buffer.read(VAR_INT);
             return enumClass.getEnumConstants()[ordinal];
+        }
+    }
+
+    record EnumSetType<E extends Enum<E>>(@NotNull Class<E> enumType) implements NetworkBufferTypeImpl<EnumSet<E>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, EnumSet<E> value) {
+            final E[] values = enumType.getEnumConstants();
+            BitSet bitSet = new BitSet(values.length);
+            for (int i = 0; i < values.length; ++i) {
+                bitSet.set(i, value.contains(values[i]));
+            }
+            buffer.writeFixedBitSet(bitSet, values.length);
+        }
+
+        @Override
+        public EnumSet<E> read(@NotNull NetworkBuffer buffer) {
+            final E[] values = enumType.getEnumConstants();
+            BitSet bitSet = buffer.readFixedBitSet(values.length);
+            EnumSet<E> enumSet = EnumSet.noneOf(enumType);
+            for (int i = 0; i < values.length; ++i) {
+                if (bitSet.get(i)) {
+                    enumSet.add(values[i]);
+                }
+            }
+            return enumSet;
         }
     }
 
