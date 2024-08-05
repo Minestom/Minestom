@@ -11,6 +11,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.BiConsumer;
@@ -57,6 +59,7 @@ public final class NetworkBuffer {
 
     public static final Type<BitSet> BITSET = LONG_ARRAY.map(BitSet::valueOf, BitSet::toLongArray);
     public static final Type<Instant> INSTANT_MS = LONG.map(Instant::ofEpochMilli, Instant::toEpochMilli);
+    public static final Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.map(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
 
     public static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {

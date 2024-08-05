@@ -61,7 +61,7 @@ public record PlayerInfoUpdatePacket(
                             username = reader.read(STRING);
                             properties = reader.readCollection(Property.SERIALIZER, GameProfile.MAX_PROPERTIES);
                         }
-                        case INITIALIZE_CHAT -> chatSession = new ChatSession(reader);
+                        case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(reader);
                         case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
                         case UPDATE_LISTED -> listed = reader.read(BOOLEAN);
                         case UPDATE_LATENCY -> latency = reader.read(VAR_INT);
@@ -99,7 +99,7 @@ public record PlayerInfoUpdatePacket(
             writer.write(STRING, entry.username);
             writer.writeCollection(Property.SERIALIZER, entry.properties);
         }),
-        INITIALIZE_CHAT((writer, entry) -> writer.writeOptional(entry.chatSession)),
+        INITIALIZE_CHAT((writer, entry) -> writer.write(ChatSession.SERIALIZER.optional(), entry.chatSession)),
         UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, entry.gameMode.ordinal())),
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
