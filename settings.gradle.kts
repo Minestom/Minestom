@@ -9,12 +9,9 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // Important dependencies
-            version("adventure", "4.15.0")
+            version("adventure", "4.17.0")
             version("kotlin", "1.9.22")
-            version("hydrazine", "1.7.2")
-            version("dependencyGetter", "v1.0.1")
-            version("data", "1.20.4-rv4")
-            version("hephaistos", "2.6.1")
+            version("data", "1.21-rv3")
             version("jetbrainsAnnotations", "24.1.0")
             version("logback", "1.4.5")
             version("slf4j", "2.0.7")
@@ -73,9 +70,7 @@ dependencyResolutionManagement {
             library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
             // Miscellaneous
-            library("hydrazine", "com.github.MadMartian", "hydrazine-path-finding").versionRef("hydrazine")
-            library("dependencyGetter", "com.github.Minestom", "DependencyGetter").versionRef("dependencyGetter")
-            library("minestomData", "net.onelitefeather.microtus", "data").versionRef("data")
+            library("minestomData", "net.minestom", "data").versionRef("data")
             library("jetbrainsAnnotations", "org.jetbrains", "annotations").versionRef("jetbrainsAnnotations");
 
             // Logging
