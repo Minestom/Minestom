@@ -18,6 +18,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -124,7 +125,7 @@ public final class NetworkBuffer {
         this(1024);
     }
 
-    public <T> void write(@NotNull Type<T> type, @NotNull T value) {
+    public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
         type.write(this, value);
     }
 

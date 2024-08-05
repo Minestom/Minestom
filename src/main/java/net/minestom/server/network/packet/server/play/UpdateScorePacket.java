@@ -9,10 +9,6 @@ import org.jetbrains.annotations.Nullable;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-// public record ClientboundSetScorePacket(String owner, String objectiveName,
-// int score, @Nullable Component display, @Nullable NumberFormat numberFormat) implements Packet<ClientGamePacketListener>
-//{
-
 public record UpdateScorePacket(
         @NotNull String entityName,
         @NotNull String objectiveName,
@@ -26,14 +22,14 @@ public record UpdateScorePacket(
             buffer.write(STRING, value.entityName);
             buffer.write(STRING, value.objectiveName);
             buffer.write(VAR_INT, value.score);
-            buffer.writeOptional(COMPONENT, value.displayName);
-            buffer.writeOptional(value.numberFormat);
+            buffer.write(COMPONENT.optional(), value.displayName);
+            buffer.write(Sidebar.NumberFormat.SERIALIZER.optional(), value.numberFormat);
         }
 
         @Override
         public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer buffer) {
             return new UpdateScorePacket(buffer.read(STRING), buffer.read(STRING), buffer.read(VAR_INT),
-                    buffer.readOptional(COMPONENT), buffer.readOptional(Sidebar.NumberFormat::new));
+                    buffer.read(COMPONENT.optional()), buffer.read(Sidebar.NumberFormat.SERIALIZER.optional()));
         }
     };
 }
