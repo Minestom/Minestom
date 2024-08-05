@@ -44,6 +44,19 @@ public enum GameMode {
         }
     };
 
+    public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, GameMode value) {
+            buffer.write(BYTE, value != null ? value.id() : -1);
+        }
+
+        @Override
+        public GameMode read(@NotNull NetworkBuffer buffer) {
+            final byte id = buffer.read(BYTE);
+            return id != -1 ? GameMode.fromId(id) : null;
+        }
+    };
+
     public static @NotNull GameMode fromId(int id) {
         return switch (id) {
             case 0 -> SURVIVAL;
