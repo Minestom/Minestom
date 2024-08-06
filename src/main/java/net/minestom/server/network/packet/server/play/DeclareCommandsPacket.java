@@ -26,6 +26,11 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             DeclareCommandsPacket::new
     );
 
+    public static final int NODE_TYPE = 0x03;
+    public static final int IS_EXECUTABLE = 0x04;
+    public static final int HAS_REDIRECT = 0x08;
+    public static final int HAS_SUGGESTION_TYPE = 0x10;
+
     public static final class Node {
         public byte flags;
         public int[] children = new int[0];
@@ -45,7 +50,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 }
                 writer.write(VAR_INT_ARRAY, value.children);
 
-                if ((value.flags & 0x08) != 0) {
+                if ((value.flags & HAS_REDIRECT) != 0) {
                     writer.write(VAR_INT, value.redirectedNode);
                 }
 
@@ -61,7 +66,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                     }
                 }
 
-                if ((value.flags & 0x10) != 0) {
+                if ((value.flags & HAS_SUGGESTION_TYPE) != 0) {
                     writer.write(STRING, value.suggestionsType);
                 }
             }
@@ -70,7 +75,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 Node node = new Node();
                 node.flags = reader.read(BYTE);
                 node.children = reader.read(VAR_INT_ARRAY);
-                if ((node.flags & 0x08) != 0) {
+                if ((node.flags & HAS_REDIRECT) != 0) {
                     node.redirectedNode = reader.read(VAR_INT);
                 }
 
@@ -84,7 +89,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                     node.properties = node.getProperties(reader, node.parser);
                 }
 
-                if ((node.flags & 0x10) != 0) {
+                if ((node.flags & HAS_SUGGESTION_TYPE) != 0) {
                     node.suggestionsType = reader.read(STRING);
                 }
                 return node;
