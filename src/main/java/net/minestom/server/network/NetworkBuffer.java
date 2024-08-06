@@ -77,8 +77,8 @@ public final class NetworkBuffer {
     public static final Type<@Nullable Point> OPT_BLOCK_POSITION = BLOCK_POSITION.optional();
     public static final Type<@Nullable UUID> OPT_UUID = UUID.optional();
 
-    public static final Type<Direction> DIRECTION = new NetworkBufferTypeImpl.EnumType<>(Direction.class);
-    public static final Type<EntityPose> POSE = new NetworkBufferTypeImpl.EnumType<>(EntityPose.class);
+    public static final Type<Direction> DIRECTION = Enum(Direction.class);
+    public static final Type<EntityPose> POSE = Enum(EntityPose.class);
 
     // Combinators
 

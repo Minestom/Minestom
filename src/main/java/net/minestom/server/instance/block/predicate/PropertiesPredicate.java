@@ -18,26 +18,10 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
-    public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, PropertiesPredicate value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.properties.size());
-            for (Map.Entry<String, ValuePredicate> entry : value.properties.entrySet()) {
-                buffer.write(NetworkBuffer.STRING, entry.getKey());
-                buffer.write(ValuePredicate.NETWORK_TYPE, entry.getValue());
-            }
-        }
-
-        @Override
-        public PropertiesPredicate read(@NotNull NetworkBuffer buffer) {
-            int size = buffer.read(NetworkBuffer.VAR_INT);
-            Map<String, ValuePredicate> properties = new HashMap<>(size);
-            for (int i = 0; i < size; i++) {
-                properties.put(buffer.read(NetworkBuffer.STRING), buffer.read(ValuePredicate.NETWORK_TYPE));
-            }
-            return new PropertiesPredicate(properties);
-        }
-    };
+    public static NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
+            PropertiesPredicate::new
+    );
     public static final BinaryTagSerializer<PropertiesPredicate> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Map<String, ValuePredicate> properties = new HashMap<>();
