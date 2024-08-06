@@ -2,11 +2,10 @@ package net.minestom.server.potion;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -138,19 +137,11 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration,
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
-    public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Potion value) {
-            buffer.write(VAR_INT, value.effect.id());
-            buffer.write(BYTE, value.amplifier);
-            buffer.write(VAR_INT, value.duration);
-            buffer.write(BYTE, value.flags);
-        }
-
-        @Override
-        public Potion read(@NotNull NetworkBuffer buffer) {
-            return new Potion(Objects.requireNonNull(PotionEffect.fromId(buffer.read(VAR_INT))), buffer.read(BYTE),
-                    buffer.read(VAR_INT), buffer.read(BYTE));
-        }
-    };
+    public static NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
+            PotionEffect.NETWORK_TYPE, Potion::effect,
+            BYTE, Potion::amplifier,
+            VAR_INT, Potion::duration,
+            BYTE, Potion::flags,
+            Potion::new
+    );
 }

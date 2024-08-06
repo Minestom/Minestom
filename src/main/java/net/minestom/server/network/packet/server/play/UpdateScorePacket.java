@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.scoreboard.Sidebar;
 import org.jetbrains.annotations.NotNull;
@@ -16,20 +17,12 @@ public record UpdateScorePacket(
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat
 ) implements ServerPacket.Play {
-    public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, @NotNull UpdateScorePacket value) {
-            buffer.write(STRING, value.entityName);
-            buffer.write(STRING, value.objectiveName);
-            buffer.write(VAR_INT, value.score);
-            buffer.write(COMPONENT.optional(), value.displayName);
-            buffer.write(Sidebar.NumberFormat.SERIALIZER.optional(), value.numberFormat);
-        }
-
-        @Override
-        public @NotNull UpdateScorePacket read(@NotNull NetworkBuffer buffer) {
-            return new UpdateScorePacket(buffer.read(STRING), buffer.read(STRING), buffer.read(VAR_INT),
-                    buffer.read(COMPONENT.optional()), buffer.read(Sidebar.NumberFormat.SERIALIZER.optional()));
-        }
-    };
+    public static NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = NetworkBufferTemplate.template(
+            STRING, UpdateScorePacket::entityName,
+            STRING, UpdateScorePacket::objectiveName,
+            VAR_INT, UpdateScorePacket::score,
+            COMPONENT.optional(), UpdateScorePacket::displayName,
+            Sidebar.NumberFormat.SERIALIZER.optional(), UpdateScorePacket::numberFormat,
+            UpdateScorePacket::new
+    );
 }

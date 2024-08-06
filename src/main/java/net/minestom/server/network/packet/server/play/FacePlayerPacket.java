@@ -14,21 +14,21 @@ public record FacePlayerPacket(FacePosition facePosition,
     public static final NetworkBuffer.Type<FacePlayerPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, @NotNull FacePlayerPacket value) {
-            buffer.write(VAR_INT, value.facePosition.ordinal());
+            buffer.write(Enum(FacePosition.class), value.facePosition);
             buffer.write(VECTOR3D, value.target);
             final boolean isEntity = value.entityId > 0;
             buffer.write(BOOLEAN, isEntity);
             if (isEntity) {
                 buffer.write(VAR_INT, value.entityId);
-                buffer.write(NetworkBuffer.Enum(FacePosition.class), value.entityFacePosition);
+                buffer.write(Enum(FacePosition.class), value.entityFacePosition);
             }
         }
 
         @Override
         public @NotNull FacePlayerPacket read(@NotNull NetworkBuffer buffer) {
-            return new FacePlayerPacket(FacePosition.values()[buffer.read(VAR_INT)],
+            return new FacePlayerPacket(buffer.read(Enum(FacePosition.class)),
                     buffer.read(VECTOR3D), buffer.read(BOOLEAN) ? buffer.read(VAR_INT) : 0,
-                    buffer.readableBytes() > 0 ? buffer.read(NetworkBuffer.Enum(FacePosition.class)) : null);
+                    buffer.readableBytes() > 0 ? buffer.read(Enum(FacePosition.class)) : null);
         }
     };
 
