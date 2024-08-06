@@ -70,6 +70,7 @@ public final class NetworkBuffer {
     public static final Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
     public static final Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     public static final Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
+    public static final Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     public static final Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 
     public static final Type<@Nullable Component> OPT_CHAT = COMPONENT.optional();

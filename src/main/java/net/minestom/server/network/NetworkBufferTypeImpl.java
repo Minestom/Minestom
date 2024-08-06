@@ -587,6 +587,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record Vector3BType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(BYTE, (byte) value.x());
+            buffer.write(BYTE, (byte) value.y());
+            buffer.write(BYTE, (byte) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final byte x = buffer.read(BYTE);
+            final byte y = buffer.read(BYTE);
+            final byte z = buffer.read(BYTE);
+            return new Vec(x, y, z);
+        }
+    }
+
     record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, float[] value) {

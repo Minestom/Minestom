@@ -54,21 +54,12 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
 
     public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier,
                            @NotNull EquipmentSlotGroup slot) {
-        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Modifier value) {
-                buffer.write(Attribute.NETWORK_TYPE, value.attribute);
-                buffer.write(AttributeModifier.NETWORK_TYPE, value.modifier);
-                buffer.write(NetworkBuffer.Enum(EquipmentSlotGroup.class), value.slot);
-            }
-
-            @Override
-            public Modifier read(@NotNull NetworkBuffer buffer) {
-                return new Modifier(buffer.read(Attribute.NETWORK_TYPE),
-                        buffer.read(AttributeModifier.NETWORK_TYPE),
-                        buffer.read(NetworkBuffer.Enum(EquipmentSlotGroup.class)));
-            }
-        };
+        public static NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
+                Attribute.NETWORK_TYPE, Modifier::attribute,
+                AttributeModifier.NETWORK_TYPE, Modifier::modifier,
+                NetworkBuffer.Enum(EquipmentSlotGroup.class), Modifier::slot,
+                Modifier::new
+        );
         public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Modifier(
                         Attribute.NBT_TYPE.read(tag.get("type")),
