@@ -14,7 +14,6 @@ import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,6 @@ import java.nio.ByteOrder;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -139,24 +137,6 @@ public final class NetworkBuffer {
 
     public <T> @UnknownNullability T read(@NotNull Type<T> type) {
         return type.read(this);
-    }
-
-    public <T> void writeCollection(@Nullable Collection<@NotNull T> values,
-                                    @NotNull BiConsumer<@NotNull NetworkBuffer, @NotNull T> consumer) {
-        if (values == null) {
-            write(BYTE, (byte) 0);
-            return;
-        }
-        write(VAR_INT, values.size());
-        for (T value : values) consumer.accept(this, value);
-    }
-
-    public <T> @NotNull List<@NotNull T> readCollection(@NotNull Function<@NotNull NetworkBuffer, @NotNull T> function, int maxSize) {
-        final int size = read(VAR_INT);
-        Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-        final List<T> values = new java.util.ArrayList<>(size);
-        for (int i = 0; i < size; i++) values.add(function.apply(this));
-        return values;
     }
 
     public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {

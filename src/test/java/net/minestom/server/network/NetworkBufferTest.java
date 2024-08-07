@@ -283,8 +283,6 @@ public class NetworkBufferTest {
         buffer.write(BOOLEAN.list(), list);
 
         assertThrows(IllegalArgumentException.class, () -> buffer.read(BOOLEAN.list(10)));
-        buffer.readIndex(0); // reset
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(b -> b.read(BOOLEAN), 10));
     }
 
     @Test
