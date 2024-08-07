@@ -10,6 +10,7 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -102,6 +103,16 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     @Override
     public void setBoots(@NotNull ItemStack itemStack) {
         safeItemInsert(BOOTS_SLOT, itemStack);
+    }
+
+    @Override
+    public @NotNull ItemStack getBodyEquipment() {
+        return ItemStack.AIR;
+    }
+
+    @Override
+    public void setBodyEquipment(@NotNull ItemStack itemStack) {
+        Check.fail("PlayerInventory does not support body equipment");
     }
 
     /**
