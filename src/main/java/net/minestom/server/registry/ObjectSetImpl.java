@@ -14,10 +14,10 @@ import java.util.Set;
 
 import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 
-sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
+sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
 
-    record Empty<T extends ProtocolObject>() implements ObjectSetImpl<T> {
-        static final Empty<?> INSTANCE = new Empty<>();
+    record Empty() implements ObjectSetImpl {
+        static final Empty INSTANCE = new Empty();
 
         @Override
         public boolean contains(@NotNull NamespaceID namespace) {
@@ -25,7 +25,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record Entries<T extends ProtocolObject>(@NotNull Set<NamespaceID> entries) implements ObjectSetImpl<T> {
+    record Entries(@NotNull Set<NamespaceID> entries) implements ObjectSetImpl {
 
         public Entries {
             entries = Set.copyOf(entries);
@@ -37,7 +37,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    final class Tag<T extends ProtocolObject> implements ObjectSetImpl<T> {
+    final class Tag implements ObjectSetImpl {
         private final net.minestom.server.gamedata.tags.Tag.BasicType tagType;
         private final String name;
         private volatile Set<NamespaceID> value = null;
@@ -75,12 +75,12 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record NbtType<T extends ProtocolObject>(
+    record NbtType(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements BinaryTagSerializer<ObjectSet<T>> {
+    ) implements BinaryTagSerializer<ObjectSet> {
 
         @Override
-        public @NotNull ObjectSet<T> read(@NotNull BinaryTag tag) {
+        public @NotNull ObjectSet read(@NotNull BinaryTag tag) {
             return switch (tag) {
                 case null -> ObjectSet.empty();
                 case ListBinaryTag list -> {
@@ -92,15 +92,15 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                             throw new IllegalArgumentException("Invalid entry type: " + entryTag.type());
                         entries.add(NamespaceID.from(stringTag.value()));
                     }
-                    yield new Entries<>(entries);
+                    yield new Entries(entries);
                 }
                 case StringBinaryTag string -> {
                     // Could be a tag or a block name depending if it starts with a #
                     final String value = string.value();
                     if (value.startsWith("#")) {
-                        yield new Tag<>(tagType(), value.substring(1));
+                        yield new Tag(tagType(), value.substring(1));
                     } else {
-                        yield new Entries<>(Set.of(NamespaceID.from(value)));
+                        yield new Entries(Set.of(NamespaceID.from(value)));
                     }
                 }
                 default -> throw new IllegalArgumentException("Invalid tag type: " + tag.type());
@@ -108,10 +108,10 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
 
         @Override
-        public @NotNull BinaryTag write(@NotNull ObjectSet<T> value) {
+        public @NotNull BinaryTag write(@NotNull ObjectSet value) {
             return switch (value) {
-                case Empty<T> empty -> ListBinaryTag.empty();
-                case Entries<T> entries -> {
+                case Empty empty -> ListBinaryTag.empty();
+                case Entries entries -> {
                     if (entries.entries.size() == 1)
                         yield stringBinaryTag(entries.entries.stream().findFirst().get().asString());
                     ListBinaryTag.Builder<StringBinaryTag> builder = ListBinaryTag.builder(BinaryTagTypes.STRING);
@@ -119,7 +119,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                         builder.add(stringBinaryTag(entry.asString()));
                     yield builder.build();
                 }
-                case Tag<T> tag -> stringBinaryTag("#" + tag.name());
+                case Tag tag -> stringBinaryTag("#" + tag.name());
             };
         }
     }

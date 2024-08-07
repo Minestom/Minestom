@@ -1,5 +1,7 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.key.Namespaced;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -9,27 +11,24 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * A set of some protocol objects. May contain a single element, multiple elements, or a single tag (which itself contains multiple elements).
- *
- * @param <T> The type of protocol object represented by this set.
+ * A set of some namespaced objects. May contain a single element, multiple elements, or a single tag (which itself contains multiple elements).
  */
-public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImpl {
+public sealed interface ObjectSet permits ObjectSetImpl {
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> empty() {
-        //noinspection unchecked
-        return (ObjectSet<T>) ObjectSetImpl.Empty.INSTANCE;
+    static @NotNull ObjectSet empty() {
+        return ObjectSetImpl.Empty.INSTANCE;
     }
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<NamespaceID> entries) {
-        return new ObjectSetImpl.Entries<>(Set.copyOf(entries));
+    static @NotNull ObjectSet of(@NotNull Collection<NamespaceID> entries) {
+        return new ObjectSetImpl.Entries(Set.copyOf(entries));
     }
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Tag tag) {
-        return new ObjectSetImpl.Tag<>(tag);
+    static @NotNull ObjectSet of(@NotNull Tag tag) {
+        return new ObjectSetImpl.Tag(tag);
     }
 
-    static <T extends ProtocolObject> @NotNull BinaryTagSerializer<ObjectSet<T>> nbtType(@NotNull Tag.BasicType tagType) {
-        return new ObjectSetImpl.NbtType<>(tagType);
+    static @NotNull BinaryTagSerializer<ObjectSet> nbtType(@NotNull Tag.BasicType tagType) {
+        return new ObjectSetImpl.NbtType(tagType);
     }
 
     /**
@@ -44,7 +43,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return contains(object.namespace());
     }
 
-    default boolean contains(@NotNull DynamicRegistry.Key<T> key) {
+    default boolean contains(@NotNull DynamicRegistry.Key<?> key) {
         return contains(key.namespace());
     }
 

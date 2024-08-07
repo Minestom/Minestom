@@ -1,5 +1,6 @@
 package net.minestom.server.utils.nbt;
 
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -181,6 +182,18 @@ public interface BinaryTagSerializer<T> {
         }
     };
 
+    BinaryTagSerializer<Long> LONG = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Long value) {
+            return LongBinaryTag.longBinaryTag(value);
+        }
+
+        @Override
+        public @NotNull Long read(@NotNull BinaryTag tag) {
+            return tag instanceof NumberBinaryTag numberTag ? numberTag.longValue() : 0L;
+        }
+    };
+
     BinaryTagSerializer<String> STRING = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull String value) {
@@ -283,6 +296,23 @@ public interface BinaryTagSerializer<T> {
         };
     }
 
+    static <T extends Keyed> @NotNull BinaryTagSerializer<T> keyed(@NotNull Function<String, T> fromKey) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull T value) {
+                return stringBinaryTag(value.key().asString());
+            }
+
+            @Override
+            public @NotNull T read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof StringBinaryTag s)) throw new IllegalArgumentException("Expected string tag for namespaced object");
+                final T value = fromKey.apply(s.value());
+                Check.notNull(value, "Key is not registered: {0} > {1}", tag, s);
+                return value;
+            }
+        };
+    }
+
     static <P1, R> @NotNull BinaryTagSerializer<R> object(
             @NotNull String param1, @NotNull BinaryTagSerializer<P1> serializer1, @NotNull Function<R, P1> getter1,
             @NotNull Function<P1, R> constructor
@@ -303,7 +333,10 @@ public interface BinaryTagSerializer<T> {
             @Override
             public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
                 if (!(tag instanceof CompoundBinaryTag compound)) return constructor.apply(null);
-                return constructor.apply(serializer1.read(context, compound.get(param1)));
+                BinaryTag tag1 = compound.get(param1);
+                return constructor.apply(
+                        tag1 == null ? null : serializer1.read(context, tag1)
+                );
             }
         };
     }
@@ -327,9 +360,11 @@ public interface BinaryTagSerializer<T> {
             @Override
             public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
                 if (!(tag instanceof CompoundBinaryTag compound)) return constructor.apply(null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
                 return constructor.apply(
-                        serializer1.read(context, compound.get(param1)),
-                        serializer2.read(context, compound.get(param2))
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2)
                 );
             }
         };
@@ -361,10 +396,13 @@ public interface BinaryTagSerializer<T> {
             @Override
             public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
                 if (!(tag instanceof CompoundBinaryTag compound)) return constructor.apply(null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
                 return constructor.apply(
-                        serializer1.read(context, compound.get(param1)),
-                        serializer2.read(context, compound.get(param2)),
-                        serializer3.read(context, compound.get(param3))
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3)
                 );
             }
         };
@@ -400,11 +438,15 @@ public interface BinaryTagSerializer<T> {
             public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
                 if (!(tag instanceof CompoundBinaryTag compound))
                     return constructor.apply(null, null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
+                BinaryTag tag4 = compound.get(param4);
                 return constructor.apply(
-                        serializer1.read(context, compound.get(param1)),
-                        serializer2.read(context, compound.get(param2)),
-                        serializer3.read(context, compound.get(param3)),
-                        serializer4.read(context, compound.get(param4))
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3),
+                        tag4 == null ? null : serializer4.read(context, tag4)
                 );
             }
         };
@@ -443,12 +485,194 @@ public interface BinaryTagSerializer<T> {
             public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
                 if (!(tag instanceof CompoundBinaryTag compound))
                     return constructor.apply(null, null, null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
+                BinaryTag tag4 = compound.get(param4);
+                BinaryTag tag5 = compound.get(param5);
                 return constructor.apply(
-                        serializer1.read(context, compound.get(param1)),
-                        serializer2.read(context, compound.get(param2)),
-                        serializer3.read(context, compound.get(param3)),
-                        serializer4.read(context, compound.get(param4)),
-                        serializer5.read(context, compound.get(param5))
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3),
+                        tag4 == null ? null : serializer4.read(context, tag4),
+                        tag5 == null ? null : serializer5.read(context, tag5)
+                );
+            }
+        };
+    }
+
+    interface Function6<P1, P2, P3, P4, P5, P6, R> {
+        R apply(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6);
+    }
+
+    static <P1, P2, P3, P4, P5, P6, R> @NotNull BinaryTagSerializer<R> object(
+            @NotNull String param1, @NotNull BinaryTagSerializer<P1> serializer1, @NotNull Function<R, P1> getter1,
+            @NotNull String param2, @NotNull BinaryTagSerializer<P2> serializer2, @NotNull Function<R, P2> getter2,
+            @NotNull String param3, @NotNull BinaryTagSerializer<P3> serializer3, @NotNull Function<R, P3> getter3,
+            @NotNull String param4, @NotNull BinaryTagSerializer<P4> serializer4, @NotNull Function<R, P4> getter4,
+            @NotNull String param5, @NotNull BinaryTagSerializer<P5> serializer5, @NotNull Function<R, P5> getter5,
+            @NotNull String param6, @NotNull BinaryTagSerializer<P6> serializer6, @NotNull Function<R, P6> getter6,
+            @NotNull Function6<P1, P2, P3, P4, P5, P6, R> constructor
+    ) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull R value) {
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                P1 p1 = getter1.apply(value);
+                if (p1 != null) builder.put(param1, serializer1.write(context, p1));
+                P2 p2 = getter2.apply(value);
+                if (p2 != null) builder.put(param2, serializer2.write(context, p2));
+                P3 p3 = getter3.apply(value);
+                if (p3 != null) builder.put(param3, serializer3.write(context, p3));
+                P4 p4 = getter4.apply(value);
+                if (p4 != null) builder.put(param4, serializer4.write(context, p4));
+                P5 p5 = getter5.apply(value);
+                if (p5 != null) builder.put(param5, serializer5.write(context, p5));
+                P6 p6 = getter6.apply(value);
+                if (p6 != null) builder.put(param6, serializer6.write(context, p6));
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound))
+                    return constructor.apply(null, null, null, null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
+                BinaryTag tag4 = compound.get(param4);
+                BinaryTag tag5 = compound.get(param5);
+                BinaryTag tag6 = compound.get(param6);
+                return constructor.apply(
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3),
+                        tag4 == null ? null : serializer4.read(context, tag4),
+                        tag5 == null ? null : serializer5.read(context, tag5),
+                        tag6 == null ? null : serializer6.read(context, tag6)
+                );
+            }
+        };
+    }
+
+    interface Function7<P1, P2, P3, P4, P5, P6, P7, R> {
+        R apply(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7);
+    }
+
+    static <P1, P2, P3, P4, P5, P6, P7, R> @NotNull BinaryTagSerializer<R> object(
+            @NotNull String param1, @NotNull BinaryTagSerializer<P1> serializer1, @NotNull Function<R, P1> getter1,
+            @NotNull String param2, @NotNull BinaryTagSerializer<P2> serializer2, @NotNull Function<R, P2> getter2,
+            @NotNull String param3, @NotNull BinaryTagSerializer<P3> serializer3, @NotNull Function<R, P3> getter3,
+            @NotNull String param4, @NotNull BinaryTagSerializer<P4> serializer4, @NotNull Function<R, P4> getter4,
+            @NotNull String param5, @NotNull BinaryTagSerializer<P5> serializer5, @NotNull Function<R, P5> getter5,
+            @NotNull String param6, @NotNull BinaryTagSerializer<P6> serializer6, @NotNull Function<R, P6> getter6,
+            @NotNull String param7, @NotNull BinaryTagSerializer<P7> serializer7, @NotNull Function<R, P7> getter7,
+            @NotNull Function7<P1, P2, P3, P4, P5, P6, P7, R> constructor
+    ) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull R value) {
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                P1 p1 = getter1.apply(value);
+                if (p1 != null) builder.put(param1, serializer1.write(context, p1));
+                P2 p2 = getter2.apply(value);
+                if (p2 != null) builder.put(param2, serializer2.write(context, p2));
+                P3 p3 = getter3.apply(value);
+                if (p3 != null) builder.put(param3, serializer3.write(context, p3));
+                P4 p4 = getter4.apply(value);
+                if (p4 != null) builder.put(param4, serializer4.write(context, p4));
+                P5 p5 = getter5.apply(value);
+                if (p5 != null) builder.put(param5, serializer5.write(context, p5));
+                P6 p6 = getter6.apply(value);
+                if (p6 != null) builder.put(param6, serializer6.write(context, p6));
+                P7 p7 = getter7.apply(value);
+                if (p7 != null) builder.put(param7, serializer7.write(context, p7));
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound))
+                    return constructor.apply(null, null, null, null, null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
+                BinaryTag tag4 = compound.get(param4);
+                BinaryTag tag5 = compound.get(param5);
+                BinaryTag tag6 = compound.get(param6);
+                BinaryTag tag7 = compound.get(param7);
+                return constructor.apply(
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3),
+                        tag4 == null ? null : serializer4.read(context, tag4),
+                        tag5 == null ? null : serializer5.read(context, tag5),
+                        tag6 == null ? null : serializer6.read(context, tag6),
+                        tag7 == null ? null : serializer7.read(context, tag7)
+                );
+            }
+        };
+    }
+
+    interface Function8<P1, P2, P3, P4, P5, P6, P7, P8, R> {
+        R apply(P1 p1, P2 p2, P3 p3, P4 p4, P5 p5, P6 p6, P7 p7, P8 p8);
+    }
+
+    static <P1, P2, P3, P4, P5, P6, P7, P8, R> @NotNull BinaryTagSerializer<R> object(
+            @NotNull String param1, @NotNull BinaryTagSerializer<P1> serializer1, @NotNull Function<R, P1> getter1,
+            @NotNull String param2, @NotNull BinaryTagSerializer<P2> serializer2, @NotNull Function<R, P2> getter2,
+            @NotNull String param3, @NotNull BinaryTagSerializer<P3> serializer3, @NotNull Function<R, P3> getter3,
+            @NotNull String param4, @NotNull BinaryTagSerializer<P4> serializer4, @NotNull Function<R, P4> getter4,
+            @NotNull String param5, @NotNull BinaryTagSerializer<P5> serializer5, @NotNull Function<R, P5> getter5,
+            @NotNull String param6, @NotNull BinaryTagSerializer<P6> serializer6, @NotNull Function<R, P6> getter6,
+            @NotNull String param7, @NotNull BinaryTagSerializer<P7> serializer7, @NotNull Function<R, P7> getter7,
+            @NotNull String param8, @NotNull BinaryTagSerializer<P8> serializer8, @NotNull Function<R, P8> getter8,
+            @NotNull Function8<P1, P2, P3, P4, P5, P6, P7, P8, R> constructor
+    ) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull R value) {
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                P1 p1 = getter1.apply(value);
+                if (p1 != null) builder.put(param1, serializer1.write(context, p1));
+                P2 p2 = getter2.apply(value);
+                if (p2 != null) builder.put(param2, serializer2.write(context, p2));
+                P3 p3 = getter3.apply(value);
+                if (p3 != null) builder.put(param3, serializer3.write(context, p3));
+                P4 p4 = getter4.apply(value);
+                if (p4 != null) builder.put(param4, serializer4.write(context, p4));
+                P5 p5 = getter5.apply(value);
+                if (p5 != null) builder.put(param5, serializer5.write(context, p5));
+                P6 p6 = getter6.apply(value);
+                if (p6 != null) builder.put(param6, serializer6.write(context, p6));
+                P7 p7 = getter7.apply(value);
+                if (p7 != null) builder.put(param7, serializer7.write(context, p7));
+                P8 p8 = getter8.apply(value);
+                if (p8 != null) builder.put(param8, serializer8.write(context, p8));
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound))
+                    return constructor.apply(null, null, null, null, null, null, null, null);
+                BinaryTag tag1 = compound.get(param1);
+                BinaryTag tag2 = compound.get(param2);
+                BinaryTag tag3 = compound.get(param3);
+                BinaryTag tag4 = compound.get(param4);
+                BinaryTag tag5 = compound.get(param5);
+                BinaryTag tag6 = compound.get(param6);
+                BinaryTag tag7 = compound.get(param7);
+                BinaryTag tag8 = compound.get(param8);
+                return constructor.apply(
+                        tag1 == null ? null : serializer1.read(context, tag1),
+                        tag2 == null ? null : serializer2.read(context, tag2),
+                        tag3 == null ? null : serializer3.read(context, tag3),
+                        tag4 == null ? null : serializer4.read(context, tag4),
+                        tag5 == null ? null : serializer5.read(context, tag5),
+                        tag6 == null ? null : serializer6.read(context, tag6),
+                        tag7 == null ? null : serializer7.read(context, tag7),
+                        tag8 == null ? null : serializer8.read(context, tag8)
                 );
             }
         };
