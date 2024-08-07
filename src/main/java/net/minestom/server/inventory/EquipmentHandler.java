@@ -126,6 +126,20 @@ public interface EquipmentHandler {
     void setBoots(@NotNull ItemStack itemStack);
 
     /**
+     * Gets the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @return the body equipment
+     */
+    @NotNull ItemStack getBodyEquipment();
+
+    /**
+     * Changes the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @param itemStack the body equipment
+     */
+    void setBodyEquipment(@NotNull ItemStack itemStack);
+
+    /**
      * Gets the equipment in a specific slot.
      *
      * @param slot the equipment to get the item from
@@ -139,6 +153,7 @@ public interface EquipmentHandler {
             case CHESTPLATE -> getChestplate();
             case LEGGINGS -> getLeggings();
             case BOOTS -> getBoots();
+            case BODY -> getBodyEquipment();
         };
     }
 
@@ -150,6 +165,7 @@ public interface EquipmentHandler {
             case CHESTPLATE -> setChestplate(itemStack);
             case LEGGINGS -> setLeggings(itemStack);
             case BOOTS -> setBoots(itemStack);
+            case BODY -> setBodyEquipment(itemStack);
         }
     }
 
@@ -184,7 +200,9 @@ public interface EquipmentHandler {
                 EquipmentSlot.BOOTS, getBoots(),
                 EquipmentSlot.LEGGINGS, getLeggings(),
                 EquipmentSlot.CHESTPLATE, getChestplate(),
-                EquipmentSlot.HELMET, getHelmet()));
+                EquipmentSlot.HELMET, getHelmet(),
+                EquipmentSlot.BODY, getBodyEquipment()));
+        // Some entities do not allow body equipment, in which case the client will ignore this
     }
 
 }

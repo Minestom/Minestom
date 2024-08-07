@@ -90,6 +90,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack chestplate;
     private ItemStack leggings;
     private ItemStack boots;
+    private ItemStack bodyEquipment;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -111,6 +112,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         this.chestplate = ItemStack.AIR;
         this.leggings = ItemStack.AIR;
         this.boots = ItemStack.AIR;
+        this.bodyEquipment = ItemStack.AIR;
     }
 
     @Override
@@ -207,6 +209,20 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         this.boots = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
         syncEquipment(EquipmentSlot.BOOTS);
         updateEquipmentAttributes(oldItem, this.boots, EquipmentSlot.BOOTS);
+    }
+
+    @NotNull
+    @Override
+    public ItemStack getBodyEquipment() {
+        return bodyEquipment;
+    }
+
+    @Override
+    public void setBodyEquipment(@NotNull ItemStack itemStack) {
+        ItemStack oldItem = this.bodyEquipment;
+        this.bodyEquipment = getEquipmentItem(itemStack, EquipmentSlot.BODY);
+        syncEquipment(EquipmentSlot.BODY);
+        updateEquipmentAttributes(oldItem, this.bodyEquipment, EquipmentSlot.BODY);
     }
 
     private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
