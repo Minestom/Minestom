@@ -200,6 +200,10 @@ public final class MinecraftServer implements MinecraftConstants {
         return !isStarted();
     }
 
+    public static boolean isStopped() {
+        return serverProcess.isStopped();
+    }
+
     /**
      * Gets the chunk view distance of the server.
      * <p>
