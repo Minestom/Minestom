@@ -816,8 +816,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
-                sendPacket(chunk.getFullDataPacket());
-                EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                PlayerChunkLoadEvent chunkLoadEvent = new PlayerChunkLoadEvent(this, chunkX, chunkZ);
+                EventDispatcher.call(chunkLoadEvent);
+                sendPacket(Objects.requireNonNullElse(chunkLoadEvent.chunk(), chunk).getFullDataPacket());
 
                 pendingChunkCount -= 1f;
                 batchSize += 1;
