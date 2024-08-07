@@ -441,21 +441,23 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 triggerStatus((byte) 9); // Mark item use as finished
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
-                // Refresh hand
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
-                refreshActiveHand(false, isOffHand, false);
+                if (!itemUpdateStateEvent.isCancelled()) {
+                    // Refresh hand
+                    final boolean isOffHand = itemUpdateStateEvent.getHand() == Player.Hand.OFF;
+                    refreshActiveHand(false, isOffHand, false);
 
-                final ItemStack item = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = item.has(ItemComponent.FOOD);
-                if (isFood || item.material() == Material.POTION) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
-                    EventDispatcher.call(playerEatEvent);
+                    final ItemStack item = itemUpdateStateEvent.getItemStack();
+                    final boolean isFood = item.has(ItemComponent.FOOD);
+                    if (isFood || item.material() == Material.POTION) {
+                        PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
+                        EventDispatcher.call(playerEatEvent);
+                    }
+
+                    var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
+                    EventDispatcher.call(itemUsageCompleteEvent);
+
+                    clearItemUse();
                 }
-
-                var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
-                EventDispatcher.call(itemUsageCompleteEvent);
-
-                clearItemUse();
             }
         }
 
