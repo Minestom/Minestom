@@ -101,7 +101,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             return; // Prevent packet corruption
                         ClientPacket packet = null;
                         try {
-                            NetworkBuffer networkBuffer = NetworkBuffer.wrap(payload);
+                            NetworkBuffer networkBuffer = NetworkBuffer.wrap(payload, MinecraftServer.process());
                             packet = packetParser.parse(getConnectionState(), id, networkBuffer);
                             payload.position(networkBuffer.readIndex());
                             // Process the packet
