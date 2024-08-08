@@ -80,11 +80,12 @@ public final class NetworkBuffer {
     // Combinators
 
     public static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
-        return new NetworkBufferTypeImpl.EnumType<>(enumClass);
+        final E[] values = enumClass.getEnumConstants();
+        return VAR_INT.transform(integer -> values[integer], Enum::ordinal);
     }
 
     public static <E extends Enum<E>> @NotNull Type<EnumSet<E>> EnumSet(@NotNull Class<E> enumClass) {
-        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass);
+        return new NetworkBufferTypeImpl.EnumSetType<>(enumClass, enumClass.getEnumConstants());
     }
 
     public static @NotNull Type<BitSet> FixedBitSet(int length) {

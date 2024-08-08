@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -625,23 +626,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     // Combinators
 
-    record EnumType<E extends Enum<?>>(@NotNull Class<E> enumClass) implements NetworkBufferTypeImpl<E> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, E value) {
-            buffer.write(VAR_INT, value.ordinal());
-        }
-
-        @Override
-        public E read(@NotNull NetworkBuffer buffer) {
-            final int ordinal = buffer.read(VAR_INT);
-            return enumClass.getEnumConstants()[ordinal];
-        }
-    }
-
-    record EnumSetType<E extends Enum<E>>(@NotNull Class<E> enumType) implements NetworkBufferTypeImpl<EnumSet<E>> {
+    record EnumSetType<E extends Enum<E>>(@NotNull Class<E> enumType,
+                                          E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, EnumSet<E> value) {
-            final E[] values = enumType.getEnumConstants();
             BitSet bitSet = new BitSet(values.length);
             for (int i = 0; i < values.length; ++i) {
                 bitSet.set(i, value.contains(values[i]));
@@ -652,7 +640,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public EnumSet<E> read(@NotNull NetworkBuffer buffer) {
-            final E[] values = enumType.getEnumConstants();
             final byte[] array = buffer.read(FixedRawBytes((values.length + 7) / 8));
             BitSet bitSet = BitSet.valueOf(array);
             EnumSet<E> enumSet = EnumSet.noneOf(enumType);
@@ -742,17 +729,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public Map<K, V> read(@NotNull NetworkBuffer buffer) {
             final int size = buffer.read(VAR_INT);
             Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-            final Map<K, V> map = new HashMap<>(size);
+            K[] keys = (K[]) new Object[size];
+            V[] values = (V[]) new Object[size];
             for (int i = 0; i < size; i++) {
-                final K key = buffer.read(parent);
-                final V value = buffer.read(valueType);
-                map.put(key, value);
+                keys[i] = buffer.read(parent);
+                values[i] = buffer.read(valueType);
             }
-            return map;
+            return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
         }
     }
 
@@ -767,13 +755,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             for (T value : values) buffer.write(parent, value);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public List<T> read(@NotNull NetworkBuffer buffer) {
             final int size = buffer.read(VAR_INT);
             Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
-            final List<T> values = new java.util.ArrayList<>(size);
-            for (int i = 0; i < size; i++) values.add(buffer.read(parent));
-            return values;
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return List.of(values);
         }
     }
 
