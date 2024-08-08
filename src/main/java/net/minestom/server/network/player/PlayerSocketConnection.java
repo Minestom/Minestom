@@ -101,7 +101,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                             return; // Prevent packet corruption
                         ClientPacket packet = null;
                         try {
-                            NetworkBuffer networkBuffer = new NetworkBuffer(payload);
+                            NetworkBuffer networkBuffer = NetworkBuffer.wrap(payload);
                             packet = packetParser.parse(getConnectionState(), id, networkBuffer);
                             payload.position(networkBuffer.readIndex());
                             // Process the packet
@@ -118,7 +118,8 @@ public class PlayerSocketConnection extends PlayerConnection {
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
                             if (payload.position() != payload.limit()) {
-                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", getConnectionState(), Integer.toHexString(id), payload, packet);
+                                var info = packetParser.stateRegistry(getConnectionState()).packetInfo(id);
+                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", info.packetClass().getSimpleName(), Integer.toHexString(id), payload, packet);
                             }
                         }
                     });

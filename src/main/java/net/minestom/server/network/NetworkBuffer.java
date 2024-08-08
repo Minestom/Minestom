@@ -2,7 +2,6 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
@@ -101,34 +100,23 @@ public final class NetworkBuffer {
     }
 
     ByteBuffer nioBuffer;
-    final boolean resizable;
-    int writeIndex;
-    int readIndex;
+    int readIndex, writeIndex;
 
     BinaryTagWriter nbtWriter;
     BinaryTagReader nbtReader;
 
-    // In the future, this should be passed as a parameter.
-    final Registries registries = MinecraftServer.process();
+    final @Nullable ResizeStrategy resizeStrategy;
+    final @Nullable Registries registries;
 
-    public NetworkBuffer(@NotNull ByteBuffer buffer, boolean resizable) {
+    public NetworkBuffer(@NotNull ByteBuffer buffer,
+                         @Nullable ResizeStrategy resizeStrategy,
+                         @Nullable Registries registries) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
-        this.resizable = resizable;
+        this.resizeStrategy = resizeStrategy;
+        this.registries = registries;
 
         this.writeIndex = buffer.position();
         this.readIndex = buffer.position();
-    }
-
-    public NetworkBuffer(@NotNull ByteBuffer buffer) {
-        this(buffer, true);
-    }
-
-    public NetworkBuffer(int initialCapacity) {
-        this(ByteBuffer.allocateDirect(initialCapacity), true);
-    }
-
-    public NetworkBuffer() {
-        this(1024);
     }
 
     public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
@@ -184,14 +172,23 @@ public final class NetworkBuffer {
     }
 
     void ensureSize(int length) {
-        if (!resizable) return;
-        if (nioBuffer.capacity() < writeIndex + length) {
-            final int newCapacity = Math.max(nioBuffer.capacity() * 2, writeIndex + length);
-            ByteBuffer newBuffer = ByteBuffer.allocateDirect(newCapacity);
-            nioBuffer.position(0);
-            newBuffer.put(nioBuffer);
-            nioBuffer = newBuffer.clear();
+        final ResizeStrategy strategy = this.resizeStrategy;
+        if (strategy == null) return;
+
+        final long capacity = nioBuffer.capacity();
+        final long targetSize = writeIndex + length;
+        if (capacity >= targetSize) return;
+
+        final long newCapacity = strategy.resize(capacity, targetSize);
+        // Check if long is within the bounds of an int
+        if (newCapacity > Integer.MAX_VALUE) {
+            throw new RuntimeException("Buffer size is too large, harass maintainers for `MemorySegment` support");
         }
+
+        ByteBuffer newBuffer = ByteBuffer.allocateDirect((int) newCapacity);
+        nioBuffer.position(0);
+        newBuffer.put(nioBuffer);
+        nioBuffer = newBuffer.clear();
     }
 
     public interface Type<T> {
@@ -224,15 +221,82 @@ public final class NetworkBuffer {
         }
     }
 
-    public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
-        NetworkBuffer writer = new NetworkBuffer();
+    public static @NotNull Builder builder(int size) {
+        return new NetworkBufferImpl.Builder(size);
+    }
+
+    public static @NotNull NetworkBuffer staticBuffer(int size, Registries registries) {
+        return NetworkBuffer.builder(size).registry(registries).build();
+    }
+
+    public static @NotNull NetworkBuffer staticBuffer(int size) {
+        return staticBuffer(size, null);
+    }
+
+    public static @NotNull NetworkBuffer resizableBuffer(int initialSize, Registries registries) {
+        return NetworkBuffer.builder(initialSize)
+                .resizeStrategy(ResizeStrategy.DOUBLE)
+                .registry(registries)
+                .build();
+    }
+
+    public static @NotNull NetworkBuffer resizableBuffer(int initialSize) {
+        return resizableBuffer(initialSize, null);
+    }
+
+    public static @NotNull NetworkBuffer resizableBuffer() {
+        return resizableBuffer(256);
+    }
+
+    public static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, @Nullable Registries registries) {
+        ByteBuffer buffer = ByteBuffer.wrap(bytes);
+        return new NetworkBuffer(buffer, null, registries);
+    }
+
+    public static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes) {
+        return wrap(bytes, null);
+    }
+
+    public static NetworkBuffer wrap(@NotNull ByteBuffer buffer, @Nullable Registries registries) {
+        return new NetworkBuffer(buffer, null, registries);
+    }
+
+    public static NetworkBuffer wrap(@NotNull ByteBuffer buffer) {
+        return wrap(buffer, null);
+    }
+
+    public sealed interface Builder permits NetworkBufferImpl.Builder {
+        @NotNull Builder resizeStrategy(@Nullable ResizeStrategy resizeStrategy);
+
+        @NotNull Builder registry(@Nullable Registries registries);
+
+        @NotNull NetworkBuffer build();
+    }
+
+    @FunctionalInterface
+    public interface ResizeStrategy {
+        ResizeStrategy DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
+
+        long resize(long capacity, long targetSize);
+    }
+
+    public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
+        NetworkBuffer writer = resizableBuffer(256, registries);
         writing.accept(writer);
         byte[] bytes = new byte[writer.writeIndex];
         writer.copyTo(0, bytes, 0, bytes.length);
         return bytes;
     }
 
+    public static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
+        return makeArray(writing, null);
+    }
+
+    public static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
+        return makeArray(buffer -> buffer.write(type, value), registries);
+    }
+
     public static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
-        return makeArray(buffer -> buffer.write(type, value));
+        return makeArray(type, value, null);
     }
 }

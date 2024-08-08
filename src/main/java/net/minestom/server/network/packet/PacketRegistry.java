@@ -27,6 +27,8 @@ public interface PacketRegistry<T> {
 
     PacketInfo<T> packetInfo(Class<? extends T> packetClass);
 
+    PacketInfo<T> packetInfo(int packetId);
+
     record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
@@ -336,16 +338,15 @@ public interface PacketRegistry<T> {
         }
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
     sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
-        private final Entry<? extends T>[] suppliers;
+        private final PacketInfo<? extends T>[] suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
             protected PacketInfo<T> computeValue(@NotNull Class<?> type) {
-                for (int i = 0; i < suppliers.length; i++) {
-                    final Entry<? extends T> entry = suppliers[i];
-                    if (entry != null && entry.type == type) {
-                        //noinspection unchecked
-                        return new PacketInfo<T>(entry.type, i, (NetworkBuffer.Type<T>) entry.reader);
+                for (PacketInfo<? extends T> info : suppliers) {
+                    if (info != null && info.packetClass == type) {
+                        return (PacketInfo<T>) info;
                     }
                 }
                 throw new IllegalStateException("Packet type " + type + " isn't registered!");
@@ -354,17 +355,21 @@ public interface PacketRegistry<T> {
 
         @SafeVarargs
         PacketRegistryTemplate(Entry<? extends T>... suppliers) {
-            this.suppliers = suppliers;
+            PacketInfo<? extends T>[] packetInfos = new PacketInfo[suppliers.length];
+            for (int i = 0; i < suppliers.length; i++) {
+                final Entry<? extends T> entry = suppliers[i];
+                if (entry == null) continue;
+                packetInfos[i] = new PacketInfo(entry.type, i, entry.reader);
+            }
+            this.suppliers = packetInfos;
         }
 
         public @UnknownNullability T create(int packetId, @NotNull NetworkBuffer reader) {
-            final Entry<? extends T> entry = suppliers[packetId];
-            if (entry == null)
-                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
-            final NetworkBuffer.Type<? extends T> supplier = entry.reader;
+            final PacketInfo<T> info = packetInfo(packetId);
+            final NetworkBuffer.Type<T> supplier = info.serializer;
             final T packet = supplier.read(reader);
             if (packet == null) {
-                throw new IllegalStateException("Packet " + entry.type + " failed to read!");
+                throw new IllegalStateException("Packet " + info.packetClass + " failed to read!");
             }
             return packet;
         }
@@ -372,6 +377,17 @@ public interface PacketRegistry<T> {
         @Override
         public PacketInfo<T> packetInfo(Class<? extends T> packetClass) {
             return packetIds.get(packetClass);
+        }
+
+        @Override
+        public PacketInfo<T> packetInfo(int packetId) {
+            if (packetId < 0 || packetId >= suppliers.length) {
+                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
+            }
+            final PacketInfo<T> info = (PacketInfo<T>) suppliers[packetId];
+            if (info == null)
+                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
+            return info;
         }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {

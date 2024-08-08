@@ -33,7 +33,6 @@ import java.net.*;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -178,7 +177,7 @@ public final class LoginListener {
         GameProfile gameProfile = null;
         boolean success = false;
         if (data != null && data.length > 0) {
-            NetworkBuffer buffer = new NetworkBuffer(ByteBuffer.wrap(data));
+            NetworkBuffer buffer = NetworkBuffer.wrap(data);
             success = VelocityProxy.checkIntegrity(buffer);
             if (success) {
                 // Get the real connection address

@@ -261,11 +261,11 @@ public final class PacketUtils {
     }
 
     public static <T> void writeFramedPacket(@NotNull ByteBuffer buffer,
-                                         int id,
-                                         @NotNull NetworkBuffer.Type<T> type,
-                                         @NotNull T packet,
-                                         int compressionThreshold) {
-        NetworkBuffer networkBuffer = new NetworkBuffer(buffer, false);
+                                             int id,
+                                             @NotNull NetworkBuffer.Type<T> type,
+                                             @NotNull T packet,
+                                             int compressionThreshold) {
+        NetworkBuffer networkBuffer = NetworkBuffer.wrap(buffer, MinecraftServer.process());
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = networkBuffer.skipWrite(3);

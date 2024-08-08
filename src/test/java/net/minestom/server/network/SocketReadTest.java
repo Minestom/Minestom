@@ -37,7 +37,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(NetworkBuffer.wrap(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -62,7 +62,7 @@ public class SocketReadTest {
         assertEquals(2, packets.size());
         for (var rawPacket : packets) {
             assertEquals(0x0A, rawPacket.left());
-            var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
+            var readPacket = ClientPluginMessagePacket.SERIALIZER.read(NetworkBuffer.wrap(rawPacket.right()));
             assertEquals("channel", readPacket.channel());
             assertEquals(2000, readPacket.data().length);
         }
@@ -91,7 +91,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(NetworkBuffer.wrap(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
@@ -119,7 +119,7 @@ public class SocketReadTest {
         assertEquals(1, packets.size());
         var rawPacket = packets.get(0);
         assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
+        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(NetworkBuffer.wrap(rawPacket.right()));
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
     }
