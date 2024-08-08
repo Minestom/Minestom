@@ -32,15 +32,18 @@ public enum GameMode {
         return canTakeDamage;
     }
 
-    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = BYTE.transform(GameMode::fromId, gameMode -> gameMode.id);
+
+    public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, GameMode value) {
-            buffer.write(BYTE, value.id());
+            buffer.write(BYTE, value != null ? value.id() : -1);
         }
 
         @Override
         public GameMode read(@NotNull NetworkBuffer buffer) {
-            return GameMode.fromId(buffer.read(BYTE));
+            final byte id = buffer.read(BYTE);
+            return id != -1 ? GameMode.fromId(id) : null;
         }
     };
 

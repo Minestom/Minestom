@@ -27,7 +27,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
             buffer.write(BYTE, value.scale);
             buffer.write(BOOLEAN, value.locked);
             buffer.write(BOOLEAN, value.trackingPosition);
-            if (value.trackingPosition) buffer.writeCollection(Icon.SERIALIZER, value.icons);
+            if (value.trackingPosition) buffer.write(Icon.SERIALIZER.list(), value.icons);
             if (value.colorContent != null) {
                 buffer.write(ColorContent.SERIALIZER, value.colorContent);
             } else {
@@ -41,7 +41,7 @@ public record MapDataPacket(int mapId, byte scale, boolean locked,
             var scale = buffer.read(BYTE);
             var locked = buffer.read(BOOLEAN);
             var trackingPosition = buffer.read(BOOLEAN);
-            List<Icon> icons = trackingPosition ? buffer.readCollection(Icon.SERIALIZER, MAX_ICONS) : List.of();
+            List<Icon> icons = trackingPosition ? buffer.read(Icon.SERIALIZER.list(MAX_ICONS)) : List.of();
 
             var columns = buffer.read(BYTE);
             if (columns <= 0) return new MapDataPacket(mapId, scale, locked, trackingPosition, icons, null);

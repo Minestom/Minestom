@@ -24,9 +24,9 @@ public record EntityMetaDataPacket(int entityId,
         @Override
         public void write(@NotNull NetworkBuffer buffer, EntityMetaDataPacket value) {
             buffer.write(VAR_INT, value.entityId);
-            for (var entry : value.entries.entrySet()) {
+            for (Map.Entry<Integer, Metadata.Entry<?>> entry : value.entries.entrySet()) {
                 buffer.write(BYTE, entry.getKey().byteValue());
-                buffer.write(entry.getValue());
+                buffer.write(Metadata.Entry.SERIALIZER, entry.getValue());
             }
             buffer.write(BYTE, (byte) 0xFF); // End
         }
@@ -44,8 +44,8 @@ public record EntityMetaDataPacket(int entityId,
             if (index == (byte) 0xFF) { // reached the end
                 break;
             }
-            final int type = reader.read(VAR_INT);
-            entries.put((int) index, Metadata.Entry.read(type, reader));
+            Metadata.Entry<?> entry = Metadata.Entry.SERIALIZER.read(reader);
+            entries.put((int) index, entry);
         }
         return entries;
     }

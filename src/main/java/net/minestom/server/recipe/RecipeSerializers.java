@@ -48,7 +48,7 @@ public final class RecipeSerializers {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Shaped shaped) {
             buffer.write(STRING, shaped.group());
-            buffer.writeEnum(Crafting.class, shaped.category());
+            buffer.write(NetworkBuffer.Enum(Crafting.class), shaped.category());
             buffer.write(VAR_INT, shaped.width());
             buffer.write(VAR_INT, shaped.height());
             for (Ingredient ingredient : shaped.ingredients()) {
@@ -61,7 +61,7 @@ public final class RecipeSerializers {
         @Override
         public Shaped read(@NotNull NetworkBuffer buffer) {
             String group = buffer.read(STRING);
-            Crafting category = buffer.readEnum(Crafting.class);
+            Crafting category = buffer.read(NetworkBuffer.Enum(Crafting.class));
             int width = buffer.read(VAR_INT);
             int height = buffer.read(VAR_INT);
             List<Ingredient> ingredients = new ArrayList<>();

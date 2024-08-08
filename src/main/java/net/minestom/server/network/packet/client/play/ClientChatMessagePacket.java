@@ -19,7 +19,7 @@ public record ClientChatMessagePacket(String message, long timestamp,
             buffer.write(STRING, value.message);
             buffer.write(LONG, value.timestamp);
             buffer.write(LONG, value.salt);
-            buffer.writeOptional(BYTE_ARRAY, value.signature);
+            buffer.write(BYTE_ARRAY.optional(), value.signature);
             buffer.write(VAR_INT, value.ackOffset);
             buffer.write(RAW_BYTES, Arrays.copyOf(value.ackList.toByteArray(), 3));
         }
@@ -27,8 +27,8 @@ public record ClientChatMessagePacket(String message, long timestamp,
         @Override
         public ClientChatMessagePacket read(@NotNull NetworkBuffer buffer) {
             return new ClientChatMessagePacket(buffer.read(STRING), buffer.read(LONG),
-                    buffer.read(LONG), buffer.readOptional(r -> r.readBytes(256)),
-                    buffer.read(VAR_INT), BitSet.valueOf(buffer.readBytes(3)));
+                    buffer.read(LONG), buffer.read(FixedRawBytes(256).optional()),
+                    buffer.read(VAR_INT), BitSet.valueOf(buffer.read(FixedRawBytes(3))));
         }
     };
 }

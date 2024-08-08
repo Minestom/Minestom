@@ -16,7 +16,6 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -213,15 +212,13 @@ public final class Metadata {
         return (byte) NEXT_ID.getAndIncrement();
     }
 
-    public sealed interface Entry<T> extends NetworkBuffer.Writer
-            permits MetadataImpl.EntryImpl {
+    public sealed interface Entry<T> permits MetadataImpl.EntryImpl {
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        NetworkBuffer.Type<Entry<?>> SERIALIZER = (NetworkBuffer.Type) MetadataImpl.EntryImpl.SERIALIZER;
+
         int type();
 
-        @UnknownNullability T value();
-
-        @ApiStatus.Internal
-        static @NotNull Entry<?> read(int type, @NotNull NetworkBuffer reader) {
-            return MetadataImpl.EntryImpl.read(type, reader);
-        }
+        @UnknownNullability
+        T value();
     }
 }

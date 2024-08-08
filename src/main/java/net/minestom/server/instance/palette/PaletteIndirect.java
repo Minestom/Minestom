@@ -3,7 +3,6 @@ package net.minestom.server.instance.palette;
 import it.unimi.dsi.fastutil.ints.Int2IntOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,52 +10,64 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.instance.palette.Palettes.arrayLength;
+import static net.minestom.server.instance.palette.Palettes.read;
 
 /**
  * Palette able to take any value anywhere. May consume more memory than required.
  */
-final class FlexiblePalette implements SpecializedPalette, Cloneable {
+final class PaletteIndirect implements SpecializedPalette, Cloneable {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
 
     // Specific to this palette type
-    private final AdaptivePalette adaptivePalette;
+    private final int dimension;
+    private final int maxBitsPerEntry;
+
     private byte bitsPerEntry;
     private int count;
 
-    private long[] values;
+    long[] values;
     // palette index = value
     IntArrayList paletteToValueList;
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    FlexiblePalette(AdaptivePalette adaptivePalette, byte bitsPerEntry) {
-        this.adaptivePalette = adaptivePalette;
-
+    PaletteIndirect(int dimension, int maxBitsPerEntry, byte bitsPerEntry,
+                    int count, int[] palette, long[] values) {
+        this.dimension = dimension;
+        this.maxBitsPerEntry = maxBitsPerEntry;
         this.bitsPerEntry = bitsPerEntry;
 
-        this.paletteToValueList = new IntArrayList(1);
-        this.paletteToValueList.add(0);
-        this.valueToPaletteMap = new Int2IntOpenHashMap(1);
-        this.valueToPaletteMap.put(0, 0);
+        this.count = count;
+        this.values = values;
+
+        this.paletteToValueList = new IntArrayList(palette.length);
+        this.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
         this.valueToPaletteMap.defaultReturnValue(-1);
 
-        final int valuesPerLong = 64 / bitsPerEntry;
-        this.values = new long[(maxSize() + valuesPerLong - 1) / valuesPerLong];
+        for (int i = 0; i < palette.length; i++) {
+            this.paletteToValueList.add(palette[i]);
+            this.valueToPaletteMap.put(palette[i], i);
+        }
+
+        this.values = new long[arrayLength(dimension(), bitsPerEntry)];
     }
 
-    FlexiblePalette(AdaptivePalette adaptivePalette) {
-        this(adaptivePalette, adaptivePalette.defaultBitsPerEntry);
+    PaletteIndirect(int dimension, int maxBitsPerEntry, byte bitsPerEntry) {
+        this(dimension, maxBitsPerEntry, bitsPerEntry,
+                0,
+                new int[]{0},
+                new long[arrayLength(dimension, bitsPerEntry)]
+        );
+    }
+
+    PaletteIndirect(AdaptivePalette palette) {
+        this(palette.dimension, palette.maxBitsPerEntry, palette.defaultBitsPerEntry);
     }
 
     @Override
     public int get(int x, int y, int z) {
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int sectionIndex = getSectionIndex(dimension(), x, y, z);
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
-        final int value = (int) (values[index] >> bitIndex) & ((1 << bitsPerEntry) - 1);
+        final int value = read(dimension(), bitsPerEntry, values, x, y, z);
         // Change to palette value and return
         return hasPalette() ? paletteToValueList.getInt(value) : value;
     }
@@ -74,20 +85,9 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
     @Override
     public void set(int x, int y, int z, int value) {
         value = getPaletteIndex(value);
-        final int bitsPerEntry = this.bitsPerEntry;
-        final long[] values = this.values;
-        // Change to palette value
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final int sectionIndex = getSectionIndex(dimension(), x, y, z);
-        final int index = sectionIndex / valuesPerLong;
-        final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
-
-        final long block = values[index];
-        final long clear = (1L << bitsPerEntry) - 1L;
-        final long oldBlock = block >> bitIndex & clear;
-        values[index] = block & ~(clear << bitIndex) | ((long) value << bitIndex);
+        final int oldValue = Palettes.write(dimension(), bitsPerEntry, values, x, y, z, value);
         // Check if block count needs to be updated
-        final boolean currentAir = oldBlock == 0;
+        final boolean currentAir = oldValue == 0;
         if (currentAir != (value == 0)) this.count += currentAir ? 1 : -1;
     }
 
@@ -99,13 +99,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
             return;
         }
         value = getPaletteIndex(value);
-        final int bitsPerEntry = this.bitsPerEntry;
-        final int valuesPerLong = 64 / bitsPerEntry;
-        final long[] values = this.values;
-        long block = 0;
-        for (int i = 0; i < valuesPerLong; i++)
-            block |= (long) value << i * bitsPerEntry;
-        Arrays.fill(values, block);
+        Palettes.fill(bitsPerEntry, values, value);
         this.count = maxSize();
     }
 
@@ -185,18 +179,18 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     @Override
     public int maxBitsPerEntry() {
-        return adaptivePalette.maxBitsPerEntry();
+        return maxBitsPerEntry;
     }
 
     @Override
     public int dimension() {
-        return adaptivePalette.dimension();
+        return dimension;
     }
 
     @Override
     public @NotNull SpecializedPalette clone() {
         try {
-            FlexiblePalette palette = (FlexiblePalette) super.clone();
+            PaletteIndirect palette = (PaletteIndirect) super.clone();
             palette.values = values != null ? values.clone() : null;
             palette.paletteToValueList = paletteToValueList.clone();
             palette.valueToPaletteMap = valueToPaletteMap.clone();
@@ -206,15 +200,6 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
             MinecraftServer.getExceptionManager().handleException(e);
             throw new IllegalStateException("Weird thing happened");
         }
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, bitsPerEntry);
-        if (bitsPerEntry <= maxBitsPerEntry()) { // Palette index
-            writer.writeCollection(VAR_INT, paletteToValueList);
-        }
-        writer.write(LONG_ARRAY, values);
     }
 
     private void retrieveAll(@NotNull EntryConsumer consumer, boolean consumeEmpty) {
@@ -268,7 +253,7 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     void resize(byte newBitsPerEntry) {
         newBitsPerEntry = newBitsPerEntry > maxBitsPerEntry() ? 15 : newBitsPerEntry;
-        FlexiblePalette palette = new FlexiblePalette(adaptivePalette, newBitsPerEntry);
+        PaletteIndirect palette = new PaletteIndirect(dimension, maxBitsPerEntry, newBitsPerEntry);
         palette.paletteToValueList = paletteToValueList;
         palette.valueToPaletteMap = valueToPaletteMap;
         getAll(palette::set);
@@ -295,14 +280,6 @@ final class FlexiblePalette implements SpecializedPalette, Cloneable {
 
     boolean hasPalette() {
         return bitsPerEntry <= maxBitsPerEntry();
-    }
-
-    static int getSectionIndex(int dimension, int x, int y, int z) {
-        final int dimensionMask = dimension - 1;
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
-        return (y & dimensionMask) << (dimensionBitCount << 1) |
-                (z & dimensionMask) << dimensionBitCount |
-                (x & dimensionMask);
     }
 
     static int maxPaletteSize(int bitsPerEntry) {

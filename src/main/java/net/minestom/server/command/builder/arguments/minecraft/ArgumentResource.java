@@ -39,6 +39,6 @@ public class ArgumentResource extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArray(buffer -> buffer.write(NetworkBuffer.STRING, identifier));
+        return NetworkBuffer.makeArray(NetworkBuffer.STRING, identifier);
     }
 }

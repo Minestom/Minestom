@@ -25,7 +25,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
                 case CustomSoundEvent soundEvent -> {
                     buffer.write(NetworkBuffer.VAR_INT, 0); // Custom sound
                     buffer.write(NetworkBuffer.STRING, soundEvent.name());
-                    buffer.writeOptional(NetworkBuffer.FLOAT, soundEvent.range());
+                    buffer.write(NetworkBuffer.FLOAT.optional(), soundEvent.range());
                 }
             }
         }
@@ -36,7 +36,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
             if (id != -1) return BuiltinSoundEvent.getId(id);
 
             NamespaceID namespace = NamespaceID.from(buffer.read(NetworkBuffer.STRING));
-            return new CustomSoundEvent(namespace, buffer.readOptional(NetworkBuffer.FLOAT));
+            return new CustomSoundEvent(namespace, buffer.read(NetworkBuffer.FLOAT.optional()));
         }
     };
 
@@ -81,7 +81,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * Create a custom sound event. The namespace should match a sound provided in the resource pack.
      *
      * @param namespaceID the namespace ID of the custom sound event
-     * @param range the range of the sound event, or null for (legacy) dynamic range
+     * @param range       the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull String namespaceID, @Nullable Float range) {
@@ -90,8 +90,9 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
 
     /**
      * Create a custom sound event. The {@link NamespaceID} should match a sound provided in the resource pack.
+     *
      * @param namespaceID the namespace ID of the custom sound event
-     * @param range the range of the sound event, or null for (legacy) dynamic range
+     * @param range       the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull NamespaceID namespaceID, @Nullable Float range) {

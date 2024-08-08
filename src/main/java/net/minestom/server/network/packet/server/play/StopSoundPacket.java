@@ -28,7 +28,7 @@ public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
         @Override
         public StopSoundPacket read(@NotNull NetworkBuffer buffer) {
             byte flags = buffer.read(BYTE);
-            var source = flags == 3 || flags == 1 ? buffer.readEnum(Sound.Source.class) : null;
+            var source = flags == 3 || flags == 1 ? buffer.read(NetworkBuffer.Enum(Sound.Source.class)) : null;
             var sound = flags == 2 || flags == 3 ? buffer.read(STRING) : null;
             return new StopSoundPacket(flags, source, sound);
         }

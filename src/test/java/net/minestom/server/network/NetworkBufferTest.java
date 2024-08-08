@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -22,7 +21,7 @@ public class NetworkBufferTest {
 
     @Test
     public void resize() {
-        var buffer = new NetworkBuffer(6);
+        var buffer = NetworkBuffer.resizableBuffer(6);
         buffer.write(INT, 6);
         assertEquals(4, buffer.writeIndex());
 
@@ -33,7 +32,7 @@ public class NetworkBufferTest {
         assertEquals(7, buffer.read(INT));
 
         // Test one-off length
-        buffer = new NetworkBuffer(1);
+        buffer = NetworkBuffer.resizableBuffer(1);
         buffer.write(BYTE, (byte) 3);
         assertEquals(1, buffer.writeIndex());
 
@@ -46,7 +45,7 @@ public class NetworkBufferTest {
 
     @Test
     public void readableBytes() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
         assertEquals(0, buffer.readableBytes());
 
         buffer.write(BYTE, (byte) 0);
@@ -64,7 +63,7 @@ public class NetworkBufferTest {
 
     @Test
     public void extractBytes() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
 
         buffer.write(BYTE, (byte) 25);
         assertEquals(1, buffer.writeIndex());
@@ -94,7 +93,7 @@ public class NetworkBufferTest {
         assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
         }));
 
-        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(buffer -> buffer.write(BYTE, (byte) 1)));
+        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(BYTE, (byte) 1));
 
         assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArray(buffer -> {
             buffer.write(BYTE, (byte) 1);
@@ -276,20 +275,18 @@ public class NetworkBufferTest {
 
     @Test
     public void collectionMaxSize() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
         var list = new ArrayList<Boolean>();
         for (int i = 0; i < 1000; i++)
             list.add(true);
-        buffer.writeCollection(BOOLEAN, list);
+        buffer.write(BOOLEAN.list(), list);
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(BOOLEAN, 10));
-        buffer.readIndex(0); // reset
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(b -> b.read(BOOLEAN), 10));
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(BOOLEAN.list(10)));
     }
 
     @Test
     public void oomStringRegression() {
-        var buffer = new NetworkBuffer(ByteBuffer.allocate(100));
+        var buffer = NetworkBuffer.resizableBuffer(100);
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
@@ -297,7 +294,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value, byte[] expected, @NotNull Action<T> action) {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -316,7 +313,7 @@ public class NetworkBufferTest {
 
         // Ensure resize support
         {
-            var tmp = new NetworkBuffer(0);
+            var tmp = NetworkBuffer.resizableBuffer(0);
             action.write(tmp, type, value);
             assertEquals(0, tmp.readIndex());
             if (expected != null) assertEquals(expected.length, tmp.writeIndex());
@@ -351,12 +348,12 @@ public class NetworkBufferTest {
         assertBufferType(type, value, expected, new Action<T>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
-                buffer.writeOptional(type, value);
+                buffer.write(type.optional(), value);
             }
 
             @Override
             public T read(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type) {
-                return buffer.readOptional(type);
+                return buffer.read(type.optional());
             }
         });
     }
@@ -365,13 +362,13 @@ public class NetworkBufferTest {
         assertBufferTypeOptional(type, value, null);
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> values, byte @Nullable [] expected) {
-        var buffer = new NetworkBuffer();
-        buffer.writeCollection(type, values);
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> values, byte @Nullable [] expected) {
+        var buffer = NetworkBuffer.resizableBuffer();
+        buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
 
-        var actual = buffer.readCollection(type, Integer.MAX_VALUE);
+        var actual = buffer.read(type.list(Integer.MAX_VALUE));
 
         assertEquals(values, actual);
         if (expected != null) assertEquals(expected.length, buffer.readIndex());
@@ -384,7 +381,7 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> value) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> value) {
         assertBufferTypeCollection(type, value, null);
     }
 

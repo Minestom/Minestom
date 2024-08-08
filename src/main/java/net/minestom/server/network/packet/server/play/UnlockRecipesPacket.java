@@ -36,9 +36,9 @@ public record UnlockRecipesPacket(int mode,
             buffer.write(BOOLEAN, value.smokerRecipeBookOpen);
             buffer.write(BOOLEAN, value.smokerRecipeBookFilterActive);
 
-            buffer.writeCollection(STRING, value.recipeIds);
+            buffer.write(STRING.list(), value.recipeIds);
             if (value.mode == 0) {
-                buffer.writeCollection(STRING, value.initRecipeIds);
+                buffer.write(STRING.list(), value.initRecipeIds);
             }
         }
 
@@ -53,8 +53,8 @@ public record UnlockRecipesPacket(int mode,
             var blastFurnaceRecipeBookFilterActive = buffer.read(BOOLEAN);
             var smokerRecipeBookOpen = buffer.read(BOOLEAN);
             var smokerRecipeBookFilterActive = buffer.read(BOOLEAN);
-            var recipeIds = buffer.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES);
-            var initRecipeIds = mode == 0 ? buffer.readCollection(STRING, DeclareRecipesPacket.MAX_RECIPES) : null;
+            var recipeIds = buffer.read(STRING.list(DeclareRecipesPacket.MAX_RECIPES));
+            var initRecipeIds = mode == 0 ? buffer.read(STRING.list(DeclareRecipesPacket.MAX_RECIPES)) : null;
             return new UnlockRecipesPacket(mode,
                     craftingRecipeBookOpen, craftingRecipeBookFilterActive,
                     smeltingRecipeBookOpen, smeltingRecipeBookFilterActive,

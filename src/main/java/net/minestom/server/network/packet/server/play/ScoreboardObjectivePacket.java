@@ -27,7 +27,7 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
                 buffer.write(COMPONENT, value.objectiveValue);
                 assert value.type != null;
                 buffer.write(VAR_INT, value.type.ordinal());
-                buffer.writeOptional(value.numberFormat);
+                buffer.write(Sidebar.NumberFormat.SERIALIZER.optional(), value.numberFormat);
             }
         }
 
@@ -41,7 +41,7 @@ public record ScoreboardObjectivePacket(@NotNull String objectiveName, byte mode
             if (mode == 0 || mode == 2) {
                 objectiveValue = buffer.read(COMPONENT);
                 type = Type.values()[buffer.read(VAR_INT)];
-                numberFormat = buffer.readOptional(Sidebar.NumberFormat::new);
+                numberFormat = buffer.read(Sidebar.NumberFormat.SERIALIZER.optional());
             }
             return new ScoreboardObjectivePacket(objectiveName, mode, objectiveValue, type, numberFormat);
         }

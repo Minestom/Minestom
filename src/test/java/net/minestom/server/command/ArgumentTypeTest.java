@@ -454,7 +454,7 @@ public class ArgumentTypeTest {
     }
 
     @Test
-    public void testArgumentMapWithSender() {
+    public void testArgumentTransformWithSender() {
         var serverSender = new ServerSender();
 
         var arg = ArgumentType.Word("word").from("word1", "word2", "word3")

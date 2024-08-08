@@ -1020,7 +1020,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         String title = PlainTextComponentSerializer.plainText().serialize(book.title());
         String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(book.pages(), title, author, 0, false))
+                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
                 .build();
 
         // Set book in offhand
@@ -2422,6 +2422,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     /**
      * Send a {@link Notification} to the player.
+     *
      * @param notification the {@link Notification} to send
      */
     public void sendNotification(@NotNull Notification notification) {

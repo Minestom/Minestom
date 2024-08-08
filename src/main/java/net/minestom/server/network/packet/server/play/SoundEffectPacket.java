@@ -36,7 +36,7 @@ public record SoundEffectPacket(
         @Override
         public SoundEffectPacket read(@NotNull NetworkBuffer buffer) {
             return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
-                    buffer.readEnum(Source.class),
+                    buffer.read(NetworkBuffer.Enum(Source.class)),
                     buffer.read(INT) * 8,
                     buffer.read(INT) * 8,
                     buffer.read(INT) * 8,

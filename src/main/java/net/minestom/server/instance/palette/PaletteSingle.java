@@ -1,15 +1,11 @@
 package net.minestom.server.instance.palette;
 
-import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
-
-import static net.minestom.server.network.NetworkBuffer.BYTE;
-import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
  * Palette containing a single value. Useful for both empty and full palettes.
  */
-record FilledPalette(byte dim, int value) implements SpecializedPalette.Immutable {
+record PaletteSingle(byte dim, int value) implements SpecializedPalette.Immutable {
     @Override
     public int get(int x, int y, int z) {
         return value;
@@ -43,12 +39,5 @@ record FilledPalette(byte dim, int value) implements SpecializedPalette.Immutabl
     @Override
     public @NotNull SpecializedPalette clone() {
         return this;
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, (byte) 0);
-        writer.write(VAR_INT, value);
-        writer.write(VAR_INT, 0);
     }
 }

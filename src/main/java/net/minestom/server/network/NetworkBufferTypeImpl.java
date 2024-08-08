@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
+import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -8,7 +9,6 @@ import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
@@ -21,8 +21,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -260,9 +259,12 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record RawBytesType() implements NetworkBufferTypeImpl<byte[]> {
+    record RawBytesType(int length) implements NetworkBufferTypeImpl<byte[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, byte[] value) {
+            if (length != -1 && value.length != length) {
+                throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
+            }
             buffer.ensureSize(value.length);
             buffer.nioBuffer.put(buffer.writeIndex(), value);
             buffer.writeIndex += value.length;
@@ -271,7 +273,10 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int limit = buffer.nioBuffer.limit();
-            final int length = limit - buffer.readIndex();
+            int length = limit - buffer.readIndex();
+            if (this.length != -1) {
+                length = Math.min(length, this.length);
+            }
             assert length > 0 : "Invalid remaining: " + length;
             final byte[] bytes = new byte[length];
             buffer.nioBuffer.get(buffer.readIndex(), bytes);
@@ -549,18 +554,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record DeathLocationType() implements NetworkBufferTypeImpl<WorldPos> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, WorldPos value) {
-            buffer.writeOptional(value);
-        }
-
-        @Override
-        public WorldPos read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(WorldPos::new);
-        }
-    }
-
     record Vector3Type() implements NetworkBufferTypeImpl<Point> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Point value) {
@@ -595,6 +588,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record Vector3BType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(BYTE, (byte) value.x());
+            buffer.write(BYTE, (byte) value.y());
+            buffer.write(BYTE, (byte) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final byte x = buffer.read(BYTE);
+            final byte y = buffer.read(BYTE);
+            final byte z = buffer.read(BYTE);
+            return new Vec(x, y, z);
+        }
+    }
+
     record QuaternionType() implements NetworkBufferTypeImpl<float[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, float[] value) {
@@ -616,27 +626,61 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     // Combinators
 
-    record EnumType<E extends Enum<?>>(@NotNull Class<E> enumClass) implements NetworkBufferTypeImpl<E> {
+    record EnumSetType<E extends Enum<E>>(@NotNull Class<E> enumType,
+                                          E[] values) implements NetworkBufferTypeImpl<EnumSet<E>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, E value) {
-            buffer.writeEnum(enumClass, value);
+        public void write(@NotNull NetworkBuffer buffer, EnumSet<E> value) {
+            BitSet bitSet = new BitSet(values.length);
+            for (int i = 0; i < values.length; ++i) {
+                bitSet.set(i, value.contains(values[i]));
+            }
+            final byte[] array = bitSet.toByteArray();
+            buffer.write(RAW_BYTES, array);
         }
 
         @Override
-        public E read(@NotNull NetworkBuffer buffer) {
-            return buffer.readEnum(enumClass);
+        public EnumSet<E> read(@NotNull NetworkBuffer buffer) {
+            final byte[] array = buffer.read(FixedRawBytes((values.length + 7) / 8));
+            BitSet bitSet = BitSet.valueOf(array);
+            EnumSet<E> enumSet = EnumSet.noneOf(enumType);
+            for (int i = 0; i < values.length; ++i) {
+                if (bitSet.get(i)) {
+                    enumSet.add(values[i]);
+                }
+            }
+            return enumSet;
+        }
+    }
+
+    record FixedBitSetType(int length) implements NetworkBufferTypeImpl<BitSet> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BitSet value) {
+            final int setLength = value.length();
+            if (setLength > length) {
+                throw new IllegalArgumentException("BitSet is larger than expected size (" + setLength + ">" + length + ")");
+            } else {
+                final byte[] array = value.toByteArray();
+                buffer.write(RAW_BYTES, array);
+            }
+        }
+
+        @Override
+        public BitSet read(@NotNull NetworkBuffer buffer) {
+            final byte[] array = buffer.read(FixedRawBytes((length + 7) / 8));
+            return BitSet.valueOf(array);
         }
     }
 
     record OptionalType<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<@Nullable T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, T value) {
-            buffer.writeOptional(parent, value);
+            buffer.write(BOOLEAN, value != null);
+            if (value != null) buffer.write(parent, value);
         }
 
         @Override
         public T read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(parent);
+            return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
         }
     }
 
@@ -661,8 +705,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MappedType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
-                            @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
+    record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
+                               @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, S value) {
             parent.write(buffer, from.apply(value));
@@ -674,27 +718,51 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
+    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType,
+                         int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, List<T> value) {
-            buffer.writeCollection(parent, value);
+        public void write(@NotNull NetworkBuffer buffer, Map<K, V> map) {
+            buffer.write(VAR_INT, map.size());
+            for (Map.Entry<K, V> entry : map.entrySet()) {
+                buffer.write(parent, entry.getKey());
+                buffer.write(valueType, entry.getValue());
+            }
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        public List<T> read(@NotNull NetworkBuffer buffer) {
-            return buffer.readCollection(parent, maxSize);
+        public Map<K, V> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Map size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            K[] keys = (K[]) new Object[size];
+            V[] values = (V[]) new Object[size];
+            for (int i = 0; i < size; i++) {
+                keys[i] = buffer.read(parent);
+                values[i] = buffer.read(valueType);
+            }
+            return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
         }
     }
 
-    record OptionalTypeImpl<T>(@NotNull Type<T> parent) implements NetworkBufferTypeImpl<T> {
+    record ListType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<List<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, T value) {
-            buffer.writeOptional(parent, value);
+        public void write(@NotNull NetworkBuffer buffer, List<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
-        public T read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(parent);
+        public List<T> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return List.of(values);
         }
     }
 
