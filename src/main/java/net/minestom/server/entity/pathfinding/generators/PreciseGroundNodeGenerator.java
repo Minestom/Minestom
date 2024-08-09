@@ -7,7 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
     private final static int MAX_FALL_DISTANCE = 5;
 
     @Override
-    public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
+    public @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
@@ -36,23 +36,23 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
                 double floorPointY = current.y();
                 double floorPointZ = current.blockZ() + 0.5 + z;
 
-                var optionalFloorPointY = gravitySnap(instance, floorPointX, floorPointY, floorPointZ, boundingBox, MAX_FALL_DISTANCE);
+                var optionalFloorPointY = gravitySnap(getter, floorPointX, floorPointY, floorPointZ, boundingBox, MAX_FALL_DISTANCE);
                 if (optionalFloorPointY.isEmpty()) continue;
                 floorPointY = optionalFloorPointY.getAsDouble();
 
                 var floorPoint = new Vec(floorPointX, floorPointY, floorPointZ);
-                var nodeWalk = createWalk(instance, floorPoint, boundingBox, cost, current, goal, visited);
+                var nodeWalk = createWalk(getter, floorPoint, boundingBox, cost, current, goal, visited);
 
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
                 for (int i = 1; i <= 1; ++i) {
                     Point jumpPoint = new Vec(current.blockX() + 0.5 + x, current.y() + i, current.blockZ() + 0.5 + z);
-                    OptionalDouble jumpPointY = gravitySnap(instance, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
+                    OptionalDouble jumpPointY = gravitySnap(getter, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
                     if (jumpPointY.isEmpty()) continue;
                     jumpPoint = jumpPoint.withY(jumpPointY.getAsDouble());
 
                     if (!floorPoint.sameBlock(jumpPoint)) {
-                        var nodeJump = createJump(instance, jumpPoint, boundingBox, cost + 0.8, current, goal, visited);
+                        var nodeJump = createJump(getter, jumpPoint, boundingBox, cost + 0.8, current, goal, visited);
                         if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
                     }
                 }
@@ -62,13 +62,8 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         return nearby;
     }
 
-    @Override
-    public boolean hasGravitySnap() {
-        return true;
-    }
-
-    private PNode createWalk(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
-        var snapped = gravitySnap(instance, point.x(), point.y(), point.z(), boundingBox, MAX_FALL_DISTANCE);
+    private PNode createWalk(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
+        var snapped = gravitySnap(getter, point.x(), point.y(), point.z(), boundingBox, MAX_FALL_DISTANCE);
 
         if (snapped.isPresent()) {
             var snappedPoint = new Vec(point.x(), snapped.getAsDouble(), point.z());
@@ -82,12 +77,12 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
                 if (start.y() - snappedPoint.y() > MAX_FALL_DISTANCE) {
                     return null;
                 }
-                if (!canMoveTowards(instance, new Vec(start.x(), start.y(), start.z()), snappedPoint.withY(start.y()), boundingBox)) {
+                if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), snappedPoint.withY(start.y()), boundingBox)) {
                     return null;
                 }
-                n.setType(PNode.NodeType.FALL);
+                n.setType(PNode.Type.FALL);
             } else {
-                if (!canMoveTowards(instance, new Vec(start.x(), start.y(), start.z()), snappedPoint, boundingBox)) {
+                if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), snappedPoint, boundingBox)) {
                     return null;
                 }
             }
@@ -98,7 +93,7 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         }
     }
 
-    private PNode createJump(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
+    private PNode createJump(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         if (Math.abs(point.y() - start.y()) < Vec.EPSILON) return null;
         if (point.y() - start.y() > 2) return null;
         if (point.blockX() != start.blockX() && point.blockZ() != start.blockZ()) return null;
@@ -106,10 +101,10 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         var n = newNode(start, cost, point, goal);
         if (closed.contains(n)) return null;
 
-        if (pointInvalid(instance, point, boundingBox)) return null;
-        if (pointInvalid(instance, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
+        if (pointInvalid(getter, point, boundingBox)) return null;
+        if (pointInvalid(getter, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
 
-        n.setType(PNode.NodeType.JUMP);
+        n.setType(PNode.Type.JUMP);
         return n;
     }
 
@@ -119,26 +114,32 @@ public class PreciseGroundNodeGenerator implements NodeGenerator {
         tempNode.setPoint(point.x(), point.y(), point.z());
 
         var newNode = tempNode;
-        tempNode = new PNode(0, 0, 0, 0, 0, PNode.NodeType.WALK, current);
+        tempNode = new PNode(0, 0, 0, 0, 0, PNode.Type.WALK, current);
 
         return newNode;
     }
 
     @Override
-    public @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
-        double pointX = (int) Math.floor(pointOrgX) + 0.5;
-        double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
-        var res= CollisionUtils.handlePhysics(instance, boundingBox, new Pos(pointX, pointOrgY, pointZ), new Vec(0, -MAX_FALL_DISTANCE, 0), null, true);
+    public boolean hasGravitySnap() {
+        return true;
+    }
+
+    @Override
+    public @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
+        final double pointX = (int) Math.floor(pointOrgX) + 0.5;
+        final double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
+        final PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox,
+                new Pos(pointX, pointOrgY, pointZ), new Vec(0, -MAX_FALL_DISTANCE, 0),
+                null, true);
         return OptionalDouble.of(res.newPosition().y());
     }
 
     @Override
-    public boolean canMoveTowards(@NotNull Instance instance, @NotNull Point startOrg, @NotNull Point endOrg, @NotNull BoundingBox boundingBox) {
-        var end = endOrg.add(0, Vec.EPSILON, 0);
-        var start = startOrg.add(0, Vec.EPSILON, 0);
-
-        Point diff = end.sub(start);
-        PhysicsResult res = CollisionUtils.handlePhysics(instance, instance.getChunkAt(start), boundingBox, Pos.fromPoint(start), Vec.fromPoint(diff), null, false);
+    public boolean canMoveTowards(Block.@NotNull Getter getter, @NotNull Point startOrg, @NotNull Point endOrg, @NotNull BoundingBox boundingBox) {
+        final Point end = endOrg.add(0, Vec.EPSILON, 0);
+        final Point start = startOrg.add(0, Vec.EPSILON, 0);
+        final Point diff = end.sub(start);
+        PhysicsResult res = CollisionUtils.handlePhysics(getter, boundingBox, Pos.fromPoint(start), Vec.fromPoint(diff), null, false);
         return !res.collisionZ() && !res.collisionY() && !res.collisionX();
     }
 }

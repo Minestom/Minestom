@@ -8,7 +8,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.coordinate.RelativeVec;
 
 public class TeleportCommand extends Command {
 

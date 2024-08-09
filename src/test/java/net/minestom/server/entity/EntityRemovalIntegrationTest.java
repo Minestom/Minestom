@@ -5,7 +5,7 @@ import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.entity.EntityTickEvent;
 import net.minestom.server.network.packet.server.play.DestroyEntitiesPacket;
-import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.timer.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.lang.ref.WeakReference;

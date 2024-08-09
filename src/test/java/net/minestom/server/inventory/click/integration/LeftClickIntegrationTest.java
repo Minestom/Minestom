@@ -10,7 +10,7 @@ import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.SlotUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -161,7 +161,7 @@ public class LeftClickIntegrationTest {
             // Do not touch slot
         } else {
             int offset = openInventory != null ? openInventory.getInnerSize() : 0;
-            slot = PlayerInventoryUtils.convertToPacketSlot(slot);
+            slot = SlotUtils.convertToPacketSlot(slot);
             if (openInventory != null) {
                 slot = slot - 9 + offset;
             }

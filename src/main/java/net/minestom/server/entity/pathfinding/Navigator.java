@@ -35,7 +35,7 @@ public final class Navigator {
 
     private double minimumDistance;
 
-     NodeGenerator nodeGenerator = new GroundNodeGenerator();
+    NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
 
     public Navigator(@NotNull Entity entity) {
@@ -43,8 +43,8 @@ public final class Navigator {
         nodeFollower = new GroundNodeFollower(entity);
     }
 
-    public @NotNull PPath.PathState getState() {
-        if (path == null && computingPath == null) return PPath.PathState.INVALID;
+    public @NotNull PPath.State getState() {
+        if (path == null && computingPath == null) return PPath.State.INVALID;
         if (path == null) return computingPath.getState();
         return path.getState();
     }
@@ -62,11 +62,11 @@ public final class Navigator {
     /**
      * Sets the path to {@code position} and ask the entity to follow the path.
      *
-     * @param point the position to find the path to, null to reset the pathfinder
+     * @param point           the position to find the path to, null to reset the pathfinder
      * @param minimumDistance distance to target when completed
-     * @param maxDistance maximum search distance
-     * @param pathVariance how far to search off of the direct path. For open worlds, this can be low (around 20) and for large mazes this needs to be very high.
-     * @param onComplete called when the path has been completed
+     * @param maxDistance     maximum search distance
+     * @param pathVariance    how far to search off of the direct path. For open worlds, this can be low (around 20) and for large mazes this needs to be very high.
+     * @param onComplete      called when the path has been completed
      * @return true if a path is being generated
      */
     public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, @Nullable Runnable onComplete) {
@@ -104,13 +104,13 @@ public final class Navigator {
             return false;
         }
 
-        if (this.computingPath != null) this.computingPath.setState(PPath.PathState.TERMINATING);
+        if (this.computingPath != null) this.computingPath.setState(PPath.State.TERMINATING);
 
         this.computingPath = PathGenerator.generate(instance,
-                        this.entity.getPosition(),
-                        point,
-                        minimumDistance, maxDistance,
-                        pathVariance,
+                this.entity.getPosition(),
+                point,
+                minimumDistance, maxDistance,
+                pathVariance,
                 this.entity.getBoundingBox(),
                 this.entity.isOnGround(),
                 this.nodeGenerator,
@@ -123,8 +123,9 @@ public final class Navigator {
     @ApiStatus.Internal
     public synchronized void tick() {
         if (goalPosition == null) return; // No path
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) return; // No pathfinding tick for dead entities
-        if (computingPath != null && (computingPath.getState() == PPath.PathState.COMPUTED || computingPath.getState() == PPath.PathState.BEST_EFFORT)) {
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
+            return; // No pathfinding tick for dead entities
+        if (computingPath != null && (computingPath.getState() == PPath.State.COMPUTED || computingPath.getState() == PPath.State.BEST_EFFORT)) {
             path = computingPath;
             computingPath = null;
         }
@@ -132,8 +133,8 @@ public final class Navigator {
         if (path == null) return;
 
         // If the path is computed start following it
-        if (path.getState() == PPath.PathState.COMPUTED || path.getState() == PPath.PathState.BEST_EFFORT) {
-            path.setState(PPath.PathState.FOLLOWING);
+        if (path.getState() == PPath.State.COMPUTED || path.getState() == PPath.State.BEST_EFFORT) {
+            path.setState(PPath.State.FOLLOWING);
             // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
             for (int i = 0; i < path.getNodes().size(); i++) {
                 if (isSameBlock(path.getNodes().get(i), entity.getPosition())) {
@@ -144,7 +145,7 @@ public final class Navigator {
         }
 
         // If the state is not following, wait until it is
-        if (path.getState() != PPath.PathState.FOLLOWING) return;
+        if (path.getState() != PPath.State.FOLLOWING) return;
 
         // If we're near the entity, we're done
         if (this.entity.getPosition().distance(goalPosition) < minimumDistance) {
@@ -158,8 +159,8 @@ public final class Navigator {
         Point nextTarget = path.getNext();
 
         // Repath
-        if (currentTarget == null || path.getCurrentType() == PNode.NodeType.REPATH || path.getCurrentType() == null) {
-            if (computingPath != null && computingPath.getState() == PPath.PathState.CALCULATING) return;
+        if (currentTarget == null || path.getCurrentType() == PNode.Type.REPATH || path.getCurrentType() == null) {
+            if (computingPath != null && computingPath.getState() == PPath.State.CALCULATING) return;
 
             computingPath = PathGenerator.generate(entity.getInstance(),
                     entity.getPosition(),
@@ -171,7 +172,7 @@ public final class Navigator {
         }
 
         if (nextTarget == null) {
-            path.setState(PPath.PathState.INVALID);
+            path.setState(PPath.State.INVALID);
             return;
         }
 
@@ -179,7 +180,7 @@ public final class Navigator {
         nodeFollower.moveTowards(currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
 
         if (nodeFollower.isAtPoint(currentTarget)) path.next();
-        else if (path.getCurrentType() == PNode.NodeType.JUMP) nodeFollower.jump(currentTarget, nextTarget);
+        else if (path.getCurrentType() == PNode.Type.JUMP) nodeFollower.jump(currentTarget, nextTarget);
     }
 
     /**
@@ -201,11 +202,11 @@ public final class Navigator {
     }
 
     public void reset() {
-        if (this.path != null) this.path.setState(PPath.PathState.TERMINATING);
+        if (this.path != null) this.path.setState(PPath.State.TERMINATING);
         this.goalPosition = null;
         this.path = null;
 
-        if (this.computingPath != null) this.computingPath.setState(PPath.PathState.TERMINATING);
+        if (this.computingPath != null) this.computingPath.setState(PPath.State.TERMINATING);
         this.computingPath = null;
     }
 
@@ -234,6 +235,7 @@ public final class Navigator {
 
     /**
      * Visualise path for debugging
+     *
      * @param path the path to draw
      */
     private void drawPath(PPath path) {

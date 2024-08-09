@@ -1,11 +1,11 @@
 package net.minestom.server.network.packet.server.play.data;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.coordinate.CoordConversionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -41,7 +41,7 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
             final Block block = entry.getValue();
             final var registry = block.registry();
 
-            final Point point = ChunkUtils.getBlockPosition(index, 0, 0);
+            final Point point = CoordConversionUtils.blockIndexToGlobal(index, 0, 0);
             writer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
             writer.write(SHORT, (short) point.blockY()); // y
 

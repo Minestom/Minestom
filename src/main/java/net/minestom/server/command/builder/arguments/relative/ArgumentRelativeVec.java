@@ -5,13 +5,13 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.coordinate.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 import java.util.function.Function;
 
-import static net.minestom.server.utils.location.RelativeVec.CoordinateType.*;
+import static net.minestom.server.coordinate.RelativeVec.CoordinateType.*;
 
 /**
  * Common interface for all the relative location arguments.

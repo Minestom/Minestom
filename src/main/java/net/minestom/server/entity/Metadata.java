@@ -217,7 +217,8 @@ public final class Metadata {
             permits MetadataImpl.EntryImpl {
         int type();
 
-        @UnknownNullability T value();
+        @UnknownNullability
+        T value();
 
         @ApiStatus.Internal
         static @NotNull Entry<?> read(int type, @NotNull NetworkBuffer reader) {

@@ -14,16 +14,11 @@ public sealed interface SendablePacket
 
     @ApiStatus.Experimental
     static @NotNull ServerPacket extractServerPacket(@NotNull ConnectionState state, @NotNull SendablePacket packet) {
-        if (packet instanceof ServerPacket serverPacket) {
-            return serverPacket;
-        } else if (packet instanceof CachedPacket cachedPacket) {
-            return cachedPacket.packet(state);
-        } else if (packet instanceof FramedPacket framedPacket) {
-            return framedPacket.packet();
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            return lazyPacket.packet();
-        } else {
-            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
-        }
+        return switch (packet) {
+            case ServerPacket serverPacket -> serverPacket;
+            case CachedPacket cachedPacket -> cachedPacket.packet(state);
+            case FramedPacket framedPacket -> framedPacket.packet();
+            case LazyPacket lazyPacket -> lazyPacket.packet();
+        };
     }
 }

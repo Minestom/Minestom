@@ -1,7 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
@@ -10,11 +9,12 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.SlotUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.SlotUtils.*;
 
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
@@ -164,7 +164,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * Refreshes an inventory slot.
      *
      * @param slot      the packet slot,
-     *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
+     *                  see {@link SlotUtils#convertToPacketSlot(int)}
      * @param itemStack the item stack in the slot
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {

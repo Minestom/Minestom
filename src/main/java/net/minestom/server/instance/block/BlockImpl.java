@@ -79,7 +79,9 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         propertiesKeys[propertiesOffset] = new PropertiesHolder(propertiesArray);
                         blocksValues[propertiesOffset++] = block;
                     }
-                    POSSIBLE_STATES.set(blockId, ArrayUtils.toMap(propertiesKeys, blocksValues, propertiesOffset));
+                    final Map<PropertiesHolder, BlockImpl> propertiesHolderBlockMap =
+                            Map.copyOf(new Object2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
+                    POSSIBLE_STATES.set(blockId, propertiesHolderBlockMap);
                 }
                 // Register default state
                 final int defaultState = properties.getInt("defaultStateId");

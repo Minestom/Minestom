@@ -17,10 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.net.SocketAddress;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -65,12 +62,36 @@ public abstract class PlayerConnection {
      */
     public abstract void sendPacket(@NotNull SendablePacket packet);
 
-    public void sendPackets(@NotNull Collection<SendablePacket> packets) {
+    public void sendPackets(@NotNull Collection<? extends SendablePacket> packets) {
         packets.forEach(this::sendPacket);
     }
 
     public void sendPackets(@NotNull SendablePacket... packets) {
         sendPackets(List.of(packets));
+    }
+
+    public void sendPackets(@NotNull Collection<? extends SendablePacket> packets, int[] exceptions) {
+        if (exceptions.length == 0) {
+            sendPackets(packets);
+            return;
+        }
+        // We expect the exception indexes to be sorted
+        int exceptionIndex = 0;
+        int nextException = exceptions[exceptionIndex];
+        Iterator<? extends SendablePacket> iterator = packets.iterator();
+        for (int i = 0; iterator.hasNext(); i++) {
+            if (i == nextException) {
+                // Skip this packet
+                if (++exceptionIndex == exceptions.length) {
+                    // No more exception
+                    nextException = -1;
+                } else {
+                    // Next exception
+                    nextException = exceptions[exceptionIndex];
+                }
+            }
+            sendPacket(iterator.next());
+        }
     }
 
     /**

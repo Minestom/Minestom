@@ -2,7 +2,7 @@ package net.minestom.server.event.server;
 
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.timer.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;

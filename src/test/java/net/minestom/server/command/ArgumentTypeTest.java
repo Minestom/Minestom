@@ -23,9 +23,9 @@ import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.timer.TimeUnit;
 import net.minestom.server.utils.Range;
 import net.minestom.server.utils.location.RelativeVec;
-import net.minestom.server.utils.time.TimeUnit;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;

@@ -169,7 +169,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         }
 
         @Override
-        public <T> ItemStack.@NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
+        public <T> ItemStack.@NotNull Builder tag(@NotNull Tag<T> tag, @Nullable T value) {
             components.set(ItemComponent.CUSTOM_DATA, components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
             return this;
         }

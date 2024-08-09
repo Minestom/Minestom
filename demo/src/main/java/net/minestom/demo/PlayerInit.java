@@ -46,9 +46,9 @@ import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.timer.TimeUnit;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
 import java.util.List;

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.util.Collection;
 import java.util.Objects;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
+import static net.minestom.server.coordinate.CoordConversionUtils.globalToChunk;
 
 public sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable
         permits SnapshotImpl.Instance {
@@ -25,13 +25,13 @@ public sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.G
 
     @Override
     default @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-        ChunkSnapshot chunk = chunk(getChunkCoordinate(x), getChunkCoordinate(z));
+        ChunkSnapshot chunk = chunk(globalToChunk(x), globalToChunk(z));
         return Objects.requireNonNull(chunk).getBlock(x, y, z, condition);
     }
 
     @Override
     default @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
-        ChunkSnapshot chunk = chunk(getChunkCoordinate(x), getChunkCoordinate(z));
+        ChunkSnapshot chunk = chunk(globalToChunk(x), globalToChunk(z));
         return Objects.requireNonNull(chunk).getBiome(x, y, z);
     }
 

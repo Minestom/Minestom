@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.CoordConversionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -24,7 +25,6 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
+import static net.minestom.server.coordinate.CoordConversionUtils.globalToSectionRelative;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -84,17 +84,17 @@ public class DynamicChunk extends Chunk {
 
         Section section = getSectionAt(y);
 
-        int sectionRelativeX = toSectionRelativeCoordinate(x);
-        int sectionRelativeZ = toSectionRelativeCoordinate(z);
+        int sectionRelativeX = globalToSectionRelative(x);
+        int sectionRelativeZ = globalToSectionRelative(z);
 
         section.blockPalette().set(
                 sectionRelativeX,
-                toSectionRelativeCoordinate(y),
+                globalToSectionRelative(y),
                 sectionRelativeZ,
                 block.stateId()
         );
 
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        final int index = CoordConversionUtils.blockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
         final Block lastCachedBlock;
@@ -140,9 +140,9 @@ public class DynamicChunk extends Chunk {
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.namespace());
 
         section.biomePalette().set(
-                toSectionRelativeCoordinate(x) / 4,
-                toSectionRelativeCoordinate(y) / 4,
-                toSectionRelativeCoordinate(z) / 4, id);
+                globalToSectionRelative(x) / 4,
+                globalToSectionRelative(y) / 4,
+                globalToSectionRelative(z) / 4, id);
     }
 
     @Override
@@ -184,7 +184,7 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
-            final Point blockPosition = ChunkUtils.getBlockPosition(index, chunkX, chunkZ);
+            final Point blockPosition = CoordConversionUtils.blockIndexToGlobal(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
     }
@@ -198,7 +198,7 @@ public class DynamicChunk extends Chunk {
         // Verify if the block object is present
         if (condition != Condition.TYPE) {
             final Block entry = !entries.isEmpty() ?
-                    entries.get(ChunkUtils.getBlockIndex(x, y, z)) : null;
+                    entries.get(CoordConversionUtils.blockIndex(x, y, z)) : null;
             if (entry != null || condition == Condition.CACHED) {
                 return entry;
             }
@@ -206,7 +206,7 @@ public class DynamicChunk extends Chunk {
         // Retrieve the block from state id
         final Section section = getSectionAt(y);
         final int blockStateId = section.blockPalette()
-                .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
+                .get(globalToSectionRelative(x), globalToSectionRelative(y), globalToSectionRelative(z));
         return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
     }
 
@@ -215,7 +215,7 @@ public class DynamicChunk extends Chunk {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
-                .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
+                .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
         DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);

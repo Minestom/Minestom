@@ -19,11 +19,11 @@ public enum Rotation {
      */
     CLOCKWISE_135,
     /**
-     * Flipped upside-down, a 180 degree rotation
+     * Flipped upside-down, a 180-degree rotation
      */
     FLIPPED,
     /**
-     * Flipped upside-down + 45 degree rotation
+     * Flipped upside-down + 45-degree rotation
      */
     FLIPPED_45,
     /**
