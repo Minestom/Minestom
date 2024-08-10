@@ -96,7 +96,7 @@ public final class NetworkBuffer {
         return new NetworkBufferTypeImpl.RawBytesType(length);
     }
 
-    public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier) {
+    public static <T> @NotNull Type<T> Lazy(@NotNull Supplier<@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
@@ -109,9 +109,9 @@ public final class NetworkBuffer {
     final @Nullable ResizeStrategy resizeStrategy;
     final @Nullable Registries registries;
 
-    public NetworkBuffer(@NotNull ByteBuffer buffer,
-                         @Nullable ResizeStrategy resizeStrategy,
-                         @Nullable Registries registries) {
+    NetworkBuffer(@NotNull ByteBuffer buffer,
+                  @Nullable ResizeStrategy resizeStrategy,
+                  @Nullable Registries registries) {
         this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
         this.resizeStrategy = resizeStrategy;
         this.registries = registries;
@@ -201,11 +201,11 @@ public final class NetworkBuffer {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
         }
 
-        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull NetworkBuffer.Type<V> valueType, int maxSize) {
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType, int maxSize) {
             return new NetworkBufferTypeImpl.MapType<>(this, valueType, maxSize);
         }
 
-        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull NetworkBuffer.Type<V> valueType) {
+        default <V> @NotNull Type<Map<T, V>> mapValue(@NotNull Type<V> valueType) {
             return mapValue(valueType, Integer.MAX_VALUE);
         }
 
@@ -227,7 +227,7 @@ public final class NetworkBuffer {
     }
 
     public static @NotNull NetworkBuffer staticBuffer(int size, Registries registries) {
-        return NetworkBuffer.builder(size).registry(registries).build();
+        return builder(size).registry(registries).build();
     }
 
     public static @NotNull NetworkBuffer staticBuffer(int size) {
@@ -235,7 +235,7 @@ public final class NetworkBuffer {
     }
 
     public static @NotNull NetworkBuffer resizableBuffer(int initialSize, Registries registries) {
-        return NetworkBuffer.builder(initialSize)
+        return builder(initialSize)
                 .resizeStrategy(ResizeStrategy.DOUBLE)
                 .registry(registries)
                 .build();
