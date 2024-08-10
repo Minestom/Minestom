@@ -13,6 +13,7 @@ public class BatchOption {
     private boolean calculateInverse = false;
     private boolean unsafeApply = false;
     private boolean sendUpdate = true;
+    private boolean loadChunks = false;
 
     public BatchOption() {
     }
@@ -34,7 +35,7 @@ public class BatchOption {
      * Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.
      * <p>
      * This flag will determine the return value of {@link Batch#apply(Instance, Object)} (and other variants).
-     * If true, a {@link Batch} will be returned. Otherwise null will be returned.
+     * If true, a {@link Batch} will be returned. Otherwise, null will be returned.
      * <p>
      * Defaults to false.
      *
@@ -65,6 +66,20 @@ public class BatchOption {
 
     public boolean shouldSendUpdate() {
         return sendUpdate;
+    }
+
+    /**
+     * Gets if the batch will load chunks before applying blocks
+     * <p>
+     * If set, the batch will load the chunks in the instance before applying blocks.
+     * This can prevent NullPointerExceptions from occurring because the chunks do not exist while the batch is being placed.
+     * <p>
+     * Defaults to false.
+     *
+     * @return true if the batch should load chunks
+     */
+    public boolean shouldLoadChunks() {
+        return loadChunks;
     }
 
     /**
@@ -107,6 +122,18 @@ public class BatchOption {
     @Contract("_ -> this")
     public BatchOption setSendUpdate(boolean sendUpdate) {
         this.sendUpdate = sendUpdate;
+        return this;
+    }
+
+    /**
+     * @param loadChunks true to make this batch load chunks when applying to an instance.
+     * @return 'this' for chaining
+     * @see #shouldLoadChunks()
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public BatchOption setLoadChunks(boolean loadChunks) {
+        this.loadChunks = loadChunks;
         return this;
     }
 }
