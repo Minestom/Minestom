@@ -1,46 +1,33 @@
 package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Called every time a {@link Player} writes and sends something in the chat.
- * The event can be cancelled to do not send anything, and the format can be changed.
+ * The event can be cancelled to do not send anything, and the message can be changed.
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
-
     private final Player player;
     private final Collection<Player> recipients;
-    private String message;
-    private Function<PlayerChatEvent, Component> chatFormat;
+    private final String content;
+    private Component finalMessage;
 
     private boolean cancelled;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull Function<PlayerChatEvent, Component> defaultChatFormat,
-                           @NotNull String message) {
+                           @NotNull String content) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
-        this.chatFormat = defaultChatFormat;
-        this.message = message;
-    }
-
-    /**
-     * Changes the chat format.
-     *
-     * @param chatFormat the custom chat format
-     */
-    public void setChatFormat(@NotNull Function<PlayerChatEvent, Component> chatFormat) {
-        this.chatFormat = chatFormat;
+        this.content = content;
+        this.finalMessage = buildDefaultChatMessage();
     }
 
     /**
@@ -55,31 +42,30 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     }
 
     /**
-     * Gets the message sent.
+     * Gets the original message content sent by the player.
      *
      * @return the sender's message
      */
-    public @NotNull String getMessage() {
-        return message;
+    public @NotNull String getContent() {
+        return content;
     }
 
     /**
-     * Used to change the message.
+     * Gets the message format that will be sent.
+     *
+     * @return The chat message format.
+     */
+    public Component getFinalMessage() {
+        return finalMessage;
+    }
+
+    /**
+     * Used to change the message format.
      *
      * @param message the new message
      */
-    public void setMessage(@NotNull String message) {
-        this.message = message;
-    }
-
-    /**
-     * Used to retrieve the chat format for this message.
-     * <p>
-     *
-     * @return the chat format which will be used
-     */
-    public @NotNull Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
-        return chatFormat;
+    public void setFinalMessage(@NotNull Component message) {
+        this.finalMessage = message;
     }
 
     @Override
@@ -95,5 +81,15 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     @Override
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    private Component buildDefaultChatMessage() {
+        return Component.translatable("chat.type.text")
+                .arguments(
+                        Component.text(player.getUsername())
+                                .insertion(player.getUsername())
+                                .clickEvent(ClickEvent.suggestCommand("/msg " + player.getUsername() + " "))
+                                .hoverEvent(player),
+                        Component.text(content));
     }
 }
