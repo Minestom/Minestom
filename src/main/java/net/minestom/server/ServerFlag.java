@@ -23,6 +23,7 @@ public final class ServerFlag {
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
     public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
+    public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 262_143);
     public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 20);
     public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
