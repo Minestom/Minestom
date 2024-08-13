@@ -268,7 +268,7 @@ public final class PacketUtils {
         NetworkBuffer networkBuffer = NetworkBuffer.wrap(buffer, MinecraftServer.process());
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
-            final int lengthIndex = networkBuffer.skipWrite(3);
+            final int lengthIndex = networkBuffer.advanceWrite(3);
             networkBuffer.write(NetworkBuffer.VAR_INT, id);
             type.write(networkBuffer, packet);
             final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
@@ -277,8 +277,8 @@ public final class PacketUtils {
             return;
         }
         // Compressed format https://wiki.vg/Protocol#With_compression
-        final int compressedIndex = networkBuffer.skipWrite(3);
-        final int uncompressedIndex = networkBuffer.skipWrite(3);
+        final int compressedIndex = networkBuffer.advanceWrite(3);
+        final int uncompressedIndex = networkBuffer.advanceWrite(3);
 
         final int contentStart = networkBuffer.writeIndex();
         networkBuffer.write(NetworkBuffer.VAR_INT, id);
@@ -295,7 +295,7 @@ public final class PacketUtils {
                 deflater.deflate(buffer.position(contentStart));
                 deflater.reset();
 
-                networkBuffer.skipWrite(buffer.position() - contentStart);
+                networkBuffer.advanceWrite(buffer.position() - contentStart);
             }
         }
         // Packet header (Packet + Data Length)

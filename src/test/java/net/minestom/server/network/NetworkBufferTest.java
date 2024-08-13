@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -294,7 +295,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value, byte[] expected, @NotNull Action<T> action) {
-        var buffer = NetworkBuffer.resizableBuffer();
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -363,7 +364,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> values, byte @Nullable [] expected) {
-        var buffer = NetworkBuffer.resizableBuffer();
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
