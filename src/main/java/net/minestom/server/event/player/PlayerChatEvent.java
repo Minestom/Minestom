@@ -12,14 +12,13 @@ import java.util.Collection;
 
 /**
  * Called every time a {@link Player} writes and sends something in the chat.
- * The event can be cancelled to do not send anything, and the message can be changed.
+ * The event can be cancelled to not send anything, and the final message can be changed.
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private final Player player;
     private final Collection<Player> recipients;
     private final String content;
     private Component finalMessage;
-
     private boolean cancelled;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
@@ -31,11 +30,11 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     }
 
     /**
-     * Those are the players who will receive the message.
+     * Returns the players who will receive the message.
      * <p>
-     * It can be modified to add or remove recipient.
+     * It can be modified to add and remove recipients.
      *
-     * @return a modifiable list of message targets
+     * @return a modifiable list of the message's targets
      */
     public @NotNull Collection<Player> getRecipients() {
         return recipients;
@@ -51,18 +50,18 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     }
 
     /**
-     * Gets the message format that will be sent.
+     * Gets the final message component that will be sent.
      *
-     * @return The chat message format.
+     * @return the chat message component
      */
     public Component getFinalMessage() {
         return finalMessage;
     }
 
     /**
-     * Used to change the message format.
+     * Used to change the final message component.
      *
-     * @param message the new message
+     * @param message the new message component
      */
     public void setFinalMessage(@NotNull Component message) {
         this.finalMessage = message;

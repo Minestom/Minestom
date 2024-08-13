@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Player;
@@ -13,7 +12,6 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 public class ChatMessageListener {
     private static final CommandManager COMMAND_MANAGER = MinecraftServer.getCommandManager();
@@ -41,9 +39,14 @@ public class ChatMessageListener {
         // Call the event
         EventDispatcher.callCancellable(playerChatEvent, () -> {
             final Collection<Player> recipients = playerChatEvent.getRecipients();
+
             if (!recipients.isEmpty()) {
                 // delegate to the messenger to avoid sending messages we shouldn't be
-                Messenger.sendMessage(recipients, playerChatEvent.getFinalMessage(), ChatPosition.CHAT, player.getUuid());
+                Messenger.sendMessage(
+                        recipients,
+                        playerChatEvent.getFinalMessage(),
+                        ChatPosition.CHAT,
+                        player.getUuid());
             }
         });
     }
