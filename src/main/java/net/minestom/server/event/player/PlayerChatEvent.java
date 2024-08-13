@@ -87,7 +87,6 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
                 .arguments(
                         Component.text(player.getUsername())
                                 .insertion(player.getUsername())
-                                .clickEvent(ClickEvent.suggestCommand("/msg " + player.getUsername() + " "))
                                 .hoverEvent(player),
                         Component.text(content));
     }
