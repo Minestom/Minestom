@@ -1,7 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
@@ -12,6 +11,7 @@ import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,16 +20,14 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 /**
  * Represents the inventory of a {@link Player}, retrieved with {@link Player#getInventory()}.
  */
-public non-sealed class PlayerInventory extends AbstractInventory implements EquipmentHandler {
+public non-sealed class PlayerInventory extends AbstractInventory {
     public static final int INVENTORY_SIZE = 46;
     public static final int INNER_INVENTORY_SIZE = 36;
 
-    protected final Player player;
     private ItemStack cursorItem = ItemStack.AIR;
 
-    public PlayerInventory(@NotNull Player player) {
+    public PlayerInventory() {
         super(INVENTORY_SIZE);
-        this.player = player;
     }
 
     @Override
@@ -37,7 +35,8 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         cursorItem = ItemStack.AIR;
         super.clear();
         // Update equipments
-        this.player.sendPacketToViewersAndSelf(player.getEquipmentsPacket());
+
+        viewers.forEach(viewer -> viewer.sendPacketToViewersAndSelf(viewer.getEquipmentsPacket()));
     }
 
     @Override
@@ -45,35 +44,46 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         return INNER_INVENTORY_SIZE;
     }
 
-    private int getSlotId(@NotNull EquipmentSlot slot) {
+    @Override
+    public byte getWindowId() {
+        return 0;
+    }
+
+    private int getSlotId(@NotNull EquipmentSlot slot, byte heldSlot) {
         return switch (slot) {
-            case MAIN_HAND -> player.getHeldSlot();
+            case MAIN_HAND -> heldSlot;
             case OFF_HAND -> OFFHAND_SLOT;
             default -> slot.armorSlot();
         };
     }
 
-    @Override
-    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
-        if (slot == EquipmentSlot.BODY) return ItemStack.AIR;
-        return getItemStack(getSlotId(slot));
+    private @Nullable EquipmentSlot getEquipmentSlot(int slot, byte heldSlot) {
+        return switch (slot) {
+            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
+            case HELMET_SLOT -> EquipmentSlot.HELMET;
+            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
+            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
+            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
+            case BODY -> null;
+            default -> slot == heldSlot ? EquipmentSlot.MAIN_HAND : null;
+        };
     }
 
-    @Override
-    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot, byte heldSlot) {
+        if (slot == EquipmentSlot.BODY) return ItemStack.AIR;
+        return getItemStack(getSlotId(slot, heldSlot));
+    }
+
+    public void setEquipment(@NotNull EquipmentSlot slot, byte heldSlot, @NotNull ItemStack itemStack) {
         if (slot == EquipmentSlot.BODY)
             Check.fail("PlayerInventory does not support body equipment");
 
-        safeItemInsert(getSlotId(slot), itemStack);
+        safeItemInsert(getSlotId(slot, heldSlot), itemStack);
     }
 
-    /**
-     * Refreshes the player inventory by sending a {@link WindowItemsPacket} containing all.
-     * the inventory items
-     */
     @Override
-    public void update() {
-        this.player.sendPacket(createWindowItemsPacket());
+    public void update(@NotNull Player player) {
+        player.sendPacket(createWindowItemsPacket());
     }
 
     /**
@@ -93,34 +103,34 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
     public void setCursorItem(@NotNull ItemStack cursorItem) {
         if (this.cursorItem.equals(cursorItem)) return;
         this.cursorItem = cursorItem;
-        final SetSlotPacket setSlotPacket = SetSlotPacket.createCursorPacket(cursorItem);
-        this.player.sendPacket(setSlotPacket);
+        sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
     }
 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        final EquipmentSlot equipmentSlot = switch (slot) {
-            case HELMET_SLOT -> EquipmentSlot.HELMET;
-            case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
-            case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
-            case BOOTS_SLOT -> EquipmentSlot.BOOTS;
-            case OFFHAND_SLOT -> EquipmentSlot.OFF_HAND;
-            default -> slot == player.getHeldSlot() ? EquipmentSlot.MAIN_HAND : null;
-        };
-        if (equipmentSlot != null) {
+        for (Player player : getViewers()) {
+            final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
+            if (equipmentSlot == null) continue;
+
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
-            this.player.updateEquipmentAttributes(this.itemStacks[slot], itemStack, equipmentSlot);
         }
+
+        ItemStack oldItem = this.itemStacks[slot];
         this.itemStacks[slot] = itemStack;
 
-        if (sendPacket) {
-            // Sync equipment
-            if (equipmentSlot != null) this.player.syncEquipment(equipmentSlot);
-            // Refresh slot
-            sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
+        if (!sendPacket) return;
+
+        for (Player player : getViewers()) {
+            final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
+            if (equipmentSlot == null) continue;
+
+            player.updateEquipmentAttributes(oldItem, itemStack, equipmentSlot);
+            player.syncEquipment(equipmentSlot);
         }
+
+        sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
     /**
@@ -131,11 +141,15 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
      * @param itemStack the item stack in the slot
      */
     protected void sendSlotRefresh(short slot, ItemStack itemStack) {
-        var openInventory = player.getOpenInventory();
-        if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-            this.player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
-        } else if (openInventory == null || slot == OFFHAND_SLOT) {
-            this.player.sendPacket(new SetSlotPacket((byte) 0, 0, slot, itemStack));
+        SetSlotPacket defaultPacket = new SetSlotPacket((byte) 0, 0, slot, itemStack);
+
+        for (Player player : getViewers()) {
+            AbstractInventory openInventory = player.getOpenInventory();
+            if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
+                player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
+            } else if (openInventory == null || slot == OFFHAND_SLOT) {
+                player.sendPacket(defaultPacket);
+            }
         }
     }
 
