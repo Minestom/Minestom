@@ -454,10 +454,9 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    private void callClickEvent(@NotNull Player player, @Nullable AbstractInventory inventory, int slot,
+    private void callClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final Inventory eventInventory = inventory instanceof Inventory ? (Inventory) inventory : null;
-        EventDispatcher.call(new InventoryClickEvent(eventInventory, player, slot, clickType, clicked, cursor));
+        EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }
 
     public void clearCache(@NotNull Player player) {

@@ -1,11 +1,14 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.Viewable;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
-import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.CloseWindowPacket;
+import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.MathUtils;
@@ -14,16 +17,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.UnaryOperator;
 
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable
         permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
@@ -38,10 +40,58 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
 
     private final TagHandler tagHandler = TagHandler.newHandler();
 
+    // the players currently viewing this inventory
+    protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
+    protected final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
+
     protected AbstractInventory(int size) {
         this.size = size;
         this.itemStacks = new ItemStack[getSize()];
         Arrays.fill(itemStacks, ItemStack.AIR);
+    }
+
+    /**
+     * Gets this window id.
+     * <p>
+     * This is the id that the client will send to identify the affected inventory, mostly used by packets.
+     *
+     * @return the window id
+     */
+    public abstract byte getWindowId();
+
+    @Override
+    public @NotNull Set<Player> getViewers() {
+        return unmodifiableViewers;
+    }
+
+    @Override
+    public boolean addViewer(@NotNull Player player) {
+        if (!this.viewers.add(player)) return false;
+
+        update(player);
+        return false;
+    }
+
+    @Override
+    public boolean removeViewer(@NotNull Player player) {
+        if (!this.viewers.remove(player)) return false;
+
+        // Drop cursor item when closing inventory
+        ItemStack cursorItem = player.getInventory().getCursorItem();
+        player.getInventory().setCursorItem(ItemStack.AIR);
+
+        if (!cursorItem.isAir()) {
+            // Drop the item if it can not be added back to the inventory
+            if (!player.getInventory().addItemStack(cursorItem)) {
+                player.dropItem(cursorItem);
+            }
+        }
+
+        if (player.didCloseInventory()) {
+            player.sendPacket(new CloseWindowPacket(getWindowId()));
+        }
+
+        return true;
     }
 
     /**
@@ -78,11 +128,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
             UNSAFE_itemInsert(slot, itemStack, sendPacket);
         }
-        if (this instanceof PlayerInventory inv) {
-            EventDispatcher.call(new PlayerInventoryItemChangeEvent(inv.player, slot, previous, itemStack));
-        } else if (this instanceof Inventory inv) {
-            EventDispatcher.call(new InventoryItemChangeEvent(inv, slot, previous, itemStack));
-        }
+        EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));
     }
 
     protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
@@ -173,7 +219,21 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         update();
     }
 
-    public abstract void update();
+    /**
+     * Refreshes the inventory for all viewers.
+     */
+    public void update() {
+        this.viewers.forEach(this::update);
+    }
+
+    /**
+     * Refreshes the inventory for a specific viewer.
+     *
+     * @param player the player to update the inventory for
+     */
+    public void update(@NotNull Player player) {
+        player.sendPacket(new WindowItemsPacket(getWindowId(), 0, List.of(itemStacks), player.getInventory().getCursorItem()));
+    }
 
     /**
      * Gets the {@link ItemStack} at the specified slot.
