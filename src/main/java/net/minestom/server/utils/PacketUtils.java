@@ -199,9 +199,14 @@ public final class PacketUtils {
             try {
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
                 final int packetLength = readBuffer.read(VAR_INT);
+                if (readBuffer.readIndex() > readBuffer.writeIndex()) {
+                    // Can't read the packet length
+                    readBuffer.readIndex(beginMark);
+                    return 0;
+                }
                 final int readerStart = readBuffer.readIndex();
                 if (readBuffer.readableBytes() < packetLength) {
-                    // Integrity fail
+                    // Can't read the full packet
                     final int missingLength = packetLength - readBuffer.readableBytes();
                     readBuffer.readIndex(beginMark);
                     return missingLength;
@@ -230,7 +235,7 @@ public final class PacketUtils {
                 readBuffer.readIndex(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
                 readBuffer.readIndex(beginMark);
-                break;
+                return 0;
             }
         }
         return 0;

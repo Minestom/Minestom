@@ -275,11 +275,11 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
-            final int limit = impl(buffer).nioBuffer.limit();
-            int length = limit - buffer.readIndex();
+            int length = buffer.readableBytes();
             if (this.length != -1) {
                 length = Math.min(length, this.length);
             }
+            if (length == 0) return new byte[0];
             assert length > 0 : "Invalid remaining: " + length;
             final byte[] bytes = new byte[length];
             impl(buffer).nioBuffer.get(buffer.readIndex(), bytes);
@@ -464,6 +464,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
+            if (length == 0) return new byte[0];
             final int remaining = buffer.size();
             Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
             return buffer.read(FixedRawBytes(length));

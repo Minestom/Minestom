@@ -156,6 +156,7 @@ public class PacketWriteReadTest {
         CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void serverTest() throws NoSuchFieldException, IllegalAccessException {
         for (var packet : SERVER_PACKETS) {
@@ -165,6 +166,7 @@ public class PacketWriteReadTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void clientTest() throws NoSuchFieldException, IllegalAccessException {
         for (var packet : CLIENT_PACKETS) {
