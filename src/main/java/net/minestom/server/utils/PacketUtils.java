@@ -24,7 +24,6 @@ import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
-import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -41,7 +40,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
-import java.util.zip.Inflater;
+
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
  * Utils class for packets. Including writing a {@link ServerPacket} into a {@link ByteBuffer}
@@ -119,7 +119,6 @@ public final class PacketUtils {
      * Note: {@link ServerPacket.ComponentHolding}s are not translated inside a {@link CachedPacket}.
      *
      * @see CachedPacket#body(ConnectionState)
-     * @see PlayerSocketConnection#writePacketSync(SendablePacket, boolean)
      */
     static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
         if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
@@ -193,60 +192,57 @@ public final class PacketUtils {
     }
 
     @ApiStatus.Internal
-    public static @Nullable BinaryBuffer readPackets(@NotNull BinaryBuffer readBuffer, boolean compressed,
-                                                     BiConsumer<Integer, ByteBuffer> payloadConsumer) throws DataFormatException {
-        BinaryBuffer remaining = null;
-        ByteBuffer pool = ObjectPool.PACKET_POOL.get();
+    public static int readPackets(@NotNull NetworkBuffer readBuffer, boolean compressed,
+                                  BiConsumer<Integer, NetworkBuffer> payloadConsumer) throws DataFormatException {
         while (readBuffer.readableBytes() > 0) {
-            final var beginMark = readBuffer.mark();
+            final int beginMark = readBuffer.readIndex();
             try {
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
-                final int packetLength = readBuffer.readVarInt();
-                final int readerStart = readBuffer.readerOffset();
-                if (!readBuffer.canRead(packetLength)) {
+                final int packetLength = readBuffer.read(VAR_INT);
+                final int readerStart = readBuffer.readIndex();
+                if (readBuffer.readableBytes() < packetLength) {
                     // Integrity fail
-                    throw new BufferUnderflowException();
+                    final int missingLength = packetLength - readBuffer.readableBytes();
+                    readBuffer.readIndex(beginMark);
+                    return missingLength;
                 }
                 // Read packet https://wiki.vg/Protocol#Packet_format
-                BinaryBuffer content = readBuffer;
-                int decompressedSize = packetLength;
+                NetworkBuffer content = readBuffer.slice(readBuffer.readIndex(), packetLength);
                 if (compressed) {
-                    final int dataLength = readBuffer.readVarInt();
-                    final int payloadLength = packetLength - (readBuffer.readerOffset() - readerStart);
-                    if (payloadLength < 0) {
-                        throw new DataFormatException("Negative payload length " + payloadLength);
-                    }
-                    if (dataLength == 0) {
-                        // Data is too small to be compressed, payload is following
-                        decompressedSize = payloadLength;
+                    final int dataLength = content.read(VAR_INT);
+                    if (dataLength > 0) {
+                        ByteBuffer pool = ObjectPool.PACKET_POOL.get();
+                        try {
+                            NetworkBuffer decompressed = NetworkBuffer.wrap(pool);
+                            decompressed.clear();
+                            content.decompress(content.readIndex(), content.readableBytes(), decompressed);
+                            readUncompressedPacket(decompressed, payloadConsumer);
+                        } finally {
+                            ObjectPool.PACKET_POOL.add(pool);
+                        }
                     } else {
-                        // Decompress to content buffer
-                        content = BinaryBuffer.wrap(pool);
-                        decompressedSize = dataLength;
-                        Inflater inflater = new Inflater(); // TODO: Pool?
-                        inflater.setInput(readBuffer.asByteBuffer(readBuffer.readerOffset(), payloadLength));
-                        inflater.inflate(content.asByteBuffer(0, dataLength));
-                        inflater.reset();
+                        readUncompressedPacket(content, payloadConsumer);
                     }
-                }
-                // Slice packet
-                ByteBuffer payload = content.asByteBuffer(content.readerOffset(), decompressedSize);
-                final int packetId = Utils.readVarInt(payload);
-                try {
-                    payloadConsumer.accept(packetId, payload);
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                } else {
+                    readUncompressedPacket(content, payloadConsumer);
                 }
                 // Position buffer to read the next packet
-                readBuffer.readerOffset(readerStart + packetLength);
+                readBuffer.readIndex(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
-                readBuffer.reset(beginMark);
-                remaining = BinaryBuffer.copy(readBuffer);
+                readBuffer.readIndex(beginMark);
                 break;
             }
         }
-        ObjectPool.PACKET_POOL.add(pool);
-        return remaining;
+        return 0;
+    }
+
+    private static void readUncompressedPacket(@NotNull NetworkBuffer buffer, BiConsumer<Integer, NetworkBuffer> payloadConsumer) {
+        final int packetId = buffer.read(VAR_INT);
+        try {
+            payloadConsumer.accept(packetId, buffer);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static void writeFramedPacket(@NotNull ConnectionState state,
@@ -269,7 +265,7 @@ public final class PacketUtils {
         if (compressionThreshold <= 0) {
             // Uncompressed format https://wiki.vg/Protocol#Without_compression
             final int lengthIndex = networkBuffer.advanceWrite(3);
-            networkBuffer.write(NetworkBuffer.VAR_INT, id);
+            networkBuffer.write(VAR_INT, id);
             type.write(networkBuffer, packet);
             final int finalSize = networkBuffer.writeIndex() - (lengthIndex + 3);
             Utils.writeVarIntHeader(buffer, lengthIndex, finalSize);
@@ -281,7 +277,7 @@ public final class PacketUtils {
         final int uncompressedIndex = networkBuffer.advanceWrite(3);
 
         final int contentStart = networkBuffer.writeIndex();
-        networkBuffer.write(NetworkBuffer.VAR_INT, id);
+        networkBuffer.write(VAR_INT, id);
         type.write(networkBuffer, packet);
         final int packetSize = networkBuffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;

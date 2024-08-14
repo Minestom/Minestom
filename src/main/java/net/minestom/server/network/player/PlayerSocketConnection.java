@@ -65,9 +65,10 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
+    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(1024, MinecraftServer.process());
+
     private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
     private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
-    private BinaryBuffer cacheBuffer;
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
@@ -79,31 +80,29 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
-    public void processPackets(BinaryBuffer readBuffer, PacketParser.Client packetParser) {
-        // Decrypt data
-        {
-            final EncryptionContext encryptionContext = this.encryptionContext;
-            if (encryptionContext != null) {
-                ByteBuffer input = readBuffer.asByteBuffer(0, readBuffer.writerOffset());
-                try {
-                    encryptionContext.decrypt().update(input, input.duplicate());
-                } catch (ShortBufferException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                    return;
-                }
-            }
+    public void read(PacketParser.Client packetParser) throws IOException {
+        NetworkBuffer readBuffer = this.readBuffer;
+        final int writeIndex = readBuffer.writeIndex();
+        final int length = readBuffer.readChannel(channel);
+        // Decrypt newly read data
+        final EncryptionContext encryptionContext = this.encryptionContext;
+        if (encryptionContext != null) {
+            readBuffer.decrypt(encryptionContext.decrypt, writeIndex, length);
         }
+        // Process packets
+        processPackets(readBuffer, packetParser);
+    }
+
+    private void processPackets(NetworkBuffer readBuffer, PacketParser.Client packetParser) {
         // Read all packets
         try {
-            this.cacheBuffer = PacketUtils.readPackets(readBuffer, compressed,
+            final int missingLength = PacketUtils.readPackets(readBuffer, compressed,
                     (id, payload) -> {
                         if (!isOnline())
                             return; // Prevent packet corruption
-                        ClientPacket packet = null;
+                        ClientPacket packet;
                         try {
-                            NetworkBuffer networkBuffer = NetworkBuffer.wrap(payload, MinecraftServer.process());
-                            packet = packetParser.parse(getConnectionState(), id, networkBuffer);
-                            payload.position(networkBuffer.readIndex());
+                            packet = packetParser.parse(getConnectionState(), id, payload);
                             // Process the packet
                             if (packet.processImmediately()) {
                                 MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
@@ -117,23 +116,23 @@ public class PlayerSocketConnection extends PlayerConnection {
                             // Error while reading the packet
                             MinecraftServer.getExceptionManager().handleException(e);
                         } finally {
-                            if (payload.position() != payload.limit()) {
+                            if (payload.readableBytes() != 0) {
                                 var info = packetParser.stateRegistry(getConnectionState()).packetInfo(id);
-                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({}) {}", info.packetClass().getSimpleName(), Integer.toHexString(id), payload, packet);
+                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})", info.packetClass().getSimpleName(), Integer.toHexString(id), payload);
                             }
                         }
                     });
+            if (missingLength > 0) {
+                // Resize for next read
+                final int newSize = readBuffer.size() + missingLength;
+                readBuffer.resize(newSize);
+            } else {
+                // Compact in case of incomplete read
+                readBuffer.compact();
+            }
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             disconnect();
-        }
-    }
-
-    public void consumeCache(BinaryBuffer buffer) {
-        final BinaryBuffer cache = this.cacheBuffer;
-        if (cache != null) {
-            buffer.write(cache);
-            this.cacheBuffer = null;
         }
     }
 

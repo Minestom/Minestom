@@ -7,9 +7,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import javax.crypto.Cipher;
+import javax.crypto.ShortBufferException;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.nio.channels.ReadableByteChannel;
 import java.util.function.Consumer;
+import java.util.zip.DataFormatException;
+import java.util.zip.Inflater;
 
 final class NetworkBufferImpl implements NetworkBuffer {
     ByteBuffer nioBuffer;
@@ -74,6 +80,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.readIndex = readIndex;
     }
 
+    @Override
+    public void index(int readIndex, int writeIndex) {
+        this.readIndex = readIndex;
+        this.writeIndex = writeIndex;
+    }
+
     public int advanceWrite(int length) {
         final int oldWriteIndex = writeIndex;
         writeIndex += length;
@@ -120,14 +132,59 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
+    public void compact() {
+        nioBuffer.position(readIndex);
+        nioBuffer.limit(writeIndex);
+        nioBuffer.compact();
+        writeIndex -= readIndex;
+        readIndex = 0;
+    }
+
+    @Override
+    public NetworkBuffer slice(int index, int length) {
+        NetworkBufferImpl slice = new NetworkBufferImpl(nioBuffer.slice(index, length), resizeStrategy, registries);
+        slice.readIndex = 0;
+        slice.writeIndex = length;
+        return slice;
+    }
+
+    @Override
+    public int readChannel(ReadableByteChannel channel) throws IOException {
+        final int count = channel.read(nioBuffer.slice(writeIndex, size() - writeIndex));
+        if (count == -1) {
+            // EOS
+            throw new IOException("Disconnected");
+        }
+        advanceWrite(count);
+        return count;
+    }
+
+    @Override
+    public void decrypt(Cipher cipher, int start, int length) {
+        ByteBuffer input = nioBuffer.slice(start, length);
+        try {
+            cipher.update(input, input.duplicate());
+        } catch (ShortBufferException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void decompress(int start, int length, NetworkBuffer output) throws DataFormatException {
+        Inflater inflater = new Inflater(); // TODO: Pool?
+        inflater.setInput(nioBuffer.slice(start, length));
+        ByteBuffer outputBuffer = impl(output).nioBuffer.slice(
+                output.writeIndex(),
+                output.size() - output.writeIndex());
+        final int bytes = inflater.inflate(outputBuffer);
+        output.advanceWrite(bytes);
+        inflater.reset();
+    }
+
+    @Override
     public String toString() {
-        return "NetworkBufferImpl{" +
-                "readIndex=" + readIndex +
-                ", writeIndex=" + writeIndex +
-                ", registries=" + registries +
-                ", resizeStrategy=" + resizeStrategy +
-                ", size=" + size() +
-                '}';
+        return String.format("NetworkBufferImpl{r%d|w%d->%d, registries=%s, resizeStrategy=%s}",
+                readIndex, writeIndex, size(), registries != null, resizeStrategy != null);
     }
 
     static final class Builder implements NetworkBuffer.Builder {
@@ -156,5 +213,9 @@ final class NetworkBufferImpl implements NetworkBuffer {
             ByteBuffer buffer = ByteBuffer.allocateDirect(initialSize);
             return new NetworkBufferImpl(buffer, resizeStrategy, registries);
         }
+    }
+
+    static NetworkBufferImpl impl(NetworkBuffer buffer) {
+        return (NetworkBufferImpl) buffer;
     }
 }

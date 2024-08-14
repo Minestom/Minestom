@@ -15,13 +15,17 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import javax.crypto.Cipher;
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ReadableByteChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.zip.DataFormatException;
 
 public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
@@ -113,6 +117,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void readIndex(int readIndex);
 
+    void index(int readIndex, int writeIndex);
+
     int advanceWrite(int length);
 
     int advanceRead(int length);
@@ -124,6 +130,16 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void resize(int newSize);
 
     void ensureSize(int length);
+
+    void compact();
+
+    NetworkBuffer slice(int index, int length);
+
+    int readChannel(ReadableByteChannel channel) throws IOException;
+
+    void decrypt(Cipher cipher, int start, int length);
+
+    void decompress(int start, int length, NetworkBuffer output) throws DataFormatException;
 
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);

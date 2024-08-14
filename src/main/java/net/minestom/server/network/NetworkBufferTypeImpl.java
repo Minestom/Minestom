@@ -26,6 +26,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     int SEGMENT_BITS = 0x7F;
@@ -783,9 +784,5 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
             return key;
         }
-    }
-
-    static NetworkBufferImpl impl(NetworkBuffer buffer) {
-        return (NetworkBufferImpl) buffer;
     }
 }
