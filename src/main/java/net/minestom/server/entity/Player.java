@@ -2291,63 +2291,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+        return inventory.getEquipment(slot);
     }
 
     @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getHelmet() {
-        return inventory.getHelmet();
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getChestplate() {
-        return inventory.getChestplate();
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getLeggings() {
-        return inventory.getLeggings();
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getBoots() {
-        return inventory.getBoots();
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
+    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+        inventory.setEquipment(slot, itemStack);
     }
 
     @Override
