@@ -2,9 +2,7 @@ package net.minestom.server.network;
 
 import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
-import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Utils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -21,14 +19,11 @@ public class SocketReadTest {
     public void complete(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-
-        var wrapper = NetworkBuffer.wrap(buffer);
-        wrapper.index(0, buffer.position());
+        var buffer = PacketUtils.PACKET_POOL.get();
+        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0X0A, packet, compressed ? 256 : 0);
 
         List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
+        var remaining = PacketUtils.readPackets(buffer, compressed,
                 (integer, payload) -> packets.add(Pair.of(integer, payload)));
         assertEquals(0, remaining);
 
@@ -45,15 +40,12 @@ public class SocketReadTest {
     public void completeTwo(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-
-        var wrapper = NetworkBuffer.wrap(buffer);
-        wrapper.index(0, buffer.position());
+        var buffer = PacketUtils.PACKET_POOL.get();
+        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
 
         List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
+        var remaining = PacketUtils.readPackets(buffer, compressed,
                 (integer, payload) -> packets.add(Pair.of(integer, payload)));
         assertEquals(0, remaining);
 
@@ -73,17 +65,14 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        Utils.writeVarInt(buffer, 200); // incomplete 200 bytes packet
-
-        var wrapper = NetworkBuffer.wrap(buffer);
-        wrapper.index(0, buffer.position());
+        var buffer = PacketUtils.PACKET_POOL.get();
+        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
         List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
+        var remaining = PacketUtils.readPackets(buffer, compressed,
                 (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertEquals(Utils.getVarIntSize(200), wrapper.readableBytes());
+        assertEquals(getVarIntSize(200), buffer.readableBytes());
         assertEquals(200, remaining);
 
         assertEquals(1, packets.size());
@@ -101,17 +90,14 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        buffer.put((byte) -85); // incomplete var-int length
-
-        var wrapper = NetworkBuffer.wrap(buffer);
-        wrapper.index(0, buffer.position());
+        var buffer = PacketUtils.PACKET_POOL.get();
+        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
+        var remaining = PacketUtils.readPackets(buffer, compressed,
                 (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertEquals(1, wrapper.readableBytes());
+        assertEquals(1, buffer.readableBytes());
 
         assertEquals(1, packets.size());
         var rawPacket = packets.getFirst();
@@ -119,5 +105,13 @@ public class SocketReadTest {
         var readPacket = ClientPluginMessagePacket.SERIALIZER.read(rawPacket.right());
         assertEquals("channel", readPacket.channel());
         assertEquals(2000, readPacket.data().length);
+    }
+
+    private static int getVarIntSize(int input) {
+        return (input & 0xFFFFFF80) == 0
+                ? 1 : (input & 0xFFFFC000) == 0
+                ? 2 : (input & 0xFFE00000) == 0
+                ? 3 : (input & 0xF0000000) == 0
+                ? 4 : 5;
     }
 }

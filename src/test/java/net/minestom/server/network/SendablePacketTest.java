@@ -34,7 +34,7 @@ public class SendablePacketTest {
 
         var buffer = PacketUtils.allocateTrimmedPacket(ConnectionState.PLAY, packet);
         var cachedBuffer = cached.body(ConnectionState.PLAY);
-        assertEquals(buffer.body(), cachedBuffer);
+        assertTrue(NetworkBuffer.equals(buffer.body(), cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
         assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);

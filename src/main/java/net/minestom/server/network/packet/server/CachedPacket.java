@@ -1,14 +1,14 @@
 package net.minestom.server.network.packet.server;
 
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.PacketUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.SoftReference;
-import java.nio.ByteBuffer;
 import java.util.function.Supplier;
 
 /**
@@ -40,7 +40,7 @@ public final class CachedPacket implements SendablePacket {
         return cache != null ? cache.packet() : packetSupplier.get();
     }
 
-    public @Nullable ByteBuffer body(@NotNull ConnectionState state) {
+    public @Nullable NetworkBuffer body(@NotNull ConnectionState state) {
         FramedPacket cache = updatedCache(state);
         return cache != null ? cache.body() : null;
     }

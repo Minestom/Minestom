@@ -1,8 +1,5 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.ServerFlag;
-import net.minestom.server.network.socket.Server;
-import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -10,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.lang.ref.Cleaner;
 import java.lang.ref.SoftReference;
-import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
@@ -22,15 +18,12 @@ import java.util.function.UnaryOperator;
 public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
 
-    public static final ObjectPool<BinaryBuffer> BUFFER_POOL = new ObjectPool<>(() -> BinaryBuffer.ofSize(ServerFlag.POOLED_BUFFER_SIZE), BinaryBuffer::clear);
-    public static final ObjectPool<ByteBuffer> PACKET_POOL = new ObjectPool<>(() -> ByteBuffer.allocateDirect(ServerFlag.MAX_PACKET_SIZE), ByteBuffer::clear);
-
     private final Cleaner cleaner = Cleaner.create();
     private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
-    ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+    public ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }

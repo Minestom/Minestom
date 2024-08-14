@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import org.jetbrains.annotations.NotNull;
@@ -13,8 +14,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SocketChannel;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 final class NetworkBufferImpl implements NetworkBuffer {
@@ -26,6 +30,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     final @Nullable ResizeStrategy resizeStrategy;
     final @Nullable Registries registries;
+    boolean readOnly;
 
     NetworkBufferImpl(@NotNull ByteBuffer buffer,
                       @Nullable ResizeStrategy resizeStrategy,
@@ -36,9 +41,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
         this.readIndex = buffer.position();
         this.writeIndex = buffer.position();
+        buffer.limit(buffer.capacity());
     }
 
     public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
+        assertReadOnly(this);
         type.write(this, value);
     }
 
@@ -46,8 +53,36 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return type.read(this);
     }
 
+    @Override
+    public <T> void writeAt(int index, @NotNull Type<T> type, @UnknownNullability T value) {
+        assertReadOnly(this);
+        final int oldWriteIndex = writeIndex;
+        writeIndex = index;
+        try {
+            write(type, value);
+        } finally {
+            writeIndex = oldWriteIndex;
+        }
+    }
+
+    @Override
+    public <T> @UnknownNullability T readAt(int index, @NotNull Type<T> type) {
+        final int oldReadIndex = readIndex;
+        readIndex = index;
+        try {
+            return read(type);
+        } finally {
+            readIndex = oldReadIndex;
+        }
+    }
+
     public void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length) {
         this.nioBuffer.get(srcOffset, dest, destOffset, length);
+    }
+
+    @Override
+    public void copyTo(int srcOffset, @NotNull ByteBuffer dest, int destOffset, int length) {
+        dest.put(destOffset, nioBuffer, srcOffset, length);
     }
 
     public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
@@ -108,6 +143,12 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return nioBuffer.capacity();
     }
 
+    @Override
+    public void readOnly() {
+        this.readOnly = true;
+        this.nioBuffer = nioBuffer.asReadOnlyBuffer();
+    }
+
     public void resize(int newSize) {
         ByteBuffer newBuffer = ByteBuffer.allocateDirect(newSize);
         nioBuffer.position(0);
@@ -133,6 +174,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void compact() {
+        assertReadOnly(this);
         nioBuffer.position(readIndex);
         nioBuffer.limit(writeIndex);
         nioBuffer.compact();
@@ -145,12 +187,29 @@ final class NetworkBufferImpl implements NetworkBuffer {
         NetworkBufferImpl slice = new NetworkBufferImpl(nioBuffer.slice(index, length), resizeStrategy, registries);
         slice.readIndex = 0;
         slice.writeIndex = length;
+        slice.readOnly = readOnly;
         return slice;
     }
 
     @Override
+    public NetworkBuffer copy() {
+        ByteBuffer copy = ByteBuffer.allocateDirect(nioBuffer.capacity());
+        copy.put(nioBuffer.duplicate());
+        return new NetworkBufferImpl(copy, resizeStrategy, registries);
+    }
+
+    @Override
+    public NetworkBuffer copy(int index, int length) {
+        ByteBuffer copy = ByteBuffer.allocateDirect(length);
+        copy.put(nioBuffer.slice(index, length).duplicate());
+        return new NetworkBufferImpl(copy, resizeStrategy, registries);
+    }
+
+    @Override
     public int readChannel(ReadableByteChannel channel) throws IOException {
-        final int count = channel.read(nioBuffer.slice(writeIndex, size() - writeIndex));
+        assertReadOnly(this);
+        var buffer = nioBuffer.slice(writeIndex, size() - writeIndex);
+        final int count = channel.read(buffer);
         if (count == -1) {
             // EOS
             throw new IOException("Disconnected");
@@ -160,7 +219,21 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public void decrypt(Cipher cipher, int start, int length) {
+    public boolean writeChannel(SocketChannel channel) throws IOException {
+        var buffer = nioBuffer.slice(readIndex, writeIndex - readIndex);
+        if (!buffer.hasRemaining())
+            return true; // Nothing to write
+        final int count = channel.write(buffer);
+        if (count == -1) {
+            // EOS
+            throw new IOException("Disconnected");
+        }
+        advanceRead(count);
+        return !buffer.hasRemaining();
+    }
+
+    @Override
+    public void cipher(Cipher cipher, int start, int length) {
         ByteBuffer input = nioBuffer.slice(start, length);
         try {
             cipher.update(input, input.duplicate());
@@ -169,22 +242,75 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
+    private static final ObjectPool<Deflater> DEFLATER_POOL = new ObjectPool<>(Deflater::new, UnaryOperator.identity());
+    private static final ObjectPool<Inflater> INFLATER_POOL = new ObjectPool<>(Inflater::new, UnaryOperator.identity());
+
     @Override
-    public void decompress(int start, int length, NetworkBuffer output) throws DataFormatException {
-        Inflater inflater = new Inflater(); // TODO: Pool?
-        inflater.setInput(nioBuffer.slice(start, length));
-        ByteBuffer outputBuffer = impl(output).nioBuffer.slice(
+    public int compress(int start, int length, NetworkBuffer output) {
+        assertReadOnly(output);
+        ByteBuffer src = this.nioBuffer;
+        ByteBuffer dst = impl(output).nioBuffer;
+
+        ByteBuffer input = src.slice(start, length);
+        ByteBuffer outputBuffer = dst.slice(
                 output.writeIndex(),
                 output.size() - output.writeIndex());
-        final int bytes = inflater.inflate(outputBuffer);
-        output.advanceWrite(bytes);
-        inflater.reset();
+
+        Deflater deflater = DEFLATER_POOL.get();
+        try {
+            deflater.setInput(input);
+            deflater.finish();
+            final int bytes = deflater.deflate(outputBuffer);
+            deflater.reset();
+            output.advanceWrite(bytes);
+            return bytes;
+        } finally {
+            DEFLATER_POOL.add(deflater);
+        }
+    }
+
+    @Override
+    public int decompress(int start, int length, NetworkBuffer output) throws DataFormatException {
+        assertReadOnly(output);
+        Inflater inflater = INFLATER_POOL.get();
+        try {
+            inflater.setInput(nioBuffer.slice(start, length));
+            ByteBuffer outputBuffer = impl(output).nioBuffer.slice(
+                    output.writeIndex(),
+                    output.size() - output.writeIndex());
+            final int bytes = inflater.inflate(outputBuffer);
+            output.advanceWrite(bytes);
+            inflater.reset();
+            return bytes;
+        } finally {
+            INFLATER_POOL.add(inflater);
+        }
     }
 
     @Override
     public String toString() {
         return String.format("NetworkBufferImpl{r%d|w%d->%d, registries=%s, resizeStrategy=%s}",
                 readIndex, writeIndex, size(), registries != null, resizeStrategy != null);
+    }
+
+    static void copy(NetworkBuffer srcBuffer, int srcOffset,
+                     NetworkBuffer dstBuffer, int dstOffset, int length) {
+        assertReadOnly(dstBuffer);
+        ByteBuffer src = impl(srcBuffer).nioBuffer;
+        ByteBuffer dst = impl(dstBuffer).nioBuffer;
+        dst.put(dstOffset, src, srcOffset, length);
+    }
+
+    public static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+        ByteBuffer nioBuffer1 = impl(buffer1).nioBuffer.slice(0, buffer1.size());
+        ByteBuffer nioBuffer2 = impl(buffer2).nioBuffer.slice(0, buffer2.size());
+        return nioBuffer1.equals(nioBuffer2);
+    }
+
+    static void assertReadOnly(NetworkBuffer buffer) {
+        if (impl(buffer).readOnly) {
+            throw new UnsupportedOperationException("Buffer is read-only");
+        }
     }
 
     static final class Builder implements NetworkBuffer.Builder {

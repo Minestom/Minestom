@@ -19,6 +19,7 @@ import javax.crypto.Cipher;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SocketChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
@@ -103,7 +104,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T read(@NotNull Type<T> type);
 
+    <T> void writeAt(int index, @NotNull Type<T> type, @UnknownNullability T value);
+
+    <T> @UnknownNullability T readAt(int index, @NotNull Type<T> type);
+
     void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length);
+
+    void copyTo(int srcOffset, @NotNull ByteBuffer dest, int destOffset, int length);
 
     byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
 
@@ -127,6 +134,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     int size();
 
+    void readOnly();
+
     void resize(int newSize);
 
     void ensureSize(int length);
@@ -135,11 +144,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     NetworkBuffer slice(int index, int length);
 
+    NetworkBuffer copy(int index, int length);
+
+    NetworkBuffer copy();
+
     int readChannel(ReadableByteChannel channel) throws IOException;
 
-    void decrypt(Cipher cipher, int start, int length);
+    boolean writeChannel(SocketChannel channel) throws IOException;
 
-    void decompress(int start, int length, NetworkBuffer output) throws DataFormatException;
+    void cipher(Cipher cipher, int start, int length);
+
+    int compress(int start, int length, NetworkBuffer output);
+
+    int decompress(int start, int length, NetworkBuffer output) throws DataFormatException;
 
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
@@ -252,5 +269,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
         return makeArray(type, value, null);
+    }
+
+    static void copy(NetworkBuffer srcBuffer, int srcOffset,
+                     NetworkBuffer dstBuffer, int dstOffset, int length) {
+        NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
+    }
+
+    static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
+        return NetworkBufferImpl.equals(buffer1, buffer2);
     }
 }

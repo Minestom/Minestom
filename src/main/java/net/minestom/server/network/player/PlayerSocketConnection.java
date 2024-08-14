@@ -7,18 +7,16 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
-import net.minestom.server.network.socket.Worker;
-import net.minestom.server.utils.ObjectPool;
 import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.binary.BinaryBuffer;
 import net.minestom.server.utils.validate.Check;
-import org.jctools.queues.MessagePassingQueue;
+import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -27,14 +25,13 @@ import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
-import javax.crypto.ShortBufferException;
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.ByteBuffer;
-import java.nio.channels.ClosedChannelException;
+import java.nio.BufferOverflowException;
 import java.nio.channels.SocketChannel;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Collection;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.zip.DataFormatException;
 
 /**
@@ -45,14 +42,9 @@ import java.util.zip.DataFormatException;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
-    private static final ObjectPool<BinaryBuffer> POOL = ObjectPool.BUFFER_POOL;
 
-    private final Worker worker;
-    private final MessagePassingQueue<Runnable> workerQueue;
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
-
-    private volatile boolean compressed = false;
 
     //Could be null. Only used for Mojang Auth
     private volatile EncryptionContext encryptionContext;
@@ -65,17 +57,16 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
-    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(1024, MinecraftServer.process());
-
-    private final List<BinaryBuffer> waitingBuffers = new ArrayList<>();
-    private final AtomicReference<BinaryBuffer> tickBuffer = new AtomicReference<>(POOL.get());
+    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(260000, MinecraftServer.process());
+    private final MpscUnboundedXaddArrayQueue<Receivable> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
+    private final AtomicLong sentPacketCounter = new AtomicLong();
+    private volatile boolean compressed = false;
+    private volatile long compressionStart = Long.MAX_VALUE;
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
-    public PlayerSocketConnection(@NotNull Worker worker, @NotNull SocketChannel channel, SocketAddress remoteAddress) {
+    public PlayerSocketConnection(@NotNull SocketChannel channel, SocketAddress remoteAddress) {
         super();
-        this.worker = worker;
-        this.workerQueue = worker.queue();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
     }
@@ -87,7 +78,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Decrypt newly read data
         final EncryptionContext encryptionContext = this.encryptionContext;
         if (encryptionContext != null) {
-            readBuffer.decrypt(encryptionContext.decrypt, writeIndex, length);
+            readBuffer.cipher(encryptionContext.decrypt(), writeIndex, length);
         }
         // Process packets
         processPackets(readBuffer, packetParser);
@@ -154,35 +145,34 @@ public class PlayerSocketConnection extends PlayerConnection {
      */
     public void startCompression() {
         Check.stateCondition(compressed, "Compression is already enabled!");
+        this.compressionStart = sentPacketCounter.get();
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
         sendPacket(new SetCompressionPacket(threshold));
         this.compressed = true;
     }
 
+    sealed interface Receivable {
+        record Packet(SendablePacket packet) implements Receivable {
+        }
+
+        record Buffer(NetworkBuffer buffer, int index, int length) implements Receivable {
+        }
+    }
+
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        final boolean compressed = this.compressed;
-        this.workerQueue.relaxedOffer(() -> writePacketSync(packet, compressed));
+        this.packetQueue.relaxedOffer(new Receivable.Packet(packet));
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
-        final List<SendablePacket> packetsCopy = List.copyOf(packets);
-        final boolean compressed = this.compressed;
-        this.workerQueue.relaxedOffer(() -> {
-            for (SendablePacket packet : packetsCopy) writePacketSync(packet, compressed);
-        });
+        for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(new Receivable.Packet(packet));
     }
 
     @ApiStatus.Internal
-    public void write(@NotNull ByteBuffer buffer, int index, int length) {
-        this.workerQueue.relaxedOffer(() -> writeBufferSync(buffer, index, length));
-    }
-
-    @ApiStatus.Internal
-    public void write(@NotNull ByteBuffer buffer) {
-        write(buffer, buffer.position(), buffer.remaining());
+    public void write(@NotNull NetworkBuffer buffer, int index, int length) {
+        this.packetQueue.relaxedOffer(new Receivable.Buffer(buffer, index, length));
     }
 
     @Override
@@ -200,18 +190,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     @ApiStatus.Internal
     public void setRemoteAddress(@NotNull SocketAddress remoteAddress) {
         this.remoteAddress = remoteAddress;
-    }
-
-    @Override
-    public void disconnect() {
-        super.disconnect();
-        this.workerQueue.relaxedOffer(() -> {
-            this.worker.disconnect(this, channel);
-            final BinaryBuffer tick = tickBuffer.getAndSet(null);
-            if (tick != null) POOL.add(tick);
-            for (BinaryBuffer buffer : waitingBuffers) POOL.add(buffer);
-            this.waitingBuffers.clear();
-        });
     }
 
     public @NotNull SocketChannel getChannel() {
@@ -301,110 +279,110 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private void writePacketSync(SendablePacket packet, boolean compressed) {
-        if (!channel.isConnected()) return;
-        final Player player = getPlayer();
-        // Outgoing event
-        if (player != null && outgoing.hasListener()) {
-            final ServerPacket serverPacket = SendablePacket.extractServerPacket(getConnectionState(), packet);
-            PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
-            outgoing.call(event);
-            if (event.isCancelled()) return;
-        }
-        // Write packet
-        if (packet instanceof ServerPacket serverPacket) {
-            writeServerPacketSync(serverPacket, compressed);
-        } else if (packet instanceof FramedPacket framedPacket) {
-            var buffer = framedPacket.body();
-            writeBufferSync(buffer, 0, buffer.limit());
-        } else if (packet instanceof CachedPacket cachedPacket) {
-            var buffer = cachedPacket.body(getConnectionState());
-            if (buffer != null) writeBufferSync(buffer, buffer.position(), buffer.remaining());
-            else writeServerPacketSync(cachedPacket.packet(getConnectionState()), compressed);
-        } else if (packet instanceof LazyPacket lazyPacket) {
-            writeServerPacketSync(lazyPacket.packet(), compressed);
-        } else {
-            throw new RuntimeException("Unknown packet type: " + packet.getClass().getName());
-        }
+    private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
+        return switch (receivable) {
+            case Receivable.Buffer receivableBuffer -> {
+                final NetworkBuffer rawBuffer = receivableBuffer.buffer();
+                final int index = receivableBuffer.index();
+                final int length = receivableBuffer.length();
+                if (buffer.size() - buffer.writeIndex() < length) {
+                    // Not enough space in the buffer
+                    yield false;
+                }
+                NetworkBuffer.copy(rawBuffer, index, buffer, buffer.writeIndex(), length);
+                buffer.advanceWrite(length);
+                yield true;
+            }
+            case Receivable.Packet packet -> writePacketSync(buffer, packet.packet(), compressed);
+        };
     }
 
-    private void writeServerPacketSync(ServerPacket serverPacket, boolean compressed) {
+    private boolean writePacketSync(NetworkBuffer buffer, SendablePacket packet, boolean compressed) {
         final Player player = getPlayer();
+        final ConnectionState state = getConnectionState();
         if (player != null) {
-            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && serverPacket instanceof ServerPacket.ComponentHolding) {
-                serverPacket = ((ServerPacket.ComponentHolding) serverPacket).copyWithOperator(component ->
+            // Outgoing event
+            if (outgoing.hasListener()) {
+                final ServerPacket serverPacket = SendablePacket.extractServerPacket(state, packet);
+                PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+                outgoing.call(event);
+                if (event.isCancelled()) return true;
+            }
+            // Translation
+            if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
+                packet = ((ServerPacket.ComponentHolding) packet).copyWithOperator(component ->
                         MinestomAdventure.COMPONENT_TRANSLATOR.apply(component, Objects.requireNonNullElseGet(player.getLocale(), MinestomAdventure::getDefaultLocale)));
             }
         }
-        try (var hold = ObjectPool.PACKET_POOL.hold()) {
-            var buffer = PacketUtils.createFramedPacket(getConnectionState(), hold.get(), serverPacket, compressed);
-            writeBufferSync(buffer, 0, buffer.limit());
+        // Write packet
+        final int start = buffer.writeIndex();
+        try {
+            switch (packet) {
+                case ServerPacket serverPacket ->
+                        PacketUtils.writeFramedPacket(state, buffer, serverPacket, compressed);
+                case FramedPacket framedPacket -> {
+                    final NetworkBuffer body = framedPacket.body();
+                    final int length = body.size();
+                    NetworkBuffer.copy(body, 0, buffer, start, length);
+                    buffer.advanceWrite(length);
+                }
+                case CachedPacket cachedPacket -> {
+                    final NetworkBuffer body = cachedPacket.body(state);
+                    if (body != null) {
+                        final int length = body.size();
+                        NetworkBuffer.copy(body, 0, buffer, start, length);
+                        buffer.advanceWrite(length);
+                    } else PacketUtils.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressed);
+                }
+                case LazyPacket lazyPacket ->
+                        PacketUtils.writeFramedPacket(state, buffer, lazyPacket.packet(), compressed);
+            }
+            final int end = buffer.writeIndex();
+            // Encrypt data
+            final EncryptionContext encryptionContext = this.encryptionContext;
+            if (encryptionContext != null) { // Encryption support
+                buffer.cipher(encryptionContext.encrypt(), start, end - start);
+            }
+            return true;
+        } catch (IllegalArgumentException | IndexOutOfBoundsException | BufferOverflowException exception) {
+            buffer.writeIndex(start);
+            return false;
         }
     }
 
-    private void writeBufferSync(@NotNull ByteBuffer buffer, int index, int length) {
-        // Encrypt data
-        final EncryptionContext encryptionContext = this.encryptionContext;
-        if (encryptionContext != null) { // Encryption support
-            try (var hold = ObjectPool.PACKET_POOL.hold()) {
-                ByteBuffer output = hold.get();
-                try {
-                    length = encryptionContext.encrypt().update(buffer.slice(index, length), output);
-                    writeBufferSync0(output, 0, length);
-                } catch (ShortBufferException e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
-                }
+    private NetworkBuffer writeLeftover = null;
+
+    public void flushSync() throws IOException {
+        // Write leftover if any
+        NetworkBuffer leftover = this.writeLeftover;
+        if (leftover != null) {
+            final boolean success = leftover.writeChannel(channel);
+            if (success) {
+                this.writeLeftover = null;
+            } else {
+                // Failed to write the whole leftover, try again next flush
                 return;
             }
         }
-        writeBufferSync0(buffer, index, length);
-    }
-
-    private void writeBufferSync0(@NotNull ByteBuffer buffer, int index, int length) {
-        BinaryBuffer localBuffer = tickBuffer.getPlain();
-        if (localBuffer == null)
-            return; // Socket is closed
-        final int capacity = localBuffer.capacity();
-        if (length <= capacity) {
-            if (!localBuffer.canWrite(length)) localBuffer = updateLocalBuffer();
-            localBuffer.write(buffer, index, length);
-        } else {
-            final int bufferCount = length / capacity + 1;
-            for (int i = 0; i < bufferCount; i++) {
-                final int sliceStart = i * capacity;
-                final int sliceLength = Math.min(length, sliceStart + capacity) - sliceStart;
-                if (!localBuffer.canWrite(sliceLength)) localBuffer = updateLocalBuffer();
-                localBuffer.write(buffer, sliceStart, sliceLength);
+        // Consume queued packets
+        var packetQueue = this.packetQueue;
+        if (packetQueue.isEmpty()) return;
+        try (var hold = PacketUtils.PACKET_POOL.hold()) {
+            NetworkBuffer buffer = hold.get();
+            // Write to buffer
+            Receivable packet;
+            while ((packet = packetQueue.peek()) != null) {
+                final boolean compressed = sentPacketCounter.getAndIncrement() > compressionStart;
+                final boolean success = writeReceivable(buffer, packet, compressed);
+                if (success) packetQueue.poll();
+                else break;
+            }
+            // Write to channel
+            final boolean success = buffer.writeChannel(channel);
+            if (!success) {
+                this.writeLeftover = buffer.copy(buffer.readIndex(), buffer.readableBytes());
             }
         }
-    }
-
-    public void flushSync() throws IOException {
-        final SocketChannel channel = this.channel;
-        final List<BinaryBuffer> waitingBuffers = this.waitingBuffers;
-        if (!channel.isConnected()) throw new ClosedChannelException();
-        if (waitingBuffers.isEmpty()) {
-            BinaryBuffer localBuffer = tickBuffer.getPlain();
-            if (localBuffer == null)
-                return; // Socket is closed
-            localBuffer.writeChannel(channel);
-        } else {
-            // Write as much as possible from the waiting list
-            Iterator<BinaryBuffer> iterator = waitingBuffers.iterator();
-            while (iterator.hasNext()) {
-                BinaryBuffer waitingBuffer = iterator.next();
-                if (!waitingBuffer.writeChannel(channel)) break;
-                iterator.remove();
-                POOL.add(waitingBuffer);
-            }
-        }
-    }
-
-    private BinaryBuffer updateLocalBuffer() {
-        BinaryBuffer newBuffer = POOL.get();
-        this.waitingBuffers.add(tickBuffer.getPlain());
-        this.tickBuffer.setPlain(newBuffer);
-        return newBuffer;
     }
 
     record EncryptionContext(Cipher encrypt, Cipher decrypt) {
