@@ -1767,12 +1767,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         AbstractInventory openInventory = getOpenInventory();
         if (openInventory == null) return;
 
+        this.openInventory = null;
+        openInventory.removeViewer(this);
+        inventory.update();
+
         if (!fromClient) {
             didCloseInventory = true;
         }
-        openInventory.removeViewer(this);
-        this.openInventory = null;
-        inventory.update();
     }
 
     /**
