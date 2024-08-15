@@ -167,17 +167,17 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        this.packetQueue.relaxedOffer(new Receivable.Packet(packet));
+        offer(new Receivable.Packet(packet));
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
-        for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(new Receivable.Packet(packet));
+        for (SendablePacket packet : packets) offer(new Receivable.Packet(packet));
     }
 
     @ApiStatus.Internal
     public void write(@NotNull NetworkBuffer buffer, int index, int length) {
-        this.packetQueue.relaxedOffer(new Receivable.Buffer(buffer, index, length));
+        offer(new Receivable.Buffer(buffer, index, length));
     }
 
     @Override
@@ -282,6 +282,10 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void setNonce(byte[] nonce) {
         this.nonce = nonce;
+    }
+
+    private void offer(Receivable receivable){
+        this.packetQueue.relaxedOffer(receivable);
     }
 
     private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
