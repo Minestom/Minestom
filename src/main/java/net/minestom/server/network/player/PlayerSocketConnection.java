@@ -57,10 +57,12 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
-    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(260000, MinecraftServer.process());
+    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(1024, MinecraftServer.process());
     private final MpscUnboundedXaddArrayQueue<Receivable> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
+
     private final AtomicLong sentPacketCounter = new AtomicLong();
-    private volatile boolean compressed = false;
+    // Index where compression starts, linked to `sentPacketCounter`
+    // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
@@ -84,10 +86,14 @@ public class PlayerSocketConnection extends PlayerConnection {
         processPackets(readBuffer, packetParser);
     }
 
+    private boolean compression() {
+        return compressionStart != Long.MAX_VALUE;
+    }
+
     private void processPackets(NetworkBuffer readBuffer, PacketParser.Client packetParser) {
         // Read all packets
         try {
-            final int missingLength = PacketUtils.readPackets(readBuffer, compressed,
+            final int missingLength = PacketUtils.readPackets(readBuffer, compression(),
                     (id, payload) -> {
                         if (!isOnline())
                             return; // Prevent packet corruption
@@ -144,12 +150,11 @@ public class PlayerSocketConnection extends PlayerConnection {
      * @throws IllegalStateException if encryption is already enabled for this connection
      */
     public void startCompression() {
-        Check.stateCondition(compressed, "Compression is already enabled!");
+        Check.stateCondition(compression(), "Compression is already enabled!");
         this.compressionStart = sentPacketCounter.get();
         final int threshold = MinecraftServer.getCompressionThreshold();
         Check.stateCondition(threshold == 0, "Compression cannot be enabled because the threshold is equal to 0");
         sendPacket(new SetCompressionPacket(threshold));
-        this.compressed = true;
     }
 
     sealed interface Receivable {
