@@ -120,36 +120,37 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         ItemStack oldItem = this.itemStacks[slot];
         this.itemStacks[slot] = itemStack;
 
-        if (!sendPacket) return;
+        if (sendPacket) handleSlotRefresh(slot, oldItem, itemStack);
+    }
 
+    protected void handleSlotRefresh(int slot, ItemStack oldItem, ItemStack itemStack) {
         for (Player player : getViewers()) {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
-            if (equipmentSlot == null) continue;
+            if (equipmentSlot != null) {
+                player.updateEquipmentAttributes(oldItem, itemStack, equipmentSlot);
+                player.syncEquipment(equipmentSlot);
+            }
 
-            player.updateEquipmentAttributes(oldItem, itemStack, equipmentSlot);
-            player.syncEquipment(equipmentSlot);
+            sendSlotRefresh(player, (short) convertToPacketSlot(slot), itemStack);
         }
-
-        sendSlotRefresh((short) convertToPacketSlot(slot), itemStack);
     }
 
     /**
      * Refreshes an inventory slot.
      *
+     * @param player    the specific player to update for
      * @param slot      the packet slot,
      *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
      * @param itemStack the item stack in the slot
      */
-    protected void sendSlotRefresh(short slot, ItemStack itemStack) {
+    protected void sendSlotRefresh(@NotNull Player player, short slot, ItemStack itemStack) {
         SetSlotPacket defaultPacket = new SetSlotPacket((byte) 0, 0, slot, itemStack);
 
-        for (Player player : getViewers()) {
-            AbstractInventory openInventory = player.getOpenInventory();
-            if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-                player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
-            } else if (openInventory == null || slot == OFFHAND_SLOT) {
-                player.sendPacket(defaultPacket);
-            }
+        AbstractInventory openInventory = player.getOpenInventory();
+        if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
+            player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
+        } else if (openInventory == null || slot == OFFHAND_SLOT) {
+            player.sendPacket(defaultPacket);
         }
     }
 
