@@ -284,7 +284,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private void offer(Receivable receivable){
+    private void offer(Receivable receivable) {
         this.packetQueue.relaxedOffer(receivable);
     }
 
