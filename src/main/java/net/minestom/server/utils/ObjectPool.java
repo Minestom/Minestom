@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.ref.Cleaner;
 import java.lang.ref.SoftReference;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -106,21 +107,20 @@ public final class ObjectPool<T> {
 
     public final class Holder implements AutoCloseable {
         private final T object;
-        private boolean closed;
+        private final AtomicBoolean closed = new AtomicBoolean(false);
 
         Holder(T object) {
             this.object = object;
         }
 
         public @NotNull T get() {
-            if (closed) throw new IllegalStateException("Holder is closed");
+            if (closed.get()) throw new IllegalStateException("Holder is closed");
             return object;
         }
 
         @Override
         public void close() {
-            if (!closed) {
-                closed = true;
+            if (closed.compareAndSet(false, true)) {
                 add(object);
             }
         }
