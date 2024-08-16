@@ -2,15 +2,22 @@ package net.minestom.server.utils;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
+import net.minestom.server.adventure.ComponentHolder;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.Predicate;
 
 public final class PacketSendingUtils {
@@ -59,7 +66,7 @@ public final class PacketSendingUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = PacketUtils.shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+        final SendablePacket sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
@@ -77,5 +84,34 @@ public final class PacketSendingUtils {
 
     public static void broadcastPlayPacket(@NotNull ServerPacket packet) {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    }
+
+    /**
+     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
+     * Note: {@link ServerPacket.ComponentHolding}s are not translated inside a {@link CachedPacket}.
+     *
+     * @see CachedPacket#body(ConnectionState)
+     */
+    static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
+        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
+        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
+        return !containsTranslatableComponents(holder);
+    }
+
+    private static boolean containsTranslatableComponents(final @NotNull ComponentHolder<?> holder) {
+        for (final Component component : holder.components()) {
+            if (isTranslatable(component)) return true;
+        }
+        return false;
+    }
+
+    private static boolean isTranslatable(final @NotNull Component component) {
+        if (component instanceof TranslatableComponent) return true;
+        final List<Component> children = component.children();
+        if (children.isEmpty()) return false;
+        for (final Component child : children) {
+            if (isTranslatable(child)) return true;
+        }
+        return false;
     }
 }

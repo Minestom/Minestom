@@ -1,11 +1,7 @@
 package net.minestom.server.utils;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.adventure.ComponentHolder;
-import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBuffer.Type;
@@ -15,7 +11,6 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
-import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -52,38 +47,6 @@ public final class PacketUtils {
             NetworkBuffer::clear);
 
     private PacketUtils() {
-    }
-
-    /**
-     * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
-     * Note: {@link ServerPacket.ComponentHolding}s are not translated inside a {@link CachedPacket}.
-     *
-     * @see CachedPacket#body(ConnectionState)
-     */
-    static boolean shouldUseCachePacket(final @NotNull ServerPacket packet) {
-        if (!MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION) return ServerFlag.GROUPED_PACKET;
-        if (!(packet instanceof ServerPacket.ComponentHolding holder)) return ServerFlag.GROUPED_PACKET;
-        return !containsTranslatableComponents(holder);
-    }
-
-    private static boolean containsTranslatableComponents(final @NotNull ComponentHolder<?> holder) {
-        for (final Component component : holder.components()) {
-            if (isTranslatable(component)) return true;
-        }
-        return false;
-    }
-
-    private static boolean isTranslatable(final @NotNull Component component) {
-        if (component instanceof TranslatableComponent) return true;
-
-        final var children = component.children();
-        if (children.isEmpty()) return false;
-
-        for (final Component child : children) {
-            if (isTranslatable(child)) return true;
-        }
-
-        return false;
     }
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
