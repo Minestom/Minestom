@@ -55,7 +55,7 @@ public final class PacketUtils {
     private static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server();
 
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = new ObjectPool<>(
-            () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+            () -> NetworkBuffer.resizableBuffer(ServerFlag.MAX_PACKET_SIZE, MinecraftServer.process()),
             buffer -> {
                 buffer.clear();
                 return buffer;
@@ -252,22 +252,26 @@ public final class PacketUtils {
         }
     }
 
-    public static void writeFramedPacket(@NotNull ConnectionState state, @NotNull NetworkBuffer buffer, @NotNull ServerPacket packet) {
-        writeFramedPacket(state, buffer, packet, MinecraftServer.getCompressionThreshold() > 0);
-    }
-
     public static void writeFramedPacket(@NotNull ConnectionState state,
                                          @NotNull NetworkBuffer buffer,
                                          @NotNull ServerPacket packet,
-                                         boolean compression) {
-        final PacketRegistry<ServerPacket> registry = SERVER_PACKET_PARSER.stateRegistry(state);
-        final PacketRegistry.PacketInfo<ServerPacket> packetInfo = registry.packetInfo(packet.getClass());
+                                         int compressionThreshold) {
+        writeFramedPacket(SERVER_PACKET_PARSER, state, buffer, packet, compressionThreshold);
+    }
+
+    public static <T> void writeFramedPacket(@NotNull PacketParser<T> parser,
+                                             @NotNull ConnectionState state,
+                                             @NotNull NetworkBuffer buffer,
+                                             @NotNull T packet,
+                                             int compressionThreshold) {
+        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        @SuppressWarnings("unchecked") final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo((Class<? extends T>) packet.getClass());
         final int id = packetInfo.id();
-        final Type<ServerPacket> serializer = packetInfo.serializer();
+        final Type<T> serializer = packetInfo.serializer();
         writeFramedPacket(
                 buffer, serializer,
                 id, packet,
-                compression ? MinecraftServer.getCompressionThreshold() : 0
+                compressionThreshold
         );
     }
 
@@ -323,7 +327,7 @@ public final class PacketUtils {
     public static FramedPacket allocateTrimmedPacket(@NotNull ConnectionState state, @NotNull ServerPacket packet) {
         try (var hold = PACKET_POOL.hold()) {
             NetworkBuffer buffer = hold.get();
-            writeFramedPacket(state, buffer, packet);
+            writeFramedPacket(state, buffer, packet, MinecraftServer.getCompressionThreshold());
             final NetworkBuffer copy = buffer.copy(0, buffer.writeIndex());
             return new FramedPacket(packet, copy);
         }
@@ -337,7 +341,7 @@ public final class PacketUtils {
         private synchronized void append(ServerPacket serverPacket, @Nullable Player exception) {
             final int start = buffer.writeIndex();
             // Viewable storage is only used for play packets, so fine to assume this.
-            writeFramedPacket(ConnectionState.PLAY, buffer, serverPacket);
+            writeFramedPacket(ConnectionState.PLAY, buffer, serverPacket, MinecraftServer.getCompressionThreshold());
             final int end = buffer.writeIndex();
             if (exception != null) {
                 final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;

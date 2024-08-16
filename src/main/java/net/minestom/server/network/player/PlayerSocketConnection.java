@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -32,6 +33,8 @@ import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.DataFormatException;
 
 /**
@@ -57,13 +60,16 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
-    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(1024, MinecraftServer.process());
+    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
     private final MpscUnboundedXaddArrayQueue<Receivable> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
+
+    final ReentrantLock writeLock = new ReentrantLock();
+    final Condition writeCondition = writeLock.newCondition();
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
@@ -286,10 +292,17 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void offer(Receivable receivable) {
         this.packetQueue.relaxedOffer(receivable);
+        try {
+            this.writeLock.lock();
+            this.writeCondition.signal();
+        } finally {
+            this.writeLock.unlock();
+        }
     }
 
     private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
-        return switch (receivable) {
+        final int start = buffer.writeIndex();
+        final boolean result = switch (receivable) {
             case Receivable.Buffer receivableBuffer -> {
                 final NetworkBuffer rawBuffer = receivableBuffer.buffer();
                 final int index = receivableBuffer.index();
@@ -304,6 +317,14 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
             case Receivable.Packet packet -> writePacketSync(buffer, packet.packet(), compressed);
         };
+        final int end = buffer.writeIndex();
+        final int length = end - start;
+        // Encrypt data
+        final EncryptionContext encryptionContext = this.encryptionContext;
+        if (encryptionContext != null && length != 0) { // Encryption support
+            buffer.cipher(encryptionContext.encrypt(), start, end - start);
+        }
+        return result;
     }
 
     private boolean writePacketSync(NetworkBuffer buffer, SendablePacket packet, boolean compressed) {
@@ -325,10 +346,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         // Write packet
         final int start = buffer.writeIndex();
+        final int compressionThreshold = compressed ? MinecraftServer.getCompressionThreshold() : 0;
         try {
             switch (packet) {
                 case ServerPacket serverPacket ->
-                        PacketUtils.writeFramedPacket(state, buffer, serverPacket, compressed);
+                        PacketUtils.writeFramedPacket(state, buffer, serverPacket, compressionThreshold);
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
                     final int length = body.size();
@@ -341,16 +363,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                         final int length = body.size();
                         NetworkBuffer.copy(body, 0, buffer, start, length);
                         buffer.advanceWrite(length);
-                    } else PacketUtils.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressed);
+                    } else
+                        PacketUtils.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressionThreshold);
                 }
                 case LazyPacket lazyPacket ->
-                        PacketUtils.writeFramedPacket(state, buffer, lazyPacket.packet(), compressed);
-            }
-            final int end = buffer.writeIndex();
-            // Encrypt data
-            final EncryptionContext encryptionContext = this.encryptionContext;
-            if (encryptionContext != null) { // Encryption support
-                buffer.cipher(encryptionContext.encrypt(), start, end - start);
+                        PacketUtils.writeFramedPacket(state, buffer, lazyPacket.packet(), compressionThreshold);
             }
             return true;
         } catch (IllegalArgumentException | IndexOutOfBoundsException | BufferOverflowException exception) {
@@ -375,7 +392,16 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         // Consume queued packets
         var packetQueue = this.packetQueue;
-        if (packetQueue.isEmpty()) return;
+        if (packetQueue.isEmpty()) {
+            try {
+                this.writeLock.lock();
+                this.writeCondition.await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            } finally {
+                this.writeLock.unlock();
+            }
+        }
         try (var hold = PacketUtils.PACKET_POOL.hold()) {
             NetworkBuffer buffer = hold.get();
             // Write to buffer
