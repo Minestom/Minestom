@@ -1,7 +1,9 @@
 package net.minestom.server.network;
 
+import net.minestom.server.network.packet.PacketReading;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
-import net.minestom.server.utils.PacketUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -16,10 +18,10 @@ public class SocketReadTest {
     public void complete(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
 
-        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
         var packets = readResult.packets();
         assertEquals(0, readResult.missingLength());
 
@@ -32,11 +34,11 @@ public class SocketReadTest {
     public void completeTwo(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
 
-        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
         var packets = readResult.packets();
         assertEquals(0, readResult.missingLength());
 
@@ -52,11 +54,11 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
-        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
         var packets = readResult.packets();
         assertEquals(getVarIntSize(200), buffer.readableBytes());
         assertEquals(200, readResult.missingLength());
@@ -72,11 +74,11 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
-        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
         var packets = readResult.packets();
         assertEquals(1, buffer.readableBytes());
         assertEquals(0, readResult.missingLength());

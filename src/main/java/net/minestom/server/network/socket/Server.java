@@ -3,6 +3,8 @@ package net.minestom.server.network.socket;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -19,15 +21,19 @@ public final class Server {
 
     private volatile boolean stop;
 
-    private final PacketParser.Client packetParser;
+    private final PacketParser<ClientPacket> packetParser;
 
     private ServerSocketChannel serverSocket;
     private SocketAddress socketAddress;
     private String address;
     private int port;
 
-    public Server(PacketParser.Client packetParser) throws IOException {
+    public Server(PacketParser<ClientPacket> packetParser) {
         this.packetParser = packetParser;
+    }
+
+    public Server() {
+        this(PacketVanilla.CLIENT_PACKET_PARSER);
     }
 
     @ApiStatus.Internal
@@ -140,7 +146,7 @@ public final class Server {
     }
 
     @ApiStatus.Internal
-    public @NotNull PacketParser.Client packetParser() {
+    public @NotNull PacketParser<ClientPacket> packetParser() {
         return packetParser;
     }
 

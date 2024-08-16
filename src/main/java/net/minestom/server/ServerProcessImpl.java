@@ -28,6 +28,8 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -77,7 +79,7 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
-    private final PacketParser.Client packetParser;
+    private final PacketParser<ClientPacket> packetParser;
     private final InstanceManager instance;
     private final BlockManager block;
     private final CommandManager command;
@@ -98,7 +100,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() throws IOException {
+    public ServerProcessImpl() {
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
@@ -122,7 +124,7 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
-        this.packetParser = new PacketParser.Client();
+        this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
         this.instance = new InstanceManager(this);
         this.block = new BlockManager();
         this.command = new CommandManager();
@@ -287,7 +289,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull PacketParser.Client packetParser() {
+    public @NotNull PacketParser<ClientPacket> packetParser() {
         return packetParser;
     }
 

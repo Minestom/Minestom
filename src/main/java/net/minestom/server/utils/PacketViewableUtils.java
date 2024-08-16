@@ -13,6 +13,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -67,7 +68,7 @@ public final class PacketViewableUtils {
         private synchronized void append(ServerPacket serverPacket, @Nullable Player exception) {
             final int start = buffer.writeIndex();
             // Viewable storage is only used for play packets, so fine to assume this.
-            PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, serverPacket, MinecraftServer.getCompressionThreshold());
+            PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, serverPacket, MinecraftServer.getCompressionThreshold());
             final int end = buffer.writeIndex();
             if (exception != null) {
                 final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;

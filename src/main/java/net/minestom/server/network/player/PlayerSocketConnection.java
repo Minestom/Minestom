@@ -11,11 +11,13 @@ import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.PacketReading;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
-import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
@@ -75,7 +77,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.remoteAddress = remoteAddress;
     }
 
-    public void read(PacketParser.Client packetParser) throws IOException {
+    public void read(PacketParser<ClientPacket> packetParser) throws IOException {
         NetworkBuffer readBuffer = this.readBuffer;
         final int writeIndex = readBuffer.writeIndex();
         final int length = readBuffer.readChannel(channel);
@@ -92,12 +94,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         return compressionStart != Long.MAX_VALUE;
     }
 
-    private void processPackets(NetworkBuffer readBuffer, PacketParser.Client packetParser) {
+    private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
         // Read all packets
         try {
-            final PacketUtils.ReadResult<ClientPacket> result = PacketUtils.readPackets(
+            final PacketReading.ReadResult<ClientPacket> result = PacketReading.readPackets(
                     packetParser,
-                    getConnectionState(), PacketUtils::nextClientState,
+                    getConnectionState(), PacketVanilla::nextClientState,
                     readBuffer, compression()
             );
             for (ClientPacket packet : result.packets()) {
@@ -340,7 +342,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         try {
             switch (packet) {
                 case ServerPacket serverPacket ->
-                        PacketUtils.writeFramedPacket(state, buffer, serverPacket, compressionThreshold);
+                        PacketWriting.writeFramedPacket(state, buffer, serverPacket, compressionThreshold);
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
                     final int length = body.size();
@@ -354,10 +356,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                         NetworkBuffer.copy(body, 0, buffer, start, length);
                         buffer.advanceWrite(length);
                     } else
-                        PacketUtils.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressionThreshold);
+                        PacketWriting.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressionThreshold);
                 }
                 case LazyPacket lazyPacket ->
-                        PacketUtils.writeFramedPacket(state, buffer, lazyPacket.packet(), compressionThreshold);
+                        PacketWriting.writeFramedPacket(state, buffer, lazyPacket.packet(), compressionThreshold);
             }
             return true;
         } catch (IllegalArgumentException | IndexOutOfBoundsException | BufferOverflowException exception) {
@@ -392,7 +394,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 this.writeLock.unlock();
             }
         }
-        try (var hold = PacketUtils.PACKET_POOL.hold()) {
+        try (var hold = PacketVanilla.PACKET_POOL.hold()) {
             NetworkBuffer buffer = hold.get();
             // Write to buffer
             Receivable packet;

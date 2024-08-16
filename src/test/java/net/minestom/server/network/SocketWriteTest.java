@@ -1,7 +1,8 @@
 package net.minestom.server.network;
 
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.PacketUtils;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
@@ -29,8 +30,8 @@ public class SocketWriteTest {
     public void writeSingleUncompressed() {
         var packet = new IntPacket(5);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -41,9 +42,9 @@ public class SocketWriteTest {
     public void writeMultiUncompressed() {
         var packet = new IntPacket(5);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, -1);
 
         // 3 bytes length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -58,8 +59,8 @@ public class SocketWriteTest {
 
         var packet = new CompressiblePacket(string);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, CompressiblePacket.SERIALIZER, 1, packet, 256);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, CompressiblePacket.SERIALIZER, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + payload
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -70,8 +71,8 @@ public class SocketWriteTest {
     public void writeSingleCompressedSmall() {
         var packet = new IntPacket(5);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
@@ -82,9 +83,9 @@ public class SocketWriteTest {
     public void writeMultiCompressedSmall() {
         var packet = new IntPacket(5);
 
-        var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
-        PacketUtils.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
+        PacketWriting.writeFramedPacket(buffer, IntPacket.SERIALIZER, 1, packet, 256);
 
         // 3 bytes packet length [var-int] + 3 bytes data length [var-int] + 1 byte packet id [var-int] + 4 bytes int
         // The 3 bytes var-int length is hardcoded for performance purpose, could change in the future
