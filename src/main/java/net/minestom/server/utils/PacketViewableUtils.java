@@ -35,7 +35,7 @@ public final class PacketViewableUtils {
             return;
         }
         if (!ServerFlag.VIEWABLE_PACKET) {
-            PacketUtils.sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
+            PacketSendingUtils.sendGroupedPacket(viewable.getViewers(), serverPacket, value -> !Objects.equals(value, entity));
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;

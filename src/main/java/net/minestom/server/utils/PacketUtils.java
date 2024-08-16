@@ -1,15 +1,11 @@
 package net.minestom.server.utils;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.adventure.MinestomAdventure;
-import net.minestom.server.adventure.audience.PacketGroupingAudience;
-import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBuffer.Type;
@@ -30,10 +26,8 @@ import org.slf4j.LoggerFactory;
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
@@ -61,57 +55,6 @@ public final class PacketUtils {
     }
 
     /**
-     * Sends a packet to an audience. This method performs the following steps in the
-     * following order:
-     * <ol>
-     *     <li>If {@code audience} is a {@link Player}, send the packet to them.</li>
-     *     <li>Otherwise, if {@code audience} is a {@link PacketGroupingAudience}, call
-     *     {@link #sendGroupedPacket(Collection, ServerPacket)} on the players that the
-     *     grouping audience contains.</li>
-     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience.Single},
-     *     call this method on the single audience inside the forwarding audience.</li>
-     *     <li>Otherwise, if {@code audience} is a {@link ForwardingAudience}, call this
-     *     method for each audience member of the forwarding audience.</li>
-     *     <li>Otherwise, do nothing.</li>
-     * </ol>
-     *
-     * @param audience the audience
-     * @param packet   the packet
-     */
-    @SuppressWarnings("OverrideOnly") // we need to access the audiences inside ForwardingAudience
-    public static void sendPacket(@NotNull Audience audience, @NotNull ServerPacket packet) {
-        if (audience instanceof Player player) {
-            player.sendPacket(packet);
-        } else if (audience instanceof PacketGroupingAudience groupingAudience) {
-            PacketUtils.sendGroupedPacket(groupingAudience.getPlayers(), packet);
-        } else if (audience instanceof ForwardingAudience.Single singleAudience) {
-            PacketUtils.sendPacket(singleAudience.audience(), packet);
-        } else if (audience instanceof ForwardingAudience forwardingAudience) {
-            for (Audience member : forwardingAudience.audiences()) {
-                PacketUtils.sendPacket(member, packet);
-            }
-        }
-    }
-
-    /**
-     * Sends a {@link ServerPacket} to multiple players.
-     * <p>
-     * Can drastically improve performance since the packet will not have to be processed as much.
-     *
-     * @param players   the players to send the packet to
-     * @param packet    the packet to send to the players
-     * @param predicate predicate to ignore specific players
-     */
-    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
-                                         @NotNull Predicate<Player> predicate) {
-        final var sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
-
-        players.forEach(player -> {
-            if (predicate.test(player)) player.sendPacket(sendablePacket);
-        });
-    }
-
-    /**
      * Checks if the {@link ServerPacket} is suitable to be wrapped into a {@link CachedPacket}.
      * Note: {@link ServerPacket.ComponentHolding}s are not translated inside a {@link CachedPacket}.
      *
@@ -127,7 +70,6 @@ public final class PacketUtils {
         for (final Component component : holder.components()) {
             if (isTranslatable(component)) return true;
         }
-
         return false;
     }
 
@@ -142,20 +84,6 @@ public final class PacketUtils {
         }
 
         return false;
-    }
-
-    /**
-     * Same as {@link #sendGroupedPacket(Collection, ServerPacket, Predicate)}
-     * but with the player validator sets to null.
-     *
-     * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
-     */
-    public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
-        sendGroupedPacket(players, packet, player -> true);
-    }
-
-    public static void broadcastPlayPacket(@NotNull ServerPacket packet) {
-        sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
     }
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
