@@ -18,13 +18,21 @@ import java.util.function.UnaryOperator;
 @ApiStatus.Experimental
 public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
+    private static final Cleaner CLEANER = Cleaner.create();
 
-    private final Cleaner cleaner = Cleaner.create();
     private final MessagePassingQueue<SoftReference<T>> pool = new MpmcUnboundedXaddArrayQueue<>(QUEUE_SIZE);
     private final Supplier<T> supplier;
     private final UnaryOperator<T> sanitizer;
 
-    public ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+    public static <T> ObjectPool<T> pool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
+        return new ObjectPool<>(supplier, sanitizer);
+    }
+
+    public static <T> ObjectPool<T> pool(Supplier<T> supplier) {
+        return new ObjectPool<>(supplier, UnaryOperator.identity());
+    }
+
+    private ObjectPool(Supplier<T> supplier, UnaryOperator<T> sanitizer) {
         this.supplier = supplier;
         this.sanitizer = sanitizer;
     }
@@ -58,15 +66,15 @@ public final class ObjectPool<T> {
     }
 
     public void register(@NotNull Object ref, @NotNull AtomicReference<T> objectRef) {
-        this.cleaner.register(ref, new BufferRefCleaner<>(this, objectRef));
+        CLEANER.register(ref, new BufferRefCleaner<>(this, objectRef));
     }
 
     public void register(@NotNull Object ref, @NotNull T object) {
-        this.cleaner.register(ref, new BufferCleaner<>(this, object));
+        CLEANER.register(ref, new BufferCleaner<>(this, object));
     }
 
     public void register(@NotNull Object ref, @NotNull Collection<T> objects) {
-        this.cleaner.register(ref, new BuffersCleaner<>(this, objects));
+        CLEANER.register(ref, new BuffersCleaner<>(this, objects));
     }
 
     public @NotNull Holder hold() {

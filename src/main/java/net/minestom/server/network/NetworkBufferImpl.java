@@ -16,7 +16,6 @@ import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
 import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
@@ -39,8 +38,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.resizeStrategy = resizeStrategy;
         this.registries = registries;
 
-        this.readIndex = buffer.position();
-        this.writeIndex = buffer.position();
         buffer.limit(buffer.capacity());
     }
 
@@ -94,9 +91,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return output;
     }
 
-    public void clear() {
+    public @NotNull NetworkBuffer clear() {
         this.writeIndex = 0;
         this.readIndex = 0;
+        return this;
     }
 
     public int writeIndex() {
@@ -107,18 +105,21 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return readIndex;
     }
 
-    public void writeIndex(int writeIndex) {
+    public @NotNull NetworkBuffer writeIndex(int writeIndex) {
         this.writeIndex = writeIndex;
+        return this;
     }
 
-    public void readIndex(int readIndex) {
+    public @NotNull NetworkBuffer readIndex(int readIndex) {
         this.readIndex = readIndex;
+        return this;
     }
 
     @Override
-    public void index(int readIndex, int writeIndex) {
+    public @NotNull NetworkBuffer index(int readIndex, int writeIndex) {
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
+        return this;
     }
 
     public int advanceWrite(int length) {
@@ -242,8 +243,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
-    private static final ObjectPool<Deflater> DEFLATER_POOL = new ObjectPool<>(Deflater::new, UnaryOperator.identity());
-    private static final ObjectPool<Inflater> INFLATER_POOL = new ObjectPool<>(Inflater::new, UnaryOperator.identity());
+    private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
+    private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
 
     @Override
     public int compress(int start, int length, NetworkBuffer output) {

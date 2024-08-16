@@ -48,8 +48,7 @@ public abstract class AbstractItemComponentTest<T> {
         if (component().isSynced()) {
             var written1 = NetworkBuffer.makeArray(b -> component().write(b, entry), MinecraftServer.process());
 
-            var buffer = NetworkBuffer.wrap(written1, MinecraftServer.process());
-            buffer.index(0, written1.length);
+            var buffer = NetworkBuffer.wrap(written1, 0, written1.length, MinecraftServer.process());
             var read = component().read(buffer);
             assertEquals(entry, read);
 

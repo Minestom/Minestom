@@ -114,17 +114,17 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
 
-    void clear();
+    @NotNull NetworkBuffer clear();
 
     int writeIndex();
 
     int readIndex();
 
-    void writeIndex(int writeIndex);
+    @NotNull NetworkBuffer writeIndex(int writeIndex);
 
-    void readIndex(int readIndex);
+    @NotNull NetworkBuffer readIndex(int readIndex);
 
-    void index(int readIndex, int writeIndex);
+    @NotNull NetworkBuffer index(int readIndex, int writeIndex);
 
     int advanceWrite(int length);
 
@@ -219,21 +219,21 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, @Nullable Registries registries) {
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        return new NetworkBufferImpl(buffer, null, registries);
+        return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes) {
-        return wrap(bytes, null);
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex) {
+        return wrap(bytes, readIndex, writeIndex, null);
     }
 
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, @Nullable Registries registries) {
-        return new NetworkBufferImpl(buffer, null, registries);
+    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, int readIndex, int writeIndex, @Nullable Registries registries) {
+        return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
     }
 
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer) {
-        return wrap(buffer, null);
+    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, int readIndex, int writeIndex) {
+        return wrap(buffer, readIndex, writeIndex, null);
     }
 
     sealed interface Builder permits NetworkBufferImpl.Builder {

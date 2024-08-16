@@ -177,7 +177,7 @@ public final class LoginListener {
         GameProfile gameProfile = null;
         boolean success = false;
         if (data != null && data.length > 0) {
-            NetworkBuffer buffer = NetworkBuffer.wrap(data);
+            NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
             success = VelocityProxy.checkIntegrity(buffer);
             if (success) {
                 // Get the real connection address

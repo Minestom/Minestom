@@ -57,9 +57,12 @@ public final class PacketViewableUtils {
     }
 
     static final class ViewableStorage {
+        static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
+                () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
+                NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
         private final Int2ObjectMap<LongArrayList> entityIdMap = new Int2ObjectOpenHashMap<>();
-        private final NetworkBuffer buffer = PacketUtils.PACKET_POOL.getAndRegister(this);
+        private final NetworkBuffer buffer = POOL.getAndRegister(this);
 
         private synchronized void append(ServerPacket serverPacket, @Nullable Player exception) {
             final int start = buffer.writeIndex();

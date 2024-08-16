@@ -53,12 +53,9 @@ public final class PacketUtils {
     private static final PacketParser<ClientPacket> CLIENT_PACKET_PARSER = new PacketParser.Client();
     private static final PacketParser<ServerPacket> SERVER_PACKET_PARSER = new PacketParser.Server();
 
-    public static final ObjectPool<NetworkBuffer> PACKET_POOL = new ObjectPool<>(
+    public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
             () -> NetworkBuffer.staticBuffer(ServerFlag.MAX_PACKET_SIZE, MinecraftServer.process()),
-            buffer -> {
-                buffer.clear();
-                return buffer;
-            });
+            NetworkBuffer::clear);
 
     private PacketUtils() {
     }
@@ -298,7 +295,7 @@ public final class PacketUtils {
         // Uncompressed format https://wiki.vg/Protocol#Without_compression
         final int lengthIndex = buffer.advanceWrite(3);
         buffer.write(NetworkBuffer.VAR_INT, id);
-        type.write(buffer, packet);
+        buffer.write(type, packet);
         final int finalSize = buffer.writeIndex() - (lengthIndex + 3);
         writeVarIntHeader(buffer, lengthIndex, finalSize);
     }
@@ -311,7 +308,7 @@ public final class PacketUtils {
         final int uncompressedIndex = buffer.advanceWrite(3);
         final int contentStart = buffer.writeIndex();
         buffer.write(NetworkBuffer.VAR_INT, id);
-        type.write(buffer, packet);
+        buffer.write(type, packet);
         final int packetSize = buffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
