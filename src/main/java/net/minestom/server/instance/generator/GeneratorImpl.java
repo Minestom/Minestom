@@ -49,7 +49,7 @@ public final class GeneratorImpl {
     }
 
     public static UnitImpl chunk(DynamicRegistry<Biome> biomeRegistry, GenSection[] chunkSections, int chunkX, int minSection, int chunkZ) {
-        final Vec start = new Vec(chunkX * 16, minSection * 16, chunkZ * 16);
+        final Vec start = SECTION_SIZE.mul(chunkX, minSection, chunkZ);
         return area(biomeRegistry, start, 1, chunkSections.length, 1, chunkSections);
     }
 
@@ -119,7 +119,7 @@ public final class GeneratorImpl {
             final int sectionY = getChunkCoordinate(y);
             final int sectionZ = getChunkCoordinate(z);
             if (sections == null) {
-                this.minSection = new Vec(sectionX * 16, sectionY * 16, sectionZ * 16);
+                this.minSection = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
                 this.width = 1;
                 this.height = 1;
                 this.depth = 1;
@@ -190,16 +190,17 @@ public final class GeneratorImpl {
 
             GenerationUnit[] units = new GenerationUnit[width * height * depth];
             int index = 0;
-            for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
+            // Z -> Y -> X order is important for indexing
+            for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
-                    for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
+                    for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
                         final GenerationUnit unit = section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true);
                         units[index++] = unit;
                     }
                 }
             }
             final List<GenerationUnit> sections = List.of(units);
-            final Point startSection = new Vec(minSectionX * 16, minSectionY * 16, minSectionZ * 16);
+            final Point startSection = SECTION_SIZE.mul(minSectionX, minSectionY, minSectionZ);
             return registerFork(startSection, sections, width, height, depth);
         }
 
@@ -294,7 +295,8 @@ public final class GeneratorImpl {
         }
 
         private int retrieveBlockId(Block block) {
-            return fork ? block.stateId() + 1 : block.stateId();
+            final int stateId = block.stateId();
+            return fork ? stateId + 1 : stateId;
         }
 
         private void handleCache(int x, int y, int z, Block block) {
@@ -344,7 +346,7 @@ public final class GeneratorImpl {
         @Override
         public void setAll(@NotNull Supplier supplier) {
             for (GenerationUnit section : sections) {
-                final var start = section.absoluteStart();
+                final Point start = section.absoluteStart();
                 final int startX = start.blockX();
                 final int startY = start.blockY();
                 final int startZ = start.blockZ();
@@ -532,6 +534,7 @@ public final class GeneratorImpl {
 
     private static int findIndex(int width, int height, int depth,
                                  int x, int y, int z) {
+        assert width > 0 && height > 0 && depth > 0;
         return (z * width * height) + (y * width) + x;
     }
 
