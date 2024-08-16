@@ -21,8 +21,6 @@ import org.jctools.queues.MpscUnboundedXaddArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -44,8 +42,6 @@ import java.util.zip.DataFormatException;
  */
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
-    private final static Logger LOGGER = LoggerFactory.getLogger(PlayerSocketConnection.class);
-
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
@@ -99,32 +95,26 @@ public class PlayerSocketConnection extends PlayerConnection {
     private void processPackets(NetworkBuffer readBuffer, PacketParser.Client packetParser) {
         // Read all packets
         try {
-            final int missingLength = PacketUtils.readPackets(readBuffer, compression(),
-                    (id, payload) -> {
-                        if (!isOnline())
-                            return; // Prevent packet corruption
-                        ClientPacket packet;
-                        try {
-                            packet = packetParser.parse(getConnectionState(), id, payload);
-                            // Process the packet
-                            if (packet.processImmediately()) {
-                                MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
-                            } else {
-                                // To be processed during the next player tick
-                                final Player player = getPlayer();
-                                assert player != null;
-                                player.addPacketToQueue(packet);
-                            }
-                        } catch (Exception e) {
-                            // Error while reading the packet
-                            MinecraftServer.getExceptionManager().handleException(e);
-                        } finally {
-                            if (payload.readableBytes() != 0) {
-                                var info = packetParser.stateRegistry(getConnectionState()).packetInfo(id);
-                                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})", info.packetClass().getSimpleName(), Integer.toHexString(id), payload);
-                            }
-                        }
-                    });
+            final PacketUtils.ReadResult<ClientPacket> result = PacketUtils.readPackets(
+                    packetParser,
+                    getConnectionState(), PacketUtils::nextClientState,
+                    readBuffer, compression()
+            );
+            for (ClientPacket packet : result.packets()) {
+                try {
+                    if (packet.processImmediately()) {
+                        MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                    } else {
+                        // To be processed during the next player tick
+                        final Player player = getPlayer();
+                        assert player != null;
+                        player.addPacketToQueue(packet);
+                    }
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            }
+            final int missingLength = result.missingLength();
             if (missingLength > 0) {
                 // Resize for next read
                 final int newSize = readBuffer.size() + missingLength;

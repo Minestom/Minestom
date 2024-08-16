@@ -1,13 +1,10 @@
 package net.minestom.server.network;
 
-import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 import net.minestom.server.utils.PacketUtils;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,19 +17,14 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0X0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
 
-        List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(buffer, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertEquals(0, remaining);
+        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var packets = readResult.packets();
+        assertEquals(0, readResult.missingLength());
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.getFirst();
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(rawPacket.right());
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        assertEquals(packet, packets.getFirst());
     }
 
     @ParameterizedTest
@@ -41,21 +33,16 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
-        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
 
-        List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(buffer, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertEquals(0, remaining);
+        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var packets = readResult.packets();
+        assertEquals(0, readResult.missingLength());
 
         assertEquals(2, packets.size());
-        for (var rawPacket : packets) {
-            assertEquals(0x0A, rawPacket.left());
-            var readPacket = ClientPluginMessagePacket.SERIALIZER.read(rawPacket.right());
-            assertEquals("channel", readPacket.channel());
-            assertEquals(2000, readPacket.data().length);
-        }
+        assertEquals(packet, packets.getFirst());
+        assertEquals(packet, packets.getLast());
     }
 
     @ParameterizedTest
@@ -66,21 +53,16 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
-        List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(buffer, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
+        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var packets = readResult.packets();
         assertEquals(getVarIntSize(200), buffer.readableBytes());
-        assertEquals(200, remaining);
+        assertEquals(200, readResult.missingLength());
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.getFirst();
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(rawPacket.right());
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        assertEquals(packet, packets.getFirst());
     }
 
     @ParameterizedTest
@@ -91,20 +73,16 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketUtils.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, ClientPluginMessagePacket.SERIALIZER, 0x0A, packet, compressed ? 256 : 0);
+        PacketUtils.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
-        List<Pair<Integer, NetworkBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(buffer, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
+        var readResult = PacketUtils.readClients(ConnectionState.PLAY, buffer, compressed);
+        var packets = readResult.packets();
         assertEquals(1, buffer.readableBytes());
+        assertEquals(0, readResult.missingLength());
 
         assertEquals(1, packets.size());
-        var rawPacket = packets.getFirst();
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(rawPacket.right());
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        assertEquals(packet, packets.getFirst());
     }
 
     private static int getVarIntSize(int input) {

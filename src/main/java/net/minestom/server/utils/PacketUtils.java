@@ -15,16 +15,24 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBuffer.Type;
 import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketRegistry;
+import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
+import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.BufferUnderflowException;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.BiConsumer;
+import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.zip.DataFormatException;
 
@@ -40,10 +48,13 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * Be sure to check the implementation code.
  */
 public final class PacketUtils {
-    private static final PacketParser.Server SERVER_PACKET_PARSER = new PacketParser.Server();
+    private final static Logger LOGGER = LoggerFactory.getLogger(PacketUtils.class);
+
+    private static final PacketParser<ClientPacket> CLIENT_PACKET_PARSER = new PacketParser.Client();
+    private static final PacketParser<ServerPacket> SERVER_PACKET_PARSER = new PacketParser.Server();
 
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = new ObjectPool<>(
-            () -> NetworkBuffer.resizableBuffer(ServerFlag.MAX_PACKET_SIZE, MinecraftServer.process()),
+            () -> NetworkBuffer.staticBuffer(ServerFlag.MAX_PACKET_SIZE, MinecraftServer.process()),
             buffer -> {
                 buffer.clear();
                 return buffer;
@@ -150,9 +161,34 @@ public final class PacketUtils {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
     }
 
-    @ApiStatus.Internal
-    public static int readPackets(@NotNull NetworkBuffer readBuffer, boolean compressed,
-                                  BiConsumer<Integer, NetworkBuffer> payloadConsumer) throws DataFormatException {
+    public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {
+        return switch (packet) {
+            case ClientHandshakePacket handshakePacket -> switch (handshakePacket.intent()) {
+                case STATUS -> ConnectionState.STATUS;
+                case LOGIN, TRANSFER -> ConnectionState.LOGIN;
+            };
+            case ClientLoginAcknowledgedPacket ignored -> ConnectionState.CONFIGURATION;
+            case ClientFinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            default -> currentState;
+        };
+    }
+
+    public record ReadResult<T>(List<T> packets, ConnectionState newState, int missingLength) {
+    }
+
+    public static ReadResult<ClientPacket> readClients(
+            @NotNull ConnectionState state,
+            @NotNull NetworkBuffer readBuffer, boolean compressed
+    ) throws DataFormatException {
+        return readPackets(CLIENT_PACKET_PARSER, state, PacketUtils::nextClientState, readBuffer, compressed);
+    }
+
+    public static <T> ReadResult<T> readPackets(
+            @NotNull PacketParser<T> parser,
+            @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            @NotNull NetworkBuffer readBuffer, boolean compressed
+    ) throws DataFormatException {
+        List<T> packets = new ArrayList<>();
         while (readBuffer.readableBytes() > 0) {
             final int beginMark = readBuffer.readIndex();
             try {
@@ -161,50 +197,70 @@ public final class PacketUtils {
                 if (readBuffer.readIndex() > readBuffer.writeIndex()) {
                     // Can't read the packet length
                     readBuffer.readIndex(beginMark);
-                    return 0;
+                    return new ReadResult<>(packets, state, 0);
                 }
                 final int readerStart = readBuffer.readIndex();
                 if (readBuffer.readableBytes() < packetLength) {
                     // Can't read the full packet
                     final int missingLength = packetLength - readBuffer.readableBytes();
                     readBuffer.readIndex(beginMark);
-                    return missingLength;
+                    return new ReadResult<>(packets, state, missingLength);
                 }
                 // Read packet https://wiki.vg/Protocol#Packet_format
                 NetworkBuffer content = readBuffer.slice(readBuffer.readIndex(), packetLength);
+                T packet;
                 if (compressed) {
                     final int dataLength = content.read(VAR_INT);
                     if (dataLength > 0) {
                         NetworkBuffer decompressed = PACKET_POOL.get();
                         try {
                             content.decompress(content.readIndex(), content.readableBytes(), decompressed);
-                            readUncompressedPacket(decompressed, payloadConsumer);
+                            packet = readUncompressedPacket(parser, state, decompressed);
                         } finally {
                             PACKET_POOL.add(decompressed);
                         }
                     } else {
-                        readUncompressedPacket(content, payloadConsumer);
+                        packet = readUncompressedPacket(parser, state, content);
                     }
                 } else {
-                    readUncompressedPacket(content, payloadConsumer);
+                    packet = readUncompressedPacket(parser, state, content);
                 }
+                packets.add(packet);
+                state = stateUpdater.apply(packet, state);
                 // Position buffer to read the next packet
                 readBuffer.readIndex(readerStart + packetLength);
             } catch (BufferUnderflowException e) {
                 readBuffer.readIndex(beginMark);
-                return 0;
+                return new ReadResult<>(packets, state, 0);
             }
         }
-        return 0;
+        return new ReadResult<>(packets, state, 0);
     }
 
-    private static void readUncompressedPacket(@NotNull NetworkBuffer buffer, BiConsumer<Integer, NetworkBuffer> payloadConsumer) {
+    private static <T> T readUncompressedPacket(PacketParser<T> parser,
+                                                @NotNull ConnectionState state,
+                                                @NotNull NetworkBuffer buffer) {
         final int packetId = buffer.read(VAR_INT);
+        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packetId);
+        final Type<T> serializer = packetInfo.serializer();
         try {
-            payloadConsumer.accept(packetId, buffer);
+            final T packet = serializer.read(buffer);
+            if (buffer.readableBytes() != 0) {
+                var info = parser.stateRegistry(state).packetInfo(packetId);
+                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})", info.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
+            }
+            return packet;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void writeFramedPacket(@NotNull ConnectionState state,
+                                         @NotNull NetworkBuffer buffer,
+                                         @NotNull ClientPacket packet,
+                                         int compressionThreshold) {
+        writeFramedPacket(CLIENT_PACKET_PARSER, state, buffer, packet, compressionThreshold);
     }
 
     public static void writeFramedPacket(@NotNull ConnectionState state,
