@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -41,6 +42,9 @@ public final class PacketReading {
             try {
                 // Ensure that the buffer contains the full packet (or wait for next socket read)
                 final int packetLength = readBuffer.read(VAR_INT);
+                if (packetLength > ServerFlag.MAX_PACKET_SIZE) {
+                    throw new DataFormatException("Packet too large: " + packetLength);
+                }
                 if (readBuffer.readIndex() > readBuffer.writeIndex()) {
                     // Can't read the packet length
                     readBuffer.readIndex(beginMark);
