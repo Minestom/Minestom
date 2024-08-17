@@ -29,7 +29,7 @@ public final class ServerFlag {
     public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
     public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
-    public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 30_000);
+    public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
 
     // Chunk update
