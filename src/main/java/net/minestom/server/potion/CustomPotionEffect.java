@@ -2,6 +2,7 @@ package net.minestom.server.potion;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,18 +15,11 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  */
 public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings settings) {
 
-    public static final NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, CustomPotionEffect value) {
-            buffer.write(VAR_INT, value.id.id());
-            buffer.write(Settings.NETWORK_TYPE, value.settings);
-        }
-
-        @Override
-        public CustomPotionEffect read(@NotNull NetworkBuffer buffer) {
-            return new CustomPotionEffect(PotionEffect.fromId(buffer.read(VAR_INT)), buffer.read(Settings.NETWORK_TYPE));
-        }
-    };
+    public static NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = NetworkBufferTemplate.template(
+            PotionEffect.NETWORK_TYPE, CustomPotionEffect::id,
+            Settings.NETWORK_TYPE, CustomPotionEffect::settings,
+            CustomPotionEffect::new
+    );
 
     public static final BinaryTagSerializer<CustomPotionEffect> NBT_TYPE = BinaryTagSerializer.lazy(() -> BinaryTagSerializer.COMPOUND.map(
             tag -> new CustomPotionEffect(

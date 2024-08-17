@@ -61,17 +61,12 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
     }
 
     public record EffectChance(@NotNull CustomPotionEffect effect, float probability) {
-        public static final NetworkBuffer.Type<EffectChance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, EffectChance value) {
+        public static NetworkBuffer.Type<EffectChance> NETWORK_TYPE = NetworkBufferTemplate.template(
+                CustomPotionEffect.NETWORK_TYPE, EffectChance::effect,
+                FLOAT, EffectChance::probability,
+                EffectChance::new
+        );
 
-            }
-
-            @Override
-            public EffectChance read(@NotNull NetworkBuffer buffer) {
-                return null;
-            }
-        };
         public static final BinaryTagSerializer<EffectChance> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new EffectChance(
                         CustomPotionEffect.NBT_TYPE.read(tag.getCompound("effect")),
@@ -83,5 +78,4 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
         );
         public static final BinaryTagSerializer<List<EffectChance>> NBT_LIST_TYPE = NBT_TYPE.list();
     }
-
 }
