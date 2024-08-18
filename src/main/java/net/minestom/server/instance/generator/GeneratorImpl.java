@@ -22,8 +22,6 @@ import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
 @ApiStatus.Internal
 public final class GeneratorImpl {
-    private static final Vec SECTION_SIZE = new Vec(16);
-
     public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
         public GenSection(Palette blocks, Palette biomes) {
             this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
@@ -37,9 +35,9 @@ public final class GeneratorImpl {
     static GenerationUnit section(DynamicRegistry<Biome> biomeRegistry, GenSection section,
                                   int sectionX, int sectionY, int sectionZ,
                                   boolean fork) {
-        final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
-        final Vec end = start.add(SECTION_SIZE);
-        final UnitModifier modifier = new SectionModifierImpl(biomeRegistry, SECTION_SIZE,
+        final Vec start = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
+        final Vec end = start.add(Vec.SECTION);
+        final UnitModifier modifier = new SectionModifierImpl(biomeRegistry, Vec.SECTION,
                 start, end, section, fork);
         return unit(biomeRegistry, modifier, start, end, null);
     }
@@ -49,7 +47,7 @@ public final class GeneratorImpl {
     }
 
     public static UnitImpl chunk(DynamicRegistry<Biome> biomeRegistry, GenSection[] chunkSections, int chunkX, int minSection, int chunkZ) {
-        final Vec start = SECTION_SIZE.mul(chunkX, minSection, chunkZ);
+        final Vec start = Vec.SECTION.mul(chunkX, minSection, chunkZ);
         return area(biomeRegistry, start, 1, chunkSections.length, 1, chunkSections);
     }
 
@@ -72,7 +70,7 @@ public final class GeneratorImpl {
         }
         sections = List.copyOf(sections);
 
-        final Point size = SECTION_SIZE.mul(width, height, depth);
+        final Point size = Vec.SECTION.mul(width, height, depth);
         final Point end = start.add(size);
         final UnitModifier modifier = new AreaModifierImpl(size, start, end, width, height, depth, sections);
         return unit(biomeRegistry, modifier, start, end, sections);
@@ -119,7 +117,7 @@ public final class GeneratorImpl {
             final int sectionY = getChunkCoordinate(y);
             final int sectionZ = getChunkCoordinate(z);
             if (sections == null) {
-                this.minSection = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
+                this.minSection = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
                 this.width = 1;
                 this.height = 1;
                 this.depth = 1;
@@ -200,7 +198,7 @@ public final class GeneratorImpl {
                 }
             }
             final List<GenerationUnit> sections = List.of(units);
-            final Point startSection = SECTION_SIZE.mul(minSectionX, minSectionY, minSectionZ);
+            final Point startSection = Vec.SECTION.mul(minSectionX, minSectionY, minSectionZ);
             return registerFork(startSection, sections, width, height, depth);
         }
 
