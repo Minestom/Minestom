@@ -431,11 +431,7 @@ public final class GeneratorImpl {
         }
 
         private GenerationUnit findRelativeSection(int x, int y, int z) {
-            final int sectionX = getChunkCoordinate(x);
-            final int sectionY = getChunkCoordinate(y);
-            final int sectionZ = getChunkCoordinate(z);
-            final int index = sectionZ + sectionY * depth + sectionX * depth * height;
-            return sections.get(index);
+            return findAbsolute(sections, Vec.ZERO, width, height, depth, x, y, z);
         }
 
         private void checkBorder(int x, int y, int z) {
