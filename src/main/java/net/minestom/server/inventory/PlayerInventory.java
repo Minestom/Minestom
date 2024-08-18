@@ -1,6 +1,7 @@
 package net.minestom.server.inventory;
 
 import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.item.EntityEquipEvent;
@@ -147,6 +148,7 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             itemStack = entityEquipEvent.getEquippedItem();
+            this.player.updateEquipmentAttributes(this.itemStacks[slot], itemStack, equipmentSlot);
         }
         this.itemStacks[slot] = itemStack;
 

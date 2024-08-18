@@ -1,11 +1,10 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -13,15 +12,15 @@ import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BlockTest {
+public class BlockTest {
 
     @Test
-    void testNBT() {
+    public void testNBT() {
         Block block = Block.CHEST;
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
 
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         block = block.withNbt(nbt);
         assertTrue(block.hasNbt());
         assertEquals(block.nbt(), nbt);
@@ -35,7 +34,7 @@ class BlockTest {
     }
 
     @Test
-    void validProperties() {
+    public void validProperties() {
         Block block = Block.CHEST;
         assertEquals(block.properties(), Objects.requireNonNull(Block.fromBlockId(block.id())).properties());
 
@@ -53,15 +52,15 @@ class BlockTest {
     }
 
     @Test
-    void invalidProperties() {
+    public void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
         assertThrows(Exception.class, () -> block.withProperties(Map.of("random", "randomKey")));
     }
 
     @Test
-    void testEquality() {
-        var nbt = new NBTCompound(Map.of("key", NBT.Int(5)));
+    public void testEquality() {
+        var nbt = CompoundBinaryTag.builder().putInt("key", 5).build();
         Block b1 = Block.CHEST;
         Block b2 = Block.CHEST;
         assertEquals(b1.withNbt(nbt), b2.withNbt(nbt));
@@ -71,14 +70,14 @@ class BlockTest {
     }
 
     @Test
-    void testMutability() {
+    public void testMutability() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.properties().put("facing", "north"));
         assertThrows(Exception.class, () -> block.withProperty("facing", "north").properties().put("facing", "south"));
     }
 
     @Test
-    void testShape() {
+    public void testShape() {
         Point start = Block.LANTERN.registry().collisionShape().relativeStart();
         Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
 

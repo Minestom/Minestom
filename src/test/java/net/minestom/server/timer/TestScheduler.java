@@ -3,17 +3,16 @@ package net.minestom.server.timer;
 import net.minestom.server.MinecraftServer;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestScheduler {
+public class TestScheduler {
 
     @Test
-    void tickTask() {
+    public void tickTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         Task task = scheduler.scheduleNextTick(() -> result.set(true));
@@ -30,7 +29,7 @@ class TestScheduler {
     }
 
     @Test
-    void durationTask() throws InterruptedException {
+    public void durationTask() throws InterruptedException {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.buildTask(() -> result.set(true))
@@ -45,7 +44,7 @@ class TestScheduler {
     }
 
     @Test
-    void immediateTask() {
+    public void immediateTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         scheduler.scheduleNextProcess(() -> result.set(true));
@@ -61,7 +60,7 @@ class TestScheduler {
     }
 
     @Test
-    void cancelTask() {
+    public void cancelTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         AtomicBoolean result = new AtomicBoolean(false);
         var task = scheduler.buildTask(() -> result.set(true))
@@ -74,27 +73,11 @@ class TestScheduler {
     }
 
     @Test
-    void cancelAsyncDelayedTask() throws InterruptedException {
-        Scheduler scheduler = Scheduler.newScheduler();
-        AtomicBoolean result = new AtomicBoolean(false);
-        var task = scheduler.buildTask(() -> result.set(true))
-                .delay(Duration.ofMillis(1))
-                .executionType(ExecutionType.ASYNC)
-                .schedule();
-        assertTrue(task.isAlive(), "Task should still be alive");
-        task.cancel();
-        assertFalse(task.isAlive(), "Task should not be alive anymore");
-        scheduler.process();
-        Thread.sleep(10L);
-        assertFalse(result.get(), "Task should be cancelled");
-    }
-
-    @Test
-    void parkTask() {
+    public void parkTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         // Ignored parked task
         scheduler.buildTask(() -> fail("This parked task should never be executed"))
-                .executionType(ExecutionType.SYNC)
+                .executionType(ExecutionType.TICK_START)
                 .delay(TaskSchedule.park())
                 .schedule();
 
@@ -114,7 +97,7 @@ class TestScheduler {
     }
 
     @Test
-    void futureTask() {
+    public void futureTask() {
         Scheduler scheduler = Scheduler.newScheduler();
         CompletableFuture<Void> future = new CompletableFuture<>();
         AtomicBoolean result = new AtomicBoolean(false);
@@ -126,24 +109,6 @@ class TestScheduler {
         assertFalse(result.get(), "Tasks must be processed first");
         scheduler.process();
         assertTrue(result.get(), "Future should be completed");
-    }
-
-    @Test
-    void asyncTask() throws InterruptedException {
-        final Thread currentThread = Thread.currentThread();
-        Scheduler scheduler = Scheduler.newScheduler();
-        AtomicBoolean result = new AtomicBoolean(false);
-        scheduler.buildTask(() -> {
-                    assertNotEquals(currentThread, Thread.currentThread(),
-                            "Task should be executed in a different thread");
-                    result.set(true);
-                })
-                .executionType(ExecutionType.ASYNC)
-                .schedule();
-        assertFalse(result.get(), "Async task should only be executed after process()");
-        scheduler.process();
-        Thread.sleep(250);
-        assertTrue(result.get(), "Async task didn't get executed");
     }
 
     @Test

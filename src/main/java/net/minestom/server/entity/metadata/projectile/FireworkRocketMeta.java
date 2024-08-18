@@ -2,8 +2,8 @@ package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
-import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,7 +14,7 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
 
     private Entity shooter;
 
-    public FireworkRocketMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FireworkRocketMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -24,7 +24,7 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     }
 
     public void setFireworkInfo(@NotNull ItemStack value) {
-        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.ItemStack(value));
     }
 
     @Override

@@ -75,14 +75,23 @@ public final class LoginListener {
             byte[] nonce = new byte[4];
             ThreadLocalRandom.current().nextBytes(nonce);
             socketConnection.setNonce(nonce);
-            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce));
+            socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce, true));
         } else {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
-            final UUID playerUuid = bungee && isSocketConnection ?
-                    ((PlayerSocketConnection) connection).gameProfile().uuid() :
-                    CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
-            CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
+            AsyncUtils.runAsync(() -> {
+                try {
+                    final UUID playerUuid;
+                    if (bungee && isSocketConnection)
+                        playerUuid = ((PlayerSocketConnection) connection).gameProfile().uuid();
+                    else playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
+                    CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
+
+                } catch (Exception exception) {
+                    connection.sendPacket(new LoginDisconnectPacket(Component.text(exception.getClass().getSimpleName() + ": " + exception.getMessage())));
+                    connection.disconnect();
+                }
+            });
         }
     }
 

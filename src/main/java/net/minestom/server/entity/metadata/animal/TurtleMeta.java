@@ -4,13 +4,14 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class TurtleMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 6;
 
-    public TurtleMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public TurtleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -19,7 +20,7 @@ public class TurtleMeta extends AnimalMeta {
     }
 
     public void setBlockPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
     }
 
     public boolean isHasEgg() {
@@ -43,7 +44,7 @@ public class TurtleMeta extends AnimalMeta {
     }
 
     public void setTravelPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET + 3, Metadata.BlockPosition(value));
     }
 
     public boolean isGoingHome() {

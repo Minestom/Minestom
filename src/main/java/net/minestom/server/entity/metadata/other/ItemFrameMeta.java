@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.item.ItemStack;
@@ -14,7 +15,7 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
 
     private Orientation orientation;
 
-    public ItemFrameMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ItemFrameMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
         this.orientation = Orientation.DOWN;
     }
@@ -25,7 +26,7 @@ public class ItemFrameMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public void setItem(@NotNull ItemStack value) {
-        super.metadata.setIndex(OFFSET, Metadata.Slot(value));
+        super.metadata.setIndex(OFFSET, Metadata.ItemStack(value));
     }
 
     @NotNull

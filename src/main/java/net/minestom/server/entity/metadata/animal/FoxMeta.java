@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +22,7 @@ public class FoxMeta extends AnimalMeta {
     private static final byte DEFENDING_BIT = (byte) 0x80;
     //Microtus end - update java keyword usage
 
-    public FoxMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FoxMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

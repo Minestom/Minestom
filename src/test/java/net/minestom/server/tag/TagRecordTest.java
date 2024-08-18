@@ -1,10 +1,10 @@
 package net.minestom.server.tag;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.item.ItemStack;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -13,10 +13,10 @@ import java.util.Map;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TagRecordTest {
+public class TagRecordTest {
 
     @Test
-    void basic() {
+    public void basic() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Structure("vec", Vec.class);
         var vec = new Vec(1, 2, 3);
@@ -26,28 +26,30 @@ class TagRecordTest {
     }
 
     @Test
-    void fromNBT() {
-        var vecCompound = NBT.Compound(Map.of(
-                "x", NBT.Double(1),
-                "y", NBT.Double(2),
-                "z", NBT.Double(3)));
-        var handler = TagHandler.fromCompound(NBT.Compound(Map.of("vec", vecCompound)));
+    public void fromNBT() {
+        var vecCompound = CompoundBinaryTag.builder()
+                .putDouble("x", 1)
+                .putDouble("y", 2)
+                .putDouble("z", 3)
+                .build();
+        var handler = TagHandler.fromCompound(CompoundBinaryTag.from(Map.of("vec", vecCompound)));
         var tag = Tag.Structure("vec", Vec.class);
         assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
     }
 
     @Test
-    void fromNBTView() {
-        var handler = TagHandler.fromCompound(NBT.Compound(Map.of(
-                "x", NBT.Double(1),
-                "y", NBT.Double(2),
-                "z", NBT.Double(3))));
+    public void fromNBTView() {
+        var handler = TagHandler.fromCompound(CompoundBinaryTag.builder()
+                .putDouble("x", 1)
+                .putDouble("y", 2)
+                .putDouble("z", 3)
+                .build());
         var tag = Tag.View(Vec.class);
         assertEquals(new Vec(1, 2, 3), handler.getTag(tag));
     }
 
     @Test
-    void basicSerializer() {
+    public void basicSerializer() {
         var handler = TagHandler.newHandler();
         var serializer = TagRecord.serializer(Vec.class);
         serializer.write(handler, new Vec(1, 2, 3));
@@ -55,7 +57,7 @@ class TagRecordTest {
     }
 
     @Test
-    void basicSnbt() {
+    public void basicSnbt() {
         var handler = TagHandler.newHandler();
         var tag = Tag.Structure("vec", Vec.class);
         var vec = new Vec(1, 2, 3);
@@ -74,10 +76,10 @@ class TagRecordTest {
     }
 
     @Test
-    void nbtSerializer() {
-        record CompoundRecord(NBTCompound compound) {
+    public void nbtSerializer() {
+        record CompoundRecord(CompoundBinaryTag compound) {
         }
-        var test = new CompoundRecord(NBT.Compound(Map.of("key", NBT.String("value"))));
+        var test = new CompoundRecord(CompoundBinaryTag.from(Map.of("key", StringBinaryTag.stringBinaryTag("value"))));
         var handler = TagHandler.newHandler();
         var serializer = TagRecord.serializer(CompoundRecord.class);
         serializer.write(handler, test);
@@ -85,26 +87,26 @@ class TagRecordTest {
     }
 
     @Test
-    void unsupportedList() {
+    public void unsupportedList() {
         record Test(List<Object> list) {
         }
         assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", Test.class));
     }
 
     @Test
-    void unsupportedArray() {
+    public void unsupportedArray() {
         record Test(Object[] array) {
         }
         assertThrows(IllegalArgumentException.class, () -> Tag.Structure("test", Test.class));
     }
 
     @Test
-    void forceRecord() {
+    public void forceRecord() {
         assertThrows(Throwable.class, () -> Tag.Structure("entity", Class.class.cast(Entity.class)));
     }
 
     @Test
-    void invalidItem() {
+    public void invalidItem() {
         // ItemStack cannot become a record due to `ItemStack#toItemNBT` being serialized differently, and independently of
         // the item record components
         assertThrows(Throwable.class, () -> Tag.Structure("item", Class.class.cast(ItemStack.class)));

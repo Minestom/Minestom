@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.MobMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class EnderDragonMeta extends MobMeta {
     public static final byte OFFSET = MobMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 0;
 
-    public EnderDragonMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public EnderDragonMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

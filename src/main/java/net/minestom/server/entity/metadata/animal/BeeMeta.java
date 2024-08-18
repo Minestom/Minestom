@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class BeeMeta extends AnimalMeta {
@@ -14,7 +15,7 @@ public class BeeMeta extends AnimalMeta {
     private static final byte HAS_NECTAR_BIT = 0x08;
     //Microtus end - update java keyword usage
 
-    public BeeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public BeeMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

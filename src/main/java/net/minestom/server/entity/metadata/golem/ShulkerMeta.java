@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.golem;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class ShulkerMeta extends AbstractGolemMeta {
     public static final byte OFFSET = AbstractGolemMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
-    public ShulkerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ShulkerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.golem;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class IronGolemMeta extends AbstractGolemMeta {
@@ -9,7 +9,7 @@ public class IronGolemMeta extends AbstractGolemMeta {
     public static final byte MAX_OFFSET = OFFSET + 1;
     private static final byte PLAYER_CREATED_BIT = 0x01; //Microtus - update java keyword usage
 
-    public IronGolemMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public IronGolemMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

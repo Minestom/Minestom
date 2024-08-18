@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
                             @NotNull ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public SetSlotPacket(@NotNull NetworkBuffer reader) {
         this(reader.read(BYTE), reader.read(VAR_INT), reader.read(SHORT),
-                reader.read(ITEM));
+                reader.read(ItemStack.NETWORK_TYPE));
     }
 
     @Override
@@ -27,7 +27,7 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
         writer.write(BYTE, windowId);
         writer.write(VAR_INT, stateId);
         writer.write(SHORT, slot);
-        writer.write(ITEM, itemStack);
+        writer.write(ItemStack.NETWORK_TYPE, itemStack);
     }
 
     @Override
@@ -37,20 +37,24 @@ public record SetSlotPacket(byte windowId, int stateId, short slot,
 
     @Override
     public @NotNull Collection<Component> components() {
-        final var components = new ArrayList<>(this.itemStack.getLore());
-        final var displayname = this.itemStack.getDisplayName();
-        if (displayname != null) components.add(displayname);
-
+        final var components = new ArrayList<>(this.itemStack.get(ItemComponent.LORE, List.of()));
+        final var displayName = this.itemStack.get(ItemComponent.CUSTOM_NAME);
+        if (displayName != null) components.add(displayName);
+        final var itemName = this.itemStack.get(ItemComponent.ITEM_NAME);
+        if (itemName != null) components.add(itemName);
         return List.copyOf(components);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new SetSlotPacket(this.windowId, this.stateId, this.slot, this.itemStack.withDisplayName(operator).withLore(lines -> {
-            final var translatedComponents = new ArrayList<Component>();
-            lines.forEach(component -> translatedComponents.add(operator.apply(component)));
-            return translatedComponents;
-        }));
+        return new SetSlotPacket(this.windowId, this.stateId, this.slot, this.itemStack
+                .with(ItemComponent.CUSTOM_NAME, operator)
+                .with(ItemComponent.ITEM_NAME, operator)
+                .with(ItemComponent.LORE, (UnaryOperator<List<Component>>) lines -> {
+                    final var translatedComponents = new ArrayList<Component>();
+                    lines.forEach(component -> translatedComponents.add(operator.apply(component)));
+                    return translatedComponents;
+                }));
     }
 
     /**

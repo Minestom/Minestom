@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.instance.block.Block;
@@ -15,7 +16,7 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
 
     private Block block = Block.STONE;
 
-    public FallingBlockMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FallingBlockMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -24,7 +25,7 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public void setSpawnPosition(Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.Position(value));
+        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
     }
 
     @NotNull

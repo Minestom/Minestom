@@ -49,9 +49,21 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
     public static final byte ICON_FLAG = 0x04;
 
     /**
+     * A flag instructing the client to use its builtin blending effect, only used with the darkness effect currently.
+     */
+    public static final byte BLEND_FLAG = 0x08;
+
+    /**
      * A duration constant which sets a Potion duration to infinite.
      */
     public static final int INFINITE_DURATION = -1;
+
+    /**
+     * @see #Potion(PotionEffect, byte, int, byte)
+     */
+    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, int flags) {
+        this(effect, amplifier, duration, (byte) flags);
+    }
 
     /**
      * Creates a new Potion with no flags.
@@ -106,6 +118,10 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         return (flags & ICON_FLAG) == ICON_FLAG;
     }
 
+    public boolean hasBlend() {
+        return (flags & BLEND_FLAG) == BLEND_FLAG;
+    }
+
     /**
      * Sends a packet that a potion effect has been applied to the entity.
      * <p>
@@ -114,7 +130,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      * @param entity the entity to add the effect to
      */
     public void sendAddPacket(@NotNull Entity entity) {
-        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this, null));
+        entity.sendPacketToViewersAndSelf(new EntityEffectPacket(entity.getEntityId(), this));
     }
 
     /**

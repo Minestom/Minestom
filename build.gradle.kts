@@ -10,7 +10,7 @@ plugins {
 
 group = "net.onelitefeather.microtus"
 
-version = System.getenv("TAG_VERSION") ?: "1.4.3-SNAPSHOT"
+version = System.getenv("TAG_VERSION") ?: "1.4.0-SNAPSHOT"
 
 allprojects {
     group = "net.onelitefeather.microtus"
@@ -58,7 +58,7 @@ tasks {
             addStringOption("-release", "21")
             // Links to external javadocs
             links("https://docs.oracle.com/en/java/javase/21/docs/api/")
-            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
+            links("https://jd.adventure.kyori.net/api/${libs.versions.adventure.get()}/")
         }
     }
     withType<Zip> {
@@ -78,11 +78,11 @@ tasks {
 }
 
 dependencies {
-    // Testing Framework
-    testImplementation(project(mapOf("path" to ":testing")))
-    // Only here to ensure J9 module support for extensions and our classloaders
-    testCompileOnly(libs.mockito.core)
-
+    // Core dependencies
+    api(libs.slf4j)
+    api(libs.jetbrainsAnnotations)
+    api(libs.bundles.adventure)
+    implementation(libs.minestomData)
 
     // Logging
     implementation(libs.bundles.logging)
@@ -93,31 +93,22 @@ dependencies {
     implementation(libs.caffeine)
     api(libs.fastutil)
     implementation(libs.bundles.flare)
-
-    // Libraries
-    api(libs.gson)
-    implementation(libs.jcTools)
-    // Path finding
-    api(libs.hydrazine)
-
-    // Adventure, for user-interface
-    api(libs.bundles.adventure)
-
-    // Kotlin Libraries
-    api(libs.bundles.kotlin)
-
+    // BStats
+    api(libs.bstats.base)
+    // Maven
     api(libs.maven.resolver)
     api(libs.maven.connector)
     api(libs.maven.transport.http)
 
-    // Minestom Data (From MinestomDataGenerator)
-    implementation(libs.minestomData)
+    // Libraries
+    api(libs.gson)
+    implementation(libs.jcTools)
 
-    // NBT parsing/manipulation/saving
-    api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
-    api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
-
-    // BStats
-    api(libs.bstats.base)
+    // Testing
+    testImplementation(libs.bundles.junit)
+    testImplementation(project(":testing"))
+    // Only here to ensure J9 module support for extensions and our classloaders
+    testCompileOnly(libs.mockito.core)
 }
+
 

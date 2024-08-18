@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class PrimedTntMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public PrimedTntMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PrimedTntMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

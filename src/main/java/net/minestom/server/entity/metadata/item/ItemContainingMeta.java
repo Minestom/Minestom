@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -13,7 +14,7 @@ class ItemContainingMeta extends EntityMeta {
 
     private final ItemStack defaultItem;
 
-    protected ItemContainingMeta(@NotNull Entity entity, @NotNull Metadata metadata, @NotNull Material defaultItemMaterial) {
+    protected ItemContainingMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata, @NotNull Material defaultItemMaterial) {
         super(entity, metadata);
         this.defaultItem = ItemStack.of(defaultItemMaterial);
     }
@@ -24,7 +25,7 @@ class ItemContainingMeta extends EntityMeta {
     }
 
     public void setItem(@NotNull ItemStack item) {
-        super.metadata.setIndex(OFFSET, Metadata.Slot(item));
+        super.metadata.setIndex(OFFSET, Metadata.ItemStack(item));
     }
 
 }

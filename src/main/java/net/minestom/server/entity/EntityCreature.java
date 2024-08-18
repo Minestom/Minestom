@@ -1,6 +1,5 @@
 package net.minestom.server.entity;
 
-import com.extollit.gaming.ai.path.HydrazinePathFinder;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
@@ -9,7 +8,9 @@ import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -56,8 +57,7 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
 
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
-        this.navigator.setPathFinder(new HydrazinePathFinder(navigator.getPathingEntity(), instance.getInstanceSpace()));
-
+        this.navigator.reset();
         return super.setInstance(instance, spawnPosition);
     }
 
@@ -148,4 +148,10 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
         attack(target, false);
     }
 
+    @SuppressWarnings("unchecked")
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends EntityCreature> acquirable() {
+        return (Acquirable<? extends EntityCreature>) super.acquirable();
+    }
 }

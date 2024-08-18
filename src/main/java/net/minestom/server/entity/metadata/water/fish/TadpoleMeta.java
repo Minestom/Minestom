@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 // Microtus - entity meta update
@@ -15,7 +15,7 @@ public final class TadpoleMeta extends AbstractFishMeta {
      * @param entity the involved entity
      * @param metadata the involved metadata
      */
-    public TadpoleMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public TadpoleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 }

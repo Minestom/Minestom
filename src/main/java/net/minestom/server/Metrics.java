@@ -11,7 +11,6 @@ import java.util.regex.Pattern;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.utils.debug.DebugUtils;
 import org.bstats.MetricsBase;
 import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
@@ -51,7 +50,7 @@ public class Metrics {
         }
         System.setProperty("bstats.relocatecheck", "false");
         metrics = new MetricsBase("server-implementation", serverUUID, SERVICE_ID,true,  this::getServerData, jsonObjectBuilder -> {}, null, () -> true, MinecraftServer.LOGGER::error,MinecraftServer.LOGGER::info,
-                DebugUtils.INSIDE_TEST, DebugUtils.INSIDE_TEST,DebugUtils.INSIDE_TEST);
+                ServerFlag.INSIDE_TEST, ServerFlag.INSIDE_TEST,ServerFlag.INSIDE_TEST);
 
         metrics.addCustomChart(new SimplePie("minecraft_version", () -> {
             String minecraftVersion = MinecraftServer.VERSION_NAME;

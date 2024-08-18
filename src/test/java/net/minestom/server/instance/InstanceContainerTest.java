@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.minestom.server.tag.Tag;
 import net.minestom.server.world.DimensionType;
-import net.minestom.server.world.DimensionTypeManager;
 import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
@@ -12,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class InstanceContainerTest {
 
     static {
-        new DimensionTypeManager().addDimension(DimensionType.OVERWORLD);
     }
 
     @Test

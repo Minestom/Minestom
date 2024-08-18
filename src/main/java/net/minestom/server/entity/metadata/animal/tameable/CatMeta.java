@@ -3,13 +3,17 @@ package net.minestom.server.entity.metadata.animal.tameable;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 public class CatMeta extends TameableAnimalMeta {
     public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 4;
 
-    public CatMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    private static final DyeColor[] DYE_VALUES = DyeColor.values();
+
+    public CatMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -39,7 +43,7 @@ public class CatMeta extends TameableAnimalMeta {
     }
 
     public @NotNull DyeColor getCollarColor() {
-        return DyeColor.getValue(super.metadata.getIndex(OFFSET + 3, DyeColor.RED.ordinal())); // Microtus -  Banner and Shield Meta
+        return DYE_VALUES[super.metadata.getIndex(OFFSET + 3, DyeColor.RED.ordinal())];
     }
 
     public void setCollarColor(@NotNull DyeColor value) {
@@ -59,7 +63,7 @@ public class CatMeta extends TameableAnimalMeta {
         JELLIE,
         ALL_BLACK;
 
-        private static final Variant[] VALUES = values();
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
     }
 
 }

@@ -5,9 +5,11 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.item.StackingRule;
+import net.minestom.server.thread.Acquirable;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -77,13 +79,12 @@ public class ItemEntity extends Entity {
                         if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
                         final ItemStack itemStackEntity = itemEntity.getItemStack();
-                        final StackingRule stackingRule = StackingRule.get();
-                        final boolean canStack = stackingRule.canBeStacked(itemStack, itemStackEntity);
+                        final boolean canStack = itemStack.isSimilar(itemStackEntity);
 
                         if (!canStack) return;
-                        final int totalAmount = stackingRule.getAmount(itemStack) + stackingRule.getAmount(itemStackEntity);
-                        if (!stackingRule.canApply(itemStack, totalAmount)) return;
-                        final ItemStack result = stackingRule.apply(itemStack, totalAmount);
+                        final int totalAmount = itemStack.amount() + itemStackEntity.amount();
+                        if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
+                        final ItemStack result = itemStack.withAmount(totalAmount);
                         EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
                         EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
                             setItemStack(entityItemMergeEvent.getResult());
@@ -216,5 +217,12 @@ public class ItemEntity extends Entity {
      */
     public long getSpawnTime() {
         return spawnTime;
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends ItemEntity> acquirable() {
+        return (Acquirable<? extends ItemEntity>) super.acquirable();
     }
 }

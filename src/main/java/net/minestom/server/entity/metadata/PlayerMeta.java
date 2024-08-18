@@ -1,12 +1,12 @@
 package net.minestom.server.entity.metadata;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jglrxavpok.hephaistos.nbt.NBT;
-
-import java.util.Map;
 
 public class PlayerMeta extends LivingEntityMeta {
     public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
@@ -22,7 +22,7 @@ public class PlayerMeta extends LivingEntityMeta {
     private static final byte HAT_BIT = 0x40;
     //Microtus end - update java keyword usage
 
-    public PlayerMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PlayerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -111,23 +111,23 @@ public class PlayerMeta extends LivingEntityMeta {
     }
 
     @Nullable
-    public NBT getLeftShoulderEntityData() {
+    public BinaryTag getLeftShoulderEntityData() {
         return super.metadata.getIndex(OFFSET + 4, null);
     }
 
-    public void setLeftShoulderEntityData(@Nullable NBT value) {
-        if (value == null) value = NBT.Compound(Map.of());
+    public void setLeftShoulderEntityData(@Nullable BinaryTag value) {
+        if (value == null) value = CompoundBinaryTag.empty();
 
         super.metadata.setIndex(OFFSET + 4, Metadata.NBT(value));
     }
 
     @Nullable
-    public NBT getRightShoulderEntityData() {
+    public BinaryTag getRightShoulderEntityData() {
         return super.metadata.getIndex(OFFSET + 5, null);
     }
 
-    public void setRightShoulderEntityData(@Nullable NBT value) {
-        if (value == null) value = NBT.Compound(Map.of());
+    public void setRightShoulderEntityData(@Nullable BinaryTag value) {
+        if (value == null) value = CompoundBinaryTag.empty();
 
         super.metadata.setIndex(OFFSET + 5, Metadata.NBT(value));
     }
