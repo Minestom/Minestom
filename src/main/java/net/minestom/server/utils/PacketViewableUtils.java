@@ -68,7 +68,7 @@ public final class PacketViewableUtils {
         private synchronized void append(ServerPacket serverPacket, @Nullable Player exception) {
             final int start = buffer.writeIndex();
             // Viewable storage is only used for play packets, so fine to assume this.
-            PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, serverPacket, MinecraftServer.getCompressionThreshold());
+            PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
             final int end = buffer.writeIndex();
             if (exception != null) {
                 final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;

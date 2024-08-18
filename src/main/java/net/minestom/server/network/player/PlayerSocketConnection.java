@@ -98,9 +98,10 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Read all packets
         try {
             final PacketReading.ReadResult<ClientPacket> result = PacketReading.readPackets(
+                    readBuffer,
                     packetParser,
                     getConnectionState(), PacketVanilla::nextClientState,
-                    readBuffer, compression()
+                    compression()
             );
             for (ClientPacket packet : result.packets()) {
                 try {
@@ -342,7 +343,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         try {
             switch (packet) {
                 case ServerPacket serverPacket ->
-                        PacketWriting.writeFramedPacket(state, buffer, serverPacket, compressionThreshold);
+                        PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
                     final int length = body.size();
@@ -356,10 +357,10 @@ public class PlayerSocketConnection extends PlayerConnection {
                         NetworkBuffer.copy(body, 0, buffer, start, length);
                         buffer.advanceWrite(length);
                     } else
-                        PacketWriting.writeFramedPacket(state, buffer, cachedPacket.packet(state), compressionThreshold);
+                        PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
                 }
                 case LazyPacket lazyPacket ->
-                        PacketWriting.writeFramedPacket(state, buffer, lazyPacket.packet(), compressionThreshold);
+                        PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
             }
             return true;
         } catch (IllegalArgumentException | IndexOutOfBoundsException | BufferOverflowException exception) {

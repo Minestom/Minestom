@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.LazyPacket;
@@ -32,9 +33,10 @@ public class SendablePacketTest {
         var cached = new CachedPacket(packet);
         assertSame(packet, cached.packet(ConnectionState.PLAY));
 
-        var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet);
+        var buffer = PacketWriting.allocateTrimmedPacket(ConnectionState.PLAY, packet,
+                MinecraftServer.getCompressionThreshold());
         var cachedBuffer = cached.body(ConnectionState.PLAY);
-        assertTrue(NetworkBuffer.equals(buffer.body(), cachedBuffer));
+        assertTrue(NetworkBuffer.equals(buffer, cachedBuffer));
         // May fail in the very unlikely case where soft references are cleared
         // Rare enough to make this test worth it
         assertSame(cached.body(ConnectionState.PLAY), cachedBuffer);

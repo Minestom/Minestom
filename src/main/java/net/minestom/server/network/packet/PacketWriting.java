@@ -1,10 +1,8 @@
 package net.minestom.server.network.packet;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.network.packet.server.FramedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,26 +14,33 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
  * Fairly internal and performance sensitive.
  */
 public final class PacketWriting {
-    public static void writeFramedPacket(@NotNull ConnectionState state,
-                                         @NotNull NetworkBuffer buffer,
+    public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                         @NotNull ConnectionState state,
                                          @NotNull ClientPacket packet,
                                          int compressionThreshold) {
-        writeFramedPacket(PacketVanilla.CLIENT_PACKET_PARSER, state, buffer, packet, compressionThreshold);
+        writeFramedPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
-    public static void writeFramedPacket(@NotNull ConnectionState state,
-                                         @NotNull NetworkBuffer buffer,
+    public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                         @NotNull ConnectionState state,
                                          @NotNull ServerPacket packet,
                                          int compressionThreshold) {
-        writeFramedPacket(PacketVanilla.SERVER_PACKET_PARSER, state, buffer, packet, compressionThreshold);
+        writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
-    public static <T> void writeFramedPacket(@NotNull PacketParser<T> parser,
+    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                             @NotNull PacketParser<T> parser,
                                              @NotNull ConnectionState state,
-                                             @NotNull NetworkBuffer buffer,
                                              @NotNull T packet,
                                              int compressionThreshold) {
         final PacketRegistry<T> registry = parser.stateRegistry(state);
+        writeFramedPacket(buffer, registry, packet, compressionThreshold);
+    }
+
+    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                             @NotNull PacketRegistry<T> registry,
+                                             @NotNull T packet,
+                                             int compressionThreshold) {
         @SuppressWarnings("unchecked") final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo((Class<? extends T>) packet.getClass());
         final int id = packetInfo.id();
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
@@ -46,14 +51,16 @@ public final class PacketWriting {
         );
     }
 
-    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type,
+    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                             @NotNull NetworkBuffer.Type<T> type,
                                              int id, @NotNull T packet,
                                              int compressionThreshold) {
         if (compressionThreshold <= 0) writeUncompressedFormat(buffer, type, id, packet);
         else writeCompressedFormat(buffer, type, id, packet, compressionThreshold);
     }
 
-    private static <T> void writeUncompressedFormat(NetworkBuffer buffer, NetworkBuffer.Type<T> type,
+    private static <T> void writeUncompressedFormat(NetworkBuffer buffer,
+                                                    NetworkBuffer.Type<T> type,
                                                     int id, T packet) {
         // Uncompressed format https://wiki.vg/Protocol#Without_compression
         final int lengthIndex = buffer.advanceWrite(3);
@@ -63,7 +70,8 @@ public final class PacketWriting {
         writeVarIntHeader(buffer, lengthIndex, finalSize);
     }
 
-    private static <T> void writeCompressedFormat(NetworkBuffer buffer, NetworkBuffer.Type<T> type,
+    private static <T> void writeCompressedFormat(NetworkBuffer buffer,
+                                                  NetworkBuffer.Type<T> type,
                                                   int id, T packet,
                                                   int compressionThreshold) {
         // Compressed format https://wiki.vg/Protocol#With_compression
@@ -88,18 +96,19 @@ public final class PacketWriting {
         writeVarIntHeader(buffer, uncompressedIndex, compressed ? packetSize : 0);
     }
 
+    public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
+                                                      @NotNull ServerPacket packet,
+                                                      int compressionThreshold) {
+        try (var hold = PacketVanilla.PACKET_POOL.hold()) {
+            NetworkBuffer buffer = hold.get();
+            writeFramedPacket(buffer, state, packet, compressionThreshold);
+            return buffer.copy(0, buffer.writeIndex());
+        }
+    }
+
     private static void writeVarIntHeader(@NotNull NetworkBuffer buffer, int startIndex, int value) {
         buffer.writeAt(startIndex, BYTE, (byte) (value & 0x7F | 0x80));
         buffer.writeAt(startIndex + 1, BYTE, (byte) ((value >>> 7) & 0x7F | 0x80));
         buffer.writeAt(startIndex + 2, BYTE, (byte) (value >>> 14));
-    }
-
-    public static FramedPacket allocateTrimmedPacket(@NotNull ConnectionState state, @NotNull ServerPacket packet) {
-        try (var hold = PacketVanilla.PACKET_POOL.hold()) {
-            NetworkBuffer buffer = hold.get();
-            writeFramedPacket(state, buffer, packet, MinecraftServer.getCompressionThreshold());
-            final NetworkBuffer copy = buffer.copy(0, buffer.writeIndex());
-            return new FramedPacket(packet, copy);
-        }
     }
 }

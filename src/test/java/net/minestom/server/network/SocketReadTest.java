@@ -19,9 +19,9 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
-        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
-        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
         var packets = readResult.packets();
         assertEquals(0, readResult.missingLength());
 
@@ -35,10 +35,10 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
-        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
-        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
-        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
         var packets = readResult.packets();
         assertEquals(0, readResult.missingLength());
 
@@ -55,10 +55,10 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
-        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
-        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
         var packets = readResult.packets();
         assertEquals(getVarIntSize(200), buffer.readableBytes());
         assertEquals(200, readResult.missingLength());
@@ -75,10 +75,10 @@ public class SocketReadTest {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
         var buffer = PacketVanilla.PACKET_POOL.get();
-        PacketWriting.writeFramedPacket(ConnectionState.PLAY, buffer, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
-        var readResult = PacketReading.readClients(ConnectionState.PLAY, buffer, compressed);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
         var packets = readResult.packets();
         assertEquals(1, buffer.readableBytes());
         assertEquals(0, readResult.missingLength());

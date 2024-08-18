@@ -24,17 +24,21 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public final class PacketReading {
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
 
+    public record ReadResult<T>(List<T> packets, ConnectionState newState, int missingLength) {
+    }
+
     public static ReadResult<ClientPacket> readClients(
-            @NotNull ConnectionState state,
-            @NotNull NetworkBuffer readBuffer, boolean compressed
+            @NotNull NetworkBuffer readBuffer,
+            @NotNull ConnectionState state, boolean compressed
     ) throws DataFormatException {
-        return readPackets(PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, readBuffer, compressed);
+        return readPackets(readBuffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
     public static <T> ReadResult<T> readPackets(
+            @NotNull NetworkBuffer readBuffer,
             @NotNull PacketParser<T> parser,
             @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
-            @NotNull NetworkBuffer readBuffer, boolean compressed
+            boolean compressed
     ) throws DataFormatException {
         List<T> packets = new ArrayList<>();
         while (readBuffer.readableBytes() > 0) {
@@ -66,15 +70,15 @@ public final class PacketReading {
                         NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
                         try {
                             content.decompress(content.readIndex(), content.readableBytes(), decompressed);
-                            packet = readUncompressedPacket(parser, state, decompressed);
+                            packet = readUncompressedPacket(decompressed, parser, state);
                         } finally {
                             PacketVanilla.PACKET_POOL.add(decompressed);
                         }
                     } else {
-                        packet = readUncompressedPacket(parser, state, content);
+                        packet = readUncompressedPacket(content, parser, state);
                     }
                 } else {
-                    packet = readUncompressedPacket(parser, state, content);
+                    packet = readUncompressedPacket(content, parser, state);
                 }
                 packets.add(packet);
                 state = stateUpdater.apply(packet, state);
@@ -88,9 +92,9 @@ public final class PacketReading {
         return new ReadResult<>(packets, state, 0);
     }
 
-    private static <T> T readUncompressedPacket(PacketParser<T> parser,
-                                                @NotNull ConnectionState state,
-                                                @NotNull NetworkBuffer buffer) {
+    private static <T> T readUncompressedPacket(NetworkBuffer buffer,
+                                                PacketParser<T> parser,
+                                                ConnectionState state) {
         final int packetId = buffer.read(VAR_INT);
         final PacketRegistry<T> registry = parser.stateRegistry(state);
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packetId);
@@ -105,8 +109,5 @@ public final class PacketReading {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public record ReadResult<T>(List<T> packets, ConnectionState newState, int missingLength) {
     }
 }
