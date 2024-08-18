@@ -3,10 +3,12 @@ package net.minestom.server.network;
 import net.minestom.server.network.packet.PacketReading;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.List;
 import java.util.zip.DataFormatException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,11 +24,11 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        var packets = readResult.packets();
-        assertEquals(0, readResult.missingLength());
-
-        assertEquals(1, packets.size());
-        assertEquals(packet, packets.getFirst());
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(List.of(packet), packets);
     }
 
     @ParameterizedTest
@@ -39,12 +41,11 @@ public class SocketReadTest {
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        var packets = readResult.packets();
-        assertEquals(0, readResult.missingLength());
-
-        assertEquals(2, packets.size());
-        assertEquals(packet, packets.getFirst());
-        assertEquals(packet, packets.getLast());
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(List.of(packet, packet), packets);
     }
 
     @ParameterizedTest
@@ -59,12 +60,17 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        var packets = readResult.packets();
-        assertEquals(getVarIntSize(200), buffer.readableBytes());
-        assertEquals(200, readResult.missingLength());
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(List.of(packet), packets);
 
-        assertEquals(1, packets.size());
-        assertEquals(packet, packets.getFirst());
+        readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+            throw new AssertionError("Expected a failure result, got " + readResult);
+        }
+        assertEquals(getVarIntSize(200) + 200, failure.requiredCapacity());
     }
 
     @ParameterizedTest
@@ -79,12 +85,54 @@ public class SocketReadTest {
         buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        var packets = readResult.packets();
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
         assertEquals(1, buffer.readableBytes());
-        assertEquals(0, readResult.missingLength());
 
-        assertEquals(1, packets.size());
-        assertEquals(packet, packets.getFirst());
+        assertEquals(List.of(packet), packets);
+
+        // Try to read the next packet
+        readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Empty<ClientPacket>)) {
+            throw new AssertionError("Expected an empty result, got " + readResult);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void resize(boolean compressed) throws DataFormatException {
+        // Write a complete packet that is larger than the buffer capacity
+
+        var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
+
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        final int packetLength = buffer.writeIndex();
+        buffer = buffer.copy(0, packetLength / 2).index(0, packetLength / 2);
+
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+            throw new AssertionError("Expected a failure result, got " + readResult);
+        }
+        assertEquals(packetLength, failure.requiredCapacity());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void resizeHeader(boolean compressed) throws DataFormatException {
+        // Write a buffer where you cannot read the packet length
+
+        var buffer = NetworkBuffer.staticBuffer(1);
+        buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
+
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+            throw new AssertionError("Expected a failure result, got " + readResult);
+        }
+        // 5 = max var-int size
+        assertEquals(5, failure.requiredCapacity());
     }
 
     private static int getVarIntSize(int input) {

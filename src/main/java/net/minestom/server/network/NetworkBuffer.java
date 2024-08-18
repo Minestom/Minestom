@@ -142,11 +142,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void compact();
 
-    NetworkBuffer slice(int index, int length);
+    NetworkBuffer slice(int index, int length, int readIndex, int writeIndex);
 
-    NetworkBuffer copy(int index, int length);
+    NetworkBuffer copy(int index, int length, int readIndex, int writeIndex);
 
-    NetworkBuffer copy();
+    default NetworkBuffer copy(int index, int length) {
+        return copy(index, length, readIndex(), writeIndex());
+    }
 
     int readChannel(ReadableByteChannel channel) throws IOException;
 

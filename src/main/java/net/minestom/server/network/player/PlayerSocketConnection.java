@@ -97,34 +97,41 @@ public class PlayerSocketConnection extends PlayerConnection {
     private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
         // Read all packets
         try {
-            final PacketReading.ReadResult<ClientPacket> result = PacketReading.readPackets(
+            final PacketReading.Result<ClientPacket> result = PacketReading.readPackets(
                     readBuffer,
                     packetParser,
                     getConnectionState(), PacketVanilla::nextClientState,
                     compression()
             );
-            for (ClientPacket packet : result.packets()) {
-                try {
-                    if (packet.processImmediately()) {
-                        MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
-                    } else {
-                        // To be processed during the next player tick
-                        final Player player = getPlayer();
-                        assert player != null;
-                        player.addPacketToQueue(packet);
+            switch (result) {
+                case PacketReading.Result.Success<ClientPacket> success -> {
+                    for (ClientPacket packet : success.packets()) {
+                        try {
+                            if (packet.processImmediately()) {
+                                MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                            } else {
+                                // To be processed during the next player tick
+                                final Player player = getPlayer();
+                                assert player != null;
+                                player.addPacketToQueue(packet);
+                            }
+                        } catch (Exception e) {
+                            MinecraftServer.getExceptionManager().handleException(e);
+                        }
                     }
-                } catch (Exception e) {
-                    MinecraftServer.getExceptionManager().handleException(e);
+                    // Compact in case of incomplete read
+                    readBuffer.compact();
                 }
-            }
-            final int missingLength = result.missingLength();
-            if (missingLength > 0) {
-                // Resize for next read
-                final int newSize = readBuffer.size() + missingLength;
-                readBuffer.resize(newSize);
-            } else {
-                // Compact in case of incomplete read
-                readBuffer.compact();
+                case PacketReading.Result.Empty<ClientPacket> ignored -> {
+                    // Empty
+                }
+                case PacketReading.Result.Failure<ClientPacket> failure -> {
+                    // Resize for next read
+                    final int requiredCapacity = failure.requiredCapacity();
+                    assert requiredCapacity > readBuffer.size() :
+                            "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.size();
+                    readBuffer.resize(requiredCapacity);
+                }
             }
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
@@ -408,7 +415,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             // Write to channel
             final boolean success = buffer.writeChannel(channel);
             if (!success) {
-                this.writeLeftover = buffer.copy(buffer.readIndex(), buffer.readableBytes());
+                this.writeLeftover = buffer.copy(buffer.readIndex(), buffer.readableBytes(),
+                        0, buffer.readableBytes());
             }
         }
     }

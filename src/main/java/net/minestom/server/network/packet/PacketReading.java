@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.BufferUnderflowException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -21,75 +20,135 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * <p>
  * Fairly internal and performance sensitive.
  */
+@SuppressWarnings("ALL")
 public final class PacketReading {
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
 
-    public record ReadResult<T>(List<T> packets, ConnectionState newState, int missingLength) {
+    private static final int MAX_VAR_INT_SIZE = 5;
+    private static final Result.Empty EMPTY_CLIENT_PACKET = new Result.Empty<>();
+
+    public sealed interface Result<T> {
+
+        /**
+         * At least one packet was read. The buffer may still contain half-read packets
+         */
+        record Success<T>(List<T> packets, ConnectionState newState) implements Result<T> {
+            public Success {
+                if (packets.isEmpty()) {
+                    throw new IllegalArgumentException("Empty packets");
+                }
+            }
+
+            public Success(T packet, ConnectionState newState) {
+                this(List.of(packet), newState);
+            }
+        }
+
+        /**
+         * Represents no packet to read.
+         */
+        record Empty<T>() implements Result<T> {
+        }
+
+        /**
+         * Represents a failure to read a packet due to insufficient buffer capacity.
+         * <p>
+         * Buffer should be expanded to at least {@code requiredCapacity} bytes.
+         * <p>
+         * If the buffer does not allow to read the packet length, max var-int length is returned.
+         */
+        record Failure<T>(int requiredCapacity) implements Result<T> {
+        }
     }
 
-    public static ReadResult<ClientPacket> readClients(
+    public static Result<ClientPacket> readClients(
             @NotNull NetworkBuffer readBuffer,
             @NotNull ConnectionState state, boolean compressed
     ) throws DataFormatException {
         return readPackets(readBuffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
-    public static <T> ReadResult<T> readPackets(
-            @NotNull NetworkBuffer readBuffer,
+    public static <T> Result<T> readPackets(
+            @NotNull NetworkBuffer buffer,
             @NotNull PacketParser<T> parser,
             @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
         List<T> packets = new ArrayList<>();
-        while (readBuffer.readableBytes() > 0) {
-            final int beginMark = readBuffer.readIndex();
-            try {
-                // Ensure that the buffer contains the full packet (or wait for next socket read)
-                final int packetLength = readBuffer.read(VAR_INT);
-                if (packetLength > ServerFlag.MAX_PACKET_SIZE) {
-                    throw new DataFormatException("Packet too large: " + packetLength);
+        readLoop:
+        while (buffer.readableBytes() > 0) {
+            final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed);
+            if (buffer.readableBytes() == 0 && packets.isEmpty()) return result;
+            switch (result) {
+                case Result.Success<T> success -> {
+                    assert success.packets().size() == 1;
+                    packets.add(success.packets().getFirst());
+                    state = success.newState();
                 }
-                if (readBuffer.readIndex() > readBuffer.writeIndex()) {
-                    // Can't read the packet length
-                    readBuffer.readIndex(beginMark);
-                    return new ReadResult<>(packets, state, 0);
+                case Result.Empty<T> ignored -> {
+                    break readLoop;
                 }
-                final int readerStart = readBuffer.readIndex();
-                if (readBuffer.readableBytes() < packetLength) {
-                    // Can't read the full packet
-                    final int missingLength = packetLength - readBuffer.readableBytes();
-                    readBuffer.readIndex(beginMark);
-                    return new ReadResult<>(packets, state, missingLength);
+                case Result.Failure<T> failure -> {
+                    return packets.isEmpty() ? failure : new Result.Success<>(packets, state);
                 }
-                // Read packet https://wiki.vg/Protocol#Packet_format
-                NetworkBuffer content = readBuffer.slice(readBuffer.readIndex(), packetLength);
-                T packet;
-                if (compressed) {
-                    final int dataLength = content.read(VAR_INT);
-                    if (dataLength > 0) {
-                        NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
-                        try {
-                            content.decompress(content.readIndex(), content.readableBytes(), decompressed);
-                            packet = readUncompressedPacket(decompressed, parser, state);
-                        } finally {
-                            PacketVanilla.PACKET_POOL.add(decompressed);
-                        }
-                    } else {
-                        packet = readUncompressedPacket(content, parser, state);
-                    }
-                } else {
-                    packet = readUncompressedPacket(content, parser, state);
-                }
-                packets.add(packet);
-                state = stateUpdater.apply(packet, state);
-                // Position buffer to read the next packet
-                readBuffer.readIndex(readerStart + packetLength);
-            } catch (BufferUnderflowException e) {
-                readBuffer.readIndex(beginMark);
-                return new ReadResult<>(packets, state, 0);
             }
         }
-        return new ReadResult<>(packets, state, 0);
+        return !packets.isEmpty() ? new Result.Success<>(packets, state) : EMPTY_CLIENT_PACKET;
+    }
+
+    public static <T> Result<T> readPacket(
+            @NotNull NetworkBuffer buffer,
+            @NotNull PacketParser<T> parser,
+            @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            boolean compressed
+    ) throws DataFormatException {
+        final int beginMark = buffer.readIndex();
+        // READ PACKET LENGTH
+        final int packetLength;
+        try {
+            packetLength = buffer.read(VAR_INT);
+        } catch (IndexOutOfBoundsException e) {
+            // Couldn't read a single var-int
+            return new Result.Failure<>(MAX_VAR_INT_SIZE);
+        }
+        final int readerStart = buffer.readIndex();
+        if (readerStart > buffer.writeIndex()) {
+            // Can't read the packet length, buffer has enough capacity
+            buffer.readIndex(beginMark);
+            return EMPTY_CLIENT_PACKET;
+        }
+        if (packetLength > ServerFlag.MAX_PACKET_SIZE) {
+            throw new DataFormatException("Packet too large: " + packetLength);
+        }
+        // READ PAYLOAD https://wiki.vg/Protocol#Packet_format
+        if (buffer.readableBytes() < packetLength) {
+            // Can't read the full packet
+            buffer.readIndex(beginMark);
+            final int packetLengthVarIntSize = readerStart - beginMark;
+            final int requiredCapacity = packetLengthVarIntSize + packetLength;
+            return new Result.Failure<>(requiredCapacity);
+        }
+        NetworkBuffer content = buffer.slice(buffer.readIndex(), packetLength, 0, packetLength);
+        T packet;
+        if (compressed) {
+            final int dataLength = content.read(VAR_INT);
+            if (dataLength > 0) {
+                NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
+                try {
+                    content.decompress(content.readIndex(), content.readableBytes(), decompressed);
+                    packet = readUncompressedPacket(decompressed, parser, state);
+                } finally {
+                    PacketVanilla.PACKET_POOL.add(decompressed);
+                }
+            } else {
+                packet = readUncompressedPacket(content, parser, state);
+            }
+        } else {
+            packet = readUncompressedPacket(content, parser, state);
+        }
+        final ConnectionState nextState = stateUpdater.apply(packet, state);
+        buffer.readIndex(readerStart + packetLength);
+        return new Result.Success<>(packet, nextState);
     }
 
     private static <T> T readUncompressedPacket(NetworkBuffer buffer,
@@ -102,8 +161,9 @@ public final class PacketReading {
         try {
             final T packet = serializer.read(buffer);
             if (buffer.readableBytes() != 0) {
-                var info = parser.stateRegistry(state).packetInfo(packetId);
-                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})", info.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
+                final PacketRegistry.PacketInfo<T> info = parser.stateRegistry(state).packetInfo(packetId);
+                LOGGER.warn("WARNING: Packet ({}) 0x{} not fully read ({})",
+                        info.packetClass().getSimpleName(), Integer.toHexString(packetId), buffer);
             }
             return packet;
         } catch (Exception e) {

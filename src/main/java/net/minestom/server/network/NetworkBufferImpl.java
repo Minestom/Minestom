@@ -158,12 +158,13 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     public void ensureSize(int length) {
-        final ResizeStrategy strategy = this.resizeStrategy;
-        if (strategy == null) return;
-
         final long capacity = nioBuffer.capacity();
         final long targetSize = writeIndex + length;
         if (capacity >= targetSize) return;
+
+        final ResizeStrategy strategy = this.resizeStrategy;
+        if (strategy == null)
+            throw new IndexOutOfBoundsException("Buffer is full and cannot be resized: " + capacity + " -> " + targetSize);
 
         final long newCapacity = strategy.resize(capacity, targetSize);
         // Check if long is within the bounds of an int
@@ -184,26 +185,22 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public NetworkBuffer slice(int index, int length) {
+    public NetworkBuffer slice(int index, int length, int readIndex, int writeIndex) {
         NetworkBufferImpl slice = new NetworkBufferImpl(nioBuffer.slice(index, length), resizeStrategy, registries);
-        slice.readIndex = 0;
-        slice.writeIndex = length;
+        slice.readIndex = readIndex;
+        slice.writeIndex = writeIndex;
         slice.readOnly = readOnly;
         return slice;
     }
 
     @Override
-    public NetworkBuffer copy() {
-        ByteBuffer copy = ByteBuffer.allocateDirect(nioBuffer.capacity());
-        copy.put(nioBuffer.duplicate());
-        return new NetworkBufferImpl(copy, resizeStrategy, registries);
-    }
-
-    @Override
-    public NetworkBuffer copy(int index, int length) {
-        ByteBuffer copy = ByteBuffer.allocateDirect(length);
-        copy.put(nioBuffer.slice(index, length).duplicate());
-        return new NetworkBufferImpl(copy, resizeStrategy, registries);
+    public NetworkBuffer copy(int index, int length, int readIndex, int writeIndex) {
+        ByteBuffer payload = ByteBuffer.allocateDirect(length);
+        payload.put(nioBuffer.slice(index, length).duplicate());
+        NetworkBufferImpl copy = new NetworkBufferImpl(payload, resizeStrategy, registries);
+        copy.readIndex = readIndex;
+        copy.writeIndex = writeIndex;
+        return copy;
     }
 
     @Override
