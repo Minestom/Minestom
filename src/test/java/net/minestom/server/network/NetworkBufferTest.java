@@ -18,10 +18,10 @@ import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class NetworkBufferTest {
+public class NetworkBufferTest {
 
     @Test
-    void resize() {
+    public void resize() {
         var buffer = new NetworkBuffer(6);
         buffer.write(INT, 6);
         assertEquals(4, buffer.writeIndex());
@@ -45,7 +45,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void readableBytes() {
+    public void readableBytes() {
         var buffer = new NetworkBuffer();
         assertEquals(0, buffer.readableBytes());
 
@@ -63,7 +63,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void extractBytes() {
+    public void extractBytes() {
         var buffer = new NetworkBuffer();
 
         buffer.write(BYTE, (byte) 25);
@@ -90,7 +90,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void makeArray() {
+    public void makeArray() {
         assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
         }));
 
@@ -103,7 +103,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void numbers() {
+    public void numbers() {
         assertBufferType(BOOLEAN, false, new byte[]{0x00});
         assertBufferType(BOOLEAN, true, new byte[]{0x01});
 
@@ -196,7 +196,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void varInt() {
+    public void varInt() {
         assertBufferType(VAR_INT, 0, new byte[]{0});
         assertBufferType(VAR_INT, 1, new byte[]{0x01});
         assertBufferType(VAR_INT, 2, new byte[]{0x02});
@@ -212,7 +212,7 @@ class NetworkBufferTest {
     }
 
     @Test
-    void varLong() {
+    public void varLong() {
         assertBufferType(VAR_LONG, 0L, new byte[]{0});
         assertBufferType(VAR_LONG, 1L, new byte[]{0x01});
         assertBufferType(VAR_LONG, 2L, new byte[]{0x02});
@@ -227,14 +227,14 @@ class NetworkBufferTest {
     }
 
     @Test
-    void rawBytes() {
+    public void rawBytes() {
         // FIXME: currently break because the array is identity compared
         //assertBufferType(NetworkBuffer.RAW_BYTES, new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64},
         //      new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
     }
 
     @Test
-    void string() {
+    public void string() {
         assertBufferType(STRING, "Hello World", new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
     }
 
@@ -245,12 +245,12 @@ class NetworkBufferTest {
     }
 
     @Test
-    void component() {
+    public void component() {
         assertBufferType(COMPONENT, Component.text("Hello world"));
     }
 
     @Test
-    void uuid() {
+    public void uuid() {
         assertBufferType(UUID, new UUID(0, 0), new byte[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0});
         assertBufferType(UUID, new UUID(1, 1), new byte[]{0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1});
     }
@@ -263,13 +263,13 @@ class NetworkBufferTest {
     }
 
     @Test
-    void optional() {
+    public void optional() {
         assertBufferTypeOptional(BOOLEAN, null, new byte[]{0});
         assertBufferTypeOptional(BOOLEAN, true, new byte[]{1, 1});
     }
 
     @Test
-    void collection() {
+    public void collection() {
         assertBufferTypeCollection(BOOLEAN, List.of(), new byte[]{0});
         assertBufferTypeCollection(BOOLEAN, List.of(true), new byte[]{0x01, 0x01});
     }

@@ -22,13 +22,6 @@ public abstract class MinestomCodeGenerator implements CodeExporter {
     protected static final Modifier[] CONSTANT_MODIFIERS = {Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL};
     protected static final Modifier[] PRIVATE_FINAL_MODIFIERS = {Modifier.PRIVATE, Modifier.FINAL};
     protected static final String DEFAULT_INDENT = "    ";
-<<<<<<< HEAD
-
-    /**
-     * Creates a new code generator.
-     */
-    protected MinestomCodeGenerator() {
-=======
     protected String packageName;
 
     /**
@@ -40,37 +33,16 @@ public abstract class MinestomCodeGenerator implements CodeExporter {
             throw new IllegalArgumentException("Package name cannot be empty");
         }
         this.packageName = packageName;
->>>>>>> ab0874cf0 (Apply microtus patches 1-20)
     }
 
     public abstract void generate();
 
     protected static @NotNull String extractNamespace(@NotNull String namespace) {
-<<<<<<< HEAD
         return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
     }
 
-    protected static @NotNull String extractNamespaces(@NotNull String namespace, @NotNull Map<String, String> arguments) {
-        if (arguments.isEmpty()) return extractNamespace(namespace);
-
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
-            namespace = namespace.replace(entry.getKey(), entry.getValue());
-        }
-        return namespace.toUpperCase(Locale.ROOT);
-    }
 
     protected static String toConstant(String namespace) {
-=======
->>>>>>> ab0874cf0 (Apply microtus patches 1-20)
         return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
-    }
-
-    protected static @NotNull String extractNamespaces(@NotNull String namespace, @NotNull Map<String, String> arguments) {
-        if (arguments.isEmpty()) return extractNamespace(namespace);
-
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
-            namespace = namespace.replace(entry.getKey(), entry.getValue());
-        }
-        return namespace.toUpperCase(Locale.ROOT);
     }
 }

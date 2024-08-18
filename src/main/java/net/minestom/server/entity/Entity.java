@@ -1767,6 +1767,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return acquirable;
     }
 
+    /**
+     * Acquires this entity.
+     *
+     * @param <T> the type of object to be acquired
+     * @return the acquirable for this entity
+     * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
+     * subclasses
+     */
+    @Deprecated
+    @ApiStatus.Experimental
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Entity> acquirable() {
+        return acquirable;
+    }
+
     public enum Pose {
         STANDING,
         FALL_FLYING,

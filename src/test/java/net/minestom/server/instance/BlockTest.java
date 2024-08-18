@@ -14,10 +14,10 @@ import java.util.Objects;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class BlockTest {
+public class BlockTest {
 
     @Test
-    void testNBT() {
+    public void testNBT() {
         Block block = Block.CHEST;
         assertFalse(block.hasNbt());
         assertNull(block.nbt());
@@ -36,7 +36,7 @@ class BlockTest {
     }
 
     @Test
-    void validProperties() {
+    public void validProperties() {
         Block block = Block.CHEST;
         assertEquals(block.properties(), Objects.requireNonNull(Block.fromBlockId(block.id())).properties());
 
@@ -54,7 +54,7 @@ class BlockTest {
     }
 
     @Test
-    void invalidProperties() {
+    public void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));
         assertThrows(Exception.class, () -> block.withProperties(Map.of("random", "randomKey")));
@@ -72,14 +72,14 @@ class BlockTest {
     }
 
     @Test
-    void testMutability() {
+    public void testMutability() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.properties().put("facing", "north"));
         assertThrows(Exception.class, () -> block.withProperty("facing", "north").properties().put("facing", "south"));
     }
 
     @Test
-    void testShape() {
+    public void testShape() {
         Point start = Block.LANTERN.registry().collisionShape().relativeStart();
         Point end = Block.LANTERN.registry().collisionShape().relativeEnd();
 
