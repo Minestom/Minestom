@@ -8,17 +8,18 @@ import net.minestom.server.listener.CreativeInventoryActionListener;
 import net.minestom.server.network.packet.client.play.ClientCreativeInventoryActionPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
-public class PlayerCreativeSlotTest {
+@ExtendWith(MicrotusExtension.class)
+class PlayerCreativeSlotTest {
 
     @Test
-    public void testCreativeSlots(Env env) {
+    void testCreativeSlots(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();
@@ -31,7 +32,7 @@ public class PlayerCreativeSlotTest {
     }
 
     @Test
-    public void testBoundsCheck(Env env) {
+    void testBoundsCheck(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();

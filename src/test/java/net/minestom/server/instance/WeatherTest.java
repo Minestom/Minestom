@@ -3,18 +3,19 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChangeGameStatePacket;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-@EnvTest
-public class WeatherTest {
+@ExtendWith(MicrotusExtension.class)
+class WeatherTest {
     @Test
-    public void weatherTest(Env env) {
+    void weatherTest(Env env) {
         var instance = env.createFlatInstance();
 
         // Defaults

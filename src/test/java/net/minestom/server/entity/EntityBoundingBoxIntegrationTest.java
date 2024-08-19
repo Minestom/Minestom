@@ -1,18 +1,19 @@
 package net.minestom.server.entity;
 
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class EntityBoundingBoxIntegrationTest {
     @Test
     void pose(Env env) {

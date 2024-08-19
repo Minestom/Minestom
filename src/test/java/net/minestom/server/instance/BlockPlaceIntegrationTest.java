@@ -9,13 +9,14 @@ import net.minestom.server.item.Material;
 import net.minestom.server.listener.BlockPlacementListener;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class BlockPlaceIntegrationTest {
 
     @Test

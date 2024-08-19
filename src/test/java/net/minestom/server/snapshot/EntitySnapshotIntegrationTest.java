@@ -1,15 +1,16 @@
 package net.minestom.server.snapshot;
 
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class EntitySnapshotIntegrationTest {
 
     @Test

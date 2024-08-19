@@ -6,16 +6,17 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Map;
 
 import static java.util.Map.entry;
 import static net.minestom.server.instance.BlockLightMergeIntegrationTest.assertLightInstance;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 class WorldRelightIntegrationTest {
     private @NotNull Instance createLightingInstance(@NotNull ServerProcess process) {
         var instance = process.instance().createInstanceContainer();

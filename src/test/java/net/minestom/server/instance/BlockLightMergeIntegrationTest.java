@@ -3,8 +3,9 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,7 +16,7 @@ import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 public class BlockLightMergeIntegrationTest {
     @Test
     void testPropagationAir(Env env) {
@@ -353,7 +354,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void lightLookupTest(Env env) {
+    void lightLookupTest(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
@@ -378,7 +379,7 @@ public class BlockLightMergeIntegrationTest {
     }
 
     @Test
-    public void lightLookupTestCrossBorder(Env env) {
+    void lightLookupTestCrossBorder(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
@@ -416,7 +417,7 @@ public class BlockLightMergeIntegrationTest {
 
 
     @Test
-    public void skylightShortGrass(Env env) {
+    void skylightShortGrass(Env env) {
         Instance instance = env.createFlatInstance();
         instance.setChunkSupplier(LightingChunk::new);
         for (int x = 4; x <= 7; x++) {
