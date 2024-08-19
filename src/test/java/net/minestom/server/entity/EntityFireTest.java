@@ -4,16 +4,16 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.event.entity.EntityFireExtinguishEvent;
 import net.minestom.server.event.entity.EntitySetFireEvent;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@EnvTest
-public class EntityFireTest
-{
+@ExtendWith(MicrotusExtension.class)
+public class EntityFireTest {
     @Test
     public void duration(Env env) {
         var instance = env.createFlatInstance();

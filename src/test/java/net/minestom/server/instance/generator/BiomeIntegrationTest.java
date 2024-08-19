@@ -4,15 +4,16 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.generator.GeneratorImpl.GenSection;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 public class BiomeIntegrationTest {
 
     private static int PLAINS_ID, BADLANDS_ID;
