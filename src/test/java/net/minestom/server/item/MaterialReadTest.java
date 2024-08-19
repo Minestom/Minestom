@@ -1,12 +1,13 @@
 package net.minestom.server.item;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.testing.EnvTest;
+import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@EnvTest
+@ExtendWith(MicrotusExtension.class)
 public class MaterialReadTest {
 
     static {
