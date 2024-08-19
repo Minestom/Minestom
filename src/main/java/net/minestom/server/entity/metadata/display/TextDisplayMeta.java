@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.display;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class TextDisplayMeta extends AbstractDisplayMeta {
@@ -15,7 +16,7 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
     private static final byte ALIGN_LEFT = 8;
     private static final byte ALIGN_RIGHT = 16;
 
-    public TextDisplayMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public TextDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -43,8 +44,8 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
         super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
     }
 
-    public int getTextOpacity() {
-        return super.metadata.getIndex(OFFSET + 3, -1);
+    public byte getTextOpacity() {
+        return super.metadata.getIndex(OFFSET + 3, (byte) -1);
     }
 
     public void setTextOpacity(byte value) {

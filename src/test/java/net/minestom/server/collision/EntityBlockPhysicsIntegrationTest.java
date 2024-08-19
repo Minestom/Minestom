@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.testing.Env;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -12,6 +13,8 @@ import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +49,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckCollision(Env env) {
+    public void entityPhysicsCheckCollision(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -59,7 +62,22 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckSlab(Env env) {
+    public void entityPhysicsCheckShortDiagonal(Env env) {
+        var instance = env.createFlatInstance();
+        instance.setBlock(0, 42, 1, Block.STONE);
+
+        var entity = new Entity(EntityType.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0.9)).join();
+        assertEquals(instance, entity.getInstance());
+
+        entity.setBoundingBox(BoundingBox.ZERO);
+
+        PhysicsResult res = CollisionUtils.handlePhysics(entity, new Vec(0, 0, 1.3));
+        assertEqualsPoint(new Pos(0, 42, 1), res.newPosition());
+    }
+
+    @Test
+    public void entityPhysicsCheckSlab(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -77,7 +95,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckShallowAngle(Env env) {
+    public void entityPhysicsCheckShallowAngle(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(13, 99, 16, Block.STONE);
 
@@ -92,7 +110,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckFallFence(Env env) {
+    public void entityPhysicsCheckFallFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
 
@@ -105,7 +123,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckFallHitCarpet(Env env) {
+    public void entityPhysicsCheckFallHitCarpet(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -124,7 +142,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckFallHitFence(Env env) {
+    public void entityPhysicsCheckFallHitFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
         instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
@@ -138,7 +156,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckHorizontalFence(Env env) {
+    public void entityPhysicsCheckHorizontalFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.OAK_FENCE);
 
@@ -151,7 +169,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckMultipleBlocksPassFirst(Env env) {
+    public void entityPhysicsCheckMultipleBlocksPassFirst(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(4, 40, -1, Block.SANDSTONE_STAIRS);
         instance.setBlock(16, 40, 0, Block.STONE);
@@ -165,7 +183,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckMultipleBlocksHitFirst(Env env) {
+    public void entityPhysicsCheckMultipleBlocksHitFirst(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(4, 40, 0, Block.GRASS_BLOCK);
         instance.setBlock(16, 40, 0, Block.STONE);
@@ -182,7 +200,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckHorizontalCarpetedFence(Env env) {
+    public void entityPhysicsCheckHorizontalCarpetedFence(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.OAK_FENCE);
         instance.setBlock(1, 43, 0, Block.BROWN_CARPET);
@@ -196,7 +214,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDiagonalCarpetedFenceX(Env env) {
+    public void entityPhysicsCheckDiagonalCarpetedFenceX(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -215,7 +233,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDiagonalCarpetedFenceZ(Env env) {
+    public void entityPhysicsCheckDiagonalCarpetedFenceZ(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -234,7 +252,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDiagonalCarpetedFenceXZ(Env env) {
+    public void entityPhysicsCheckDiagonalCarpetedFenceXZ(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -265,7 +283,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckFallHitFenceLongMove(Env env) {
+    public void entityPhysicsCheckFallHitFenceLongMove(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.OAK_FENCE);
         instance.setBlock(0, 43, 0, Block.BROWN_CARPET);
@@ -279,7 +297,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckFenceAboveHead(Env env) {
+    public void entityPhysicsCheckFenceAboveHead(Env env) {
         var instance = env.createFlatInstance();
 
         instance.setBlock(0, 45, 0, Block.OAK_FENCE);
@@ -293,7 +311,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDiagonal(Env env) {
+    public void entityPhysicsCheckDiagonal(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
@@ -309,7 +327,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDirectSlide(Env env) {
+    public void entityPhysicsCheckDirectSlide(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
@@ -323,7 +341,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckCorner(Env env) {
+    public void entityPhysicsCheckCorner(Env env) {
         var instance = env.createFlatInstance();
         for (int i = -2; i <= 2; ++i)
             for (int j = -2; j <= 2; ++j)
@@ -342,7 +360,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckEnclosedHit(Env env) {
+    public void entityPhysicsCheckEnclosedHit(Env env) {
         var instance = env.createFlatInstance();
         for (int i = -2; i <= 2; ++i)
             for (int j = -2; j <= 2; ++j)
@@ -364,7 +382,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckEnclosedHitSubBlock(Env env) {
+    public void entityPhysicsCheckEnclosedHitSubBlock(Env env) {
         var instance = env.createFlatInstance();
         for (int i = -2; i <= 2; ++i)
             for (int j = -2; j <= 2; ++j)
@@ -386,7 +404,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckEnclosedMiss(Env env) {
+    public void entityPhysicsCheckEnclosedMiss(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(11, 43, 11, Block.STONE);
 
@@ -403,7 +421,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckEntityHit() {
+    public void entityPhysicsCheckEntityHit(Env env) {
         Point z1 = new Pos(0, 0, 0);
         Point z2 = new Pos(15, 0, 0);
         Point z3 = new Pos(11, 0, 0);
@@ -411,17 +429,17 @@ class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityType.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, null);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, 0, 0, 0);
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);
 
-        assertEqualsPoint(new Pos(10.4, 0.52, 0), sweepResultFinal.collidedPosition);
+        assertEqualsPoint(new Pos(10.4, 0.52, 0), new Vec(sweepResultFinal.collidedPositionX, sweepResultFinal.collidedPositionY, sweepResultFinal.collidedPositionZ));
         assertEquals(sweepResultFinal.collidedShape, bb);
     }
 
     @Test
-    void entityPhysicsCheckEdgeClip(Env env) {
+    public void entityPhysicsCheckEdgeClip(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
 
@@ -434,7 +452,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckEdgeClipSmall(Env env) {
+    public void entityPhysicsCheckEdgeClipSmall(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
@@ -448,7 +466,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockNorth(Env env) {
+    public void entityPhysicsCheckDoorSubBlockNorth(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "north", "open", "true"));
 
@@ -463,7 +481,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockSouth(Env env) {
+    public void entityPhysicsCheckDoorSubBlockSouth(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "south", "open", "true"));
 
@@ -478,7 +496,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockWest(Env env) {
+    public void entityPhysicsCheckDoorSubBlockWest(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "west", "open", "true"));
 
@@ -493,7 +511,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockEast(Env env) {
+    public void entityPhysicsCheckDoorSubBlockEast(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "east", "open", "true"));
 
@@ -508,7 +526,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockUp(Env env) {
+    public void entityPhysicsCheckDoorSubBlockUp(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("half", "top"));
 
@@ -523,7 +541,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockDown(Env env) {
+    public void entityPhysicsCheckDoorSubBlockDown(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR;
 
@@ -538,7 +556,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckOnGround(Env env) {
+    public void entityPhysicsCheckOnGround(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 40, 0, Block.STONE);
 
@@ -551,7 +569,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckStairTop(Env env) {
+    public void entityPhysicsCheckStairTop(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.ACACIA_STAIRS);
 
@@ -564,7 +582,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckStairTopSmall(Env env) {
+    public void entityPhysicsCheckStairTopSmall(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.ACACIA_STAIRS);
 
@@ -577,7 +595,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNotOnGround(Env env) {
+    public void entityPhysicsCheckNotOnGround(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -593,7 +611,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNotOnGroundHitUp(Env env) {
+    public void entityPhysicsCheckNotOnGroundHitUp(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 60, 0, Block.STONE);
 
@@ -606,7 +624,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckSlide(Env env) {
+    public void entityPhysicsCheckSlide(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
         instance.setBlock(1, 43, 2, Block.STONE);
@@ -621,7 +639,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveCollide(Env env) {
+    public void entityPhysicsSmallMoveCollide(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 0, Block.STONE);
 
@@ -633,9 +651,16 @@ class EntityBlockPhysicsIntegrationTest {
         assertEqualsPoint(new Pos(0.7, 42, 0), res.newPosition());
     }
 
+    @Test
+    public void tmp(Env env) {
+        BoundingBox boundingBox = new BoundingBox(3,2.8,3);
+        Vec velocity = new Vec(1,3,5);
+        Pos entityPosition = new Pos(0,0,0);
+    }
+
     // Checks C include all checks for crossing one intermediate block (3 block checks)
     @Test
-    void entityPhysicsSmallMoveC0(Env env) {
+    public void entityPhysicsSmallMoveC0(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
@@ -650,7 +675,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC1(Env env) {
+    public void entityPhysicsSmallMoveC1(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
@@ -665,7 +690,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC2(Env env) {
+    public void entityPhysicsSmallMoveC2(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
@@ -680,7 +705,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC3(Env env) {
+    public void entityPhysicsSmallMoveC3(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
@@ -695,7 +720,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC4(Env env) {
+    public void entityPhysicsSmallMoveC4(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 1, Block.STONE);
 
@@ -710,7 +735,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC5(Env env) {
+    public void entityPhysicsSmallMoveC5(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 0, Block.STONE);
 
@@ -725,7 +750,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC6(Env env) {
+    public void entityPhysicsSmallMoveC6(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
@@ -740,7 +765,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC7(Env env) {
+    public void entityPhysicsSmallMoveC7(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 42, 1, Block.STONE);
 
@@ -756,7 +781,7 @@ class EntityBlockPhysicsIntegrationTest {
 
     // Checks CE include checks for crossing two intermediate block (4 block checks)
     @Test
-    void entityPhysicsSmallMoveC0E(Env env) {
+    public void entityPhysicsSmallMoveC0E(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 0, Block.STONE);
 
@@ -771,7 +796,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC1E(Env env) {
+    public void entityPhysicsSmallMoveC1E(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -786,7 +811,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsSmallMoveC2E(Env env) {
+    public void entityPhysicsSmallMoveC2E(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(1, 43, 1, Block.STONE);
 
@@ -802,7 +827,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNoCollision(Env env) {
+    public void entityPhysicsCheckNoCollision(Env env) {
         var instance = env.createFlatInstance();
 
         for (int i = -2; i <= 2; ++i)
@@ -818,7 +843,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckBlockMiss(Env env) {
+    public void entityPhysicsCheckBlockMiss(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 2, Block.STONE);
         instance.setBlock(2, 43, 0, Block.STONE);
@@ -832,7 +857,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckBlockDirections(Env env) {
+    public void entityPhysicsCheckBlockDirections(Env env) {
         var instance = env.createFlatInstance();
 
         instance.setBlock(0, 43, 1, Block.STONE);
@@ -866,7 +891,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckLargeVelocityMiss(Env env) {
+    public void entityPhysicsCheckLargeVelocityMiss(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -881,7 +906,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckLargeVelocityHit(Env env) {
+    public void entityPhysicsCheckLargeVelocityHit(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -898,7 +923,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNoMove(Env env) {
+    public void entityPhysicsCheckNoMove(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -910,7 +935,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsRepeatedCollision(Env env) {
+    public void entityPhysicsRepeatedCollision(Env env) {
         var instance = env.createFlatInstance();
         PhysicsResult previousResult = null;
 
@@ -942,7 +967,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNoMoveCache(Env env) {
+    public void entityPhysicsCheckNoMoveCache(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -956,7 +981,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckNoMoveLargeVelocityHit(Env env) {
+    public void entityPhysicsCheckNoMoveLargeVelocityHit(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -975,7 +1000,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckLargeVelocityHitNoMove(Env env) {
+    public void entityPhysicsCheckLargeVelocityHitNoMove(Env env) {
         var instance = env.createFlatInstance();
         var entity = new Entity(EntityType.ZOMBIE);
 
@@ -994,7 +1019,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckDoorSubBlockSouthRepeat(Env env) {
+    public void entityPhysicsCheckDoorSubBlockSouthRepeat(Env env) {
         var instance = env.createFlatInstance();
         Block b = Block.ACACIA_TRAPDOOR.withProperties(Map.of("facing", "south", "open", "true"));
 
@@ -1012,7 +1037,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckCollisionDownCache(Env env) {
+    public void entityPhysicsCheckCollisionDownCache(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -1032,7 +1057,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityPhysicsCheckGravityCached(Env env) {
+    public void entityPhysicsCheckGravityCached(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 43, 1, Block.STONE);
 
@@ -1063,7 +1088,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityBlockPositionTestSlightlyAbove(Env env) {
+    public void entityBlockPositionTestSlightlyAbove(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 
@@ -1078,7 +1103,7 @@ class EntityBlockPhysicsIntegrationTest {
     }
 
     @Test
-    void entityBlockPositionTestFarAbove(Env env) {
+    public void entityBlockPositionTestFarAbove(Env env) {
         var instance = env.createFlatInstance();
         instance.setBlock(0, 42, 0, Block.STONE);
 

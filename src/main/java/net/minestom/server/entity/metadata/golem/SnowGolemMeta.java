@@ -2,13 +2,14 @@ package net.minestom.server.entity.metadata.golem;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class SnowGolemMeta extends AbstractGolemMeta {
     public static final byte OFFSET = AbstractGolemMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public SnowGolemMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SnowGolemMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

@@ -1,18 +1,15 @@
 dependencyResolutionManagement {
     repositories {
         maven("https://s01.oss.sonatype.org/content/repositories/snapshots")
-        maven("https://s01.oss.sonatype.org/content/groups/public/")
         maven("https://jitpack.io")
         mavenCentral()
     }
     versionCatalogs {
         create("libs") {
             // Important dependencies
-            version("adventure", "4.15.0")
+            version("adventure", "4.17.0")
             version("kotlin", "2.0.0")
-            version("hydrazine", "1.7.2")
-            version("data", "1.20.4-rv10")
-            version("hephaistos", "2.6.1")
+            version("data", "1.21-rv3")
             version("jetbrainsAnnotations", "24.1.0")
             version("logback", "1.4.5")
             version("slf4j", "2.0.7")
@@ -55,6 +52,7 @@ dependencyResolutionManagement {
 
             // Libs
             library("adventure-api", "net.kyori", "adventure-api").versionRef("adventure")
+            library("adventure-nbt", "net.kyori", "adventure-nbt").versionRef("adventure")
             library("adventure-serializer-gson", "net.kyori", "adventure-text-serializer-gson").versionRef("adventure")
             library("adventure-serializer-legacy", "net.kyori", "adventure-text-serializer-legacy").versionRef("adventure")
             library("adventure-serializer-plain", "net.kyori", "adventure-text-serializer-plain").versionRef("adventure")
@@ -71,8 +69,7 @@ dependencyResolutionManagement {
             library("kotlin-stdlib-jdk8", "org.jetbrains.kotlin", "kotlin-stdlib-jdk8").versionRef("kotlin")
 
             // Miscellaneous
-            library("hydrazine", "com.github.MadMartian", "hydrazine-path-finding").versionRef("hydrazine")
-            library("minestomData", "net.onelitefeather.microtus", "data").versionRef("data")
+            library("minestomData", "net.minestom", "data").versionRef("data")
             library("jetbrainsAnnotations", "org.jetbrains", "annotations").versionRef("jetbrainsAnnotations");
 
             // Logging
@@ -121,7 +118,7 @@ dependencyResolutionManagement {
 
             bundle("kotlin", listOf("kotlin-stdlib-jdk8", "kotlin-reflect"))
             bundle("flare", listOf("flare", "flare-fastutil"))
-            bundle("adventure", listOf("adventure-api", "adventure-mini-message", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"))
+            bundle("adventure", listOf("adventure-api", "adventure-nbt", "adventure-mini-message", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"))
             bundle("logging", listOf("tinylog-api", "tinylog-impl", "tinylog-slf4j"))
             bundle("terminal", listOf("jline", "jline-jansi"))
             bundle("logback", listOf("logback-core", "logback-classic"))
@@ -146,7 +143,7 @@ pluginManagement {
 rootProject.name = "Microtus"
 include("code-generators")
 include("jmh-benchmarks")
-include("jcstress-tests")
-include("demo")
+// include("jcstress-tests")
 include("testing")
 include("bom")
+include("demo")

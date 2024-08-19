@@ -264,24 +264,23 @@ class BlockIteratorTest {
             points.add(iterator.next());
         }
 
+        // todo(mattw): I need to confirm that these are correct
         Point[] validPoints = new Point[]{
                 new Vec(0.0, 0.0, 0.0),
+                new Vec(1.0, 1.0, 0.0),
+                new Vec(0.0, 1.0, 1.0),
+                new Vec(1.0, 0.0, 1.0),
                 new Vec(1.0, 0.0, 0.0),
                 new Vec(0.0, 1.0, 0.0),
                 new Vec(0.0, 0.0, 1.0),
                 new Vec(1.0, 1.0, 1.0),
+                new Vec(2.0, 2.0, 1.0),
+                new Vec(1.0, 2.0, 2.0),
+                new Vec(2.0, 1.0, 2.0),
                 new Vec(2.0, 1.0, 1.0),
                 new Vec(1.0, 2.0, 1.0),
                 new Vec(1.0, 1.0, 2.0),
-                new Vec(2.0, 2.0, 2.0),
-
-                // todo(mattw): I need to confirm that these are correct
-                new Vec(1.0, 1.0, 0.0),
-                new Vec(0.0, 1.0, 1.0),
-                new Vec(1.0, 0.0, 1.0),
-                new Vec(2.0, 2.0, 1.0),
-                new Vec(1.0, 2.0, 2.0),
-                new Vec(2.0, 1.0, 2.0)
+                new Vec(2.0, 2.0, 2.0)
         };
 
         for (Point p : validPoints) {

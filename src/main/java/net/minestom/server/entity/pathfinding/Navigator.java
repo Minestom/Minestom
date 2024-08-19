@@ -1,110 +1,90 @@
 package net.minestom.server.entity.pathfinding;
 
-import com.extollit.gaming.ai.path.HydrazinePathFinder;
-import com.extollit.gaming.ai.path.PathOptions;
-import com.extollit.gaming.ai.path.model.IPath;
-import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
+import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
+import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
+import net.minestom.server.entity.pathfinding.followers.NodeFollower;
+import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
+import net.minestom.server.entity.pathfinding.generators.NodeGenerator;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
+import net.minestom.server.network.packet.server.play.ParticlePacket;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-// TODO all pathfinding requests could be processed in another thread
+import java.util.List;
+import java.util.function.Supplier;
 
 /**
  * Necessary object for all {@link NavigableEntity}.
  */
 public final class Navigator {
-    private final PFPathingEntity pathingEntity;
-    private HydrazinePathFinder pathFinder;
-    private Point pathPosition;
-
+    private Point goalPosition;
     private final Entity entity;
+
+    // Essentially a double buffer. Wait until a path is done computing before replacing the old one.
+    private PPath computingPath;
+    private PPath path;
+
+    private double minimumDistance;
+
+    NodeGenerator nodeGenerator = new GroundNodeGenerator();
+    private NodeFollower nodeFollower;
 
     public Navigator(@NotNull Entity entity) {
         this.entity = entity;
-        this.pathingEntity = new PFPathingEntity(this);
+        nodeFollower = new GroundNodeFollower(entity);
+    }
+
+    public @NotNull PPath.PathState getState() {
+        if (path == null && computingPath == null) return PPath.PathState.INVALID;
+        if (path == null) return computingPath.getState();
+        return path.getState();
+    }
+
+    public synchronized boolean setPathTo(@Nullable Point point) {
+        BoundingBox bb = this.entity.getBoundingBox();
+        double centerToCorner = Math.sqrt(bb.width() * bb.width() + bb.depth() * bb.depth()) / 2;
+        return setPathTo(point, centerToCorner, null);
+    }
+
+    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, @Nullable Runnable onComplete) {
+        return setPathTo(point, minimumDistance, 50, 20, onComplete);
     }
 
     /**
-     * Used to move the entity toward {@code direction} in the X and Z axis
-     * Gravity is still applied but the entity will not attempt to jump
-     * Also update the yaw/pitch of the entity to look along 'direction'
+     * Sets the path to {@code position} and ask the entity to follow the path.
      *
-     * @param direction the targeted position
-     * @param speed     define how far the entity will move
+     * @param point the position to find the path to, null to reset the pathfinder
+     * @param minimumDistance distance to target when completed
+     * @param maxDistance maximum search distance
+     * @param pathVariance how far to search off of the direct path. For open worlds, this can be low (around 20) and for large mazes this needs to be very high.
+     * @param onComplete called when the path has been completed
+     * @return true if a path is being generated
      */
-    public PhysicsResult moveTowards(@NotNull Point direction, double speed) {
-        final Pos position = entity.getPosition();
-        final double dx = direction.x() - position.x();
-        final double dy = direction.y() - position.y();
-        final double dz = direction.z() - position.z();
-        // the purpose of these few lines is to slow down entities when they reach their destination
-        final double distSquared = dx * dx + dy * dy + dz * dz;
-        if (speed > distSquared) {
-            speed = distSquared;
-        }
-        final double radians = Math.atan2(dz, dx);
-        final double speedX = Math.cos(radians) * speed;
-        final double speedY = dy * speed;
-        final double speedZ = Math.sin(radians) * speed;
-        final float yaw = PositionUtils.getLookYaw(dx, dz);
-        final float pitch = PositionUtils.getLookPitch(dx, dy, dz);
-        // Prevent ghosting
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, speedY, speedZ));
-        this.entity.refreshPosition(physicsResult.newPosition().withView(yaw, pitch));
-        return physicsResult;
-    }
-
-    public void jump(float height) {
-        // FIXME magic value
-        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
-    }
-
-    /**
-     * Retrieves the path to {@code position} and ask the entity to follow the path.
-     * <p>
-     * Can be set to null to reset the pathfinder.
-     * <p>
-     * The position is cloned, if you want the entity to continually follow this position object
-     * you need to call this when you want the path to update.
-     *
-     * @param point      the position to find the path to, null to reset the pathfinder
-     * @param bestEffort whether to use the best-effort algorithm to the destination,
-     *                   if false then this method is more likely to return immediately
-     * @return true if a path has been found
-     */
-    public synchronized boolean setPathTo(@Nullable Point point, boolean bestEffort) {
-        if (point != null && pathPosition != null && point.samePoint(pathPosition)) {
-            // Tried to set path to the same target position
-            return false;
-        }
+    public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, @Nullable Runnable onComplete) {
         final Instance instance = entity.getInstance();
-        if (pathFinder == null) {
-            // Unexpected error
-            return false;
-        }
-        this.pathFinder.reset();
         if (point == null) {
+            this.path = null;
             return false;
         }
+
         // Can't path with a null instance.
         if (instance == null) {
+            this.path = null;
             return false;
         }
+
         // Can't path outside the world border
         final WorldBorder worldBorder = instance.getWorldBorder();
-        if (!worldBorder.isInside(point)) {
+        if (!worldBorder.inBounds(point)) {
             return false;
         }
         // Can't path in an unloaded chunk
@@ -113,35 +93,93 @@ public final class Navigator {
             return false;
         }
 
-        final PathOptions pathOptions = new PathOptions()
-                .targetingStrategy(bestEffort ? PathOptions.TargetingStrategy.gravitySnap :
-                        PathOptions.TargetingStrategy.none);
-        final IPath path = pathFinder.initiatePathTo(
-                point.x(),
-                point.y(),
-                point.z(),
-                pathOptions);
+        this.minimumDistance = minimumDistance;
+        if (this.entity.getPosition().distance(point) < minimumDistance) {
+            if (onComplete != null) onComplete.run();
+            return false;
+        }
 
-        final boolean success = path != null;
-        this.pathPosition = success ? point : null;
-        return success;
-    }
+        if (point.sameBlock(entity.getPosition())) {
+            if (onComplete != null) onComplete.run();
+            return false;
+        }
 
-    /**
-     * @see #setPathTo(Point, boolean) with {@code bestEffort} sets to {@code true}.
-     */
-    public boolean setPathTo(@Nullable Point position) {
-        return setPathTo(position, true);
+        if (this.computingPath != null) this.computingPath.setState(PPath.PathState.TERMINATING);
+
+        this.computingPath = PathGenerator.generate(instance,
+                        this.entity.getPosition(),
+                        point,
+                        minimumDistance, maxDistance,
+                        pathVariance,
+                this.entity.getBoundingBox(),
+                this.entity.isOnGround(),
+                this.nodeGenerator,
+                onComplete);
+
+        this.goalPosition = point;
+        return true;
     }
 
     @ApiStatus.Internal
     public synchronized void tick() {
-        if (pathPosition == null) return; // No path
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
-            return; // No pathfinding tick for dead entities
-        if (pathFinder.updatePathFor(pathingEntity) == null) {
-            reset();
+        if (goalPosition == null) return; // No path
+        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead()) return; // No pathfinding tick for dead entities
+        if (computingPath != null && (computingPath.getState() == PPath.PathState.COMPUTED || computingPath.getState() == PPath.PathState.BEST_EFFORT)) {
+            path = computingPath;
+            computingPath = null;
         }
+
+        if (path == null) return;
+
+        // If the path is computed start following it
+        if (path.getState() == PPath.PathState.COMPUTED || path.getState() == PPath.PathState.BEST_EFFORT) {
+            path.setState(PPath.PathState.FOLLOWING);
+            // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
+            for (int i = 0; i < path.getNodes().size(); i++) {
+                if (isSameBlock(path.getNodes().get(i), entity.getPosition())) {
+                    path.getNodes().subList(0, i).clear();
+                    break;
+                }
+            }
+        }
+
+        // If the state is not following, wait until it is
+        if (path.getState() != PPath.PathState.FOLLOWING) return;
+
+        // If we're near the entity, we're done
+        if (this.entity.getPosition().distance(goalPosition) < minimumDistance) {
+            path.runComplete();
+            path = null;
+
+            return;
+        }
+
+        Point currentTarget = path.getCurrent();
+        Point nextTarget = path.getNext();
+
+        // Repath
+        if (currentTarget == null || path.getCurrentType() == PNode.NodeType.REPATH || path.getCurrentType() == null) {
+            if (computingPath != null && computingPath.getState() == PPath.PathState.CALCULATING) return;
+
+            computingPath = PathGenerator.generate(entity.getInstance(),
+                    entity.getPosition(),
+                    Pos.fromPoint(goalPosition),
+                    minimumDistance, path.maxDistance(),
+                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
+
+            return;
+        }
+
+        if (nextTarget == null) {
+            path.setState(PPath.PathState.INVALID);
+            return;
+        }
+
+        boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
+        nodeFollower.moveTowards(currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
+
+        if (nodeFollower.isAtPoint(currentTarget)) path.next();
+        else if (path.getCurrentType() == PNode.NodeType.JUMP) nodeFollower.jump(currentTarget, nextTarget);
     }
 
     /**
@@ -149,26 +187,65 @@ public final class Navigator {
      *
      * @return the target pathfinder position, null if there is no one
      */
-    public @Nullable Point getPathPosition() {
-        return pathPosition;
+    public @Nullable Point getGoalPosition() {
+        return goalPosition;
     }
 
+    /**
+     * Gets the entity which is navigating.
+     *
+     * @return the entity
+     */
     public @NotNull Entity getEntity() {
         return entity;
     }
 
-    @ApiStatus.Internal
-    public @NotNull PFPathingEntity getPathingEntity() {
-        return pathingEntity;
+    public void reset() {
+        if (this.path != null) this.path.setState(PPath.PathState.TERMINATING);
+        this.goalPosition = null;
+        this.path = null;
+
+        if (this.computingPath != null) this.computingPath.setState(PPath.PathState.TERMINATING);
+        this.computingPath = null;
     }
 
-    @ApiStatus.Internal
-    public void setPathFinder(@Nullable HydrazinePathFinder pathFinder) {
-        this.pathFinder = pathFinder;
+    public boolean isComplete() {
+        if (this.path == null) return true;
+        return goalPosition == null || entity.getPosition().sameBlock(goalPosition);
     }
 
-    private void reset() {
-        this.pathPosition = null;
-        this.pathFinder.reset();
+    public List<PNode> getNodes() {
+        if (this.path == null && computingPath == null) return null;
+        if (this.path == null) return computingPath.getNodes();
+        return this.path.getNodes();
+    }
+
+    public Point getPathPosition() {
+        return goalPosition;
+    }
+
+    public void setNodeFollower(@NotNull Supplier<NodeFollower> nodeFollower) {
+        this.nodeFollower = nodeFollower.get();
+    }
+
+    public void setNodeGenerator(@NotNull Supplier<NodeGenerator> nodeGenerator) {
+        this.nodeGenerator = nodeGenerator.get();
+    }
+
+    /**
+     * Visualise path for debugging
+     * @param path the path to draw
+     */
+    private void drawPath(PPath path) {
+        if (path == null) return;
+
+        for (PNode point : path.getNodes()) {
+            var packet = new ParticlePacket(Particle.COMPOSTER, point.x(), point.y() + 0.5, point.z(), 0, 0, 0, 0, 1);
+            entity.sendPacketToViewers(packet);
+        }
+    }
+
+    private static boolean isSameBlock(PNode pNode, Pos position) {
+        return Math.floor(pNode.x()) == position.blockX() && Math.floor(pNode.y()) == position.blockY() && Math.floor(pNode.z()) == position.blockZ();
     }
 }

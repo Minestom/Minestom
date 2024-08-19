@@ -1,6 +1,5 @@
 package net.minestom.server.recipe;
 
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +14,7 @@ public abstract class SmithingTrimRecipe extends Recipe {
             @NotNull DeclareRecipesPacket.Ingredient baseIngredient,
             @NotNull DeclareRecipesPacket.Ingredient additionIngredient
     ) {
-        super(Type.SMITHING_TRIM, recipeId);
+        super(RecipeType.SMITHING_TRIM, recipeId);
         this.template = template;
         this.baseIngredient = baseIngredient;
         this.additionIngredient = additionIngredient;

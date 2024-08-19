@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +15,7 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
     private Entity hooked;
     private Entity owner;
 
-    public FishingHookMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FishingHookMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

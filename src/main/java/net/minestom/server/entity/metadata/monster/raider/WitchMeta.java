@@ -2,13 +2,14 @@ package net.minestom.server.entity.metadata.monster.raider;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class WitchMeta extends RaiderMeta {
     public static final byte OFFSET = RaiderMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public WitchMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WitchMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

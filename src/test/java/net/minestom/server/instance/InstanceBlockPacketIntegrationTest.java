@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
-import net.minestom.testing.Env;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -9,20 +10,17 @@ import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.testing.extension.MicrotusExtension;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
-import org.jglrxavpok.hephaistos.nbt.NBTCompound;
-import org.jglrxavpok.hephaistos.parser.SNBTParser;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 
-import java.io.StringReader;
 import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith(MicrotusExtension.class)
+@EnvTest
 class InstanceBlockPacketIntegrationTest {
 
     @Test
@@ -73,10 +71,10 @@ class InstanceBlockPacketIntegrationTest {
         assertEquals(Block.AIR, instance.getBlock(blockPoint));
 
         final Block block;
-        final NBTCompound data;
+        final CompoundBinaryTag data;
         try {
-            data = (NBTCompound) new SNBTParser(new StringReader("{\"GlowingText\":0B,\"Color\":\"black\",\"Text1\":\"{\\\"text\\\":\\\"wawsd\\\"}\"," +
-                    "\"Text2\":\"{\\\"text\\\":\\\"\\\"}\",\"Text3\":\"{\\\"text\\\":\\\"\\\"}\",\"Text4\":\"{\\\"text\\\":\\\"\\\"}\"}")).parse();
+            data = (CompoundBinaryTag) TagStringIOExt.readTag("{\"GlowingText\":0B,\"Color\":\"black\",\"Text1\":\"{\\\"text\\\":\\\"wawsd\\\"}\"," +
+                    "\"Text2\":\"{\\\"text\\\":\\\"\\\"}\",\"Text3\":\"{\\\"text\\\":\\\"\\\"}\",\"Text4\":\"{\\\"text\\\":\\\"\\\"}\"}");
             block = Block.OAK_SIGN.withHandler(signHandler).withNbt(data);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

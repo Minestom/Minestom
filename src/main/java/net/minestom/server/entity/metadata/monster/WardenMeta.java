@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 // Microtus - entity meta update
@@ -16,12 +17,13 @@ public class WardenMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
+
     /**
      * Creates a new metadata which can be set to a warden entity.
      * @param entity the warden entity reference
      * @param metadata the reference to a {@link Metadata}
      */
-    public WardenMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public WardenMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

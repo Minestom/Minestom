@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.PathfinderMobMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class AllayMeta extends PathfinderMobMeta {
     public static final byte OFFSET = PathfinderMobMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    public AllayMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public AllayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

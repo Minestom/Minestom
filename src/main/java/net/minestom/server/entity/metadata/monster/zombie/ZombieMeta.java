@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.monster.zombie;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.monster.MonsterMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,7 +11,7 @@ public class ZombieMeta extends MonsterMeta {
     public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
-    public ZombieMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ZombieMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

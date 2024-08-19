@@ -152,6 +152,7 @@ class EntityVelocityIntegrationTest {
         assertFalse(entity.hasVelocity());
 
         entity.setInstance(instance, new Pos(0, 41, 0)).join();
+        entity.setVelocity(new Vec(0, -10, 0));
 
         env.tick();
 

@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
@@ -22,7 +23,6 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.recipe.RecipeCategory;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +56,7 @@ public class PacketWriteReadTest {
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));
         //SERVER_PACKETS.add(new LoginPluginRequestPacket(5, "id", generateByteArray(16)));
-        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911", 0));
+        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911", 0, false));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
         SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
@@ -65,7 +65,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new BlockActionPacket(VEC, (byte) 5, (byte) 5, 5));
         SERVER_PACKETS.add(new BlockBreakAnimationPacket(5, VEC, (byte) 5));
         SERVER_PACKETS.add(new BlockChangePacket(VEC, 0));
-        SERVER_PACKETS.add(new BlockEntityDataPacket(VEC, 5, NBT.Compound(Map.of("key", NBT.String("value")))));
+        SERVER_PACKETS.add(new BlockEntityDataPacket(VEC, 5, CompoundBinaryTag.builder().putString("key", "value").build()));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.AddAction(COMPONENT, 5f, BossBar.Color.BLUE, BossBar.Overlay.PROGRESS, (byte) 2)));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.RemoveAction()));
         SERVER_PACKETS.add(new BossBarPacket(UUID.randomUUID(), new BossBarPacket.UpdateHealthAction(5f)));
@@ -136,7 +136,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new EntityMetaDataPacket(5, Map.of(1, Metadata.VarInt(5))));
         SERVER_PACKETS.add(new EntityPositionAndRotationPacket(5, (short) 0, (short) 0, (short) 0, 45f, 45f, false));
         SERVER_PACKETS.add(new EntityPositionPacket(5, (short) 0, (short) 0, (short) 0, true));
-        SERVER_PACKETS.add(new EntityPropertiesPacket(5, List.of()));
+        SERVER_PACKETS.add(new EntityAttributesPacket(5, List.of()));
         SERVER_PACKETS.add(new EntityRotationPacket(5, 45f, 45f, false));
 
         final PlayerSkin skin = new PlayerSkin("hh", "hh");
@@ -157,7 +157,7 @@ public class PacketWriteReadTest {
 
     @BeforeAll
     public static void setupClient() {
-        CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, 2));
+        CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN));
     }
 
     @Test

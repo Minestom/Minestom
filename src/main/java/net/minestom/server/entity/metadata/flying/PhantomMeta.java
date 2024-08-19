@@ -2,13 +2,14 @@ package net.minestom.server.entity.metadata.flying;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PhantomMeta extends FlyingMeta {
     public static final byte OFFSET = FlyingMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
 
-    public PhantomMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PhantomMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

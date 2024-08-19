@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class BlazeMeta extends MonsterMeta {
@@ -9,7 +9,7 @@ public class BlazeMeta extends MonsterMeta {
     public static final byte MAX_OFFSET = OFFSET + 1;
     private static final byte ON_FIRE_BIT = 0x01; //Microtus - update java keyword usage
 
-    public BlazeMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public BlazeMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

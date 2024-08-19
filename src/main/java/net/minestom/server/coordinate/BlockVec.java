@@ -150,7 +150,7 @@ public record BlockVec(double x, double y, double z) implements Point {
 
     @Override
     public @NotNull Point div(double x, double y, double z) {
-        return div(this.x / x, this.y / y, this.z / z);
+        return new Vec(this.x / x, this.y / y, this.z / z);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class SheepMeta extends AnimalMeta {
@@ -13,7 +13,7 @@ public class SheepMeta extends AnimalMeta {
     private static final byte SHEARED_BIT = 0x10;
     //Microtus end - update java keyword usage
 
-    public SheepMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SheepMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

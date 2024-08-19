@@ -29,8 +29,6 @@ dependencies {
         // Libraries
         api(libs.gson)
         api(libs.jcTools)
-        // Path finding
-        api(libs.hydrazine)
 
         // Adventure, for user-interface
         api(libs.bundles.adventure)
@@ -44,10 +42,6 @@ dependencies {
 
         // Minestom Data (From MinestomDataGenerator)
         api(libs.minestomData)
-
-        // NBT parsing/manipulation/saving
-        api("io.github.jglrxavpok.hephaistos:common:${libs.versions.hephaistos.get()}")
-        api("io.github.jglrxavpok.hephaistos:gson:${libs.versions.hephaistos.get()}")
 
         // BStats
         api(libs.bstats.base)

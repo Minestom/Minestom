@@ -2,6 +2,8 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -9,7 +11,7 @@ public class FrogMeta extends AnimalMeta {
     public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    public FrogMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public FrogMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -60,17 +62,6 @@ public class FrogMeta extends AnimalMeta {
         WARM,
         COLD;
 
-        private static final FrogMeta.Variant[] VALUES = values();
-
-        // Microtus start - meta update
-        /**
-         * Add method to get a variant from a frog over the ordinal id
-         * @param id the ordinal id
-         * @return the entry which matches with the id
-         */
-        public static @Nullable FrogMeta.Variant getVariant(int id) {
-            return id >= 0 && id <= VALUES.length ? VALUES[id] : null;
-        }
-        // Microtus end - meta update
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
     }
 }

@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,9 +25,9 @@ public class EntityMeta {
     //Microtus end - update java keyword usage
 
     private final WeakReference<Entity> entityRef;
-    protected final Metadata metadata;
+    protected final MetadataHolder metadata;
 
-    public EntityMeta(@Nullable Entity entity, @NotNull Metadata metadata) {
+    public EntityMeta(@Nullable Entity entity, @NotNull MetadataHolder metadata) {
         this.entityRef = new WeakReference<>(entity);
         this.metadata = metadata;
     }

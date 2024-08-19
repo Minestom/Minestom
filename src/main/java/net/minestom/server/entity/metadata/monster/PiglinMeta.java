@@ -3,13 +3,14 @@ package net.minestom.server.entity.metadata.monster;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PiglinMeta extends BasePiglinMeta {
     public static final byte OFFSET = BasePiglinMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
-    public PiglinMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public PiglinMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

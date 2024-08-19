@@ -2,13 +2,14 @@ package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class LlamaMeta extends ChestedHorseMeta {
     public static final byte OFFSET = ChestedHorseMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
-    public LlamaMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public LlamaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

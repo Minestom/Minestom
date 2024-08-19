@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.other;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +18,7 @@ public class ArmorStandMeta extends LivingEntityMeta {
     private static final byte IS_MARKER_BIT = 0x10;
     //Microtus end - update java keyword usage
 
-    public ArmorStandMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public ArmorStandMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

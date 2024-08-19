@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.other;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -11,7 +12,7 @@ public class EndCrystalMeta extends EntityMeta {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 2;
 
-    public EndCrystalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public EndCrystalMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
@@ -20,7 +21,7 @@ public class EndCrystalMeta extends EntityMeta {
     }
 
     public void setBeamTarget(@Nullable Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.OptPosition(value));
+        super.metadata.setIndex(OFFSET, Metadata.OptBlockPosition(value));
     }
 
     public boolean isShowingBottom() {

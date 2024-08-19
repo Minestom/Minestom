@@ -1,28 +1,29 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-import org.jglrxavpok.hephaistos.nbt.NBT;
 
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.VarHandle;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public final class Metadata {
     public static Entry<Byte> Byte(byte value) {
@@ -33,7 +34,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_VARINT, value, NetworkBuffer.VAR_INT);
     }
 
-    public static Entry<Long> Long(long value) {
+    public static Entry<Long> VarLong(long value) {
         return new MetadataImpl.EntryImpl<>(TYPE_LONG, value, NetworkBuffer.VAR_LONG);
     }
 
@@ -50,11 +51,11 @@ public final class Metadata {
     }
 
     public static Entry<Component> OptChat(@Nullable Component value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTCHAT, value, NetworkBuffer.OPT_CHAT);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_CHAT, value, NetworkBuffer.OPT_CHAT);
     }
 
-    public static Entry<ItemStack> Slot(@NotNull ItemStack value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_SLOT, value, NetworkBuffer.ITEM);
+    public static Entry<ItemStack> ItemStack(@NotNull ItemStack value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_ITEM_STACK, value, ItemStack.NETWORK_TYPE);
     }
 
     public static Entry<Boolean> Boolean(boolean value) {
@@ -65,12 +66,12 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_ROTATION, value, NetworkBuffer.VECTOR3);
     }
 
-    public static Entry<Point> Position(@NotNull Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_POSITION, value, NetworkBuffer.BLOCK_POSITION);
+    public static Entry<Point> BlockPosition(@NotNull Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCK_POSITION, value, NetworkBuffer.BLOCK_POSITION);
     }
 
-    public static Entry<Point> OptPosition(@Nullable Point value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTPOSITION, value, NetworkBuffer.OPT_BLOCK_POSITION);
+    public static Entry<Point> OptBlockPosition(@Nullable Point value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_BLOCK_POSITION, value, NetworkBuffer.OPT_BLOCK_POSITION);
     }
 
     public static Entry<Direction> Direction(@NotNull Direction value) {
@@ -78,15 +79,15 @@ public final class Metadata {
     }
 
     public static Entry<UUID> OptUUID(@Nullable UUID value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTUUID, value, NetworkBuffer.OPT_UUID);
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_UUID, value, NetworkBuffer.OPT_UUID);
     }
 
-    public static Entry<Integer> BlockState(@NotNull Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, NetworkBuffer.BLOCK_STATE);
+    public static Entry<Block> BlockState(@NotNull Block value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_BLOCKSTATE, value, Block.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptBlockState(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTBLOCKSTATE, value, new NetworkBuffer.Type<>() {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_BLOCKSTATE, value, new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Integer value) {
                 buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value);
@@ -100,19 +101,29 @@ public final class Metadata {
         });
     }
 
-    public static Entry<NBT> NBT(@NotNull NBT nbt) {
+    public static Entry<BinaryTag> NBT(@NotNull BinaryTag nbt) {
         return new MetadataImpl.EntryImpl<>(TYPE_NBT, nbt, NetworkBuffer.NBT);
     }
 
-    public static Entry<int[]> VillagerData(int villagerType,
-                                            int villagerProfession,
-                                            int level) {
-        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, new int[]{villagerType, villagerProfession, level},
-                NetworkBuffer.VILLAGER_DATA);
+    public static Entry<Particle> Particle(@NotNull Particle particle) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, Particle.NETWORK_TYPE);
+    }
+
+    public static Entry<List<Particle>> ParticleList(@NotNull List<Particle> particles) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
+    }
+
+    public static Entry<int[]> VillagerData(int[] data) {
+        Check.argCondition(data.length != 3, "Villager data array must have a length of 3");
+        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, NetworkBuffer.VILLAGER_DATA);
+    }
+
+    public static Entry<int[]> VillagerData(int villagerType, int villagerProfession, int level) {
+        return VillagerData(new int[]{villagerType, villagerProfession, level});
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_OPTVARINT, value, new NetworkBuffer.Type<>() {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_VARINT, value, new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Integer value) {
                 buffer.write(NetworkBuffer.VAR_INT, value == null ? 0 : value + 1);
@@ -126,24 +137,32 @@ public final class Metadata {
         });
     }
 
-    public static Entry<Entity.Pose> Pose(@NotNull Entity.Pose value) {
+    public static Entry<Entity.Pose> Pose(Entity.@NotNull Pose value) {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
     public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, NetworkBuffer.CAT_VARIANT);
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
+    }
+
+    public static Entry<DynamicRegistry.Key<WolfMeta.Variant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfMeta.Variant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfMeta.Variant.NETWORK_TYPE);
     }
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, NetworkBuffer.FROG_VARIANT);
+        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogMeta.Variant.NETWORK_TYPE);
     }
 
-    public static Entry<PaintingMeta.Variant> PaintingVariant(@NotNull PaintingMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PAINTINGVARIANT, value, NetworkBuffer.PAINTING_VARIANT);
+    public static Entry<DynamicRegistry.Key<PaintingMeta.Variant>> PaintingVariant(@NotNull DynamicRegistry.Key<PaintingMeta.Variant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingMeta.Variant.NETWORK_TYPE);
     }
 
     public static Entry<SnifferMeta.State> SnifferState(@NotNull SnifferMeta.State value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, NetworkBuffer.SNIFFER_STATE);
+        return new MetadataImpl.EntryImpl<>(TYPE_SNIFFER_STATE, value, SnifferMeta.State.NETWORK_TYPE);
+    }
+
+    public static Entry<ArmadilloMeta.State> ArmadilloState(@NotNull ArmadilloMeta.State value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_ARMADILLO_STATE, value, ArmadilloMeta.State.NETWORK_TYPE);
     }
 
     public static Entry<Point> Vector3(@NotNull Point value) {
@@ -154,124 +173,44 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 
-    public static Entry<Particle> Particle(@NotNull Particle particle) {
-        return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE, particle, NetworkBuffer.PARTICLE);
-    }
+    private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
 
-    public static final byte TYPE_BYTE = 0;
-    public static final byte TYPE_VARINT = 1;
-    public static final byte TYPE_LONG = 2;
-    public static final byte TYPE_FLOAT = 3;
-    public static final byte TYPE_STRING = 4;
-    public static final byte TYPE_CHAT = 5;
-    public static final byte TYPE_OPTCHAT = 6;
-    public static final byte TYPE_SLOT = 7;
-    public static final byte TYPE_BOOLEAN = 8;
-    public static final byte TYPE_ROTATION = 9;
-    public static final byte TYPE_POSITION = 10;
-    public static final byte TYPE_OPTPOSITION = 11;
-    public static final byte TYPE_DIRECTION = 12;
-    public static final byte TYPE_OPTUUID = 13;
-    public static final byte TYPE_BLOCKSTATE = 14;
-    public static final byte TYPE_OPTBLOCKSTATE = 15;
-    public static final byte TYPE_NBT = 16;
-    public static final byte TYPE_PARTICLE = 17;
-    public static final byte TYPE_VILLAGERDATA = 18;
-    public static final byte TYPE_OPTVARINT = 19;
-    public static final byte TYPE_POSE = 20;
-    public static final byte TYPE_CAT_VARIANT = 21;
-    public static final byte TYPE_FROG_VARIANT = 22;
-    public static final byte TYPE_OPTGLOBALPOS = 23;
-    public static final byte TYPE_PAINTINGVARIANT = 24;
-    public static final byte TYPE_SNIFFER_STATE = 25;
-    public static final byte TYPE_VECTOR3 = 26;
-    public static final byte TYPE_QUATERNION = 27;
+    public static final byte TYPE_BYTE = nextId();
+    public static final byte TYPE_VARINT = nextId();
+    public static final byte TYPE_LONG = nextId();
+    public static final byte TYPE_FLOAT = nextId();
+    public static final byte TYPE_STRING = nextId();
+    public static final byte TYPE_CHAT = nextId();
+    public static final byte TYPE_OPT_CHAT = nextId();
+    public static final byte TYPE_ITEM_STACK = nextId();
+    public static final byte TYPE_BOOLEAN = nextId();
+    public static final byte TYPE_ROTATION = nextId();
+    public static final byte TYPE_BLOCK_POSITION = nextId();
+    public static final byte TYPE_OPT_BLOCK_POSITION = nextId();
+    public static final byte TYPE_DIRECTION = nextId();
+    public static final byte TYPE_OPT_UUID = nextId();
+    public static final byte TYPE_BLOCKSTATE = nextId();
+    public static final byte TYPE_OPT_BLOCKSTATE = nextId();
+    public static final byte TYPE_NBT = nextId();
+    public static final byte TYPE_PARTICLE = nextId();
+    public static final byte TYPE_PARTICLE_LIST = nextId();
+    public static final byte TYPE_VILLAGERDATA = nextId();
+    public static final byte TYPE_OPT_VARINT = nextId();
+    public static final byte TYPE_POSE = nextId();
+    public static final byte TYPE_CAT_VARIANT = nextId();
+    public static final byte TYPE_WOLF_VARIANT = nextId();
+    public static final byte TYPE_FROG_VARIANT = nextId();
+    public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
+    public static final byte TYPE_PAINTING_VARIANT = nextId();
+    public static final byte TYPE_SNIFFER_STATE = nextId();
+    public static final byte TYPE_ARMADILLO_STATE = nextId();
+    public static final byte TYPE_VECTOR3 = nextId();
+    public static final byte TYPE_QUATERNION = nextId();
 
     // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
 
-    private static final VarHandle NOTIFIED_CHANGES;
-
-    static {
-        try {
-            NOTIFIED_CHANGES = MethodHandles.lookup().findVarHandle(Metadata.class, "notifyAboutChanges", boolean.class);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
-
-    private final Entity entity;
-    private volatile Entry<?>[] entries = new Entry<?>[0];
-    private volatile Map<Integer, Entry<?>> entryMap = null;
-
-    @SuppressWarnings("FieldMayBeFinal")
-    private volatile boolean notifyAboutChanges = true;
-    private final Map<Integer, Entry<?>> notNotifiedChanges = new HashMap<>();
-
-    public Metadata(@Nullable Entity entity) {
-        this.entity = entity;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Entry<?>[] entries = this.entries;
-        if (index < 0 || index >= entries.length) return defaultValue;
-        final Entry<?> entry = entries[index];
-        return entry != null ? (T) entry.value() : defaultValue;
-    }
-
-    public void setIndex(int index, @NotNull Entry<?> entry) {
-        Entry<?>[] entries = this.entries;
-        // Resize array if necessary
-        if (index >= entries.length) {
-            final int newLength = Math.max(entries.length * 2, index + 1);
-            this.entries = entries = Arrays.copyOf(entries, newLength);
-        }
-        entries[index] = entry;
-        this.entryMap = null;
-        // Send metadata packet to update viewers and self
-        final Entity entity = this.entity;
-        if (entity != null && entity.isActive()) {
-            if (!this.notifyAboutChanges) {
-                synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
-                }
-            } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
-            }
-        }
-    }
-
-    public void setNotifyAboutChanges(boolean notifyAboutChanges) {
-        if (!NOTIFIED_CHANGES.compareAndSet(this, !notifyAboutChanges, notifyAboutChanges))
-            return;
-        if (!notifyAboutChanges) {
-            // Ask future metadata changes to be cached
-            return;
-        }
-        final Entity entity = this.entity;
-        if (entity == null || !entity.isActive()) return;
-        Map<Integer, Entry<?>> entries;
-        synchronized (this.notNotifiedChanges) {
-            Map<Integer, Entry<?>> awaitingChanges = this.notNotifiedChanges;
-            if (awaitingChanges.isEmpty()) return;
-            entries = Map.copyOf(awaitingChanges);
-            awaitingChanges.clear();
-        }
-        entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), entries));
-    }
-
-    public @NotNull Map<Integer, Entry<?>> getEntries() {
-        Map<Integer, Entry<?>> map = entryMap;
-        if (map == null) {
-            map = new HashMap<>();
-            final Entry<?>[] entries = this.entries;
-            for (int i = 0; i < entries.length; i++) {
-                final Entry<?> entry = entries[i];
-                if (entry != null) map.put(i, entry);
-            }
-            this.entryMap = Map.copyOf(map);
-        }
-        return map;
+    private static byte nextId() {
+        return (byte) NEXT_ID.getAndIncrement();
     }
 
     public sealed interface Entry<T> extends NetworkBuffer.Writer

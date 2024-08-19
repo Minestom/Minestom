@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.Material;
@@ -14,7 +14,7 @@ public class SmallFireballMeta extends ItemContainingMeta implements ObjectDataP
 
     private Entity shooter;
 
-    public SmallFireballMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    public SmallFireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata, Material.FIRE_CHARGE);
     }
 

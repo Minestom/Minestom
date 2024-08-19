@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractHorseMeta extends AnimalMeta {
@@ -17,7 +17,7 @@ public class AbstractHorseMeta extends AnimalMeta {
     private static final byte MOUTH_OPEN_BIT = 0x40;
     //Microtus end - update java keyword usage
 
-    protected AbstractHorseMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    protected AbstractHorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

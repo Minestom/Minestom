@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.BlockFace;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +41,6 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    @ApiStatus.Experimental
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
         return (minX() + positionRelative.x() <= boundingBox.maxX() - Vec.EPSILON / 2 && maxX() + positionRelative.x() >= boundingBox.minX() + Vec.EPSILON / 2) &&
                 (minY() + positionRelative.y() <= boundingBox.maxY() - Vec.EPSILON / 2 && maxY() + positionRelative.y() >= boundingBox.minY() + Vec.EPSILON / 2) &&
@@ -50,10 +48,11 @@ public final class BoundingBox implements Shape {
     }
 
     @Override
-    @ApiStatus.Experimental
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
-            finalResult.collidedPosition = rayStart.add(rayDirection.mul(finalResult.res));
+            finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
+            finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
+            finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
             finalResult.collidedShape = this;
             return true;
         }
@@ -61,7 +60,6 @@ public final class BoundingBox implements Shape {
         return false;
     }
 
-    @ApiStatus.Experimental
     public boolean boundingBoxRayIntersectionCheck(Vec start, Vec direction, Pos position) {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
@@ -167,48 +165,96 @@ public final class BoundingBox implements Shape {
         NONE
     }
 
-    public Iterator<Point> getBlocks(Point point) {
+    public PointIterator getBlocks(Point point) {
         return new PointIterator(this, point, AxisMask.NONE, 0);
     }
 
-    public Iterator<Point> getBlocks(Point point, AxisMask axisMask, double axis) {
+    public PointIterator getBlocks(Point point, AxisMask axisMask, double axis) {
         return new PointIterator(this, point, axisMask, axis);
     }
 
-    static class PointIterator implements Iterator<Point> {
-        private final double sx, sy, sz;
+    public static class MutablePoint {
+        double x, y, z;
+
+        public void set(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+        }
+
+        public double x() {
+            return x;
+        }
+
+        public double y() {
+            return y;
+        }
+
+        public double z() {
+            return z;
+        }
+
+        public int blockX() {
+            return (int) Math.floor(x);
+        }
+
+        public int blockY() {
+            return (int) Math.floor(y);
+        }
+
+        public int blockZ() {
+            return (int) Math.floor(z);
+        }
+    }
+
+    public static class PointIterator implements Iterator<MutablePoint> {
+        private double sx, sy, sz;
         double x, y, z;
         private double minX, minY, minZ, maxX, maxY, maxZ;
+        private final MutablePoint point = new MutablePoint();
 
+        public PointIterator() {}
         public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
-            minX = (int) Math.floor(boundingBox.minX() + p.x());
-            minY = (int) Math.floor(boundingBox.minY() + p.y());
-            minZ = (int) Math.floor(boundingBox.minZ() + p.z());
-            maxX = (int) Math.floor(boundingBox.maxX() + p.x());
-            maxY = (int) Math.floor(boundingBox.maxY() + p.y());
-            maxZ = (int) Math.floor(boundingBox.maxZ() + p.z());
+            reset(boundingBox, p, axisMask, axis);
+        }
+
+        public void reset(BoundingBox boundingBox, double pointX, double pointY, double pointZ, AxisMask axisMask, int axis) {
+            minX = (int) Math.floor(boundingBox.minX() + pointX);
+            minY = (int) Math.floor(boundingBox.minY() + pointY);
+            minZ = (int) Math.floor(boundingBox.minZ() + pointZ);
+            maxX = (int) Math.floor(boundingBox.maxX() + pointX);
+            maxY = (int) Math.floor(boundingBox.maxY() + pointY);
+            maxZ = (int) Math.floor(boundingBox.maxZ() + pointZ);
 
             x = minX;
             y = minY;
             z = minZ;
 
-            sx = boundingBox.minX() + p.x() - minX;
-            sy = boundingBox.minY() + p.y() - minY;
-            sz = boundingBox.minZ() + p.z() - minZ;
+            sx = boundingBox.minX() + pointX - minX;
+            sy = boundingBox.minY() + pointY - minY;
+            sz = boundingBox.minZ() + pointZ - minZ;
 
             if (axisMask == AxisMask.X) {
-                x = axis + p.x();
+                x = axis + pointX;
                 minX = x;
                 maxX = x;
             } else if (axisMask == AxisMask.Y) {
-                y = axis + p.y();
+                y = axis + pointY;
                 minY = y;
                 maxY = y;
             } else if (axisMask == AxisMask.Z) {
-                z = axis + p.z();
+                z = axis + pointZ;
                 minZ = z;
                 maxZ = z;
             }
+        }
+
+        public void reset(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
+            reset(boundingBox, p.x(), p.y(), p.z(), axisMask, (int) axis);
+        }
+
+        public void reset(BoundingBox boundingBox, double x, double y, double z, AxisMask axisMask, double axis) {
+            reset(boundingBox, x, y, z, axisMask, (int) axis);
         }
 
         @Override
@@ -217,8 +263,8 @@ public final class BoundingBox implements Shape {
         }
 
         @Override
-        public Point next() {
-            var res = new Vec(x + sx, y + sy, z + sz);
+        public MutablePoint next() {
+            point.set(x + sx, y + sy, z + sz);
 
             x++;
             if (x > maxX) {
@@ -229,7 +275,7 @@ public final class BoundingBox implements Shape {
                     z++;
                 }
             }
-            return res;
+            return point;
         }
     }
 

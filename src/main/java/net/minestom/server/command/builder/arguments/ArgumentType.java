@@ -1,7 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
 import net.minestom.server.command.builder.arguments.minecraft.*;
-import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEnchantment;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentEntityType;
 import net.minestom.server.command.builder.arguments.minecraft.registry.ArgumentParticle;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
@@ -122,13 +121,6 @@ public class ArgumentType {
      */
     public static ArgumentTime Time(@NotNull String id) {
         return new ArgumentTime(id);
-    }
-
-    /**
-     * @see ArgumentEnchantment
-     */
-    public static ArgumentEnchantment Enchantment(@NotNull String id) {
-        return new ArgumentEnchantment(id);
     }
 
     /**

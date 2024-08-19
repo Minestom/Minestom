@@ -16,12 +16,14 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeCategory;
 import net.minestom.server.recipe.ShapedRecipe;
+import net.minestom.server.recipe.ShapelessRecipe;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
@@ -37,7 +39,6 @@ public class Main {
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
-        MinecraftServer.getBiomeManager().loadVanillaBiomes();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
@@ -77,6 +78,9 @@ public class Main {
         commandManager.register(new RelightCommand());
         commandManager.register(new KillCommand());
         commandManager.register(new WeatherCommand());
+        commandManager.register(new PotionCommand());
+        commandManager.register(new CookieCommand());
+        commandManager.register(new WorldBorderCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -133,6 +137,22 @@ public class Main {
             }
         };
         MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
+        var recipe = new ShapelessRecipe(
+                "minestom:test2", "abc",
+                RecipeCategory.Crafting.MISC,
+                List.of(
+                        new DeclareRecipesPacket.Ingredient(List.of(ItemStack.of(Material.DIRT)))
+                ),
+                ItemStack.builder(Material.GOLD_BLOCK)
+                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .build()
+        ) {
+            @Override
+            public boolean shouldShow(@NotNull Player player) {
+                return true;
+            }
+        };
+        MinecraftServer.getRecipeManager().addRecipe(recipe);
 
         PlayerInit.init();
 

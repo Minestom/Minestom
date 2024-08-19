@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class MobMeta extends LivingEntityMeta {
@@ -14,7 +14,7 @@ public class MobMeta extends LivingEntityMeta {
     private static final byte IS_AGGRESSIVE_BIT = 0x04;
     //Microtus end - update java keyword usage
 
-    protected MobMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    protected MobMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

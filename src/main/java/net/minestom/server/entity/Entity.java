@@ -41,6 +41,7 @@ import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.Acquirable;
+import net.minestom.server.thread.AcquirableSource;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -51,7 +52,6 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.player.PlayerUtils;
 import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -60,13 +60,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
-import space.vectrix.flare.fastutil.Int2ObjectSyncMap;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -80,9 +78,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape {
-    private static final Int2ObjectSyncMap<Entity> ENTITY_BY_ID = Int2ObjectSyncMap.hashmap();
-    private static final Map<UUID, Entity> ENTITY_BY_UUID = new ConcurrentHashMap<>();
+        PermissionHandler, HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Certain entities should only have their position packets sent during synchronization
@@ -147,7 +143,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private final EventNode<EntityEvent> eventNode;
     private final Set<Permission> permissions = new CopyOnWriteArraySet<>();
 
-    protected UUID uuid;
+    private final UUID uuid;
     private boolean isActive; // False if entity has only been instanced without being added somewhere
     protected boolean removed;
 
@@ -162,7 +158,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
-    protected Metadata metadata = new Metadata(this);
+    protected MetadataHolder metadata = new MetadataHolder(this);
     protected EntityMeta entityMeta;
 
     private final List<TimedPotion> effects = new CopyOnWriteArrayList<>();
@@ -180,12 +176,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPosition = Pos.ZERO;
         this.lastSyncedPosition = Pos.ZERO;
 
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
         setBoundingBox(entityType.registry().boundingBox());
-
-        Entity.ENTITY_BY_ID.put(id, this);
-        Entity.ENTITY_BY_UUID.put(uuid, this);
 
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = new Aerodynamics(entityType.registry().acceleration(),
@@ -212,29 +205,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void scheduleNextTick(@NotNull Consumer<Entity> callback) {
         this.scheduler.scheduleNextTick(() -> callback.accept(this));
     }
-
-    /**
-     * Gets an entity based on its id (from {@link #getEntityId()}).
-     * <p>
-     * Entity id are unique server-wide.
-     *
-     * @param id the entity unique id
-     * @return the entity having the specified id, null if not found
-     */
-    public static @Nullable Entity getEntity(int id) {
-        return Entity.ENTITY_BY_ID.get(id);
-    }
-
-    /**
-     * Gets an entity based on its UUID (from {@link #getUuid()}).
-     *
-     * @param uuid the entity UUID
-     * @return the entity having the specified uuid, null if not found
-     */
-    public static @Nullable Entity getEntity(@NotNull UUID uuid) {
-        return Entity.ENTITY_BY_UUID.getOrDefault(uuid, null);
-    }
-
 
     /**
      * Generate and return a new unique entity id.
@@ -303,23 +273,25 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Teleports the entity only if the chunk at {@code position} is loaded or if
      * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
      *
-     * @param position the teleport position
-     * @param chunks   the chunk indexes to load before teleporting the entity,
-     *                 indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
-     *                 can be null or empty to only load the chunk at {@code position}
-     * @param flags    flags used to teleport the entity relatively rather than absolutely
-     *                 use {@link RelativeFlags} to see available flags
+     * @param position      the teleport position
+     * @param chunks        the chunk indexes to load before teleporting the entity,
+     *                      indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                      can be null or empty to only load the chunk at {@code position}
+     * @param flags         flags used to teleport the entity relatively rather than absolutely
+     *                      use {@link RelativeFlags} to see available flags
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                                     boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
         final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -336,6 +308,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             endCallback.run();
             return AsyncUtils.empty();
         }
+    }
+
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        return teleport(position, chunks, flags, true);
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
@@ -397,12 +374,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.viewEngine.viewableOption.updateAuto(autoViewable);
     }
 
-    @ApiStatus.Experimental
     public void updateViewableRule(@Nullable Predicate<Player> predicate) {
         this.viewEngine.viewableOption.updateRule(predicate);
     }
 
-    @ApiStatus.Experimental
     public void updateViewableRule() {
         this.viewEngine.viewableOption.updateRule();
     }
@@ -413,7 +388,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @return true if surrounding entities are visible by this
      */
-    @ApiStatus.Experimental
     public boolean autoViewEntities() {
         return viewEngine.viewerOption.isAuto();
     }
@@ -423,17 +397,14 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param autoViewer true to add view surrounding entities, false to remove
      */
-    @ApiStatus.Experimental
     public void setAutoViewEntities(boolean autoViewer) {
         this.viewEngine.viewerOption.updateAuto(autoViewer);
     }
 
-    @ApiStatus.Experimental
     public void updateViewerRule(@Nullable Predicate<Entity> predicate) {
         this.viewEngine.viewerOption.updateRule(predicate);
     }
 
-    @ApiStatus.Experimental
     public void updateViewerRule() {
         this.viewEngine.viewerOption.updateRule();
     }
@@ -480,7 +451,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             if (entity.isViewer(player)) {
                 player.sendPacket(entity.getAttachEntityPacket());
             }
-        };
+        }
         // Head position
         player.sendPacket(new EntityHeadLookPacket(getEntityId(), position.yaw()));
     }
@@ -528,8 +499,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public synchronized void switchEntityType(@NotNull EntityType entityType) {
         this.entityType = entityType;
-        this.metadata = new Metadata(this);
-        this.entityMeta = EntityTypeImpl.createMeta(entityType, this, this.metadata);
+        this.metadata = new MetadataHolder(this);
+        this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
                 type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
@@ -602,7 +573,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!ChunkUtils.isLoaded(finalChunk)) return;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
-        if (!PlayerUtils.isSocketClient(this)) {
+        if (!(this instanceof Player)) {
             onGround = physicsResult.isOnGround();
             refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
         }
@@ -672,7 +643,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Each entity has an unique id (server-wide) which will change after a restart.
      *
      * @return the unique entity id
-     * @see Entity#getEntity(int) to retrive an entity based on its id
+     * @see Instance#getEntityById(int) to retrieve an entity based on its id
      */
     public int getEntityId() {
         return id;
@@ -694,18 +665,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public @NotNull UUID getUuid() {
         return uuid;
-    }
-
-    /**
-     * Changes the internal entity UUID, mostly unsafe.
-     *
-     * @param uuid the new entity uuid
-     */
-    public void setUuid(@NotNull UUID uuid) {
-        // Refresh internal map
-        Entity.ENTITY_BY_UUID.remove(this.uuid);
-        Entity.ENTITY_BY_UUID.put(uuid, this);
-        this.uuid = uuid;
     }
 
     /**
@@ -811,7 +770,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
-                    instance.getWorldBorder().init(player);
+                    player.sendPacket(instance.createInitializeWorldBorderPacket());
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
@@ -1060,18 +1019,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public boolean isOnFire() {
         return this.entityMeta.isOnFire();
-    }
-
-    /**
-     * Sets the entity in fire visually.
-     * <p>
-     * WARNING: if you want to apply damage or specify a duration,
-     * see {@link LivingEntity#setFireForDuration(int, TemporalUnit)}.
-     *
-     * @param fire should the entity be set in fire
-     */
-    public void setOnFire(boolean fire) {
-        this.entityMeta.setOnFire(fire);
     }
 
     /**
@@ -1384,13 +1331,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     /**
      * Gets the entity eye height.
-     * <p>
-     * Default to {@link BoundingBox#height()}x0.85
      *
      * @return the entity eye height
      */
     public double getEyeHeight() {
-        return getPose() == Pose.SLEEPING ? 0.2 : (boundingBox.height() * 0.85);
+        return getPose() == Pose.SLEEPING ? 0.2 : entityType.registry().eyeHeight();
     }
 
     /**
@@ -1453,11 +1398,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the level of the specified effect.
      *
      * @param effect the effect type
-     * @return the effect level, 0 if not found
+     * @return the effect level, -1 if not found
      */
     public int getEffectLevel(@NotNull PotionEffect effect) {
         TimedPotion timedPotion = getEffect(effect);
-        return timedPotion == null ? 0 : timedPotion.potion().amplifier();
+        return timedPotion == null ? -1 : timedPotion.potion().amplifier();
     }
 
     /**
@@ -1500,11 +1445,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         MinecraftServer.process().dispatcher().removeElement(this);
         this.removed = true;
-        if (permanent) {
-            Entity.ENTITY_BY_ID.remove(id);
-            Entity.ENTITY_BY_UUID.remove(uuid);
-        } else {
-            // Reset some other state
+        if (!permanent) {
+            // Reset some state to be ready for re-use
             this.position = Pos.ZERO;
             this.previousPosition = Pos.ZERO;
             this.lastSyncedPosition = Pos.ZERO;
@@ -1514,7 +1456,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             removeFromInstance(currentInstance);
             this.instance = null;
         }
-
     }
 
     /**
@@ -1622,11 +1563,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return HoverEvent.showEntity(ShowEntity.showEntity(this.entityType, this.uuid));
     }
 
-    @ApiStatus.Experimental
-    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
-        return (Acquirable<T>) acquirable;
-    }
-
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
@@ -1650,7 +1586,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    @ApiStatus.Experimental
     public @NotNull EventNode<EntityEvent> eventNode() {
         return eventNode;
     }
@@ -1764,7 +1699,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @Override
     public boolean intersectBox(@NotNull Point positionRelative, @NotNull BoundingBox boundingBox) {
-        return boundingBox.intersectBox(positionRelative, boundingBox);
+        return this.boundingBox.intersectBox(positionRelative, boundingBox);
     }
 
     @Override
@@ -1784,6 +1719,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     public boolean hasCollision() {
         return hasCollision;
+    }
+
+    /**
+     * Acquires this entity.
+     *
+     * @param <T> the type of object to be acquired
+     * @return the acquirable for this entity
+     * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
+     * subclasses
+     */
+    @Deprecated
+    @ApiStatus.Experimental
+    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
+        return (Acquirable<T>) acquirable;
+    }
+
+    @ApiStatus.Experimental
+    @Override
+    public @NotNull Acquirable<? extends Entity> acquirable() {
+        return acquirable;
     }
 
     public enum Pose {

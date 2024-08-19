@@ -1,7 +1,6 @@
 package net.minestom.server.utils;
 
 import net.minestom.server.ServerFlag;
-import net.minestom.server.network.socket.Server;
 import net.minestom.server.utils.binary.BinaryBuffer;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpmcUnboundedXaddArrayQueue;
@@ -18,7 +17,6 @@ import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 @ApiStatus.Internal
-@ApiStatus.Experimental
 public final class ObjectPool<T> {
     private static final int QUEUE_SIZE = 32_768;
 

@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,6 +19,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public interface IChunkLoader {
 
+    static @NotNull IChunkLoader noop() {
+        return NoopChunkLoaderImpl.INSTANCE;
+    }
+
     /**
      * Loads instance data from the loader.
      *
@@ -27,7 +32,7 @@ public interface IChunkLoader {
     }
 
     /**
-     * Loads a {@link Chunk}, all blocks should be set since the {@link ChunkGenerator} is not applied.
+     * Loads a {@link Chunk}, all blocks should be set since the {@link net.minestom.server.instance.generator.Generator} is not applied.
      *
      * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X

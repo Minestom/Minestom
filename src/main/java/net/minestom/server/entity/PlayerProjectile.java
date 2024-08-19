@@ -14,13 +14,15 @@ import net.minestom.server.event.entity.projectile.ProjectileCollideWithBlockEve
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.thread.Acquirable;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PlayerProjectile extends LivingEntity {
+public class PlayerProjectile extends Entity {
     private final Entity shooter;
     private long cooldown = 0;
 
@@ -112,9 +114,9 @@ public class PlayerProjectile extends LivingEntity {
 
         while (iterator.hasNext()) {
             var block = iterator.next();
-            Block b = instance.getBlock(block);
-            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block), this.getBoundingBox());
-            if (hit) return Pos.fromPoint(block);
+            Block b = instance.getBlock(block.blockX(), block.blockY(), block.blockZ());
+            var hit = b.registry().collisionShape().intersectBox(this.getPosition().sub(block.x(), block.y(), block.z()), this.getBoundingBox());
+            if (hit) return new Pos(block.blockX(), block.blockY(), block.blockZ());
         }
 
         return null;
@@ -128,6 +130,8 @@ public class PlayerProjectile extends LivingEntity {
     public void tick(long time) {
         final Pos posBefore = getPosition();
         super.tick(time);
+        if (super.isRemoved()) return;
+
         final Pos posNow = getPosition();
 
         Vec diff = Vec.fromPoint(posNow.sub(posBefore));
@@ -175,5 +179,12 @@ public class PlayerProjectile extends LivingEntity {
             var e = new ProjectileCollideWithBlockEvent(this, Pos.fromPoint(hitPoint), hitBlock);
             MinecraftServer.getGlobalEventHandler().call(e);
         }
+    }
+
+    @ApiStatus.Experimental
+    @SuppressWarnings("unchecked")
+    @Override
+    public @NotNull Acquirable<? extends PlayerProjectile> acquirable() {
+        return (Acquirable<? extends PlayerProjectile>) super.acquirable();
     }
 }

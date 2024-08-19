@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +15,7 @@ public class TameableAnimalMeta extends AnimalMeta {
     private final static byte SITTING_BIT = 0x01;
     private final static byte TAMED_BIT = 0x04;
 
-    protected TameableAnimalMeta(@NotNull Entity entity, @NotNull Metadata metadata) {
+    protected TameableAnimalMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 

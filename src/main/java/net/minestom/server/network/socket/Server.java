@@ -5,6 +5,8 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.PacketProcessor;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.*;
@@ -15,14 +17,9 @@ import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public final class Server {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Server.class);
-
-    public static final boolean NO_DELAY = true;
 
     private volatile boolean stop;
 
