@@ -83,9 +83,7 @@ public class BlockBreakCalculation {
 
         speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_BLOCK_BREAK_SPEED);
 
-        ItemStack helmet = player.getInventory().getHelmet();
-
-        if (isInWater(player) && !helmet.get(ItemComponent.ENCHANTMENTS, EnchantmentList.EMPTY).has(Enchantment.AQUA_AFFINITY)) {
+        if (isInWater(player)) {
             speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_SUBMERGED_MINING_SPEED);
         }
 
