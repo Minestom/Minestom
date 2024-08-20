@@ -22,11 +22,11 @@ public class BlockBreakCalculation {
     private static final Tag WATER_TAG = MinecraftServer.getTagManager().getTag(net.minestom.server.gamedata.tags.Tag.BasicType.FLUIDS, "minecraft:water");
 
     /**
-     * Calculates the break time in seconds
+     * Calculates the break time in ticks
      *
-     * @return the block break time in seconds
+     * @return the block break time in ticks
      */
-    public static float breakTime(@NotNull Block block, @NotNull Player player) {
+    public static int breakTicks(@NotNull Block block, @NotNull Player player) {
         // Taken from minecaft wiki Breaking#Calculation
         Registry.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
@@ -85,8 +85,7 @@ public class BlockBreakCalculation {
             return 0;
         }
 
-        float ticks = (float) Math.ceil(1 / damage);
-        return ticks / 20;
+        return (int) Math.ceil(1 / damage);
     }
 
     private static boolean isInWater(@NotNull Player player) {
