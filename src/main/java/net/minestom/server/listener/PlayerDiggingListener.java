@@ -82,9 +82,7 @@ public final class PlayerDiggingListener {
             return breakBlock(instance, player, blockPosition, block, blockFace);
         }
 
-        // Survival digging
-        int breakTicks = BlockBreakCalculation.breakTicks(block, player);
-        final boolean instantBreak = player.isInstantBreak() || breakTicks == 0;
+        final boolean instantBreak = BlockBreakCalculation.breakTicks(block, player) == 0;
         if (!instantBreak) {
             PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
