@@ -2,6 +2,7 @@ package net.minestom.server.utils.block;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.gamedata.tags.Tag;
@@ -27,9 +28,8 @@ public class BlockBreakCalculation {
      * @return the block break time in ticks, -1 if the block is unbreakable
      */
     public static int breakTicks(@NotNull Block block, @NotNull Player player) {
-        if (player.isInstantBreak()) {
-            // Creative, or survival with instant break ability???
-            // Anyway, return 0 ticks
+        if (player.getGameMode() == GameMode.CREATIVE) {
+            // Creative can always break blocks instantly
             return 0;
         }
         // Taken from minecaft wiki Breaking#Calculation
