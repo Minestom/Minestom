@@ -45,6 +45,22 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void resizeRead() {
+        var buffer = NetworkBuffer.resizableBuffer(4);
+        buffer.write(INT, 6);
+        assertEquals(4, buffer.capacity());
+        assertEquals(4, buffer.writeIndex());
+
+        buffer.resize(8);
+        assertEquals(8, buffer.capacity());
+        assertEquals(6, buffer.read(INT));
+
+        buffer.write(INT, 7);
+        assertEquals(8, buffer.capacity());
+        assertEquals(8, buffer.writeIndex());
+    }
+
+    @Test
     public void readableBytes() {
         var buffer = NetworkBuffer.resizableBuffer();
         assertEquals(0, buffer.readableBytes());
