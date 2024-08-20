@@ -76,6 +76,14 @@ public class TestInstabreakCommand extends Command {
                 }
             }
         }
+        for (int x = -9; x < -6; x++) {
+            for (int z = -9; z < -6; z++) {
+                for (int y = 0; y < 3; y++) {
+                    areaBatch.setBlock(x, y, z, Block.BAMBOO);
+                }
+                areaBatch.setBlock(x, 3, z, Block.BAMBOO_SAPLING);
+            }
+        }
 
 
         addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
@@ -102,6 +110,7 @@ public class TestInstabreakCommand extends Command {
         List<ItemStack> items = new ArrayList<>();
         items.add(ItemStack.builder(Material.SHEARS).set(ItemComponent.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
         items.add(ItemStack.builder(Material.WHITE_WOOL).amount(64).build());
+        items.add(ItemStack.of(Material.DIAMOND_SWORD));
         for (ItemStack item : items) {
             player.getInventory().addItemStack(item);
         }
