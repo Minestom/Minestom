@@ -62,6 +62,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public boolean isValid() {
-        return packet != null && packet.get() != null;
+        final SoftReference<FramedPacket> ref = packet;
+        return ref != null && ref.get() != null;
     }
 }
