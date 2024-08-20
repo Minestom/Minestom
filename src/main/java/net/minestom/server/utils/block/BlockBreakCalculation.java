@@ -3,6 +3,7 @@ package net.minestom.server.utils.block;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -64,7 +65,7 @@ public class BlockBreakCalculation {
         ItemStack helmet = player.getInventory().getHelmet();
 
         if (isInWater(player) && !helmet.get(ItemComponent.ENCHANTMENTS, EnchantmentList.EMPTY).has(Enchantment.AQUA_AFFINITY)) {
-            speedMultiplier /= 5;
+            speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_SUBMERGED_MINING_SPEED);
         }
 
         if (!player.isOnGround()) {
