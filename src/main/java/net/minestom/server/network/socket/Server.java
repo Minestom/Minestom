@@ -103,6 +103,8 @@ public final class Server {
                 break;
             }
         }
+        // Ensure the connection is not stuck waiting for packets to write
+        connection.signalWrite();
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {

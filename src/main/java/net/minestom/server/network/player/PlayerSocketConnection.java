@@ -292,12 +292,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void offer(Receivable receivable) {
         this.packetQueue.relaxedOffer(receivable);
-        try {
-            this.writeLock.lock();
-            this.writeCondition.signal();
-        } finally {
-            this.writeLock.unlock();
-        }
+        signalWrite();
     }
 
     private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
@@ -393,15 +388,9 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Consume queued packets
         var packetQueue = this.packetQueue;
         if (packetQueue.isEmpty()) {
-            try {
-                this.writeLock.lock();
-                this.writeCondition.await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            } finally {
-                this.writeLock.unlock();
-            }
+            awaitWrite();
         }
+        if (!online) return;
         try (var hold = PacketVanilla.PACKET_POOL.hold()) {
             NetworkBuffer buffer = hold.get();
             // Write to buffer
@@ -418,6 +407,26 @@ public class PlayerSocketConnection extends PlayerConnection {
                 this.writeLeftover = buffer.copy(buffer.readIndex(), buffer.readableBytes(),
                         0, buffer.readableBytes());
             }
+        }
+    }
+
+    public void awaitWrite() {
+        try {
+            this.writeLock.lock();
+            this.writeCondition.await();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            this.writeLock.unlock();
+        }
+    }
+
+    public void signalWrite() {
+        try {
+            this.writeLock.lock();
+            this.writeCondition.signal();
+        } finally {
+            this.writeLock.unlock();
         }
     }
 
