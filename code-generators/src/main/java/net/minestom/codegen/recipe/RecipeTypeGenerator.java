@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
+import net.minestom.codegen.util.GenerationHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -18,8 +19,11 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
+import static net.minestom.codegen.util.GenerationHelper.VARIABLE_GETTER;
+
 public class RecipeTypeGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(RecipeTypeGenerator.class);
+    private static final String NAMESPACE = "namespace";
     private final InputStream recipeTypesFile;
     private final File outputFolder;
 
@@ -54,10 +58,10 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
         // Fields
         recipeTypeEnum.addFields(
                 List.of(
-                        FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", CONSTANT_MODIFIERS)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, recipeTypeCN)
                                 .build(),
-                        FieldSpec.builder(namespaceIdCN, "namespace", Modifier.PRIVATE, Modifier.FINAL).build()
+                        FieldSpec.builder(namespaceIdCN, NAMESPACE, PRIVATE_FINAL_MODIFIERS).build()
                 )
         );
 
@@ -66,21 +70,21 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
                 List.of(
                         // Constructor
                         MethodSpec.constructorBuilder()
-                                .addParameter(ParameterSpec.builder(namespaceIdCN, "namespace").addAnnotation(NotNull.class).build())
-                                .addStatement("this.namespace = namespace")
+                                .addParameter(ParameterSpec.builder(namespaceIdCN, NAMESPACE).addAnnotation(NotNull.class).build())
+                                .addStatement(GenerationHelper.VARIABLE_SETTER, NAMESPACE)
                                 .build(),
-                        MethodSpec.methodBuilder("namespace")
+                        MethodSpec.methodBuilder(NAMESPACE)
                                 .addModifiers(Modifier.PUBLIC)
                                 .addAnnotation(NotNull.class)
                                 .addAnnotation(Override.class)
                                 .returns(namespaceIdCN)
-                                .addStatement("return this.namespace")
+                                .addStatement(VARIABLE_GETTER, NAMESPACE)
                                 .build(),
                         MethodSpec.methodBuilder("id")
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(TypeName.INT)
                                 .addAnnotation(Override.class)
-                                .addStatement("return this.ordinal()")
+                                .addStatement(VARIABLE_GETTER, "ordinal()")
                                 .build()
                 )
         );
@@ -96,15 +100,11 @@ public class RecipeTypeGenerator extends MinestomCodeGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder("net.minestom.server.recipe", recipeTypeEnum.build())
-                                .indent("    ")
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
-        );
+        final JavaFile javaFile = JavaFile.builder("net.minestom.server.recipe", recipeTypeEnum.build())
+                .indent(DEFAULT_INDENT)
+                .skipJavaLangImports(true)
+                .build();
+        writeFile(javaFile, outputFolder);
     }
 
     private static @NotNull String recipeTypeConstantName(@NotNull String name) {
