@@ -98,6 +98,16 @@ public final class PacketWriting {
     }
 
     public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
+                                                      @NotNull ClientPacket packet,
+                                                      int compressionThreshold) {
+        try (var hold = PacketVanilla.PACKET_POOL.hold()) {
+            NetworkBuffer buffer = hold.get();
+            writeFramedPacket(buffer, state, packet, compressionThreshold);
+            return buffer.copy(0, buffer.writeIndex());
+        }
+    }
+
+    public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
                                                       @NotNull ServerPacket packet,
                                                       int compressionThreshold) {
         try (var hold = PacketVanilla.PACKET_POOL.hold()) {
