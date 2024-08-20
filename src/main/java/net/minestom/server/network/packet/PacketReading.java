@@ -64,11 +64,11 @@ public final class PacketReading {
     }
 
     public static Result<ClientPacket> readClients(
-            @NotNull NetworkBuffer readBuffer,
+            @NotNull NetworkBuffer buffer,
             @NotNull ConnectionState state,
             boolean compressed
     ) throws DataFormatException {
-        return readPackets(readBuffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
+        return readPackets(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
     public static <T> Result<T> readPackets(
@@ -98,6 +98,14 @@ public final class PacketReading {
             }
         }
         return !packets.isEmpty() ? new Result.Success<>(packets, state) : EMPTY_CLIENT_PACKET;
+    }
+
+    public static Result<ClientPacket> readClient(
+            @NotNull NetworkBuffer buffer,
+            @NotNull ConnectionState state,
+            boolean compressed
+    ) throws DataFormatException {
+        return readPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
     public static <T> Result<T> readPacket(
