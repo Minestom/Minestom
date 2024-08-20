@@ -1,6 +1,7 @@
 package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -44,6 +45,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
     Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();

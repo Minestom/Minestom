@@ -27,7 +27,7 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
         @Override
         public void write(@NotNull NetworkBuffer buffer, ChunkData value) {
             // Heightmaps
-            buffer.write(NBT, value.heightmaps);
+            buffer.write(NBT_COMPOUND, value.heightmaps);
             // Data
             buffer.write(BYTE_ARRAY, value.data);
             // Block entities
@@ -50,7 +50,7 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
 
         @Override
         public ChunkData read(@NotNull NetworkBuffer buffer) {
-            return new ChunkData((CompoundBinaryTag) buffer.read(NBT), buffer.read(BYTE_ARRAY),
+            return new ChunkData(buffer.read(NBT_COMPOUND), buffer.read(BYTE_ARRAY),
                     readBlockEntities(buffer));
         }
     };
@@ -62,7 +62,7 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
             final byte xz = reader.read(BYTE);
             final short y = reader.read(SHORT);
             final int blockEntityId = reader.read(VAR_INT);
-            final CompoundBinaryTag nbt = (CompoundBinaryTag) reader.read(NBT);
+            final CompoundBinaryTag nbt = reader.read(NBT_COMPOUND);
             // TODO create block object
         }
         return blockEntities;

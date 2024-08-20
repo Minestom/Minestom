@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -13,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
+
+import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 
 /**
  * <p>A predicate to filter blocks based on their name, properties, and/or nbt.</p>
@@ -44,23 +47,13 @@ public record BlockPredicate(
      */
     public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null);
 
-    public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, BlockPredicate value) {
-            buffer.write(BlockTypeFilter.NETWORK_TYPE.optional(), value.blocks);
-            buffer.write(PropertiesPredicate.NETWORK_TYPE.optional(), value.state);
-            buffer.write(NetworkBuffer.NBT.optional(), value.nbt);
-        }
+    public static NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
+            BlockTypeFilter.NETWORK_TYPE.optional(), BlockPredicate::blocks,
+            PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
+            NBT_COMPOUND.optional(), BlockPredicate::nbt,
+            BlockPredicate::new
+    );
 
-        @Override
-        public BlockPredicate read(@NotNull NetworkBuffer buffer) {
-            return new BlockPredicate(
-                    buffer.read(BlockTypeFilter.NETWORK_TYPE.optional()),
-                    buffer.read(PropertiesPredicate.NETWORK_TYPE.optional()),
-                    (CompoundBinaryTag) buffer.read(NetworkBuffer.NBT.optional())
-            );
-        }
-    };
     public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull BlockPredicate value) {
@@ -116,5 +109,4 @@ public record BlockPredicate(
             return false;
         return nbt == null || Objects.equals(nbt, BlockUtils.extractClientNbt(block));
     }
-
 }

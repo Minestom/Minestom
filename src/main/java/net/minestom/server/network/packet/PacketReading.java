@@ -4,6 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * Fairly internal and performance sensitive.
  */
 @SuppressWarnings("ALL")
+@ApiStatus.Internal
 public final class PacketReading {
     private final static Logger LOGGER = LoggerFactory.getLogger(PacketReading.class);
 
@@ -63,7 +65,8 @@ public final class PacketReading {
 
     public static Result<ClientPacket> readClients(
             @NotNull NetworkBuffer readBuffer,
-            @NotNull ConnectionState state, boolean compressed
+            @NotNull ConnectionState state,
+            boolean compressed
     ) throws DataFormatException {
         return readPackets(readBuffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
@@ -71,7 +74,8 @@ public final class PacketReading {
     public static <T> Result<T> readPackets(
             @NotNull NetworkBuffer buffer,
             @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            @NotNull ConnectionState state,
+            @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
         List<T> packets = new ArrayList<>();
@@ -99,7 +103,8 @@ public final class PacketReading {
     public static <T> Result<T> readPacket(
             @NotNull NetworkBuffer buffer,
             @NotNull PacketParser<T> parser,
-            @NotNull ConnectionState state, BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
+            @NotNull ConnectionState state,
+            @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
         final int beginMark = buffer.readIndex();
