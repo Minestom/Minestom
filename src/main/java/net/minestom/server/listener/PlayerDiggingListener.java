@@ -24,6 +24,7 @@ import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
+import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,26 +71,27 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
-        final GameMode gameMode = player.getGameMode();
 
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
         }
 
+        final GameMode gameMode = player.getGameMode();
         if (gameMode == GameMode.CREATIVE) {
             return breakBlock(instance, player, blockPosition, block, blockFace);
         }
 
         // Survival digging
         // FIXME: verify mineable tag and enchantment
-        final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
+        int breakTicks = BlockBreakCalculation.breakTicks(block, player);
+        final boolean instantBreak = player.isInstantBreak() || breakTicks == 0;
         if (!instantBreak) {
             PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
-        // Client only send a single STARTED_DIGGING when insta-break is enabled
+        // Client only sends a single STARTED_DIGGING when insta-break is enabled
         return breakBlock(instance, player, blockPosition, block, blockFace);
     }
 
