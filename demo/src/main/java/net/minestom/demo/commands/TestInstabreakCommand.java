@@ -1,5 +1,6 @@
 package net.minestom.demo.commands;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
@@ -7,6 +8,8 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -56,6 +59,11 @@ public class TestInstabreakCommand extends Command {
             Player player = (Player) sender;
             giveItems(player);
         }, ArgumentType.Literal("giveItems"));
+
+        addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
+            Player player = (Player) sender;
+            player.openInventory(new Inventory(InventoryType.ANVIL, Component.translatable("container.repair")));
+        }, ArgumentType.Literal("anvil"));
 
         RelativeBlockBatch areaBatch = new RelativeBlockBatch();
         for (int x = -20; x < 21; x++) {
