@@ -61,6 +61,92 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void copyClone() {
+        var buffer = NetworkBuffer.staticBuffer(10);
+        buffer.write(INT, 6);
+        buffer.write(SHORT, (short) 2);
+        buffer.write(FLOAT, 3.5f);
+        assertEquals(10, buffer.writeIndex());
+        assertEquals(10, buffer.capacity());
+
+        var copy = buffer.copy(0, 10);
+        assertEquals(10, copy.writeIndex());
+        assertEquals(10, copy.capacity());
+
+        assertTrue(NetworkBuffer.equals(buffer, copy));
+    }
+
+    @Test
+    public void copyDirectZeroIndex() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(10);
+        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
+        assertEquals(10, buffer2.capacity());
+
+        assertEquals(6, buffer2.read(INT));
+        assertEquals((short) 2, buffer2.read(SHORT));
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void copyDirectIndex() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(4);
+        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
+        assertEquals(4, buffer2.capacity());
+
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void copyDirectIndexOffset() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(8);
+        buffer2.write(INT, 5);
+        NetworkBuffer.copy(buffer1, 6, buffer2, 4, 4);
+        assertEquals(8, buffer2.capacity());
+
+        assertEquals(5, buffer2.read(INT));
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void compact() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        buffer.write(INT, 6);
+        buffer.write(SHORT, (short) 2);
+        buffer.write(FLOAT, 3.5f);
+
+        buffer.read(INT);
+        buffer.compact();
+        // Short should be copied at index 0
+        assertEquals(256, buffer.capacity());
+        assertEquals(6, buffer.writeIndex());
+        assertEquals(0, buffer.readIndex());
+
+        assertEquals((short) 2, buffer.read(SHORT));
+        assertEquals(3.5f, buffer.read(FLOAT));
+    }
+
+    @Test
     public void readableBytes() {
         var buffer = NetworkBuffer.resizableBuffer();
         assertEquals(0, buffer.readableBytes());

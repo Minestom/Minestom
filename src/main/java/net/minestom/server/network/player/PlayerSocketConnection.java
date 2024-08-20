@@ -302,13 +302,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 final NetworkBuffer rawBuffer = receivableBuffer.buffer();
                 final long index = receivableBuffer.index();
                 final long length = receivableBuffer.length();
-                if (buffer.writableBytes() < length) {
-                    // Not enough space in the buffer
-                    yield false;
-                }
-                NetworkBuffer.copy(rawBuffer, index, buffer, buffer.writeIndex(), length);
-                buffer.advanceWrite(length);
-                yield true;
+                yield writeBuffer(buffer, rawBuffer, index, length);
             }
             case Receivable.Packet packet -> writePacketSync(buffer, packet.packet(), compressed);
         };
@@ -349,15 +343,13 @@ public class PlayerSocketConnection extends PlayerConnection {
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
                     final long length = body.capacity();
-                    NetworkBuffer.copy(body, 0, buffer, start, length);
-                    buffer.advanceWrite(length);
+                    writeBuffer(buffer, body, 0, length);
                 }
                 case CachedPacket cachedPacket -> {
                     final NetworkBuffer body = cachedPacket.body(state);
                     if (body != null) {
                         final long length = body.capacity();
-                        NetworkBuffer.copy(body, 0, buffer, start, length);
-                        buffer.advanceWrite(length);
+                        writeBuffer(buffer, body, 0, length);
                     } else
                         PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
                 }
@@ -369,6 +361,16 @@ public class PlayerSocketConnection extends PlayerConnection {
             buffer.writeIndex(start);
             return false;
         }
+    }
+
+    private boolean writeBuffer(NetworkBuffer buffer, NetworkBuffer body, long index, long length) {
+        if (buffer.writableBytes() < length) {
+            // Not enough space in the buffer
+            return false;
+        }
+        NetworkBuffer.copy(body, index, buffer, buffer.writeIndex(), length);
+        buffer.advanceWrite(length);
+        return true;
     }
 
     private NetworkBuffer writeLeftover = null;
@@ -390,7 +392,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         if (packetQueue.isEmpty()) {
             awaitWrite();
         }
-        if (!online) return;
+        if (!channel.isConnected()) throw new IOException("Channel is closed");
         try (var hold = PacketVanilla.PACKET_POOL.hold()) {
             NetworkBuffer buffer = hold.get();
             // Write to buffer
@@ -404,8 +406,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             // Write to channel
             final boolean success = buffer.writeChannel(channel);
             if (!success) {
-                this.writeLeftover = buffer.copy(buffer.readIndex(), buffer.readableBytes(),
-                        0, buffer.readableBytes());
+                final long readable = buffer.readableBytes();
+                this.writeLeftover = buffer.copy(buffer.readIndex(), readable, 0, readable);
             }
         }
     }

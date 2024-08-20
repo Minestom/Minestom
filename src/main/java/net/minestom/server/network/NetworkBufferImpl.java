@@ -11,39 +11,62 @@ import org.jetbrains.annotations.UnknownNullability;
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+import static net.minestom.server.network.NetworkBufferUnsafe.*;
+
 final class NetworkBufferImpl implements NetworkBuffer {
-    private ByteBuffer nioBuffer;
-    long readIndex, writeIndex;
+    private static final Cleaner CLEANER = Cleaner.create();
+
+    private final NetworkBufferImpl parent; // Used for slices so we can control GC over the parent buffer
+    private final BufferCleaner state;
+    private long address, capacity;
+    private long readIndex, writeIndex;
+    boolean readOnly;
 
     BinaryTagWriter nbtWriter;
     BinaryTagReader nbtReader;
 
     final @Nullable ResizeStrategy resizeStrategy;
     final @Nullable Registries registries;
-    boolean readOnly;
 
-    NetworkBufferImpl(@NotNull ByteBuffer buffer,
+    NetworkBufferImpl(NetworkBufferImpl parent,
+                      long address, long capacity,
+                      long readIndex, long writeIndex,
                       @Nullable ResizeStrategy resizeStrategy,
                       @Nullable Registries registries) {
-        this.nioBuffer = buffer.order(ByteOrder.BIG_ENDIAN);
+        this.parent = parent;
+        this.address = address;
+        this.capacity = capacity;
+        this.readIndex = readIndex;
+        this.writeIndex = writeIndex;
         this.resizeStrategy = resizeStrategy;
         this.registries = registries;
 
-        buffer.limit(buffer.capacity());
+        this.state = new BufferCleaner(new AtomicLong(address));
+        if (this.parent == null) CLEANER.register(this, state);
+    }
+
+    private record BufferCleaner(AtomicLong address) implements Runnable {
+        @Override
+        public void run() {
+            UNSAFE.freeMemory(address.get());
+        }
     }
 
     @Override
     public <T> void write(@NotNull Type<T> type, @UnknownNullability T value) {
-        assertReadOnly(this);
+        assertReadOnly();
         type.write(this, value);
     }
 
@@ -54,7 +77,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) {
-        assertReadOnly(this);
+        assertReadOnly();
         final long oldWriteIndex = writeIndex;
         writeIndex = index;
         try {
@@ -79,14 +102,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
     public void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length) {
         assertOverflow(srcOffset + length);
         assertOverflow(destOffset + length);
-        this.nioBuffer.get((int) srcOffset, dest, (int) destOffset, (int) length);
-    }
-
-    @Override
-    public void copyTo(long srcOffset, @NotNull ByteBuffer dest, long destOffset, long length) {
-        assertOverflow(srcOffset + length);
-        assertOverflow(destOffset + length);
-        dest.put((int) destOffset, nioBuffer, (int) srcOffset, (int) length);
+        if (length == 0) return;
+        if (dest.length < destOffset + length) {
+            throw new IndexOutOfBoundsException("Destination array is too small: " + dest.length + " < " + (destOffset + length));
+        }
+        UNSAFE.copyMemory(null, address + srcOffset, dest, BYTE_ARRAY_OFFSET + destOffset, length);
     }
 
     public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
@@ -101,9 +121,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     public @NotNull NetworkBuffer clear() {
-        this.writeIndex = 0;
-        this.readIndex = 0;
-        return this;
+        return index(0, 0);
     }
 
     public long writeIndex() {
@@ -156,36 +174,41 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long capacity() {
-        return nioBuffer.capacity();
+        return capacity;
     }
 
     @Override
     public void readOnly() {
         this.readOnly = true;
-        this.nioBuffer = nioBuffer.asReadOnlyBuffer();
+    }
+
+    @Override
+    public boolean isReadOnly() {
+        return readOnly;
     }
 
     @Override
     public void resize(long newSize) {
-        assertOverflow(newSize);
-        ByteBuffer oldBuffer = nioBuffer;
-        ByteBuffer newBuffer = ByteBuffer.allocateDirect((int) newSize);
-        oldBuffer.position(0);
-        newBuffer.put(nioBuffer);
-        nioBuffer = newBuffer.clear();
+        assertReadOnly();
+        final long newAddress = UNSAFE.reallocateMemory(address, newSize);
+        if (newAddress == 0) {
+            throw new OutOfMemoryError("Failed to reallocate memory");
+        }
+        this.address = newAddress;
+        this.capacity = newSize;
+        this.state.address.set(newAddress);
     }
 
     @Override
     public void ensureWritable(long length) {
+        assertReadOnly();
         if (writableBytes() >= length) return;
         final long newCapacity = newCapacity(length, capacity());
-        assertOverflow(newCapacity);
-        resize((int) newCapacity);
+        resize(newCapacity);
     }
 
     private long newCapacity(long length, long capacity) {
         final long targetSize = writeIndex + length;
-        assertOverflow(targetSize);
         final ResizeStrategy strategy = this.resizeStrategy;
         if (strategy == null)
             throw new IndexOutOfBoundsException("Buffer is full and cannot be resized: " + capacity + " -> " + targetSize);
@@ -197,9 +220,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void compact() {
-        assertReadOnly(this);
-        nioBuffer.position((int) readIndex);
-        nioBuffer.limit((int) writeIndex);
+        assertReadOnly();
+        ByteBuffer nioBuffer = bufferSlice((int) readIndex, (int) readableBytes());
         nioBuffer.compact();
         writeIndex -= readIndex;
         readIndex = 0;
@@ -207,50 +229,50 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public NetworkBuffer slice(long index, long length, long readIndex, long writeIndex) {
-        NetworkBufferImpl slice = new NetworkBufferImpl(nioBuffer.slice((int) index, (int) length), resizeStrategy, registries);
-        slice.readIndex = readIndex;
-        slice.writeIndex = writeIndex;
+        Objects.checkFromIndexSize(index, length, capacity);
+        NetworkBufferImpl slice = new NetworkBufferImpl(this,
+                address + index, length,
+                readIndex, writeIndex,
+                resizeStrategy, registries);
         slice.readOnly = readOnly;
         return slice;
     }
 
     @Override
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        assertOverflow(length);
-        assertOverflow(index + length);
-        ByteBuffer payload = ByteBuffer.allocateDirect((int) length);
-        payload.put(nioBuffer.slice((int) index, (int) length).duplicate());
-        NetworkBufferImpl copy = new NetworkBufferImpl(payload, resizeStrategy, registries);
-        copy.readIndex = readIndex;
-        copy.writeIndex = writeIndex;
-        return copy;
+        Objects.checkFromIndexSize(index, length, capacity);
+        final long newAddress = UNSAFE.allocateMemory(length);
+        if (newAddress == 0) {
+            throw new OutOfMemoryError("Failed to allocate memory");
+        }
+        UNSAFE.copyMemory(address + index, newAddress, length);
+        return new NetworkBufferImpl(null,
+                newAddress, length,
+                readIndex, writeIndex,
+                resizeStrategy, registries);
     }
 
     @Override
     public int readChannel(ReadableByteChannel channel) throws IOException {
-        assertReadOnly(this);
+        assertReadOnly();
         assertOverflow(writeIndex + writableBytes());
-        var buffer = nioBuffer.slice((int) writeIndex, (int) writableBytes());
+        var buffer = bufferSlice((int) writeIndex, (int) writableBytes());
         final int count = channel.read(buffer);
-        if (count == -1) {
-            // EOS
-            throw new IOException("Disconnected");
-        }
+        if (count == -1) throw new IOException("Disconnected"); // EOS
         advanceWrite(count);
         return count;
     }
 
     @Override
     public boolean writeChannel(SocketChannel channel) throws IOException {
-        assertOverflow(readIndex + readableBytes());
-        var buffer = nioBuffer.slice((int) readIndex, (int) readableBytes());
+        final long readableBytes = readableBytes();
+        if (readableBytes == 0) return true; // Nothing to write
+        assertOverflow(readIndex + readableBytes);
+        var buffer = bufferSlice((int) readIndex, (int) readableBytes);
         if (!buffer.hasRemaining())
             return true; // Nothing to write
         final int count = channel.write(buffer);
-        if (count == -1) {
-            // EOS
-            throw new IOException("Disconnected");
-        }
+        if (count == -1) throw new IOException("Disconnected"); // EOS
         advanceRead(count);
         return !buffer.hasRemaining();
     }
@@ -258,7 +280,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public void cipher(Cipher cipher, long start, long length) {
         assertOverflow(start + length);
-        ByteBuffer input = nioBuffer.slice((int) start, (int) length);
+        ByteBuffer input = bufferSlice((int) start, (int) length);
         try {
             cipher.update(input, input.duplicate());
         } catch (ShortBufferException e) {
@@ -271,14 +293,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
-        assertReadOnly(output);
+        impl(output).assertReadOnly();
         assertOverflow(start + length);
 
-        ByteBuffer src = this.nioBuffer;
-        ByteBuffer dst = impl(output).nioBuffer;
-
-        ByteBuffer input = src.slice((int) start, (int) length);
-        ByteBuffer outputBuffer = dst.slice((int) output.writeIndex(), (int) output.writableBytes());
+        ByteBuffer input = bufferSlice((int) start, (int) length);
+        ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
         Deflater deflater = DEFLATER_POOL.get();
         try {
@@ -295,14 +314,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long decompress(long start, long length, NetworkBuffer output) throws DataFormatException {
-        assertReadOnly(output);
+        impl(output).assertReadOnly();
         assertOverflow(start + length);
 
-        ByteBuffer src = this.nioBuffer;
-        ByteBuffer dst = impl(output).nioBuffer;
-
-        ByteBuffer input = src.slice((int) start, (int) length);
-        ByteBuffer outputBuffer = dst.slice((int) output.writeIndex(), (int) output.writableBytes());
+        ByteBuffer input = bufferSlice((int) start, (int) length);
+        ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
         Inflater inflater = INFLATER_POOL.get();
         try {
@@ -316,103 +332,152 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
+    private ByteBuffer bufferSlice(int position, int length) {
+        ByteBuffer buffer = ByteBuffer.allocateDirect(0).order(ByteOrder.BIG_ENDIAN);
+        updateAddress(buffer, address);
+        updateCapacity(buffer, (int) capacity);
+        buffer.limit(position + length).position(position);
+        return buffer;
+    }
+
     @Override
     public String toString() {
-        return String.format("NetworkBufferImpl{r%d|w%d->%d, registries=%s, resizeStrategy=%s}",
-                readIndex, writeIndex, capacity(), registries != null, resizeStrategy != null);
+        return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, resize=%s, readOnly=%s}",
+                readIndex, writeIndex, capacity(), registries != null, resizeStrategy != null, readOnly);
+    }
+
+    private static boolean requireConversion() {
+        return ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN;
     }
 
     // Internal writing methods
     void _putBytes(long index, byte[] value) {
-        assertOverflow(index + value.length);
-        nioBuffer.put((int) index, value, 0, value.length);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, value.length, capacity);
+        UNSAFE.copyMemory(value, BYTE_ARRAY_OFFSET, null, address + index, value.length);
     }
 
     void _getBytes(long index, byte[] value) {
-        final int length = value.length;
-        assertOverflow(index + length);
-        nioBuffer.get((int) index, value, 0, length);
+        Objects.checkFromIndexSize(index, value.length, capacity);
+        UNSAFE.copyMemory(null, address + index, value, BYTE_ARRAY_OFFSET, value.length);
     }
 
     void _putByte(long index, byte value) {
-        assertOverflow(index + Byte.BYTES);
-        nioBuffer.put((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Byte.BYTES, capacity);
+        UNSAFE.putByte(address + index, value);
     }
 
     byte _getByte(long index) {
-        assertOverflow(index + Byte.BYTES);
-        return nioBuffer.get((int) index);
+        Objects.checkFromIndexSize(index, Byte.BYTES, capacity);
+        return UNSAFE.getByte(address + index);
     }
 
     void _putShort(long index, short value) {
-        assertOverflow(index + Short.BYTES);
-        nioBuffer.putShort((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Short.BYTES, capacity);
+        if (requireConversion()) value = Short.reverseBytes(value);
+        UNSAFE.putShort(address + index, value);
     }
 
     short _getShort(long index) {
-        assertOverflow(index + Short.BYTES);
-        return nioBuffer.getShort((int) index);
+        Objects.checkFromIndexSize(index, Short.BYTES, capacity);
+        final short value = UNSAFE.getShort(address + index);
+        return requireConversion() ? Short.reverseBytes(value) : value;
     }
 
     void _putInt(long index, int value) {
-        assertOverflow(index + Integer.BYTES);
-        nioBuffer.putInt((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
+        if (requireConversion()) value = Integer.reverseBytes(value);
+        UNSAFE.putInt(address + index, value);
     }
 
     int _getInt(long index) {
-        assertOverflow(index + Integer.BYTES);
-        return nioBuffer.getInt((int) index);
+        Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
+        final int value = UNSAFE.getInt(address + index);
+        return requireConversion() ? Integer.reverseBytes(value) : value;
     }
 
     void _putLong(long index, long value) {
-        assertOverflow(index + Long.BYTES);
-        nioBuffer.putLong((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Long.BYTES, capacity);
+        if (requireConversion()) value = Long.reverseBytes(value);
+        UNSAFE.putLong(address + index, value);
     }
 
     long _getLong(long index) {
-        assertOverflow(index + Long.BYTES);
-        return nioBuffer.getLong((int) index);
+        Objects.checkFromIndexSize(index, Long.BYTES, capacity);
+        final long value = UNSAFE.getLong(address + index);
+        return requireConversion() ? Long.reverseBytes(value) : value;
     }
 
     void _putFloat(long index, float value) {
-        assertOverflow(index + Float.BYTES);
-        nioBuffer.putFloat((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Float.BYTES, capacity);
+        int intValue = Float.floatToIntBits(value);
+        if (requireConversion()) intValue = Integer.reverseBytes(intValue);
+        UNSAFE.putInt(address + index, intValue);
     }
 
     float _getFloat(long index) {
-        assertOverflow(index + Float.BYTES);
-        return nioBuffer.getFloat((int) index);
+        Objects.checkFromIndexSize(index, Float.BYTES, capacity);
+        int intValue = UNSAFE.getInt(address + index);
+        if (requireConversion()) intValue = Integer.reverseBytes(intValue);
+        return Float.intBitsToFloat(intValue);
     }
 
     void _putDouble(long index, double value) {
-        assertOverflow(index + Double.BYTES);
-        nioBuffer.putDouble((int) index, value);
+        assertReadOnly();
+        Objects.checkFromIndexSize(index, Double.BYTES, capacity);
+        long longValue = Double.doubleToLongBits(value);
+        if (requireConversion()) longValue = Long.reverseBytes(longValue);
+        UNSAFE.putLong(address + index, longValue);
     }
 
     double _getDouble(long index) {
-        assertOverflow(index + Double.BYTES);
-        return nioBuffer.getDouble((int) index);
+        Objects.checkFromIndexSize(index, Double.BYTES, capacity);
+        long longValue = UNSAFE.getLong(address + index);
+        if (requireConversion()) longValue = Long.reverseBytes(longValue);
+        return Double.longBitsToDouble(longValue);
+    }
+
+    static NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+        var buffer = new Builder(bytes.length).registry(registries).build();
+        buffer.writeAt(0, NetworkBuffer.RAW_BYTES, bytes);
+        buffer.index(readIndex, writeIndex);
+        return buffer;
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,
                      NetworkBuffer dstBuffer, long dstOffset, long length) {
-        assertReadOnly(dstBuffer);
-        assertOverflow(srcOffset + length);
-        assertOverflow(dstOffset + length);
-        dstBuffer.ensureWritable(dstOffset + length);
-        ByteBuffer src = impl(srcBuffer).nioBuffer;
-        ByteBuffer dst = impl(dstBuffer).nioBuffer;
-        dst.put((int) dstOffset, src, (int) srcOffset, (int) length);
+        var src = impl(srcBuffer);
+        var dst = impl(dstBuffer);
+        dst.assertReadOnly();
+        Objects.checkFromIndexSize(srcOffset, length, src.capacity);
+        Objects.checkFromIndexSize(dstOffset, length, dst.capacity);
+        final long srcAddress = src.address + srcOffset;
+        final long dstAddress = dst.address + dstOffset;
+        UNSAFE.copyMemory(srcAddress, dstAddress, length);
     }
 
     public static boolean equals(NetworkBuffer buffer1, NetworkBuffer buffer2) {
-        ByteBuffer nioBuffer1 = impl(buffer1).nioBuffer.slice(0, (int) buffer1.capacity());
-        ByteBuffer nioBuffer2 = impl(buffer2).nioBuffer.slice(0, (int) buffer2.capacity());
-        return nioBuffer1.equals(nioBuffer2);
+        var impl1 = impl(buffer1);
+        var impl2 = impl(buffer2);
+        final int capacity = (int) impl1.capacity;
+        if (capacity != impl2.capacity) return false;
+        final long address1 = impl1.address;
+        final long address2 = impl2.address;
+        for (long i = 0; i < capacity; i++) {
+            if (UNSAFE.getByte(address1 + i) != UNSAFE.getByte(address2 + i)) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    static void assertReadOnly(NetworkBuffer buffer) {
-        if (impl(buffer).readOnly) {
+    void assertReadOnly() {
+        if (readOnly) {
             throw new UnsupportedOperationException("Buffer is read-only");
         }
     }
@@ -440,9 +505,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
         @Override
         public @NotNull NetworkBuffer build() {
-            assertOverflow(initialSize);
-            ByteBuffer buffer = ByteBuffer.allocateDirect((int) initialSize);
-            return new NetworkBufferImpl(buffer, resizeStrategy, registries);
+            final long address = UNSAFE.allocateMemory(initialSize);
+            return new NetworkBufferImpl(null,
+                    address, initialSize,
+                    0, 0,
+                    resizeStrategy, registries);
         }
     }
 
@@ -454,7 +521,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         try {
             Math.toIntExact(value); // Check if long is within the bounds of an int
         } catch (ArithmeticException e) {
-            throw new RuntimeException("Buffer size is too large, harass maintainers for `MemorySegment` support");
+            throw new RuntimeException("Method does not support long values: " + value);
         }
     }
 }

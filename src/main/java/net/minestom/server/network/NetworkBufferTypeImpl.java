@@ -174,34 +174,19 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record VarIntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
-            final int value = boxed;
-            final long index = buffer.writeIndex();
+            buffer.ensureWritable(5);
+            long index = buffer.writeIndex();
+            int value = boxed;
             var nio = impl(buffer);
-            if ((value & (0xFFFFFFFF << 7)) == 0) {
-                buffer.ensureWritable(1);
-                nio._putByte(index, (byte) value);
-                buffer.advanceWrite(1);
-            } else if ((value & (0xFFFFFFFF << 14)) == 0) {
-                buffer.ensureWritable(2);
-                nio._putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
-                buffer.advanceWrite(2);
-            } else if ((value & (0xFFFFFFFF << 21)) == 0) {
-                buffer.ensureWritable(3);
-                nio._putByte(index, (byte) (value & 0x7F | 0x80));
-                nio._putByte(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
-                nio._putByte(index + 2, (byte) (value >>> 14));
-                buffer.advanceWrite(3);
-            } else if ((value & (0xFFFFFFFF << 28)) == 0) {
-                buffer.ensureWritable(4);
-                nio._putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
-                        | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
-                buffer.advanceWrite(4);
-            } else {
-                buffer.ensureWritable(5);
-                nio._putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
-                        | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
-                nio._putByte(index + 4, (byte) (value >>> 28));
-                buffer.advanceWrite(5);
+            while (true) {
+                if ((value & ~SEGMENT_BITS) == 0) {
+                    nio._putByte(index++, (byte) value);
+                    buffer.advanceWrite(index - buffer.writeIndex());
+                    return;
+                }
+                nio._putByte(index++, (byte) ((byte) (value & SEGMENT_BITS) | CONTINUE_BIT));
+                // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
+                value >>>= 7;
             }
         }
 

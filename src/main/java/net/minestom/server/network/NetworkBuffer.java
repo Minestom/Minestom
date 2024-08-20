@@ -18,7 +18,6 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
 import java.security.PublicKey;
@@ -113,8 +112,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length);
 
-    void copyTo(long srcOffset, @NotNull ByteBuffer dest, long destOffset, long length);
-
     byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
 
     @NotNull NetworkBuffer clear();
@@ -140,6 +137,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long capacity();
 
     void readOnly();
+
+    boolean isReadOnly();
 
     void resize(long newSize);
 
@@ -227,20 +226,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
-        ByteBuffer buffer = ByteBuffer.wrap(bytes);
-        return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
+        return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
     }
 
     static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
-    }
-
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, long readIndex, long writeIndex, @Nullable Registries registries) {
-        return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
-    }
-
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, long readIndex, long writeIndex) {
-        return wrap(buffer, readIndex, writeIndex, null);
     }
 
     sealed interface Builder permits NetworkBufferImpl.Builder {
