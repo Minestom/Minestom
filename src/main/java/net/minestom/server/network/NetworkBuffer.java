@@ -135,6 +135,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     int readableBytes();
 
+    int writableBytes();
+
     int size();
 
     void readOnly();

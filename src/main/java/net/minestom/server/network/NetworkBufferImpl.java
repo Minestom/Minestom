@@ -135,8 +135,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return oldReadIndex;
     }
 
+    @Override
     public int readableBytes() {
         return writeIndex - readIndex;
+    }
+
+    @Override
+    public int writableBytes() {
+        return size() - writeIndex;
     }
 
     @Override
@@ -150,13 +156,16 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.nioBuffer = nioBuffer.asReadOnlyBuffer();
     }
 
+    @Override
     public void resize(int newSize) {
+        ByteBuffer oldBuffer = nioBuffer;
         ByteBuffer newBuffer = ByteBuffer.allocateDirect(newSize);
-        nioBuffer.position(0);
+        oldBuffer.position(0);
         newBuffer.put(nioBuffer);
         nioBuffer = newBuffer.clear();
     }
 
+    @Override
     public void ensureSize(int length) {
         final long capacity = nioBuffer.capacity();
         final long targetSize = writeIndex + length;
@@ -167,6 +176,9 @@ final class NetworkBufferImpl implements NetworkBuffer {
             throw new IndexOutOfBoundsException("Buffer is full and cannot be resized: " + capacity + " -> " + targetSize);
 
         final long newCapacity = strategy.resize(capacity, targetSize);
+        if (newCapacity == capacity)
+            throw new IndexOutOfBoundsException("Buffer is full has been resized to the same capacity: " + capacity + " -> " + targetSize);
+
         // Check if long is within the bounds of an int
         if (newCapacity > Integer.MAX_VALUE) {
             throw new RuntimeException("Buffer size is too large, harass maintainers for `MemorySegment` support");
@@ -294,6 +306,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     static void copy(NetworkBuffer srcBuffer, int srcOffset,
                      NetworkBuffer dstBuffer, int dstOffset, int length) {
         assertReadOnly(dstBuffer);
+        dstBuffer.ensureSize(dstOffset + length);
         ByteBuffer src = impl(srcBuffer).nioBuffer;
         ByteBuffer dst = impl(dstBuffer).nioBuffer;
         dst.put(dstOffset, src, srcOffset, length);

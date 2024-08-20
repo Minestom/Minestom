@@ -109,7 +109,12 @@ public final class Server {
         while (!stop) {
             try {
                 connection.flushSync();
-            } catch (Exception e) {
+            } catch (IOException e) {
+                // TODO print exception? (should ignore disconnection)
+                connection.disconnect();
+                break;
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }
