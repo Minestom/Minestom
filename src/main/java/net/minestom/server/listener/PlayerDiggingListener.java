@@ -79,12 +79,8 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
-        final GameMode gameMode = player.getGameMode();
-        if (gameMode == GameMode.CREATIVE) {
-            return breakBlock(instance, player, blockPosition, block, blockFace);
-        }
-
-        final boolean instantBreak = BlockBreakCalculation.breakTicks(block, player) == 0;
+        final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
+        final boolean instantBreak = breakTicks == 0;
         if (!instantBreak) {
             PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
