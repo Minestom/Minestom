@@ -138,12 +138,10 @@ public final class PacketReading {
         if (compressed) {
             final int dataLength = content.read(VAR_INT);
             if (dataLength > 0) {
-                NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
-                try {
+                try (var hold = PacketVanilla.PACKET_POOL.hold()) {
+                    NetworkBuffer decompressed = hold.get();
                     content.decompress(content.readIndex(), content.readableBytes(), decompressed);
                     packet = readUncompressedPacket(decompressed, parser, state);
-                } finally {
-                    PacketVanilla.PACKET_POOL.add(decompressed);
                 }
             } else {
                 packet = readUncompressedPacket(content, parser, state);
