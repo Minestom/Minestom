@@ -72,8 +72,6 @@ public final class PlayerDiggingListener {
     private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
 
-        System.out.println(" Packet Start Digging");
-
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
@@ -93,8 +91,6 @@ public final class PlayerDiggingListener {
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
 
-        System.out.println(" Packet Cancel Digging");
-
         PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
@@ -102,8 +98,6 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult finishDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
-
-        System.out.println(" Packet Finish Digging");
 
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
