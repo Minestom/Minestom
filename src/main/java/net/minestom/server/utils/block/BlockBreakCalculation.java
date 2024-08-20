@@ -32,7 +32,7 @@ public class BlockBreakCalculation {
             // Creative can always break blocks instantly
             return 0;
         }
-        // Taken from minecaft wiki Breaking#Calculation
+        // Taken from minecraft wiki Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
         Registry.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
