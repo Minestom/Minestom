@@ -44,7 +44,7 @@ public class ChatMessageListener {
                 // delegate to the messenger to avoid sending messages we shouldn't be
                 Messenger.sendMessage(
                         recipients,
-                        playerChatEvent.getFinalMessage(),
+                        playerChatEvent.getFormattedMessage(),
                         ChatPosition.CHAT,
                         player.getUuid());
             }

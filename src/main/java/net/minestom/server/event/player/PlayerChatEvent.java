@@ -17,16 +17,16 @@ import java.util.Collection;
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     private final Player player;
     private final Collection<Player> recipients;
-    private final String content;
-    private Component finalMessage;
+    private final String rawMessage;
+    private Component formattedMessage;
     private boolean cancelled;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull String content) {
+                           @NotNull String rawMessage) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
-        this.content = content;
-        this.finalMessage = buildDefaultChatMessage();
+        this.rawMessage = rawMessage;
+        formattedMessage = buildDefaultChatMessage();
     }
 
     /**
@@ -45,8 +45,8 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return the sender's message
      */
-    public @NotNull String getContent() {
-        return content;
+    public @NotNull String getRawMessage() {
+        return rawMessage;
     }
 
     /**
@@ -54,8 +54,8 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @return the chat message component
      */
-    public Component getFinalMessage() {
-        return finalMessage;
+    public Component getFormattedMessage() {
+        return formattedMessage;
     }
 
     /**
@@ -63,8 +63,8 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
      *
      * @param message the new message component
      */
-    public void setFinalMessage(@NotNull Component message) {
-        this.finalMessage = message;
+    public void setFormattedMessage(@NotNull Component message) {
+        formattedMessage = message;
     }
 
     @Override
@@ -88,6 +88,6 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
                         Component.text(player.getUsername())
                                 .insertion(player.getUsername())
                                 .hoverEvent(player),
-                        Component.text(content));
+                        Component.text(rawMessage));
     }
 }
