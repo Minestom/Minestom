@@ -49,6 +49,7 @@ public class BlockBreakCalculation {
             return UNBREAKABLE;
         }
         ItemStack item = player.getItemInMainHand();
+        // Bamboo is hard-coded in client
         if (block.id() == Block.BAMBOO.id() || block.id() == Block.BAMBOO_SAPLING.id()) {
             if (SWORD_TAG.contains(item.material().namespace())) {
                 return 0;
