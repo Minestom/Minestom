@@ -41,6 +41,7 @@ public class BlockBreakCalculation {
             return 0;
         }
         // Taken from minecraft wiki Breaking#Calculation
+        // https://minecraft.wiki/w/Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
         Registry.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
