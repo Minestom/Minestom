@@ -307,7 +307,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                 final NetworkBuffer rawBuffer = receivableBuffer.buffer();
                 final int index = receivableBuffer.index();
                 final int length = receivableBuffer.length();
-                if (buffer.size() - buffer.writeIndex() < length) {
+                if (buffer.writableBytes() < length) {
                     // Not enough space in the buffer
                     yield false;
                 }

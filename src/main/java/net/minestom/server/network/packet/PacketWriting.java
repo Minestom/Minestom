@@ -83,7 +83,8 @@ public final class PacketWriting {
         final int packetSize = buffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
-            // Packet large enough, compress it
+            // Write the compressed content into the pooled buffer
+            // and compress it into the current buffer
             try (var hold = PacketVanilla.PACKET_POOL.hold()) {
                 final NetworkBuffer input = hold.get();
                 NetworkBuffer.copy(buffer, contentStart, input, 0, packetSize);

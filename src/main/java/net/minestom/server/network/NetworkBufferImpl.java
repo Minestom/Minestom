@@ -262,9 +262,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         ByteBuffer dst = impl(output).nioBuffer;
 
         ByteBuffer input = src.slice(start, length);
-        ByteBuffer outputBuffer = dst.slice(
-                output.writeIndex(),
-                output.size() - output.writeIndex());
+        ByteBuffer outputBuffer = dst.slice(output.writeIndex(), output.writableBytes());
 
         Deflater deflater = DEFLATER_POOL.get();
         try {
@@ -282,15 +280,18 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public int decompress(int start, int length, NetworkBuffer output) throws DataFormatException {
         assertReadOnly(output);
+        ByteBuffer src = this.nioBuffer;
+        ByteBuffer dst = impl(output).nioBuffer;
+
+        ByteBuffer input = src.slice(start, length);
+        ByteBuffer outputBuffer = dst.slice(output.writeIndex(), output.writableBytes());
+
         Inflater inflater = INFLATER_POOL.get();
         try {
-            inflater.setInput(nioBuffer.slice(start, length));
-            ByteBuffer outputBuffer = impl(output).nioBuffer.slice(
-                    output.writeIndex(),
-                    output.size() - output.writeIndex());
+            inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
-            output.advanceWrite(bytes);
             inflater.reset();
+            output.advanceWrite(bytes);
             return bytes;
         } finally {
             INFLATER_POOL.add(inflater);
