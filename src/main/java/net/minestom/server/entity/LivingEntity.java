@@ -10,6 +10,7 @@ import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
@@ -83,34 +84,23 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private float health = 1F;
 
     // Equipments
-    private ItemStack mainHandItem;
-    private ItemStack offHandItem;
+    private ItemStack mainHandItem = ItemStack.AIR;
+    private ItemStack offHandItem = ItemStack.AIR;
 
-    private ItemStack helmet;
-    private ItemStack chestplate;
-    private ItemStack leggings;
-    private ItemStack boots;
+    private ItemStack helmet = ItemStack.AIR;
+    private ItemStack chestplate = ItemStack.AIR;
+    private ItemStack leggings = ItemStack.AIR;
+    private ItemStack boots = ItemStack.AIR;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
      */
     public LivingEntity(@NotNull EntityType entityType, @NotNull UUID uuid) {
         super(entityType, uuid);
-        initEquipments();
     }
 
     public LivingEntity(@NotNull EntityType entityType) {
         this(entityType, UUID.randomUUID());
-    }
-
-    private void initEquipments() {
-        this.mainHandItem = ItemStack.AIR;
-        this.offHandItem = ItemStack.AIR;
-
-        this.helmet = ItemStack.AIR;
-        this.chestplate = ItemStack.AIR;
-        this.leggings = ItemStack.AIR;
-        this.boots = ItemStack.AIR;
     }
 
     @Override
@@ -125,91 +115,37 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         else speed.removeModifier(SPRINTING_SPEED_MODIFIER);
     }
 
-    @NotNull
     @Override
-    public ItemStack getItemInMainHand() {
-        return mainHandItem;
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+        return switch (slot) {
+            case MAIN_HAND -> mainHandItem;
+            case OFF_HAND -> offHandItem;
+            case BOOTS -> boots;
+            case LEGGINGS -> leggings;
+            case CHESTPLATE -> chestplate;
+            case HELMET -> helmet;
+        };
     }
 
     @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.mainHandItem;
-        this.mainHandItem = getEquipmentItem(itemStack, EquipmentSlot.MAIN_HAND);
-        syncEquipment(EquipmentSlot.MAIN_HAND);
-        updateEquipmentAttributes(oldItem, this.mainHandItem, EquipmentSlot.MAIN_HAND);
+    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+        ItemStack oldItem = getEquipment(slot);
+        ItemStack newItem = slotChangeEvent(itemStack, slot);
+
+        switch (slot) {
+            case MAIN_HAND -> mainHandItem = newItem;
+            case OFF_HAND -> offHandItem = newItem;
+            case BOOTS -> boots = newItem;
+            case LEGGINGS -> leggings = newItem;
+            case CHESTPLATE -> chestplate = newItem;
+            case HELMET -> helmet = newItem;
+        }
+
+        syncEquipment(slot);
+        updateEquipmentAttributes(oldItem, newItem, slot);
     }
 
-    @NotNull
-    @Override
-    public ItemStack getItemInOffHand() {
-        return offHandItem;
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.offHandItem;
-        this.offHandItem = getEquipmentItem(itemStack, EquipmentSlot.OFF_HAND);
-        syncEquipment(EquipmentSlot.OFF_HAND);
-        updateEquipmentAttributes(oldItem, this.offHandItem, EquipmentSlot.OFF_HAND);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getHelmet() {
-        return helmet;
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.helmet;
-        this.helmet = getEquipmentItem(itemStack, EquipmentSlot.HELMET);
-        syncEquipment(EquipmentSlot.HELMET);
-        updateEquipmentAttributes(oldItem, this.helmet, EquipmentSlot.HELMET);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getChestplate() {
-        return chestplate;
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.chestplate;
-        this.chestplate = getEquipmentItem(itemStack, EquipmentSlot.CHESTPLATE);
-        syncEquipment(EquipmentSlot.CHESTPLATE);
-        updateEquipmentAttributes(oldItem, this.chestplate, EquipmentSlot.CHESTPLATE);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getLeggings() {
-        return leggings;
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.leggings;
-        this.leggings = getEquipmentItem(itemStack, EquipmentSlot.LEGGINGS);
-        syncEquipment(EquipmentSlot.LEGGINGS);
-        updateEquipmentAttributes(oldItem, this.leggings, EquipmentSlot.LEGGINGS);
-    }
-
-    @NotNull
-    @Override
-    public ItemStack getBoots() {
-        return boots;
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        ItemStack oldItem = this.boots;
-        this.boots = getEquipmentItem(itemStack, EquipmentSlot.BOOTS);
-        syncEquipment(EquipmentSlot.BOOTS);
-        updateEquipmentAttributes(oldItem, this.boots, EquipmentSlot.BOOTS);
-    }
-
-    private ItemStack getEquipmentItem(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
+    private ItemStack slotChangeEvent(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
         EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
@@ -526,7 +462,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(
                 new EntityAttributesPacket.Property(
                         attributeInstance.attribute(),
-                        attributeInstance.getValue(),
+                        attributeInstance.getBaseValue(),
                         attributeInstance.getModifiers())
         ));
         if (self) {
@@ -673,7 +609,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected @NotNull EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
-            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getValue(), instance.getModifiers()));
+            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
     }
@@ -720,7 +656,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets {@link net.minestom.server.entity.metadata.EntityMeta} of this entity casted to {@link LivingEntityMeta}.
+     * Gets {@link EntityMeta} of this entity casted to {@link LivingEntityMeta}.
      *
      * @return null if meta of this entity does not inherit {@link LivingEntityMeta}, casted value otherwise.
      */

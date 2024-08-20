@@ -16,7 +16,6 @@ import java.util.concurrent.Executors;
 
 public class PathGenerator {
     private static final ExecutorService pool = Executors.newWorkStealingPool();
-    private static final PNode repathNode = new PNode(0, 0, 0, 0, 0, PNode.NodeType.REPATH, null);
     private static final Comparator<PNode> pNodeComparator = (s1, s2) -> (int) (((s1.g() + s1.h()) - (s2.g() + s2.h())) * 1000);
 
     public static @NotNull PPath generate(@NotNull Instance instance, @NotNull Pos orgStart, @NotNull Point orgTarget, double closeDistance, double maxDistance, double pathVariance, @NotNull BoundingBox boundingBox, boolean isOnGround, @NotNull NodeGenerator generator, @Nullable Runnable onComplete) {
@@ -32,6 +31,10 @@ public class PathGenerator {
         pool.submit(() -> computePath(instance, start, target, closeDistance, maxDistance, pathVariance, boundingBox, path, generator));
 
         return path;
+    }
+
+    private static PNode buildRepathNode(PNode parent) {
+        return new PNode(0, 0, 0, 0, 0, PNode.NodeType.REPATH, parent);
     }
 
     private static void computePath(Instance instance, Point start, Point target, double closeDistance, double maxDistance, double pathVariance, BoundingBox boundingBox, PPath path, NodeGenerator generator) {
@@ -93,8 +96,7 @@ public class PathGenerator {
             current = closestFoundNodes.get(0);
 
             if (!open.isEmpty()) {
-                repathNode.setParent(current);
-                current = repathNode;
+                current = buildRepathNode(current);
             }
         }
 
