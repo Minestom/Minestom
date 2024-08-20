@@ -22,32 +22,37 @@ public class BlockBreakCalculation {
     private static final Tag WATER_TAG = MinecraftServer.getTagManager().getTag(net.minestom.server.gamedata.tags.Tag.BasicType.FLUIDS, "minecraft:water");
 
     /**
-     * Calculates the break time in ticks
+     * Calculates the block break time in ticks
      *
-     * @return the block break time in ticks
+     * @return the block break time in ticks, -1 if the block is unbreakable
      */
     public static int breakTicks(@NotNull Block block, @NotNull Player player) {
+        if (player.isInstantBreak()) {
+            // Creative, or survival with instant break ability???
+            // Anyway, return 0 ticks
+            return 0;
+        }
         // Taken from minecaft wiki Breaking#Calculation
+        // More information to mimic calculations taken from minecraft's source
         Registry.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
+        if (blockHardness == -1) {
+            // Bedrock, barrier, and unbreakable blocks
+            return -1;
+        }
         ItemStack item = player.getItemInMainHand();
         Tool tool = item.get(ItemComponent.TOOL);
-        EnchantmentList itemEnchantments = item.get(ItemComponent.ENCHANTMENTS);
         boolean isBestTool = canBreakBlock(tool, block);
-        // canHarvest seems to be isBestTool, though this needs confirmation
-        // after a quick look at vanilla source I came to this conclusion, someone else please verify this!
-        //noinspection UnnecessaryLocalVariable
-        boolean canHarvest = isBestTool;
         float speedMultiplier;
 
         if (isBestTool) {
             speedMultiplier = getMiningSpeed(tool, block);
 
-            if (!canHarvest) {
-                speedMultiplier = 1;
-            } else if (itemEnchantments != null && itemEnchantments.has(Enchantment.EFFICIENCY)) {
-                int level = itemEnchantments.level(Enchantment.EFFICIENCY) + 1;
-                speedMultiplier += level * level + 1;
+            // Also, the wiki's canBreak seems to be this >1
+            if (speedMultiplier > 1F) {
+                // Wiki tells us about calculations for efficiency, but enchantments don't apply these calculations in minestom.
+                // If someone wants faster tools, they have to use player attributes or the TOOL component
+                speedMultiplier += (float) player.getAttributeValue(Attribute.PLAYER_MINING_EFFICIENCY);
             }
         } else {
             speedMultiplier = 1;
@@ -62,6 +67,8 @@ public class BlockBreakCalculation {
             speedMultiplier *= getMiningFatigueMultiplier(player);
         }
 
+        speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_BLOCK_BREAK_SPEED);
+
         ItemStack helmet = player.getInventory().getHelmet();
 
         if (isInWater(player) && !helmet.get(ItemComponent.ENCHANTMENTS, EnchantmentList.EMPTY).has(Enchantment.AQUA_AFFINITY)) {
@@ -74,13 +81,14 @@ public class BlockBreakCalculation {
 
         double damage = speedMultiplier / blockHardness;
 
-        if (canHarvest) {
+
+        if (isBestTool) {
             damage /= 30;
         } else {
             damage /= 100;
         }
 
-        if (damage > 1) {
+        if (damage >= 1) {
             // Instant breaking
             return 0;
         }
@@ -151,7 +159,7 @@ public class BlockBreakCalculation {
 
     private static float getHasteMultiplier(@NotNull Player player) {
         // Add 1 to potion level for correct calculation
-        int level = Math.max(player.getEffectLevel(PotionEffect.HASTE), player.getEffectLevel(PotionEffect.CONDUIT_POWER)) + 1;
+        float level = Math.max(player.getEffectLevel(PotionEffect.HASTE), player.getEffectLevel(PotionEffect.CONDUIT_POWER)) + 1;
         return (1F + 0.2F * level);
     }
 
@@ -163,7 +171,7 @@ public class BlockBreakCalculation {
     }
 
     private static boolean canBreakBlock(@Nullable Tool tool, @NotNull Block block) {
-        return !block.registry().requiresCorrectToolForDrops() || isEffective(tool, block);
+        return !block.registry().requiresTool() || isEffective(tool, block);
     }
 
     private static boolean isEffective(@Nullable Tool tool, @NotNull Block block) {
