@@ -367,7 +367,7 @@ public final class Registry {
             return occludes;
         }
 
-        public boolean requiresCorrectToolForDrops() {
+        public boolean requiresTool() {
             return requiresTool;
         }
 
