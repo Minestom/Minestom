@@ -87,6 +87,9 @@ public class BlockBreakCalculation {
         } else {
             damage /= 100;
         }
+        System.out.println(block.key().asString() + "Hardness: " + blockHardness);
+        System.out.println("SpeedMultiplier: " + speedMultiplier);
+        System.out.println("BlockDamagePerTick: " + damage);
 
         if (damage >= 1) {
             // Instant breaking
