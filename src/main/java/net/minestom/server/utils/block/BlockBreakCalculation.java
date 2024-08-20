@@ -28,7 +28,7 @@ public class BlockBreakCalculation {
     // The vanilla client checks for bamboo breaking speed with item instanceof SwordItem.
     // We could either check all sword ID's, or the sword tag.
     // Since tags are immutable, checking the tag seems easier to understand
-    private static final Tag SWORD_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.ITEMS, "minecraft:sword"));
+    private static final Tag SWORD_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.ITEMS, "minecraft:swords"));
 
     /**
      * Calculates the block break time in ticks
