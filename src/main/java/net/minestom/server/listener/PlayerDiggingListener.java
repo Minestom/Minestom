@@ -113,6 +113,17 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
+        final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
+        // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
+        // If the block is unbreakable, prevent a hacked client from breaking it!
+        if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+            EventDispatcher.call(playerCancelDiggingEvent);
+            return new DiggingResult(block, false);
+        }
+        // TODO maybe add a check if the player has spent enough time mining the block.
+        //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
+
         PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
 
