@@ -6,6 +6,7 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.gamedata.tags.Tag.BasicType;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemComponent;
@@ -18,9 +19,16 @@ import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 public class BlockBreakCalculation {
 
-    private static final Tag WATER_TAG = MinecraftServer.getTagManager().getTag(net.minestom.server.gamedata.tags.Tag.BasicType.FLUIDS, "minecraft:water");
+    public static final int UNBREAKABLE = -1;
+    private static final Tag WATER_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.FLUIDS, "minecraft:water"));
+    // The vanilla client checks for bamboo breaking speed with item instanceof SwordItem.
+    // We could either check all sword ID's, or the sword tag.
+    // Since tags are immutable, checking the tag seems easier to understand
+    private static final Tag SWORD_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.ITEMS, "minecraft:sword"));
 
     /**
      * Calculates the block break time in ticks
@@ -38,9 +46,14 @@ public class BlockBreakCalculation {
         double blockHardness = registry.hardness();
         if (blockHardness == -1) {
             // Bedrock, barrier, and unbreakable blocks
-            return -1;
+            return UNBREAKABLE;
         }
         ItemStack item = player.getItemInMainHand();
+        if (block.id() == Block.BAMBOO.id() || block.id() == Block.BAMBOO_SAPLING.id()) {
+            if (SWORD_TAG.contains(item.material().namespace())) {
+                return 0;
+            }
+        }
         Tool tool = item.get(ItemComponent.TOOL);
         boolean isBestTool = canBreakBlock(tool, block);
         float speedMultiplier;
@@ -109,12 +122,7 @@ public class BlockBreakCalculation {
         Pos eye = player.getPosition().add(0, player.getEyeHeight(), 0);
         Block block = instance.getBlock(eye);
 
-        // Don't know how WATER_TAG should ever be null, but just to be safe
-        if (WATER_TAG != null) {
-            if (!WATER_TAG.contains(block.namespace())) {
-                return false;
-            }
-        } else if (block.id() != Block.WATER.id()) {
+        if (!WATER_TAG.contains(block.namespace())) {
             return false;
         }
         float fluidHeight = getFluidHeight(player.getInstance(), x, y, z, block);
