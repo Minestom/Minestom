@@ -79,7 +79,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void read(PacketParser<ClientPacket> packetParser) throws IOException {
         NetworkBuffer readBuffer = this.readBuffer;
-        final int writeIndex = readBuffer.writeIndex();
+        final long writeIndex = readBuffer.writeIndex();
         final int length = readBuffer.readChannel(channel);
         // Decrypt newly read data
         final EncryptionContext encryptionContext = this.encryptionContext;
@@ -127,9 +127,9 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
                 case PacketReading.Result.Failure<ClientPacket> failure -> {
                     // Resize for next read
-                    final int requiredCapacity = failure.requiredCapacity();
-                    assert requiredCapacity > readBuffer.size() :
-                            "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.size();
+                    final long requiredCapacity = failure.requiredCapacity();
+                    assert requiredCapacity > readBuffer.capacity() :
+                            "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
                     readBuffer.resize(requiredCapacity);
                 }
             }
@@ -167,7 +167,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         record Packet(SendablePacket packet) implements Receivable {
         }
 
-        record Buffer(NetworkBuffer buffer, int index, int length) implements Receivable {
+        record Buffer(NetworkBuffer buffer, long index, long length) implements Receivable {
         }
     }
 
@@ -182,7 +182,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     @ApiStatus.Internal
-    public void write(@NotNull NetworkBuffer buffer, int index, int length) {
+    public void write(@NotNull NetworkBuffer buffer, long index, long length) {
         offer(new Receivable.Buffer(buffer, index, length));
     }
 
@@ -296,12 +296,12 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
-        final int start = buffer.writeIndex();
+        final long start = buffer.writeIndex();
         final boolean result = switch (receivable) {
             case Receivable.Buffer receivableBuffer -> {
                 final NetworkBuffer rawBuffer = receivableBuffer.buffer();
-                final int index = receivableBuffer.index();
-                final int length = receivableBuffer.length();
+                final long index = receivableBuffer.index();
+                final long length = receivableBuffer.length();
                 if (buffer.writableBytes() < length) {
                     // Not enough space in the buffer
                     yield false;
@@ -312,8 +312,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
             case Receivable.Packet packet -> writePacketSync(buffer, packet.packet(), compressed);
         };
-        final int end = buffer.writeIndex();
-        final int length = end - start;
+        final long end = buffer.writeIndex();
+        final long length = end - start;
         // Encrypt data
         final EncryptionContext encryptionContext = this.encryptionContext;
         if (encryptionContext != null && length != 0) { // Encryption support
@@ -340,7 +340,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             }
         }
         // Write packet
-        final int start = buffer.writeIndex();
+        final long start = buffer.writeIndex();
         final int compressionThreshold = compressed ? MinecraftServer.getCompressionThreshold() : 0;
         try {
             switch (packet) {
@@ -348,14 +348,14 @@ public class PlayerSocketConnection extends PlayerConnection {
                         PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
-                    final int length = body.size();
+                    final long length = body.capacity();
                     NetworkBuffer.copy(body, 0, buffer, start, length);
                     buffer.advanceWrite(length);
                 }
                 case CachedPacket cachedPacket -> {
                     final NetworkBuffer body = cachedPacket.body(state);
                     if (body != null) {
-                        final int length = body.size();
+                        final long length = body.capacity();
                         NetworkBuffer.copy(body, 0, buffer, start, length);
                         buffer.advanceWrite(length);
                     } else

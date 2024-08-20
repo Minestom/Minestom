@@ -66,10 +66,10 @@ public final class PacketViewableUtils {
         private final NetworkBuffer buffer = POOL.getAndRegister(this);
 
         private synchronized void append(ServerPacket serverPacket, @Nullable Player exception) {
-            final int start = buffer.writeIndex();
+            final long start = buffer.writeIndex();
             // Viewable storage is only used for play packets, so fine to assume this.
             PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
-            final int end = buffer.writeIndex();
+            final long end = buffer.writeIndex();
             if (exception != null) {
                 final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
                 LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
@@ -86,7 +86,7 @@ public final class PacketViewableUtils {
         }
 
         private void processPlayer(Player player, NetworkBuffer buffer) {
-            final int size = buffer.size();
+            final long capacity = buffer.capacity();
             final PlayerConnection connection = player.getPlayerConnection();
             final LongArrayList pairs = entityIdMap.get(player.getEntityId());
             if (pairs != null) {
@@ -99,14 +99,14 @@ public final class PacketViewableUtils {
                     if (start != lastWrite) writeTo(connection, buffer, lastWrite, start - lastWrite);
                     lastWrite = (int) offsets; // End = last 32 bits
                 }
-                if (size != lastWrite) writeTo(connection, buffer, lastWrite, size - lastWrite);
+                if (capacity != lastWrite) writeTo(connection, buffer, lastWrite, capacity - lastWrite);
             } else {
                 // Write all
-                writeTo(connection, buffer, 0, size);
+                writeTo(connection, buffer, 0, capacity);
             }
         }
 
-        private static void writeTo(PlayerConnection connection, NetworkBuffer buffer, int offset, int length) {
+        private static void writeTo(PlayerConnection connection, NetworkBuffer buffer, long offset, long length) {
             if (connection instanceof PlayerSocketConnection socketConnection) {
                 socketConnection.write(buffer, offset, length);
                 return;

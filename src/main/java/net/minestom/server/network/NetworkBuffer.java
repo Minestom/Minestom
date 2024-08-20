@@ -107,51 +107,51 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     <T> @UnknownNullability T read(@NotNull Type<T> type);
 
-    <T> void writeAt(int index, @NotNull Type<T> type, @UnknownNullability T value);
+    <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value);
 
-    <T> @UnknownNullability T readAt(int index, @NotNull Type<T> type);
+    <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type);
 
-    void copyTo(int srcOffset, byte @NotNull [] dest, int destOffset, int length);
+    void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length);
 
-    void copyTo(int srcOffset, @NotNull ByteBuffer dest, int destOffset, int length);
+    void copyTo(long srcOffset, @NotNull ByteBuffer dest, long destOffset, long length);
 
     byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor);
 
     @NotNull NetworkBuffer clear();
 
-    int writeIndex();
+    long writeIndex();
 
-    int readIndex();
+    long readIndex();
 
-    @NotNull NetworkBuffer writeIndex(int writeIndex);
+    @NotNull NetworkBuffer writeIndex(long writeIndex);
 
-    @NotNull NetworkBuffer readIndex(int readIndex);
+    @NotNull NetworkBuffer readIndex(long readIndex);
 
-    @NotNull NetworkBuffer index(int readIndex, int writeIndex);
+    @NotNull NetworkBuffer index(long readIndex, long writeIndex);
 
-    int advanceWrite(int length);
+    long advanceWrite(long length);
 
-    int advanceRead(int length);
+    long advanceRead(long length);
 
-    int readableBytes();
+    long readableBytes();
 
-    int writableBytes();
+    long writableBytes();
 
-    int size();
+    long capacity();
 
     void readOnly();
 
-    void resize(int newSize);
+    void resize(long newSize);
 
-    void ensureSize(int length);
+    void ensureWritable(long length);
 
     void compact();
 
-    NetworkBuffer slice(int index, int length, int readIndex, int writeIndex);
+    NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
 
-    NetworkBuffer copy(int index, int length, int readIndex, int writeIndex);
+    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
 
-    default NetworkBuffer copy(int index, int length) {
+    default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex());
     }
 
@@ -159,11 +159,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     boolean writeChannel(SocketChannel channel) throws IOException;
 
-    void cipher(Cipher cipher, int start, int length);
+    void cipher(Cipher cipher, long start, long length);
 
-    int compress(int start, int length, NetworkBuffer output);
+    long compress(long start, long length, NetworkBuffer output);
 
-    int decompress(int start, int length, NetworkBuffer output) throws DataFormatException;
+    long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
@@ -195,19 +195,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         }
     }
 
-    static @NotNull Builder builder(int size) {
+    static @NotNull Builder builder(long size) {
         return new NetworkBufferImpl.Builder(size);
     }
 
-    static @NotNull NetworkBuffer staticBuffer(int size, Registries registries) {
+    static @NotNull NetworkBuffer staticBuffer(long size, Registries registries) {
         return builder(size).registry(registries).build();
     }
 
-    static @NotNull NetworkBuffer staticBuffer(int size) {
+    static @NotNull NetworkBuffer staticBuffer(long size) {
         return staticBuffer(size, null);
     }
 
-    static @NotNull NetworkBuffer resizableBuffer(int initialSize, Registries registries) {
+    static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         return builder(initialSize)
                 .resizeStrategy(ResizeStrategy.DOUBLE)
                 .registry(registries)
@@ -226,20 +226,20 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
         ByteBuffer buffer = ByteBuffer.wrap(bytes);
         return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex) {
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, int readIndex, int writeIndex, @Nullable Registries registries) {
+    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, long readIndex, long writeIndex, @Nullable Registries registries) {
         return new NetworkBufferImpl(buffer, null, registries).index(readIndex, writeIndex);
     }
 
-    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, int readIndex, int writeIndex) {
+    static NetworkBuffer wrap(@NotNull ByteBuffer buffer, long readIndex, long writeIndex) {
         return wrap(buffer, readIndex, writeIndex, null);
     }
 
@@ -261,7 +261,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
         NetworkBuffer writer = resizableBuffer(256, registries);
         writing.accept(writer);
-        byte[] bytes = new byte[writer.writeIndex()];
+        final int length = Math.toIntExact(writer.writeIndex());
+        byte[] bytes = new byte[length];
         writer.copyTo(0, bytes, 0, bytes.length);
         return bytes;
     }
@@ -278,8 +279,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return makeArray(type, value, null);
     }
 
-    static void copy(NetworkBuffer srcBuffer, int srcOffset,
-                     NetworkBuffer dstBuffer, int dstOffset, int length) {
+    static void copy(NetworkBuffer srcBuffer, long srcOffset,
+                     NetworkBuffer dstBuffer, long dstOffset, long length) {
         NetworkBufferImpl.copy(srcBuffer, srcOffset, dstBuffer, dstOffset, length);
     }
 

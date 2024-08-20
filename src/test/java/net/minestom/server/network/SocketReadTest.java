@@ -109,7 +109,7 @@ public class SocketReadTest {
 
         var buffer = PacketVanilla.PACKET_POOL.get();
         PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
-        final int packetLength = buffer.writeIndex();
+        final long packetLength = buffer.writeIndex();
         buffer = buffer.copy(0, packetLength / 2).index(0, packetLength / 2);
 
         var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);

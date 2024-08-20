@@ -46,14 +46,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record BooleanType() implements NetworkBufferTypeImpl<Boolean> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Boolean value) {
-            buffer.ensureSize(1);
-            impl(buffer).nioBuffer.put(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
+            buffer.ensureWritable(1);
+            impl(buffer)._putByte(buffer.writeIndex(), value ? (byte) 1 : (byte) 0);
             buffer.advanceWrite(1);
         }
 
         @Override
         public Boolean read(@NotNull NetworkBuffer buffer) {
-            final byte value = impl(buffer).nioBuffer.get(buffer.readIndex());
+            final byte value = impl(buffer)._getByte(buffer.readIndex());
             buffer.advanceRead(1);
             return value == 1;
         }
@@ -62,14 +62,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ByteType() implements NetworkBufferTypeImpl<Byte> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Byte value) {
-            buffer.ensureSize(1);
-            impl(buffer).nioBuffer.put(buffer.writeIndex(), value);
+            buffer.ensureWritable(1);
+            impl(buffer)._putByte(buffer.writeIndex(), value);
             buffer.advanceWrite(1);
         }
 
         @Override
         public Byte read(@NotNull NetworkBuffer buffer) {
-            final byte value = impl(buffer).nioBuffer.get(buffer.readIndex());
+            final byte value = impl(buffer)._getByte(buffer.readIndex());
             buffer.advanceRead(1);
             return value;
         }
@@ -78,14 +78,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record ShortType() implements NetworkBufferTypeImpl<Short> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Short value) {
-            buffer.ensureSize(2);
-            impl(buffer).nioBuffer.putShort(buffer.writeIndex(), value);
+            buffer.ensureWritable(2);
+            impl(buffer)._putShort(buffer.writeIndex(), value);
             buffer.advanceWrite(2);
         }
 
         @Override
         public Short read(@NotNull NetworkBuffer buffer) {
-            final short value = impl(buffer).nioBuffer.getShort(buffer.readIndex());
+            final short value = impl(buffer)._getShort(buffer.readIndex());
             buffer.advanceRead(2);
             return value;
         }
@@ -94,14 +94,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record UnsignedShortType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.ensureSize(2);
-            impl(buffer).nioBuffer.putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
+            buffer.ensureWritable(2);
+            impl(buffer)._putShort(buffer.writeIndex(), (short) (value & 0xFFFF));
             buffer.advanceWrite(2);
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            final short value = impl(buffer).nioBuffer.getShort(buffer.readIndex());
+            final short value = impl(buffer)._getShort(buffer.readIndex());
             buffer.advanceRead(2);
             return value & 0xFFFF;
         }
@@ -110,14 +110,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record IntType() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.ensureSize(4);
-            impl(buffer).nioBuffer.putInt(buffer.writeIndex(), value);
+            buffer.ensureWritable(4);
+            impl(buffer)._putInt(buffer.writeIndex(), value);
             buffer.advanceWrite(4);
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            final int value = impl(buffer).nioBuffer.getInt(buffer.readIndex());
+            final int value = impl(buffer)._getInt(buffer.readIndex());
             buffer.advanceRead(4);
             return value;
         }
@@ -126,14 +126,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record LongType() implements NetworkBufferTypeImpl<Long> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Long value) {
-            buffer.ensureSize(8);
-            impl(buffer).nioBuffer.putLong(buffer.writeIndex(), value);
+            buffer.ensureWritable(8);
+            impl(buffer)._putLong(buffer.writeIndex(), value);
             buffer.advanceWrite(8);
         }
 
         @Override
         public Long read(@NotNull NetworkBuffer buffer) {
-            final long value = impl(buffer).nioBuffer.getLong(buffer.readIndex());
+            final long value = impl(buffer)._getLong(buffer.readIndex());
             buffer.advanceRead(8);
             return value;
         }
@@ -142,14 +142,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record FloatType() implements NetworkBufferTypeImpl<Float> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Float value) {
-            buffer.ensureSize(4);
-            impl(buffer).nioBuffer.putFloat(buffer.writeIndex(), value);
+            buffer.ensureWritable(4);
+            impl(buffer)._putFloat(buffer.writeIndex(), value);
             buffer.advanceWrite(4);
         }
 
         @Override
         public Float read(@NotNull NetworkBuffer buffer) {
-            final float value = impl(buffer).nioBuffer.getFloat(buffer.readIndex());
+            final float value = impl(buffer)._getFloat(buffer.readIndex());
             buffer.advanceRead(4);
             return value;
         }
@@ -158,14 +158,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record DoubleType() implements NetworkBufferTypeImpl<Double> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Double value) {
-            buffer.ensureSize(8);
-            impl(buffer).nioBuffer.putDouble(buffer.writeIndex(), value);
+            buffer.ensureWritable(8);
+            impl(buffer)._putDouble(buffer.writeIndex(), value);
             buffer.advanceWrite(8);
         }
 
         @Override
         public Double read(@NotNull NetworkBuffer buffer) {
-            final double value = impl(buffer).nioBuffer.getDouble(buffer.readIndex());
+            final double value = impl(buffer)._getDouble(buffer.readIndex());
             buffer.advanceRead(8);
             return value;
         }
@@ -175,47 +175,43 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
             final int value = boxed;
-            final int index = buffer.writeIndex();
+            final long index = buffer.writeIndex();
+            var nio = impl(buffer);
             if ((value & (0xFFFFFFFF << 7)) == 0) {
-                buffer.ensureSize(1);
-                var nio = impl(buffer).nioBuffer;
-                nio.put(index, (byte) value);
+                buffer.ensureWritable(1);
+                nio._putByte(index, (byte) value);
                 buffer.advanceWrite(1);
             } else if ((value & (0xFFFFFFFF << 14)) == 0) {
-                buffer.ensureSize(2);
-                var nio = impl(buffer).nioBuffer;
-                nio.putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
+                buffer.ensureWritable(2);
+                nio._putShort(index, (short) ((value & 0x7F | 0x80) << 8 | (value >>> 7)));
                 buffer.advanceWrite(2);
             } else if ((value & (0xFFFFFFFF << 21)) == 0) {
-                buffer.ensureSize(3);
-                var nio = impl(buffer).nioBuffer;
-                nio.put(index, (byte) (value & 0x7F | 0x80));
-                nio.put(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
-                nio.put(index + 2, (byte) (value >>> 14));
+                buffer.ensureWritable(3);
+                nio._putByte(index, (byte) (value & 0x7F | 0x80));
+                nio._putByte(index + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+                nio._putByte(index + 2, (byte) (value >>> 14));
                 buffer.advanceWrite(3);
             } else if ((value & (0xFFFFFFFF << 28)) == 0) {
-                buffer.ensureSize(4);
-                var nio = impl(buffer).nioBuffer;
-                nio.putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
+                buffer.ensureWritable(4);
+                nio._putInt(index, (value & 0x7F | 0x80) << 24 | (((value >>> 7) & 0x7F | 0x80) << 16)
                         | ((value >>> 14) & 0x7F | 0x80) << 8 | (value >>> 21));
                 buffer.advanceWrite(4);
             } else {
-                buffer.ensureSize(5);
-                var nio = impl(buffer).nioBuffer;
-                nio.putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
+                buffer.ensureWritable(5);
+                nio._putInt(index, (value & 0x7F | 0x80) << 24 | ((value >>> 7) & 0x7F | 0x80) << 16
                         | ((value >>> 14) & 0x7F | 0x80) << 8 | ((value >>> 21) & 0x7F | 0x80));
-                nio.put(index + 4, (byte) (value >>> 28));
+                nio._putByte(index + 4, (byte) (value >>> 28));
                 buffer.advanceWrite(5);
             }
         }
 
         @Override
         public Integer read(@NotNull NetworkBuffer buffer) {
-            int index = buffer.readIndex();
+            long index = buffer.readIndex();
             // https://github.com/jvm-profiling-tools/async-profiler/blob/a38a375dc62b31a8109f3af97366a307abb0fe6f/src/converter/one/jfr/JfrReader.java#L393
             int result = 0;
             for (int shift = 0; ; shift += 7) {
-                byte b = impl(buffer).nioBuffer.get(index++);
+                byte b = impl(buffer)._getByte(index++);
                 result |= (b & 0x7f) << shift;
                 if (b >= 0) {
                     buffer.advanceRead(index - buffer.readIndex());
@@ -228,15 +224,15 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record VarLongType() implements NetworkBufferTypeImpl<Long> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Long value) {
-            buffer.ensureSize(10);
+            buffer.ensureWritable(10);
             int size = 0;
             while (true) {
                 if ((value & ~((long) SEGMENT_BITS)) == 0) {
-                    impl(buffer).nioBuffer.put(buffer.writeIndex() + size, (byte) value.intValue());
+                    impl(buffer)._putByte(buffer.writeIndex() + size, (byte) value.intValue());
                     buffer.advanceWrite(size + 1);
                     return;
                 }
-                impl(buffer).nioBuffer.put(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
+                impl(buffer)._putByte(buffer.writeIndex() + size, (byte) (value & SEGMENT_BITS | CONTINUE_BIT));
                 size++;
                 // Note: >>> means that the sign bit is shifted with the rest of the number rather than being left alone
                 value >>>= 7;
@@ -250,7 +246,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             int position = 0;
             byte currentByte;
             while (true) {
-                currentByte = impl(buffer).nioBuffer.get(buffer.readIndex() + length);
+                currentByte = impl(buffer)._getByte(buffer.readIndex() + length);
                 length++;
                 value |= (long) (currentByte & SEGMENT_BITS) << position;
                 if ((currentByte & CONTINUE_BIT) == 0) break;
@@ -268,21 +264,21 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             if (length != -1 && value.length != length) {
                 throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
             }
-            buffer.ensureSize(value.length);
-            impl(buffer).nioBuffer.put(buffer.writeIndex(), value);
+            buffer.ensureWritable(value.length);
+            impl(buffer)._putBytes(buffer.writeIndex(), value);
             buffer.advanceWrite(value.length);
         }
 
         @Override
         public byte[] read(@NotNull NetworkBuffer buffer) {
-            int length = buffer.readableBytes();
+            long length = buffer.readableBytes();
             if (this.length != -1) {
                 length = Math.min(length, this.length);
             }
             if (length == 0) return new byte[0];
             assert length > 0 : "Invalid remaining: " + length;
-            final byte[] bytes = new byte[length];
-            impl(buffer).nioBuffer.get(buffer.readIndex(), bytes);
+            final byte[] bytes = new byte[(int) length];
+            impl(buffer)._getBytes(buffer.readIndex(), bytes);
             buffer.advanceRead(length);
             return bytes;
         }
@@ -355,7 +351,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
                     @Override
                     public int available() {
-                        return buffer.readableBytes();
+                        return (int) buffer.readableBytes();
                     }
                 }));
                 impl(buffer).nbtReader = nbtReader;
@@ -465,7 +461,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int length = buffer.read(VAR_INT);
             if (length == 0) return new byte[0];
-            final int remaining = buffer.size();
+            final long remaining = buffer.readableBytes();
             Check.argCondition(length > remaining, "String is too long (length: {0}, readable: {1})", length, remaining);
             return buffer.read(FixedRawBytes(length));
         }

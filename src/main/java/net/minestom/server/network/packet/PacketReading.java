@@ -59,7 +59,7 @@ public final class PacketReading {
          * <p>
          * If the buffer does not allow to read the packet length, max var-int length is returned.
          */
-        record Failure<T>(int requiredCapacity) implements Result<T> {
+        record Failure<T>(long requiredCapacity) implements Result<T> {
         }
     }
 
@@ -107,7 +107,7 @@ public final class PacketReading {
             @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
-        final int beginMark = buffer.readIndex();
+        final long beginMark = buffer.readIndex();
         // READ PACKET LENGTH
         final int packetLength;
         try {
@@ -116,7 +116,7 @@ public final class PacketReading {
             // Couldn't read a single var-int
             return new Result.Failure<>(MAX_VAR_INT_SIZE);
         }
-        final int readerStart = buffer.readIndex();
+        final long readerStart = buffer.readIndex();
         if (readerStart > buffer.writeIndex()) {
             // Can't read the packet length, buffer has enough capacity
             buffer.readIndex(beginMark);
@@ -129,8 +129,8 @@ public final class PacketReading {
         if (buffer.readableBytes() < packetLength) {
             // Can't read the full packet
             buffer.readIndex(beginMark);
-            final int packetLengthVarIntSize = readerStart - beginMark;
-            final int requiredCapacity = packetLengthVarIntSize + packetLength;
+            final long packetLengthVarIntSize = readerStart - beginMark;
+            final long requiredCapacity = packetLengthVarIntSize + packetLength;
             return new Result.Failure<>(requiredCapacity);
         }
         NetworkBuffer content = buffer.slice(buffer.readIndex(), packetLength, 0, packetLength);
@@ -142,6 +142,7 @@ public final class PacketReading {
                 // and read the uncompressed packet from it
                 try (var hold = PacketVanilla.PACKET_POOL.hold()) {
                     NetworkBuffer decompressed = hold.get();
+                    decompressed.ensureWritable(dataLength);
                     content.decompress(content.readIndex(), content.readableBytes(), decompressed);
                     packet = readUncompressedPacket(decompressed, parser, state);
                 }

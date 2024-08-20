@@ -63,10 +63,10 @@ public final class PacketWriting {
                                                     NetworkBuffer.Type<T> type,
                                                     int id, T packet) {
         // Uncompressed format https://wiki.vg/Protocol#Without_compression
-        final int lengthIndex = buffer.advanceWrite(3);
+        final long lengthIndex = buffer.advanceWrite(3);
         buffer.write(NetworkBuffer.VAR_INT, id);
         buffer.write(type, packet);
-        final int finalSize = buffer.writeIndex() - (lengthIndex + 3);
+        final long finalSize = buffer.writeIndex() - (lengthIndex + 3);
         writeVarIntHeader(buffer, lengthIndex, finalSize);
     }
 
@@ -75,12 +75,12 @@ public final class PacketWriting {
                                                   int id, T packet,
                                                   int compressionThreshold) {
         // Compressed format https://wiki.vg/Protocol#With_compression
-        final int compressedIndex = buffer.advanceWrite(3);
-        final int uncompressedIndex = buffer.advanceWrite(3);
-        final int contentStart = buffer.writeIndex();
+        final long compressedIndex = buffer.advanceWrite(3);
+        final long uncompressedIndex = buffer.advanceWrite(3);
+        final long contentStart = buffer.writeIndex();
         buffer.write(NetworkBuffer.VAR_INT, id);
         buffer.write(type, packet);
-        final int packetSize = buffer.writeIndex() - contentStart;
+        final long packetSize = buffer.writeIndex() - contentStart;
         final boolean compressed = packetSize >= compressionThreshold;
         if (compressed) {
             // Write the compressed content into the pooled buffer
@@ -107,7 +107,7 @@ public final class PacketWriting {
         }
     }
 
-    private static void writeVarIntHeader(@NotNull NetworkBuffer buffer, int startIndex, int value) {
+    private static void writeVarIntHeader(@NotNull NetworkBuffer buffer, long startIndex, long value) {
         buffer.writeAt(startIndex, BYTE, (byte) (value & 0x7F | 0x80));
         buffer.writeAt(startIndex + 1, BYTE, (byte) ((value >>> 7) & 0x7F | 0x80));
         buffer.writeAt(startIndex + 2, BYTE, (byte) (value >>> 14));

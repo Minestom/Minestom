@@ -55,7 +55,7 @@ public final class VelocityProxy {
         for (int i = 0; i < signature.length; i++) {
             signature[i] = buffer.read(BYTE);
         }
-        final int index = buffer.readIndex();
+        final long index = buffer.readIndex();
         final byte[] data = buffer.read(RAW_BYTES);
         buffer.readIndex(index);
         try {
