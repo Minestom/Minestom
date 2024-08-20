@@ -83,7 +83,6 @@ public final class PlayerDiggingListener {
         }
 
         // Survival digging
-        // FIXME: verify mineable tag and enchantment
         int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         final boolean instantBreak = player.isInstantBreak() || breakTicks == 0;
         if (!instantBreak) {
