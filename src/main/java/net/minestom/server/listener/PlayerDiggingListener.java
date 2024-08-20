@@ -181,7 +181,6 @@ public final class PlayerDiggingListener {
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        System.out.println("  Break block");
 
         final boolean success = instance.breakBlock(player, blockPosition, blockFace);
         final Block updatedBlock = instance.getBlock(blockPosition);
