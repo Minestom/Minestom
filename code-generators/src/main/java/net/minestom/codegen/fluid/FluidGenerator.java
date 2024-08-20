@@ -12,7 +12,8 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
+
+import static net.minestom.codegen.util.GenerationHelper.VARIABLE_SETTER;
 
 public final class FluidGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(FluidGenerator.class);
@@ -49,7 +50,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
 
         fluidClass.addField(
                 FieldSpec.builder(namespaceIDClassName, "id")
-                        .addModifiers(Modifier.PRIVATE, Modifier.FINAL).addAnnotation(NotNull.class).build()
+                        .addModifiers(PRIVATE_FINAL_MODIFIERS).addAnnotation(NotNull.class).build()
         );
         // static field
         fluidClass.addField(
@@ -62,7 +63,7 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         fluidClass.addMethod(
                 MethodSpec.constructorBuilder()
                         .addParameter(ParameterSpec.builder(namespaceIDClassName, "id").addAnnotation(NotNull.class).build())
-                        .addStatement("this.id = id")
+                        .addStatement(VARIABLE_SETTER, "id")
                         .addStatement("$T.fluids.put(id, this)", registriesClassName)
                         .build()
         );
@@ -131,14 +132,10 @@ public final class FluidGenerator extends MinestomCodeGenerator {
         });
 
         // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder("net.minestom.server.fluid", fluidClass.build())
-                                .indent("    ")
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
-        );
+        final JavaFile javaFile = JavaFile.builder("net.minestom.server.fluid", fluidClass.build())
+                .indent(DEFAULT_INDENT)
+                .skipJavaLangImports(true)
+                .build();
+        writeFile(javaFile, outputFolder);
     }
 }

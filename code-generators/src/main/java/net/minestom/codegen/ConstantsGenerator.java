@@ -71,7 +71,7 @@ public class ConstantsGenerator extends MinestomCodeGenerator {
         writeFiles(
                 List.of(
                         JavaFile.builder("net.minestom.server", constantsInterface.build())
-                                .indent("    ")
+                                .indent(DEFAULT_INDENT)
                                 .skipJavaLangImports(true)
                                 .build()
                 ),

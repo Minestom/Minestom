@@ -19,7 +19,7 @@ public abstract class MinestomCodeGenerator implements CodeExporter {
             ClassName.get("net.minestom.server.registry", "Registries");
     protected static final ClassName KEYORI_ADVENTURE_KEY =
             ClassName.get("net.kyori.adventure.key", "Keyed");
-    protected static final Modifier[] CONSTANT_MODIFIERS = {Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL};
+    protected static final Modifier[] CONSTANT_MODIFIERS = {Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL};
     protected static final Modifier[] PRIVATE_FINAL_MODIFIERS = {Modifier.PRIVATE, Modifier.FINAL};
     protected static final String DEFAULT_INDENT = "    ";
     protected String packageName;

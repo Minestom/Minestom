@@ -3,10 +3,17 @@ package net.minestom.codegen.color;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.ArrayTypeName;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.ParameterSpec;
+import com.squareup.javapoet.ParameterizedTypeName;
+import com.squareup.javapoet.TypeName;
+import com.squareup.javapoet.TypeSpec;
 import net.minestom.codegen.MinestomCodeGenerator;
-import net.minestom.codegen.util.GenerationHelper;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -20,21 +27,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
-@ApiStatus.NonExtendable
-@ApiStatus.Internal
-public final class DyeColorGenerator extends MinestomCodeGenerator {
+import static net.minestom.codegen.util.GenerationHelper.VARIABLE_GETTER;
+import static net.minestom.codegen.util.GenerationHelper.VARIABLE_SETTER;
 
-    private static final String CLASS_NAME = "DyeColor"; // Microtus - Banner and shield meta
+public class DyeColorGenerator extends MinestomCodeGenerator {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
+    private static final String COLOR_PACKAGE = "net.minestom.server.color";
     private static final String TEXTURE_DIFFUSE_COLOR = "textureDiffuseColor";
     private static final String TEXT_COLOR = "textColor";
     private static final String FIREWORK_COLOR = "fireworkColor";
     private static final String MAP_COLOR_ID = "mapColorId";
-    private static final Logger LOGGER = LoggerFactory.getLogger(DyeColorGenerator.class);
     private final InputStream dyeColorsFile;
     private final File outputFolder;
 
     public DyeColorGenerator(@Nullable InputStream dyeColorsFile, @NotNull File outputFolder) {
-        super("net.minestom.server.color");
         this.dyeColorsFile = dyeColorsFile;
         this.outputFolder = outputFolder;
     }
@@ -50,11 +56,11 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
             LOGGER.error("Output folder for code generation does not exist and could not be created.");
             return;
         }
-        // Important classes we use a lot
-        ClassName colorCN = ClassName.get(packageName, "Color");
+        // Important classes we use alot
+        ClassName colorCN = ClassName.get(COLOR_PACKAGE, "Color");
 
         JsonArray dyeColors = GSON.fromJson(new InputStreamReader(dyeColorsFile), JsonArray.class);
-        ClassName dyeColorCN = ClassName.get(packageName, CLASS_NAME);
+        ClassName dyeColorCN = ClassName.get(COLOR_PACKAGE, "DyeColor");
         // Dye Color Enum
         TypeSpec.Builder dyeColorEnum = TypeSpec.enumBuilder(dyeColorCN)
                 .addSuperinterface(ClassName.get("net.kyori.adventure.util", "RGBLike"))
@@ -68,18 +74,24 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
         // Fields
         dyeColorEnum.addFields(
                 List.of(
-                        FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", CONSTANT_MODIFIERS)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, dyeColorCN)
                                 .build(),
-                        FieldSpec.builder(binaryTagSerializerTypeCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                        FieldSpec.builder(binaryTagSerializerTypeCN, "NBT_TYPE", CONSTANT_MODIFIERS)
                                 .initializer("$T.fromEnumStringable($T.class)", binaryTagSerializerCN, dyeColorCN)
                                 .build(),
                         FieldSpec.builder(colorCN, TEXTURE_DIFFUSE_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
                         FieldSpec.builder(colorCN, TEXT_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
                         FieldSpec.builder(colorCN, FIREWORK_COLOR, PRIVATE_FINAL_MODIFIERS).build(),
-                        FieldSpec.builder(TypeName.INT, MAP_COLOR_ID, PRIVATE_FINAL_MODIFIERS).build(),
-                        FieldSpec.builder(ArrayTypeName.of(dyeColorCN), "VALUES", CONSTANT_MODIFIERS).initializer(CLASS_NAME + ".values()").build()  // Microtus - Banner and shield meta
+                        FieldSpec.builder(TypeName.INT, MAP_COLOR_ID, PRIVATE_FINAL_MODIFIERS).build()
                 )
+        );
+
+        dyeColorEnum.addField(
+                FieldSpec.builder(ArrayTypeName.of(dyeColorCN), "VALUES")
+                        .addModifiers(Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                        .initializer("values()")
+                        .build()
         );
 
         // Methods
@@ -95,63 +107,65 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
                                                 ParameterSpec.builder(TypeName.INT, MAP_COLOR_ID).build()
                                         )
                                 )
-                                .addStatement(GenerationHelper.VARIABLE_SETTER, TEXTURE_DIFFUSE_COLOR)
-                                .addStatement(GenerationHelper.VARIABLE_SETTER, TEXT_COLOR)
-                                .addStatement(GenerationHelper.VARIABLE_SETTER, FIREWORK_COLOR)
-                                .addStatement(GenerationHelper.VARIABLE_SETTER, MAP_COLOR_ID)
+                                .addStatement(VARIABLE_SETTER, TEXTURE_DIFFUSE_COLOR)
+                                .addStatement(VARIABLE_SETTER, TEXT_COLOR)
+                                .addStatement(VARIABLE_SETTER, FIREWORK_COLOR)
+                                .addStatement(VARIABLE_SETTER, MAP_COLOR_ID)
                                 .build(),
                         MethodSpec.methodBuilder("color")
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
-                                .addStatement("return this.textureDiffuseColor")
+                                .addStatement(VARIABLE_GETTER, TEXTURE_DIFFUSE_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder(TEXT_COLOR)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
-                                .addStatement("return this.textColor")
+                                .addStatement(VARIABLE_GETTER, TEXT_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder(FIREWORK_COLOR)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(colorCN.annotated(AnnotationSpec.builder(NotNull.class).build()))
-                                .addStatement("return this.fireworkColor")
+                                .addStatement(VARIABLE_GETTER, FIREWORK_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder("red")
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(TypeName.INT)
                                 .addAnnotation(Override.class)
-                                .addStatement("return this.textureDiffuseColor.red()")
+                                .addStatement("return this.$L.red()", TEXTURE_DIFFUSE_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder("green")
                                 .returns(TypeName.INT)
                                 .addModifiers(Modifier.PUBLIC)
                                 .addAnnotation(Override.class)
-                                .addStatement("return this.textureDiffuseColor.green()")
+                                .addStatement("return this.$L.green()", TEXTURE_DIFFUSE_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder("blue")
                                 .returns(TypeName.INT)
                                 .addModifiers(Modifier.PUBLIC)
                                 .addAnnotation(Override.class)
-                                .addStatement("return this.textureDiffuseColor.blue()")
+                                .addStatement("return this.$L.blue()", TEXTURE_DIFFUSE_COLOR)
                                 .build(),
                         MethodSpec.methodBuilder(MAP_COLOR_ID)
                                 .addModifiers(Modifier.PUBLIC)
                                 .returns(TypeName.INT)
-                                .addStatement("return this.mapColorId")
-                                .build(),
-                        MethodSpec.methodBuilder("getValue") // Microtus start - Banner and shield meta
-                                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                .addParameter(ParameterSpec.builder(TypeName.INT, "id").build())
-                                .addAnnotation(Nullable.class)
-                                .returns(ClassName.get(packageName, CLASS_NAME))
-                                .addCode("return VALUES[$L];", "id")
-                                .build() // Microtus end - Banner and shield meta
+                                .addStatement(VARIABLE_GETTER, MAP_COLOR_ID)
+                                .build()
                 )
+        );
+
+        dyeColorEnum.addMethod(
+                MethodSpec.methodBuilder("getValue")
+                        .addParameter(ParameterSpec.builder(TypeName.INT, "id").build())
+                        .returns(dyeColorCN.annotated(AnnotationSpec.builder(Nullable.class).build()))
+                        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        .addStatement("return $L", "VALUES[id]")
+                        .build()
         );
 
         // Use data
         for (JsonObject dyeColorObject : StreamSupport.stream(dyeColors.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
             String dyeColorName = dyeColorObject.get("name").getAsString();
-            dyeColorEnum.addEnumConstant(extractNamespace(dyeColorName), TypeSpec.anonymousClassBuilder(
+            dyeColorEnum.addEnumConstant(toConstant(dyeColorName), TypeSpec.anonymousClassBuilder(
                             "new $T(0x$L), new $T(0x$L), new $T(0x$L), $L",
                             colorCN, Integer.toString(dyeColorObject.get(TEXTURE_DIFFUSE_COLOR).getAsInt(), 16),
                             colorCN, Integer.toString(dyeColorObject.get(TEXT_COLOR).getAsInt(), 16),
@@ -162,14 +176,10 @@ public final class DyeColorGenerator extends MinestomCodeGenerator {
         }
 
         // Write files to outputFolder
-        writeFiles(
-                List.of(
-                        JavaFile.builder(packageName, dyeColorEnum.build())
-                                .indent(DEFAULT_INDENT)
-                                .skipJavaLangImports(true)
-                                .build()
-                ),
-                outputFolder
-        );
+        final JavaFile javaFile = JavaFile.builder(COLOR_PACKAGE, dyeColorEnum.build())
+                .indent(DEFAULT_INDENT)
+                .skipJavaLangImports(true)
+                .build();
+        writeFile(javaFile, outputFolder);
     }
 }

@@ -18,19 +18,20 @@ public final class GenerationHelper {
     public static final MethodSpec ADVENTURE_KEY_METHOD;
     public static final MethodSpec TO_STRING;
     public static final String VARIABLE_SETTER = "this.$1L = $1L";
+    public static final String VARIABLE_GETTER = "return this.$1L";
 
     static {
         ID_GETTER = MethodSpec.methodBuilder("getId")
                 .returns(NAMESPACE_ID_CLASS)
                 .addAnnotation(NotNull.class)
-                .addStatement("return this.id")
+                .addStatement(VARIABLE_GETTER, "id")
                 .addModifiers(Modifier.PUBLIC)
                 .build();
         ADVENTURE_KEY_METHOD = MethodSpec.methodBuilder("key")
                 .returns(ADVENTURE_KEY)
                 .addAnnotation(Override.class)
                 .addAnnotation(NotNull.class)
-                .addStatement("return this.id")
+                .addStatement(VARIABLE_GETTER, "id")
                 .addModifiers(Modifier.PUBLIC)
                 .build();
         TO_STRING = MethodSpec.methodBuilder("toString")

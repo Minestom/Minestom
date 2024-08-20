@@ -4,20 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Locale;
 
-public class CodeGenerator {
+public class CodeGenerator implements CodeExporter {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
     private static final Logger LOGGER = LoggerFactory.getLogger(CodeGenerator.class);
 
@@ -29,7 +27,7 @@ public class CodeGenerator {
 
     public void generate(InputStream resourceFile, String packageName, String typeName, String loaderName, String generatedName) {
         if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for " + typeName);
+            LOGGER.error("Failed to find resource file for {}", typeName);
             return;
         }
         ClassName typeClass = ClassName.get(packageName, typeName);
@@ -72,7 +70,7 @@ public class CodeGenerator {
 
     public void generateKeys(InputStream resourceFile, String packageName, String typeName, String generatedName) {
         if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for " + typeName);
+            LOGGER.error("Failed to find resource file for {}", typeName);
             return;
         }
 
@@ -116,15 +114,5 @@ public class CodeGenerator {
                         .skipJavaLangImports(true)
                         .build()),
                 outputFolder);
-    }
-
-    private void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {
-        for (JavaFile javaFile : fileList) {
-            try {
-                javaFile.writeTo(outputFolder);
-            } catch (IOException e) {
-                LOGGER.error("An error occured while writing source code to the file system.", e);
-            }
-        }
     }
 }
