@@ -1,85 +1,70 @@
 package net.minestom.server.event.player;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Called every time a {@link Player} writes and sends something in the chat.
- * The event can be cancelled to do not send anything, and the format can be changed.
+ * The event can be cancelled to not send anything, and the final message can be changed.
  */
 public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
-
     private final Player player;
     private final Collection<Player> recipients;
-    private String message;
-    private Function<PlayerChatEvent, Component> chatFormat;
-
+    private final String rawMessage;
+    private Component formattedMessage;
     private boolean cancelled;
 
     public PlayerChatEvent(@NotNull Player player, @NotNull Collection<Player> recipients,
-                           @NotNull Function<PlayerChatEvent, Component> defaultChatFormat,
-                           @NotNull String message) {
+                           @NotNull String rawMessage) {
         this.player = player;
         this.recipients = new ArrayList<>(recipients);
-        this.chatFormat = defaultChatFormat;
-        this.message = message;
+        this.rawMessage = rawMessage;
+        formattedMessage = buildDefaultChatMessage();
     }
 
     /**
-     * Changes the chat format.
-     *
-     * @param chatFormat the custom chat format
-     */
-    public void setChatFormat(@NotNull Function<PlayerChatEvent, Component> chatFormat) {
-        this.chatFormat = chatFormat;
-    }
-
-    /**
-     * Those are the players who will receive the message.
+     * Returns the players who will receive the message.
      * <p>
-     * It can be modified to add or remove recipient.
+     * It can be modified to add and remove recipients.
      *
-     * @return a modifiable list of message targets
+     * @return a modifiable list of the message's targets
      */
     public @NotNull Collection<Player> getRecipients() {
         return recipients;
     }
 
     /**
-     * Gets the message sent.
+     * Gets the original message content sent by the player.
      *
      * @return the sender's message
      */
-    public @NotNull String getMessage() {
-        return message;
+    public @NotNull String getRawMessage() {
+        return rawMessage;
     }
 
     /**
-     * Used to change the message.
+     * Gets the final message component that will be sent.
      *
-     * @param message the new message
+     * @return the chat message component
      */
-    public void setMessage(@NotNull String message) {
-        this.message = message;
+    public Component getFormattedMessage() {
+        return formattedMessage;
     }
 
     /**
-     * Used to retrieve the chat format for this message.
-     * <p>
+     * Used to change the final message component.
      *
-     * @return the chat format which will be used
+     * @param message the new message component
      */
-    public @NotNull Function<@NotNull PlayerChatEvent, @NotNull Component> getChatFormatFunction() {
-        return chatFormat;
+    public void setFormattedMessage(@NotNull Component message) {
+        formattedMessage = message;
     }
 
     @Override
@@ -95,5 +80,14 @@ public class PlayerChatEvent implements PlayerInstanceEvent, CancellableEvent {
     @Override
     public @NotNull Player getPlayer() {
         return player;
+    }
+
+    private Component buildDefaultChatMessage() {
+        return Component.translatable("chat.type.text")
+                .arguments(
+                        Component.text(player.getUsername())
+                                .insertion(player.getUsername())
+                                .hoverEvent(player),
+                        Component.text(rawMessage));
     }
 }
