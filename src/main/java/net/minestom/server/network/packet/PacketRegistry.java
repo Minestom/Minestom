@@ -29,7 +29,7 @@ public interface PacketRegistry<T> {
 
     PacketInfo<T> packetInfo(int packetId);
 
-    record PacketInfo<T>(Class<? extends T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
+    record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
     sealed class Client extends PacketRegistryTemplate<ClientPacket> {
@@ -157,7 +157,9 @@ public interface PacketRegistry<T> {
 
     final class ServerHandshake extends Server {
         public ServerHandshake() {
-            super();
+            super(
+                    // Empty
+            );
         }
     }
 
