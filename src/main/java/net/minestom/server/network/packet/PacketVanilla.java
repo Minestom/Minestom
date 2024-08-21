@@ -27,7 +27,7 @@ public final class PacketVanilla {
      * Size starts with {@link ServerFlag#POOLED_BUFFER_SIZE} and doubles until {@link ServerFlag#MAX_PACKET_SIZE}.
      */
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
-            () -> NetworkBuffer.builder(25)
+            () -> NetworkBuffer.builder(ServerFlag.POOLED_BUFFER_SIZE)
                     .resizeStrategy((capacity, targetSize) -> {
                                 // Buffer capacity should never go above max packet size
                                 final long doubled = NetworkBuffer.ResizeStrategy.DOUBLE.resize(capacity, targetSize);
