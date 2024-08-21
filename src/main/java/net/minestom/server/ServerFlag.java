@@ -25,12 +25,14 @@ public final class ServerFlag {
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 262_143);
-    public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 20);
-    public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
-    public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
-    public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 30_000);
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
+
+    // Network rate limiting
+    public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);
+    public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
+    public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
+    public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
 
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
