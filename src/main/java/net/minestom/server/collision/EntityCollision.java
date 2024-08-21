@@ -14,24 +14,6 @@ import java.util.List;
 import java.util.function.Function;
 
 final class EntityCollision {
-    /**
-     * Represents the result of a collision with an entity
-     * @param collisionPoint
-     * @param entity
-     * @param face null if the collision is not with a face
-     */
-    public record EntityCollisionResult(
-            @NotNull Point collisionPoint,
-            @NotNull Entity entity,
-            @Nullable BlockFace face,
-            double percentage
-    ) implements Comparable<EntityCollisionResult> {
-        @Override
-        public int compareTo(@NotNull EntityCollision.EntityCollisionResult o) {
-            return Double.compare(percentage, o.percentage);
-        }
-    }
-
     static @NotNull List<EntityCollisionResult> checkCollision(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point point, @NotNull Vec entityVelocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
         double minimumRes = physicsResult != null ? physicsResult.res().res : Double.MAX_VALUE;
 
