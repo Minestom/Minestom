@@ -190,6 +190,9 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public void resize(long newSize) {
         assertReadOnly();
+        if (newSize <= capacity) {
+            throw new IllegalArgumentException("New size is smaller than the current size");
+        }
         final long newAddress = UNSAFE.reallocateMemory(address, newSize);
         if (newAddress == 0) {
             throw new OutOfMemoryError("Failed to reallocate memory");
