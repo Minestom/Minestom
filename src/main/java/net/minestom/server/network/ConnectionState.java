@@ -18,6 +18,7 @@ public enum ConnectionState {
     LOGIN,
     /**
      * Client acknowledged login and is now configuring the game.
+     * Can also go back to configuration from play.
      */
     CONFIGURATION,
     /**
