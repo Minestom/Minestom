@@ -208,6 +208,15 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
         return new Pos(x, y, z, -yaw, pitch);
     }
 
+    /**
+     * Returns a new position with an inverted pitch value
+     * @return the new position
+     */
+    @Contract(pure = true)
+    public @NotNull Pos invertPitch() {
+        return new Pos(x, y, z, yaw, -pitch);
+    }
+
     @Override
     @Contract(pure = true)
     public @NotNull Pos withZ(double z) {
