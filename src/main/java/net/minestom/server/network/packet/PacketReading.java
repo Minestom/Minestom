@@ -33,7 +33,8 @@ public final class PacketReading {
     public sealed interface Result<T> {
 
         /**
-         * At least one packet was read. The buffer may still contain half-read packets
+         * At least one packet was read.
+         * The buffer may still contain half-read packets and should therefore be compacted for next read.
          */
         record Success<T>(List<T> packets, ConnectionState newState) implements Result<T> {
             public Success {
@@ -48,7 +49,9 @@ public final class PacketReading {
         }
 
         /**
-         * Represents no packet to read.
+         * Represents no packet to read. Can generally be ignored.
+         * <p>
+         * Happens when a packet length or payload couldn't be read, but the buffer has enough capacity.
          */
         record Empty<T>() implements Result<T> {
         }
@@ -156,7 +159,8 @@ public final class PacketReading {
             buffer.readIndex(beginMark);
             final long packetLengthVarIntSize = readerStart - beginMark;
             final long requiredCapacity = packetLengthVarIntSize + packetLength;
-            return new Result.Failure<>(requiredCapacity);
+            if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
+            else return EMPTY_CLIENT_PACKET;
         }
         NetworkBuffer content = buffer.slice(buffer.readIndex(), packetLength, 0, packetLength);
         T packet;

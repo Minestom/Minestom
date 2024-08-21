@@ -67,10 +67,9 @@ public class SocketReadTest {
         assertEquals(List.of(packet), packets);
 
         readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
-        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
-            throw new AssertionError("Expected a failure result, got " + readResult);
+        if (!(readResult instanceof PacketReading.Result.Empty<ClientPacket>)) {
+            throw new AssertionError("Expected an empty result, got " + readResult);
         }
-        assertEquals(getVarIntSize(200) + 200, failure.requiredCapacity());
     }
 
     @ParameterizedTest
