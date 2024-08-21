@@ -14,6 +14,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 @ApiStatus.Internal
@@ -43,27 +44,18 @@ public final class CollisionUtils {
 
     /**
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
-     * @return the closest entity we collide with
-     */
-    public static PhysicsResult checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final Instance instance = entity.getInstance();
-        assert instance != null;
-        return checkEntityCollisions(instance, entity.getBoundingBox(), entity.getPosition(), entityVelocity, 3, e -> true, null);
-    }
-
-    /**
-     *
      * @param velocity the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
      *                     Measured from bottom center to top corner
      *                     This is used to extend the search radius for entities we collide with
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
-     * @return the closest entity we collide with
      */
-    public static PhysicsResult checkEntityCollisions(@NotNull Instance instance, BoundingBox boundingBox, Point pos, @NotNull Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, PhysicsResult blockResult) {
-        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, blockResult);
+    public static Collection<EntityCollision.EntityCollisionResult> checkEntityCollisions(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point pos, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
+    }
+
+    public static Collection<EntityCollision.EntityCollisionResult> checkEntityCollisions(@NotNull Entity entity, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
