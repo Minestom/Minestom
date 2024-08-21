@@ -343,12 +343,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public String toString() {
         return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, resize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity(), registries != null, resizeStrategy != null, readOnly);
+                readIndex, writeIndex, capacity, registries != null, resizeStrategy != null, readOnly);
     }
 
-    private static boolean requireConversion() {
-        return ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN;
-    }
+    private static final boolean ENDIAN_CONVERSION = ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN;
 
     // Internal writing methods
     void _putBytes(long index, byte[] value) {
@@ -376,54 +374,54 @@ final class NetworkBufferImpl implements NetworkBuffer {
     void _putShort(long index, short value) {
         assertReadOnly();
         Objects.checkFromIndexSize(index, Short.BYTES, capacity);
-        if (requireConversion()) value = Short.reverseBytes(value);
+        if (ENDIAN_CONVERSION) value = Short.reverseBytes(value);
         UNSAFE.putShort(address + index, value);
     }
 
     short _getShort(long index) {
         Objects.checkFromIndexSize(index, Short.BYTES, capacity);
         final short value = UNSAFE.getShort(address + index);
-        return requireConversion() ? Short.reverseBytes(value) : value;
+        return ENDIAN_CONVERSION ? Short.reverseBytes(value) : value;
     }
 
     void _putInt(long index, int value) {
         assertReadOnly();
         Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
-        if (requireConversion()) value = Integer.reverseBytes(value);
+        if (ENDIAN_CONVERSION) value = Integer.reverseBytes(value);
         UNSAFE.putInt(address + index, value);
     }
 
     int _getInt(long index) {
         Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
         final int value = UNSAFE.getInt(address + index);
-        return requireConversion() ? Integer.reverseBytes(value) : value;
+        return ENDIAN_CONVERSION ? Integer.reverseBytes(value) : value;
     }
 
     void _putLong(long index, long value) {
         assertReadOnly();
         Objects.checkFromIndexSize(index, Long.BYTES, capacity);
-        if (requireConversion()) value = Long.reverseBytes(value);
+        if (ENDIAN_CONVERSION) value = Long.reverseBytes(value);
         UNSAFE.putLong(address + index, value);
     }
 
     long _getLong(long index) {
         Objects.checkFromIndexSize(index, Long.BYTES, capacity);
         final long value = UNSAFE.getLong(address + index);
-        return requireConversion() ? Long.reverseBytes(value) : value;
+        return ENDIAN_CONVERSION ? Long.reverseBytes(value) : value;
     }
 
     void _putFloat(long index, float value) {
         assertReadOnly();
         Objects.checkFromIndexSize(index, Float.BYTES, capacity);
         int intValue = Float.floatToIntBits(value);
-        if (requireConversion()) intValue = Integer.reverseBytes(intValue);
+        if (ENDIAN_CONVERSION) intValue = Integer.reverseBytes(intValue);
         UNSAFE.putInt(address + index, intValue);
     }
 
     float _getFloat(long index) {
         Objects.checkFromIndexSize(index, Float.BYTES, capacity);
         int intValue = UNSAFE.getInt(address + index);
-        if (requireConversion()) intValue = Integer.reverseBytes(intValue);
+        if (ENDIAN_CONVERSION) intValue = Integer.reverseBytes(intValue);
         return Float.intBitsToFloat(intValue);
     }
 
@@ -431,14 +429,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertReadOnly();
         Objects.checkFromIndexSize(index, Double.BYTES, capacity);
         long longValue = Double.doubleToLongBits(value);
-        if (requireConversion()) longValue = Long.reverseBytes(longValue);
+        if (ENDIAN_CONVERSION) longValue = Long.reverseBytes(longValue);
         UNSAFE.putLong(address + index, longValue);
     }
 
     double _getDouble(long index) {
         Objects.checkFromIndexSize(index, Double.BYTES, capacity);
         long longValue = UNSAFE.getLong(address + index);
-        if (requireConversion()) longValue = Long.reverseBytes(longValue);
+        if (ENDIAN_CONVERSION) longValue = Long.reverseBytes(longValue);
         return Double.longBitsToDouble(longValue);
     }
 
@@ -477,9 +475,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     void assertReadOnly() {
-        if (readOnly) {
-            throw new UnsupportedOperationException("Buffer is read-only");
-        }
+        if (readOnly) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
     static final class Builder implements NetworkBuffer.Builder {
