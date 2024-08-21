@@ -21,8 +21,8 @@ final class EntityCollision {
      * @param face null if the collision is not with a face
      */
     public record EntityCollisionResult(
-            Point collisionPoint,
-            Entity entity,
+            @NotNull Point collisionPoint,
+            @NotNull Entity entity,
             @Nullable BlockFace face,
             double percentage
     ) implements Comparable<EntityCollisionResult> {

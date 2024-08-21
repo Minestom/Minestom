@@ -43,6 +43,7 @@ public final class CollisionUtils {
     }
 
     /**
+     * Checks for entity collisions
      *
      * @param velocity the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
@@ -54,6 +55,16 @@ public final class CollisionUtils {
         return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
     }
 
+    /**
+     * Checks for entity collisions
+     *
+     * @param entity the entity to check collisions for
+     * @param velocity the velocity of the entity
+     * @param extendRadius the largest entity bounding box we can collide with
+     * @param entityFilter the entity filter
+     * @param physicsResult optional physics result
+     * @return the entity collision results
+     */
     public static Collection<EntityCollision.EntityCollisionResult> checkEntityCollisions(@NotNull Entity entity, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
         return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
