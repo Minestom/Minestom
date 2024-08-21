@@ -138,19 +138,26 @@ loadScripts(document, 'script');</script>
  <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPos,
  <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;b)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.instance.Instance,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
- <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
- <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pos,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;net.minestom.server.collision.EntityCollision.EntityCollisionResult&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
  double&nbsp;extendRadius,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
- <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;blockResult)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;physicsResult)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Checks for entity collisions</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;net.minestom.server.collision.EntityCollision.EntityCollisionResult&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#checkEntityCollisions(net.minestom.server.instance.Instance,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)" class="member-name-link">checkEntityCollisions</a><wbr>(@NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pos,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ double&nbsp;extendRadius,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;physicsResult)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Checks for entity collisions</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#handlePhysics(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)" class="member-name-link">handlePhysics</a><wbr>(@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</code></div>
@@ -263,33 +270,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec)">
-<h3>checkEntityCollisions</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">checkEntityCollisions</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull
- @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;entityVelocity)</span></div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>entity</code> - the entity to move</dd>
-<dd><code>entityVelocity</code> - the velocity of the entity</dd>
-<dt>Returns:</dt>
-<dd>the closest entity we collide with</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="checkEntityCollisions(net.minestom.server.instance.Instance,net.minestom.server.collision.BoundingBox,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)">
 <h3>checkEntityCollisions</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a></span>&nbsp;<span class="element-name">checkEntityCollisions</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;net.minestom.server.collision.EntityCollision.EntityCollisionResult&gt;</span>&nbsp;<span class="element-name">checkEntityCollisions</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
- <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
- <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pos,
+ @NotNull
+ @NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
+ @NotNull
+ @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;pos,
  @NotNull
  @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
  double&nbsp;extendRadius,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
- <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;blockResult)</span></div>
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
+ @Nullable
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;physicsResult)</span></div>
+<div class="block">Checks for entity collisions</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>velocity</code> - the velocity of the entity</dd>
@@ -297,8 +294,32 @@ loadScripts(document, 'script');</script>
                      Measured from bottom center to top corner
                      This is used to extend the search radius for entities we collide with
                      For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="checkEntityCollisions(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,double,java.util.function.Function,net.minestom.server.collision.PhysicsResult)">
+<h3>checkEntityCollisions</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;net.minestom.server.collision.EntityCollision.EntityCollisionResult&gt;</span>&nbsp;<span class="element-name">checkEntityCollisions</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;velocity,
+ double&nbsp;extendRadius,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;&nbsp;entityFilter,
+ @Nullable
+ @Nullable <a href="PhysicsResult.html" title="class in net.minestom.server.collision">PhysicsResult</a>&nbsp;physicsResult)</span></div>
+<div class="block">Checks for entity collisions</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entity</code> - the entity to check collisions for</dd>
+<dd><code>velocity</code> - the velocity of the entity</dd>
+<dd><code>extendRadius</code> - the largest entity bounding box we can collide with</dd>
+<dd><code>entityFilter</code> - the entity filter</dd>
+<dd><code>physicsResult</code> - optional physics result</dd>
 <dt>Returns:</dt>
-<dd>the closest entity we collide with</dd>
+<dd>the entity collision results</dd>
 </dl>
 </section>
 </li>
