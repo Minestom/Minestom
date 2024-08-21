@@ -9,6 +9,9 @@ import net.minestom.server.network.packet.client.configuration.ClientFinishConfi
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
+import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
+import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.utils.ObjectPool;
 
 /**
@@ -33,6 +36,18 @@ public final class PacketVanilla {
             };
             case ClientLoginAcknowledgedPacket ignored -> ConnectionState.CONFIGURATION;
             case ClientFinishConfigurationPacket ignored -> ConnectionState.PLAY;
+            default -> currentState;
+        };
+    }
+
+    public static ConnectionState nextServerState(ServerPacket packet, ConnectionState currentState) {
+        // Client chooses between STATUS or LOGIN state directly after the first handshake packet
+        if (currentState == ConnectionState.HANDSHAKE)
+            throw new IllegalStateException("No server Handshake packet exists");
+        return switch (packet) {
+            case LoginSuccessPacket ignored -> ConnectionState.CONFIGURATION;
+            case StartConfigurationPacket ignored -> ConnectionState.CONFIGURATION;
+            case FinishConfigurationPacket ignored -> ConnectionState.PLAY;
             default -> currentState;
         };
     }

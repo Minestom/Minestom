@@ -25,7 +25,11 @@ public interface PacketRegistry<T> {
     @UnknownNullability
     T create(int packetId, @NotNull NetworkBuffer reader);
 
-    PacketInfo<T> packetInfo(Class<? extends T> packetClass);
+    PacketInfo<T> packetInfo(@NotNull Class<?> packetClass);
+
+    default PacketInfo<T> packetInfo(@NotNull T packet) {
+        return packetInfo(packet.getClass());
+    }
 
     PacketInfo<T> packetInfo(int packetId);
 
@@ -377,18 +381,16 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public PacketInfo<T> packetInfo(Class<? extends T> packetClass) {
+        public PacketInfo<T> packetInfo(@NotNull Class<?> packetClass) {
             return packetIds.get(packetClass);
         }
 
         @Override
         public PacketInfo<T> packetInfo(int packetId) {
-            if (packetId < 0 || packetId >= suppliers.length) {
+            final PacketInfo<T> info;
+            if (packetId < 0 || packetId >= suppliers.length || (info = (PacketInfo<T>) suppliers[packetId]) == null) {
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             }
-            final PacketInfo<T> info = (PacketInfo<T>) suppliers[packetId];
-            if (info == null)
-                throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             return info;
         }
 

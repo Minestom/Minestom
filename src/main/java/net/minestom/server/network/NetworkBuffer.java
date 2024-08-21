@@ -39,6 +39,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
     Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
     Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
+    Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();

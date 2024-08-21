@@ -4,6 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -71,6 +72,14 @@ public final class PacketReading {
         return readPackets(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
     }
 
+    public static Result<ServerPacket> readServers(
+            @NotNull NetworkBuffer buffer,
+            @NotNull ConnectionState state,
+            boolean compressed
+    ) throws DataFormatException {
+        return readPackets(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, PacketVanilla::nextServerState, compressed);
+    }
+
     public static <T> Result<T> readPackets(
             @NotNull NetworkBuffer buffer,
             @NotNull PacketParser<T> parser,
@@ -106,6 +115,14 @@ public final class PacketReading {
             boolean compressed
     ) throws DataFormatException {
         return readPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, PacketVanilla::nextClientState, compressed);
+    }
+
+    public static Result<ServerPacket> readServer(
+            @NotNull NetworkBuffer buffer,
+            @NotNull ConnectionState state,
+            boolean compressed
+    ) throws DataFormatException {
+        return readPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, PacketVanilla::nextServerState, compressed);
     }
 
     public static <T> Result<T> readPacket(

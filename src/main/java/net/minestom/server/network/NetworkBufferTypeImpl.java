@@ -206,6 +206,29 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record VarInt3Type() implements NetworkBufferTypeImpl<Integer> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
+            final int value = boxed;
+            // Value must be between 0 and 2^21
+            Check.argCondition(value < 0 || value >= (1 << 21), "VarInt3 out of bounds: {0}", value);
+            buffer.ensureWritable(3);
+            final long startIndex = buffer.writeIndex();
+            var impl = impl(buffer);
+            impl._putByte(startIndex, (byte) (value & 0x7F | 0x80));
+            impl._putByte(startIndex + 1, (byte) ((value >>> 7) & 0x7F | 0x80));
+            impl._putByte(startIndex + 2, (byte) (value >>> 14));
+            buffer.advanceWrite(3);
+        }
+
+        @Override
+        public Integer read(@NotNull NetworkBuffer buffer) {
+            // Ensure that the buffer can read other var-int sizes
+            // The optimization is mostly relevant for writing
+            return buffer.read(VAR_INT);
+        }
+    }
+
     record VarLongType() implements NetworkBufferTypeImpl<Long> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Long value) {
