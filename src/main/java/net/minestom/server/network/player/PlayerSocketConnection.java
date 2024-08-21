@@ -307,12 +307,15 @@ public class PlayerSocketConnection extends PlayerConnection {
         };
         final long end = buffer.writeIndex();
         final long length = end - start;
+        if (length == 0 || !result) {
+            return false;
+        }
         // Encrypt data
         final EncryptionContext encryptionContext = this.encryptionContext;
-        if (encryptionContext != null && length != 0) { // Encryption support
-            buffer.cipher(encryptionContext.encrypt(), start, end - start);
+        if (encryptionContext != null) { // Encryption support
+            buffer.cipher(encryptionContext.encrypt(), start, length);
         }
-        return result;
+        return true;
     }
 
     private boolean writePacketSync(NetworkBuffer buffer, SendablePacket packet, boolean compressed) {
@@ -343,14 +346,12 @@ public class PlayerSocketConnection extends PlayerConnection {
                 }
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
-                    final long length = body.capacity();
-                    yield writeBuffer(buffer, body, 0, length);
+                    yield writeBuffer(buffer, body, 0, body.capacity());
                 }
                 case CachedPacket cachedPacket -> {
                     final NetworkBuffer body = cachedPacket.body(state);
                     if (body != null) {
-                        final long length = body.capacity();
-                        yield writeBuffer(buffer, body, 0, length);
+                        yield writeBuffer(buffer, body, 0, body.capacity());
                     } else {
                         PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
                         yield true;
@@ -361,7 +362,7 @@ public class PlayerSocketConnection extends PlayerConnection {
                     yield true;
                 }
             };
-        } catch (IllegalArgumentException | IndexOutOfBoundsException exception) {
+        } catch (IndexOutOfBoundsException exception) {
             buffer.writeIndex(start);
             return false;
         }
@@ -386,6 +387,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             final boolean success = leftover.writeChannel(channel);
             if (success) {
                 this.writeLeftover = null;
+                PacketVanilla.PACKET_POOL.add(leftover);
             } else {
                 // Failed to write the whole leftover, try again next flush
                 return;
@@ -397,38 +399,38 @@ public class PlayerSocketConnection extends PlayerConnection {
             awaitWrite();
         }
         if (!channel.isConnected()) throw new IOException("Channel is closed");
-        try (var hold = PacketVanilla.PACKET_POOL.hold()) {
-            NetworkBuffer buffer = hold.get();
-            // Write to buffer
-            Receivable packet;
-            int written = 0;
-            while ((packet = packetQueue.peek()) != null) {
-                final boolean compressed = sentPacketCounter.get() > compressionStart;
-                final boolean success = writeReceivable(buffer, packet, compressed);
-                // Poll the packet only if fully written
-                if (success) {
-                    // Packet fully written
-                    packetQueue.poll();
-                    sentPacketCounter.getAndIncrement();
-                    written++;
+        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
+        // Write to buffer
+        Receivable packet;
+        int written = 0;
+        while ((packet = packetQueue.peek()) != null) {
+            final boolean compressed = sentPacketCounter.get() > compressionStart;
+            final boolean success = writeReceivable(buffer, packet, compressed);
+            assert !success || buffer.writeIndex() > 0;
+            // Poll the packet only if fully written
+            if (success) {
+                // Packet fully written
+                packetQueue.poll();
+                sentPacketCounter.getAndIncrement();
+                written++;
+            } else {
+                if (written == 0) {
+                    assert buffer.writeIndex() == 0;
+                    // Try again with a bigger buffer
+                    final long newSize = Math.min(buffer.capacity() * 2, ServerFlag.MAX_PACKET_SIZE);
+                    buffer.resize(newSize);
                 } else {
-                    if (written == 0) {
-                        // Try again with a bigger buffer
-                        buffer.resize(buffer.capacity() * 2);
-                    } else {
-                        // At least one packet has been written
-                        // Not worth resizing to fit more, we'll try again next flush
-                        break;
-                    }
+                    // At least one packet has been written
+                    // Not worth resizing to fit more, we'll try again next flush
+                    break;
                 }
             }
-            // Write to channel
-            final boolean success = buffer.writeChannel(channel);
-            if (!success) {
-                final long readable = buffer.readableBytes();
-                this.writeLeftover = buffer.copy(buffer.readIndex(), readable, 0, readable);
-            }
         }
+        // Write to channel
+        final boolean success = buffer.writeChannel(channel);
+        // Keep the buffer if not fully written
+        if (success) PacketVanilla.PACKET_POOL.add(buffer);
+        else this.writeLeftover = buffer;
     }
 
     public void awaitWrite() {

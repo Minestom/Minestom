@@ -88,7 +88,7 @@ public final class PacketWriting {
             // and compress it into the current buffer
             NetworkBuffer input = PacketVanilla.PACKET_POOL.get();
             try {
-                input.ensureWritable(packetSize);
+                if (input.capacity() < packetSize) input.resize(packetSize);
                 NetworkBuffer.copy(buffer, contentStart, input, 0, packetSize);
                 buffer.writeIndex(contentStart);
                 input.compress(0, packetSize, buffer);
@@ -128,10 +128,12 @@ public final class PacketWriting {
                 } catch (IndexOutOfBoundsException e) {
                     // Try again with doubled size
                     final long capacity = buffer.capacity();
-                    if (capacity >= ServerFlag.MAX_PACKET_SIZE) {
+                    if (capacity == ServerFlag.MAX_PACKET_SIZE) {
                         throw new IllegalStateException("Packet too large: " + capacity);
                     }
-                    buffer.resize(capacity * 2);
+                    final long newSize = Math.min(capacity * 2, ServerFlag.MAX_PACKET_SIZE);
+                    buffer.resize(newSize);
+                    buffer.writeIndex(0);
                 }
             }
         } finally {

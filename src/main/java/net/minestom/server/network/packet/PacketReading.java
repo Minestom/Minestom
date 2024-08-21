@@ -175,7 +175,7 @@ public final class PacketReading {
                 // and read the uncompressed packet from it
                 NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
                 try {
-                    decompressed.ensureWritable(dataLength);
+                    if (decompressed.capacity() < dataLength) decompressed.resize(dataLength);
                     content.decompress(content.readIndex(), content.readableBytes(), decompressed);
                     packet = readUncompressedPacket(decompressed, parser, state);
                 } finally {

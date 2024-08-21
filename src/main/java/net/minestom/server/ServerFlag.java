@@ -39,9 +39,9 @@ public final class ServerFlag {
     public static final float CHUNKS_PER_TICK_MULTIPLIER = floatProperty("minestom.chunk-queue.multiplier", 1f);
 
     // Packet sending optimizations
-    public static final boolean GROUPED_PACKET = booleanProperty("minestom.grouped-packet", true);
+    public static final boolean GROUPED_PACKET = booleanProperty("minestom.grouped-packet", false);
     public static final boolean CACHED_PACKET = booleanProperty("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = booleanProperty("minestom.viewable-packet", true);
+    public static final boolean VIEWABLE_PACKET = booleanProperty("minestom.viewable-packet", false);
 
     // Tags
     public static final boolean TAG_HANDLER_CACHE_ENABLED = booleanProperty("minestom.tag-handler-cache", true);

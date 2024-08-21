@@ -193,7 +193,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final long newAddress = UNSAFE.reallocateMemory(address, newSize);
-        if (newAddress == 0) throw new OutOfMemoryError("Failed to reallocate memory");
         this.address = newAddress;
         this.capacity = newSize;
         this.state.address.set(newAddress);
