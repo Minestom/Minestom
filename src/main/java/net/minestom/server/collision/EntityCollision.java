@@ -31,7 +31,7 @@ final class EntityCollision {
             // Overlapping with entity, math can't be done we return the entity
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {
                 var p = Pos.fromPoint(point);
-                result.add(new EntityCollisionResult(p, e, null, 0));
+                result.add(new EntityCollisionResult(p, e, Vec.ZERO, 0));
             }
 
             // Check collisions with entity
@@ -39,7 +39,8 @@ final class EntityCollision {
 
             if (sweepResult.res < 1) {
                 var p = Pos.fromPoint(point).add(entityVelocity.mul(sweepResult.res));
-                result.add(new EntityCollisionResult(p, e, null, sweepResult.res));
+                Vec direction = new Vec(sweepResult.collidedPositionX, sweepResult.collidedPositionY, sweepResult.collidedPositionZ);
+                result.add(new EntityCollisionResult(p, e, direction, sweepResult.res));
             }
         }
 
