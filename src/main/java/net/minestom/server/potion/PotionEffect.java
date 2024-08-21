@@ -1,5 +1,6 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -18,8 +19,8 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
     @NotNull Registry.PotionEffectEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -31,13 +32,30 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
         return PotionEffectImpl.values();
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectImpl.getSafe(namespaceID);
+    static @Nullable PotionEffect fromKey(@NotNull String key) {
+        return PotionEffectImpl.getSafe(key);
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable PotionEffect fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static PotionEffect fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     static @Nullable PotionEffect fromId(int id) {
         return PotionEffectImpl.getId(id);

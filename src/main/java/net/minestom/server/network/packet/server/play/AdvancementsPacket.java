@@ -74,7 +74,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     }
 
     /**
-     * AdvancementMapping maps the namespaced ID to the Advancement.
+     * AdvancementMapping maps the key to the Advancement.
      */
     public record AdvancementMapping(@NotNull String key,
                                      @NotNull Advancement value) implements NetworkBuffer.Writer, ComponentHolder<AdvancementMapping> {

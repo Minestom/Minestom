@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
@@ -24,7 +25,7 @@ public final class ItemComponent {
     // Note that even non-networked components are registered here as they still contribute to the component ID counter.
     // The order in this file determines the component protocol IDs, so it is important to match the client.
 
-    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final Map<String, DataComponent<?>> KEYS = new HashMap<>(32);
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
     public static final DataComponent<CustomData> CUSTOM_DATA = register("custom_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
@@ -86,27 +87,44 @@ public final class ItemComponent {
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);
-    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromNamespaceId);
+    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromKey);
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return NAMESPACES.get(namespaceId);
+    public static @Nullable DataComponent<?> fromKey(@NotNull String key) {
+        return KEYS.get(key);
     }
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+    public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     public static @Nullable DataComponent<?> fromId(int id) {
         return IDS.get(id);
     }
 
     public static @NotNull Collection<DataComponent<?>> values() {
-        return NAMESPACES.values();
+        return KEYS.values();
     }
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
-        NAMESPACES.put(impl.name(), impl);
+        DataComponent<T> impl = DataComponent.createHeadless(KEYS.size(), Key.key(name), network, nbt);
+        KEYS.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
     }

@@ -29,7 +29,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
-                (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
+                (key, props) -> new DimensionTypeImpl(Registry.dimensionType(key, props))
         );
     }
 

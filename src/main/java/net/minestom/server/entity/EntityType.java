@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.NamespaceID;
@@ -19,8 +21,8 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
     @NotNull Registry.EntityEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -40,12 +42,28 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
         return EntityTypeImpl.values();
     }
 
-    static EntityType fromNamespaceId(@NotNull String namespaceID) {
-        return EntityTypeImpl.getSafe(namespaceID);
+    static EntityType fromKey(@NotNull String key) {
+        return EntityTypeImpl.getSafe(key);
     }
 
+    static EntityType fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static EntityType fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
     static EntityType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+        return fromKey(namespaceID);
     }
 
     static @Nullable EntityType fromId(int id) {

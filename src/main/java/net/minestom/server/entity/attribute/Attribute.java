@@ -1,5 +1,8 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.command.CommandSender;
+import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -19,8 +22,8 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     @NotNull Registry.AttributeEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -48,12 +51,28 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
         return AttributeImpl.values();
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull String namespaceID) {
-        return AttributeImpl.getSafe(namespaceID);
+    static @Nullable Attribute fromKey(@NotNull String key) {
+        return AttributeImpl.getSafe(key);
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Attribute fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static Attribute fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static Attribute fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
     }
 
     static @Nullable Attribute fromId(int id) {

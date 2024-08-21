@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
@@ -31,7 +32,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.thread.Acquirable;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -48,7 +48,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(NamespaceID.from("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
 
     // ItemStack pickup
     protected boolean canPickupItem;

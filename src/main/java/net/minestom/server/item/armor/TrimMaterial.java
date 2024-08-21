@@ -46,7 +46,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
         return DynamicRegistry.create(
                 "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
-                (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
+                (key, props) -> new TrimMaterialImpl(Registry.trimMaterial(key, props))
         );
     }
 

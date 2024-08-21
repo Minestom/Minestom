@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
@@ -26,8 +27,8 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     @NotNull Registry.MaterialEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -59,13 +60,30 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return MaterialImpl.values();
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
-        return MaterialImpl.getSafe(namespaceID);
+    static @Nullable Material fromKey(@NotNull String key) {
+        return MaterialImpl.getSafe(key);
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Material fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
+
+    /**
+     * @deprecated use {@link #fromKey(String)}
+     */
+    @Deprecated
+    static Material fromNamespaceId(@NotNull String namespaceID) {
+        return fromKey(namespaceID);
+    }
+
+    /**
+     * @deprecated use {@link #fromKey(Key)}
+     */
+    @Deprecated
+    static Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
+        return fromKey(namespaceID);
+    }
+
 
     static @Nullable Material fromId(int id) {
         return MaterialImpl.getId(id);
