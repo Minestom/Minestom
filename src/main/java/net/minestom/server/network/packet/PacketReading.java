@@ -150,7 +150,11 @@ public final class PacketReading {
             buffer.readIndex(beginMark);
             return EMPTY_CLIENT_PACKET;
         }
-        if (packetLength > ServerFlag.MAX_PACKET_SIZE) {
+        final int maxPacketSize = switch (state) {
+            case HANDSHAKE, LOGIN -> ServerFlag.MAX_PACKET_SIZE_PRE_AUTH;
+            default -> ServerFlag.MAX_PACKET_SIZE;
+        };
+        if (packetLength > maxPacketSize) {
             throw new DataFormatException("Packet too large: " + packetLength);
         }
         // READ PAYLOAD https://wiki.vg/Protocol#Packet_format
