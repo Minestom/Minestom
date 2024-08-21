@@ -147,6 +147,13 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void outOfBound() {
+        var buffer = NetworkBuffer.staticBuffer(3);
+        buffer.write(SHORT, (short) 2);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.write(INT, 6));
+    }
+
+    @Test
     public void readableBytes() {
         var buffer = NetworkBuffer.resizableBuffer();
         assertEquals(0, buffer.readableBytes());

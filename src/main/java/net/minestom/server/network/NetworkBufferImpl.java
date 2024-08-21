@@ -37,20 +37,20 @@ final class NetworkBufferImpl implements NetworkBuffer {
     BinaryTagWriter nbtWriter;
     BinaryTagReader nbtReader;
 
-    final @Nullable ResizeStrategy resizeStrategy;
+    final @Nullable AutoResize autoResize;
     final @Nullable Registries registries;
 
     NetworkBufferImpl(NetworkBufferImpl parent,
                       long address, long capacity,
                       long readIndex, long writeIndex,
-                      @Nullable ResizeStrategy resizeStrategy,
+                      @Nullable AutoResize autoResize,
                       @Nullable Registries registries) {
         this.parent = parent;
         this.address = address;
         this.capacity = capacity;
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
-        this.resizeStrategy = resizeStrategy;
+        this.autoResize = autoResize;
         this.registries = registries;
 
         this.state = new BufferCleaner(new AtomicLong(address));
@@ -190,13 +190,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
     @Override
     public void resize(long newSize) {
         assertReadOnly();
-        if (newSize <= capacity) {
-            throw new IllegalArgumentException("New size is smaller than the current size");
-        }
+        if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
+        if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
         final long newAddress = UNSAFE.reallocateMemory(address, newSize);
-        if (newAddress == 0) {
-            throw new OutOfMemoryError("Failed to reallocate memory");
-        }
+        if (newAddress == 0) throw new OutOfMemoryError("Failed to reallocate memory");
         this.address = newAddress;
         this.capacity = newSize;
         this.state.address.set(newAddress);
@@ -212,7 +209,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     private long newCapacity(long length, long capacity) {
         final long targetSize = writeIndex + length;
-        final ResizeStrategy strategy = this.resizeStrategy;
+        final AutoResize strategy = this.autoResize;
         if (strategy == null)
             throw new IndexOutOfBoundsException("Buffer is full and cannot be resized: " + capacity + " -> " + targetSize);
         final long newCapacity = strategy.resize(capacity, targetSize);
@@ -236,7 +233,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         NetworkBufferImpl slice = new NetworkBufferImpl(this,
                 address + index, length,
                 readIndex, writeIndex,
-                resizeStrategy, registries);
+                autoResize, registries);
         slice.readOnly = readOnly;
         return slice;
     }
@@ -252,7 +249,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         return new NetworkBufferImpl(null,
                 newAddress, length,
                 readIndex, writeIndex,
-                resizeStrategy, registries);
+                autoResize, registries);
     }
 
     @Override
@@ -345,8 +342,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public String toString() {
-        return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, resize=%s, readOnly=%s}",
-                readIndex, writeIndex, capacity, registries != null, resizeStrategy != null, readOnly);
+        return String.format("NetworkBuffer{r%d|w%d->%d, registries=%s, autoResize=%s, readOnly=%s}",
+                readIndex, writeIndex, capacity, registries != null, autoResize != null, readOnly);
     }
 
     private static final boolean ENDIAN_CONVERSION = ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN;
@@ -483,7 +480,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     static final class Builder implements NetworkBuffer.Builder {
         private final long initialSize;
-        private ResizeStrategy resizeStrategy;
+        private AutoResize autoResize;
         private Registries registries;
 
         public Builder(long initialSize) {
@@ -491,8 +488,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder resizeStrategy(@Nullable ResizeStrategy resizeStrategy) {
-            this.resizeStrategy = resizeStrategy;
+        public NetworkBuffer.@NotNull Builder autoResize(@Nullable AutoResize autoResize) {
+            this.autoResize = autoResize;
             return this;
         }
 
@@ -508,7 +505,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             return new NetworkBufferImpl(null,
                     address, initialSize,
                     0, 0,
-                    resizeStrategy, registries);
+                    autoResize, registries);
         }
     }
 

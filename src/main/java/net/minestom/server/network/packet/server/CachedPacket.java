@@ -65,4 +65,11 @@ public final class CachedPacket implements SendablePacket {
         final SoftReference<FramedPacket> ref = packet;
         return ref != null && ref.get() != null;
     }
+
+    @Override
+    public String toString() {
+        final SoftReference<FramedPacket> ref = packet;
+        final FramedPacket cache = ref != null ? ref.get() : null;
+        return String.format("CachedPacket{cache=%s}", cache);
+    }
 }

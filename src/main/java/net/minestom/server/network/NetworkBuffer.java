@@ -209,7 +209,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         return builder(initialSize)
-                .resizeStrategy(ResizeStrategy.DOUBLE)
+                .autoResize(AutoResize.DOUBLE)
                 .registry(registries)
                 .build();
     }
@@ -235,7 +235,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     sealed interface Builder permits NetworkBufferImpl.Builder {
-        @NotNull Builder resizeStrategy(@Nullable ResizeStrategy resizeStrategy);
+        @NotNull Builder autoResize(@Nullable AutoResize autoResize);
 
         @NotNull Builder registry(@Nullable Registries registries);
 
@@ -243,8 +243,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     @FunctionalInterface
-    interface ResizeStrategy {
-        ResizeStrategy DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
+    interface AutoResize {
+        AutoResize DOUBLE = (capacity, targetSize) -> Math.max(capacity * 2, targetSize);
 
         long resize(long capacity, long targetSize);
     }
