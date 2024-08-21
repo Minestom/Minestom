@@ -95,14 +95,14 @@ loadScripts(document, 'script');</script>
 <dt>Record Components:</dt>
 <dd><code><span id="param-collisionPoint">collisionPoint</span></code> - </dd>
 <dd><code><span id="param-entity">entity</span></code> - </dd>
-<dd><code><span id="param-face">face</span></code> - null if the collision is not with a face</dd>
+<dd><code><span id="param-direction">direction</span></code> - the direction of the collision. ex. Vec(-1, 0, 0) means the entity collided with the west face of the entity</dd>
 </dl>
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="EntityCollisionResult.html" title="class in net.minestom.server.collision">EntityCollisionResult</a>&gt;</code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityCollisionResult</span>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;collisionPoint, @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity, @Nullable <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face, double&nbsp;percentage)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">EntityCollisionResult</span>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;collisionPoint, @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity, @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction, double&nbsp;percentage)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="EntityCollisionResult.html" title="class in net.minestom.server.collision">EntityCollisionResult</a>&gt;</span></div>
 <div class="block">Represents the result of a collision with an entity</div>
@@ -117,9 +117,9 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity,net.minestom.server.instance.block.BlockFace,double)" class="member-name-link">EntityCollisionResult</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;collisionPoint,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,double)" class="member-name-link">EntityCollisionResult</a><wbr>(@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;collisionPoint,
  @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @Nullable <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face,
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
  double&nbsp;percentage)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>EntityCollisionResult</code> record class.</div>
@@ -146,20 +146,20 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#compareTo(net.minestom.server.collision.EntityCollisionResult)" class="member-name-link">compareTo</a><wbr>(@NotNull <a href="EntityCollisionResult.html" title="class in net.minestom.server.collision">EntityCollisionResult</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entity()" class="member-name-link">entity</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#direction()" class="member-name-link">direction</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-direction"><code>direction</code></a> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#entity()" class="member-name-link">entity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <a href="#param-entity"><code>entity</code></a> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Indicates whether some other object is "equal to" this one.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#face()" class="member-name-link">face</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <a href="#param-face"><code>face</code></a> record component.</div>
+<div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
@@ -194,21 +194,21 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity,net.minestom.server.instance.block.BlockFace,double)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,net.minestom.server.entity.Entity,net.minestom.server.coordinate.Vec,double)">
 <h3>EntityCollisionResult</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntityCollisionResult</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;collisionPoint,
  @NotNull
  @NotNull <a href="../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @Nullable
- @Nullable <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a>&nbsp;face,
+ @NotNull
+ @NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;direction,
  double&nbsp;percentage)</span></div>
 <div class="block">Creates an instance of a <code>EntityCollisionResult</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>collisionPoint</code> - the value for the <a href="#param-collisionPoint"><code>collisionPoint</code></a> record component</dd>
 <dd><code>entity</code> - the value for the <a href="#param-entity"><code>entity</code></a> record component</dd>
-<dd><code>face</code> - the value for the <a href="#param-face"><code>face</code></a> record component</dd>
+<dd><code>direction</code> - the value for the <a href="#param-direction"><code>direction</code></a> record component</dd>
 <dd><code>percentage</code> - the value for the <code>percentage</code> record component</dd>
 </dl>
 </section>
@@ -298,14 +298,14 @@ implements <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base
 </section>
 </li>
 <li>
-<section class="detail" id="face()">
-<h3>face</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../instance/block/BlockFace.html" title="enum class in net.minestom.server.instance.block">BlockFace</a></span>&nbsp;<span class="element-name">face</span>()</div>
-<div class="block">Returns the value of the <a href="#param-face"><code>face</code></a> record component.</div>
+<section class="detail" id="direction()">
+<h3>direction</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">direction</span>()</div>
+<div class="block">Returns the value of the <a href="#param-direction"><code>direction</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <a href="#param-face"><code>face</code></a> record component</dd>
+<dd>the value of the <a href="#param-direction"><code>direction</code></a> record component</dd>
 </dl>
 </section>
 </li>
