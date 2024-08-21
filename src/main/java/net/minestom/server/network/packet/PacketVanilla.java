@@ -23,9 +23,20 @@ public final class PacketVanilla {
 
     /**
      * Pool containing a buffer able to hold the largest packet.
+     * <p>
+     * Size starts with {@link ServerFlag#POOLED_BUFFER_SIZE} and doubles until {@link ServerFlag#MAX_PACKET_SIZE}.
      */
     public static final ObjectPool<NetworkBuffer> PACKET_POOL = ObjectPool.pool(
-            () -> NetworkBuffer.staticBuffer(ServerFlag.MAX_PACKET_SIZE, MinecraftServer.process()),
+            () -> NetworkBuffer.builder(25)
+                    .resizeStrategy((capacity, targetSize) -> {
+                                // Buffer capacity should never go above max packet size
+                                final long doubled = NetworkBuffer.ResizeStrategy.DOUBLE.resize(capacity, targetSize);
+                                final long maxPacketSize = ServerFlag.MAX_PACKET_SIZE;
+                                return Math.min(doubled, maxPacketSize);
+                            }
+                    )
+                    .registry(MinecraftServer.process())
+                    .build(),
             NetworkBuffer::clear);
 
     public static ConnectionState nextClientState(ClientPacket packet, ConnectionState currentState) {

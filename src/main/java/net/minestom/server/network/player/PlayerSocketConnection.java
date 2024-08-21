@@ -28,7 +28,6 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import java.io.IOException;
 import java.net.SocketAddress;
-import java.nio.BufferOverflowException;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Objects;
@@ -337,27 +336,32 @@ public class PlayerSocketConnection extends PlayerConnection {
         final long start = buffer.writeIndex();
         final int compressionThreshold = compressed ? MinecraftServer.getCompressionThreshold() : 0;
         try {
-            switch (packet) {
-                case ServerPacket serverPacket ->
-                        PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
+            return switch (packet) {
+                case ServerPacket serverPacket -> {
+                    PacketWriting.writeFramedPacket(buffer, state, serverPacket, compressionThreshold);
+                    yield true;
+                }
                 case FramedPacket framedPacket -> {
                     final NetworkBuffer body = framedPacket.body();
                     final long length = body.capacity();
-                    writeBuffer(buffer, body, 0, length);
+                    yield writeBuffer(buffer, body, 0, length);
                 }
                 case CachedPacket cachedPacket -> {
                     final NetworkBuffer body = cachedPacket.body(state);
                     if (body != null) {
                         final long length = body.capacity();
-                        writeBuffer(buffer, body, 0, length);
-                    } else
+                        yield writeBuffer(buffer, body, 0, length);
+                    } else {
                         PacketWriting.writeFramedPacket(buffer, state, cachedPacket.packet(state), compressionThreshold);
+                        yield true;
+                    }
                 }
-                case LazyPacket lazyPacket ->
-                        PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
-            }
-            return true;
-        } catch (IllegalArgumentException | IndexOutOfBoundsException | BufferOverflowException exception) {
+                case LazyPacket lazyPacket -> {
+                    PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
+                    yield true;
+                }
+            };
+        } catch (IllegalArgumentException | IndexOutOfBoundsException exception) {
             buffer.writeIndex(start);
             return false;
         }
@@ -397,11 +401,26 @@ public class PlayerSocketConnection extends PlayerConnection {
             NetworkBuffer buffer = hold.get();
             // Write to buffer
             Receivable packet;
+            int written = 0;
             while ((packet = packetQueue.peek()) != null) {
-                final boolean compressed = sentPacketCounter.getAndIncrement() > compressionStart;
+                final boolean compressed = sentPacketCounter.get() > compressionStart;
                 final boolean success = writeReceivable(buffer, packet, compressed);
-                if (success) packetQueue.poll();
-                else break;
+                // Poll the packet only if fully written
+                if (success) {
+                    // Packet fully written
+                    packetQueue.poll();
+                    sentPacketCounter.getAndIncrement();
+                    written++;
+                } else {
+                    if (written == 0) {
+                        // Try again with a bigger buffer
+                        buffer.resize(buffer.capacity() * 2);
+                    } else {
+                        // At least one packet has been written
+                        // Not worth resizing to fit more, we'll try again next flush
+                        break;
+                    }
+                }
             }
             // Write to channel
             final boolean success = buffer.writeChannel(channel);

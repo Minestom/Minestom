@@ -173,11 +173,13 @@ public final class PacketReading {
             if (dataLength > 0) {
                 // Decompress the packet into the pooled buffer
                 // and read the uncompressed packet from it
-                try (var hold = PacketVanilla.PACKET_POOL.hold()) {
-                    NetworkBuffer decompressed = hold.get();
+                NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
+                try {
                     decompressed.ensureWritable(dataLength);
                     content.decompress(content.readIndex(), content.readableBytes(), decompressed);
                     packet = readUncompressedPacket(decompressed, parser, state);
+                } finally {
+                    PacketVanilla.PACKET_POOL.add(decompressed);
                 }
             } else {
                 packet = readUncompressedPacket(content, parser, state);
