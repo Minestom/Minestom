@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
@@ -17,14 +18,14 @@ public final class PacketWriting {
     public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
                                          @NotNull ConnectionState state,
                                          @NotNull ClientPacket packet,
-                                         int compressionThreshold) {
+                                         int compressionThreshold) throws IndexOutOfBoundsException {
         writeFramedPacket(buffer, PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
     public static void writeFramedPacket(@NotNull NetworkBuffer buffer,
                                          @NotNull ConnectionState state,
                                          @NotNull ServerPacket packet,
-                                         int compressionThreshold) {
+                                         int compressionThreshold) throws IndexOutOfBoundsException {
         writeFramedPacket(buffer, PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
@@ -32,7 +33,7 @@ public final class PacketWriting {
                                              @NotNull PacketParser<T> parser,
                                              @NotNull ConnectionState state,
                                              @NotNull T packet,
-                                             int compressionThreshold) {
+                                             int compressionThreshold) throws IndexOutOfBoundsException {
         final PacketRegistry<T> registry = parser.stateRegistry(state);
         writeFramedPacket(buffer, registry, packet, compressionThreshold);
     }
@@ -40,7 +41,7 @@ public final class PacketWriting {
     public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
                                              @NotNull PacketRegistry<T> registry,
                                              @NotNull T packet,
-                                             int compressionThreshold) {
+                                             int compressionThreshold) throws IndexOutOfBoundsException {
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
         final int id = packetInfo.id();
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
@@ -54,14 +55,14 @@ public final class PacketWriting {
     public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
                                              @NotNull NetworkBuffer.Type<T> type,
                                              int id, @NotNull T packet,
-                                             int compressionThreshold) {
+                                             int compressionThreshold) throws IndexOutOfBoundsException {
         if (compressionThreshold <= 0) writeUncompressedFormat(buffer, type, id, packet);
         else writeCompressedFormat(buffer, type, id, packet, compressionThreshold);
     }
 
     private static <T> void writeUncompressedFormat(NetworkBuffer buffer,
                                                     NetworkBuffer.Type<T> type,
-                                                    int id, T packet) {
+                                                    int id, T packet) throws IndexOutOfBoundsException {
         // Uncompressed format https://wiki.vg/Protocol#Without_compression
         final long lengthIndex = buffer.advanceWrite(3);
         buffer.write(NetworkBuffer.VAR_INT, id);
@@ -73,7 +74,7 @@ public final class PacketWriting {
     private static <T> void writeCompressedFormat(NetworkBuffer buffer,
                                                   NetworkBuffer.Type<T> type,
                                                   int id, T packet,
-                                                  int compressionThreshold) {
+                                                  int compressionThreshold) throws IndexOutOfBoundsException {
         // Compressed format https://wiki.vg/Protocol#With_compression
         final long compressedIndex = buffer.advanceWrite(3);
         final long uncompressedIndex = buffer.advanceWrite(3);
@@ -103,22 +104,36 @@ public final class PacketWriting {
     public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
                                                       @NotNull ClientPacket packet,
                                                       int compressionThreshold) {
-        NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
-        try {
-            writeFramedPacket(buffer, state, packet, compressionThreshold);
-            return buffer.copy(0, buffer.writeIndex());
-        } finally {
-            PacketVanilla.PACKET_POOL.add(buffer);
-        }
+        return allocateTrimmedPacket(PacketVanilla.CLIENT_PACKET_PARSER, state, packet, compressionThreshold);
     }
 
     public static NetworkBuffer allocateTrimmedPacket(@NotNull ConnectionState state,
                                                       @NotNull ServerPacket packet,
                                                       int compressionThreshold) {
+        return allocateTrimmedPacket(PacketVanilla.SERVER_PACKET_PARSER, state, packet, compressionThreshold);
+    }
+
+    public static <T> NetworkBuffer allocateTrimmedPacket(
+            @NotNull PacketParser<T> parser,
+            @NotNull ConnectionState state,
+            @NotNull T packet,
+            int compressionThreshold) {
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         try {
-            writeFramedPacket(buffer, state, packet, compressionThreshold);
-            return buffer.copy(0, buffer.writeIndex());
+            while (true) {
+                try {
+                    final PacketRegistry<T> registry = parser.stateRegistry(state);
+                    writeFramedPacket(buffer, registry, packet, compressionThreshold);
+                    return buffer.copy(0, buffer.writeIndex());
+                } catch (IndexOutOfBoundsException e) {
+                    // Try again with doubled size
+                    final long capacity = buffer.capacity();
+                    if (capacity >= ServerFlag.MAX_PACKET_SIZE) {
+                        throw new IllegalStateException("Packet too large: " + capacity);
+                    }
+                    buffer.resize(capacity * 2);
+                }
+            }
         } finally {
             PacketVanilla.PACKET_POOL.add(buffer);
         }
