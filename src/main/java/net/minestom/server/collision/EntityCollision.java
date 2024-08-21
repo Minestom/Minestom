@@ -32,7 +32,7 @@ final class EntityCollision {
         }
     }
 
-    static List<EntityCollisionResult> checkCollision(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point point, @NotNull Vec entityVelocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+    static @NotNull List<EntityCollisionResult> checkCollision(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point point, @NotNull Vec entityVelocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
         double minimumRes = physicsResult != null ? physicsResult.res().res : Double.MAX_VALUE;
 
         List<EntityCollisionResult> result = new ArrayList<>();
