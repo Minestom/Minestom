@@ -13,10 +13,12 @@ import net.minestom.server.network.packet.server.configuration.FinishConfigurati
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.play.StartConfigurationPacket;
 import net.minestom.server.utils.ObjectPool;
+import org.jetbrains.annotations.ApiStatus;
 
 /**
  * Constants and utilities for vanilla packets.
  */
+@ApiStatus.Internal
 public final class PacketVanilla {
     public static final PacketParser<ClientPacket> CLIENT_PACKET_PARSER = new PacketParser.Client();
     public static final PacketParser<ServerPacket> SERVER_PACKET_PARSER = new PacketParser.Server();

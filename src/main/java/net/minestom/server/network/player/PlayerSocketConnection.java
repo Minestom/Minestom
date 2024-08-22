@@ -31,6 +31,7 @@ import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -58,7 +59,7 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int protocolVersion;
 
     private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
-    private final MpscUnboundedXaddArrayQueue<Receivable> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
+    private final MpscUnboundedXaddArrayQueue<SendablePacket> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
     // Index where compression starts, linked to `sentPacketCounter`
@@ -162,27 +163,14 @@ public class PlayerSocketConnection extends PlayerConnection {
         sendPacket(new SetCompressionPacket(threshold));
     }
 
-    sealed interface Receivable {
-        record Packet(SendablePacket packet) implements Receivable {
-        }
-
-        record Buffer(NetworkBuffer buffer, long index, long length) implements Receivable {
-        }
-    }
-
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        offer(new Receivable.Packet(packet));
+        offer(packet);
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
-        for (SendablePacket packet : packets) offer(new Receivable.Packet(packet));
-    }
-
-    @ApiStatus.Internal
-    public void write(@NotNull NetworkBuffer buffer, long index, long length) {
-        offer(new Receivable.Buffer(buffer, index, length));
+        for (SendablePacket packet : packets) offer(packet);
     }
 
     @Override
@@ -289,30 +277,19 @@ public class PlayerSocketConnection extends PlayerConnection {
         this.nonce = nonce;
     }
 
-    private void offer(Receivable receivable) {
-        this.packetQueue.relaxedOffer(receivable);
+    private void offer(SendablePacket sendablePacket) {
+        this.packetQueue.relaxedOffer(sendablePacket);
         signalWrite();
     }
 
-    private boolean writeReceivable(NetworkBuffer buffer, Receivable receivable, boolean compressed) {
+    private boolean writeSendable(NetworkBuffer buffer, SendablePacket sendable, boolean compressed) {
         final long start = buffer.writeIndex();
-        final boolean result = switch (receivable) {
-            case Receivable.Buffer receivableBuffer -> {
-                final NetworkBuffer rawBuffer = receivableBuffer.buffer();
-                final long index = receivableBuffer.index();
-                final long length = receivableBuffer.length();
-                yield writeBuffer(buffer, rawBuffer, index, length);
-            }
-            case Receivable.Packet packet -> writePacketSync(buffer, packet.packet(), compressed);
-        };
-        final long end = buffer.writeIndex();
-        final long length = end - start;
-        if (length == 0 || !result) {
-            return false;
-        }
+        final boolean result = writePacketSync(buffer, sendable, compressed);
+        if (!result) return false;
         // Encrypt data
+        final long length = buffer.writeIndex() - start;
         final EncryptionContext encryptionContext = this.encryptionContext;
-        if (encryptionContext != null) { // Encryption support
+        if (encryptionContext != null && length > 0) { // Encryption support
             buffer.cipher(encryptionContext.encrypt(), start, length);
         }
         return true;
@@ -325,9 +302,11 @@ public class PlayerSocketConnection extends PlayerConnection {
             // Outgoing event
             if (outgoing.hasListener()) {
                 final ServerPacket serverPacket = SendablePacket.extractServerPacket(state, packet);
-                PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
-                outgoing.call(event);
-                if (event.isCancelled()) return true;
+                if (serverPacket != null) { // Events are not called for buffered packets
+                    PlayerPacketOutEvent event = new PlayerPacketOutEvent(player, serverPacket);
+                    outgoing.call(event);
+                    if (event.isCancelled()) return true;
+                }
             }
             // Translation
             if (MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION && packet instanceof ServerPacket.ComponentHolding) {
@@ -360,6 +339,12 @@ public class PlayerSocketConnection extends PlayerConnection {
                 case LazyPacket lazyPacket -> {
                     PacketWriting.writeFramedPacket(buffer, state, lazyPacket.packet(), compressionThreshold);
                     yield true;
+                }
+                case BufferedPacket bufferedPacket -> {
+                    final NetworkBuffer rawBuffer = bufferedPacket.buffer();
+                    final long index = bufferedPacket.index();
+                    final long length = bufferedPacket.length();
+                    yield writeBuffer(buffer, rawBuffer, index, length);
                 }
             };
         } catch (IndexOutOfBoundsException exception) {
@@ -401,11 +386,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         if (!channel.isConnected()) throw new IOException("Channel is closed");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
-        Receivable packet;
+        SendablePacket packet;
         int written = 0;
         while ((packet = packetQueue.peek()) != null) {
             final boolean compressed = sentPacketCounter.get() > compressionStart;
-            final boolean success = writeReceivable(buffer, packet, compressed);
+            final boolean success = writeSendable(buffer, packet, compressed);
             assert !success || buffer.writeIndex() > 0;
             // Poll the packet only if fully written
             if (success) {
@@ -436,7 +421,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     public void awaitWrite() {
         try {
             this.writeLock.lock();
-            this.writeCondition.await();
+            //noinspection ResultOfMethodCallIgnored
+            this.writeCondition.await(50, TimeUnit.MILLISECONDS);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         } finally {

@@ -39,16 +39,19 @@ public final class Server {
     @ApiStatus.Internal
     public void init(SocketAddress address) throws IOException {
         ProtocolFamily family;
-        if (address instanceof InetSocketAddress inetSocketAddress) {
-            this.address = inetSocketAddress.getHostString();
-            this.port = inetSocketAddress.getPort();
-            family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
-        } else if (address instanceof UnixDomainSocketAddress unixDomainSocketAddress) {
-            this.address = "unix://" + unixDomainSocketAddress.getPath();
-            this.port = 0;
-            family = StandardProtocolFamily.UNIX;
-        } else {
-            throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
+        switch (address) {
+            case InetSocketAddress inetSocketAddress -> {
+                this.address = inetSocketAddress.getHostString();
+                this.port = inetSocketAddress.getPort();
+                family = inetSocketAddress.getAddress().getAddress().length == 4 ? StandardProtocolFamily.INET : StandardProtocolFamily.INET6;
+            }
+            case UnixDomainSocketAddress unixDomainSocketAddress -> {
+                this.address = "unix://" + unixDomainSocketAddress.getPath();
+                this.port = 0;
+                family = StandardProtocolFamily.UNIX;
+            }
+            default ->
+                    throw new IllegalArgumentException("Address must be an InetSocketAddress or a UnixDomainSocketAddress");
         }
 
         ServerSocketChannel server = ServerSocketChannel.open(family);

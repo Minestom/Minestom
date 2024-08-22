@@ -14,6 +14,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketWriting;
+import net.minestom.server.network.packet.server.BufferedPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -71,7 +72,7 @@ public final class PacketViewableUtils {
             PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, serverPacket, MinecraftServer.getCompressionThreshold());
             final long end = buffer.writeIndex();
             if (exception != null) {
-                final long offsets = (long) start << 32 | end & 0xFFFFFFFFL;
+                final long offsets = start << 32 | end & 0xFFFFFFFFL;
                 LongList list = entityIdMap.computeIfAbsent(exception.getEntityId(), id -> new LongArrayList());
                 list.add(offsets);
             }
@@ -90,26 +91,27 @@ public final class PacketViewableUtils {
             final long capacity = buffer.capacity();
             final PlayerConnection connection = player.getPlayerConnection();
             final LongArrayList pairs = entityIdMap.get(player.getEntityId());
-            if (pairs != null) {
-                // Ensure that we skip the specified parts of the buffer
-                int lastWrite = 0;
-                final long[] elements = pairs.elements();
-                for (int i = 0; i < pairs.size(); ++i) {
-                    final long offsets = elements[i];
-                    final int start = (int) (offsets >> 32);
-                    if (start != lastWrite) writeTo(connection, buffer, lastWrite, start - lastWrite);
-                    lastWrite = (int) offsets; // End = last 32 bits
-                }
-                if (capacity != lastWrite) writeTo(connection, buffer, lastWrite, capacity - lastWrite);
-            } else {
-                // Write all
+            if (pairs == null) {
+                // No range exception, write the whole buffer
                 writeTo(connection, buffer, 0, capacity);
+                return;
             }
+            // Player has range exception(s)
+            // Ensure that we skip the specified parts of the buffer
+            int lastWrite = 0;
+            final long[] elements = pairs.elements();
+            for (int i = 0; i < pairs.size(); ++i) {
+                final long offsets = elements[i];
+                final int start = (int) (offsets >> 32);
+                if (start != lastWrite) writeTo(connection, buffer, lastWrite, start - lastWrite);
+                lastWrite = (int) offsets; // End = last 32 bits
+            }
+            if (capacity != lastWrite) writeTo(connection, buffer, lastWrite, capacity - lastWrite);
         }
 
         private static void writeTo(PlayerConnection connection, NetworkBuffer buffer, long offset, long length) {
             if (connection instanceof PlayerSocketConnection socketConnection) {
-                socketConnection.write(buffer, offset, length);
+                socketConnection.sendPacket(new BufferedPacket(buffer, offset, length));
                 return;
             }
             // TODO for non-socket connection
