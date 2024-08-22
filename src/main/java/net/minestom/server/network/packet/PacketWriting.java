@@ -120,10 +120,17 @@ public final class PacketWriting {
             int compressionThreshold) {
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         try {
+            final PacketRegistry<T> registry = parser.stateRegistry(state);
+            final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
+            final int id = packetInfo.id();
+            final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
             while (true) {
                 try {
-                    final PacketRegistry<T> registry = parser.stateRegistry(state);
-                    writeFramedPacket(buffer, registry, packet, compressionThreshold);
+                    writeFramedPacket(
+                            buffer, serializer,
+                            id, packet,
+                            compressionThreshold
+                    );
                     return buffer.copy(0, buffer.writeIndex());
                 } catch (IndexOutOfBoundsException e) {
                     // Try again with doubled size
