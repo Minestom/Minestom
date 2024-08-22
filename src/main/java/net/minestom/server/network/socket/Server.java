@@ -9,6 +9,7 @@ import net.minestom.server.network.player.PlayerSocketConnection;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
 import java.nio.channels.ServerSocketChannel;
@@ -96,12 +97,11 @@ public final class Server {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (IOException e) {
-                // TODO print exception? (should ignore disconnection)
+            } catch (EOFException e) {
                 connection.disconnect();
                 break;
-            } catch (Throwable t) {
-                MinecraftServer.getExceptionManager().handleException(t);
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }
@@ -114,8 +114,7 @@ public final class Server {
         while (!stop) {
             try {
                 connection.flushSync();
-            } catch (IOException e) {
-                // TODO print exception? (should ignore disconnection)
+            } catch (EOFException e) {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {

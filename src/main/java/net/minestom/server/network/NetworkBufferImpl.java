@@ -10,6 +10,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
+import java.io.EOFException;
 import java.io.IOException;
 import java.lang.ref.Cleaner;
 import java.nio.ByteBuffer;
@@ -257,7 +258,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         assertOverflow(writeIndex + writableBytes());
         var buffer = bufferSlice((int) writeIndex, (int) writableBytes());
         final int count = channel.read(buffer);
-        if (count == -1) throw new IOException("Disconnected"); // EOS
+        if (count == -1) throw new EOFException("Disconnected");
         advanceWrite(count);
         return count;
     }
@@ -271,7 +272,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (!buffer.hasRemaining())
             return true; // Nothing to write
         final int count = channel.write(buffer);
-        if (count == -1) throw new IOException("Disconnected"); // EOS
+        if (count == -1) throw new EOFException("Disconnected");
         advanceRead(count);
         return !buffer.hasRemaining();
     }

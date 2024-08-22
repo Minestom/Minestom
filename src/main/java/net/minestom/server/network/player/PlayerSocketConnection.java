@@ -26,6 +26,7 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import java.io.EOFException;
 import java.io.IOException;
 import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
@@ -383,7 +384,7 @@ public class PlayerSocketConnection extends PlayerConnection {
         if (packetQueue.isEmpty()) {
             awaitWrite();
         }
-        if (!channel.isConnected()) throw new IOException("Channel is closed");
+        if (!channel.isConnected()) throw new EOFException("Channel is closed");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
         SendablePacket packet;
