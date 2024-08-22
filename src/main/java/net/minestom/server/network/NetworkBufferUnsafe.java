@@ -10,6 +10,7 @@ final class NetworkBufferUnsafe {
     static final Unsafe UNSAFE;
 
     static final Field ADDRESS, CAPACITY;
+    static final long ADDRESS_OFFSET, CAPACITY_OFFSET;
 
     static {
         try {
@@ -25,6 +26,8 @@ final class NetworkBufferUnsafe {
             CAPACITY = Buffer.class.getDeclaredField("capacity");
             // Use Unsafe to read value of the address field. This way it will not fail on JDK9+ which
             // will forbid changing the access level via reflection.
+            ADDRESS_OFFSET = UNSAFE.objectFieldOffset(ADDRESS);
+            CAPACITY_OFFSET = UNSAFE.objectFieldOffset(CAPACITY);
         } catch (NoSuchFieldException e) {
             throw new AssertionError(e);
         }
@@ -36,12 +39,10 @@ final class NetworkBufferUnsafe {
     static final long BYTE_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(byte[].class);
 
     static void updateAddress(ByteBuffer buffer, long address) {
-        final long offset = UNSAFE.objectFieldOffset(ADDRESS);
-        UNSAFE.putLong(buffer, offset, address);
+        UNSAFE.putLong(buffer, ADDRESS_OFFSET, address);
     }
 
     static void updateCapacity(ByteBuffer buffer, int capacity) {
-        final long offset = UNSAFE.objectFieldOffset(CAPACITY);
-        UNSAFE.putInt(buffer, offset, capacity);
+        UNSAFE.putInt(buffer, CAPACITY_OFFSET, capacity);
     }
 }
