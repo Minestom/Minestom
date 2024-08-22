@@ -17,9 +17,6 @@ import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
 
 public final class Server {
-
-    public static final boolean NO_DELAY = true;
-
     private volatile boolean stop;
 
     private final PacketParser<ClientPacket> packetParser;
@@ -87,8 +84,8 @@ public final class Server {
             Socket socket = channel.socket();
             socket.setSendBufferSize(ServerFlag.SOCKET_SEND_BUFFER_SIZE);
             socket.setReceiveBufferSize(ServerFlag.SOCKET_RECEIVE_BUFFER_SIZE);
-            socket.setTcpNoDelay(Server.NO_DELAY);
-            socket.setSoTimeout(30 * 1000); // 30 seconds
+            socket.setTcpNoDelay(ServerFlag.SOCKET_NO_DELAY);
+            socket.setSoTimeout(ServerFlag.SOCKET_TIMEOUT);
         }
     }
 
