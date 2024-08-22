@@ -226,11 +226,11 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return resizableBuffer(null);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex, @Nullable Registries registries) {
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
         return NetworkBufferImpl.wrap(bytes, readIndex, writeIndex, registries);
     }
 
-    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, long readIndex, long writeIndex) {
+    static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex) {
         return wrap(bytes, readIndex, writeIndex, null);
     }
 
@@ -250,12 +250,9 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     }
 
     static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
-        NetworkBuffer writer = resizableBuffer(256, registries);
-        writing.accept(writer);
-        final int length = Math.toIntExact(writer.writeIndex());
-        byte[] bytes = new byte[length];
-        writer.copyTo(0, bytes, 0, bytes.length);
-        return bytes;
+        NetworkBuffer buffer = resizableBuffer(256, registries);
+        writing.accept(buffer);
+        return buffer.read(RAW_BYTES);
     }
 
     static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
