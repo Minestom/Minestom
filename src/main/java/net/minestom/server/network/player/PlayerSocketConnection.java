@@ -97,46 +97,48 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
         // Read all packets
+        final PacketReading.Result<ClientPacket> result;
         try {
-            final PacketReading.Result<ClientPacket> result = PacketReading.readPackets(
+            result = PacketReading.readPackets(
                     readBuffer,
                     packetParser,
                     getConnectionState(), PacketVanilla::nextClientState,
                     compression()
             );
-            switch (result) {
-                case PacketReading.Result.Success<ClientPacket> success -> {
-                    for (ClientPacket packet : success.packets()) {
-                        try {
-                            if (packet.processImmediately()) {
-                                MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
-                            } else {
-                                // To be processed during the next player tick
-                                final Player player = getPlayer();
-                                assert player != null;
-                                player.addPacketToQueue(packet);
-                            }
-                        } catch (Exception e) {
-                            MinecraftServer.getExceptionManager().handleException(e);
-                        }
-                    }
-                    // Compact in case of incomplete read
-                    readBuffer.compact();
-                }
-                case PacketReading.Result.Empty<ClientPacket> ignored -> {
-                    // Empty
-                }
-                case PacketReading.Result.Failure<ClientPacket> failure -> {
-                    // Resize for next read
-                    final long requiredCapacity = failure.requiredCapacity();
-                    assert requiredCapacity > readBuffer.capacity() :
-                            "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
-                    readBuffer.resize(requiredCapacity);
-                }
-            }
         } catch (DataFormatException e) {
             MinecraftServer.getExceptionManager().handleException(e);
             disconnect();
+            return;
+        }
+        switch (result) {
+            case PacketReading.Result.Success<ClientPacket> success -> {
+                for (ClientPacket packet : success.packets()) {
+                    try {
+                        if (packet.processImmediately()) {
+                            MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                        } else {
+                            // To be processed during the next player tick
+                            final Player player = getPlayer();
+                            assert player != null;
+                            player.addPacketToQueue(packet);
+                        }
+                    } catch (Exception e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                }
+                // Compact in case of incomplete read
+                readBuffer.compact();
+            }
+            case PacketReading.Result.Empty<ClientPacket> ignored -> {
+                // Empty
+            }
+            case PacketReading.Result.Failure<ClientPacket> failure -> {
+                // Resize for next read
+                final long requiredCapacity = failure.requiredCapacity();
+                assert requiredCapacity > readBuffer.capacity() :
+                        "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
+                readBuffer.resize(requiredCapacity);
+            }
         }
     }
 
@@ -166,12 +168,14 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
-        offer(packet);
+        this.packetQueue.relaxedOffer(packet);
+        signalWrite();
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
-        for (SendablePacket packet : packets) offer(packet);
+        for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
+        signalWrite();
     }
 
     @Override
@@ -276,11 +280,6 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     public void setNonce(byte[] nonce) {
         this.nonce = nonce;
-    }
-
-    private void offer(SendablePacket sendablePacket) {
-        this.packetQueue.relaxedOffer(sendablePacket);
-        signalWrite();
     }
 
     private boolean writeSendable(NetworkBuffer buffer, SendablePacket sendable, boolean compressed) {
