@@ -30,7 +30,7 @@ public final class ServerFlag {
 
     // Network buffers
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
-    public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8192);
+    public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
     public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
     public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
     public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
@@ -43,9 +43,9 @@ public final class ServerFlag {
     public static final float CHUNKS_PER_TICK_MULTIPLIER = floatProperty("minestom.chunk-queue.multiplier", 1f);
 
     // Packet sending optimizations
-    public static final boolean GROUPED_PACKET = booleanProperty("minestom.grouped-packet", false);
+    public static final boolean GROUPED_PACKET = booleanProperty("minestom.grouped-packet", true);
     public static final boolean CACHED_PACKET = booleanProperty("minestom.cached-packet", true);
-    public static final boolean VIEWABLE_PACKET = booleanProperty("minestom.viewable-packet", false);
+    public static final boolean VIEWABLE_PACKET = booleanProperty("minestom.viewable-packet", true);
 
     // Tags
     public static final boolean TAG_HANDLER_CACHE_ENABLED = booleanProperty("minestom.tag-handler-cache", true);
