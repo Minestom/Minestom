@@ -66,7 +66,7 @@ public final class PacketSendingUtils {
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet,
                                          @NotNull Predicate<Player> predicate) {
-        final SendablePacket sendablePacket = shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
+        final SendablePacket sendablePacket = groupedPacket(packet);
         players.forEach(player -> {
             if (predicate.test(player)) player.sendPacket(sendablePacket);
         });
@@ -74,16 +74,21 @@ public final class PacketSendingUtils {
 
     /**
      * Same as {@link #sendGroupedPacket(Collection, ServerPacket, Predicate)}
-     * but with the player validator sets to null.
+     * but without any predicate.
      *
      * @see #sendGroupedPacket(Collection, ServerPacket, Predicate)
      */
     public static void sendGroupedPacket(@NotNull Collection<Player> players, @NotNull ServerPacket packet) {
-        sendGroupedPacket(players, packet, player -> true);
+        final SendablePacket sendablePacket = groupedPacket(packet);
+        players.forEach(player -> player.sendPacket(sendablePacket));
     }
 
     public static void broadcastPlayPacket(@NotNull ServerPacket packet) {
         sendGroupedPacket(MinecraftServer.getConnectionManager().getOnlinePlayers(), packet);
+    }
+
+    static SendablePacket groupedPacket(ServerPacket packet) {
+        return shouldUseCachePacket(packet) ? new CachedPacket(packet) : packet;
     }
 
     /**
