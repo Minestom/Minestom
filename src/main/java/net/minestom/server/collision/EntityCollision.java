@@ -32,12 +32,13 @@ final class EntityCollision {
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {
                 var p = Pos.fromPoint(point);
                 result.add(new EntityCollisionResult(p, e, Vec.ZERO, 0));
+                continue;
             }
 
             // Check collisions with entity
-            e.getBoundingBox().intersectBoxSwept(point, entityVelocity, e.getPosition(), boundingBox, sweepResult);
+            boolean intersected = e.getBoundingBox().intersectBoxSwept(point, entityVelocity, e.getPosition(), boundingBox, sweepResult);
 
-            if (sweepResult.res < 1) {
+            if (intersected && sweepResult.res < 1) {
                 var p = Pos.fromPoint(point).add(entityVelocity.mul(sweepResult.res));
                 Vec direction = new Vec(sweepResult.collidedPositionX, sweepResult.collidedPositionY, sweepResult.collidedPositionZ);
                 result.add(new EntityCollisionResult(p, e, direction, sweepResult.res));
