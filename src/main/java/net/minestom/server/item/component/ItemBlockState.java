@@ -15,7 +15,7 @@ import java.util.Map;
 public record ItemBlockState(@NotNull Map<String, String> properties) {
     public static final ItemBlockState EMPTY = new ItemBlockState(Map.of());
 
-    public static NetworkBuffer.Type<ItemBlockState> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ItemBlockState> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING), ItemBlockState::properties,
             ItemBlockState::new
     );

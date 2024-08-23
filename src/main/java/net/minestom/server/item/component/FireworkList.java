@@ -15,7 +15,7 @@ import java.util.List;
 public record FireworkList(byte flightDuration, @NotNull List<FireworkExplosion> explosions) {
     public static final FireworkList EMPTY = new FireworkList((byte) 0, List.of());
 
-    public static NetworkBuffer.Type<FireworkList> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<FireworkList> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.BYTE, FireworkList::flightDuration,
             FireworkExplosion.NETWORK_TYPE.list(256), FireworkList::explosions,
             FireworkList::new

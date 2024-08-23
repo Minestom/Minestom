@@ -14,13 +14,13 @@ public record TagsPacket(List<Registry> registries) implements ServerPacket.Conf
         registries = List.copyOf(registries);
     }
 
-    public static NetworkBuffer.Type<TagsPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<TagsPacket> SERIALIZER = NetworkBufferTemplate.template(
             Registry.SERIALIZER.list(), TagsPacket::registries,
             TagsPacket::new
     );
 
     public record Registry(String registry, List<Tag> tags) {
-        public static NetworkBuffer.Type<Registry> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Registry> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Registry::registry,
                 Tag.SERIALIZER.list(), Registry::tags,
                 Registry::new
@@ -32,7 +32,7 @@ public record TagsPacket(List<Registry> registries) implements ServerPacket.Conf
     }
 
     public record Tag(String identifier, int[] entries) {
-        public static NetworkBuffer.Type<Tag> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Tag> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Tag::identifier,
                 VAR_INT_ARRAY, Tag::entries,
                 Tag::new

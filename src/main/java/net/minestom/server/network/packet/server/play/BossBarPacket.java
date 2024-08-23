@@ -76,7 +76,7 @@ public record BossBarPacket(@NotNull UUID uuid,
                     AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public static NetworkBuffer.Type<AddAction> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<AddAction> SERIALIZER = NetworkBufferTemplate.template(
                 COMPONENT, AddAction::title,
                 FLOAT, AddAction::health,
                 Enum(BossBar.Color.class), AddAction::color,
@@ -102,7 +102,7 @@ public record BossBarPacket(@NotNull UUID uuid,
     }
 
     public record RemoveAction() implements Action {
-        public static NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(RemoveAction::new);
+        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(RemoveAction::new);
 
         @Override
         public int id() {
@@ -115,7 +115,7 @@ public record BossBarPacket(@NotNull UUID uuid,
             this(bar.progress());
         }
 
-        public static NetworkBuffer.Type<UpdateHealthAction> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<UpdateHealthAction> SERIALIZER = NetworkBufferTemplate.template(
                 FLOAT, UpdateHealthAction::health,
                 UpdateHealthAction::new
         );
@@ -131,7 +131,7 @@ public record BossBarPacket(@NotNull UUID uuid,
             this(bar.name());
         }
 
-        public static NetworkBuffer.Type<UpdateTitleAction> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<UpdateTitleAction> SERIALIZER = NetworkBufferTemplate.template(
                 COMPONENT, UpdateTitleAction::title,
                 UpdateTitleAction::new
         );
@@ -158,7 +158,7 @@ public record BossBarPacket(@NotNull UUID uuid,
             this(bar.color(), bar.overlay());
         }
 
-        public static NetworkBuffer.Type<UpdateStyleAction> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<UpdateStyleAction> SERIALIZER = NetworkBufferTemplate.template(
                 Enum(BossBar.Color.class), UpdateStyleAction::color,
                 Enum(BossBar.Overlay.class), UpdateStyleAction::overlay,
                 UpdateStyleAction::new
@@ -175,7 +175,7 @@ public record BossBarPacket(@NotNull UUID uuid,
             this(AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public static NetworkBuffer.Type<UpdateFlagsAction> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<UpdateFlagsAction> SERIALIZER = NetworkBufferTemplate.template(
                 BYTE, UpdateFlagsAction::flags,
                 UpdateFlagsAction::new
         );

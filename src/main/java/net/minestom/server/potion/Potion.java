@@ -137,7 +137,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration,
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
-    public static NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
             PotionEffect.NETWORK_TYPE, Potion::effect,
             BYTE, Potion::amplifier,
             VAR_INT, Potion::duration,

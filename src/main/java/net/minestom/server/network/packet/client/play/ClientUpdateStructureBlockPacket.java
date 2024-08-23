@@ -15,7 +15,7 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
                                                String metadata, float integrity,
                                                long seed, byte flags) implements ClientPacket {
 
-    public static NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateStructureBlockPacket::location,
             NetworkBuffer.Enum(Action.class), ClientUpdateStructureBlockPacket::action,
             NetworkBuffer.Enum(Mode.class), ClientUpdateStructureBlockPacket::mode,

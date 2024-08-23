@@ -15,7 +15,7 @@ public record ClientResourcePackStatusPacket(
         @NotNull UUID id,
         @NotNull ResourcePackStatus status
 ) implements ClientPacket {
-    public static NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ClientResourcePackStatusPacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, ClientResourcePackStatusPacket::id,
             VAR_INT.transform(ClientResourcePackStatusPacket::readStatus, ClientResourcePackStatusPacket::statusId), ClientResourcePackStatusPacket::status,
             ClientResourcePackStatusPacket::new

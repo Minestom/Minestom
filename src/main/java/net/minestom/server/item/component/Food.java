@@ -19,7 +19,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
                    @NotNull ItemStack usingConvertsTo, @NotNull List<EffectChance> effects) {
     public static final float DEFAULT_EAT_SECONDS = 1.6f;
 
-    public static NetworkBuffer.Type<Food> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<Food> NETWORK_TYPE = NetworkBufferTemplate.template(
             VAR_INT, Food::nutrition,
             FLOAT, Food::saturationModifier,
             BOOLEAN, Food::canAlwaysEat,
@@ -61,7 +61,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
     }
 
     public record EffectChance(@NotNull CustomPotionEffect effect, float probability) {
-        public static NetworkBuffer.Type<EffectChance> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<EffectChance> NETWORK_TYPE = NetworkBufferTemplate.template(
                 CustomPotionEffect.NETWORK_TYPE, EffectChance::effect,
                 FLOAT, EffectChance::probability,
                 EffectChance::new

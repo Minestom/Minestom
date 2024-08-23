@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 public record SignedMessageHeader(@Nullable MessageSignature previousSignature, @NotNull UUID sender) {
-    public static NetworkBuffer.Type<SignedMessageHeader> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<SignedMessageHeader> SERIALIZER = NetworkBufferTemplate.template(
             MessageSignature.SERIALIZER.optional(), SignedMessageHeader::previousSignature,
             NetworkBuffer.UUID, SignedMessageHeader::sender,
             SignedMessageHeader::new

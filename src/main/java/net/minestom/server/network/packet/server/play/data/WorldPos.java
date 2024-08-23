@@ -8,7 +8,7 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public record WorldPos(@NotNull String dimension, @NotNull Point blockPosition) {
-    public static NetworkBuffer.Type<WorldPos> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<WorldPos> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, WorldPos::dimension,
             NetworkBuffer.BLOCK_POSITION, WorldPos::blockPosition,
             WorldPos::new

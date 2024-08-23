@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.INT;
 public record ChunkDataPacket(int chunkX, int chunkZ,
                               @NotNull ChunkData chunkData,
                               @NotNull LightData lightData) implements ServerPacket.Play {
-    public static NetworkBuffer.Type<ChunkDataPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ChunkDataPacket> SERIALIZER = NetworkBufferTemplate.template(
             INT, ChunkDataPacket::chunkX,
             INT, ChunkDataPacket::chunkZ,
             ChunkData.NETWORK_TYPE, ChunkDataPacket::chunkData,

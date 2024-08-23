@@ -18,7 +18,7 @@ public record LightData(
 ) {
     public static final int MAX_SECTIONS = 4096 / 16;
 
-    public static NetworkBuffer.Type<LightData> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<LightData> SERIALIZER = NetworkBufferTemplate.template(
             BITSET, LightData::skyMask,
             BITSET, LightData::blockMask,
             BITSET, LightData::emptySkyMask,

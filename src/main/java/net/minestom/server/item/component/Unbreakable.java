@@ -8,7 +8,7 @@ import net.minestom.server.utils.nbt.BinaryTagSerializer;
 public record Unbreakable(boolean showInTooltip) {
     public static final Unbreakable DEFAULT = new Unbreakable();
 
-    public static NetworkBuffer.Type<Unbreakable> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<Unbreakable> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.BOOLEAN, Unbreakable::showInTooltip,
             Unbreakable::new
     );

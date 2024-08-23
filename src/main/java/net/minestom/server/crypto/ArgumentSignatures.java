@@ -15,13 +15,13 @@ public record ArgumentSignatures(@NotNull List<@NotNull Entry> entries) {
         entries = List.copyOf(entries);
     }
 
-    public static NetworkBuffer.Type<ArgumentSignatures> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ArgumentSignatures> SERIALIZER = NetworkBufferTemplate.template(
             Entry.SERIALIZER.list(MAX_ENTRIES), ArgumentSignatures::entries,
             ArgumentSignatures::new
     );
 
     public record Entry(@NotNull String name, @NotNull MessageSignature signature) {
-        public static NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Entry::name,
                 MessageSignature.SERIALIZER, Entry::signature,
                 Entry::new

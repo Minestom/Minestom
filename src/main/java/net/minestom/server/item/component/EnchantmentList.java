@@ -18,7 +18,7 @@ public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Int
                               boolean showInTooltip) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of(), true);
 
-    public static NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(
             Enchantment.NETWORK_TYPE.mapValue(NetworkBuffer.VAR_INT, Short.MAX_VALUE), EnchantmentList::enchantments,
             NetworkBuffer.BOOLEAN, EnchantmentList::showInTooltip,
             EnchantmentList::new

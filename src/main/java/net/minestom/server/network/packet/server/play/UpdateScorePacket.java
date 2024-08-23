@@ -17,7 +17,7 @@ public record UpdateScorePacket(
         @Nullable Component displayName,
         @Nullable Sidebar.NumberFormat numberFormat
 ) implements ServerPacket.Play {
-    public static NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<UpdateScorePacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING, UpdateScorePacket::entityName,
             STRING, UpdateScorePacket::objectiveName,
             VAR_INT, UpdateScorePacket::score,

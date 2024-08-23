@@ -8,7 +8,7 @@ import java.util.BitSet;
 import static net.minestom.server.network.NetworkBuffer.BITSET;
 
 public record FilterMask(@NotNull Type type, @NotNull BitSet mask) {
-    public static NetworkBuffer.Type<FilterMask> SERIALIZER = new NetworkBuffer.Type<>() {
+    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, FilterMask value) {
             buffer.write(NetworkBuffer.Enum(Type.class), value.type);

@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material,
                         @NotNull DynamicRegistry.Key<TrimPattern> pattern, boolean showInTooltip) {
 
-    public static NetworkBuffer.Type<ArmorTrim> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ArmorTrim> NETWORK_TYPE = NetworkBufferTemplate.template(
             TrimMaterial.NETWORK_TYPE, ArmorTrim::material,
             TrimPattern.NETWORK_TYPE, ArmorTrim::pattern,
             NetworkBuffer.BOOLEAN, ArmorTrim::showInTooltip,

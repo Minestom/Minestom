@@ -17,7 +17,7 @@ public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries)
         entries = List.copyOf(entries);
     }
 
-    public static NetworkBuffer.Type<LastSeenMessages> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<LastSeenMessages> SERIALIZER = NetworkBufferTemplate.template(
             MessageSignature.SERIALIZER.list(MAX_ENTRIES), LastSeenMessages::entries,
             LastSeenMessages::new
     );
@@ -25,7 +25,7 @@ public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries)
     public record Packed(@NotNull List<MessageSignature.@NotNull Packed> entries) {
         public static final Packed EMPTY = new Packed(List.of());
 
-        public static NetworkBuffer.Type<Packed> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = NetworkBufferTemplate.template(
                 MessageSignature.Packed.SERIALIZER.list(MAX_ENTRIES), Packed::entries,
                 Packed::new
         );

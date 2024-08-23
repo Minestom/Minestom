@@ -18,7 +18,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
-    public static NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
             PropertiesPredicate::new
     );
@@ -81,7 +81,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
          * @param max The max value to match, exclusive
          */
         record Range(@Nullable String min, @Nullable String max) implements ValuePredicate {
-            public static NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
+            public static final NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
                     STRING.optional(), Range::min,
                     STRING.optional(), Range::max,
                     Range::new

@@ -16,7 +16,7 @@ public final class SignedMessageBody {
             }
         }
 
-        public static NetworkBuffer.Type<Packed> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING, Packed::content,
                 NetworkBuffer.INSTANT_MS, Packed::timeStamp,
                 NetworkBuffer.LONG, Packed::salt,

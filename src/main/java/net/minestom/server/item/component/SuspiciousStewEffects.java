@@ -33,7 +33,7 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
 
     public record Effect(@NotNull PotionEffect id, int durationTicks) {
 
-        public static NetworkBuffer.Type<Effect> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Effect> NETWORK_TYPE = NetworkBufferTemplate.template(
                 PotionEffect.NETWORK_TYPE, Effect::id,
                 NetworkBuffer.VAR_INT, Effect::durationTicks,
                 Effect::new

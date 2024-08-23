@@ -20,7 +20,7 @@ import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInTooltip) {
     public static final AttributeList EMPTY = new AttributeList(List.of(), true);
 
-    public static NetworkBuffer.Type<AttributeList> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = NetworkBufferTemplate.template(
             Modifier.NETWORK_TYPE.list(Short.MAX_VALUE), AttributeList::modifiers,
             BOOLEAN, AttributeList::showInTooltip,
             AttributeList::new
@@ -54,7 +54,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
 
     public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier,
                            @NotNull EquipmentSlotGroup slot) {
-        public static NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
                 Attribute.NETWORK_TYPE, Modifier::attribute,
                 AttributeModifier.NETWORK_TYPE, Modifier::modifier,
                 NetworkBuffer.Enum(EquipmentSlotGroup.class), Modifier::slot,

@@ -10,7 +10,7 @@ import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record ClientAdvancementTabPacket(@NotNull AdvancementAction action,
                                          @Nullable String tabIdentifier) implements ClientPacket {
-    public static NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+    public static final NetworkBuffer.Type<ClientAdvancementTabPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ClientAdvancementTabPacket value) {
             buffer.write(NetworkBuffer.Enum(AdvancementAction.class), value.action);

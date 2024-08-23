@@ -31,7 +31,7 @@ public record BasicQueryResponse(String motd, String gameType,
         );
     }
 
-    public static NetworkBuffer.Type<BasicQueryResponse> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<BasicQueryResponse> SERIALIZER = NetworkBufferTemplate.template(
             STRING_TERMINATED, BasicQueryResponse::motd,
             STRING_TERMINATED, BasicQueryResponse::gameType,
             STRING_TERMINATED, BasicQueryResponse::map,

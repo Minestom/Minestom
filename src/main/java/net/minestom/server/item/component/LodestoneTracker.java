@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 
 public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
 
-    public static NetworkBuffer.Type<LodestoneTracker> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<LodestoneTracker> NETWORK_TYPE = NetworkBufferTemplate.template(
             WorldPos.NETWORK_TYPE.optional(), LodestoneTracker::target,
             NetworkBuffer.BOOLEAN, LodestoneTracker::tracked,
             LodestoneTracker::new

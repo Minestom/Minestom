@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record Bee(@NotNull CustomData entityData, int ticksInHive, int minTicksInHive) {
 
-    public static NetworkBuffer.Type<Bee> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<Bee> NETWORK_TYPE = NetworkBufferTemplate.template(
             CustomData.NETWORK_TYPE, Bee::entityData,
             NetworkBuffer.VAR_INT, Bee::ticksInHive,
             NetworkBuffer.VAR_INT, Bee::minTicksInHive,

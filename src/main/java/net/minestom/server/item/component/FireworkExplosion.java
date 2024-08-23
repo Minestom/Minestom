@@ -30,7 +30,7 @@ public record FireworkExplosion(
         BURST
     }
 
-    public static NetworkBuffer.Type<FireworkExplosion> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<FireworkExplosion> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.Enum(Shape.class), FireworkExplosion::shape,
             Color.NETWORK_TYPE.list(Short.MAX_VALUE), FireworkExplosion::colors,
             Color.NETWORK_TYPE.list(Short.MAX_VALUE), FireworkExplosion::fadeColors,

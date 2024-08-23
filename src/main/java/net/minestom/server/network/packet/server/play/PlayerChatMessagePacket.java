@@ -26,7 +26,7 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
                                       int msgTypeId, Component msgTypeName,
                                       @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
 
-    public static NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
             UUID, PlayerChatMessagePacket::sender,
             VAR_INT, PlayerChatMessagePacket::index,
             RAW_BYTES.optional(), PlayerChatMessagePacket::signature,

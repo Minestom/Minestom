@@ -18,7 +18,7 @@ public record WrittenBookContent(@NotNull FilteredText<String> title, @NotNull S
                                  @NotNull List<FilteredText<Component>> pages, boolean resolved) {
     public static final WrittenBookContent EMPTY = new WrittenBookContent(new FilteredText<>("", null), "", 0, List.of(), true);
 
-    public static NetworkBuffer.Type<WrittenBookContent> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<WrittenBookContent> NETWORK_TYPE = NetworkBufferTemplate.template(
             FilteredText.STRING_NETWORK_TYPE, WrittenBookContent::title,
             STRING, WrittenBookContent::author,
             VAR_INT, WrittenBookContent::generation,

@@ -19,7 +19,7 @@ import static net.minestom.server.network.NetworkBuffer.UUID;
 public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull List<Property> properties) {
     public static final HeadProfile EMPTY = new HeadProfile(null, null, List.of());
 
-    public static NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = NetworkBufferTemplate.template(
             STRING.optional(), HeadProfile::name,
             UUID.optional(), HeadProfile::uuid,
             Property.NETWORK_TYPE.list(Short.MAX_VALUE), HeadProfile::properties,
@@ -56,7 +56,7 @@ public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull L
     }
 
     public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
-        public static NetworkBuffer.Type<Property> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Property> NETWORK_TYPE = NetworkBufferTemplate.template(
                 STRING, Property::name,
                 STRING, Property::value,
                 STRING.optional(), Property::signature,

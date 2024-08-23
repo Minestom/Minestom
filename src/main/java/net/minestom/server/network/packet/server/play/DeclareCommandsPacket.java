@@ -20,7 +20,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         nodes = List.copyOf(nodes);
     }
 
-    public static NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<DeclareCommandsPacket> SERIALIZER = NetworkBufferTemplate.template(
             Node.SERIALIZER.list(MAX_NODES), DeclareCommandsPacket::nodes,
             VAR_INT, DeclareCommandsPacket::rootIndex,
             DeclareCommandsPacket::new
@@ -40,7 +40,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         public byte[] properties; // Only for argument
         public String suggestionsType = ""; // Only if flags 0x10
 
-        public static NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {
+        public static final NetworkBuffer.Type<Node> SERIALIZER = new Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer writer, Node value) {
                 writer.write(BYTE, value.flags);

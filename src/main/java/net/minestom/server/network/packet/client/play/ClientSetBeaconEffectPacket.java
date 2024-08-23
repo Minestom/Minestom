@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 public record ClientSetBeaconEffectPacket(@Nullable PotionType primaryEffect,
                                           @Nullable PotionType secondaryEffect) implements ClientPacket {
-    public static NetworkBuffer.Type<ClientSetBeaconEffectPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<ClientSetBeaconEffectPacket> SERIALIZER = NetworkBufferTemplate.template(
             PotionType.NETWORK_TYPE.optional(), ClientSetBeaconEffectPacket::primaryEffect,
             PotionType.NETWORK_TYPE.optional(), ClientSetBeaconEffectPacket::secondaryEffect,
             ClientSetBeaconEffectPacket::new

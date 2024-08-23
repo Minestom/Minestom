@@ -63,7 +63,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
 
     public record Rule(@NotNull BlockTypeFilter blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
-        public static NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
                 BlockTypeFilter.NETWORK_TYPE, Rule::blocks,
                 NetworkBuffer.FLOAT, Rule::speed,
                 NetworkBuffer.BOOLEAN.optional(), Rule::correctForDrops,

@@ -23,7 +23,7 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name, @NotNull Lis
         properties = List.copyOf(properties);
     }
 
-    public static NetworkBuffer.Type<GameProfile> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<GameProfile> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, GameProfile::uuid,
             STRING, GameProfile::name,
             Property.SERIALIZER.list(MAX_PROPERTIES), GameProfile::properties,
@@ -35,7 +35,7 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name, @NotNull Lis
             this(name, value, null);
         }
 
-        public static NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
+        public static final NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Property::name,
                 STRING, Property::value,
                 STRING.optional(), Property::signature,

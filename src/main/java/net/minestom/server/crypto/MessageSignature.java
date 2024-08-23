@@ -16,7 +16,7 @@ public record MessageSignature(byte @NotNull [] signature) {
         }
     }
 
-    public static NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.RAW_BYTES, MessageSignature::signature,
             MessageSignature::new
     );

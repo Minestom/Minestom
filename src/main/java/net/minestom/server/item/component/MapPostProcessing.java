@@ -6,5 +6,5 @@ public enum MapPostProcessing {
     LOCK,
     SCALE;
 
-    public static NetworkBuffer.Type<MapPostProcessing> NETWORK_TYPE = NetworkBuffer.Enum(MapPostProcessing.class);
+    public static final NetworkBuffer.Type<MapPostProcessing> NETWORK_TYPE = NetworkBuffer.Enum(MapPostProcessing.class);
 }

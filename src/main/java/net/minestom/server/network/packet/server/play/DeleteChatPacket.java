@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
 public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
-    public static NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = NetworkBufferTemplate.template(
             MessageSignature.SERIALIZER, DeleteChatPacket::signature,
             DeleteChatPacket::new
     );

@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record StopSoundPacket(byte flags, @Nullable Sound.Source source,
                               @Nullable String sound) implements ServerPacket.Play {
-    public static NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new Type<>() {
+    public static final NetworkBuffer.Type<StopSoundPacket> SERIALIZER = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, StopSoundPacket value) {
             buffer.write(BYTE, value.flags());

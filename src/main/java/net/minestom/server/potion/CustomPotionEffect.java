@@ -15,7 +15,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  */
 public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings settings) {
 
-    public static NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = NetworkBufferTemplate.template(
             PotionEffect.NETWORK_TYPE, CustomPotionEffect::id,
             Settings.NETWORK_TYPE, CustomPotionEffect::settings,
             CustomPotionEffect::new
