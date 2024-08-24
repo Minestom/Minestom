@@ -2342,6 +2342,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return this;
     }
 
+    @Override
+    protected void initCollisions() {
+        preventBlockPlacement = gameMode != GameMode.SPECTATOR;
+        collidesWithEntities = gameMode != GameMode.SPECTATOR;
+    }
+
     protected void sendChunkUpdates(Chunk newChunk) {
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
             final int newX = newChunk.getChunkX();

@@ -12,6 +12,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -106,7 +107,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Vec velocity = Vec.ZERO; // Movement in block per second
     protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
-    protected boolean hasCollision = true;
+    protected boolean collidesWithEntities = true;
+    protected boolean preventBlockPlacement = true;
 
     private Aerodynamics aerodynamics;
     protected int gravityTickCount; // Number of tick where gravity tick was applied
@@ -504,6 +506,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
                 type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
+        initCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
         getViewers().forEach(this::updateOldViewer);
         viewers.forEach(this::updateNewViewer);
@@ -766,6 +769,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
+        initCollisions();
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
@@ -1718,8 +1722,29 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return boundingBox.relativeEnd();
     }
 
-    public boolean hasCollision() {
-        return hasCollision;
+    public boolean isCollidesWithEntities() {
+        return collidesWithEntities;
+    }
+
+    public boolean isPreventBlockPlacement() {
+        // EntityMeta can change at any time, so initializing this during #initCollisions is not an option
+        // Can be overridden to allow for custom behaviour
+        if (entityMeta instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker()) return false;
+        return preventBlockPlacement;
+    }
+
+    protected void initCollisions() {
+        preventBlockPlacement = entityType != EntityType.ARROW
+                && entityType != EntityType.ITEM
+                && entityType != EntityType.SNOWBALL
+                && entityType != EntityType.EXPERIENCE_BOTTLE
+                && entityType != EntityType.EXPERIENCE_ORB
+                && entityType != EntityType.POTION
+                && entityType != EntityType.AREA_EFFECT_CLOUD;
+
+        collidesWithEntities = entityType != EntityType.TEXT_DISPLAY
+                && entityType != EntityType.ITEM_DISPLAY
+                && entityType != EntityType.BLOCK_DISPLAY;
     }
 
     /**
