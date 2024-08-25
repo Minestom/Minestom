@@ -15,16 +15,16 @@ public final class PhysicsUtils {
      * current velocity passed in. Then adjusting the velocity by applying
      * air resistance and friction.
      *
-     * @param entityPosition the current entity position
+     * @param entityPosition        the current entity position
      * @param entityVelocityPerTick the current entity velocity in blocks/tick
-     * @param entityBoundingBox the current entity bounding box
-     * @param worldBorder the world border to test bounds against
-     * @param blockGetter the block getter to test block collisions against
-     * @param aerodynamics the current entity aerodynamics
-     * @param entityNoGravity whether the entity has gravity
-     * @param entityHasPhysics whether the entity has physics
-     * @param entityOnGround whether the entity is on the ground
-     * @param entityFlying whether the entity is flying
+     * @param entityBoundingBox     the current entity bounding box
+     * @param worldBorder           the world border to test bounds against
+     * @param blockGetter           the block getter to test block collisions against
+     * @param aerodynamics          the current entity aerodynamics
+     * @param entityNoGravity       whether the entity has gravity
+     * @param entityHasPhysics      whether the entity has physics
+     * @param entityOnGround        whether the entity is on the ground
+     * @param entityFlying          whether the entity is flying
      * @param previousPhysicsResult the physics result from the previous simulation or null
      * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
      */
@@ -41,7 +41,7 @@ public final class PhysicsUtils {
         Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
         newVelocity = updateVelocity(entityPosition, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
         return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
-                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.hasCollision(), physicsResult.res());
+                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res());
     }
 
     private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,
@@ -62,5 +62,6 @@ public final class PhysicsUtils {
         return new Vec(Math.abs(x) < Vec.EPSILON ? 0 : x, Math.abs(y) < Vec.EPSILON ? 0 : y, Math.abs(z) < Vec.EPSILON ? 0 : z);
     }
 
-    private PhysicsUtils() {}
+    private PhysicsUtils() {
+    }
 }
