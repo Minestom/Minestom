@@ -191,6 +191,6 @@ public final class CollisionUtils {
     public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
                 false, false, false, entityVelocity, new Point[3],
-                new Shape[3], false, SweepResult.NO_COLLISION);
+                new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
     }
 }
