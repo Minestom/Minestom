@@ -28,9 +28,12 @@ import static net.minestom.server.network.NetworkBufferUnsafe.*;
 
 final class NetworkBufferImpl implements NetworkBuffer {
     private static final Cleaner CLEANER = Cleaner.create();
+    private static final long DUMMY_ADDRESS = -1;
 
     private final NetworkBufferImpl parent; // Used for slices so we can control GC over the parent buffer
     private final BufferCleaner state;
+    // Address may be -1 if the buffer is a dummy buffer
+    // Dummy buffers are used for size calculations and do not have memory allocated
     private long address, capacity;
     private long readIndex, writeIndex;
     boolean readOnly;
@@ -55,7 +58,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.registries = registries;
 
         this.state = new BufferCleaner(new AtomicLong(address));
-        if (this.parent == null) CLEANER.register(this, state);
+        if (this.parent == null && address != DUMMY_ADDRESS) CLEANER.register(this, state);
     }
 
     private record BufferCleaner(AtomicLong address) implements Runnable {
@@ -73,6 +76,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public <T> @UnknownNullability T read(@NotNull Type<T> type) {
+        assertDummy();
         return type.read(this);
     }
 
@@ -90,6 +94,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) {
+        assertDummy();
         final long oldReadIndex = readIndex;
         readIndex = index;
         try {
@@ -101,6 +106,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length) {
+        assertDummy();
         assertOverflow(srcOffset + length);
         assertOverflow(destOffset + length);
         if (length == 0) return;
@@ -111,6 +117,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     public byte @NotNull [] extractBytes(@NotNull Consumer<@NotNull NetworkBuffer> extractor) {
+        assertDummy();
         final long startingPosition = readIndex();
         extractor.accept(this);
         final long endingPosition = readIndex();
@@ -190,6 +197,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void resize(long newSize) {
+        assertDummy();
         assertReadOnly();
         if (newSize < capacity) throw new IllegalArgumentException("New size is smaller than the current size");
         if (newSize == capacity) throw new IllegalArgumentException("New size is the same as the current size");
@@ -220,6 +228,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void compact() {
+        assertDummy();
         assertReadOnly();
         ByteBuffer nioBuffer = bufferSlice((int) readIndex, (int) readableBytes());
         nioBuffer.compact();
@@ -229,6 +238,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public NetworkBuffer slice(long index, long length, long readIndex, long writeIndex) {
+        assertDummy();
         Objects.checkFromIndexSize(index, length, capacity);
         NetworkBufferImpl slice = new NetworkBufferImpl(this,
                 address + index, length,
@@ -240,6 +250,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
+        assertDummy();
         Objects.checkFromIndexSize(index, length, capacity);
         final long newAddress = UNSAFE.allocateMemory(length);
         if (newAddress == 0) {
@@ -254,6 +265,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public int readChannel(ReadableByteChannel channel) throws IOException {
+        assertDummy();
         assertReadOnly();
         assertOverflow(writeIndex + writableBytes());
         var buffer = bufferSlice((int) writeIndex, (int) writableBytes());
@@ -265,6 +277,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public boolean writeChannel(SocketChannel channel) throws IOException {
+        assertDummy();
         final long readableBytes = readableBytes();
         if (readableBytes == 0) return true; // Nothing to write
         assertOverflow(readIndex + readableBytes);
@@ -279,6 +292,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public void cipher(Cipher cipher, long start, long length) {
+        assertDummy();
         assertOverflow(start + length);
         ByteBuffer input = bufferSlice((int) start, (int) length);
         try {
@@ -293,6 +307,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
+        assertDummy();
         impl(output).assertReadOnly();
         assertOverflow(start + length);
 
@@ -314,6 +329,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     @Override
     public long decompress(long start, long length, NetworkBuffer output) throws DataFormatException {
+        assertDummy();
         impl(output).assertReadOnly();
         assertOverflow(start + length);
 
@@ -332,6 +348,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
+    @Override
+    public @Nullable Registries registries() {
+        return registries;
+    }
+
     private ByteBuffer bufferSlice(int position, int length) {
         ByteBuffer buffer = ByteBuffer.allocateDirect(0).order(ByteOrder.BIG_ENDIAN);
         updateAddress(buffer, address);
@@ -348,30 +369,39 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     private static final boolean ENDIAN_CONVERSION = ByteOrder.nativeOrder() != ByteOrder.BIG_ENDIAN;
 
+    private boolean isDummy() {
+        return address == DUMMY_ADDRESS;
+    }
+
     // Internal writing methods
     void _putBytes(long index, byte[] value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, value.length, capacity);
         UNSAFE.copyMemory(value, BYTE_ARRAY_OFFSET, null, address + index, value.length);
     }
 
     void _getBytes(long index, byte[] value) {
+        assertDummy();
         Objects.checkFromIndexSize(index, value.length, capacity);
         UNSAFE.copyMemory(null, address + index, value, BYTE_ARRAY_OFFSET, value.length);
     }
 
     void _putByte(long index, byte value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Byte.BYTES, capacity);
         UNSAFE.putByte(address + index, value);
     }
 
     byte _getByte(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Byte.BYTES, capacity);
         return UNSAFE.getByte(address + index);
     }
 
     void _putShort(long index, short value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Short.BYTES, capacity);
         if (ENDIAN_CONVERSION) value = Short.reverseBytes(value);
@@ -379,12 +409,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     short _getShort(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Short.BYTES, capacity);
         final short value = UNSAFE.getShort(address + index);
         return ENDIAN_CONVERSION ? Short.reverseBytes(value) : value;
     }
 
     void _putInt(long index, int value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
         if (ENDIAN_CONVERSION) value = Integer.reverseBytes(value);
@@ -392,12 +424,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     int _getInt(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Integer.BYTES, capacity);
         final int value = UNSAFE.getInt(address + index);
         return ENDIAN_CONVERSION ? Integer.reverseBytes(value) : value;
     }
 
     void _putLong(long index, long value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Long.BYTES, capacity);
         if (ENDIAN_CONVERSION) value = Long.reverseBytes(value);
@@ -405,12 +439,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     long _getLong(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Long.BYTES, capacity);
         final long value = UNSAFE.getLong(address + index);
         return ENDIAN_CONVERSION ? Long.reverseBytes(value) : value;
     }
 
     void _putFloat(long index, float value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Float.BYTES, capacity);
         int intValue = Float.floatToIntBits(value);
@@ -419,6 +455,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     float _getFloat(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Float.BYTES, capacity);
         int intValue = UNSAFE.getInt(address + index);
         if (ENDIAN_CONVERSION) intValue = Integer.reverseBytes(intValue);
@@ -426,6 +463,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     void _putDouble(long index, double value) {
+        if (isDummy()) return;
         assertReadOnly();
         Objects.checkFromIndexSize(index, Double.BYTES, capacity);
         long longValue = Double.doubleToLongBits(value);
@@ -434,6 +472,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     double _getDouble(long index) {
+        assertDummy();
         Objects.checkFromIndexSize(index, Double.BYTES, capacity);
         long longValue = UNSAFE.getLong(address + index);
         if (ENDIAN_CONVERSION) longValue = Long.reverseBytes(longValue);
@@ -478,6 +517,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
         if (readOnly) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
+    void assertDummy() {
+        if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
+    }
+
     static final class Builder implements NetworkBuffer.Builder {
         private final long initialSize;
         private AutoResize autoResize;
@@ -507,6 +550,15 @@ final class NetworkBufferImpl implements NetworkBuffer {
                     0, 0,
                     autoResize, registries);
         }
+    }
+
+    static NetworkBufferImpl dummy(Registries registries) {
+        // Dummy buffer with no memory allocated
+        // Useful for size calculations
+        return new NetworkBufferImpl(null,
+                DUMMY_ADDRESS, Long.MAX_VALUE,
+                0, 0,
+                null, registries);
     }
 
     static NetworkBufferImpl impl(NetworkBuffer buffer) {

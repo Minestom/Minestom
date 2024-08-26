@@ -120,31 +120,44 @@ public final class PacketWriting {
             int compressionThreshold) {
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         try {
-            final PacketRegistry<T> registry = parser.stateRegistry(state);
-            final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
-            final int id = packetInfo.id();
-            final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
-            while (true) {
-                try {
-                    writeFramedPacket(
-                            buffer, serializer,
-                            id, packet,
-                            compressionThreshold
-                    );
-                    return buffer.copy(0, buffer.writeIndex());
-                } catch (IndexOutOfBoundsException e) {
-                    // Try again with doubled size
-                    final long capacity = buffer.capacity();
-                    if (capacity == ServerFlag.MAX_PACKET_SIZE) {
-                        throw new IllegalStateException("Packet too large: " + capacity);
-                    }
-                    final long newSize = Math.min(capacity * 2, ServerFlag.MAX_PACKET_SIZE);
-                    buffer.resize(newSize);
-                    buffer.writeIndex(0);
-                }
-            }
+            return allocateTrimmedPacket(buffer, parser, state, packet, compressionThreshold);
         } finally {
             PacketVanilla.PACKET_POOL.add(buffer);
         }
+    }
+
+    public static <T> NetworkBuffer allocateTrimmedPacket(
+            @NotNull NetworkBuffer tmpBuffer,
+            @NotNull PacketParser<T> parser,
+            @NotNull ConnectionState state,
+            @NotNull T packet,
+            int compressionThreshold) {
+        final PacketRegistry<T> registry = parser.stateRegistry(state);
+        final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
+        final int id = packetInfo.id();
+        final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
+        try {
+            return writeCopy(tmpBuffer, id, serializer, packet, compressionThreshold);
+        } catch (IndexOutOfBoundsException e) {
+            final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
+            if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
+                throw new IllegalStateException("Packet too large: " + sizeOf);
+            }
+            // Add 15 bytes to account for the 3 potential varints in the packet header
+            // Packet Length - Data Length - Packet ID
+            tmpBuffer.resize(sizeOf + 15);
+            tmpBuffer.writeIndex(0);
+            return writeCopy(tmpBuffer, id, serializer, packet, compressionThreshold);
+        }
+    }
+
+    private static <T> NetworkBuffer writeCopy(
+            NetworkBuffer buffer,
+            int id,
+            NetworkBuffer.Type<T> serializer,
+            T packet,
+            int compressionThreshold) {
+        writeFramedPacket(buffer, serializer, id, packet, compressionThreshold);
+        return buffer.copy(0, buffer.writeIndex());
     }
 }

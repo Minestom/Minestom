@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -209,6 +211,56 @@ public class NetworkBufferTest {
             buffer.write(BYTE, (byte) 1);
             buffer.write(LONG, 50L);
         }));
+    }
+
+    @Test
+    public void sizeOfPrimitives() {
+        assertEquals(1, BYTE.sizeOf((byte) 1));
+        assertEquals(2, SHORT.sizeOf((short) 1));
+        assertEquals(4, INT.sizeOf(1));
+        assertEquals(8, LONG.sizeOf(1L));
+        assertEquals(4, FLOAT.sizeOf(1f));
+        assertEquals(8, DOUBLE.sizeOf(1d));
+    }
+
+    @Test
+    public void sizeOfCompounds() {
+        var type = new Type<Integer>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                buffer.write(INT, value);
+                buffer.write(INT, value);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        assertEquals(8, type.sizeOf(1));
+    }
+
+    @Test
+    public void sizeOfThrow() {
+        Function<Consumer<NetworkBuffer>, Type<Integer>> fn = networkBufferConsumer -> new Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                networkBufferConsumer.accept(buffer);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.slice(0, 0, 0, 0)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
     }
 
     @Test

@@ -165,10 +165,20 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
+    @Nullable Registries registries();
+
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
 
         T read(@NotNull NetworkBuffer buffer);
+
+        default long sizeOf(@NotNull T value, @Nullable Registries registries) {
+            return NetworkBufferTypeImpl.sizeOf(this, value, registries);
+        }
+
+        default long sizeOf(@NotNull T value) {
+            return sizeOf(value, null);
+        }
 
         default <S> @NotNull Type<S> transform(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
             return new NetworkBufferTypeImpl.TransformType<>(this, to, from);
