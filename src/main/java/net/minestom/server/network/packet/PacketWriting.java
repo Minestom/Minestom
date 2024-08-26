@@ -133,11 +133,20 @@ public final class PacketWriting {
             @NotNull T packet,
             int compressionThreshold) {
         final PacketRegistry<T> registry = parser.stateRegistry(state);
+        return allocateTrimmedPacket(tmpBuffer, registry, packet, compressionThreshold);
+    }
+
+    public static <T> NetworkBuffer allocateTrimmedPacket(
+            @NotNull NetworkBuffer tmpBuffer,
+            @NotNull PacketRegistry<T> registry,
+            @NotNull T packet,
+            int compressionThreshold) {
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
         final int id = packetInfo.id();
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         try {
-            return writeCopy(tmpBuffer, id, serializer, packet, compressionThreshold);
+            writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
+            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
         } catch (IndexOutOfBoundsException e) {
             final long sizeOf = serializer.sizeOf(packet, tmpBuffer.registries());
             if (sizeOf > ServerFlag.MAX_PACKET_SIZE) {
@@ -147,17 +156,8 @@ public final class PacketWriting {
             // Packet Length - Data Length - Packet ID
             tmpBuffer.resize(sizeOf + 15);
             tmpBuffer.writeIndex(0);
-            return writeCopy(tmpBuffer, id, serializer, packet, compressionThreshold);
+            writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
+            return tmpBuffer.copy(0, tmpBuffer.writeIndex());
         }
-    }
-
-    private static <T> NetworkBuffer writeCopy(
-            NetworkBuffer buffer,
-            int id,
-            NetworkBuffer.Type<T> serializer,
-            T packet,
-            int compressionThreshold) {
-        writeFramedPacket(buffer, serializer, id, packet, compressionThreshold);
-        return buffer.copy(0, buffer.writeIndex());
     }
 }
