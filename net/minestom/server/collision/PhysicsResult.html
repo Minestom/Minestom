@@ -91,10 +91,24 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <section class="class-description" id="class-description">
+<dl class="notes">
+<dt>Record Components:</dt>
+<dd><code><span id="param-newPosition">newPosition</span></code> - the new position of the entity</dd>
+<dd><code><span id="param-newVelocity">newVelocity</span></code> - the new velocity of the entity</dd>
+<dd><code><span id="param-isOnGround">isOnGround</span></code> - if the entity is on the ground</dd>
+<dd><code><span id="param-collisionX">collisionX</span></code> - if the entity collided on the X axis</dd>
+<dd><code><span id="param-collisionY">collisionY</span></code> - if the entity collided on the Y axis</dd>
+<dd><code><span id="param-collisionZ">collisionZ</span></code> - if the entity collided on the Z axis</dd>
+<dd><code><span id="param-originalDelta">originalDelta</span></code> - the velocity delta of the entity</dd>
+<dd><code><span id="param-collisionPoints">collisionPoints</span></code> - the points where the entity collided</dd>
+<dd><code><span id="param-collisionShapes">collisionShapes</span></code> - the shapes the entity collided with</dd>
+<dd><code><span id="param-collisionShapePositions">collisionShapePositions</span></code> - the positions of the shapes the entity collided with</dd>
+</dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Experimental
-</span><span class="modifiers">public record </span><span class="element-name type-name-label">PhysicsResult</span>(<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition, <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;newVelocity, boolean&nbsp;isOnGround, boolean&nbsp;collisionX, boolean&nbsp;collisionY, boolean&nbsp;collisionZ, <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;originalDelta, @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>[]&nbsp;collisionPoints, @NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>[]&nbsp;collisionShapes, boolean&nbsp;hasCollision, <a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a>&nbsp;res)
+</span><span class="modifiers">public record </span><span class="element-name type-name-label">PhysicsResult</span>(<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition, <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;newVelocity, boolean&nbsp;isOnGround, boolean&nbsp;collisionX, boolean&nbsp;collisionY, boolean&nbsp;collisionZ, <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;originalDelta, @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionPoints, @UnknownNullability <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a> @UnknownNullability []&nbsp;collisionShapes, @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionShapePositions, boolean&nbsp;hasCollision, <a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a>&nbsp;res)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
+<div class="block">The result of a physics simulation.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,15 +120,16 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,boolean,boolean,boolean,boolean,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Point%5B%5D,net.minestom.server.collision.Shape%5B%5D,boolean,net.minestom.server.collision.SweepResult)" class="member-name-link">PhysicsResult</a><wbr>(<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,boolean,boolean,boolean,boolean,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Point%5B%5D,net.minestom.server.collision.Shape%5B%5D,net.minestom.server.coordinate.Point%5B%5D,boolean,net.minestom.server.collision.SweepResult)" class="member-name-link">PhysicsResult</a><wbr>(<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition,
  <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;newVelocity,
  boolean&nbsp;isOnGround,
  boolean&nbsp;collisionX,
  boolean&nbsp;collisionY,
  boolean&nbsp;collisionZ,
  <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;originalDelta,
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>[]&nbsp;collisionPoints,
- @NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>[]&nbsp;collisionShapes,
+ @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionPoints,
+ @UnknownNullability <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a> @UnknownNullability []&nbsp;collisionShapes,
+ @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionShapePositions,
  boolean&nbsp;hasCollision,
  <a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a>&nbsp;res)</code></div>
 <div class="col-last even-row-color">
@@ -134,74 +149,79 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>[]</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionPoints()" class="member-name-link">collisionPoints</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>collisionPoints</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionPoints"><code>collisionPoints</code></a> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionShapes()" class="member-name-link">collisionShapes</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionShapePositions()" class="member-name-link">collisionShapePositions</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>collisionShapes</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionShapePositions"><code>collisionShapePositions</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionX()" class="member-name-link">collisionX</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@UnknownNullability <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a> @UnknownNullability []</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionShapes()" class="member-name-link">collisionShapes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>collisionX</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionShapes"><code>collisionShapes</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionY()" class="member-name-link">collisionY</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionX()" class="member-name-link">collisionX</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>collisionY</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionX"><code>collisionX</code></a> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionZ()" class="member-name-link">collisionZ</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionY()" class="member-name-link">collisionY</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>collisionZ</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionY"><code>collisionY</code></a> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#collisionZ()" class="member-name-link">collisionZ</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-collisionZ"><code>collisionZ</code></a> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasCollision()" class="member-name-link">hasCollision</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hasCollision()" class="member-name-link">hasCollision</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>hasCollision</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOnGround()" class="member-name-link">isOnGround</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>isOnGround</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newPosition()" class="member-name-link">newPosition</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isOnGround()" class="member-name-link">isOnGround</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>newPosition</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-isOnGround"><code>isOnGround</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newVelocity()" class="member-name-link">newVelocity</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newPosition()" class="member-name-link">newPosition</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>newVelocity</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-newPosition"><code>newPosition</code></a> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#originalDelta()" class="member-name-link">originalDelta</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#newVelocity()" class="member-name-link">newVelocity</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>originalDelta</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-newVelocity"><code>newVelocity</code></a> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res()" class="member-name-link">res</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#originalDelta()" class="member-name-link">originalDelta</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <a href="#param-originalDelta"><code>originalDelta</code></a> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#res()" class="member-name-link">res</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>res</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
@@ -222,7 +242,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,boolean,boolean,boolean,boolean,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Point[],net.minestom.server.collision.Shape[],boolean,net.minestom.server.collision.SweepResult)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Vec,boolean,boolean,boolean,boolean,net.minestom.server.coordinate.Vec,net.minestom.server.coordinate.Point[],net.minestom.server.collision.Shape[],net.minestom.server.coordinate.Point[],boolean,net.minestom.server.collision.SweepResult)">
 <h3>PhysicsResult</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PhysicsResult</span><wbr><span class="parameters">(<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPosition,
  <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;newVelocity,
@@ -231,24 +251,24 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;collisionY,
  boolean&nbsp;collisionZ,
  <a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;originalDelta,
- @NotNull
- @NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>[]&nbsp;collisionPoints,
- @NotNull
- @NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>[]&nbsp;collisionShapes,
+ @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionPoints,
+ @UnknownNullability <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a> @UnknownNullability []&nbsp;collisionShapes,
+ @UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []&nbsp;collisionShapePositions,
  boolean&nbsp;hasCollision,
  <a href="SweepResult.html" title="class in net.minestom.server.collision">SweepResult</a>&nbsp;res)</span></div>
 <div class="block">Creates an instance of a <code>PhysicsResult</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>newPosition</code> - the value for the <code>newPosition</code> record component</dd>
-<dd><code>newVelocity</code> - the value for the <code>newVelocity</code> record component</dd>
-<dd><code>isOnGround</code> - the value for the <code>isOnGround</code> record component</dd>
-<dd><code>collisionX</code> - the value for the <code>collisionX</code> record component</dd>
-<dd><code>collisionY</code> - the value for the <code>collisionY</code> record component</dd>
-<dd><code>collisionZ</code> - the value for the <code>collisionZ</code> record component</dd>
-<dd><code>originalDelta</code> - the value for the <code>originalDelta</code> record component</dd>
-<dd><code>collisionPoints</code> - the value for the <code>collisionPoints</code> record component</dd>
-<dd><code>collisionShapes</code> - the value for the <code>collisionShapes</code> record component</dd>
+<dd><code>newPosition</code> - the value for the <a href="#param-newPosition"><code>newPosition</code></a> record component</dd>
+<dd><code>newVelocity</code> - the value for the <a href="#param-newVelocity"><code>newVelocity</code></a> record component</dd>
+<dd><code>isOnGround</code> - the value for the <a href="#param-isOnGround"><code>isOnGround</code></a> record component</dd>
+<dd><code>collisionX</code> - the value for the <a href="#param-collisionX"><code>collisionX</code></a> record component</dd>
+<dd><code>collisionY</code> - the value for the <a href="#param-collisionY"><code>collisionY</code></a> record component</dd>
+<dd><code>collisionZ</code> - the value for the <a href="#param-collisionZ"><code>collisionZ</code></a> record component</dd>
+<dd><code>originalDelta</code> - the value for the <a href="#param-originalDelta"><code>originalDelta</code></a> record component</dd>
+<dd><code>collisionPoints</code> - the value for the <a href="#param-collisionPoints"><code>collisionPoints</code></a> record component</dd>
+<dd><code>collisionShapes</code> - the value for the <a href="#param-collisionShapes"><code>collisionShapes</code></a> record component</dd>
+<dd><code>collisionShapePositions</code> - the value for the <a href="#param-collisionShapePositions"><code>collisionShapePositions</code></a> record component</dd>
 <dd><code>hasCollision</code> - the value for the <code>hasCollision</code> record component</dd>
 <dd><code>res</code> - the value for the <code>res</code> record component</dd>
 </dl>
@@ -307,10 +327,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="newPosition()">
 <h3>newPosition</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></span>&nbsp;<span class="element-name">newPosition</span>()</div>
-<div class="block">Returns the value of the <code>newPosition</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-newPosition"><code>newPosition</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>newPosition</code> record component</dd>
+<dd>the value of the <a href="#param-newPosition"><code>newPosition</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -318,10 +338,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="newVelocity()">
 <h3>newVelocity</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">newVelocity</span>()</div>
-<div class="block">Returns the value of the <code>newVelocity</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-newVelocity"><code>newVelocity</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>newVelocity</code> record component</dd>
+<dd>the value of the <a href="#param-newVelocity"><code>newVelocity</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -329,10 +349,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="isOnGround()">
 <h3>isOnGround</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isOnGround</span>()</div>
-<div class="block">Returns the value of the <code>isOnGround</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-isOnGround"><code>isOnGround</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>isOnGround</code> record component</dd>
+<dd>the value of the <a href="#param-isOnGround"><code>isOnGround</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -340,10 +360,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="collisionX()">
 <h3>collisionX</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">collisionX</span>()</div>
-<div class="block">Returns the value of the <code>collisionX</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionX"><code>collisionX</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>collisionX</code> record component</dd>
+<dd>the value of the <a href="#param-collisionX"><code>collisionX</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -351,10 +371,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="collisionY()">
 <h3>collisionY</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">collisionY</span>()</div>
-<div class="block">Returns the value of the <code>collisionY</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionY"><code>collisionY</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>collisionY</code> record component</dd>
+<dd>the value of the <a href="#param-collisionY"><code>collisionY</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -362,10 +382,10 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="collisionZ()">
 <h3>collisionZ</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">collisionZ</span>()</div>
-<div class="block">Returns the value of the <code>collisionZ</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-collisionZ"><code>collisionZ</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>collisionZ</code> record component</dd>
+<dd>the value of the <a href="#param-collisionZ"><code>collisionZ</code></a> record component</dd>
 </dl>
 </section>
 </li>
@@ -373,34 +393,43 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="originalDelta()">
 <h3>originalDelta</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">originalDelta</span>()</div>
-<div class="block">Returns the value of the <code>originalDelta</code> record component.</div>
+<div class="block">Returns the value of the <a href="#param-originalDelta"><code>originalDelta</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>originalDelta</code> record component</dd>
+<dd>the value of the <a href="#param-originalDelta"><code>originalDelta</code></a> record component</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="collisionPoints()">
 <h3>collisionPoints</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>[]</span>&nbsp;<span class="element-name">collisionPoints</span>()</div>
-<div class="block">Returns the value of the <code>collisionPoints</code> record component.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []</span>&nbsp;<span class="element-name">collisionPoints</span>()</div>
+<div class="block">Returns the value of the <a href="#param-collisionPoints"><code>collisionPoints</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>collisionPoints</code> record component</dd>
+<dd>the value of the <a href="#param-collisionPoints"><code>collisionPoints</code></a> record component</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="collisionShapes()">
 <h3>collisionShapes</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a>[]</span>&nbsp;<span class="element-name">collisionShapes</span>()</div>
-<div class="block">Returns the value of the <code>collisionShapes</code> record component.</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@UnknownNullability <a href="Shape.html" title="interface in net.minestom.server.collision">Shape</a> @UnknownNullability []</span>&nbsp;<span class="element-name">collisionShapes</span>()</div>
+<div class="block">Returns the value of the <a href="#param-collisionShapes"><code>collisionShapes</code></a> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>collisionShapes</code> record component</dd>
+<dd>the value of the <a href="#param-collisionShapes"><code>collisionShapes</code></a> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="collisionShapePositions()">
+<h3>collisionShapePositions</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@UnknownNullability <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a> @UnknownNullability []</span>&nbsp;<span class="element-name">collisionShapePositions</span>()</div>
+<div class="block">Returns the value of the <a href="#param-collisionShapePositions"><code>collisionShapePositions</code></a> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <a href="#param-collisionShapePositions"><code>collisionShapePositions</code></a> record component</dd>
 </dl>
 </section>
 </li>
