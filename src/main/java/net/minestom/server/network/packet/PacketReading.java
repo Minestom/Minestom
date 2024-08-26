@@ -187,10 +187,6 @@ public final class PacketReading {
             return readPayload(buffer, registry);
         }
 
-        if (dataLength != buffer.readableBytes()) {
-            throw new DataFormatException("Packet length mismatch: " + dataLength + " != " + buffer.readableBytes());
-        }
-
         // Decompress the packet into the pooled buffer
         // and read the uncompressed packet from it
         NetworkBuffer decompressed = PacketVanilla.PACKET_POOL.get();
