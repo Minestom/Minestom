@@ -588,11 +588,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         ChunkCache cache = new ChunkCache(instance, currentChunk);
 
         final int minX = (int) Math.floor(boundingBox.minX() + position.x());
-        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
+        final int maxX = Math.min((int) Math.ceil(boundingBox.maxX() + position.x()), Integer.MAX_VALUE - 1);
         final int minY = (int) Math.floor(boundingBox.minY() + position.y());
-        final int maxY = Math.min((int) Math.ceil(boundingBox.maxY() + position.y()), Integer.MAX_VALUE-1);
+        final int maxY = Math.min((int) Math.ceil(boundingBox.maxY() + position.y()), Integer.MAX_VALUE - 1);
         final int minZ = (int) Math.floor(boundingBox.minZ() + position.z());
-        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z());
+        final int maxZ = Math.min((int) Math.ceil(boundingBox.maxZ() + position.z()), Integer.MAX_VALUE - 1);
 
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
