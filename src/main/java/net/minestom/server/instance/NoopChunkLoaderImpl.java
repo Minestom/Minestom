@@ -18,4 +18,14 @@ final class NoopChunkLoaderImpl implements IChunkLoader {
     public void saveChunk(@NotNull Chunk chunk) {
         // Empty
     }
+
+    @Override
+    public boolean supportsParallelLoading() {
+        return true;
+    }
+
+    @Override
+    public boolean supportsParallelSaving() {
+        return true;
+    }
 }

@@ -46,7 +46,7 @@ public final class TickThread extends MinestomThread {
 
     @Override
     public void run() {
-        LockSupport.park(this);
+        waitForSignal();
         while (!stop) {
             this.lock.lock();
             try {
@@ -56,7 +56,21 @@ public final class TickThread extends MinestomThread {
             }
             this.lock.unlock();
             // #acquire() callbacks
-            this.latch.countDown();
+            var latch = this.latch;
+            this.latch = null;
+            latch.countDown();
+            waitForSignal();
+        }
+    }
+
+    private void signal() {
+        LockSupport.unpark(this);
+    }
+
+    private void waitForSignal() {
+        // LockSupport.park can spuriously return, so we need to re-check some condition.
+        // latch being null is a nice and easy option
+        while (this.latch == null) {
             LockSupport.park(this);
         }
     }
@@ -93,7 +107,7 @@ public final class TickThread extends MinestomThread {
         this.tickTime = tickTime;
         this.tickNum += 1;
         this.stop = false;
-        LockSupport.unpark(this);
+        signal();
     }
 
     public Collection<ThreadDispatcher.Partition> entries() {
@@ -115,6 +129,6 @@ public final class TickThread extends MinestomThread {
 
     void shutdown() {
         this.stop = true;
-        LockSupport.unpark(this);
+        signal();
     }
 }
