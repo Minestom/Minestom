@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
@@ -26,6 +27,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -126,10 +128,7 @@ public class PlayerMovementIntegrationTest {
         final Instance flatInstance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
-        // Preload all possible chunks to avoid issues due to async loading
-        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkRange.chunksInRange(10, 10, viewDistance + 3, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
-        CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
+        ChunkRange.chunksInRange(10, 10, viewDistance + 3, flatInstance::loadChunk);
         player.refreshSettings(new ClientSettings(
                 Locale.US, (byte) viewDistance,
                 ChatMessageType.FULL, true,
@@ -147,35 +146,43 @@ public class PlayerMovementIntegrationTest {
         chunkDataPacketCollector.assertCount(ChunkRange.chunksCount(player.effectiveViewDistance()));
     }
 
+    private int countInShape(ChunkClaim.Shape shape, int radius) {
+        int count = 0;
+        for (var x = -radius; x <= radius; x++) {
+            for (var z = -radius; z <= radius; z++) {
+                if (shape.isInRadius(radius, radius, x, z, 0, 0)) count++;
+            }
+        }
+        return count;
+    }
+
     @Test
     public void testSettingsViewDistanceExpansionAndShrink(Env env) {
+        // These values can't go above ServerFlag.CHUNK_VIEW_DISTANCE, which default to 8
         int startingViewDistance = 8;
-        byte endViewDistance = 12;
-        byte finalViewDistance = 10;
+        byte endViewDistance = 5;
+        byte finalViewDistance = 7;
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
         var player = connection.connect(instance, startingPlayerPos);
 
-        int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
+        int chunkDifference = ChunkRange.chunksCount(startingViewDistance) - ChunkRange.chunksCount(endViewDistance);
 
-        // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.chunksInRange(0, 0, endViewDistance, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
-
-        var tracker = connection.trackIncoming(ChunkDataPacket.class);
+        var tracker = connection.trackIncoming(UnloadChunkPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
                 ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
         tracker.assertCount(chunkDifference);
 
-        var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
+        var tracker1 = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
                 ChatMessageType.FULL, false, (byte) 0, MainHand.RIGHT,
                 false, true, ClientSettings.ParticleSetting.ALL)));
         player.interpretPacketQueue();
 
-        int chunkDifference1 = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(finalViewDistance);
+        int chunkDifference1 = ChunkRange.chunksCount(finalViewDistance) - ChunkRange.chunksCount(endViewDistance);
         tracker1.assertCount(chunkDifference1);
     }
 

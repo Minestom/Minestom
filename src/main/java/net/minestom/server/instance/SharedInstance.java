@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.ApiStatus;
@@ -42,6 +43,11 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public ChunkManager getChunkManager() {
+        return instanceContainer.getChunkManager();
+    }
+
+    @Override
     public CompletableFuture<Chunk> loadChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadChunk(chunkX, chunkZ);
     }
@@ -62,17 +68,17 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public CompletableFuture<Void> saveInstance() {
+    public CompletableFuture<@Nullable Void> saveInstance() {
         return instanceContainer.saveInstance();
     }
 
     @Override
-    public CompletableFuture<Void> saveChunkToStorage(Chunk chunk) {
+    public CompletableFuture<@Nullable Void> saveChunkToStorage(Chunk chunk) {
         return instanceContainer.saveChunkToStorage(chunk);
     }
 
     @Override
-    public CompletableFuture<Void> saveChunksToStorage() {
+    public CompletableFuture<@Nullable Void> saveChunksToStorage() {
         return instanceContainer.saveChunksToStorage();
     }
 
@@ -94,12 +100,6 @@ public class SharedInstance extends Instance {
     @Override
     public void setGenerator(@Nullable Generator generator) {
         instanceContainer.setGenerator(generator);
-    }
-
-    @ApiStatus.Experimental
-    @Override
-    public CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator) {
-        return instanceContainer.generateChunk(chunkX, chunkZ, generator);
     }
 
     @Override
@@ -138,7 +138,7 @@ public class SharedInstance extends Instance {
      * @param instance2 the second instance
      * @return true if the two instances share the same chunks
      */
-    public static boolean areLinked(Instance instance1, Instance instance2) {
+    public static boolean areLinked(@Nullable Instance instance1, @Nullable Instance instance2) {
         // SharedInstance check
         if (instance1 instanceof InstanceContainer && instance2 instanceof SharedInstance) {
             return ((SharedInstance) instance2).getInstanceContainer().equals(instance1);

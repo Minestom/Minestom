@@ -2,6 +2,12 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Arrays;
+
+import static net.minestom.server.instance.light.LightCompute.CONTENT_FULLY_LIT;
+import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
 
 public record Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
     public Section(Palette blockPalette, Palette biomePalette) {

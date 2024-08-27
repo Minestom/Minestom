@@ -14,6 +14,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.chunksystem.ChunkWorker;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.EventsJFR;
@@ -252,6 +253,7 @@ final class ServerProcessImpl implements ServerProcess, Registries.Delegating {
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         dispatcher.shutdown();
+        ChunkWorker.globalShutdown().join();
         LOGGER.info("{} server stopped successfully.", brand);
     }
 
