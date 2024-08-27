@@ -19,6 +19,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.chunksystem.ChunkWorker;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
@@ -352,6 +353,7 @@ final class ServerProcessImpl implements ServerProcess {
         LOGGER.info("Shutting down all thread pools.");
         benchmark.disable();
         dispatcher.shutdown();
+        ChunkWorker.globalShutdown().join();
         LOGGER.info(MinecraftServer.getBrandName() + " server stopped successfully.");
     }
 
