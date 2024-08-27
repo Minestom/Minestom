@@ -214,6 +214,20 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void arrayWrap() {
+        byte[] array = new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50};
+        var buffer = NetworkBuffer.wrap(array, 0, array.length);
+        assertEquals(9, buffer.capacity());
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        assertEquals((byte) 1, buffer.read(BYTE));
+        assertEquals(50L, buffer.read(LONG));
+
+        assertEquals(9, buffer.readIndex());
+    }
+
+    @Test
     public void sizeOfPrimitives() {
         assertEquals(1, BYTE.sizeOf((byte) 1));
         assertEquals(2, SHORT.sizeOf((short) 1));
@@ -389,9 +403,15 @@ public class NetworkBufferTest {
 
     @Test
     public void rawBytes() {
-        // FIXME: currently break because the array is identity compared
-        //assertBufferType(NetworkBuffer.RAW_BYTES, new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64},
-        //      new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        var array = new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64};
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        buffer.write(RAW_BYTES, array);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        var readArray = buffer.read(RAW_BYTES);
+        assertArrayEquals(array, readArray);
+        assertEquals(array.length, buffer.readIndex());
     }
 
     @Test

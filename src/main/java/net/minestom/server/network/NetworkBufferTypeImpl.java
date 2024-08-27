@@ -273,6 +273,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 throw new IllegalArgumentException("Invalid length: " + value.length + " != " + length);
             }
             final int length = value.length;
+            if (length == 0) return;
             buffer.ensureWritable(length);
             impl(buffer)._putBytes(buffer.writeIndex(), value);
             buffer.advanceWrite(length);
