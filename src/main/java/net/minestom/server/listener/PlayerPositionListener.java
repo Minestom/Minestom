@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
@@ -70,7 +71,11 @@ public class PlayerPositionListener {
             return;
         }
         // Try to move in an unloaded chunk, prevent it
-        if (!currentPosition.sameChunk(packetPosition) && !ChunkUtils.isLoaded(instance, packetPosition)) {
+        if (!currentPosition.sameChunk(packetPosition) && (!ChunkUtils.isLoaded(instance, packetPosition)
+                // Prevent falling through the world
+                || (!player.getChunkQueue().playerSeesChunk(packetPosition.chunkX(), packetPosition.chunkZ()))
+        )) {
+            System.err.println("Deny move from " + currentPosition + " to " + packetPosition);
             player.teleport(currentPosition);
             return;
         }
@@ -84,7 +89,7 @@ public class PlayerPositionListener {
         if (playerMoveEvent.isCancelled()) {
             // Teleport to previous position & cancel any velocity
             player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition,
-                    Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));
+                    Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), RelativeFlags.NONE));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();

@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
@@ -202,16 +203,8 @@ public class EntityVelocityIntegrationTest {
     }
 
     private void loadChunks(Instance instance) {
-        ChunkUtils.optionalLoadAll(instance, new long[]{
-                CoordConversion.chunkIndex(-1, -1),
-                CoordConversion.chunkIndex(-1, 0),
-                CoordConversion.chunkIndex(-1, 1),
-                CoordConversion.chunkIndex(0, -1),
-                CoordConversion.chunkIndex(0, 0),
-                CoordConversion.chunkIndex(0, 1),
-                CoordConversion.chunkIndex(1, -1),
-                CoordConversion.chunkIndex(1, 0),
-                CoordConversion.chunkIndex(1, 1),
-        }, null).join();
+        // load 3x3 area.
+        // loading in tests is single-threaded, so this completes immediately.
+        instance.getChunkManager().addClaim(0, 0, 1, ChunkClaim.Shape.SQUARE);
     }
 }

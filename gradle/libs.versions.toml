@@ -49,6 +49,7 @@ adventure-text-logger-slf4j = { group = "net.kyori", name = "adventure-text-logg
 minestomData = { group = "net.minestom", name = "data", version.ref = "data" }
 jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.ref = "jetbrainsAnnotations" }
 slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j" }
+slf4j-simple = { group = "org.slf4j", name = "slf4j-simple", version.ref = "slf4j" }
 
 # Performance / Data Structures
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }

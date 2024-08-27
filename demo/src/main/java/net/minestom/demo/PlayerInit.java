@@ -57,12 +57,10 @@ import net.minestom.server.utils.time.TimeUnit;
 
 import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class PlayerInit {
 
@@ -119,6 +117,7 @@ public class PlayerInit {
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
             .addListener(PlayerSpawnEvent.class, event -> {
+                if (!event.isFirstSpawn()) return;
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
@@ -400,6 +399,11 @@ public class PlayerInit {
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 
+            var start = System.nanoTime();
+
+//             50 ms for every chunk
+            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
+
             if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
                 unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
             }
@@ -407,6 +411,22 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
+//        instanceContainer.getChunkManager().addClaim(0, 0, 10);
+
+        var instance2 = instanceManager.createInstanceContainer();
+        instance2.setGenerator(unit -> {
+            var start = System.nanoTime();
+
+//             50 ms for every chunk
+            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(50)) ;
+            unit.modifier().fillHeight(0, 34, Block.STONE);
+            unit.modifier().fillHeight(34, 39, Block.DIRT);
+            unit.modifier().fillHeight(39, 40, Block.GRASS_BLOCK);
+        });
+        instance2.setChunkSupplier(LightingChunk::new);
+        instance2.setTimeRate(0);
+        instance2.setTime(12000);
+//        instance2.getChunkManager().addClaim(0, 0, 10);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
@@ -430,13 +450,16 @@ public class PlayerInit {
 
             long ramUsage = benchmarkManager.getUsedMemory();
             ramUsage /= 1e6; // bytes to MB
+            var loadedChunks = MinecraftServer.getInstanceManager().getInstances().stream().map(Instance::getChunks).mapToInt(Collection::size).sum();
 
             TickMonitor tickMonitor = LAST_TICK.get();
             final Component header = Component.text("RAM USAGE: " + ramUsage + " MB")
                     .append(Component.newline())
                     .append(Component.text("TICK TIME: " + MathUtils.round(tickMonitor.getTickTime(), 2) + "ms"))
                     .append(Component.newline())
-                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"));
+                    .append(Component.text("ACQ TIME: " + MathUtils.round(tickMonitor.getAcquisitionTime(), 2) + "ms"))
+                    .append(Component.newline())
+                    .append(Component.text("LOADED CHUNKS: " + loadedChunks));
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
