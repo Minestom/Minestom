@@ -175,7 +175,7 @@ public final class LoginListener {
         SocketAddress socketAddress = null;
         GameProfile gameProfile = null;
         boolean success = false;
-        if (data.length > 0) {
+        if (data != null && data.length > 0) {
             NetworkBuffer buffer = NetworkBuffer.wrap(data, 0, data.length);
             success = VelocityProxy.checkIntegrity(buffer);
             if (success) {

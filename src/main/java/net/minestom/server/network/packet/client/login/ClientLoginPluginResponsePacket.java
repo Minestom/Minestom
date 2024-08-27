@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 public record ClientLoginPluginResponsePacket(int messageId, byte @Nullable [] data) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientLoginPluginResponsePacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientLoginPluginResponsePacket::messageId,
-            RAW_BYTES, ClientLoginPluginResponsePacket::data,
+            RAW_BYTES.optional(), ClientLoginPluginResponsePacket::data,
             ClientLoginPluginResponsePacket::new);
 
     @Override

@@ -25,7 +25,7 @@ public class LoginPluginMessageProcessor {
     public @NotNull CompletableFuture<LoginPlugin.Response> request(@NotNull String channel, byte @NotNull [] requestPayload) {
         LoginPlugin.Request request = new LoginPlugin.Request(channel, requestPayload);
 
-        int messageId = getNextMessageId();
+        final int messageId = nextMessageId();
         requestByMsgId.put(messageId, request);
         connection.sendPacket(new LoginPluginRequestPacket(messageId, request.channel(), request.payload()));
 
@@ -39,7 +39,7 @@ public class LoginPluginMessageProcessor {
         }
 
         try {
-            LoginPlugin.Response response = LoginPlugin.Response.fromPayload(request.channel(), responseData);
+            LoginPlugin.Response response = new LoginPlugin.Response(request.channel(), responseData);
             request.responseFuture().complete(response);
         } catch (Throwable t) {
             throw new Exception("Error handling Login Plugin Response on channel '" + request.channel() + "'", t);
@@ -56,7 +56,7 @@ public class LoginPluginMessageProcessor {
         CompletableFuture.allOf(futures).get(timeout, timeUnit);
     }
 
-    private static int getNextMessageId() {
+    private static int nextMessageId() {
         return REQUEST_ID.getAndIncrement();
     }
 }
