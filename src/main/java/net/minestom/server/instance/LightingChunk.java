@@ -14,15 +14,14 @@ import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
@@ -339,9 +338,13 @@ public class LightingChunk extends DynamicChunk {
         }
     }
 
+    private UpdateLightPacket createLightPacket() {
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
+    }
+
     @Override
-    public void tick(long time) {
-        super.tick(time);
+    public void tick0(long time) {
+        super.tick0(time);
 
         if (doneInit && resendTimer.get() > 0) {
             if (resendTimer.decrementAndGet() == 0) {
@@ -351,7 +354,6 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Chunk> flushQueue(Instance instance, Set<Point> queue, LightType type, QueueType queueType) {
-        Set<Light> sections = ConcurrentHashMap.newKeySet();
         Set<Point> newQueue = ConcurrentHashMap.newKeySet();
 
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
@@ -401,8 +403,6 @@ public class LightingChunk extends DynamicChunk {
                                 Light.getNeighbors(chunk, point.blockY()),
                                 lightLookup, paletteLookup);
                     };
-
-                    sections.add(light);
 
                     light.flip();
                     newQueue.addAll(toAdd);
@@ -568,10 +568,5 @@ public class LightingChunk extends DynamicChunk {
         LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return super.isLoaded() && doneInit;
     }
 }

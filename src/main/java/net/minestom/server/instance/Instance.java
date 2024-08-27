@@ -33,6 +33,8 @@ import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -240,6 +242,8 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
     @ApiStatus.Internal
     public abstract boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates);
 
+    public abstract ChunkManager getChunkManager();
+
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
@@ -319,7 +323,10 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
+     * @see ChunkManager#getLoadedChunk(int, int)
+     * @deprecated in favor of {@link ChunkClaim ChunkClaims} and {@link ChunkManager}
      */
+    @Deprecated
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
@@ -346,7 +353,9 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * You would need to call {@link #saveChunksToStorage()} too.
      *
      * @return the future called once the instance data has been saved
+     * @deprecated see {@link ChunkManager#saveInstanceData()}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveInstance();
 
     /**
@@ -354,14 +363,18 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      *
      * @param chunk the {@link Chunk} to save
      * @return future called when the chunk is done saving
+     * @deprecated see {@link ChunkManager#saveChunk(Chunk)}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveChunkToStorage(Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
      * @return future called when the chunks are done saving
+     * @deprecated see {@link ChunkManager#saveChunks()}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveChunksToStorage();
 
     public abstract void setChunkSupplier(ChunkSupplier chunkSupplier);
@@ -386,19 +399,6 @@ public abstract class Instance implements Block.Getter, Block.Setter, Biome.Gett
      * @param generator the new generator, or null to disable generation
      */
     public abstract void setGenerator(@Nullable Generator generator);
-
-    /**
-     * Runs the provided {@link Generator} to generate a chunk at the given position.
-     * <p>
-     * Loads the chunk if not already loaded.
-     *
-     * @param chunkX    the chunk X
-     * @param chunkZ    the chunk Z
-     * @param generator the generator to use
-     * @return a future called once the generation is complete
-     */
-    @ApiStatus.Experimental
-    public abstract CompletableFuture<Void> generateChunk(int chunkX, int chunkZ, Generator generator);
 
     /**
      * Gets all the instance's loaded chunks.

@@ -102,6 +102,7 @@ module net.minestom.server {
     exports net.minestom.server.instance.block.jukebox;
     exports net.minestom.server.instance.block.predicate;
     exports net.minestom.server.instance.block.rule;
+    exports net.minestom.server.instance.chunksystem;
     exports net.minestom.server.instance.fluid;
     exports net.minestom.server.instance.generator;
     exports net.minestom.server.instance.heightmap;

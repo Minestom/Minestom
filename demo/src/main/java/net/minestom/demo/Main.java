@@ -40,6 +40,7 @@ public class Main {
 
     public static void main(String[] args) {
         System.setProperty("minestom.new-socket-write-lock", "true");
+        System.setProperty("minestom.chunk-view-distance", "32");
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init(new Auth.Offline());
@@ -94,6 +95,8 @@ public class Main {
         commandManager.register(new SleepCommand());
         commandManager.register(new MinecartCommand());
         commandManager.register(new BelowNameCommand());
+        commandManager.register(new CopyInstanceCommand());
+        commandManager.register(new LoadedChunksCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
