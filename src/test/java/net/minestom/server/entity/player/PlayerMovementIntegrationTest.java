@@ -126,10 +126,7 @@ public class PlayerMovementIntegrationTest {
         final Instance flatInstance = env.createFlatInstance();
         var connection = env.createConnection();
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
-        // Preload all possible chunks to avoid issues due to async loading
-        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkRange.chunksInRange(10, 10, viewDistance + 3, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
-        CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
+        ChunkRange.chunksInRange(10, 10, viewDistance + 3, flatInstance::loadChunk);
         player.refreshSettings(new ClientSettings(
                 Locale.US, (byte) viewDistance,
                 ChatMessageType.FULL, true,

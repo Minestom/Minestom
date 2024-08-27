@@ -33,6 +33,8 @@ import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -230,6 +232,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @ApiStatus.Internal
     public abstract boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates);
 
+    public abstract ChunkManager getChunkManager();
+
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
      *
@@ -309,7 +313,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
      * @return the chunk at the specified position, null if not loaded
+     * @see ChunkManager#getLoadedChunk(int, int)
+     * @deprecated in favor of {@link ChunkClaim ChunkClaims} and {@link ChunkManager}
      */
+    @Deprecated
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
@@ -336,7 +343,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * You would need to call {@link #saveChunksToStorage()} too.
      *
      * @return the future called once the instance data has been saved
+     * @deprecated see {@link ChunkManager#saveInstanceData()}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveInstance();
 
     /**
@@ -344,14 +353,18 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @param chunk the {@link Chunk} to save
      * @return future called when the chunk is done saving
+     * @deprecated see {@link ChunkManager#saveChunk(Chunk)}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveChunkToStorage(Chunk chunk);
 
     /**
      * Saves multiple chunks to permanent storage.
      *
      * @return future called when the chunks are done saving
+     * @deprecated see {@link ChunkManager#saveChunks()}
      */
+    @Deprecated
     public abstract CompletableFuture<Void> saveChunksToStorage();
 
     public abstract void setChunkSupplier(ChunkSupplier chunkSupplier);

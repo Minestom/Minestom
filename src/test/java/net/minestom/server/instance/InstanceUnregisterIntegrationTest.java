@@ -73,16 +73,38 @@ public class InstanceUnregisterIntegrationTest {
 
     @Test
     public void chunkGC(Env env) {
-        // Ensure that unregistering an instance does release its chunks
+        // Ensure that unloading a chunk makes it eligible for GC
         var instance = env.createFlatInstance();
         var chunk = instance.loadChunk(0, 0).join();
         var ref = new WeakReference<>(chunk);
         instance.unloadChunk(chunk);
-        env.process().instance().unregisterInstance(instance);
-        env.tick(); // Required to remove the chunk from the thread dispatcher
-
         //noinspection UnusedAssignment
         chunk = null;
+
+        // We must tick to remove the reference in the dispatcher
+        // from PartitionLoad/Unload
+        env.tick();
+
+        waitUntilCleared(ref);
+    }
+
+    @Test
+    public void chunkGCImplicit(Env env) {
+        // Ensure that unregistering an instance does release its chunks
+        // Basically make sure there are no GC roots referencing a chunk
+        var instance = env.createFlatInstance();
+        var chunk = instance.loadChunk(0, 0).join();
+        var ref = new WeakReference<>(chunk);
+        env.process().instance().unregisterInstance(instance);
+        //noinspection UnusedAssignment
+        chunk = null;
+        //noinspection UnusedAssignment
+        instance = null;
+
+        // We must tick to remove the reference in the dispatcher
+        // from PartitionLoad/Unload
+        env.tick();
+
         waitUntilCleared(ref);
     }
 

@@ -5,6 +5,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.Nullable;
@@ -38,6 +39,11 @@ public class SharedInstance extends Instance {
     @Override
     public boolean breakBlock(Player player, Point blockPosition, BlockFace blockFace, boolean doBlockUpdates) {
         return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
+    }
+
+    @Override
+    public @NotNull ChunkManager getChunkManager() {
+        return instanceContainer.getChunkManager();
     }
 
     @Override

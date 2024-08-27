@@ -38,6 +38,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
@@ -326,36 +327,29 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public CompletableFuture<Void> teleport(Pos position) {
-        return teleport(position, null, RelativeFlags.NONE);
+        return teleport(position, Vec.ZERO);
     }
 
     public CompletableFuture<Void> teleport(Pos position, Vec velocity) {
-        return teleport(position, velocity, null, RelativeFlags.NONE);
+        return teleport(position, velocity, RelativeFlags.NONE);
     }
 
-    public CompletableFuture<Void> teleport(Pos position, long @Nullable [] chunks,
-                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        return teleport(position, chunks, flags, true);
-    }
-
-    public CompletableFuture<Void> teleport(Pos position, Vec velocity, long @Nullable [] chunks,
-                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        return teleport(position, velocity, chunks, flags, true);
-    }
-
-    public CompletableFuture<Void> teleport(Pos position, long @Nullable [] chunks,
-                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+    public CompletableFuture<Void> teleport(Pos position, @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                             boolean shouldConfirm) {
-        // Use delta coord if not providing a delta velocity (to avoid resetting velocity)
-        return teleport(position, Vec.ZERO, chunks, flags | RelativeFlags.DELTA_COORD, shouldConfirm);
+        return teleport(position, Vec.ZERO, flags, shouldConfirm);
+    }
+
+    public CompletableFuture<Void> teleport(Pos position, Vec velocity,
+                                            @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        return teleport(position, velocity, flags, true);
     }
 
     /**
-     * Teleports the entity only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     * Teleports the entity only if the chunk at {@code position} is loaded.
+     * <p>
+     * To ensure the chunk is loaded, the user should add a chunk claim ({@link ChunkManager#addClaim(int, int)}.
      *
      * @param position      the teleport position
-     * @param chunks        the chunk indexes to load before teleporting the entity,
      *                      indexes are from {@link CoordConversion#chunkIndex(int, int)},
      *                      can be null or empty to only load the chunk at {@code position}
      * @param flags         flags used to teleport the entity relatively rather than absolutely
@@ -363,7 +357,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public CompletableFuture<Void> teleport(Pos position, Vec velocity, long @Nullable [] chunks,
+    public CompletableFuture<Void> teleport(Pos position, Vec velocity,
                                             @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                             boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
@@ -384,10 +378,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             else synchronizePosition();
         };
 
-        if (chunks != null && chunks.length > 0) {
-            // Chunks need to be loaded before the teleportation can happen
-            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
-        }
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
@@ -397,6 +387,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             endCallback.run();
             return AsyncUtils.empty();
         }
+    }
+
+    @ApiStatus.Internal
+    protected CompletableFuture<Void> teleportToDifferentChunk(Pos targetPosition, Runnable endCallback) {
+        // we add a temporary claim to make sure the entity can teleport to the given chunk
+        var chunkAndClaim = instance.getChunkManager().addClaim(targetPosition);
+        return chunkAndClaim.chunkFuture()
+                .thenRun(endCallback)
+                .thenRun(() -> instance.getChunkManager().removeClaim(chunkAndClaim.claim()));
     }
 
     /**
