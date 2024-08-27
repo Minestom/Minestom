@@ -53,7 +53,7 @@ public record PlayerInfoUpdatePacket(
             properties = List.copyOf(properties);
         }
 
-        public static final NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
+        public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
             return new Type<>() {
                 @Override
                 public void write(@NotNull NetworkBuffer buffer, Entry value) {
