@@ -24,11 +24,6 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
             VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
             ClientHandshakePacket::new);
 
-    @Override
-    public boolean processImmediately() {
-        return true;
-    }
-
     private static int maxHandshakeLength() {
         // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
         return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;

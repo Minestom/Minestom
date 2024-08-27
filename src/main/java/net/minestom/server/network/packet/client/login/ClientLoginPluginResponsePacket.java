@@ -13,9 +13,4 @@ public record ClientLoginPluginResponsePacket(int messageId, byte @Nullable [] d
             VAR_INT, ClientLoginPluginResponsePacket::messageId,
             RAW_BYTES.optional(), ClientLoginPluginResponsePacket::data,
             ClientLoginPluginResponsePacket::new);
-
-    @Override
-    public boolean processImmediately() {
-        return true;
-    }
 }

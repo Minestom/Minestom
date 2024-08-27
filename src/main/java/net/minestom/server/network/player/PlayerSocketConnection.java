@@ -15,7 +15,15 @@ import net.minestom.server.network.packet.PacketReading;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.network.packet.client.ClientPacket;
+import net.minestom.server.network.packet.client.common.ClientCookieResponsePacket;
+import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
+import net.minestom.server.network.packet.client.common.ClientPingRequestPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
+import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
+import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
+import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
+import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
@@ -32,6 +40,7 @@ import java.net.SocketAddress;
 import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
@@ -45,6 +54,18 @@ import java.util.zip.DataFormatException;
  */
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
+    private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
+            ClientCookieResponsePacket.class,
+            StatusRequestPacket.class,
+            ClientLoginStartPacket.class,
+            ClientPingRequestPacket.class,
+            ClientKeepAlivePacket.class,
+            ClientEncryptionResponsePacket.class,
+            ClientHandshakePacket.class,
+            ClientLoginPluginResponsePacket.class,
+            ClientLoginAcknowledgedPacket.class
+    );
+
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
 
@@ -114,7 +135,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Success<ClientPacket> success -> {
                 for (ClientPacket packet : success.packets()) {
                     try {
-                        if (packet.processImmediately()) {
+                        final boolean processImmediately = IMMEDIATE_PROCESS_PACKETS.contains(packet.getClass());
+                        if (processImmediately) {
                             MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
                         } else {
                             // To be processed during the next player tick
