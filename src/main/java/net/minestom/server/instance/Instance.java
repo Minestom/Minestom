@@ -27,6 +27,7 @@ import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -217,6 +218,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @ApiStatus.Internal
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
+
+    public @NotNull ChunkManager getChunkManager() {
+        throw new UnsupportedOperationException();
+    }
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
