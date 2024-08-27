@@ -66,7 +66,7 @@ public final class VelocityProxy {
                 return false;
             }
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
         final int version = buffer.read(VAR_INT);
         return version == SUPPORTED_FORWARDING_VERSION;
