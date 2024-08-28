@@ -26,7 +26,7 @@ public enum EquipmentSlot {
     }
 
     public boolean isHand() {
-        return !armor && this != BODY;
+        return this == MAIN_HAND || this == OFF_HAND;
     }
 
     public boolean isArmor() {
