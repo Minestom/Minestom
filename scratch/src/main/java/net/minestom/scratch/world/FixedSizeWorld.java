@@ -69,8 +69,8 @@ public final class FixedSizeWorld implements Block.Getter, Block.Setter {
         final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
             for (Section section : chunk.sections) {
                 networkBuffer.write(SHORT, (short) section.blocks.count());
-                networkBuffer.write(section.blocks);
-                networkBuffer.write(section.biomes);
+                networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blocks);
+                networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomes);
             }
         });
         return new ChunkDataPacket(chunkX, chunkZ,

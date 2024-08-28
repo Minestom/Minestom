@@ -31,7 +31,7 @@ public final class PotionHolder {
         if (settings.isAmbient()) flags |= Potion.AMBIENT_FLAG;
         if (settings.showParticles()) flags |= Potion.PARTICLES_FLAG;
         if (settings.showIcon()) flags |= Potion.ICON_FLAG;
-        var potion = new Potion(effect.id(), effect.amplifier(), effect.duration(), flags);
+        var potion = new Potion(effect.id(), (byte) effect.amplifier(), effect.duration(), flags);
         this.effects.put(effect, System.currentTimeMillis());
         this.consumer.accept(new EntityEffectPacket(entityId, potion));
     }

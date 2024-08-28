@@ -239,10 +239,6 @@ public final class SurvivalTemplate {
                 );
                 players.values().forEach(player -> player.sendPacket(packet));
             }
-            // Flush all connections
-            for (Player player : players.values()) {
-                player.connection.networkContext.flush();
-            }
             try {
                 //noinspection BusyWait
                 Thread.sleep(50);
@@ -268,9 +264,9 @@ public final class SurvivalTemplate {
             while (online) {
                 this.online = this.networkContext.read(buffer -> {
                     try {
-                        return client.read(buffer);
+                        buffer.readChannel(client);
                     } catch (IOException e) {
-                        return -1;
+                        throw new RuntimeException(e);
                     }
                 }, this::handleAsyncPacket);
             }
@@ -280,9 +276,9 @@ public final class SurvivalTemplate {
             while (online) {
                 this.online = this.networkContext.write(buffer -> {
                     try {
-                        return client.write(buffer.flip());
+                        buffer.writeChannel(client);
                     } catch (IOException e) {
-                        return -1;
+                        throw new RuntimeException(e);
                     }
                 });
             }
@@ -332,7 +328,6 @@ public final class SurvivalTemplate {
                 default -> {
                 }
             }
-            this.networkContext.flush();
         }
     }
 

@@ -154,10 +154,6 @@ public final class PlayerSyncTemplate {
                 );
                 players.values().forEach(player -> player.connection.networkContext.write(packet));
             }
-            // Flush all connections
-            for (Player player : players.values()) {
-                player.connection.networkContext.flush();
-            }
             try {
                 Thread.sleep(50);
             } catch (InterruptedException e) {
@@ -197,9 +193,9 @@ public final class PlayerSyncTemplate {
             while (online) {
                 this.online = this.networkContext.read(buffer -> {
                     try {
-                        return client.read(buffer);
+                        buffer.readChannel(client);
                     } catch (IOException e) {
-                        return -1;
+                        throw new RuntimeException(e);
                     }
                 }, this::handleAsyncPacket);
             }
@@ -209,9 +205,9 @@ public final class PlayerSyncTemplate {
             while (online) {
                 this.online = this.networkContext.write(buffer -> {
                     try {
-                        return client.write(buffer.flip());
+                        buffer.writeChannel(client);
                     } catch (IOException e) {
-                        return -1;
+                        throw new RuntimeException(e);
                     }
                 });
             }
@@ -261,7 +257,6 @@ public final class PlayerSyncTemplate {
                 default -> {
                 }
             }
-            this.networkContext.flush();
         }
     }
 

@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.StandardProtocolFamily;
-import java.nio.ByteBuffer;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.EnumSet;
@@ -99,6 +98,7 @@ public final class LimboTemplate {
                 System.out.println("Accepted connection from " + client.getRemoteAddress());
                 Connection connection = new Connection(client);
                 Thread.startVirtualThread(connection::networkLoopRead);
+                Thread.startVirtualThread(connection::networkLoopWrite);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -121,7 +121,7 @@ public final class LimboTemplate {
 
     static final class Connection {
         final SocketChannel client;
-        final NetworkContext networkContext = new NetworkContext.Sync(this::write);
+        final NetworkContext.Async networkContext = new NetworkContext.Async();
         boolean online = true;
 
         String username;
@@ -135,33 +135,33 @@ public final class LimboTemplate {
             while (online) {
                 this.online = networkContext.read(buffer -> {
                     try {
-                        return client.read(buffer);
+                        buffer.readChannel(client);
                     } catch (IOException e) {
-                        return -1;
+                        throw new RuntimeException(e);
                     }
                 }, this::handlePacket);
             }
         }
 
-        boolean write(ByteBuffer buffer) {
-            try {
-                final int length = client.write(buffer.flip());
-                if (length == -1) online = false;
-            } catch (IOException e) {
-                online = false;
+        void networkLoopWrite() {
+            while (online) {
+                this.online = this.networkContext.write(buffer -> {
+                    try {
+                        buffer.writeChannel(client);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
             }
-            return online;
         }
 
         void handlePacket(ClientPacket packet) {
             if (packet instanceof ClientFinishConfigurationPacket) {
                 init();
-                this.networkContext.flush();
                 return;
             }
             if (networkContext.state() == ConnectionState.PLAY) {
                 processPacket(packet);
-                this.networkContext.flush();
                 return;
             }
             switch (packet) {
@@ -199,7 +199,6 @@ public final class LimboTemplate {
                 default -> {
                 }
             }
-            this.networkContext.flush();
         }
 
         private final int id = 1;

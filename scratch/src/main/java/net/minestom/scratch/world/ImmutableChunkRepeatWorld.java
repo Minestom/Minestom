@@ -3,6 +3,7 @@ package net.minestom.scratch.world;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
@@ -39,8 +40,8 @@ public final class ImmutableChunkRepeatWorld {
         final byte[] data = NetworkBuffer.makeArray(networkBuffer -> {
             for (GeneratorImpl.GenSection section : sections) {
                 networkBuffer.write(SHORT, (short) section.blocks().count());
-                networkBuffer.write(section.blocks());
-                networkBuffer.write(section.biomes());
+                networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blocks());
+                networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomes());
             }
         });
 

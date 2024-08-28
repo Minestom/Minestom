@@ -37,9 +37,9 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
                 final Block block = entry.getValue();
                 final var registry = block.registry();
 
-            final Point point = CoordConversionUtils.blockIndexToGlobal(index, 0, 0);
-            writer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
-            writer.write(SHORT, (short) point.blockY()); // y
+                final Point point = CoordConversionUtils.blockIndexToGlobal(index, 0, 0);
+                buffer.write(BYTE, (byte) ((point.blockX() & 15) << 4 | point.blockZ() & 15)); // xz
+                buffer.write(SHORT, (short) point.blockY()); // y
 
                 buffer.write(VAR_INT, registry.blockEntityId());
                 final CompoundBinaryTag nbt = BlockUtils.extractClientNbt(block);
