@@ -156,6 +156,7 @@ public class PacketWriteReadTest {
         CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void serverTest() throws NoSuchFieldException, IllegalAccessException {
         for (var packet : SERVER_PACKETS) {
@@ -165,6 +166,7 @@ public class PacketWriteReadTest {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Test
     public void clientTest() throws NoSuchFieldException, IllegalAccessException {
         for (var packet : CLIENT_PACKETS) {
@@ -175,8 +177,8 @@ public class PacketWriteReadTest {
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
-        byte[] bytes = NetworkBuffer.makeArray(buffer -> networkType.write(buffer, packet));
-        NetworkBuffer reader = new NetworkBuffer();
+        byte[] bytes = NetworkBuffer.makeArray(networkType, packet);
+        NetworkBuffer reader = NetworkBuffer.resizableBuffer();
         reader.write(NetworkBuffer.RAW_BYTES, bytes);
         var createdPacket = networkType.read(reader);
         assertEquals(packet, createdPacket);

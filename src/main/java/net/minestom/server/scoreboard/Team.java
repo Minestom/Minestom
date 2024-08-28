@@ -11,7 +11,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -128,7 +128,7 @@ public class Team implements PacketGroupingAudience {
         final TeamsPacket addPlayerPacket = new TeamsPacket(teamName,
                 new TeamsPacket.AddEntitiesToTeamAction(toAdd));
         // Sends to all online players the add player packet
-        PacketUtils.broadcastPlayPacket(addPlayerPacket);
+        PacketSendingUtils.broadcastPlayPacket(addPlayerPacket);
 
         // invalidate player members
         this.isPlayerMembersUpToDate = false;
@@ -159,7 +159,7 @@ public class Team implements PacketGroupingAudience {
         final TeamsPacket removePlayerPacket = new TeamsPacket(teamName,
                 new TeamsPacket.RemoveEntitiesToTeamAction(toRemove));
         // Sends to all online player the remove player packet
-        PacketUtils.broadcastPlayPacket(removePlayerPacket);
+        PacketSendingUtils.broadcastPlayPacket(removePlayerPacket);
 
         // Removes the member from the team
         this.members.removeAll(toRemove);
@@ -372,7 +372,7 @@ public class Team implements PacketGroupingAudience {
      */
     public @NotNull TeamsPacket createTeamsCreationPacket() {
         final var info = new TeamsPacket.CreateTeamAction(teamDisplayName, friendlyFlags,
-                nameTagVisibility, collisionRule, teamColor, prefix, suffix, members);
+                nameTagVisibility, collisionRule, teamColor, prefix, suffix, List.copyOf(members));
         return new TeamsPacket(teamName, info);
     }
 
@@ -463,7 +463,7 @@ public class Team implements PacketGroupingAudience {
     public void sendUpdatePacket() {
         final var info = new TeamsPacket.UpdateTeamAction(teamDisplayName, friendlyFlags,
                 nameTagVisibility, collisionRule, teamColor, prefix, suffix);
-        PacketUtils.broadcastPlayPacket(new TeamsPacket(teamName, info));
+        PacketSendingUtils.broadcastPlayPacket(new TeamsPacket(teamName, info));
     }
 
     @Override

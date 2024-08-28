@@ -4,7 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.play.SystemChatPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,7 +50,7 @@ public final class Messenger {
      */
     public static void sendMessage(@NotNull Collection<Player> players, @NotNull Component message,
                                    @NotNull ChatPosition position, @Nullable UUID uuid) {
-        PacketUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
+        PacketSendingUtils.sendGroupedPacket(players, new SystemChatPacket(message, false),
                 player -> getChatMessageType(player).accepts(position));
     }
 
