@@ -1,5 +1,6 @@
 package net.minestom.server.item.component;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -30,13 +31,23 @@ public record BannerPatterns(@NotNull List<Layer> layers) {
                 return new Layer(buffer.read(BannerPattern.NETWORK_TYPE), buffer.read(DyeColor.NETWORK_TYPE));
             }
         };
-        public static final BinaryTagSerializer<Layer> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> new Layer(BannerPattern.NBT_TYPE.read(tag.get("pattern")), DyeColor.NBT_TYPE.read(tag.get("color"))),
-                layer -> CompoundBinaryTag.builder()
-                        .put("pattern", BannerPattern.NBT_TYPE.write(layer.pattern))
-                        .put("color", DyeColor.NBT_TYPE.write(layer.color))
-                        .build()
-        );
+        public static final BinaryTagSerializer<Layer> NBT_TYPE = new BinaryTagSerializer<Layer>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull Layer value) {
+                return CompoundBinaryTag.builder()
+                        .put("pattern", BannerPattern.NBT_TYPE.write(value.pattern))
+                        .put("color", DyeColor.NBT_TYPE.write(value.color))
+                        .build();
+            }
+
+            @Override
+            public @NotNull Layer read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound))
+                    throw new IllegalArgumentException("Expected a compound tag");
+                return new Layer(BannerPattern.NBT_TYPE.read(context, compound.get("pattern")),
+                        DyeColor.NBT_TYPE.read(context, compound.get("color")));
+            }
+        };
     }
 
     public BannerPatterns {

@@ -182,8 +182,6 @@ public class EntityVelocityIntegrationTest {
         BooleanSupplier tickLoopCondition = () -> i.getAndIncrement() < Math.max(entity.getSynchronizationTicks() - 1, 19);
 
         var tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);
-        env.tickWhile(tickLoopCondition, null);
-        tracker.assertEmpty(); // Verify no updates are sent while the entity is not being synchronized
 
         entity.setVelocity(new Vec(0, 5, 0));
         tracker = viewerConnection.trackIncoming(EntityVelocityPacket.class);

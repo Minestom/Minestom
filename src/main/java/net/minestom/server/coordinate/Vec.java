@@ -15,6 +15,7 @@ import java.util.function.DoubleUnaryOperator;
 public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
+    public static final Vec SECTION = new Vec(16);
 
     public static final double EPSILON = 0.000001;
 
