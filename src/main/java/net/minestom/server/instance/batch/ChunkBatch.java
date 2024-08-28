@@ -4,13 +4,12 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntArraySet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.coordinate.CoordConversionUtils;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.callback.OptionalCallback;
 import net.minestom.server.utils.chunk.ChunkCallback;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -54,7 +53,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        final int index = CoordConversionUtils.blockIndex(x, y, z);
         synchronized (blocks) {
             this.blocks.put(index, block);
         }
@@ -176,7 +175,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
             if (blocks.isEmpty()) {
                 // Nothing to flush
-                OptionalCallback.execute(callback, chunk);
+                if (callback != null) callback.accept(chunk);
                 return;
             }
 
@@ -201,20 +200,20 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * Applies a single block change given a chunk and a value in the described format.
      *
      * @param chunk The chunk to apply the change
-     * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
+     * @param index the block position computed using {@link CoordConversionUtils#blockIndex(int, int, int)}
      * @param block the block to place
      * @return The chunk section which the block was placed
      */
     private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
-        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-        final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+        final int x = CoordConversionUtils.blockIndexToChunkPositionX(index);
+        final int y = CoordConversionUtils.blockIndexToChunkPositionY(index);
+        final int z = CoordConversionUtils.blockIndexToChunkPositionZ(index);
         if (inverse != null) {
             Block prevBlock = chunk.getBlock(x, y, z);
             inverse.setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
-        return ChunkUtils.getChunkCoordinate(y);
+        return CoordConversionUtils.globalToChunk(y);
     }
 
     /**

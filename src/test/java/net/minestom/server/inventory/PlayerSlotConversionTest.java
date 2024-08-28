@@ -2,7 +2,7 @@ package net.minestom.server.inventory;
 
 import org.junit.jupiter.api.Test;
 
-import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
+import static net.minestom.server.utils.SlotUtils.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**

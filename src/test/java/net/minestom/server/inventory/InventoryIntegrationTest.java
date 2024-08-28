@@ -1,9 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
@@ -11,6 +8,9 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.SlotUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -162,11 +162,11 @@ public class InventoryIntegrationTest {
 
         // Ensure that slots not in the inner inventory are sent separately
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
-        player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
+        player.getInventory().setItemStack(SlotUtils.OFFHAND_SLOT, MAGIC_STACK);
         packetTracker.assertSingle(slot -> {
             System.out.println(slot);
             assertEquals((byte) 0, slot.windowId());
-            assertEquals(PlayerInventoryUtils.OFFHAND_SLOT, slot.slot());
+            assertEquals(SlotUtils.OFFHAND_SLOT, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -176,7 +176,7 @@ public class InventoryIntegrationTest {
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
             System.out.println(slot.slot());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(0) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(SlotUtils.convertToPacketSlot(0) - SlotUtils.OFFSET + inventory.getSize(), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
@@ -184,9 +184,8 @@ public class InventoryIntegrationTest {
         player.getInventory().setItemStack(35, MAGIC_STACK); // Test with last inner inventory slot
         packetTracker.assertSingle(slot -> {
             assertEquals(inventory.getWindowId(), slot.windowId());
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(35) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(SlotUtils.convertToPacketSlot(35) - SlotUtils.OFFSET + inventory.getSize(), slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
     }
-
 }

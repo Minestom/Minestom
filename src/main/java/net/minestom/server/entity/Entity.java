@@ -9,6 +9,7 @@ import net.minestom.server.*;
 import net.minestom.server.collision.*;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.PositionUtils;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -45,6 +46,7 @@ import net.minestom.server.thread.AcquirableSource;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
+import net.minestom.server.timer.TimeUnit;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -52,8 +54,6 @@ import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.entity.EntityUtils;
-import net.minestom.server.utils.position.PositionUtils;
-import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
@@ -275,7 +275,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      *
      * @param position      the teleport position
      * @param chunks        the chunk indexes to load before teleporting the entity,
-     *                      indexes are from {@link ChunkUtils#getChunkIndex(int, int)},
+     *                      indexes are from {@link net.minestom.server.coordinate.CoordConversionUtils#chunkIndex(int, int)},
      *                      can be null or empty to only load the chunk at {@code position}
      * @param flags         flags used to teleport the entity relatively rather than absolutely
      *                      use {@link RelativeFlags} to see available flags
@@ -1748,5 +1748,4 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public @NotNull Acquirable<? extends Entity> acquirable() {
         return acquirable;
     }
-
 }

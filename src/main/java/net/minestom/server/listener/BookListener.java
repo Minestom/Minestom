@@ -5,14 +5,12 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.book.EditBookEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.play.ClientEditBookPacket;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.SlotUtils;
 
-public class BookListener {
-
+public final class BookListener {
     public static void listener(ClientEditBookPacket packet, Player player) {
-        int slot = PlayerInventoryUtils.convertClientInventorySlot(packet.slot());
+        int slot = SlotUtils.convertClientInventorySlot(packet.slot());
         ItemStack itemStack = player.getInventory().getItemStack(slot);
         EventDispatcher.call(new EditBookEvent(player, itemStack, packet.pages(), packet.title()));
     }
-
 }

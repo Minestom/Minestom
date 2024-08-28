@@ -4,7 +4,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.timer.Task;
-import net.minestom.server.utils.time.Cooldown;
+import net.minestom.server.timer.Cooldown;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

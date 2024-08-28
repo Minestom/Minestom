@@ -10,7 +10,7 @@ import net.minestom.server.command.builder.arguments.minecraft.registry.Argument
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
-import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.coordinate.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
 public class SummonCommand extends Command {

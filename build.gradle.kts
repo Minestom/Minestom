@@ -67,15 +67,12 @@ sourceSets {
 dependencies {
     // Core dependencies
     api(libs.slf4j)
-    api(libs.jetbrainsAnnotations)
-    api(libs.bundles.adventure)
-    implementation(libs.minestomData)
+    api(project(":lib"))
 
     // Performance/data structures
     implementation(libs.caffeine)
     api(libs.fastutil)
     implementation(libs.bundles.flare)
-    api(libs.gson)
     implementation(libs.jcTools)
 
     // Testing
@@ -116,83 +113,93 @@ tasks {
         replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", gitFile)
     }
 
-    nexusPublishing{
-        useStaging.set(true)
-        this.packageGroup.set("net.minestom")
 
-        transitionCheckOptions {
-            maxRetries.set(360) // 1 hour
-            delayBetween.set(Duration.ofSeconds(10))
-        }
+}
 
-        repositories.sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
+nexusPublishing{
+    useStaging.set(true)
+    this.packageGroup.set("net.minestom")
 
-            if (System.getenv("SONATYPE_USERNAME") != null) {
-                username.set(System.getenv("SONATYPE_USERNAME"))
-                password.set(System.getenv("SONATYPE_PASSWORD"))
-            }
-        }
+    transitionCheckOptions {
+        maxRetries.set(360) // 1 hour
+        delayBetween.set(Duration.ofSeconds(10))
     }
 
-    publishing.publications.create<MavenPublication>("maven") {
-        groupId = "net.minestom"
-        // todo: decide on publishing scheme
-        artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
-        version = project.version.toString()
+    repositories.sonatype {
+        nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+        snapshotRepositoryUrl.set(uri("https://s01.oss.sonatype.org/content/repositories/snapshots/"))
 
-        from(project.components["java"])
+        if (System.getenv("SONATYPE_USERNAME") != null) {
+            username.set(System.getenv("SONATYPE_USERNAME"))
+            password.set(System.getenv("SONATYPE_PASSWORD"))
+        }
+    }
+}
 
-        pom {
-            name.set(this@create.artifactId)
-            description.set(shortDescription)
+allprojects {
+    extra["commonPomConfig"] = Action<MavenPom> {
+        description.set(shortDescription)
+        url.set("https://github.com/minestom/minestom")
+
+        licenses {
+            license {
+                name.set("Apache 2.0")
+                url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
+            }
+        }
+
+        developers {
+            developer {
+                id.set("TheMode")
+            }
+            developer {
+                id.set("mworzala")
+                name.set("Matt Worzala")
+                email.set("matt@hollowcube.dev")
+            }
+        }
+
+        issueManagement {
+            system.set("GitHub")
+            url.set("https://github.com/minestom/minestom/issues")
+        }
+
+        scm {
+            connection.set("scm:git:git://github.com/minestom/minestom.git")
+            developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
             url.set("https://github.com/minestom/minestom")
+            tag.set("HEAD")
+        }
 
-            licenses {
-                license {
-                    name.set("Apache 2.0")
-                    url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
-                }
-            }
-
-            developers {
-                developer {
-                    id.set("TheMode")
-                }
-                developer {
-                    id.set("mworzala")
-                    name.set("Matt Worzala")
-                    email.set("matt@hollowcube.dev")
-                }
-            }
-
-            issueManagement {
-                system.set("GitHub")
-                url.set("https://github.com/minestom/minestom/issues")
-            }
-
-            scm {
-                connection.set("scm:git:git://github.com/minestom/minestom.git")
-                developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
-                url.set("https://github.com/minestom/minestom")
-                tag.set("HEAD")
-            }
-
-            ciManagement {
-                system.set("Github Actions")
-                url.set("https://github.com/minestom/minestom/actions")
-            }
+        ciManagement {
+            system.set("Github Actions")
+            url.set("https://github.com/minestom/minestom/actions")
         }
     }
+}
 
-    signing {
-        isRequired = System.getenv("CI") != null
+publishing.publications.create<MavenPublication>("maven") {
+    groupId = "net.minestom"
+    // todo: decide on publishing scheme
+    artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
+    version = project.version.toString()
 
-        val privateKey = System.getenv("GPG_PRIVATE_KEY")
-        val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
-        useInMemoryPgpKeys(privateKey, keyPassphrase)
+    from(project.components["java"])
 
-        sign(publishing.publications)
+    pom {
+        name.set(this@create.artifactId)
+
+        val commonPomConfig: Action<MavenPom> by project.extra
+        commonPomConfig.execute(this)
     }
+}
+
+signing {
+    isRequired = System.getenv("CI") != null
+
+    val privateKey = System.getenv("GPG_PRIVATE_KEY")
+    val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
+    useInMemoryPgpKeys(privateKey, keyPassphrase)
+
+    sign(publishing.publications)
 }

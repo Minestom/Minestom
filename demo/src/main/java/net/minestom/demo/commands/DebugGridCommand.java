@@ -11,7 +11,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.location.RelativeVec;
+import net.minestom.server.coordinate.RelativeVec;
 
 import org.jetbrains.annotations.NotNull;
 
