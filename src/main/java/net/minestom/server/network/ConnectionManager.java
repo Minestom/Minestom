@@ -48,7 +48,8 @@ public final class ConnectionManager {
     private CachedPacket getDefaultTags() {
         var defaultTags = this.defaultTags;
         if (defaultTags == null) {
-            this.defaultTags = defaultTags = new CachedPacket(new TagsPacket(MinecraftServer.getTagManager().getTagMap()));
+            final TagsPacket packet = MinecraftServer.getTagManager().packet();
+            this.defaultTags = defaultTags = new CachedPacket(packet);
         }
         return defaultTags;
     }

@@ -1,70 +1,41 @@
 package net.minestom.server.network.packet.server.common;
 
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT_ARRAY;
 
-public record TagsPacket(
-        @NotNull Map<Tag.BasicType, List<Tag>> tagsMap) implements ServerPacket.Configuration, ServerPacket.Play {
+public record TagsPacket(List<Registry> registries) implements ServerPacket.Configuration, ServerPacket.Play {
     public TagsPacket {
-        tagsMap = Map.copyOf(tagsMap);
+        registries = List.copyOf(registries);
     }
 
-    public static NetworkBuffer.Type<TagsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, TagsPacket packet) {
-            buffer.write(VAR_INT, packet.tagsMap.size());
-            for (var entry : packet.tagsMap.entrySet()) {
-                final var type = entry.getKey();
-                final var tags = entry.getValue();
-                buffer.write(STRING, type.getIdentifier());
-                if (type.getFunction() == null) {
-                    buffer.write(VAR_INT, 0);
-                    continue;
-                }
-                buffer.write(VAR_INT, tags.size());
-                for (var tag : tags) {
-                    buffer.write(STRING, tag.name());
-                    final var values = tag.getValues();
-                    buffer.write(VAR_INT, values.size());
-                    for (var name : values) {
-                        buffer.write(VAR_INT, type.getFunction().apply(name.asString()));
-                    }
-                }
-            }
-        }
+    public static final NetworkBuffer.Type<TagsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            Registry.SERIALIZER.list(), TagsPacket::registries,
+            TagsPacket::new
+    );
 
-        @Override
-        public TagsPacket read(@NotNull NetworkBuffer buffer) {
-            return new TagsPacket(readTagsMap(buffer));
-        }
-    };
+    public record Registry(String registry, List<Tag> tags) {
+        public static final NetworkBuffer.Type<Registry> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Registry::registry,
+                Tag.SERIALIZER.list(), Registry::tags,
+                Registry::new
+        );
 
-    private static Map<Tag.BasicType, List<Tag>> readTagsMap(@NotNull NetworkBuffer reader) {
-        Map<Tag.BasicType, List<Tag>> tagsMap = new EnumMap<>(Tag.BasicType.class);
-        // Read amount of tag types
-        final int typeCount = reader.read(VAR_INT);
-        for (int i = 0; i < typeCount; i++) {
-            // Read tag type
-            final Tag.BasicType tagType = Tag.BasicType.fromIdentifer(reader.read(STRING));
-            if (tagType == null) {
-                throw new IllegalArgumentException("Tag type could not be resolved");
-            }
-
-            final int tagCount = reader.read(VAR_INT);
-            for (int j = 0; j < tagCount; j++) {
-                final String tagName = reader.read(STRING);
-                final int[] entries = reader.read(VAR_INT_ARRAY);
-                // TODO convert
-            }
+        public Registry {
+            tags = List.copyOf(tags);
         }
-        return tagsMap;
+    }
+
+    public record Tag(String identifier, int[] entries) {
+        public static final NetworkBuffer.Type<Tag> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Tag::identifier,
+                VAR_INT_ARRAY, Tag::entries,
+                Tag::new
+        );
     }
 }

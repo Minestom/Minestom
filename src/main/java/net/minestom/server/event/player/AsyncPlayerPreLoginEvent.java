@@ -2,8 +2,8 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
-import net.minestom.server.network.plugin.LoginPluginResponse;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class AsyncPlayerPreLoginEvent implements PlayerEvent {
      *
      * @return a CompletableFuture for the response. The thread on which it completes is asynchronous.
      */
-    public @NotNull CompletableFuture<LoginPluginResponse> sendPluginRequest(String channel, byte[] requestPayload) {
+    public @NotNull CompletableFuture<LoginPlugin.Response> sendPluginRequest(String channel, byte[] requestPayload) {
         return pluginMessageProcessor.request(channel, requestPayload);
     }
 

@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.crypto.FilterMask;
 import net.minestom.server.crypto.SignedMessageBody;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,29 +26,18 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
                                       int msgTypeId, Component msgTypeName,
                                       @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
 
-    public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, @NotNull PlayerChatMessagePacket value) {
-            buffer.write(UUID, value.sender);
-            buffer.write(VAR_INT, value.index);
-            buffer.writeOptional(RAW_BYTES, value.signature);
-            buffer.write(value.messageBody);
-            buffer.writeOptional(COMPONENT, value.unsignedContent);
-            buffer.write(value.filterMask);
-            buffer.write(VAR_INT, value.msgTypeId);
-            buffer.write(COMPONENT, value.msgTypeName);
-            buffer.writeOptional(COMPONENT, value.msgTypeTarget);
-        }
-
-        @Override
-        public @NotNull PlayerChatMessagePacket read(@NotNull NetworkBuffer buffer) {
-            return new PlayerChatMessagePacket(buffer.read(UUID), buffer.read(VAR_INT), buffer.readOptional(r -> r.readBytes(256)),
-                    new SignedMessageBody.Packed(buffer),
-                    buffer.readOptional(COMPONENT), new FilterMask(buffer),
-                    buffer.read(VAR_INT), buffer.read(COMPONENT),
-                    buffer.readOptional(COMPONENT));
-        }
-    };
+    public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
+            UUID, PlayerChatMessagePacket::sender,
+            VAR_INT, PlayerChatMessagePacket::index,
+            RAW_BYTES.optional(), PlayerChatMessagePacket::signature,
+            SignedMessageBody.Packed.SERIALIZER, PlayerChatMessagePacket::messageBody,
+            COMPONENT.optional(), PlayerChatMessagePacket::unsignedContent,
+            FilterMask.SERIALIZER, PlayerChatMessagePacket::filterMask,
+            VAR_INT, PlayerChatMessagePacket::msgTypeId,
+            COMPONENT, PlayerChatMessagePacket::msgTypeName,
+            COMPONENT, PlayerChatMessagePacket::msgTypeTarget,
+            PlayerChatMessagePacket::new
+    );
 
     @Override
     public @NotNull Collection<Component> components() {

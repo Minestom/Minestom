@@ -34,42 +34,14 @@ public record PlayerInfoUpdatePacket(
     public static final NetworkBuffer.Type<PlayerInfoUpdatePacket> SERIALIZER = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer writer, PlayerInfoUpdatePacket value) {
-            writer.writeEnumSet(value.actions, Action.class);
-            writer.writeCollection(value.entries, (buffer, entry) -> {
-                buffer.write(NetworkBuffer.UUID, entry.uuid);
-                for (Action action : value.actions) {
-                    action.writer.write(buffer, entry);
-                }
-            });
+            writer.write(EnumSet(Action.class), value.actions);
+            writer.write(Entry.serializer(value.actions).list(MAX_ENTRIES), value.entries);
         }
 
         @Override
         public PlayerInfoUpdatePacket read(@NotNull NetworkBuffer reader) {
-            var actions = reader.readEnumSet(Action.class);
-            var entries = reader.readCollection(buffer -> {
-                UUID uuid = buffer.read(NetworkBuffer.UUID);
-                String username = "";
-                List<Property> properties = List.of();
-                boolean listed = false;
-                int latency = 0;
-                GameMode gameMode = GameMode.SURVIVAL;
-                Component displayName = null;
-                ChatSession chatSession = null;
-                for (Action action : actions) {
-                    switch (action) {
-                        case ADD_PLAYER -> {
-                            username = reader.read(STRING);
-                            properties = reader.readCollection(Property.SERIALIZER, GameProfile.MAX_PROPERTIES);
-                        }
-                        case INITIALIZE_CHAT -> chatSession = new ChatSession(reader);
-                        case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
-                        case UPDATE_LISTED -> listed = reader.read(BOOLEAN);
-                        case UPDATE_LATENCY -> latency = reader.read(VAR_INT);
-                        case UPDATE_DISPLAY_NAME -> displayName = reader.readOptional(COMPONENT);
-                    }
-                }
-                return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession);
-            }, MAX_ENTRIES);
+            var actions = reader.read(EnumSet(Action.class));
+            var entries = reader.read(Entry.serializer(actions).list(MAX_ENTRIES));
             return new PlayerInfoUpdatePacket(actions, entries);
         }
     };
@@ -79,6 +51,42 @@ public record PlayerInfoUpdatePacket(
                         @Nullable Component displayName, @Nullable ChatSession chatSession) {
         public Entry {
             properties = List.copyOf(properties);
+        }
+
+        public static NetworkBuffer.Type<Entry> serializer(EnumSet<Action> actions) {
+            return new Type<>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, Entry value) {
+                    buffer.write(NetworkBuffer.UUID, value.uuid);
+                    for (Action action : actions) action.writer.write(buffer, value);
+                }
+
+                @Override
+                public Entry read(@NotNull NetworkBuffer buffer) {
+                    UUID uuid = buffer.read(NetworkBuffer.UUID);
+                    String username = "";
+                    List<Property> properties = List.of();
+                    boolean listed = false;
+                    int latency = 0;
+                    GameMode gameMode = GameMode.SURVIVAL;
+                    Component displayName = null;
+                    ChatSession chatSession = null;
+                    for (Action action : actions) {
+                        switch (action) {
+                            case ADD_PLAYER -> {
+                                username = buffer.read(STRING);
+                                properties = buffer.read(Property.SERIALIZER.list(GameProfile.MAX_PROPERTIES));
+                            }
+                            case INITIALIZE_CHAT -> chatSession = ChatSession.SERIALIZER.read(buffer);
+                            case UPDATE_GAME_MODE -> gameMode = buffer.read(NetworkBuffer.Enum(GameMode.class));
+                            case UPDATE_LISTED -> listed = buffer.read(BOOLEAN);
+                            case UPDATE_LATENCY -> latency = buffer.read(VAR_INT);
+                            case UPDATE_DISPLAY_NAME -> displayName = buffer.read(COMPONENT.optional());
+                        }
+                    }
+                    return new Entry(uuid, username, properties, listed, latency, gameMode, displayName, chatSession);
+                }
+            };
         }
     }
 
@@ -97,13 +105,13 @@ public record PlayerInfoUpdatePacket(
     public enum Action {
         ADD_PLAYER((writer, entry) -> {
             writer.write(STRING, entry.username);
-            writer.writeCollection(Property.SERIALIZER, entry.properties);
+            writer.write(Property.SERIALIZER.list(), entry.properties);
         }),
-        INITIALIZE_CHAT((writer, entry) -> writer.writeOptional(entry.chatSession)),
+        INITIALIZE_CHAT((writer, entry) -> writer.write(ChatSession.SERIALIZER.optional(), entry.chatSession)),
         UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, entry.gameMode.ordinal())),
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
-        UPDATE_DISPLAY_NAME((writer, entry) -> writer.writeOptional(COMPONENT, entry.displayName));
+        UPDATE_DISPLAY_NAME((writer, entry) -> writer.write(COMPONENT.optional(), entry.displayName));
 
         final Writer writer;
 

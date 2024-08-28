@@ -17,7 +17,7 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
             buffer.write(BLOCK_POSITION, value.blockPosition);
             buffer.write(VAR_INT, value.action);
             if (value.data != null) {
-                buffer.write(NBT, value.data);
+                buffer.write(NBT_COMPOUND, value.data);
             } else {
                 // TAG_End
                 buffer.write(BYTE, (byte) 0x00);
@@ -26,7 +26,7 @@ public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
 
         @Override
         public BlockEntityDataPacket read(@NotNull NetworkBuffer buffer) {
-            return new BlockEntityDataPacket(buffer.read(BLOCK_POSITION), buffer.read(VAR_INT), (CompoundBinaryTag) buffer.read(NBT));
+            return new BlockEntityDataPacket(buffer.read(BLOCK_POSITION), buffer.read(VAR_INT), buffer.read(NBT_COMPOUND));
         }
     };
 }
