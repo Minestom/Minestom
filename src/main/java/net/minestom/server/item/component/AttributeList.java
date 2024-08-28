@@ -8,28 +8,23 @@ import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+
 public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInTooltip) {
     public static final AttributeList EMPTY = new AttributeList(List.of(), true);
 
-    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, AttributeList value) {
-            buffer.writeCollection(Modifier.NETWORK_TYPE, value.modifiers);
-            buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
-        }
-
-        @Override
-        public AttributeList read(@NotNull NetworkBuffer buffer) {
-            return new AttributeList(buffer.readCollection(Modifier.NETWORK_TYPE, Short.MAX_VALUE),
-                    buffer.read(NetworkBuffer.BOOLEAN));
-        }
-    };
+    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Modifier.NETWORK_TYPE.list(Short.MAX_VALUE), AttributeList::modifiers,
+            BOOLEAN, AttributeList::showInTooltip,
+            AttributeList::new
+    );
 
     public static final BinaryTagSerializer<AttributeList> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
@@ -57,22 +52,14 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
         }
     };
 
-    public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier, @NotNull EquipmentSlotGroup slot) {
-        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Modifier value) {
-                buffer.write(Attribute.NETWORK_TYPE, value.attribute);
-                buffer.write(AttributeModifier.NETWORK_TYPE, value.modifier);
-                buffer.writeEnum(EquipmentSlotGroup.class, value.slot);
-            }
-
-            @Override
-            public Modifier read(@NotNull NetworkBuffer buffer) {
-                return new Modifier(buffer.read(Attribute.NETWORK_TYPE),
-                        buffer.read(AttributeModifier.NETWORK_TYPE),
-                        buffer.readEnum(EquipmentSlotGroup.class));
-            }
-        };
+    public record Modifier(@NotNull Attribute attribute, @NotNull AttributeModifier modifier,
+                           @NotNull EquipmentSlotGroup slot) {
+        public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = NetworkBufferTemplate.template(
+                Attribute.NETWORK_TYPE, Modifier::attribute,
+                AttributeModifier.NETWORK_TYPE, Modifier::modifier,
+                NetworkBuffer.Enum(EquipmentSlotGroup.class), Modifier::slot,
+                Modifier::new
+        );
         public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Modifier(
                         Attribute.NBT_TYPE.read(tag.get("type")),

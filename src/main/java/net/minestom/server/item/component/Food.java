@@ -6,43 +6,33 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import static net.minestom.server.network.NetworkBuffer.*;
+
 public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat, float eatSeconds,
                    @NotNull ItemStack usingConvertsTo, @NotNull List<EffectChance> effects) {
     public static final float DEFAULT_EAT_SECONDS = 1.6f;
 
-    public static final NetworkBuffer.Type<Food> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Food value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.nutrition);
-            buffer.write(NetworkBuffer.FLOAT, value.saturationModifier);
-            buffer.write(NetworkBuffer.BOOLEAN, value.canAlwaysEat);
-            buffer.write(NetworkBuffer.FLOAT, value.eatSeconds);
-            buffer.write(ItemStack.NETWORK_TYPE, value.usingConvertsTo);
-            buffer.writeCollection(EffectChance.NETWORK_TYPE, value.effects);
-        }
+    public static final NetworkBuffer.Type<Food> NETWORK_TYPE = NetworkBufferTemplate.template(
+            VAR_INT, Food::nutrition,
+            FLOAT, Food::saturationModifier,
+            BOOLEAN, Food::canAlwaysEat,
+            FLOAT, Food::eatSeconds,
+            ItemStack.NETWORK_TYPE, Food::usingConvertsTo,
+            EffectChance.NETWORK_TYPE.list(Short.MAX_VALUE), Food::effects,
+            Food::new
+    );
 
-        @Override
-        public Food read(@NotNull NetworkBuffer buffer) {
-            return new Food(
-                    buffer.read(NetworkBuffer.VAR_INT),
-                    buffer.read(NetworkBuffer.FLOAT),
-                    buffer.read(NetworkBuffer.BOOLEAN),
-                    buffer.read(NetworkBuffer.FLOAT),
-                    buffer.read(ItemStack.NETWORK_TYPE),
-                    buffer.readCollection(EffectChance.NETWORK_TYPE, Short.MAX_VALUE)
-            );
-        }
-    };
     public static final BinaryTagSerializer<Food> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> new Food(
                     tag.getInt("nutrition"),
-                    tag.getFloat("saturation"),
+                    tag.getFloat("saturation_modifier"),
                     tag.getBoolean("can_always_eat"),
                     tag.getFloat("eat_seconds", DEFAULT_EAT_SECONDS),
                     tag.get("using_converts_to") instanceof BinaryTag usingConvertsTo
@@ -51,7 +41,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
             value -> {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
                         .putInt("nutrition", value.nutrition)
-                        .putFloat("saturation", value.saturationModifier)
+                        .putFloat("saturation_odifier", value.saturationModifier)
                         .putBoolean("can_always_eat", value.canAlwaysEat)
                         .putFloat("eat_seconds", value.eatSeconds)
                         .put("effects", EffectChance.NBT_LIST_TYPE.write(value.effects));
@@ -71,18 +61,12 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
     }
 
     public record EffectChance(@NotNull CustomPotionEffect effect, float probability) {
-        public static final NetworkBuffer.Type<EffectChance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, EffectChance value) {
-                CustomPotionEffect.NETWORK_TYPE.write(buffer, value.effect);
-                buffer.write(NetworkBuffer.FLOAT, value.probability);
-            }
+        public static final NetworkBuffer.Type<EffectChance> NETWORK_TYPE = NetworkBufferTemplate.template(
+                CustomPotionEffect.NETWORK_TYPE, EffectChance::effect,
+                FLOAT, EffectChance::probability,
+                EffectChance::new
+        );
 
-            @Override
-            public EffectChance read(@NotNull NetworkBuffer buffer) {
-                return null;
-            }
-        };
         public static final BinaryTagSerializer<EffectChance> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new EffectChance(
                         CustomPotionEffect.NBT_TYPE.read(tag.getCompound("effect")),
@@ -94,5 +78,4 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
         );
         public static final BinaryTagSerializer<List<EffectChance>> NBT_LIST_TYPE = NBT_TYPE.list();
     }
-
 }

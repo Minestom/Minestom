@@ -1,20 +1,17 @@
 package net.minestom.server.network;
 
-import it.unimi.dsi.fastutil.Pair;
+import net.minestom.server.network.packet.PacketReading;
+import net.minestom.server.network.packet.PacketVanilla;
+import net.minestom.server.network.packet.PacketWriting;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
-import net.minestom.server.utils.ObjectPool;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.Utils;
-import net.minestom.server.utils.binary.BinaryBuffer;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DataFormatException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SocketReadTest {
 
@@ -23,23 +20,15 @@ public class SocketReadTest {
     public void complete(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
-        var wrapper = BinaryBuffer.wrap(buffer);
-        wrapper.reset(0, buffer.position());
-
-        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertNull(remaining);
-
-        assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(List.of(packet), packets);
     }
 
     @ParameterizedTest
@@ -47,25 +36,16 @@ public class SocketReadTest {
     public void completeTwo(boolean compressed) throws DataFormatException {
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
 
-        var wrapper = BinaryBuffer.wrap(buffer);
-        wrapper.reset(0, buffer.position());
-
-        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertNull(remaining);
-
-        assertEquals(2, packets.size());
-        for (var rawPacket : packets) {
-            assertEquals(0x0A, rawPacket.left());
-            var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
-            assertEquals("channel", readPacket.channel());
-            assertEquals(2000, readPacket.data().length);
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
         }
+        var packets = success.packets();
+        assertEquals(List.of(packet, packet), packets);
     }
 
     @ParameterizedTest
@@ -75,25 +55,21 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        Utils.writeVarInt(buffer, 200); // incomplete 200 bytes packet
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        buffer.write(NetworkBuffer.VAR_INT, 200); // incomplete 200 bytes packet
 
-        var wrapper = BinaryBuffer.wrap(buffer);
-        wrapper.reset(0, buffer.position());
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(List.of(packet), packets);
 
-        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertNotNull(remaining);
-        assertEquals(Utils.getVarIntSize(200), remaining.readableBytes());
-
-        assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Empty<ClientPacket>)) {
+            throw new AssertionError("Expected an empty result, got " + readResult);
+        }
     }
 
     @ParameterizedTest
@@ -103,24 +79,66 @@ public class SocketReadTest {
 
         var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
 
-        var buffer = ObjectPool.PACKET_POOL.get();
-        PacketUtils.writeFramedPacket(buffer, 0x0A, ClientPluginMessagePacket.SERIALIZER, packet, compressed ? 256 : 0);
-        buffer.put((byte) -85); // incomplete var-int length
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
 
-        var wrapper = BinaryBuffer.wrap(buffer);
-        wrapper.reset(0, buffer.position());
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
+            throw new AssertionError("Expected a success result, got " + readResult);
+        }
+        var packets = success.packets();
+        assertEquals(1, buffer.readableBytes());
 
-        List<Pair<Integer, ByteBuffer>> packets = new ArrayList<>();
-        var remaining = PacketUtils.readPackets(wrapper, compressed,
-                (integer, payload) -> packets.add(Pair.of(integer, payload)));
-        assertNotNull(remaining);
-        assertEquals(1, remaining.readableBytes());
+        assertEquals(List.of(packet), packets);
 
-        assertEquals(1, packets.size());
-        var rawPacket = packets.get(0);
-        assertEquals(0x0A, rawPacket.left());
-        var readPacket = ClientPluginMessagePacket.SERIALIZER.read(new NetworkBuffer(rawPacket.right()));
-        assertEquals("channel", readPacket.channel());
-        assertEquals(2000, readPacket.data().length);
+        // Try to read the next packet
+        readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Empty<ClientPacket>)) {
+            throw new AssertionError("Expected an empty result, got " + readResult);
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void resize(boolean compressed) throws DataFormatException {
+        // Write a complete packet that is larger than the buffer capacity
+
+        var packet = new ClientPluginMessagePacket("channel", new byte[2000]);
+
+        var buffer = PacketVanilla.PACKET_POOL.get();
+        PacketWriting.writeFramedPacket(buffer, ConnectionState.PLAY, packet, compressed ? 256 : 0);
+        final long packetLength = buffer.writeIndex();
+        buffer = buffer.copy(0, packetLength / 2).index(0, packetLength / 2);
+
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+            throw new AssertionError("Expected a failure result, got " + readResult);
+        }
+        assertEquals(packetLength, failure.requiredCapacity());
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void resizeHeader(boolean compressed) throws DataFormatException {
+        // Write a buffer where you cannot read the packet length
+
+        var buffer = NetworkBuffer.staticBuffer(1);
+        buffer.write(NetworkBuffer.BYTE, (byte) -85); // incomplete var-int length
+
+        var readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
+        if (!(readResult instanceof PacketReading.Result.Failure<ClientPacket> failure)) {
+            throw new AssertionError("Expected a failure result, got " + readResult);
+        }
+        // 5 = max var-int size
+        assertEquals(5, failure.requiredCapacity());
+    }
+
+    private static int getVarIntSize(int input) {
+        return (input & 0xFFFFFF80) == 0
+                ? 1 : (input & 0xFFFFC000) == 0
+                ? 2 : (input & 0xFFE00000) == 0
+                ? 3 : (input & 0xF0000000) == 0
+                ? 4 : 5;
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.common;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,17 +12,10 @@ public record CustomReportDetailsPacket(
 ) implements ServerPacket.Configuration, ServerPacket.Play {
     private static final int MAX_DETAILS = 32;
 
-    public static NetworkBuffer.Type<CustomReportDetailsPacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, CustomReportDetailsPacket packet) {
-            buffer.writeMap(NetworkBuffer.STRING, NetworkBuffer.STRING, packet.details);
-        }
-
-        @Override
-        public CustomReportDetailsPacket read(@NotNull NetworkBuffer buffer) {
-            return new CustomReportDetailsPacket(buffer.readMap(NetworkBuffer.STRING, NetworkBuffer.STRING, MAX_DETAILS));
-        }
-    };
+    public static final NetworkBuffer.Type<CustomReportDetailsPacket> SERIALIZER = NetworkBufferTemplate.template(
+            NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING, MAX_DETAILS), CustomReportDetailsPacket::details,
+            CustomReportDetailsPacket::new
+    );
 
     public CustomReportDetailsPacket {
         details = Map.copyOf(details);

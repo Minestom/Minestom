@@ -24,8 +24,6 @@ public class DeclareRecipesPacketTest {
                                 ItemStack.of(Material.DIAMOND))
                 )
         ));
-
-        assertThrows(IllegalArgumentException.class, () -> NetworkBuffer.makeArray(networkBuffer ->
-                DeclareRecipesPacket.SERIALIZER.write(networkBuffer, packet)));
+        assertThrows(IllegalArgumentException.class, () -> NetworkBuffer.makeArray(DeclareRecipesPacket.SERIALIZER, packet));
     }
 }

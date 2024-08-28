@@ -21,12 +21,12 @@ public record FilteredText<T>(@NotNull T text, @Nullable T filtered) {
             @Override
             public void write(@NotNull NetworkBuffer buffer, FilteredText<T> value) {
                 buffer.write(inner, value.text);
-                buffer.writeOptional(inner, value.filtered);
+                buffer.write(inner.optional(), value.filtered);
             }
 
             @Override
             public FilteredText<T> read(@NotNull NetworkBuffer buffer) {
-                return new FilteredText<>(buffer.read(inner), buffer.readOptional(inner));
+                return new FilteredText<>(buffer.read(inner), buffer.read(inner.optional()));
             }
         };
     }

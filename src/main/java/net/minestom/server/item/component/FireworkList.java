@@ -2,6 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,19 +12,11 @@ import java.util.List;
 public record FireworkList(int flightDuration, @NotNull List<FireworkExplosion> explosions) {
     public static final FireworkList EMPTY = new FireworkList(0, List.of());
 
-    public static final NetworkBuffer.Type<FireworkList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, FireworkList value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.flightDuration);
-            buffer.writeCollection(FireworkExplosion.NETWORK_TYPE, value.explosions);
-        }
-
-        @Override
-        public FireworkList read(@NotNull NetworkBuffer buffer) {
-            return new FireworkList(buffer.read(NetworkBuffer.VAR_INT),
-                    buffer.readCollection(FireworkExplosion.NETWORK_TYPE, 256));
-        }
-    };
+    public static final NetworkBuffer.Type<FireworkList> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.VAR_INT, FireworkList::flightDuration,
+            FireworkExplosion.NETWORK_TYPE.list(256), FireworkList::explosions,
+            FireworkList::new
+    );
 
     public static final BinaryTagSerializer<FireworkList> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {

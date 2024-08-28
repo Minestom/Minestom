@@ -2,6 +2,7 @@ package net.minestom.server.network.packet.client.handshake;
 
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,40 +12,19 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
                                     int serverPort, @NotNull Intent intent) implements ClientPacket {
 
     public ClientHandshakePacket {
-        if (serverAddress.length() > getMaxHandshakeLength()) {
+        if (serverAddress.length() > maxHandshakeLength()) {
             throw new IllegalArgumentException("Server address too long: " + serverAddress.length());
         }
     }
 
-    public static NetworkBuffer.Type<ClientHandshakePacket> SERIALIZER = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, ClientHandshakePacket value) {
-            buffer.write(VAR_INT, value.protocolVersion);
-            int maxLength = getMaxHandshakeLength();
-            if (value.serverAddress.length() > maxLength) {
-                throw new IllegalArgumentException("serverAddress is " + value.serverAddress.length() + " characters long, maximum allowed is " + maxLength);
-            }
-            buffer.write(STRING, value.serverAddress);
-            buffer.write(UNSIGNED_SHORT, value.serverPort);
-            // Not a writeEnum call because the indices are not 0-based
-            buffer.write(VAR_INT, value.intent.id());
-        }
+    public static final NetworkBuffer.Type<ClientHandshakePacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, ClientHandshakePacket::protocolVersion,
+            STRING, ClientHandshakePacket::serverAddress,
+            UNSIGNED_SHORT, ClientHandshakePacket::serverPort,
+            VAR_INT.transform(Intent::fromId, Intent::id), ClientHandshakePacket::intent,
+            ClientHandshakePacket::new);
 
-        @Override
-        public @NotNull ClientHandshakePacket read(@NotNull NetworkBuffer buffer) {
-            return new ClientHandshakePacket(buffer.read(VAR_INT), buffer.read(STRING),
-                    buffer.read(UNSIGNED_SHORT),
-                    // Not a readEnum call because the indices are not 0-based
-                    Intent.fromId(buffer.read(VAR_INT)));
-        }
-    };
-
-    @Override
-    public boolean processImmediately() {
-        return true;
-    }
-
-    private static int getMaxHandshakeLength() {
+    private static int maxHandshakeLength() {
         // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
         return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
     }

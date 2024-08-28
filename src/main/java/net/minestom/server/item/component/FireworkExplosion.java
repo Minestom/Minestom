@@ -4,12 +4,15 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
 public record FireworkExplosion(
         @NotNull Shape shape,
@@ -27,27 +30,14 @@ public record FireworkExplosion(
         BURST
     }
 
-    public static final NetworkBuffer.Type<FireworkExplosion> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, FireworkExplosion value) {
-            buffer.writeEnum(Shape.class, value.shape);
-            buffer.writeCollection(Color.NETWORK_TYPE, value.colors);
-            buffer.writeCollection(Color.NETWORK_TYPE, value.fadeColors);
-            buffer.write(NetworkBuffer.BOOLEAN, value.hasTrail);
-            buffer.write(NetworkBuffer.BOOLEAN, value.hasTwinkle);
-        }
-
-        @Override
-        public FireworkExplosion read(@NotNull NetworkBuffer buffer) {
-            return new FireworkExplosion(
-                    buffer.readEnum(Shape.class),
-                    buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
-                    buffer.readCollection(Color.NETWORK_TYPE, Short.MAX_VALUE),
-                    buffer.read(NetworkBuffer.BOOLEAN),
-                    buffer.read(NetworkBuffer.BOOLEAN)
-            );
-        }
-    };
+    public static final NetworkBuffer.Type<FireworkExplosion> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.Enum(Shape.class), FireworkExplosion::shape,
+            Color.NETWORK_TYPE.list(Short.MAX_VALUE), FireworkExplosion::colors,
+            Color.NETWORK_TYPE.list(Short.MAX_VALUE), FireworkExplosion::fadeColors,
+            BOOLEAN, FireworkExplosion::hasTrail,
+            BOOLEAN, FireworkExplosion::hasTwinkle,
+            FireworkExplosion::new
+    );
 
     public static final BinaryTagSerializer<FireworkExplosion> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {

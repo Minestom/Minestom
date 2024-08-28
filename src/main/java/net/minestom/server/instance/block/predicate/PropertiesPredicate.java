@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,28 +14,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static net.minestom.server.network.NetworkBuffer.STRING;
+
 public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> properties) implements Predicate<Block> {
 
-    public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, PropertiesPredicate value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.properties.size());
-            for (Map.Entry<String, ValuePredicate> entry : value.properties.entrySet()) {
-                buffer.write(NetworkBuffer.STRING, entry.getKey());
-                buffer.write(ValuePredicate.NETWORK_TYPE, entry.getValue());
-            }
-        }
-
-        @Override
-        public PropertiesPredicate read(@NotNull NetworkBuffer buffer) {
-            int size = buffer.read(NetworkBuffer.VAR_INT);
-            Map<String, ValuePredicate> properties = new HashMap<>(size);
-            for (int i = 0; i < size; i++) {
-                properties.put(buffer.read(NetworkBuffer.STRING), buffer.read(ValuePredicate.NETWORK_TYPE));
-            }
-            return new PropertiesPredicate(properties);
-        }
-    };
+    public static final NetworkBuffer.Type<PropertiesPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
+            PropertiesPredicate::new
+    );
     public static final BinaryTagSerializer<PropertiesPredicate> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Map<String, ValuePredicate> properties = new HashMap<>();
@@ -74,7 +61,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
 
         record Exact(@Nullable String value) implements ValuePredicate {
 
-            public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.map(Exact::new, Exact::value);
+            public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.transform(Exact::new, Exact::value);
             public static final BinaryTagSerializer<Exact> NBT_TYPE = BinaryTagSerializer.STRING.map(Exact::new, Exact::value);
 
             @Override
@@ -94,19 +81,12 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
          * @param max The max value to match, exclusive
          */
         record Range(@Nullable String min, @Nullable String max) implements ValuePredicate {
+            public static final NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
+                    STRING.optional(), Range::min,
+                    STRING.optional(), Range::max,
+                    Range::new
+            );
 
-            public static final NetworkBuffer.Type<Range> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-                @Override
-                public void write(@NotNull NetworkBuffer buffer, Range value) {
-                    buffer.writeOptional(NetworkBuffer.STRING, value.min);
-                    buffer.writeOptional(NetworkBuffer.STRING, value.max);
-                }
-
-                @Override
-                public Range read(@NotNull NetworkBuffer buffer) {
-                    return new Range(buffer.readOptional(NetworkBuffer.STRING), buffer.readOptional(NetworkBuffer.STRING));
-                }
-            };
             public static final BinaryTagSerializer<Range> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                     tag -> new Range(
                             tag.get("min") instanceof StringBinaryTag string ? string.value() : null,
