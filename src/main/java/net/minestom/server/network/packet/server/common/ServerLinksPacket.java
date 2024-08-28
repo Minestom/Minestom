@@ -49,7 +49,6 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
                 }
             }
         };
-        public static final NetworkBuffer.Type<List<Entry>> LIST_NETWORK_TYPE = NETWORK_TYPE.list(MAX_ENTRIES);
 
         public Entry {
             Check.argCondition(knownType == null && customType == null, "One of knownType and customType must be present");

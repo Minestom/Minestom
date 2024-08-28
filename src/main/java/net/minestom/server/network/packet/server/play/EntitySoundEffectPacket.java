@@ -31,7 +31,7 @@ public record EntitySoundEffectPacket(
         @Override
         public EntitySoundEffectPacket read(@NotNull NetworkBuffer buffer) {
             return new EntitySoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
-                    buffer.readEnum(Sound.Source.class),
+                    buffer.read(NetworkBuffer.Enum(Sound.Source.class)),
                     buffer.read(VAR_INT),
                     buffer.read(FLOAT),
                     buffer.read(FLOAT),

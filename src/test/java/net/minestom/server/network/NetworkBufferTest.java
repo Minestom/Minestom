@@ -2,6 +2,7 @@ package net.minestom.server.network;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -10,9 +11,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
-import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static net.kyori.adventure.nbt.IntBinaryTag.intBinaryTag;
 import static net.minestom.server.network.NetworkBuffer.*;
@@ -22,7 +24,7 @@ public class NetworkBufferTest {
 
     @Test
     public void resize() {
-        var buffer = new NetworkBuffer(6);
+        var buffer = NetworkBuffer.resizableBuffer(6);
         buffer.write(INT, 6);
         assertEquals(4, buffer.writeIndex());
 
@@ -33,7 +35,7 @@ public class NetworkBufferTest {
         assertEquals(7, buffer.read(INT));
 
         // Test one-off length
-        buffer = new NetworkBuffer(1);
+        buffer = NetworkBuffer.resizableBuffer(1);
         buffer.write(BYTE, (byte) 3);
         assertEquals(1, buffer.writeIndex());
 
@@ -45,8 +47,117 @@ public class NetworkBufferTest {
     }
 
     @Test
+    public void resizeRead() {
+        var buffer = NetworkBuffer.resizableBuffer(4);
+        buffer.write(INT, 6);
+        assertEquals(4, buffer.capacity());
+        assertEquals(4, buffer.writeIndex());
+
+        buffer.resize(8);
+        assertEquals(8, buffer.capacity());
+        assertEquals(6, buffer.read(INT));
+
+        buffer.write(INT, 7);
+        assertEquals(8, buffer.capacity());
+        assertEquals(8, buffer.writeIndex());
+    }
+
+    @Test
+    public void copyClone() {
+        var buffer = NetworkBuffer.staticBuffer(10);
+        buffer.write(INT, 6);
+        buffer.write(SHORT, (short) 2);
+        buffer.write(FLOAT, 3.5f);
+        assertEquals(10, buffer.writeIndex());
+        assertEquals(10, buffer.capacity());
+
+        var copy = buffer.copy(0, 10);
+        assertEquals(10, copy.writeIndex());
+        assertEquals(10, copy.capacity());
+
+        assertTrue(NetworkBuffer.equals(buffer, copy));
+    }
+
+    @Test
+    public void copyDirectZeroIndex() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(10);
+        NetworkBuffer.copy(buffer1, 0, buffer2, 0, 10);
+        assertEquals(10, buffer2.capacity());
+
+        assertEquals(6, buffer2.read(INT));
+        assertEquals((short) 2, buffer2.read(SHORT));
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void copyDirectIndex() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(4);
+        NetworkBuffer.copy(buffer1, 6, buffer2, 0, 4);
+        assertEquals(4, buffer2.capacity());
+
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void copyDirectIndexOffset() {
+        var buffer1 = NetworkBuffer.staticBuffer(10);
+        buffer1.write(INT, 6);
+        buffer1.write(SHORT, (short) 2);
+        buffer1.write(FLOAT, 3.5f);
+        assertEquals(10, buffer1.writeIndex());
+        assertEquals(10, buffer1.capacity());
+
+        var buffer2 = NetworkBuffer.staticBuffer(8);
+        buffer2.write(INT, 5);
+        NetworkBuffer.copy(buffer1, 6, buffer2, 4, 4);
+        assertEquals(8, buffer2.capacity());
+
+        assertEquals(5, buffer2.read(INT));
+        assertEquals(3.5f, buffer2.read(FLOAT));
+    }
+
+    @Test
+    public void compact() {
+        var buffer = NetworkBuffer.staticBuffer(256);
+        buffer.write(INT, 6);
+        buffer.write(SHORT, (short) 2);
+        buffer.write(FLOAT, 3.5f);
+
+        buffer.read(INT);
+        buffer.compact();
+        // Short should be copied at index 0
+        assertEquals(256, buffer.capacity());
+        assertEquals(6, buffer.writeIndex());
+        assertEquals(0, buffer.readIndex());
+
+        assertEquals((short) 2, buffer.read(SHORT));
+        assertEquals(3.5f, buffer.read(FLOAT));
+    }
+
+    @Test
+    public void outOfBound() {
+        var buffer = NetworkBuffer.staticBuffer(3);
+        buffer.write(SHORT, (short) 2);
+        assertThrows(IndexOutOfBoundsException.class, () -> buffer.write(INT, 6));
+    }
+
+    @Test
     public void readableBytes() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
         assertEquals(0, buffer.readableBytes());
 
         buffer.write(BYTE, (byte) 0);
@@ -64,7 +175,7 @@ public class NetworkBufferTest {
 
     @Test
     public void extractBytes() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
 
         buffer.write(BYTE, (byte) 25);
         assertEquals(1, buffer.writeIndex());
@@ -94,12 +205,76 @@ public class NetworkBufferTest {
         assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
         }));
 
-        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(buffer -> buffer.write(BYTE, (byte) 1)));
+        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(BYTE, (byte) 1));
 
         assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArray(buffer -> {
             buffer.write(BYTE, (byte) 1);
             buffer.write(LONG, 50L);
         }));
+    }
+
+    @Test
+    public void arrayWrap() {
+        byte[] array = new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50};
+        var buffer = NetworkBuffer.wrap(array, 0, array.length);
+        assertEquals(9, buffer.capacity());
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        assertEquals((byte) 1, buffer.read(BYTE));
+        assertEquals(50L, buffer.read(LONG));
+
+        assertEquals(9, buffer.readIndex());
+    }
+
+    @Test
+    public void sizeOfPrimitives() {
+        assertEquals(1, BYTE.sizeOf((byte) 1));
+        assertEquals(2, SHORT.sizeOf((short) 1));
+        assertEquals(4, INT.sizeOf(1));
+        assertEquals(8, LONG.sizeOf(1L));
+        assertEquals(4, FLOAT.sizeOf(1f));
+        assertEquals(8, DOUBLE.sizeOf(1d));
+    }
+
+    @Test
+    public void sizeOfCompounds() {
+        var type = new Type<Integer>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                buffer.write(INT, value);
+                buffer.write(INT, value);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        assertEquals(8, type.sizeOf(1));
+    }
+
+    @Test
+    public void sizeOfThrow() {
+        Function<Consumer<NetworkBuffer>, Type<Integer>> fn = networkBufferConsumer -> new Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Integer value) {
+                networkBufferConsumer.accept(buffer);
+            }
+
+            @Override
+            public Integer read(@NotNull NetworkBuffer buffer) {
+                throw new UnsupportedOperationException();
+            }
+        };
+
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.resize(2)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.slice(0, 0, 0, 0)).sizeOf(1));
+        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
     }
 
     @Test
@@ -228,9 +403,15 @@ public class NetworkBufferTest {
 
     @Test
     public void rawBytes() {
-        // FIXME: currently break because the array is identity compared
-        //assertBufferType(NetworkBuffer.RAW_BYTES, new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64},
-        //      new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64});
+        var array = new byte[]{0x0B, 0x48, 0x65, 0x6c, 0x6c, 0x6f, 0x20, 0x57, 0x6f, 0x72, 0x6c, 0x64};
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        buffer.write(RAW_BYTES, array);
+        assertEquals(0, buffer.readIndex());
+        assertEquals(array.length, buffer.writeIndex());
+
+        var readArray = buffer.read(RAW_BYTES);
+        assertArrayEquals(array, readArray);
+        assertEquals(array.length, buffer.readIndex());
     }
 
     @Test
@@ -276,20 +457,18 @@ public class NetworkBufferTest {
 
     @Test
     public void collectionMaxSize() {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer();
         var list = new ArrayList<Boolean>();
         for (int i = 0; i < 1000; i++)
             list.add(true);
-        buffer.writeCollection(BOOLEAN, list);
+        buffer.write(BOOLEAN.list(), list);
 
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(BOOLEAN, 10));
-        buffer.readIndex(0); // reset
-        assertThrows(IllegalArgumentException.class, () -> buffer.readCollection(b -> b.read(BOOLEAN), 10));
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(BOOLEAN.list(10)));
     }
 
     @Test
     public void oomStringRegression() {
-        var buffer = new NetworkBuffer(ByteBuffer.allocate(100));
+        var buffer = NetworkBuffer.resizableBuffer(100);
         buffer.write(VAR_INT, Integer.MAX_VALUE); // String length
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
@@ -297,7 +476,7 @@ public class NetworkBufferTest {
     }
 
     static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value, byte[] expected, @NotNull Action<T> action) {
-        var buffer = new NetworkBuffer();
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
         action.write(buffer, type, value);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
@@ -316,7 +495,7 @@ public class NetworkBufferTest {
 
         // Ensure resize support
         {
-            var tmp = new NetworkBuffer(0);
+            var tmp = NetworkBuffer.resizableBuffer(0);
             action.write(tmp, type, value);
             assertEquals(0, tmp.readIndex());
             if (expected != null) assertEquals(expected.length, tmp.writeIndex());
@@ -351,12 +530,12 @@ public class NetworkBufferTest {
         assertBufferType(type, value, expected, new Action<T>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type, @UnknownNullability T value) {
-                buffer.writeOptional(type, value);
+                buffer.write(type.optional(), value);
             }
 
             @Override
             public T read(@NotNull NetworkBuffer buffer, @NotNull NetworkBuffer.Type<T> type) {
-                return buffer.readOptional(type);
+                return buffer.read(type.optional());
             }
         });
     }
@@ -365,13 +544,13 @@ public class NetworkBufferTest {
         assertBufferTypeOptional(type, value, null);
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> values, byte @Nullable [] expected) {
-        var buffer = new NetworkBuffer();
-        buffer.writeCollection(type, values);
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> values, byte @Nullable [] expected) {
+        var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+        buffer.write(type.list(), values);
         assertEquals(0, buffer.readIndex());
         if (expected != null) assertEquals(expected.length, buffer.writeIndex());
 
-        var actual = buffer.readCollection(type, Integer.MAX_VALUE);
+        var actual = buffer.read(type.list(Integer.MAX_VALUE));
 
         assertEquals(values, actual);
         if (expected != null) assertEquals(expected.length, buffer.readIndex());
@@ -384,7 +563,7 @@ public class NetworkBufferTest {
         }
     }
 
-    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull Collection<T> value) {
+    static <T> void assertBufferTypeCollection(NetworkBuffer.@NotNull Type<T> type, @NotNull List<T> value) {
         assertBufferTypeCollection(type, value, null);
     }
 

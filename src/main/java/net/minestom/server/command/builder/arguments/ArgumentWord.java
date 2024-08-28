@@ -75,9 +75,7 @@ public class ArgumentWord extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArray(buffer -> {
-            buffer.write(NetworkBuffer.VAR_INT, 0); // Single word
-        });
+        return NetworkBuffer.makeArray(NetworkBuffer.VAR_INT, 0); // Single word
     }
 
     /**

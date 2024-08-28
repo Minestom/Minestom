@@ -2,11 +2,10 @@ package net.minestom.server.potion;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.RemoveEntityEffectPacket;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -19,8 +18,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(@NotNull PotionEffect effect, byte amplifier,
-                     int duration, byte flags) implements NetworkBuffer.Writer {
+public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -72,11 +70,6 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
      */
     public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
-    }
-
-    public Potion(@NotNull NetworkBuffer reader) {
-        this(Objects.requireNonNull(PotionEffect.fromId(reader.read(VAR_INT))), reader.read(BYTE),
-                reader.read(VAR_INT), reader.read(BYTE));
     }
 
     /**
@@ -144,11 +137,11 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier,
         entity.sendPacketToViewersAndSelf(new RemoveEntityEffectPacket(entity.getEntityId(), effect));
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, effect.id());
-        writer.write(BYTE, amplifier);
-        writer.write(VAR_INT, duration);
-        writer.write(BYTE, flags);
-    }
+    public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
+            PotionEffect.NETWORK_TYPE, Potion::effect,
+            BYTE, Potion::amplifier,
+            VAR_INT, Potion::duration,
+            BYTE, Potion::flags,
+            Potion::new
+    );
 }
