@@ -26,7 +26,7 @@ public record RespawnPacket(
             STRING, RespawnPacket::worldName,
             LONG, RespawnPacket::hashedSeed,
             GameMode.NETWORK_TYPE, RespawnPacket::gameMode,
-            GameMode.NETWORK_TYPE, RespawnPacket::previousGameMode,
+            GameMode.OPT_NETWORK_TYPE, RespawnPacket::previousGameMode,
             BOOLEAN, RespawnPacket::isDebug,
             BOOLEAN, RespawnPacket::isFlat,
             WorldPos.NETWORK_TYPE.optional(), RespawnPacket::deathLocation,

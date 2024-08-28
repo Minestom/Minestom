@@ -18,7 +18,7 @@ public record UpdateEnabledFeaturesPacket(@NotNull List<String> features) implem
         features = List.copyOf(features);
     }
 
-    public static NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = NetworkBufferTemplate.template(
+    public static final NetworkBuffer.Type<UpdateEnabledFeaturesPacket> SERIALIZER = NetworkBufferTemplate.template(
             STRING.list(MAX_FEATURES), UpdateEnabledFeaturesPacket::features,
             UpdateEnabledFeaturesPacket::new
     );

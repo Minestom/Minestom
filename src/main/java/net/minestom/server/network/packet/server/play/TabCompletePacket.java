@@ -47,11 +47,9 @@ public record TabCompletePacket(int transactionId, int start, int length,
         if (matches.isEmpty()) return this;
         final List<Match> updatedMatches = matches.stream().map(match -> match.copyWithOperator(operator)).toList();
         return new TabCompletePacket(transactionId, start, length, updatedMatches);
-
     }
 
-    public record Match(@NotNull String match,
-                        @Nullable Component tooltip) implements ComponentHolder<Match> {
+    public record Match(@NotNull String match, @Nullable Component tooltip) implements ComponentHolder<Match> {
         public static final NetworkBuffer.Type<Match> SERIALIZER = NetworkBufferTemplate.template(
                 STRING, Match::match,
                 COMPONENT.optional(), Match::tooltip,
