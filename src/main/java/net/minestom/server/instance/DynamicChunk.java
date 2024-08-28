@@ -12,6 +12,7 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
 
 /**
@@ -260,7 +262,11 @@ public class DynamicChunk extends Chunk {
             heightmapsNBT = getHeightmapNBT();
 
             data = NetworkBuffer.makeArray(networkBuffer -> {
-                for (Section section : sections) networkBuffer.write(section);
+                for (Section section : sections) {
+                    networkBuffer.write(SHORT, (short) section.blockPalette().count());
+                    networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
+                    networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomePalette());
+                }
             });
         }
 

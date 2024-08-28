@@ -42,9 +42,9 @@ public record ExplosionPacket(double x, double y, double z, float radius,
         public ExplosionPacket read(@NotNull NetworkBuffer buffer) {
             double x = buffer.read(DOUBLE), y = buffer.read(DOUBLE), z = buffer.read(DOUBLE);
             float radius = buffer.read(FLOAT);
-            byte[] records = buffer.readBytes(buffer.read(VAR_INT) * 3);
+            byte[] records = buffer.read(FixedRawBytes(buffer.read(VAR_INT) * 3));
             float playerMotionX = buffer.read(FLOAT), playerMotionY = buffer.read(FLOAT), playerMotionZ = buffer.read(FLOAT);
-            BlockInteraction blockInteraction = buffer.readEnum(BlockInteraction.class);
+            BlockInteraction blockInteraction = buffer.read(NetworkBuffer.Enum(BlockInteraction.class));
             int smallParticleId = buffer.read(VAR_INT);
             byte[] smallParticleData = readParticleData(buffer, Particle.fromId(smallParticleId));
             int largeParticleId = buffer.read(VAR_INT);

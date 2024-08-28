@@ -41,7 +41,7 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -472,7 +472,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public void setTime(long time) {
         this.time = time;
-        PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
     }
 
     /**
@@ -774,7 +774,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             this.time += timeRate;
             // time needs to be sent to players
             if (timeSynchronizationTicks > 0 && this.worldAge % timeSynchronizationTicks == 0) {
-                PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+                PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
             }
 
         }

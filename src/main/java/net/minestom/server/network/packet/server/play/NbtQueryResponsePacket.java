@@ -13,7 +13,7 @@ public record NbtQueryResponsePacket(int transactionId, CompoundBinaryTag data) 
         public void write(@NotNull NetworkBuffer buffer, NbtQueryResponsePacket value) {
             buffer.write(VAR_INT, value.transactionId);
             if (value.data != null) {
-                buffer.write(NBT, value.data);
+                buffer.write(NBT_COMPOUND, value.data);
             } else {
                 // TAG_End
                 buffer.write(BYTE, (byte) 0x00);
@@ -22,7 +22,7 @@ public record NbtQueryResponsePacket(int transactionId, CompoundBinaryTag data) 
 
         @Override
         public NbtQueryResponsePacket read(@NotNull NetworkBuffer buffer) {
-            return new NbtQueryResponsePacket(buffer.read(VAR_INT), (CompoundBinaryTag) buffer.read(NBT));
+            return new NbtQueryResponsePacket(buffer.read(VAR_INT), buffer.read(NBT_COMPOUND));
         }
     };
 }

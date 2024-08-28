@@ -22,6 +22,6 @@ public record ClientPlayerBlockPlacementPacket(@NotNull PlayerHand hand, @NotNul
             FLOAT, ClientPlayerBlockPlacementPacket::cursorPositionY,
             FLOAT, ClientPlayerBlockPlacementPacket::cursorPositionZ,
             BOOLEAN, ClientPlayerBlockPlacementPacket::insideBlock,
-            INT, ClientPlayerBlockPlacementPacket::sequence,
+            VAR_INT, ClientPlayerBlockPlacementPacket::sequence,
             ClientPlayerBlockPlacementPacket::new);
 }

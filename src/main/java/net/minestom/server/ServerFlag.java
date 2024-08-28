@@ -18,13 +18,7 @@ public final class ServerFlag {
     public static final int CHUNK_VIEW_DISTANCE = intProperty("minestom.chunk-view-distance", 8);
     public static final int ENTITY_VIEW_DISTANCE = intProperty("minestom.entity-view-distance", 5);
     public static final int ENTITY_SYNCHRONIZATION_TICKS = intProperty("minestom.entity-synchronization-ticks", 20);
-    public static final int WORKER_COUNT = intProperty("minestom.workers", Runtime.getRuntime().availableProcessors());
     public static final int DISPATCHER_THREADS = intProperty("minestom.dispatcher-threads", 1);
-    public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
-    public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
-    public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
-    public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
-    public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 262_143);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
 
@@ -33,6 +27,15 @@ public final class ServerFlag {
     public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
     public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
+
+    // Network buffers
+    public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
+    public static final int MAX_PACKET_SIZE_PRE_AUTH = intProperty("minestom.max-packet-size-pre-auth", 8_192);
+    public static final int SOCKET_SEND_BUFFER_SIZE = intProperty("minestom.send-buffer-size", 262_143);
+    public static final int SOCKET_RECEIVE_BUFFER_SIZE = intProperty("minestom.receive-buffer-size", 32_767);
+    public static final boolean SOCKET_NO_DELAY = booleanProperty("minestom.tcp-no-delay", true);
+    public static final int SOCKET_TIMEOUT = intProperty("minestom.socket-timeout", 15_000);
+    public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
 
     // Chunk update
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
