@@ -24,9 +24,4 @@ public record ClientCookieResponsePacket(
         Check.argCondition(value != null && value.length > CookieStorePacket.MAX_VALUE_LENGTH,
                 "Value is too long: {0} > {1}", value != null ? value.length : 0, CookieStorePacket.MAX_VALUE_LENGTH);
     }
-
-    @Override
-    public boolean processImmediately() {
-        return true;
-    }
 }

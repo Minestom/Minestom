@@ -7,6 +7,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.extras.query.event.BasicQueryEvent;
 import net.minestom.server.extras.query.event.FullQueryEvent;
+import net.minestom.server.extras.query.response.BasicQueryResponse;
+import net.minestom.server.extras.query.response.FullQueryResponse;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.timer.Task;
 import net.minestom.server.utils.time.TimeUnit;
@@ -183,24 +185,24 @@ public class Query {
                     if (remaining == 0) { // basic
                         BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
                         EventDispatcher.callCancellable(event, () ->
-                                sendResponse(event.getQueryResponse(), sessionID, sender));
+                                sendResponse(BasicQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
                     } else if (remaining == 5) { // full
                         FullQueryEvent event = new FullQueryEvent(sender, sessionID);
                         EventDispatcher.callCancellable(event, () ->
-                                sendResponse(event.getQueryResponse(), sessionID, sender));
+                                sendResponse(FullQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
                     }
                 }
             }
         }
     }
 
-    private static void sendResponse(@NotNull NetworkBuffer.Writer queryResponse, int sessionID, @NotNull SocketAddress sender) {
+    private static <T> void sendResponse(NetworkBuffer.Type<T> type, @NotNull T queryResponse, int sessionID, @NotNull SocketAddress sender) {
         final byte[] responseData = NetworkBuffer.makeArray(buffer -> {
             // header
             buffer.write(NetworkBuffer.BYTE, (byte) 0);
             buffer.write(NetworkBuffer.INT, sessionID);
             // payload
-            buffer.write(queryResponse);
+            buffer.write(type, queryResponse);
         });
         try {
             socket.send(new DatagramPacket(responseData, responseData.length, sender));

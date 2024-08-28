@@ -4,27 +4,20 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
-public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material, @NotNull DynamicRegistry.Key<TrimPattern> pattern, boolean showInTooltip) {
+public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material,
+                        @NotNull DynamicRegistry.Key<TrimPattern> pattern, boolean showInTooltip) {
 
-    public static final NetworkBuffer.Type<ArmorTrim> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, ArmorTrim value) {
-            buffer.write(TrimMaterial.NETWORK_TYPE, value.material);
-            buffer.write(TrimPattern.NETWORK_TYPE, value.pattern);
-            buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
-        }
-
-        @Override
-        public ArmorTrim read(@NotNull NetworkBuffer buffer) {
-            return new ArmorTrim(buffer.read(TrimMaterial.NETWORK_TYPE),
-                    buffer.read(TrimPattern.NETWORK_TYPE),
-                    buffer.read(NetworkBuffer.BOOLEAN));
-        }
-    };
+    public static final NetworkBuffer.Type<ArmorTrim> NETWORK_TYPE = NetworkBufferTemplate.template(
+            TrimMaterial.NETWORK_TYPE, ArmorTrim::material,
+            TrimPattern.NETWORK_TYPE, ArmorTrim::pattern,
+            NetworkBuffer.BOOLEAN, ArmorTrim::showInTooltip,
+            ArmorTrim::new
+    );
 
     public static final BinaryTagSerializer<ArmorTrim> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {
@@ -43,5 +36,4 @@ public record ArmorTrim(@NotNull DynamicRegistry.Key<TrimMaterial> material, @No
     public @NotNull ArmorTrim withTooltip(boolean showInTooltip) {
         return new ArmorTrim(material, pattern, showInTooltip);
     }
-
 }

@@ -61,22 +61,23 @@ final class MetadataImpl {
         EMPTY_VALUES.trim();
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     record EntryImpl<T>(int type, @UnknownNullability T value,
                         @NotNull NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
-        static Entry<?> read(int type, @NotNull NetworkBuffer reader) {
-            final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
-            if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);
-            return value.withValue(reader);
-        }
+        static final NetworkBuffer.Type<EntryImpl<?>> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, EntryImpl value) {
+                buffer.write(VAR_INT, value.type);
+                buffer.write(value.serializer, value.value);
+            }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, type);
-            writer.write(serializer, value);
-        }
-
-        private EntryImpl<T> withValue(@NotNull NetworkBuffer reader) {
-            return new EntryImpl<>(type, reader.read(serializer), serializer);
-        }
+            @Override
+            public EntryImpl read(@NotNull NetworkBuffer buffer) {
+                final int type = buffer.read(VAR_INT);
+                final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
+                if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);
+                return new EntryImpl(type, value.serializer.read(buffer), value.serializer);
+            }
+        };
     }
 }

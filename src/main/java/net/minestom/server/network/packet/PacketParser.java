@@ -14,15 +14,15 @@ import org.jetbrains.annotations.NotNull;
  */
 public sealed interface PacketParser<T> {
 
-    @NotNull PacketRegistry<T> handshakeRegistry();
+    @NotNull PacketRegistry<T> handshake();
 
-    @NotNull PacketRegistry<T> statusRegistry();
+    @NotNull PacketRegistry<T> status();
 
-    @NotNull PacketRegistry<T> loginRegistry();
+    @NotNull PacketRegistry<T> login();
 
-    @NotNull PacketRegistry<T> configurationRegistry();
+    @NotNull PacketRegistry<T> configuration();
 
-    @NotNull PacketRegistry<T> playRegistry();
+    @NotNull PacketRegistry<T> play();
 
     default @NotNull T parse(@NotNull ConnectionState connectionState,
                              int packetId, @NotNull NetworkBuffer buffer) {
@@ -32,20 +32,20 @@ public sealed interface PacketParser<T> {
 
     default @NotNull PacketRegistry<T> stateRegistry(@NotNull ConnectionState connectionState) {
         return switch (connectionState) {
-            case HANDSHAKE -> handshakeRegistry();
-            case STATUS -> statusRegistry();
-            case LOGIN -> loginRegistry();
-            case CONFIGURATION -> configurationRegistry();
-            case PLAY -> playRegistry();
+            case HANDSHAKE -> handshake();
+            case STATUS -> status();
+            case LOGIN -> login();
+            case CONFIGURATION -> configuration();
+            case PLAY -> play();
         };
     }
 
     record Client(
-            PacketRegistry<ClientPacket> handshakeRegistry,
-            PacketRegistry<ClientPacket> statusRegistry,
-            PacketRegistry<ClientPacket> loginRegistry,
-            PacketRegistry<ClientPacket> configurationRegistry,
-            PacketRegistry<ClientPacket> playRegistry
+            PacketRegistry<ClientPacket> handshake,
+            PacketRegistry<ClientPacket> status,
+            PacketRegistry<ClientPacket> login,
+            PacketRegistry<ClientPacket> configuration,
+            PacketRegistry<ClientPacket> play
     ) implements PacketParser<ClientPacket> {
         public Client() {
             this(
@@ -59,11 +59,11 @@ public sealed interface PacketParser<T> {
     }
 
     record Server(
-            PacketRegistry<ServerPacket> handshakeRegistry,
-            PacketRegistry<ServerPacket> statusRegistry,
-            PacketRegistry<ServerPacket> loginRegistry,
-            PacketRegistry<ServerPacket> configurationRegistry,
-            PacketRegistry<ServerPacket> playRegistry
+            PacketRegistry<ServerPacket> handshake,
+            PacketRegistry<ServerPacket> status,
+            PacketRegistry<ServerPacket> login,
+            PacketRegistry<ServerPacket> configuration,
+            PacketRegistry<ServerPacket> play
     ) implements PacketParser<ServerPacket> {
         public Server() {
             this(

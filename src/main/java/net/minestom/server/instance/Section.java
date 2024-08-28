@@ -2,16 +2,14 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
 import static net.minestom.server.instance.light.LightCompute.contentFullyLit;
 import static net.minestom.server.instance.light.LightCompute.emptyContent;
-import static net.minestom.server.network.NetworkBuffer.SHORT;
 
-public final class Section implements NetworkBuffer.Writer {
+public final class Section {
     private final Palette blockPalette;
     private final Palette biomePalette;
     private final Light skyLight;
@@ -57,13 +55,6 @@ public final class Section implements NetworkBuffer.Writer {
         setBlockLight(this.blockLight.array());
 
         return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(SHORT, (short) blockPalette.count());
-        writer.write(blockPalette);
-        writer.write(biomePalette);
     }
 
     public void setSkyLight(byte[] copyArray) {

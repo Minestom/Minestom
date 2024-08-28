@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * A full query response containing a dynamic set of responses.
  */
-public class FullQueryResponse implements NetworkBuffer.Writer {
+public class FullQueryResponse {
     private static final PlainTextComponentSerializer PLAIN = PlainTextComponentSerializer.plainText();
     private static final byte[] PADDING_10 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
             PADDING_11 = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
@@ -123,20 +123,27 @@ public class FullQueryResponse implements NetworkBuffer.Writer {
         return builder.toString();
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.RAW_BYTES, PADDING_11);
-        // key-values
-        for (var entry : this.kv.entrySet()) {
-            writer.write(NetworkBuffer.STRING_TERMINATED, entry.getKey());
-            writer.write(NetworkBuffer.STRING_TERMINATED, entry.getValue());
+    public static final NetworkBuffer.Type<FullQueryResponse> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, FullQueryResponse value) {
+            buffer.write(NetworkBuffer.RAW_BYTES, PADDING_11);
+            // key-values
+            for (var entry : value.kv.entrySet()) {
+                buffer.write(NetworkBuffer.STRING_TERMINATED, entry.getKey());
+                buffer.write(NetworkBuffer.STRING_TERMINATED, entry.getValue());
+            }
+            buffer.write(NetworkBuffer.STRING_TERMINATED, "");
+            buffer.write(NetworkBuffer.RAW_BYTES, PADDING_10);
+            // players
+            for (String player : value.players) {
+                buffer.write(NetworkBuffer.STRING_TERMINATED, player);
+            }
+            buffer.write(NetworkBuffer.STRING_TERMINATED, "");
         }
-        writer.write(NetworkBuffer.STRING_TERMINATED, "");
-        writer.write(NetworkBuffer.RAW_BYTES, PADDING_10);
-        // players
-        for (String player : this.players) {
-            writer.write(NetworkBuffer.STRING_TERMINATED, player);
+
+        @Override
+        public FullQueryResponse read(@NotNull NetworkBuffer buffer) {
+            throw new UnsupportedOperationException("FullQueryResponse is write-only");
         }
-        writer.write(NetworkBuffer.STRING_TERMINATED, "");
-    }
+    };
 }

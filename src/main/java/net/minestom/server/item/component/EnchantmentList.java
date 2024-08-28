@@ -4,9 +4,9 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -18,30 +18,11 @@ public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Int
                               boolean showInTooltip) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of(), true);
 
-    public static NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, @NotNull EnchantmentList value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.enchantments.size());
-            for (Map.Entry<DynamicRegistry.Key<Enchantment>, Integer> entry : value.enchantments.entrySet()) {
-                buffer.write(Enchantment.NETWORK_TYPE, entry.getKey());
-                buffer.write(NetworkBuffer.VAR_INT, entry.getValue());
-            }
-            buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
-        }
-
-        @Override
-        public @NotNull EnchantmentList read(@NotNull NetworkBuffer buffer) {
-            int size = buffer.read(NetworkBuffer.VAR_INT);
-            Check.argCondition(size < 0 || size > Short.MAX_VALUE, "Invalid enchantment list size: {0}", size);
-            Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments = new HashMap<>(size);
-            for (int i = 0; i < size; i++) {
-                DynamicRegistry.Key<Enchantment> enchantment = buffer.read(Enchantment.NETWORK_TYPE);
-                enchantments.put(enchantment, buffer.read(NetworkBuffer.VAR_INT));
-            }
-            boolean showInTooltip = buffer.read(NetworkBuffer.BOOLEAN);
-            return new EnchantmentList(enchantments, showInTooltip);
-        }
-    };
+    public static final NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Enchantment.NETWORK_TYPE.mapValue(NetworkBuffer.VAR_INT, Short.MAX_VALUE), EnchantmentList::enchantments,
+            NetworkBuffer.BOOLEAN, EnchantmentList::showInTooltip,
+            EnchantmentList::new
+    );
     public static BinaryTagSerializer<EnchantmentList> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull EnchantmentList value) {
