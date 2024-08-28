@@ -32,7 +32,7 @@ public final class CommandManager {
     private final Set<Command> commands = new HashSet<>();
 
     private CommandCallback unknownCommandCallback;
-    private @Nullable Graph cachedGraph;
+    private volatile @Nullable Graph cachedGraph;
 
     public CommandManager() {
     }
@@ -194,13 +194,17 @@ public final class CommandManager {
     }
 
     private @NotNull Graph getGraph() {
-        if (cachedGraph == null) {
+        Graph graph = cachedGraph;
+        if (graph == null) {
             synchronized (this) {
-                cachedGraph = Graph.merge(getCommands());
+                graph = cachedGraph;
+                if (graph == null) {
+                    graph = cachedGraph = Graph.merge(getCommands());
+                }
             }
         }
 
-        return cachedGraph;
+        return graph;
     }
 
     private void invalidateGraphCache() {
