@@ -1,9 +1,11 @@
 package net.minestom.server.utils;
 
-import net.minestom.server.utils.binary.BinaryBuffer;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.PacketVanilla;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
+import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,8 +14,8 @@ public class ObjectPoolTest {
 
     @Test
     public void pool() {
-        var pool = ObjectPool.BUFFER_POOL;
-        Set<BinaryBuffer> pooledBuffers = new HashSet<>();
+        var pool = PacketVanilla.PACKET_POOL;
+        Set<NetworkBuffer> pooledBuffers = Collections.newSetFromMap(new IdentityHashMap<>());
         pool.clear();
 
         assertEquals(0, pool.count());
@@ -32,7 +34,7 @@ public class ObjectPoolTest {
 
     @Test
     public void autoClose() {
-        var pool = ObjectPool.BUFFER_POOL;
+        var pool = PacketVanilla.PACKET_POOL;
         assertEquals(0, pool.count());
         try (var ignored = pool.hold()) {
             assertEquals(0, pool.count());

@@ -20,7 +20,7 @@ public record SoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket.Play {
-    public static NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+    public static final NetworkBuffer.Type<SoundEffectPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, SoundEffectPacket value) {
             buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent());
@@ -36,7 +36,7 @@ public record SoundEffectPacket(
         @Override
         public SoundEffectPacket read(@NotNull NetworkBuffer buffer) {
             return new SoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
-                    buffer.readEnum(Source.class),
+                    buffer.read(NetworkBuffer.Enum(Source.class)),
                     buffer.read(INT) * 8,
                     buffer.read(INT) * 8,
                     buffer.read(INT) * 8,

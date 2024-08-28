@@ -5,7 +5,7 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -60,7 +60,7 @@ public interface Viewable {
      */
     default void sendPacketToViewers(@NotNull SendablePacket packet) {
         if (packet instanceof ServerPacket serverPacket) {
-            PacketUtils.sendGroupedPacket(getViewers(), serverPacket);
+            PacketSendingUtils.sendGroupedPacket(getViewers(), serverPacket);
         } else {
             getViewers().forEach(player -> player.sendPacket(packet));
         }

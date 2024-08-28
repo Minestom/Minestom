@@ -12,9 +12,4 @@ public record ClientEncryptionResponsePacket(byte[] sharedSecret,
             BYTE_ARRAY, ClientEncryptionResponsePacket::sharedSecret,
             BYTE_ARRAY, ClientEncryptionResponsePacket::encryptedVerifyToken,
             ClientEncryptionResponsePacket::new);
-
-    @Override
-    public boolean processImmediately() {
-        return true;
-    }
 }
