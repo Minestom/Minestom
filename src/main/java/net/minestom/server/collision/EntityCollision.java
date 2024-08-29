@@ -23,7 +23,7 @@ final class EntityCollision {
         double projectileDistance = entityVelocity.length();
 
         for (Entity e : instance.getNearbyEntities(point, extendRadius + maxDistance + projectileDistance)) {
-            SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0);
+            SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
             if (!entityFilter.apply(e)) continue;
             if (!e.isCollidesWithEntities()) continue;
