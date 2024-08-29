@@ -53,7 +53,6 @@ public class GamemodeCommand extends Command {
                 return;
             }
 
-            //Check permission, this could be replaced with hasPermission
             if (p.getPermissionLevel() < 2) {
                 sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
                 return;
