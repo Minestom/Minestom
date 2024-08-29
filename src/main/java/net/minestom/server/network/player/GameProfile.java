@@ -2,7 +2,6 @@ package net.minestom.server.network.player;
 
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +11,7 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record GameProfile(@NotNull UUID uuid, @NotNull String name,
-                          @NotNull List<@NotNull Property> properties) implements NetworkBuffer.Writer {
+                          @NotNull List<@NotNull Property> properties) {
     public static final int MAX_PROPERTIES = 1024;
 
     public GameProfile {
