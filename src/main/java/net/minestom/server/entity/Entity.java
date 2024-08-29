@@ -88,7 +88,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             EntityType.FISHING_BOBBER, EntityType.SNOWBALL, EntityType.EGG, EntityType.ENDER_PEARL, EntityType.POTION,
             EntityType.EYE_OF_ENDER, EntityType.DRAGON_FIREBALL, EntityType.FIREBALL, EntityType.SMALL_FIREBALL,
             EntityType.TNT);
-
+    private static final Set<EntityType> ALLOW_BLOCK_PLACEMENT_ENTITIES = Set.of(EntityType.ARROW, EntityType.ITEM,
+            EntityType.SNOWBALL, EntityType.EXPERIENCE_BOTTLE, EntityType.EXPERIENCE_ORB, EntityType.POTION,
+            EntityType.AREA_EFFECT_CLOUD);
+    private static final Set<EntityType> NO_ENTITY_COLLISION_ENTITIES = Set.of(EntityType.TEXT_DISPLAY, EntityType.ITEM_DISPLAY,
+            EntityType.BLOCK_DISPLAY);
     private final CachedPacket destroyPacketCache = new CachedPacket(() -> new DestroyEntitiesPacket(getEntityId()));
 
     protected Instance instance;
@@ -1734,17 +1738,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     protected void initCollisions() {
-        preventBlockPlacement = entityType != EntityType.ARROW
-                && entityType != EntityType.ITEM
-                && entityType != EntityType.SNOWBALL
-                && entityType != EntityType.EXPERIENCE_BOTTLE
-                && entityType != EntityType.EXPERIENCE_ORB
-                && entityType != EntityType.POTION
-                && entityType != EntityType.AREA_EFFECT_CLOUD;
-
-        collidesWithEntities = entityType != EntityType.TEXT_DISPLAY
-                && entityType != EntityType.ITEM_DISPLAY
-                && entityType != EntityType.BLOCK_DISPLAY;
+        preventBlockPlacement = !ALLOW_BLOCK_PLACEMENT_ENTITIES.contains(entityType);
+        collidesWithEntities = !NO_ENTITY_COLLISION_ENTITIES.contains(entityType);
     }
 
     /**
