@@ -48,7 +48,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     @SuppressWarnings({"unchecked", "rawtypes"})
     Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
     Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
-    Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
+    Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
     Type<Pos> POS = new NetworkBufferTypeImpl.PosType();
