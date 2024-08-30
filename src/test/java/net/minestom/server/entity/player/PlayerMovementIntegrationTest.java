@@ -1,10 +1,10 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerSettings;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.message.ChatMessageType;
@@ -69,7 +69,7 @@ public class PlayerMovementIntegrationTest {
         final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkUtils.forChunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
@@ -125,9 +125,15 @@ public class PlayerMovementIntegrationTest {
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(10, 10, viewDistance+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkUtils.forChunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        player.getSettings().refresh("en_US", (byte) viewDistance, ChatMessageType.FULL, true, (byte) 0, Player.MainHand.RIGHT, false, true);
+        var settings = new PlayerSettings(
+                "en_US", (byte) viewDistance,
+                ChatMessageType.FULL, true,
+                (byte) 0, PlayerSettings.MainHand.RIGHT,
+                false, true
+        );
+        player.refreshSettings(settings);
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));

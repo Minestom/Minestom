@@ -75,8 +75,13 @@ public class PlayerIntegrationTest {
 
     @Test
     public void handSwapTest(Env env) {
-        ClientSettingsPacket packet = new ClientSettingsPacket("en_us", (byte) 16, ChatMessageType.FULL,
-                true, (byte) 127, Player.MainHand.LEFT, true, true);
+        var settings = new PlayerSettings(
+                "en_us", (byte) 16,
+                ChatMessageType.FULL, true,
+                (byte) 127, PlayerSettings.MainHand.LEFT,
+                true, true
+        );
+        ClientSettingsPacket packet = new ClientSettingsPacket(settings);
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
@@ -89,7 +94,7 @@ public class PlayerIntegrationTest {
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();
-        assertEquals(Player.MainHand.LEFT, player.getSettings().getMainHand());
+        assertEquals(PlayerSettings.MainHand.LEFT, player.getSettings().mainHand());
 
         boolean found = false;
         for (ServerPacket serverPacket : collector.collect()) {
@@ -208,7 +213,7 @@ public class PlayerIntegrationTest {
         connection2.connect(instance, new Pos(0, 42, 0)).join();
 
         var displayNamePackets = tracker2.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets);
 
@@ -217,12 +222,12 @@ public class PlayerIntegrationTest {
         player.setDisplayName(Component.text("Other Name!"));
 
         var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets2);
 
         var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(2, displayNamePackets3);
     }

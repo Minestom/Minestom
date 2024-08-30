@@ -58,7 +58,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
 import net.minestom.server.listener.manager.PacketListenerManager;
-import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
@@ -177,7 +176,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private final MpscArrayQueue<ClientPacket> packets = new MpscArrayQueue<>(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
     private final boolean levelFlat;
-    private final PlayerSettings settings;
+    private PlayerSettings settings = PlayerSettings.DEFAULT;
     private float exp;
     private int level;
     private int portalCooldown = 0;
@@ -245,7 +244,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         setRespawnPoint(Pos.ZERO);
 
-        this.settings = new PlayerSettings();
         this.inventory = new PlayerInventory(this);
 
         setCanPickupItem(true); // By default
@@ -536,10 +534,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+        ChunkUtils.forChunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.getEffectiveViewDistance(),
+        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.effectiveViewDistance(),
                 EntityTracker.Target.ENTITIES, entity -> {
                     // Skip refreshing self with a new viewer
                     if (!entity.getUuid().equals(getUuid()) && entity.isViewer(this)) {
@@ -602,7 +600,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.getEffectiveViewDistance(), chunkRemover);
+        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.effectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -659,7 +657,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -732,7 +730,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkRemover);
+                ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -747,7 +745,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, settings.getEffectiveViewDistance(), chunkAdder);
+            ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkAdder);
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
@@ -1564,6 +1562,21 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     /**
+     * Changes the player settings internally.
+     * <p>
+     * WARNING: the player will not be noticed by this change, probably unsafe.
+     */
+    public void refreshSettings(PlayerSettings settings) {
+        this.settings = settings;
+        boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
+        PlayerMeta playerMeta = getPlayerMeta();
+        if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
+        playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
+        playerMeta.setRightMainHand(settings.mainHand() == PlayerSettings.MainHand.RIGHT);
+        if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+    }
+
+    /**
      * Gets the player dimension.
      *
      * @return the player current dimension
@@ -2299,7 +2312,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public Locale getLocale() {
-        final String locale = settings.locale;
+        final String locale = settings.locale();
         if (locale == null) return null;
         return Locale.forLanguageTag(locale.replace("_", "-"));
     }
@@ -2318,7 +2331,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public void setLocale(@Nullable Locale locale) {
-        settings.locale = locale == null ? null : locale.toLanguageTag();
+        final PlayerSettings settings = this.settings;
+        final String tag = locale == null ? null : locale.toLanguageTag();
+        refreshSettings(new PlayerSettings(
+                tag, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
+                settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(), settings.allowServerListings()
+        ));
     }
 
     @Override
@@ -2348,7 +2366,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
             ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
-                    settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
+                    settings.effectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
@@ -2378,124 +2396,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     // Settings enum
-
-    /**
-     * Represents where is located the main hand of the player (can be changed in Minecraft option).
-     */
-    public enum MainHand {
-        LEFT,
-        RIGHT
-    }
-
-    public class PlayerSettings {
-
-        private String locale;
-        private byte viewDistance;
-        private ChatMessageType chatMessageType;
-        private boolean chatColors;
-        private byte displayedSkinParts;
-        private MainHand mainHand;
-        private boolean enableTextFiltering;
-        private boolean allowServerListings;
-
-        public PlayerSettings() {
-            viewDistance = (byte) ServerFlag.CHUNK_VIEW_DISTANCE;
-        }
-
-        /**
-         * The player game language.
-         *
-         * @return the player locale
-         */
-        public String getLocale() {
-            return locale;
-        }
-
-        /**
-         * Gets the player view distance.
-         *
-         * @return the player view distance
-         */
-        public byte getViewDistance() {
-            return viewDistance;
-        }
-
-        public int getEffectiveViewDistance() {
-            return Math.min(getViewDistance(), ServerFlag.CHUNK_VIEW_DISTANCE);
-        }
-
-        /**
-         * Gets the messages this player wants to receive.
-         *
-         * @return the messages
-         */
-        public @Nullable ChatMessageType getChatMessageType() {
-            return chatMessageType;
-        }
-
-        /**
-         * Gets if the player has chat colors enabled.
-         *
-         * @return true if chat colors are enabled, false otherwise
-         */
-        public boolean hasChatColors() {
-            return chatColors;
-        }
-
-        public byte getDisplayedSkinParts() {
-            return displayedSkinParts;
-        }
-
-        /**
-         * Gets the player main hand.
-         *
-         * @return the player main hand
-         */
-        public MainHand getMainHand() {
-            return mainHand;
-        }
-
-        public boolean enableTextFiltering() {
-            return enableTextFiltering;
-        }
-
-        public boolean allowServerListings() {
-            return allowServerListings;
-        }
-
-        /**
-         * Changes the player settings internally.
-         * <p>
-         * WARNING: the player will not be noticed by this change, probably unsafe.
-         *
-         * @param locale             the player locale
-         * @param viewDistance       the player view distance
-         * @param chatMessageType    the chat messages the player wishes to receive
-         * @param chatColors         if chat colors should be displayed
-         * @param displayedSkinParts the player displayed skin parts
-         * @param mainHand           the player main hand
-         */
-        public void refresh(String locale, byte viewDistance, ChatMessageType chatMessageType, boolean chatColors,
-                            byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
-            this.locale = locale;
-            // Clamp viewDistance to valid bounds
-            this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
-            this.chatMessageType = chatMessageType;
-            this.chatColors = chatColors;
-            this.displayedSkinParts = displayedSkinParts;
-            this.mainHand = mainHand;
-            this.enableTextFiltering = enableTextFiltering;
-            this.allowServerListings = allowServerListings;
-
-            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            PlayerMeta playerMeta = getPlayerMeta();
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
-            playerMeta.setDisplayedSkinParts(displayedSkinParts);
-            playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
-        }
-
-    }
 
     private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
         int chunkAX = ChunkUtils.getChunkCoordX(chunkIndexA);
