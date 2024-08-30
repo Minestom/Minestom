@@ -103,13 +103,13 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    <T> void write(@NotNull Type<T> type, @UnknownNullability T value);
+    <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T read(@NotNull Type<T> type);
+    <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
 
-    <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value);
+    <T> void writeAt(long index, @NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
-    <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type);
+    <T> @UnknownNullability T readAt(long index, @NotNull Type<T> type) throws IndexOutOfBoundsException;
 
     void copyTo(long srcOffset, byte @NotNull [] dest, long destOffset, long length);
 
