@@ -167,6 +167,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
+        this.chunkUpdateLimitChecker.removeFromHistory(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };

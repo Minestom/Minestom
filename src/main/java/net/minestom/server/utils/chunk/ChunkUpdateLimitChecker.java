@@ -36,6 +36,23 @@ public final class ChunkUpdateLimitChecker {
         return result;
     }
 
+    /**
+     * Removes the chunk from the history
+     *
+     * @param index index of chunk to remove
+     * @return {@code true} if the chunk existed in the history
+     */
+    public boolean removeFromHistory(long index) {
+        final int lastIndex = historySize - 1;
+        for (int i = 0; i < lastIndex; i++) {
+            if (chunkHistory[i] == index) {
+                chunkHistory[i] = Long.MAX_VALUE;
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void clearHistory() {
         Arrays.fill(this.chunkHistory, Long.MAX_VALUE);
     }
