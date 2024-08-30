@@ -159,14 +159,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     public long advanceWrite(long length) {
         final long oldWriteIndex = writeIndex;
-        writeIndex += length;
+        writeIndex = oldWriteIndex + length;
         return oldWriteIndex;
     }
 
     @Override
     public long advanceRead(long length) {
         final long oldReadIndex = readIndex;
-        readIndex += length;
+        readIndex = oldReadIndex + length;
         return oldReadIndex;
     }
 
