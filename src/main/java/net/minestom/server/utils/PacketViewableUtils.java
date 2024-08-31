@@ -24,11 +24,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
+@ApiStatus.Internal
 public final class PacketViewableUtils {
     // Viewable packets
     private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
 
-    @ApiStatus.Experimental
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
                                              @Nullable Entity entity) {
         if (entity != null && !entity.hasPredictableViewers()) {
@@ -45,7 +45,6 @@ public final class PacketViewableUtils {
         storage.append(serverPacket, exception);
     }
 
-    @ApiStatus.Internal
     public static void flush() {
         if (ServerFlag.VIEWABLE_PACKET) {
             VIEWABLE_STORAGE_MAP.asMap().entrySet().parallelStream().forEach(entry ->
@@ -53,13 +52,12 @@ public final class PacketViewableUtils {
         }
     }
 
-    @ApiStatus.Experimental
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
         prepareViewablePacket(viewable, serverPacket, null);
     }
 
-    static final class ViewableStorage {
-        static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
+    private static final class ViewableStorage {
+        private static final ObjectPool<NetworkBuffer> POOL = ObjectPool.pool(
                 () -> NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process()),
                 NetworkBuffer::clear);
         // Player id -> list of offsets to ignore (32:32 bits)
