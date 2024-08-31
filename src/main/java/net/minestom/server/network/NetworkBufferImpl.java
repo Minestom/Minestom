@@ -44,6 +44,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     final @Nullable AutoResize autoResize;
     final @Nullable Registries registries;
 
+    ByteBuffer nioBuffer = null;
+
     NetworkBufferImpl(NetworkBufferImpl parent,
                       long address, long capacity,
                       long readIndex, long writeIndex,
@@ -354,11 +356,14 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     private ByteBuffer bufferSlice(int position, int length) {
-        ByteBuffer buffer = ByteBuffer.allocateDirect(0).order(ByteOrder.BIG_ENDIAN);
-        updateAddress(buffer, address);
-        updateCapacity(buffer, (int) capacity);
-        buffer.limit(position + length).position(position);
-        return buffer;
+        ByteBuffer nioBuffer = this.nioBuffer;
+        if (nioBuffer == null) {
+            this.nioBuffer = nioBuffer = ByteBuffer.allocateDirect(0).order(ByteOrder.BIG_ENDIAN);
+        }
+        updateAddress(nioBuffer, address);
+        updateCapacity(nioBuffer, (int) capacity);
+        nioBuffer.limit(position + length).position(position);
+        return nioBuffer;
     }
 
     @Override
