@@ -3,8 +3,8 @@ package net.minestom.server.entity.player;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.ClientSettings;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerSettings;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.message.ChatMessageType;
@@ -127,13 +127,12 @@ public class PlayerMovementIntegrationTest {
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
         ChunkUtils.forChunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        var settings = new PlayerSettings(
+        player.refreshSettings(new ClientSettings(
                 "en_US", (byte) viewDistance,
                 ChatMessageType.FULL, true,
-                (byte) 0, PlayerSettings.MainHand.RIGHT,
+                (byte) 0, ClientSettings.MainHand.RIGHT,
                 false, true
-        );
-        player.refreshSettings(settings);
+        ));
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));

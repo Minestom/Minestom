@@ -75,13 +75,12 @@ public class PlayerIntegrationTest {
 
     @Test
     public void handSwapTest(Env env) {
-        var settings = new PlayerSettings(
+        ClientSettingsPacket packet = new ClientSettingsPacket(new ClientSettings(
                 "en_us", (byte) 16,
                 ChatMessageType.FULL, true,
-                (byte) 127, PlayerSettings.MainHand.LEFT,
+                (byte) 127, ClientSettings.MainHand.LEFT,
                 true, true
-        );
-        ClientSettingsPacket packet = new ClientSettingsPacket(settings);
+        ));
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
@@ -94,7 +93,7 @@ public class PlayerIntegrationTest {
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();
-        assertEquals(PlayerSettings.MainHand.LEFT, player.getSettings().mainHand());
+        assertEquals(ClientSettings.MainHand.LEFT, player.getSettings().mainHand());
 
         boolean found = false;
         for (ServerPacket serverPacket : collector.collect()) {

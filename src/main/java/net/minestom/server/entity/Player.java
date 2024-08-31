@@ -176,7 +176,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     private final MpscArrayQueue<ClientPacket> packets = new MpscArrayQueue<>(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
     private final boolean levelFlat;
-    private PlayerSettings settings = PlayerSettings.DEFAULT;
+    private ClientSettings settings = ClientSettings.DEFAULT;
     private float exp;
     private int level;
     private int portalCooldown = 0;
@@ -1557,7 +1557,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @return the player settings
      */
-    public @NotNull PlayerSettings getSettings() {
+    public @NotNull ClientSettings getSettings() {
         return settings;
     }
 
@@ -1566,13 +1566,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * <p>
      * WARNING: the player will not be noticed by this change, probably unsafe.
      */
-    public void refreshSettings(PlayerSettings settings) {
+    public void refreshSettings(ClientSettings settings) {
         this.settings = settings;
         boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
         PlayerMeta playerMeta = getPlayerMeta();
         if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
         playerMeta.setDisplayedSkinParts(settings.displayedSkinParts());
-        playerMeta.setRightMainHand(settings.mainHand() == PlayerSettings.MainHand.RIGHT);
+        playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
     }
 
@@ -2331,9 +2331,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public void setLocale(@Nullable Locale locale) {
-        final PlayerSettings settings = this.settings;
+        final ClientSettings settings = this.settings;
         final String tag = locale == null ? null : locale.toLanguageTag();
-        refreshSettings(new PlayerSettings(
+        refreshSettings(new ClientSettings(
                 tag, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
                 settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(), settings.allowServerListings()
         ));
