@@ -11,6 +11,7 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,7 +78,7 @@ public class PlayerIntegrationTest {
     @Test
     public void handSwapTest(Env env) {
         ClientSettingsPacket packet = new ClientSettingsPacket(new ClientSettings(
-                "en_us", (byte) 16,
+                Locale.US, (byte) 16,
                 ChatMessageType.FULL, true,
                 (byte) 127, ClientSettings.MainHand.LEFT,
                 true, true

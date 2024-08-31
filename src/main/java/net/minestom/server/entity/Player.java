@@ -26,7 +26,6 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.advancements.AdvancementTab;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
-import net.minestom.server.adventure.Localizable;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
@@ -70,6 +69,7 @@ import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -101,8 +101,6 @@ import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
@@ -119,9 +117,7 @@ import java.util.function.UnaryOperator;
  * <p>
  * You can easily create your own implementation of this and use it with {@link ConnectionManager#setPlayerProvider(PlayerProvider)}.
  */
-public class Player extends LivingEntity implements CommandSender, Localizable, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
-    private static final Logger logger = LoggerFactory.getLogger(Player.class);
-
+public class Player extends LivingEntity implements CommandSender, HoverEventSource<ShowEntity>, Identified, NamedAndIdentified {
     private static final DynamicRegistry<DimensionType> DIMENSION_TYPE_REGISTRY = MinecraftServer.getDimensionTypeRegistry();
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
@@ -2311,16 +2307,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public Locale getLocale() {
-        final String locale = settings.locale();
-        if (locale == null) return null;
-        return Locale.forLanguageTag(locale.replace("_", "-"));
-    }
-
-    @Override
     public @NotNull PlayerSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final EntitySnapshot snapshot = super.updateSnapshot(updater);
         return new SnapshotImpl.Player(snapshot, username, gameMode);
+    }
+
+    public Locale getLocale() {
+        return settings.locale();
     }
 
     /**
@@ -2329,12 +2322,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param locale the new locale
      */
-    @Override
-    public void setLocale(@Nullable Locale locale) {
+    public void setLocale(@NotNull Locale locale) {
         final ClientSettings settings = this.settings;
-        final String tag = locale == null ? null : locale.toLanguageTag();
         refreshSettings(new ClientSettings(
-                tag, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
+                locale, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
                 settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(), settings.allowServerListings()
         ));
     }

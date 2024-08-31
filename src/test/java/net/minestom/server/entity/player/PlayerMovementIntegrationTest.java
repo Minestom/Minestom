@@ -3,7 +3,6 @@ package net.minestom.server.entity.player;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.ClientSettings;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -12,6 +11,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Collector;
@@ -22,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -128,7 +129,7 @@ public class PlayerMovementIntegrationTest {
         ChunkUtils.forChunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.refreshSettings(new ClientSettings(
-                "en_US", (byte) viewDistance,
+                Locale.US, (byte) viewDistance,
                 ChatMessageType.FULL, true,
                 (byte) 0, ClientSettings.MainHand.RIGHT,
                 false, true

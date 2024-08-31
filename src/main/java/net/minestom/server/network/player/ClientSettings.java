@@ -1,4 +1,4 @@
-package net.minestom.server.entity;
+package net.minestom.server.network.player;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.message.ChatMessageType;
@@ -6,21 +6,32 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.MathUtils;
 
+import java.util.Locale;
+import java.util.Objects;
+
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientSettings(String locale, byte viewDistance,
+public record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
                              byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings) {
     public static ClientSettings DEFAULT = new ClientSettings(
-            "en_US", (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
+            Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
             ChatMessageType.FULL, true,
             (byte) 0x7F, MainHand.RIGHT,
             true, true
     );
 
+    public static final NetworkBuffer.Type<Locale> LOCALE_SERIALIZER = STRING.transform(
+            s -> {
+                final String locale = s.replace("_", "-");
+                return Locale.forLanguageTag(locale);
+            },
+            Locale::toLanguageTag
+    );
+
     public static final NetworkBuffer.Type<ClientSettings> NETWORK_TYPE = NetworkBufferTemplate.template(
-            STRING, ClientSettings::locale,
+            LOCALE_SERIALIZER, ClientSettings::locale,
             BYTE, ClientSettings::viewDistance,
             Enum(ChatMessageType.class), ClientSettings::chatMessageType,
             BOOLEAN, ClientSettings::chatColors,
@@ -31,8 +42,11 @@ public record ClientSettings(String locale, byte viewDistance,
             ClientSettings::new);
 
     public ClientSettings {
+        Objects.requireNonNull(locale);
         // Clamp viewDistance to valid bounds
         viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
+        Objects.requireNonNull(chatMessageType);
+        Objects.requireNonNull(mainHand);
     }
 
     public int effectiveViewDistance() {
