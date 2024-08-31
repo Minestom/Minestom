@@ -22,7 +22,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
             true, true
     );
 
-    public static final NetworkBuffer.Type<Locale> LOCALE_SERIALIZER = STRING.transform(
+    private static final NetworkBuffer.Type<Locale> LOCALE_SERIALIZER = STRING.transform(
             s -> {
                 final String locale = s.replace("_", "-");
                 return Locale.forLanguageTag(locale);
