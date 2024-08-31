@@ -88,7 +88,6 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketUtils;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
@@ -167,7 +166,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     };
     final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
-        this.chunkUpdateLimitChecker.removeFromHistory(ChunkUtils.getChunkIndex(chunkX, chunkZ));
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
     };
@@ -200,7 +198,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     // Game state (https://wiki.vg/Protocol#Change_Game_State)
     private boolean enableRespawnScreen;
-    private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
 
     // Experience orb pickup
     protected Cooldown experiencePickupCooldown = new Cooldown(Duration.of(10, TimeUnit.SERVER_TICK));
@@ -649,7 +646,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
-        chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
                 currentInstance == null, dimensionChange, true);
@@ -745,7 +741,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             final int chunkX = spawnPosition.chunkX();
             final int chunkZ = spawnPosition.chunkZ();
             chunksLoadedByClient = new Vec(chunkX, chunkZ);
-            chunkUpdateLimitChecker.addToHistory(getChunk());
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
@@ -2344,15 +2339,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
-        if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
-            final int newX = newChunk.getChunkX();
-            final int newZ = newChunk.getChunkZ();
-            final Vec old = chunksLoadedByClient;
-            sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
-                    settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
-            this.chunksLoadedByClient = new Vec(newX, newZ);
-        }
+        final int newX = newChunk.getChunkX();
+        final int newZ = newChunk.getChunkZ();
+        final Vec old = chunksLoadedByClient;
+        sendPacket(new UpdateViewPositionPacket(newX, newZ));
+        ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+                settings.getEffectiveViewDistance(), chunkAdder, chunkRemover);
+        this.chunksLoadedByClient = new Vec(newX, newZ);
     }
 
     /**
@@ -2360,7 +2353,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     @Override
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
-        chunkUpdateLimitChecker.clearHistory();
         return super.teleport(position, chunks, flags);
     }
 

@@ -5,6 +5,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.message.ChatMessageType;
@@ -12,6 +13,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Collector;
@@ -64,60 +66,6 @@ public class PlayerMovementIntegrationTest {
     }
 
     @Test
-    public void chunkUpdateDebounceTest(Env env) {
-        final Instance flatInstance = env.createFlatInstance();
-        final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
-        // Preload all possible chunks to avoid issues due to async loading
-        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
-        CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        final TestConnection connection = env.createConnection();
-        Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
-        final Player player = future.join();
-        // Initial join
-        chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
-        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, 0.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertCount(viewDiameter);
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, -0.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertCount(viewDiameter);
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertCount(viewDiameter);
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, 0.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertEmpty();
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, -0.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertEmpty();
-
-        // Move to next chunk
-        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        // Abuse the fact that there is no delta check
-        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(16.5, 40, -16.5), true));
-        player.interpretPacketQueue();
-        chunkDataPacketCollector.assertCount(viewDiameter * 2 - 1);
-    }
-
-    @Test
     public void testClientViewDistanceSettings(Env env) {
         int viewDistance = 4;
         final Instance flatInstance = env.createFlatInstance();
@@ -125,7 +73,7 @@ public class PlayerMovementIntegrationTest {
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(10, 10, viewDistance+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkUtils.forChunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.getSettings().refresh("en_US", (byte) viewDistance, ChatMessageType.FULL, true, (byte) 0, Player.MainHand.RIGHT, false, true);
 
@@ -136,5 +84,51 @@ public class PlayerMovementIntegrationTest {
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
+    }
+
+    @Test
+    public void playerReloadChunkTest(Env env) {
+        final Instance flatInstance = env.createFlatInstance();
+        final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
+
+        flatInstance.eventNode().addListener(PlayerChunkUnloadEvent.class, event -> {
+            Chunk chunk = event.getInstance().getChunk(event.getChunkX(), event.getChunkZ());
+            if (chunk != null) {
+                Set<Player> viewers = new HashSet<>(chunk.getViewers());
+                viewers.remove(event.getEntity());
+                if (viewers.isEmpty()) {
+                    event.getInstance().unloadChunk(chunk);
+                }
+            }
+        });
+
+        // Preload all possible chunks to avoid issues due to async loading
+        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
+        ChunkUtils.forChunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
+        final TestConnection connection = env.createConnection();
+        Collector<UnloadChunkPacket> unloadChunkPacketCollector = connection.trackIncoming(UnloadChunkPacket.class);
+        Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
+        final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
+        final Player player = future.join();
+        // Initial join
+        chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
+        player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
+
+        // Unload chunks
+        unloadChunkPacketCollector = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(-0.5, 40, 0.5), true));
+        player.interpretPacketQueue();
+        unloadChunkPacketCollector.assertCount(viewDiameter);
+
+        // Reload chunks
+        chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(0.5, 40, 0.5), true));
+        player.interpretPacketQueue();
+        env.tick();
+        env.tick();
+        env.tick();
+        env.tick();
+        chunkDataPacketCollector.assertCount(viewDiameter);
     }
 }
