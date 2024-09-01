@@ -1,7 +1,5 @@
 package net.minestom.server.network;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.entity.Player;
@@ -12,7 +10,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
-import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
@@ -42,7 +39,6 @@ import java.util.function.Function;
  * Manages the connected clients.
  */
 public final class ConnectionManager {
-    private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private CachedPacket defaultTags;
 
     private CachedPacket getDefaultTags() {
@@ -62,12 +58,6 @@ public final class ConnectionManager {
     private final Set<Player> configurationPlayers = new CopyOnWriteArraySet<>();
     // Players in play state
     private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
-
-    // The players who need keep alive ticks. This was added because we may not send a keep alive in
-    // the time after sending finish configuration but before receiving configuration end (to swap to play).
-    // I(mattw) could not come up with a better way to express this besides completely splitting client/server
-    // states. Perhaps there will be an improvement in the future.
-    private final Set<Player> keepAlivePlayers = new CopyOnWriteArraySet<>();
 
     private final Set<Player> unmodifiableConfigurationPlayers = Collections.unmodifiableSet(configurationPlayers);
     private final Set<Player> unmodifiablePlayPlayers = Collections.unmodifiableSet(playPlayers);
@@ -273,7 +263,6 @@ public final class ConnectionManager {
     public CompletableFuture<Void> doConfiguration(@NotNull Player player, boolean isFirstConfig) {
         if (isFirstConfig) {
             configurationPlayers.add(player);
-            keepAlivePlayers.add(player);
         }
 
         final PlayerConnection connection = player.getPlayerConnection();
@@ -329,7 +318,6 @@ public final class ConnectionManager {
             var packFuture = player.getResourcePackFuture();
             if (packFuture != null) packFuture.join();
 
-            keepAlivePlayers.remove(player);
             player.setPendingOptions(spawningInstance, event.isHardcore());
             player.sendPacket(new FinishConfigurationPacket());
         });
@@ -354,7 +342,6 @@ public final class ConnectionManager {
         if (player == null) return;
         this.configurationPlayers.remove(player);
         this.playPlayers.remove(player);
-        this.keepAlivePlayers.remove(player);
     }
 
     /**
@@ -363,16 +350,12 @@ public final class ConnectionManager {
     public synchronized void shutdown() {
         this.configurationPlayers.clear();
         this.playPlayers.clear();
-        this.keepAlivePlayers.clear();
         this.connectionPlayerMap.clear();
     }
 
     public void tick(long tickStart) {
         // Let waiting players into their instances
         updateWaitingPlayers();
-
-        // Send keep alive packets
-        handleKeepAlive(keepAlivePlayers, tickStart);
 
         // Interpret packets for configuration players
         configurationPlayers.forEach(Player::interpretPacketQueue);
@@ -387,7 +370,6 @@ public final class ConnectionManager {
             if (!player.isOnline()) return; // Player disconnected while in queued to join
             player.getPlayerConnection().setConnectionState(ConnectionState.PLAY);
             playPlayers.add(player);
-            keepAlivePlayers.add(player);
 
             // This fixes a bug with Geyser. They do not reply to keep alive during config, meaning that
             // `Player#didAnswerKeepAlive()` will always be false when entering the play state, so a new keep
@@ -400,23 +382,5 @@ public final class ConnectionManager {
             // Required to get the exact moment the player spawns
             if (ServerFlag.INSIDE_TEST) spawnFuture.join();
         });
-    }
-
-    /**
-     * Updates keep alive by checking the last keep alive packet and send a new one if needed.
-     *
-     * @param tickStart the time of the update in milliseconds, forwarded to the packet
-     */
-    private void handleKeepAlive(@NotNull Collection<Player> playerGroup, long tickStart) {
-        final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
-        for (Player player : playerGroup) {
-            final long lastKeepAlive = tickStart - player.getLastKeepAlive();
-            if (lastKeepAlive > ServerFlag.KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
-                player.refreshKeepAlive(tickStart);
-                player.sendPacket(keepAlivePacket);
-            } else if (lastKeepAlive >= ServerFlag.KEEP_ALIVE_KICK) {
-                player.kick(TIMEOUT_TEXT);
-            }
-        }
     }
 }
