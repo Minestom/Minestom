@@ -90,6 +90,6 @@ public final class Messenger {
      * @return the chat message type
      */
     private static @NotNull ChatMessageType getChatMessageType(@NotNull Player player) {
-        return Objects.requireNonNullElse(player.getSettings().getChatMessageType(), ChatMessageType.FULL);
+        return Objects.requireNonNullElse(player.getSettings().chatMessageType(), ChatMessageType.FULL);
     }
 }
