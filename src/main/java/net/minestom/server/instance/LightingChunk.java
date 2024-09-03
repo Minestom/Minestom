@@ -9,6 +9,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.NamespaceID;
@@ -363,11 +364,12 @@ public class LightingChunk extends DynamicChunk {
                 case SKY -> section.skyLight();
             };
 
+            final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 switch (queueType) {
                     case INTERNAL ->
-                            light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ());
-                    case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY());
+                            light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ(), blockPalette);
+                    case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY(), blockPalette);
                 }
 
                 sections.add(light);

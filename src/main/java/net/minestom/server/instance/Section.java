@@ -17,18 +17,15 @@ public final class Section implements NetworkBuffer.Writer {
     private final Light skyLight;
     private final Light blockLight;
 
-    private Section(Palette blockPalette, Palette biomePalette) {
-        this.blockPalette = blockPalette;
-        this.biomePalette = biomePalette;
-        this.skyLight = Light.sky(blockPalette);
-        this.blockLight = Light.block(blockPalette);
-    }
-
     private Section(Palette blockPalette, Palette biomePalette, Light skyLight, Light blockLight) {
         this.blockPalette = blockPalette;
         this.biomePalette = biomePalette;
         this.skyLight = skyLight;
         this.blockLight = blockLight;
+    }
+
+    private Section(Palette blockPalette, Palette biomePalette) {
+        this(blockPalette, biomePalette, Light.sky(), Light.block());
     }
 
     public Section() {
@@ -50,11 +47,11 @@ public final class Section implements NetworkBuffer.Writer {
 
     @Override
     public @NotNull Section clone() {
-        final Light skyLight = Light.sky(blockPalette);
-        final Light blockLight = Light.block(blockPalette);
+        final Light skyLight = Light.sky();
+        final Light blockLight = Light.block();
 
-        setSkyLight(this.skyLight.array());
-        setBlockLight(this.blockLight.array());
+        skyLight.set(this.skyLight.array());
+        blockLight.set(this.blockLight.array());
 
         return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
     }

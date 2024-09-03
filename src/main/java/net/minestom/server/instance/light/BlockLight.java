@@ -18,8 +18,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
-    private final Palette blockPalette;
-
     private byte[] content;
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
@@ -29,10 +27,6 @@ final class BlockLight implements Light {
 
     private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
-
-    BlockLight(Palette blockPalette) {
-        this.blockPalette = blockPalette;
-    }
 
     @Override
     public Set<Point> flip() {
@@ -144,7 +138,7 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ) {
+    public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
         this.isValidBorders.set(true);
 
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
@@ -219,7 +213,7 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public Light calculateExternal(Instance instance, Chunk chunk, int sectionY) {
+    public Light calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette) {
         if (!isValidBorders.get()) {
             this.toUpdateSet = Set.of();
             return this;

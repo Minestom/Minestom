@@ -8,7 +8,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
@@ -16,12 +15,12 @@ import static net.minestom.server.instance.light.LightCompute.SECTION_SIZE;
 import static net.minestom.server.instance.light.LightCompute.getLight;
 
 public interface Light {
-    static Light sky(@NotNull Palette blockPalette) {
-        return new SkyLight(blockPalette);
+    static Light sky() {
+        return new SkyLight();
     }
 
-    static Light block(@NotNull Palette blockPalette) {
-        return new BlockLight(blockPalette);
+    static Light block() {
+        return new BlockLight();
     }
 
     boolean requiresSend();
@@ -32,12 +31,12 @@ public interface Light {
     Set<Point> flip();
 
     @ApiStatus.Internal
-    Light calculateExternal(Instance instance, Chunk chunk, int sectionY);
+    Light calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
 
     int getLevel(int x, int y, int z);
 
     @ApiStatus.Internal
-    Light calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ);
+    Light calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ, Palette blockPalette);
 
     void invalidate();
 
@@ -61,7 +60,8 @@ public interface Light {
             Chunk foundChunk = chunk.getInstance().getChunk(x, z);
 
             if (foundChunk == null) continue;
-            if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0) continue;
+            if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0)
+                continue;
 
             links[face.ordinal()] = new Vec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
         }
@@ -90,7 +90,7 @@ public interface Light {
 
                 if (content == null && contentPropagation == null) valueFrom = 0;
                 else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
-                else if (content == null && contentPropagation != null) valueFrom = getLight(contentPropagation, posFrom);
+                else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
                 else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
 
                 int valueTo = getLight(contentPropagationTemp, posFrom);
