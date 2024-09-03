@@ -13,10 +13,10 @@ import java.util.Iterator;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public record BoundingBox(Vec min, Vec max) implements Shape {
-    private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
-    private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
-    private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
+public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
+    private static final BoundingBox SLEEPING = new BoundingBox(0.2, 0.2, 0.2);
+    private static final BoundingBox SNEAKING = new BoundingBox(0.6, 1.5, 0.6);
+    private static final BoundingBox SMALL = new BoundingBox(0.6, 0.6, 0.6);
 
     final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
@@ -60,16 +60,6 @@ public record BoundingBox(Vec min, Vec max) implements Shape {
         return RayUtils.BoundingBoxRayIntersectionCheck(start, direction, this, position);
     }
 
-    @Override
-    public @NotNull Point relativeStart() {
-        return min;
-    }
-
-    @Override
-    public @NotNull Point relativeEnd() {
-        return max;
-    }
-
     /**
      * Creates a new {@link BoundingBox} with an expanded size.
      *
@@ -105,39 +95,39 @@ public record BoundingBox(Vec min, Vec max) implements Shape {
     }
 
     public double width() {
-        return max.x() - min.x();
+        return relativeEnd.x() - relativeStart.x();
     }
 
     public double height() {
-        return max.y() - min.y();
+        return relativeEnd.y() - relativeStart.y();
     }
 
     public double depth() {
-        return max.z() - min.z();
+        return relativeEnd.z() - relativeStart.z();
     }
 
     public double minX() {
-        return relativeStart().x();
+        return relativeStart.x();
     }
 
     public double maxX() {
-        return relativeEnd().x();
+        return relativeEnd.x();
     }
 
     public double minY() {
-        return relativeStart().y();
+        return relativeStart.y();
     }
 
     public double maxY() {
-        return relativeEnd().y();
+        return relativeEnd.y();
     }
 
     public double minZ() {
-        return relativeStart().z();
+        return relativeStart.z();
     }
 
     public double maxZ() {
-        return relativeEnd().z();
+        return relativeEnd.z();
     }
 
     public enum AxisMask {
@@ -265,9 +255,9 @@ public record BoundingBox(Vec min, Vec max) implements Shape {
 
     public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
         return switch (pose) {
-            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> smallBoundingBox;
-            case SLEEPING, DYING -> sleepingBoundingBox;
-            case SNEAKING -> sneakingBoundingBox;
+            case FALL_FLYING, SWIMMING, SPIN_ATTACK -> SMALL;
+            case SLEEPING, DYING -> SLEEPING;
+            case SNEAKING -> SNEAKING;
             default -> null;
         };
     }
