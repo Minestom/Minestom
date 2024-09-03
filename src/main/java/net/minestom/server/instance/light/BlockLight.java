@@ -11,7 +11,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -63,7 +62,7 @@ final class BlockLight implements Light {
     }
 
     private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short)palette.get(x, y, z));
+        return Block.fromStateId((short) palette.get(x, y, z));
     }
 
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
@@ -94,10 +93,10 @@ final class BlockLight implements Light {
                     };
 
                     final byte lightEmission = (byte) Math.max(switch (face) {
-                            case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
-                            case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
-                            default -> (byte) otherLight.getLevel(bx, 15 - k, by);
-                        } - 1, 0);
+                        case NORTH, SOUTH -> (byte) otherLight.getLevel(bx, by, 15 - k);
+                        case WEST, EAST -> (byte) otherLight.getLevel(15 - k, bx, by);
+                        default -> (byte) otherLight.getLevel(bx, 15 - k, by);
+                    } - 1, 0);
 
                     final int posTo = switch (face) {
                         case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
@@ -110,7 +109,7 @@ final class BlockLight implements Light {
                         if (lightEmission <= internalEmission) continue;
                     }
 
-                    final Block blockTo = switch(face) {
+                    final Block blockTo = switch (face) {
                         case NORTH, SOUTH -> getBlock(blockPalette, bx, by, k);
                         case WEST, EAST -> getBlock(blockPalette, k, bx, by);
                         default -> getBlock(blockPalette, bx, k, by);
@@ -159,8 +158,7 @@ final class BlockLight implements Light {
         // Update single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
 
-        Result result = LightCompute.compute(blockPalette, queue);
-        this.content = result.light();
+        this.content = LightCompute.compute(blockPalette, queue);
 
         // Propagate changes to neighbors and self
         for (int i = -1; i <= 1; i++) {
@@ -216,7 +214,7 @@ final class BlockLight implements Light {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = bake(contentPropagation, content);
-        if (res == emptyContent) return new byte[0];
+        if (res == EMPTY_CONTENT) return new byte[0];
         return res;
     }
 
@@ -230,9 +228,8 @@ final class BlockLight implements Light {
         Point[] neighbors = Light.getNeighbors(chunk, sectionY);
 
         ShortArrayFIFOQueue queue = buildExternalQueue(instance, blockPalette, neighbors, content);
-        LightCompute.Result result = LightCompute.compute(blockPalette, queue);
 
-        byte[] contentPropagationTemp = result.light();
+        final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
 
         this.contentPropagationSwap = bake(contentPropagationSwap, contentPropagationTemp);
 
@@ -251,33 +248,6 @@ final class BlockLight implements Light {
 
         this.toUpdateSet = toUpdate;
         return this;
-    }
-
-    private byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return emptyContent;
-        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
-
-        if (content1 == null) return content2;
-        if (content2 == null) return content1;
-
-        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
-
-        byte[] lightMax = new byte[LIGHT_LENGTH];
-        for (int i = 0; i < content1.length; i++) {
-            // Lower
-            byte l1 = (byte) (content1[i] & 0x0F);
-            byte l2 = (byte) (content2[i] & 0x0F);
-
-            // Upper
-            byte u1 = (byte) ((content1[i] >> 4) & 0x0F);
-            byte u2 = (byte) ((content2[i] >> 4) & 0x0F);
-
-            byte lower = (byte) Math.max(l1, l2);
-            byte upper = (byte) Math.max(u1, u2);
-
-            lightMax[i] = (byte) (lower | (upper << 4));
-        }
-        return lightMax;
     }
 
     @Override

@@ -18,8 +18,8 @@ public class BlockLightTest {
     @Test
     public void empty() {
         var palette = Palette.blocks();
-        var result = LightCompute.compute(palette);
-        for (byte light : result.light()) {
+        var result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
+        for (byte light : result) {
             assertEquals(0, light);
         }
     }
@@ -28,8 +28,7 @@ public class BlockLightTest {
     public void glowstone() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.of(
+        assertLight(palette, Map.of(
                 new Vec(0, 1, 0), 15,
                 new Vec(0, 1, 1), 14,
                 new Vec(0, 1, 2), 13));
@@ -41,8 +40,7 @@ public class BlockLightTest {
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(4, 1, 4, Block.GLOWSTONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.of(
+        assertLight(palette, Map.of(
                 new Vec(1, 1, 3), 11,
                 new Vec(3, 3, 7), 9,
                 new Vec(1, 1, 1), 13,
@@ -53,8 +51,7 @@ public class BlockLightTest {
     public void glowstoneBorder() {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.of(
+        assertLight(palette, Map.of(
                 // X axis
                 new Vec(-1, 0, 0), 13,
                 new Vec(-1, 1, 0), 14,
@@ -72,8 +69,7 @@ public class BlockLightTest {
         var palette = Palette.blocks();
         palette.set(0, 1, 0, Block.GLOWSTONE.stateId());
         palette.set(0, 1, 1, Block.STONE.stateId());
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.of(
+        assertLight(palette, Map.of(
                 new Vec(0, 1, 0), 15,
                 new Vec(0, 1, 1), 0,
                 new Vec(0, 1, 2), 11));
@@ -91,8 +87,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.ofEntries(
+        assertLight(palette, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
                 // Isolation
@@ -120,8 +115,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.ofEntries(
+        assertLight(palette, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
                 // Front of stair
@@ -142,8 +136,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.ofEntries(
+        assertLight(palette, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
                 // Stair
@@ -169,8 +162,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.ofEntries(
+        assertLight(palette, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
                 // Stair
@@ -199,8 +191,7 @@ public class BlockLightTest {
         palette.set(4, 2, 4, Block.STONE.stateId());
         palette.set(4, 0, 4, Block.STONE.stateId());
 
-        var result = LightCompute.compute(palette);
-        assertLight(result, Map.ofEntries(
+        assertLight(palette, Map.ofEntries(
                 // Glowstone
                 entry(new Vec(4, 1, 4), 15),
                 // Stair
@@ -212,14 +203,15 @@ public class BlockLightTest {
                 entry(new Vec(3, 0, 3), 12)));
     }
 
-    void assertLight(LightCompute.Result result, Map<Vec, Integer> expectedLights) {
+    void assertLight(Palette palette, Map<Vec, Integer> expectedLights) {
+        byte[] result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
         List<String> errors = new ArrayList<>();
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 16; z++) {
                     var expected = expectedLights.get(new Vec(x, y, z));
                     if (expected != null) {
-                        final byte light = result.getLight(x, y, z);
+                        final int light = LightCompute.getLight(result, x, y, z);
                         if (light != expected) {
                             errors.add(String.format("Expected %d at [%d,%d,%d] but got %d", expected, x, y, z, light));
                         }

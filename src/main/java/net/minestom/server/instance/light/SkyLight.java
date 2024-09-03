@@ -12,7 +12,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -50,21 +49,20 @@ final class SkyLight implements Light {
 
     static ShortArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
+        if (!(c instanceof LightingChunk lc)) return lightSources;
 
-        if (c instanceof LightingChunk lc) {
-            int[] heightmap = lc.getOcclusionMap();
-            int maxY = c.getInstance().getCachedDimensionType().minY() + c.getInstance().getCachedDimensionType().height();
-            int sectionMaxY = (sectionY + 1) * 16 - 1;
-            int sectionMinY = sectionY * 16;
+        int[] heightmap = lc.getOcclusionMap();
+        int maxY = lc.getInstance().getCachedDimensionType().minY() + lc.getInstance().getCachedDimensionType().height();
+        int sectionMaxY = (sectionY + 1) * 16 - 1;
+        int sectionMinY = sectionY * 16;
 
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    int height = heightmap[z << 4 | x];
+        for (int x = 0; x < 16; x++) {
+            for (int z = 0; z < 16; z++) {
+                int height = heightmap[z << 4 | x];
 
-                    for (int y = Math.min(sectionMaxY, maxY); y >= Math.max(height, sectionMinY); y--) {
-                        int index = x | (z << 4) | ((y % 16) << 8);
-                        lightSources.enqueue((short) (index | (15 << 12)));
-                    }
+                for (int y = Math.min(sectionMaxY, maxY); y >= Math.max(height, sectionMinY); y--) {
+                    int index = x | (z << 4) | ((y % 16) << 8);
+                    lightSources.enqueue((short) (index | (15 << 12)));
                 }
             }
         }
@@ -73,7 +71,7 @@ final class SkyLight implements Light {
     }
 
     private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short)palette.get(x, y, z));
+        return Block.fromStateId((short) palette.get(x, y, z));
     }
 
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
@@ -174,10 +172,9 @@ final class SkyLight implements Light {
 
         if (queueSize == SECTION_SIZE * SECTION_SIZE * SECTION_SIZE) {
             this.fullyLit = true;
-            this.content = contentFullyLit;
+            this.content = CONTENT_FULLY_LIT;
         } else {
-            Result result = LightCompute.compute(blockPalette, queue);
-            this.content = result.light();
+            this.content = LightCompute.compute(blockPalette, queue);
         }
 
         Set<Point> toUpdate = new HashSet<>();
@@ -238,7 +235,7 @@ final class SkyLight implements Light {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = bake(contentPropagation, content);
-        if (res == emptyContent) return new byte[0];
+        if (res == EMPTY_CONTENT) return new byte[0];
         return res;
     }
 
@@ -254,13 +251,12 @@ final class SkyLight implements Light {
 
         ShortArrayFIFOQueue queue;
 
-        byte[] contentPropagationTemp = contentFullyLit;
+        byte[] contentPropagationTemp = CONTENT_FULLY_LIT;
 
         if (!fullyLit) {
             queue = buildExternalQueue(instance, blockPalette, neighbors, content);
-            LightCompute.Result result = LightCompute.compute(blockPalette, queue);
 
-            contentPropagationTemp = result.light();
+            contentPropagationTemp = LightCompute.compute(blockPalette, queue);
             this.contentPropagationSwap = bake(contentPropagationSwap, contentPropagationTemp);
         } else {
             this.contentPropagationSwap = null;
@@ -280,33 +276,6 @@ final class SkyLight implements Light {
 
         this.toUpdateSet = toUpdate;
         return this;
-    }
-
-    private byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return emptyContent;
-        if (content1 == emptyContent && content2 == emptyContent) return emptyContent;
-
-        if (content1 == null) return content2;
-        if (content2 == null) return content1;
-
-        if (Arrays.equals(content1, emptyContent) && Arrays.equals(content2, emptyContent)) return emptyContent;
-
-        byte[] lightMax = new byte[LIGHT_LENGTH];
-        for (int i = 0; i < content1.length; i++) {
-            // Lower
-            byte l1 = (byte) (content1[i] & 0x0F);
-            byte l2 = (byte) (content2[i] & 0x0F);
-
-            // Upper
-            byte u1 = (byte) ((content1[i] >> 4) & 0x0F);
-            byte u2 = (byte) ((content2[i] >> 4) & 0x0F);
-
-            byte lower = (byte) Math.max(l1, l2);
-            byte upper = (byte) Math.max(u1, u2);
-
-            lightMax[i] = (byte) (lower | (upper << 4));
-        }
-        return lightMax;
     }
 
     @Override
