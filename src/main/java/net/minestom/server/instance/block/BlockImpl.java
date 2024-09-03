@@ -1,7 +1,5 @@
 package net.minestom.server.instance.block;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
@@ -16,12 +14,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.function.Function;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
                  int propertiesArray,
@@ -100,10 +96,6 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                 final int defaultState = properties.getInt("defaultStateId");
                 return getState(defaultState);
             });
-    private static final Cache<CompoundBinaryTag, CompoundBinaryTag> NBT_CACHE = Caffeine.newBuilder()
-            .expireAfterWrite(Duration.ofMinutes(5))
-            .weakValues()
-            .build();
 
     static {
         PROPERTIES_TYPE.trim();
@@ -160,8 +152,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         var builder = CompoundBinaryTag.builder();
         if (nbt != null) builder.put(nbt);
         tag.write(builder, value);
-        var temporaryNbt = builder.build();
-        final var finalNbt = temporaryNbt.size() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
+        final CompoundBinaryTag temporaryNbt = builder.build();
+        final CompoundBinaryTag finalNbt = temporaryNbt.size() > 0 ? temporaryNbt : null;
         return new BlockImpl(registry, propertiesArray, finalNbt, handler);
     }
 
