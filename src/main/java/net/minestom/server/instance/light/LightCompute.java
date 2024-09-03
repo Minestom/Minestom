@@ -77,8 +77,8 @@ public final class LightCompute {
                 final int newIndex = xO | (zO << 4) | (yO << 8);
 
                 if (getLight(lightArray, newIndex) < newLightLevel) {
-                    final Block currentBlock = Objects.requireNonNullElse(Block.fromStateId((short) blockPalette.get(x, y, z)), Block.AIR);
-                    final Block propagatedBlock = Objects.requireNonNullElse(Block.fromStateId((short) blockPalette.get(xO, yO, zO)), Block.AIR);
+                    final Block currentBlock = Objects.requireNonNullElse(getBlock(blockPalette, x, y, z), Block.AIR);
+                    final Block propagatedBlock = Objects.requireNonNullElse(getBlock(blockPalette, xO, yO, zO), Block.AIR);
 
                     final Shape currentShape = currentBlock.registry().collisionShape();
                     final Shape propagatedShape = propagatedBlock.registry().collisionShape();
@@ -109,6 +109,10 @@ public final class LightCompute {
         if (index >>> 1 >= light.length) return 0;
         final int value = light[index >>> 1];
         return ((value >>> ((index & 1) << 2)) & 0xF);
+    }
+
+    public static Block getBlock(Palette palette, int x, int y, int z) {
+        return Block.fromStateId((short) palette.get(x, y, z));
     }
 
     public static byte[] bake(byte[] content1, byte[] content2) {
@@ -164,7 +168,7 @@ public final class LightCompute {
                 else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
                 else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
 
-                int valueTo = getLight(contentPropagationTemp, posFrom);
+                final int valueTo = getLight(contentPropagationTemp, posFrom);
 
                 if (valueFrom < valueTo) return false;
             }

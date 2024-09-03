@@ -15,8 +15,7 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static net.minestom.server.instance.light.LightCompute.EMPTY_CONTENT;
-import static net.minestom.server.instance.light.LightCompute.getLight;
+import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
     private byte[] content;
@@ -51,15 +50,11 @@ final class BlockLight implements Light {
         return lightSources;
     }
 
-    private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short) palette.get(x, y, z));
-    }
-
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         for (int i = 0; i < neighbors.length; i++) {
-            var face = BlockFace.values()[i];
+            final BlockFace face = BlockFace.values()[i];
             Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
@@ -142,7 +137,6 @@ final class BlockLight implements Light {
             return Set.of();
         }
 
-        Set<Point> toUpdate = new HashSet<>();
 
         // Update single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
@@ -150,6 +144,7 @@ final class BlockLight implements Light {
         this.content = LightCompute.compute(blockPalette, queue);
 
         // Propagate changes to neighbors and self
+        Set<Point> toUpdate = new HashSet<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
@@ -210,22 +205,19 @@ final class BlockLight implements Light {
             return Set.of();
         }
 
-        Point[] neighbors = Light.getNeighbors(chunk, sectionY);
-
+        final Point[] neighbors = Light.getNeighbors(chunk, sectionY);
         ShortArrayFIFOQueue queue = buildExternalQueue(instance, blockPalette, neighbors, content);
 
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
 
         this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
 
-        Set<Point> toUpdate = new HashSet<>();
-
         // Propagate changes to neighbors and self
+        Set<Point> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            var neighbor = neighbors[i];
+            final Point neighbor = neighbors[i];
             if (neighbor == null) continue;
-            var face = BlockFace.values()[i];
-
+            final BlockFace face = BlockFace.values()[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }

@@ -43,26 +43,23 @@ public interface Light {
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {
-        int chunkX = chunk.getChunkX();
-        int chunkZ = chunk.getChunkZ();
+        final int chunkX = chunk.getChunkX();
+        final int chunkZ = chunk.getChunkZ();
 
         Point[] links = new Vec[BlockFace.values().length];
-
         for (BlockFace face : BlockFace.values()) {
-            Direction direction = face.toDirection();
-            int x = chunkX + direction.normalX();
-            int z = chunkZ + direction.normalZ();
-            int y = sectionY + direction.normalY();
+            final Direction direction = face.toDirection();
+            final int x = chunkX + direction.normalX();
+            final int z = chunkZ + direction.normalZ();
+            final int y = sectionY + direction.normalY();
 
             Chunk foundChunk = chunk.getInstance().getChunk(x, z);
-
             if (foundChunk == null) continue;
             if (y - foundChunk.getMinSection() > foundChunk.getMaxSection() || y - foundChunk.getMinSection() < 0)
                 continue;
 
             links[face.ordinal()] = new Vec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
         }
-
         return links;
     }
 }

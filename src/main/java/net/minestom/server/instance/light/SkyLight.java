@@ -40,17 +40,16 @@ final class SkyLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         if (!(c instanceof LightingChunk lc)) return lightSources;
 
-        int[] heightmap = lc.getOcclusionMap();
-        int maxY = lc.getInstance().getCachedDimensionType().minY() + lc.getInstance().getCachedDimensionType().height();
-        int sectionMaxY = (sectionY + 1) * 16 - 1;
-        int sectionMinY = sectionY * 16;
+        final int[] heightmap = lc.getOcclusionMap();
+        final int maxY = lc.getInstance().getCachedDimensionType().minY() + lc.getInstance().getCachedDimensionType().height();
+        final int sectionMaxY = (sectionY + 1) * 16 - 1;
+        final int sectionMinY = sectionY * 16;
 
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
-                int height = heightmap[z << 4 | x];
-
+                final int height = heightmap[z << 4 | x];
                 for (int y = Math.min(sectionMaxY, maxY); y >= Math.max(height, sectionMinY); y--) {
-                    int index = x | (z << 4) | ((y % 16) << 8);
+                    final int index = x | (z << 4) | ((y % 16) << 8);
                     lightSources.enqueue((short) (index | (15 << 12)));
                 }
             }
@@ -59,15 +58,11 @@ final class SkyLight implements Light {
         return lightSources;
     }
 
-    private static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short) palette.get(x, y, z));
-    }
-
     private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         for (int i = 0; i < neighbors.length; i++) {
-            var face = BlockFace.values()[i];
+            final BlockFace face = BlockFace.values()[i];
             Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
@@ -165,9 +160,8 @@ final class SkyLight implements Light {
             this.content = LightCompute.compute(blockPalette, queue);
         }
 
-        Set<Point> toUpdate = new HashSet<>();
-
         // Propagate changes to neighbors and self
+        Set<Point> toUpdate = new HashSet<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
                 Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
@@ -230,16 +224,11 @@ final class SkyLight implements Light {
             return Set.of();
         }
 
-        Point[] neighbors = Light.getNeighbors(chunk, sectionY);
-        Set<Point> toUpdate = new HashSet<>();
-
-        ShortArrayFIFOQueue queue;
-
+        final Point[] neighbors = Light.getNeighbors(chunk, sectionY);
         byte[] contentPropagationTemp = CONTENT_FULLY_LIT;
 
         if (!fullyLit) {
-            queue = buildExternalQueue(instance, blockPalette, neighbors, content);
-
+            ShortArrayFIFOQueue queue = buildExternalQueue(instance, blockPalette, neighbors, content);
             contentPropagationTemp = LightCompute.compute(blockPalette, queue);
             this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
         } else {
@@ -247,12 +236,11 @@ final class SkyLight implements Light {
         }
 
         // Propagate changes to neighbors and self
+        Set<Point> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
-            var neighbor = neighbors[i];
+            final Point neighbor = neighbors[i];
             if (neighbor == null) continue;
-
-            var face = BlockFace.values()[i];
-
+            final BlockFace face = BlockFace.values()[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
