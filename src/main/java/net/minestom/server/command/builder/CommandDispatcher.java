@@ -1,7 +1,5 @@
 package net.minestom.server.command.builder;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.command.CommandParser;
 import net.minestom.server.command.CommandSender;
@@ -9,17 +7,12 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Class responsible for parsing {@link Command}.
  */
 public class CommandDispatcher {
     private final CommandManager manager;
-
-    private final Cache<String, CommandResult> cache = Caffeine.newBuilder()
-            .expireAfterWrite(30, TimeUnit.SECONDS)
-            .build();
 
     public CommandDispatcher(CommandManager manager) {
         this.manager = manager;
