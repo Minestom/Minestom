@@ -1614,36 +1614,21 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
-            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.id()));
+            sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.CHANGE_GAMEMODE, gameMode.ordinal()));
             PacketSendingUtils.broadcastPlayPacket(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE, infoEntry()));
         }
 
         // The client updates their abilities based on the GameMode as follows
-        switch (gameMode) {
-            case CREATIVE -> {
-                this.allowFlying = true;
-                this.instantBreak = true;
-                this.invulnerable = true;
-            }
-            case SPECTATOR -> {
-                this.allowFlying = true;
-                this.instantBreak = false;
-                this.invulnerable = true;
-                if (isActive()) {
-                    refreshFlying(true);
-                } else {
-                    this.flying = true;
-                }
-            }
-            default -> {
-                this.allowFlying = false;
-                this.instantBreak = false;
-                this.invulnerable = false;
-                if (isActive()) {
-                    refreshFlying(false);
-                } else {
-                    this.flying = false;
-                }
+        this.allowFlying = gameMode.allowFlying();
+        this.instantBreak = gameMode.instantBreak();
+        this.invulnerable = gameMode.canTakeDamage();
+        // Spectator automatically enables flying
+        // If new game mode cannot fly, disable it
+        if (gameMode == GameMode.SPECTATOR || !gameMode.allowFlying()) {
+            if (isActive()) {
+                refreshFlying(gameMode.allowFlying());
+            } else {
+                this.flying = gameMode.allowFlying();
             }
         }
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
