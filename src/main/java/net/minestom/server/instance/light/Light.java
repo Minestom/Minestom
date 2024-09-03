@@ -27,19 +27,19 @@ public interface Light {
 
     void flip();
 
-    @ApiStatus.Internal
-    Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
-
     int getLevel(int x, int y, int z);
-
-    @ApiStatus.Internal
-    Set<Point> calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ, Palette blockPalette);
 
     void invalidate();
 
     boolean requiresUpdate();
 
     void set(byte[] copyArray);
+
+    @ApiStatus.Internal
+    Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
+
+    @ApiStatus.Internal
+    Set<Point> calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ, Palette blockPalette);
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {

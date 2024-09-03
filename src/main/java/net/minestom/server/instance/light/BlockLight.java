@@ -129,6 +129,49 @@ final class BlockLight implements Light {
     }
 
     @Override
+    public void invalidate() {
+        this.needsSend.set(true);
+        this.isValidBorders.set(false);
+        this.contentPropagation = null;
+    }
+
+    @Override
+    public boolean requiresUpdate() {
+        return !isValidBorders.get();
+    }
+
+    @Override
+    @ApiStatus.Internal
+    public void set(byte[] copyArray) {
+        this.content = copyArray.clone();
+        this.contentPropagation = this.content;
+        this.isValidBorders.set(true);
+        this.needsSend.set(true);
+    }
+
+    @Override
+    public boolean requiresSend() {
+        return needsSend.getAndSet(false);
+    }
+
+    @Override
+    public byte[] array() {
+        if (content == null) return new byte[0];
+        if (contentPropagation == null) return content;
+        var res = LightCompute.bake(contentPropagation, content);
+        if (res == EMPTY_CONTENT) return new byte[0];
+        return res;
+    }
+
+    @Override
+    public int getLevel(int x, int y, int z) {
+        if (content == null) return 0;
+        int index = x | (z << 4) | (y << 8);
+        if (contentPropagation == null) return LightCompute.getLight(content, index);
+        return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
+    }
+
+    @Override
     public Set<Point> calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
         this.isValidBorders.set(true);
 
@@ -165,41 +208,6 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public void invalidate() {
-        this.needsSend.set(true);
-        this.isValidBorders.set(false);
-        this.contentPropagation = null;
-    }
-
-    @Override
-    public boolean requiresUpdate() {
-        return !isValidBorders.get();
-    }
-
-    @Override
-    @ApiStatus.Internal
-    public void set(byte[] copyArray) {
-        this.content = copyArray.clone();
-        this.contentPropagation = this.content;
-        this.isValidBorders.set(true);
-        this.needsSend.set(true);
-    }
-
-    @Override
-    public boolean requiresSend() {
-        return needsSend.getAndSet(false);
-    }
-
-    @Override
-    public byte[] array() {
-        if (content == null) return new byte[0];
-        if (contentPropagation == null) return content;
-        var res = LightCompute.bake(contentPropagation, content);
-        if (res == EMPTY_CONTENT) return new byte[0];
-        return res;
-    }
-
-    @Override
     public Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette) {
         if (!isValidBorders.get()) {
             return Set.of();
@@ -223,13 +231,5 @@ final class BlockLight implements Light {
             }
         }
         return toUpdate;
-    }
-
-    @Override
-    public int getLevel(int x, int y, int z) {
-        if (content == null) return 0;
-        int index = x | (z << 4) | (y << 8);
-        if (contentPropagation == null) return LightCompute.getLight(content, index);
-        return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
     }
 }
