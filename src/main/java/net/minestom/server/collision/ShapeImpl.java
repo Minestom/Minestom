@@ -10,6 +10,8 @@ import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -141,12 +143,15 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return lightData.occlusionBoundingBoxes;
     }
 
+    static final Map<ShapeImpl, ShapeImpl> SHAPES = new ConcurrentHashMap<>();
+
     static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, int lightEmission) {
         BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
         BoundingBox[] occlusionBoundingBoxes = occludes ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
         final CollisionData collisionData = collisionData(List.of(collisionBoundingBoxes));
         final LightData lightData = lightData(List.of(occlusionBoundingBoxes), lightEmission);
-        return new ShapeImpl(collisionData, lightData);
+        final ShapeImpl shape = new ShapeImpl(collisionData, lightData);
+        return SHAPES.computeIfAbsent(shape, k -> k);
     }
 
     private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
@@ -167,10 +172,9 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
             final double boundYSize = vals.getDouble(4 + 6 * i) - minY;
             final double boundZSize = vals.getDouble(5 + 6 * i) - minZ;
 
-            //final Vec min = new Vec(minX, minY, minZ);
-            //final Vec max = new Vec(boundXSize, boundYSize, boundZSize);
-            //final BoundingBox bb = new BoundingBox(min, max);
-            final BoundingBox bb = new BoundingBox(boundXSize, boundYSize, boundZSize, new Vec(minX, minY, minZ));
+            final Vec min = new Vec(minX, minY, minZ);
+            final Vec max = new Vec(minX + boundXSize, minY + boundYSize, minZ + boundZSize);
+            final BoundingBox bb = new BoundingBox(min, max);
             assert bb.minX() == minX;
             assert bb.minY() == minY;
             assert bb.minZ() == minZ;
