@@ -26,19 +26,14 @@ final class SkyLight implements Light {
     private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
 
-    private Set<Point> toUpdateSet = new HashSet<>();
     private final Section[] neighborSections = new Section[BlockFace.values().length];
     private boolean fullyLit = false;
 
     @Override
-    public Set<Point> flip() {
+    public void flip() {
         if (this.contentPropagationSwap != null)
             this.contentPropagation = this.contentPropagationSwap;
-
         this.contentPropagationSwap = null;
-
-        if (toUpdateSet == null) return Set.of();
-        return toUpdateSet;
     }
 
     static ShortArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
@@ -148,11 +143,10 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public Light calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
+    public Set<Point> calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
         Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
-            this.toUpdateSet = Set.of();
-            return this;
+            return Set.of();
         }
         this.isValidBorders.set(true);
 
@@ -191,11 +185,8 @@ final class SkyLight implements Light {
                 }
             }
         }
-
         toUpdate.add(new Vec(chunk.getChunkX(), sectionY, chunk.getChunkZ()));
-        this.toUpdateSet = toUpdate;
-
-        return this;
+        return toUpdate;
     }
 
     @Override
@@ -228,16 +219,15 @@ final class SkyLight implements Light {
     public byte[] array() {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
-        var res = bake(contentPropagation, content);
+        var res = LightCompute.bake(contentPropagation, content);
         if (res == EMPTY_CONTENT) return new byte[0];
         return res;
     }
 
     @Override
-    public Light calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette) {
+    public Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette) {
         if (!isValidBorders.get()) {
-            this.toUpdateSet = Set.of();
-            return this;
+            return Set.of();
         }
 
         Point[] neighbors = Light.getNeighbors(chunk, sectionY);
@@ -251,7 +241,7 @@ final class SkyLight implements Light {
             queue = buildExternalQueue(instance, blockPalette, neighbors, content);
 
             contentPropagationTemp = LightCompute.compute(blockPalette, queue);
-            this.contentPropagationSwap = bake(contentPropagationSwap, contentPropagationTemp);
+            this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
         } else {
             this.contentPropagationSwap = null;
         }
@@ -263,13 +253,11 @@ final class SkyLight implements Light {
 
             var face = BlockFace.values()[i];
 
-            if (!Light.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
+            if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
         }
-
-        this.toUpdateSet = toUpdate;
-        return this;
+        return toUpdate;
     }
 
     @Override

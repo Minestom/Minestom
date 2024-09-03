@@ -366,16 +366,16 @@ public class LightingChunk extends DynamicChunk {
 
             final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-                switch (queueType) {
+                final Set<Point> toAdd = switch (queueType) {
                     case INTERNAL ->
                             light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ(), blockPalette);
                     case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY(), blockPalette);
-                }
+                };
 
                 sections.add(light);
 
-                var toAdd = light.flip();
-                if (toAdd != null) newQueue.addAll(toAdd);
+                light.flip();
+                newQueue.addAll(toAdd);
             }, pool);
 
             tasks.add(task);

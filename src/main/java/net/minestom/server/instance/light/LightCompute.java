@@ -140,4 +140,35 @@ public final class LightCompute {
         }
         return lightMax;
     }
+
+    public static boolean compareBorders(byte[] content, byte[] contentPropagation, byte[] contentPropagationTemp, BlockFace face) {
+        if (content == null && contentPropagation == null && contentPropagationTemp == null) return true;
+
+        final int k = switch (face) {
+            case WEST, BOTTOM, NORTH -> 0;
+            case EAST, TOP, SOUTH -> 15;
+        };
+
+        for (int bx = 0; bx < SECTION_SIZE; bx++) {
+            for (int by = 0; by < SECTION_SIZE; by++) {
+                final int posFrom = switch (face) {
+                    case NORTH, SOUTH -> bx | (k << 4) | (by << 8);
+                    case WEST, EAST -> k | (by << 4) | (bx << 8);
+                    default -> bx | (by << 4) | (k << 8);
+                };
+
+                int valueFrom;
+
+                if (content == null && contentPropagation == null) valueFrom = 0;
+                else if (content != null && contentPropagation == null) valueFrom = getLight(content, posFrom);
+                else if (content == null) valueFrom = getLight(contentPropagation, posFrom);
+                else valueFrom = Math.max(getLight(content, posFrom), getLight(contentPropagation, posFrom));
+
+                int valueTo = getLight(contentPropagationTemp, posFrom);
+
+                if (valueFrom < valueTo) return false;
+            }
+        }
+        return true;
+    }
 }
