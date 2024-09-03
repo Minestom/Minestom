@@ -13,22 +13,15 @@ import java.util.Iterator;
 /**
  * See https://wiki.vg/Entity_metadata#Mobs_2
  */
-public final class BoundingBox implements Shape {
+public record BoundingBox(Vec min, Vec max) implements Shape {
     private static final BoundingBox sleepingBoundingBox = new BoundingBox(0.2, 0.2, 0.2);
     private static final BoundingBox sneakingBoundingBox = new BoundingBox(0.6, 1.5, 0.6);
     private static final BoundingBox smallBoundingBox = new BoundingBox(0.6, 0.6, 0.6);
 
-    final static BoundingBox ZERO = new BoundingBox(0, 0, 0);
-
-    private final double width, height, depth;
-    private final Point offset;
-    private Point relativeEnd;
+    final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
-        this.offset = offset;
+        this(Vec.fromPoint(offset), new Vec(width, height, depth).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
@@ -49,7 +42,7 @@ public final class BoundingBox implements Shape {
 
     @Override
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection, @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
-        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult) ) {
+        if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, this, shapePos, finalResult)) {
             finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
             finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
             finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
@@ -69,26 +62,12 @@ public final class BoundingBox implements Shape {
 
     @Override
     public @NotNull Point relativeStart() {
-        return offset;
+        return min;
     }
 
     @Override
     public @NotNull Point relativeEnd() {
-        Point relativeEnd = this.relativeEnd;
-        if (relativeEnd == null) this.relativeEnd = relativeEnd = offset.add(width, height, depth);
-        return relativeEnd;
-    }
-
-    @Override
-    public String toString() {
-        String result = "BoundingBox";
-        result += "\n";
-        result += "[" + minX() + " : " + maxX() + "]";
-        result += "\n";
-        result += "[" + minY() + " : " + maxY() + "]";
-        result += "\n";
-        result += "[" + minZ() + " : " + maxZ() + "]";
-        return result;
+        return max;
     }
 
     /**
@@ -100,7 +79,7 @@ public final class BoundingBox implements Shape {
      * @return a new {@link BoundingBox} expanded
      */
     public @NotNull BoundingBox expand(double x, double y, double z) {
-        return new BoundingBox(this.width + x, this.height + y, this.depth + z);
+        return new BoundingBox(width() + x, height() + y, depth() + z);
     }
 
     /**
@@ -112,7 +91,7 @@ public final class BoundingBox implements Shape {
      * @return a new bounding box contracted
      */
     public @NotNull BoundingBox contract(double x, double y, double z) {
-        return new BoundingBox(this.width - x, this.height - y, this.depth - z);
+        return new BoundingBox(width() - x, height() - y, depth() - z);
     }
 
     /**
@@ -122,19 +101,19 @@ public final class BoundingBox implements Shape {
      * @return a new bounding box with an offset.
      */
     public @NotNull BoundingBox withOffset(Point offset) {
-        return new BoundingBox(this.width, this.height, this.depth, offset);
+        return new BoundingBox(width(), height(), depth(), offset);
     }
 
     public double width() {
-        return width;
+        return max.x() - min.x();
     }
 
     public double height() {
-        return height;
+        return max.y() - min.y();
     }
 
     public double depth() {
-        return depth;
+        return max.z() - min.z();
     }
 
     public double minX() {
@@ -216,7 +195,9 @@ public final class BoundingBox implements Shape {
         private double minX, minY, minZ, maxX, maxY, maxZ;
         private final MutablePoint point = new MutablePoint();
 
-        public PointIterator() {}
+        public PointIterator() {
+        }
+
         public PointIterator(BoundingBox boundingBox, Point p, AxisMask axisMask, double axis) {
             reset(boundingBox, p, axisMask, axis);
         }
@@ -280,17 +261,6 @@ public final class BoundingBox implements Shape {
             }
             return point;
         }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BoundingBox that = (BoundingBox) o;
-        if (Double.compare(that.width, width) != 0) return false;
-        if (Double.compare(that.height, height) != 0) return false;
-        if (Double.compare(that.depth, depth) != 0) return false;
-        return offset.equals(that.offset);
     }
 
     public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
