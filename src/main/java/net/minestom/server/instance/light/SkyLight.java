@@ -3,9 +3,6 @@ package net.minestom.server.instance.light;
 import it.unimi.dsi.fastutil.shorts.ShortArrayFIFOQueue;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
@@ -25,7 +22,6 @@ final class SkyLight implements Light {
     private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
 
-    private final Section[] neighborSections = new Section[BlockFace.values().length];
     private boolean fullyLit = false;
 
     @Override
@@ -51,7 +47,10 @@ final class SkyLight implements Light {
         return lightSources;
     }
 
-    private ShortArrayFIFOQueue buildExternalQueue(Instance instance, Palette blockPalette, Point[] neighbors, byte[] content) {
+    private ShortArrayFIFOQueue buildExternalQueue(Palette blockPalette,
+                                                   Point[] neighbors, byte[] content,
+                                                   LightLookup lightLookup,
+                                                   PaletteLookup paletteLookup) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         for (int i = 0; i < neighbors.length; i++) {
@@ -59,17 +58,8 @@ final class SkyLight implements Light {
             Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
-            Section otherSection = neighborSections[face.ordinal()];
-
-            if (otherSection == null) {
-                Chunk chunk = instance.getChunk(neighborSection.blockX(), neighborSection.blockZ());
-                if (chunk == null) continue;
-
-                otherSection = chunk.getSection(neighborSection.blockY());
-                neighborSections[face.ordinal()] = otherSection;
-            }
-
-            var otherLight = otherSection.skyLight();
+            Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
 
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {
@@ -102,9 +92,9 @@ final class SkyLight implements Light {
                     };
 
                     final Block blockFrom = (switch (face) {
-                        case NORTH, SOUTH -> getBlock(otherSection.blockPalette(), bx, by, 15 - k);
-                        case WEST, EAST -> getBlock(otherSection.blockPalette(), 15 - k, bx, by);
-                        default -> getBlock(otherSection.blockPalette(), bx, 15 - k, by);
+                        case NORTH, SOUTH -> getBlock(otherPalette, bx, by, 15 - k);
+                        case WEST, EAST -> getBlock(otherPalette, 15 - k, bx, by);
+                        default -> getBlock(otherPalette, bx, 15 - k, by);
                     });
 
                     if (blockTo == null && blockFrom != null) {
@@ -177,7 +167,7 @@ final class SkyLight implements Light {
     public Set<Point> calculateInternal(Palette blockPalette,
                                         int chunkX, int chunkY, int chunkZ,
                                         int[] heightmap, int maxY,
-                                        NeighborLookup neighborLookup) {
+                                        LightLookup lightLookup) {
         this.isValidBorders.set(true);
 
         // Update single section with base lighting changes
@@ -203,7 +193,7 @@ final class SkyLight implements Light {
                     final int neighborX = chunkX + i;
                     final int neighborY = chunkY + j;
                     final int neighborZ = chunkZ + k;
-                    if (!(neighborLookup.light(neighborX, neighborY, neighborZ) instanceof SkyLight skyLight))
+                    if (!(lightLookup.light(neighborX, neighborY, neighborZ) instanceof SkyLight skyLight))
                         continue;
                     skyLight.contentPropagation = null;
                     toUpdate.add(new Vec(neighborX, neighborY, neighborZ));
@@ -215,22 +205,21 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette) {
+    public Set<Point> calculateExternal(Palette blockPalette,
+                                        Point[] neighbors,
+                                        LightLookup lightLookup,
+                                        PaletteLookup paletteLookup) {
         if (!isValidBorders.get()) {
             return Set.of();
         }
-
-        final Point[] neighbors = Light.getNeighbors(chunk, sectionY);
         byte[] contentPropagationTemp = CONTENT_FULLY_LIT;
-
         if (!fullyLit) {
-            ShortArrayFIFOQueue queue = buildExternalQueue(instance, blockPalette, neighbors, content);
+            ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
             contentPropagationTemp = LightCompute.compute(blockPalette, queue);
             this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
         } else {
             this.contentPropagationSwap = null;
         }
-
         // Propagate changes to neighbors and self
         Set<Point> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {

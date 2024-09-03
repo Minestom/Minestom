@@ -3,7 +3,6 @@ package net.minestom.server.instance.light;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
@@ -39,10 +38,13 @@ public interface Light {
     Set<Point> calculateInternal(Palette blockPalette,
                                  int chunkX, int chunkY, int chunkZ,
                                  int[] heightmap, int maxY,
-                                 NeighborLookup neighborLookup);
+                                 LightLookup lightLookup);
 
     @ApiStatus.Internal
-    Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
+    Set<Point> calculateExternal(Palette blockPalette,
+                                 Point[] neighbors,
+                                 LightLookup lightLookup,
+                                 PaletteLookup paletteLookup);
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {
@@ -67,7 +69,12 @@ public interface Light {
     }
 
     @FunctionalInterface
-    interface NeighborLookup {
+    interface LightLookup {
         Light light(int x, int y, int z);
+    }
+
+    @FunctionalInterface
+    interface PaletteLookup {
+        Palette palette(int x, int y, int z);
     }
 }
