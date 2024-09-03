@@ -19,7 +19,7 @@ final class BlockLight implements Light {
     private byte[] contentPropagation;
     private byte[] contentPropagationSwap;
 
-    private final AtomicBoolean isValidBorders = new AtomicBoolean(true);
+    private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
 
     @Override
@@ -120,13 +120,13 @@ final class BlockLight implements Light {
     @Override
     public void invalidate() {
         this.needsSend.set(true);
-        this.isValidBorders.set(false);
+        this.isValidBorders = false;
         this.contentPropagation = null;
     }
 
     @Override
     public boolean requiresUpdate() {
-        return !isValidBorders.get();
+        return !isValidBorders;
     }
 
     @Override
@@ -134,7 +134,7 @@ final class BlockLight implements Light {
     public void set(byte[] copyArray) {
         this.content = copyArray.clone();
         this.contentPropagation = this.content;
-        this.isValidBorders.set(true);
+        this.isValidBorders = true;
         this.needsSend.set(true);
     }
 
@@ -165,7 +165,7 @@ final class BlockLight implements Light {
                                         int chunkX, int chunkY, int chunkZ,
                                         int[] heightmap, int maxY,
                                         LightLookup lightLookup) {
-        this.isValidBorders.set(true);
+        this.isValidBorders = true;
         // Update single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
         this.content = LightCompute.compute(blockPalette, queue);
@@ -192,7 +192,7 @@ final class BlockLight implements Light {
                                         Point[] neighbors,
                                         LightLookup lightLookup,
                                         PaletteLookup paletteLookup) {
-        if (!isValidBorders.get()) {
+        if (!isValidBorders) {
             return Set.of();
         }
         ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
