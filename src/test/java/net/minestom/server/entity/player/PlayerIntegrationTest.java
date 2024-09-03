@@ -11,6 +11,7 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,8 +77,12 @@ public class PlayerIntegrationTest {
 
     @Test
     public void handSwapTest(Env env) {
-        ClientSettingsPacket packet = new ClientSettingsPacket("en_us", (byte) 16, ChatMessageType.FULL,
-                true, (byte) 127, Player.MainHand.LEFT, true, true);
+        ClientSettingsPacket packet = new ClientSettingsPacket(new ClientSettings(
+                Locale.US, (byte) 16,
+                ChatMessageType.FULL, true,
+                (byte) 127, ClientSettings.MainHand.LEFT,
+                true, true
+        ));
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
@@ -89,7 +95,7 @@ public class PlayerIntegrationTest {
         var collector = connection.trackIncoming();
         env.tick();
         env.tick();
-        assertEquals(Player.MainHand.LEFT, player.getSettings().getMainHand());
+        assertEquals(ClientSettings.MainHand.LEFT, player.getSettings().mainHand());
 
         boolean found = false;
         for (ServerPacket serverPacket : collector.collect()) {
@@ -208,7 +214,7 @@ public class PlayerIntegrationTest {
         connection2.connect(instance, new Pos(0, 42, 0)).join();
 
         var displayNamePackets = tracker2.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets);
 
@@ -217,12 +223,12 @@ public class PlayerIntegrationTest {
         player.setDisplayName(Component.text("Other Name!"));
 
         var displayNamePackets2 = tracker3.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(1, displayNamePackets2);
 
         var displayNamePackets3 = tracker.collect().stream().filter((packet) ->
-                packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
+                        packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
                 .count();
         assertEquals(2, displayNamePackets3);
     }
