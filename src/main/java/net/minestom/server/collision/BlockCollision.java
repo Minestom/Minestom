@@ -70,16 +70,18 @@ final class BlockCollision {
     private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
                                                Block.Getter getter, PhysicsResult lastPhysicsResult) {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            Block collisionBlockY = shape.block();
+            var currentBlock = getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, Vec.EPSILON, 0), Block.Getter.Condition.TYPE);
+            var lastBlockBoxes = shape.collisionBoundingBoxes();
+            var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).collisionBoundingBoxes();
 
             // Fast exit if entity hasn't moved
             if (lastPhysicsResult.collisionY()
                     && velocity.y() == lastPhysicsResult.originalDelta().y()
                     // Check block below to fast exit gravity
-                    && getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, Vec.EPSILON, 0), Block.Getter.Condition.TYPE) == collisionBlockY
+                    && currentBlockBoxes.equals(lastBlockBoxes)
                     && velocity.x() == 0 && velocity.z() == 0
                     && entityPosition.samePoint(lastPhysicsResult.newPosition())
-                    && collisionBlockY != Block.AIR) {
+                    && !lastBlockBoxes.isEmpty()) {
                 return lastPhysicsResult;
             }
         }
