@@ -11,49 +11,50 @@ import static net.minestom.server.network.NetworkBuffer.BYTE;
  * Can be set with {@link Player#setGameMode(GameMode)}.
  */
 public enum GameMode {
-    SURVIVAL((byte) 0, true),
-    CREATIVE((byte) 1, false),
-    ADVENTURE((byte) 2, true),
-    SPECTATOR((byte) 3, false);
+    SURVIVAL(false, false, false),
+    CREATIVE(true, true, true),
+    ADVENTURE(false, false, false),
+    SPECTATOR(true, true, false);
 
-    private final byte id;
-    private final boolean canTakeDamage;
+    private final boolean allowFlying;
+    private final boolean invulnerable;
+    private final boolean instantBreak;
 
-    GameMode(byte id, boolean canTakeDamage) {
-        this.id = id;
-        this.canTakeDamage = canTakeDamage;
+    GameMode(boolean allowFlying, boolean invulnerable, boolean instantBreak) {
+        this.allowFlying = allowFlying;
+        this.invulnerable = invulnerable;
+        this.instantBreak = instantBreak;
     }
 
-    public byte id() {
-        return id;
+    public boolean allowFlying() {
+        return allowFlying;
     }
 
     public boolean canTakeDamage() {
-        return canTakeDamage;
+        return invulnerable;
     }
 
-    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = BYTE.transform(GameMode::fromId, gameMode -> gameMode.id);
+    public boolean instantBreak() {
+        return instantBreak;
+    }
+
+    private static final GameMode[] VALUES = values();
+
+    public static final NetworkBuffer.Type<GameMode> NETWORK_TYPE = BYTE.transform(
+            id -> VALUES[id],
+            gameMode -> (byte) gameMode.ordinal()
+    );
 
     public static final NetworkBuffer.Type<GameMode> OPT_NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, GameMode value) {
-            buffer.write(BYTE, value != null ? value.id() : -1);
+            buffer.write(BYTE, value != null ? (byte) value.ordinal() : -1);
         }
 
         @Override
         public GameMode read(@NotNull NetworkBuffer buffer) {
             final byte id = buffer.read(BYTE);
-            return id != -1 ? GameMode.fromId(id) : null;
+            return id != -1 ? VALUES[id] : null;
         }
     };
-
-    public static @NotNull GameMode fromId(int id) {
-        return switch (id) {
-            case 0 -> SURVIVAL;
-            case 1 -> CREATIVE;
-            case 2 -> ADVENTURE;
-            case 3 -> SPECTATOR;
-            default -> throw new IllegalArgumentException("Unknown game mode id: " + id);
-        };
-    }
 }
