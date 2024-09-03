@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -36,15 +35,10 @@ final class SkyLight implements Light {
         this.contentPropagationSwap = null;
     }
 
-    static ShortArrayFIFOQueue buildInternalQueue(Chunk c, int sectionY) {
+    static ShortArrayFIFOQueue buildInternalQueue(int[] heightmap, int maxY, int sectionY) {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
-        if (!(c instanceof LightingChunk lc)) return lightSources;
-
-        final int[] heightmap = lc.getOcclusionMap();
-        final int maxY = lc.getInstance().getCachedDimensionType().minY() + lc.getInstance().getCachedDimensionType().height();
         final int sectionMaxY = (sectionY + 1) * 16 - 1;
         final int sectionMinY = sectionY * 16;
-
         for (int x = 0; x < 16; x++) {
             for (int z = 0; z < 16; z++) {
                 final int height = heightmap[z << 4 | x];
@@ -54,7 +48,6 @@ final class SkyLight implements Light {
                 }
             }
         }
-
         return lightSources;
     }
 
@@ -181,18 +174,17 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public Set<Point> calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
-        Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            return Set.of();
-        }
+    public Set<Point> calculateInternal(Palette blockPalette,
+                                        int chunkX, int chunkY, int chunkZ,
+                                        int[] heightmap, int maxY,
+                                        NeighborLookup neighborLookup) {
         this.isValidBorders.set(true);
 
         // Update single section with base lighting changes
         int queueSize = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE;
         ShortArrayFIFOQueue queue = new ShortArrayFIFOQueue(0);
         if (!fullyLit) {
-            queue = buildInternalQueue(chunk, sectionY);
+            queue = buildInternalQueue(heightmap, maxY, chunkY);
             queueSize = queue.size();
         }
 
@@ -207,22 +199,18 @@ final class SkyLight implements Light {
         Set<Point> toUpdate = new HashSet<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (neighborChunk == null) continue;
-
                 for (int k = -1; k <= 1; k++) {
-                    Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
-
-                    if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        if (neighborChunk.getSection(neighborPos.blockY()).skyLight() instanceof SkyLight skyLight) {
-                            skyLight.contentPropagation = null;
-                            toUpdate.add(new Vec(neighborChunk.getChunkX(), neighborPos.blockY(), neighborChunk.getChunkZ()));
-                        }
-                    }
+                    final int neighborX = chunkX + i;
+                    final int neighborY = chunkY + j;
+                    final int neighborZ = chunkZ + k;
+                    if (!(neighborLookup.light(neighborX, neighborY, neighborZ) instanceof SkyLight skyLight))
+                        continue;
+                    skyLight.contentPropagation = null;
+                    toUpdate.add(new Vec(neighborX, neighborY, neighborZ));
                 }
             }
         }
-        toUpdate.add(new Vec(chunk.getChunkX(), sectionY, chunk.getChunkZ()));
+        toUpdate.add(new Vec(chunkX, chunkY, chunkZ));
         return toUpdate;
     }
 

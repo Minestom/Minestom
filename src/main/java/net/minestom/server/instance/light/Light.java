@@ -36,10 +36,13 @@ public interface Light {
     void set(byte[] copyArray);
 
     @ApiStatus.Internal
-    Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
+    Set<Point> calculateInternal(Palette blockPalette,
+                                 int chunkX, int chunkY, int chunkZ,
+                                 int[] heightmap, int maxY,
+                                 NeighborLookup neighborLookup);
 
     @ApiStatus.Internal
-    Set<Point> calculateInternal(Instance instance, int chunkX, int chunkY, int chunkZ, Palette blockPalette);
+    Set<Point> calculateExternal(Instance instance, Chunk chunk, int sectionY, Palette blockPalette);
 
     @ApiStatus.Internal
     static Point[] getNeighbors(Chunk chunk, int sectionY) {
@@ -61,5 +64,10 @@ public interface Light {
             links[face.ordinal()] = new Vec(foundChunk.getChunkX(), y, foundChunk.getChunkZ());
         }
         return links;
+    }
+
+    @FunctionalInterface
+    interface NeighborLookup {
+        Light light(int x, int y, int z);
     }
 }

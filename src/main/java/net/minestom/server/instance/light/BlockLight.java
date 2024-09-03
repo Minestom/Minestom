@@ -172,38 +172,29 @@ final class BlockLight implements Light {
     }
 
     @Override
-    public Set<Point> calculateInternal(Instance instance, int chunkX, int sectionY, int chunkZ, Palette blockPalette) {
+    public Set<Point> calculateInternal(Palette blockPalette,
+                                        int chunkX, int chunkY, int chunkZ,
+                                        int[] heightmap, int maxY,
+                                        NeighborLookup neighborLookup) {
         this.isValidBorders.set(true);
-
-        Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            return Set.of();
-        }
-
-
         // Update single section with base lighting changes
         ShortArrayFIFOQueue queue = buildInternalQueue(blockPalette);
-
         this.content = LightCompute.compute(blockPalette, queue);
-
         // Propagate changes to neighbors and self
         Set<Point> toUpdate = new HashSet<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (neighborChunk == null) continue;
-
                 for (int k = -1; k <= 1; k++) {
-                    Vec neighborPos = new Vec(chunkX + i, sectionY + k, chunkZ + j);
-
-                    if (neighborPos.blockY() >= neighborChunk.getMinSection() && neighborPos.blockY() < neighborChunk.getMaxSection()) {
-                        if (neighborChunk.getSection(neighborPos.blockY()).blockLight() instanceof BlockLight blockLight)
-                            blockLight.contentPropagation = null;
-                    }
+                    final int neighborX = chunkX + i;
+                    final int neighborY = chunkY + j;
+                    final int neighborZ = chunkZ + k;
+                    if (!(neighborLookup.light(neighborX, neighborY, neighborZ) instanceof BlockLight blockLight))
+                        continue;
+                    blockLight.contentPropagation = null;
                 }
             }
         }
-        toUpdate.add(new Vec(chunk.getChunkX(), sectionY, chunk.getChunkZ()));
+        toUpdate.add(new Vec(chunkX, chunkY, chunkZ));
         return toUpdate;
     }
 

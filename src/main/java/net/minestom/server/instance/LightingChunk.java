@@ -352,9 +352,21 @@ public class LightingChunk extends DynamicChunk {
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
         List<CompletableFuture<Void>> tasks = new ArrayList<>();
 
+        Light.NeighborLookup lookup = (x, y, z) -> {
+            Chunk chunk = instance.getChunk(x, z);
+            if (chunk == null) return null;
+            if (!(chunk instanceof LightingChunk lighting)) return null;
+            if (y - lighting.getMinSection() < 0 || y - lighting.getMaxSection() >= 0) return null;
+            final Section section = lighting.getSection(y);
+            return switch (type) {
+                case BLOCK -> section.blockLight();
+                case SKY -> section.skyLight();
+            };
+        };
+
         for (Point point : queue) {
             Chunk chunk = instance.getChunk(point.blockX(), point.blockZ());
-            if (chunk == null) continue;
+            if (!(chunk instanceof LightingChunk lightingChunk)) continue;
 
             Section section = chunk.getSection(point.blockY());
             responseChunks.add(chunk);
@@ -367,8 +379,10 @@ public class LightingChunk extends DynamicChunk {
             final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
                 final Set<Point> toAdd = switch (queueType) {
-                    case INTERNAL ->
-                            light.calculateInternal(instance, chunk.getChunkX(), point.blockY(), chunk.getChunkZ(), blockPalette);
+                    case INTERNAL -> light.calculateInternal(blockPalette,
+                            chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
+                            lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
+                            lookup);
                     case EXTERNAL -> light.calculateExternal(instance, chunk, point.blockY(), blockPalette);
                 };
 
