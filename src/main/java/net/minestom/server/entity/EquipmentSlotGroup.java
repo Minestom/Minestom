@@ -16,7 +16,7 @@ public enum EquipmentSlotGroup {
     CHEST(EquipmentSlot.CHESTPLATE),
     HEAD(EquipmentSlot.HELMET),
     ARMOR(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS, EquipmentSlot.HELMET),
-    BODY(EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS);
+    BODY(EquipmentSlot.BODY);
 
     public static final NetworkBuffer.Type<EquipmentSlotGroup> NETWORK_TYPE = NetworkBuffer.Enum(EquipmentSlotGroup.class);
     public static final BinaryTagSerializer<EquipmentSlotGroup> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(EquipmentSlotGroup.class);
