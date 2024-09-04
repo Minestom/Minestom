@@ -510,7 +510,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         EntitySpawnType type = entityType.registry().spawnType();
         this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
                 type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
-        initCollisions();
+        updateCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
         getViewers().forEach(this::updateOldViewer);
         viewers.forEach(this::updateNewViewer);
@@ -773,7 +773,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
-        initCollisions();
+        updateCollisions();
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
@@ -1737,7 +1737,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return preventBlockPlacement;
     }
 
-    protected void initCollisions() {
+    protected void updateCollisions() {
         preventBlockPlacement = !ALLOW_BLOCK_PLACEMENT_ENTITIES.contains(entityType);
         collidesWithEntities = !NO_ENTITY_COLLISION_ENTITIES.contains(entityType);
     }

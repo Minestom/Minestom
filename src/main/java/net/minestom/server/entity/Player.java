@@ -2343,7 +2343,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    protected void initCollisions() {
+    protected void updateCollisions() {
         preventBlockPlacement = gameMode != GameMode.SPECTATOR;
         collidesWithEntities = gameMode != GameMode.SPECTATOR;
     }
