@@ -6,6 +6,7 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.lang.ref.WeakReference;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.Consumer;
 
 final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
@@ -67,11 +68,11 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
     private void ensureMap() {
         if (MAPPED.compareAndSet(this, false, true)) {
             synchronized (GLOBAL_CHILD_LOCK) {
-                var registered = this.holder.registeredMappedCopy();
+                Map registered = new WeakHashMap<>(this.holder.registeredMappedNode);
                 var previous = registered.putIfAbsent(retrieveOwner(),
                         new WeakReference<>(EventNodeLazyImpl.class.cast(this)));
                 if (previous == null) invalidateEventsFor(holder);
-                this.holder.registeredMappedNode = (Map) registered;
+                this.holder.registeredMappedNode = registered;
             }
         }
     }

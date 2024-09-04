@@ -175,7 +175,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public void unmap(@NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            Map<Object, WeakReference<EventNodeLazyImpl<T>>> registered = registeredMappedCopy();
+            Map<Object, WeakReference<EventNodeLazyImpl<T>>> registered = new WeakHashMap<>(registeredMappedNode);
             final WeakReference<EventNodeLazyImpl<T>> mappedNodeRef = registered.remove(value);
             EventNodeLazyImpl<T> mappedNode;
             if (mappedNodeRef != null && (mappedNode = mappedNodeRef.get()) != null) {
@@ -183,10 +183,6 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             }
             this.registeredMappedNode = registered;
         }
-    }
-
-    Map<Object, WeakReference<EventNodeLazyImpl<T>>> registeredMappedCopy() {
-        return new WeakHashMap<>(registeredMappedNode);
     }
 
     @Override
