@@ -1,7 +1,5 @@
 package net.minestom.server.utils;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
@@ -22,12 +20,14 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
 
 @ApiStatus.Internal
 public final class PacketViewableUtils {
     // Viewable packets
-    private static final Cache<Viewable, ViewableStorage> VIEWABLE_STORAGE_MAP = Caffeine.newBuilder().weakKeys().build();
+    private static volatile Map<Viewable, ViewableStorage> storageMap = new WeakHashMap<>();
 
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket,
                                              @Nullable Entity entity) {
@@ -41,15 +41,33 @@ public final class PacketViewableUtils {
             return;
         }
         final Player exception = entity instanceof Player ? (Player) entity : null;
-        ViewableStorage storage = VIEWABLE_STORAGE_MAP.get(viewable, (unused) -> new ViewableStorage());
+        ViewableStorage storage = retrieveStorage(viewable);
         storage.append(serverPacket, exception);
     }
 
-    public static void flush() {
-        if (ServerFlag.VIEWABLE_PACKET) {
-            VIEWABLE_STORAGE_MAP.asMap().entrySet().parallelStream().forEach(entry ->
-                    entry.getValue().process(entry.getKey()));
+    private static ViewableStorage retrieveStorage(Viewable viewable) {
+        Map<Viewable, ViewableStorage> map = storageMap;
+        ViewableStorage storage = map.get(viewable);
+        if (storage == null) {
+            synchronized (PacketViewableUtils.class) {
+                map = storageMap;
+                storage = map.get(viewable);
+                if (storage == null) {
+                    storage = new ViewableStorage();
+                    map = new WeakHashMap<>(map);
+                    map.put(viewable, storage);
+                    storageMap = map;
+                }
+            }
         }
+        return storage;
+    }
+
+    public static void flush() {
+        if (!ServerFlag.VIEWABLE_PACKET) return;
+        Map<Viewable, ViewableStorage> map = storageMap;
+        map.entrySet().parallelStream().forEach(entry ->
+                entry.getValue().process(entry.getKey()));
     }
 
     public static void prepareViewablePacket(@NotNull Viewable viewable, @NotNull ServerPacket serverPacket) {
