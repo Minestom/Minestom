@@ -1730,7 +1730,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return collidesWithEntities;
     }
 
-    public boolean isPreventBlockPlacement() {
+    public boolean preventBlockPlacement() {
         // EntityMeta can change at any time, so initializing this during #initCollisions is not an option
         // Can be overridden to allow for custom behaviour
         if (entityMeta instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker()) return false;

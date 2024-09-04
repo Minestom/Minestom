@@ -42,7 +42,7 @@ final class BlockCollision {
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
-            if (!entity.isPreventBlockPlacement())
+            if (!entity.preventBlockPlacement())
                 continue;
 
             final boolean intersects;
