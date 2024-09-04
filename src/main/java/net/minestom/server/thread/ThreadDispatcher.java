@@ -120,7 +120,13 @@ public final class ThreadDispatcher<P> {
         });
         // Tick all partitions
         CountDownLatch latch = new CountDownLatch(threads.size());
-        for (TickThread thread : threads) thread.startTick(latch, time);
+        for (TickThread thread : threads) {
+            if (thread.isAlive()) {
+                thread.startTick(latch, time);
+            } else {
+                latch.countDown();
+            }
+        }
         try {
             latch.await();
         } catch (InterruptedException e) {
