@@ -177,11 +177,11 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
         synchronized (GLOBAL_CHILD_LOCK) {
             Map<Object, WeakReference<EventNodeLazyImpl<T>>> registered = new WeakHashMap<>(registeredMappedNode);
             final WeakReference<EventNodeLazyImpl<T>> mappedNodeRef = registered.remove(value);
+            this.registeredMappedNode = registered;
             EventNodeLazyImpl<T> mappedNode;
             if (mappedNodeRef != null && (mappedNode = mappedNodeRef.get()) != null) {
                 mappedNode.invalidateEventsFor(this);
             }
-            this.registeredMappedNode = registered;
         }
     }
 

@@ -71,8 +71,8 @@ final class EventNodeLazyImpl<E extends Event> extends EventNodeImpl<E> {
                 Map registered = new WeakHashMap<>(this.holder.registeredMappedNode);
                 var previous = registered.putIfAbsent(retrieveOwner(),
                         new WeakReference<>(EventNodeLazyImpl.class.cast(this)));
-                if (previous == null) invalidateEventsFor(holder);
                 this.holder.registeredMappedNode = registered;
+                if (previous == null) invalidateEventsFor(holder);
             }
         }
     }
