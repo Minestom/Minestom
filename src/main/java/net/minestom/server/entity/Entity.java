@@ -1726,7 +1726,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return boundingBox.relativeEnd();
     }
 
-    public boolean isCollidesWithEntities() {
+    public boolean hasEntityCollision() {
         return collidesWithEntities;
     }
 

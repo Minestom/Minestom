@@ -26,7 +26,7 @@ final class EntityCollision {
             SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
             if (!entityFilter.apply(e)) continue;
-            if (!e.isCollidesWithEntities()) continue;
+            if (!e.hasEntityCollision()) continue;
 
             // Overlapping with entity, math can't be done we return the entity
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {
