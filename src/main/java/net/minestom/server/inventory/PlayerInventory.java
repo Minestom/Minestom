@@ -64,7 +64,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             case CHESTPLATE_SLOT -> EquipmentSlot.CHESTPLATE;
             case LEGGINGS_SLOT -> EquipmentSlot.LEGGINGS;
             case BOOTS_SLOT -> EquipmentSlot.BOOTS;
-            case BODY -> null;
             default -> slot == heldSlot ? EquipmentSlot.MAIN_HAND : null;
         };
     }
