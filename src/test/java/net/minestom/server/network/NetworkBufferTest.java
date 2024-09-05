@@ -273,7 +273,6 @@ public class NetworkBufferTest {
         assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.read(INT)).sizeOf(1));
         assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.readAt(0, INT)).sizeOf(1));
         assertThrows(UnsupportedOperationException.class, () -> fn.apply(NetworkBuffer::compact).sizeOf(1));
-        assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.slice(0, 0, 0, 0)).sizeOf(1));
         assertThrows(UnsupportedOperationException.class, () -> fn.apply(buffer -> buffer.copy(0, 0, 0, 0)).sizeOf(1));
     }
 

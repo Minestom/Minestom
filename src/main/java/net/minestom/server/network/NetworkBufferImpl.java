@@ -30,7 +30,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private static final Cleaner CLEANER = Cleaner.create();
     private static final long DUMMY_ADDRESS = -1;
 
-    private final NetworkBufferImpl parent; // Used for slices so we can control GC over the parent buffer
     private final BufferCleaner state;
     // Address may be -1 if the buffer is a dummy buffer
     // Dummy buffers are used for size calculations and do not have memory allocated
@@ -46,12 +45,10 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     ByteBuffer nioBuffer = null;
 
-    NetworkBufferImpl(NetworkBufferImpl parent,
-                      long address, long capacity,
+    NetworkBufferImpl(long address, long capacity,
                       long readIndex, long writeIndex,
                       @Nullable AutoResize autoResize,
                       @Nullable Registries registries) {
-        this.parent = parent;
         this.address = address;
         this.capacity = capacity;
         this.readIndex = readIndex;
@@ -60,7 +57,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         this.registries = registries;
 
         this.state = new BufferCleaner(new AtomicLong(address));
-        if (this.parent == null && address != DUMMY_ADDRESS) CLEANER.register(this, state);
+        if (address != DUMMY_ADDRESS) CLEANER.register(this, state);
     }
 
     private record BufferCleaner(AtomicLong address) implements Runnable {
@@ -239,18 +236,6 @@ final class NetworkBufferImpl implements NetworkBuffer {
     }
 
     @Override
-    public NetworkBuffer slice(long index, long length, long readIndex, long writeIndex) {
-        assertDummy();
-        Objects.checkFromIndexSize(index, length, capacity);
-        NetworkBufferImpl slice = new NetworkBufferImpl(this,
-                address + index, length,
-                readIndex, writeIndex,
-                autoResize, registries);
-        slice.readOnly = readOnly;
-        return slice;
-    }
-
-    @Override
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
         assertDummy();
         Objects.checkFromIndexSize(index, length, capacity);
@@ -259,7 +244,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             throw new OutOfMemoryError("Failed to allocate memory");
         }
         UNSAFE.copyMemory(address + index, newAddress, length);
-        return new NetworkBufferImpl(null,
+        return new NetworkBufferImpl(
                 newAddress, length,
                 readIndex, writeIndex,
                 autoResize, registries);
@@ -550,7 +535,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         @Override
         public @NotNull NetworkBuffer build() {
             final long address = UNSAFE.allocateMemory(initialSize);
-            return new NetworkBufferImpl(null,
+            return new NetworkBufferImpl(
                     address, initialSize,
                     0, 0,
                     autoResize, registries);
@@ -560,7 +545,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
     static NetworkBufferImpl dummy(Registries registries) {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
-        return new NetworkBufferImpl(null,
+        return new NetworkBufferImpl(
                 DUMMY_ADDRESS, Long.MAX_VALUE,
                 0, 0,
                 null, registries);

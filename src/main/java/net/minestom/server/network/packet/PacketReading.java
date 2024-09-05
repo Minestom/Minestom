@@ -165,11 +165,13 @@ public final class PacketReading {
             if (requiredCapacity > buffer.capacity()) return new Result.Failure<>(requiredCapacity);
             else return EMPTY_CLIENT_PACKET;
         }
-        NetworkBuffer content = buffer.slice(buffer.readIndex(), packetLength, 0, packetLength);
+        final long readerEnd = readerStart + packetLength;
+        final long writerEnd = buffer.writeIndex();
+        buffer.writeIndex(readerEnd);
         final PacketRegistry<T> registry = parser.stateRegistry(state);
-        final T packet = readFramedPacket(content, registry, compressed);
+        final T packet = readFramedPacket(buffer, registry, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
-        buffer.readIndex(readerStart + packetLength);
+        buffer.index(readerEnd, writerEnd);
         return new Result.Success<>(packet, nextState);
     }
 
