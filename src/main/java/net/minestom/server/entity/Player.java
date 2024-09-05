@@ -425,7 +425,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Eating animation
         if (isUsingItem()) {
             if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
-                triggerStatus((byte) 9); // Mark item use as finished
+                triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
