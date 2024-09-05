@@ -69,7 +69,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         if (!this.viewers.add(player)) return false;
 
         update(player);
-        return false;
+        return true;
     }
 
     @Override
