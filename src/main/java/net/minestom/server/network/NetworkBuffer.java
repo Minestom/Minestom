@@ -147,8 +147,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void compact();
 
-    NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
-
     NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
 
     default NetworkBuffer copy(long index, long length) {
