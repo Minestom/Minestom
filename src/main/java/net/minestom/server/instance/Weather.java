@@ -26,6 +26,15 @@ public record Weather(float rainLevel, float thunderLevel) {
     public static final Weather RAIN = new Weather(1, 0);
     public static final Weather THUNDER = new Weather(1, 1);
 
+    /**
+     * @throws IllegalArgumentException if {@code rainLevel} is not between 0 and 1
+     * @throws IllegalArgumentException if {@code thunderLevel} is not between 0 and 1
+     */
+    public Weather {
+        Check.argCondition(!MathUtils.isBetween(rainLevel, 0, 1), "Rain level should be between 0 and 1");
+        Check.argCondition(!MathUtils.isBetween(thunderLevel, 0, 1), "Thunder level should be between 0 and 1");
+    }
+
     @Contract(pure = true)
     public @NotNull Weather withRainLevel(float rainLevel) {
         return new Weather(rainLevel, thunderLevel);
