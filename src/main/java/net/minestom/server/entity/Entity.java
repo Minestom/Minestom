@@ -197,6 +197,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Local nodes require a server process
             this.eventNode = null;
         }
+        updateCollisions();
     }
 
     public Entity(@NotNull EntityType entityType) {
@@ -773,7 +774,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
-        updateCollisions();
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
