@@ -1,6 +1,5 @@
 package net.minestom.server.event;
 
-import com.github.benmanes.caffeine.cache.Caffeine;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.event.trait.RecursiveEvent;
@@ -25,10 +24,15 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
-    final Map<Object, EventNodeImpl<T>> mappedNodeCache = Caffeine.newBuilder()
-            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
-    final Map<Object, EventNodeImpl<T>> registeredMappedNode = Caffeine.newBuilder()
-            .weakKeys().weakValues().<Object, EventNodeImpl<T>>build().asMap();
+
+    // Used to store mapped nodes before any listener is added
+    // Necessary to avoid creating multiple nodes for the same object
+    // Always accessed through the global lock.
+    final Map<Object, WeakReference<EventNodeLazyImpl<T>>> mappedNodeCache = new WeakHashMap<>();
+    // Store mapped nodes with at least one listener
+    // Map is copied and mutated for each new active mapped node
+    // Can be considered immutable.
+    volatile Map<Object, WeakReference<EventNodeLazyImpl<T>>> registeredMappedNode = new WeakHashMap<>();
 
     final String name;
     final EventFilter<T, ?> filter;
@@ -159,8 +163,10 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             node = new EventNodeLazyImpl<>(this, value, filter);
             Check.stateCondition(node.parent != null, "Node already has a parent");
             Check.stateCondition(Objects.equals(parent, node), "Cannot map to self");
-            EventNodeImpl<T> previous = this.mappedNodeCache.putIfAbsent(value, (EventNodeImpl<T>) node);
-            if (previous != null) return (EventNode<E>) previous;
+            WeakReference<EventNodeLazyImpl<T>> previousRef = this.mappedNodeCache.putIfAbsent(value,
+                    new WeakReference<>((EventNodeLazyImpl<T>) node));
+            EventNodeImpl<T> previous;
+            if (previousRef != null && (previous = previousRef.get()) != null) return (EventNode<E>) previous;
             node.parent = this;
         }
         return node;
@@ -169,8 +175,13 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     @Override
     public void unmap(@NotNull Object value) {
         synchronized (GLOBAL_CHILD_LOCK) {
-            final var mappedNode = this.registeredMappedNode.remove(value);
-            if (mappedNode != null) mappedNode.invalidateEventsFor(this);
+            Map<Object, WeakReference<EventNodeLazyImpl<T>>> registered = new WeakHashMap<>(registeredMappedNode);
+            final WeakReference<EventNodeLazyImpl<T>> mappedNodeRef = registered.remove(value);
+            this.registeredMappedNode = registered;
+            EventNodeLazyImpl<T> mappedNode;
+            if (mappedNodeRef != null && (mappedNode = mappedNodeRef.get()) != null) {
+                mappedNode.invalidateEventsFor(this);
+            }
         }
     }
 
@@ -451,7 +462,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
 
             // Retrieve all filters used to retrieve potential handlers
             for (var mappedEntry : mappedNodeCache.entrySet()) {
-                final EventNodeImpl<E> mappedNode = mappedEntry.getValue();
+                final WeakReference<EventNodeLazyImpl<E>> mappedNodeRef = mappedEntry.getValue();
+                final EventNodeLazyImpl<E> mappedNode = mappedNodeRef.get();
+                if (mappedNode == null) continue; // Weak reference collected
                 final Handle<E> handle = (Handle<E>) mappedNode.getHandle(eventType);
                 if (!handle.hasListener()) continue; // Implicit update
                 filters.add(mappedNode.filter);
