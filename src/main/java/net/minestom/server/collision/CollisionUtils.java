@@ -26,10 +26,10 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
-     * @param singleCollision if the entity should only collide with one block
+     * @param singleCollision   if the entity should only collide with one block
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
@@ -45,7 +45,7 @@ public final class CollisionUtils {
     /**
      * Checks for entity collisions
      *
-     * @param velocity the velocity of the entity
+     * @param velocity     the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
      *                     Measured from bottom center to top corner
      *                     This is used to extend the search radius for entities we collide with
@@ -58,10 +58,10 @@ public final class CollisionUtils {
     /**
      * Checks for entity collisions
      *
-     * @param entity the entity to check collisions for
-     * @param velocity the velocity of the entity
-     * @param extendRadius the largest entity bounding box we can collide with
-     * @param entityFilter the entity filter
+     * @param entity        the entity to check collisions for
+     * @param velocity      the velocity of the entity
+     * @param extendRadius  the largest entity bounding box we can collide with
+     * @param entityFilter  the entity filter
      * @param physicsResult optional physics result
      * @return the entity collision results
      */
@@ -75,8 +75,8 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
      * @return the result of physics simulation
      */
@@ -170,7 +170,7 @@ public final class CollisionUtils {
         // from moving forward by supplying their previous position's value
         boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
         boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
-        if (xCollision || zCollision)  {
+        if (xCollision || zCollision) {
             return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
                     zCollision ? currentPosition.z() : newPosition.z());
         }
@@ -178,9 +178,9 @@ public final class CollisionUtils {
     }
 
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
+        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
     }
-    
+
     /**
      * Simulate the entity's collision physics as if the world had no blocks
      *

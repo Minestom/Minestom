@@ -5,7 +5,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +25,7 @@ final class EntityCollision {
             SweepResult sweepResult = new SweepResult(minimumRes, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
             if (!entityFilter.apply(e)) continue;
-            if (!e.hasCollision()) continue;
+            if (!e.hasEntityCollision()) continue;
 
             // Overlapping with entity, math can't be done we return the entity
             if (e.getBoundingBox().intersectBox(e.getPosition().sub(point), boundingBox)) {

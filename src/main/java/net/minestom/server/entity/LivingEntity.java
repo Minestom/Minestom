@@ -91,6 +91,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack chestplate = ItemStack.AIR;
     private ItemStack leggings = ItemStack.AIR;
     private ItemStack boots = ItemStack.AIR;
+    private ItemStack bodyEquipment = ItemStack.AIR;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -124,6 +125,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case LEGGINGS -> leggings;
             case CHESTPLATE -> chestplate;
             case HELMET -> helmet;
+            case BODY -> bodyEquipment;
         };
     }
 
@@ -139,6 +141,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case LEGGINGS -> leggings = newItem;
             case CHESTPLATE -> chestplate = newItem;
             case HELMET -> helmet = newItem;
+            case BODY -> bodyEquipment = newItem;
         }
 
         syncEquipment(slot);

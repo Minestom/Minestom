@@ -32,6 +32,7 @@ public final class CommandManager {
     private final Set<Command> commands = new HashSet<>();
 
     private CommandCallback unknownCommandCallback;
+    private volatile @Nullable Graph cachedGraph;
 
     public CommandManager() {
     }
@@ -55,6 +56,8 @@ public final class CommandManager {
         for (String name : command.getNames()) {
             commandMap.put(name, command);
         }
+
+        invalidateGraphCache();
     }
 
     /**
@@ -68,6 +71,8 @@ public final class CommandManager {
         for (String name : command.getNames()) {
             commandMap.remove(name);
         }
+
+        invalidateGraphCache();
     }
 
     /**
@@ -188,9 +193,22 @@ public final class CommandManager {
         return parser.parse(sender, getGraph(), input);
     }
 
-    private Graph getGraph() {
-        //todo cache
-        return Graph.merge(commands);
+    private @NotNull Graph getGraph() {
+        Graph graph = cachedGraph;
+        if (graph == null) {
+            synchronized (this) {
+                graph = cachedGraph;
+                if (graph == null) {
+                    graph = cachedGraph = Graph.merge(getCommands());
+                }
+            }
+        }
+
+        return graph;
+    }
+
+    private void invalidateGraphCache() {
+        cachedGraph = null;
     }
 
     private static CommandResult resultConverter(ExecutableCommand executable,

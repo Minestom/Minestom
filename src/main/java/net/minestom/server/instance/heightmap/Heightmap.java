@@ -20,6 +20,7 @@ public abstract class Heightmap {
     }
 
     protected abstract boolean checkBlock(@NotNull Block block);
+
     public abstract String NBTName();
 
     public void refresh(int x, int y, int z, Block block) {
@@ -75,7 +76,7 @@ public abstract class Heightmap {
         for (int i = 0; i < heights.length; i++) {
             final int indexInContainer = i % entriesPerLong;
 
-            heights[i] = (short) ((int)(data[containerIndex] >> (indexInContainer * bitsPerEntry)) & entryMask);
+            heights[i] = (short) ((int) (data[containerIndex] >> (indexInContainer * bitsPerEntry)) & entryMask);
 
             if (indexInContainer == maxPossibleIndexInContainer) containerIndex++;
         }
@@ -109,8 +110,8 @@ public abstract class Heightmap {
     /**
      * Creates compressed longs array from uncompressed heights array.
      *
-     * @param heights array of heights. Note that for this method it doesn't matter what size this array will be.
-     * But to get correct heights, array must be 256 elements long, and at index `i` must be height of (z=i/16, x=i%16).
+     * @param heights      array of heights. Note that for this method it doesn't matter what size this array will be.
+     *                     But to get correct heights, array must be 256 elements long, and at index `i` must be height of (z=i/16, x=i%16).
      * @param bitsPerEntry bits that each entry from height will take in `long` container.
      * @return array of encoded heights.
      */

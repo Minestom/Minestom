@@ -159,6 +159,24 @@ public interface EquipmentHandler {
         setEquipment(EquipmentSlot.BOOTS, itemStack);
     }
 
+    /**
+     * Gets the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @return the body equipment
+     */
+    default @NotNull ItemStack getBodyEquipment() {
+        return getEquipment(EquipmentSlot.BODY);
+    }
+
+    /**
+     * Changes the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @param itemStack the body equipment
+     */
+    default void setBodyEquipment(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.BODY, itemStack);
+    }
+
     default boolean hasEquipment(@NotNull EquipmentSlot slot) {
         return !getEquipment(slot).isAir();
     }
@@ -190,7 +208,9 @@ public interface EquipmentHandler {
                 EquipmentSlot.BOOTS, getBoots(),
                 EquipmentSlot.LEGGINGS, getLeggings(),
                 EquipmentSlot.CHESTPLATE, getChestplate(),
-                EquipmentSlot.HELMET, getHelmet()));
+                EquipmentSlot.HELMET, getHelmet(),
+                EquipmentSlot.BODY, getBodyEquipment()));
+        // Some entities do not allow body equipment, in which case the client will ignore this
     }
 
 }

@@ -8,10 +8,12 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.message.ChatMessageType;
+import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Collector;
@@ -21,6 +23,8 @@ import net.minestom.testing.TestConnection;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
@@ -136,5 +140,33 @@ public class PlayerMovementIntegrationTest {
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
+    }
+
+    @Test
+    public void testSettingsViewDistanceExpansionAndShrink(Env env) {
+        int startingViewDistance = 8;
+        byte endViewDistance = 12;
+        byte finalViewDistance = 10;
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        Pos startingPlayerPos = new Pos(0, 42, 0);
+        var player = connection.connect(instance, startingPlayerPos).join();
+
+        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
+
+        // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
+        ChunkUtils.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
+
+        var tracker = connection.trackIncoming(ChunkDataPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.interpretPacketQueue();
+        tracker.assertCount(chunkDifference);
+
+        var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
+        player.addPacketToQueue(new ClientSettingsPacket("en_US", finalViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.interpretPacketQueue();
+
+        int chunkDifference1 = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(finalViewDistance);
+        tracker1.assertCount(chunkDifference1);
     }
 }
