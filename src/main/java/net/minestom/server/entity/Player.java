@@ -1641,6 +1641,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
         if (isActive()) {
             refreshAbilities();
+            updateCollisions();
         }
 
         return true;
@@ -2331,6 +2332,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    @Override
+    protected void updateCollisions() {
+        preventBlockPlacement = gameMode != GameMode.SPECTATOR;
+        collidesWithEntities = gameMode != GameMode.SPECTATOR;
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
