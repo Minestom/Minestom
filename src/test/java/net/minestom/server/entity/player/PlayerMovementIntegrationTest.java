@@ -23,8 +23,6 @@ import net.minestom.testing.TestConnection;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -164,12 +162,14 @@ public class PlayerMovementIntegrationTest {
         ChunkUtils.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
+                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT, false, true)));
         player.interpretPacketQueue();
         tracker.assertCount(chunkDifference);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", finalViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
+                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT, false, true)));
         player.interpretPacketQueue();
 
         int chunkDifference1 = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(finalViewDistance);

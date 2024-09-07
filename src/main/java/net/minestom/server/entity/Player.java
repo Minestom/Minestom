@@ -1563,21 +1563,22 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         playerMeta.setRightMainHand(settings.mainHand() == ClientSettings.MainHand.RIGHT);
         if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
 
-        final byte previousViewDistance = previous.viewDistance;
+        final byte previousViewDistance = previous.viewDistance();
+        final byte newViewDistance = settings.viewDistance();
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
             // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < settings.viewDistance) {
+            if (previousViewDistance < newViewDistance) {
                 // View distance expanded, send chunks
-                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), settings.viewDistance, (chunkX, chunkZ) -> {
+                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
                     if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
                         chunkAdder.accept(chunkX, chunkZ);
                     }
                 });
-            } else if (previousViewDistance > this.viewDistance) {
+            } else if (previousViewDistance > newViewDistance) {
                 // View distance shrunk, unload chunks
                 ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > settings.viewDistance || Math.abs(chunkZ - position.chunkZ()) > settings.viewDistance) {
+                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
                         chunkRemover.accept(chunkX, chunkZ);
                     }
                 });
