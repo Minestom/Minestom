@@ -1,13 +1,16 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
@@ -25,6 +28,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
@@ -859,6 +863,34 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
                 tagHandler.readableCopy());
+    }
+
+    /**
+     * Plays a {@link Sound} at a given point, except to the excluded player
+     * @param excludedPlayer The player in the instance who won't receive the sound
+     * @param sound The sound to play
+     * @param point The point in this instance at which to play the sound
+     */
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, @NotNull Point point) {
+        playSoundExcept(excludedPlayer, sound, point.x(), point.y(), point.z());
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, double x, double y, double z) {
+        ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, x, y, z);
+        PacketUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        if (emitter != Sound.Emitter.self()) {
+            ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+            PacketUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+        } else {
+            // if we're playing on self, we need to delegate to each audience member
+            for (Audience audience : this.audiences()) {
+                if (audience == excludedPlayer) continue;
+                audience.playSound(sound, emitter);
+            }
+        }
     }
 
     /**
