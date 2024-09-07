@@ -72,7 +72,6 @@ dependencies {
     implementation(libs.minestomData)
 
     // Performance/data structures
-    implementation(libs.caffeine)
     api(libs.fastutil)
     implementation(libs.bundles.flare)
     api(libs.gson)
@@ -116,7 +115,7 @@ tasks {
         replaceToken("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"", gitFile)
     }
 
-    nexusPublishing{
+    nexusPublishing {
         useStaging.set(true)
         this.packageGroup.set("net.minestom")
 
