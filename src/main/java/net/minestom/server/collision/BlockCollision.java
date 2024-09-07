@@ -4,10 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.block.BlockIterator;
@@ -42,18 +39,11 @@ final class BlockCollision {
 
     static Entity canPlaceBlockAt(Instance instance, Point blockPos, Block b) {
         for (Entity entity : instance.getNearbyEntities(blockPos, 3)) {
-            final EntityType type = entity.getEntityType();
-            if (!entity.hasCollision() || type == EntityType.ITEM || type == EntityType.ARROW)
-                continue;
-            // Marker Armor Stands should not prevent block placement
-            if (entity.getEntityMeta() instanceof ArmorStandMeta armorStandMeta && armorStandMeta.isMarker())
+            if (!entity.preventBlockPlacement())
                 continue;
 
             final boolean intersects;
             if (entity instanceof Player) {
-                // Ignore spectators
-                if (((Player) entity).getGameMode() == GameMode.SPECTATOR)
-                    continue;
                 // Need to move player slightly away from block we're placing.
                 // If player is at block 40 we cannot place a block at block 39 with side length 1 because the block will be in [39, 40]
                 // For this reason we subtract a small amount from the player position
