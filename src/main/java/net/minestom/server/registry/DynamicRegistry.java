@@ -209,5 +209,4 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     @NotNull SendablePacket registryDataPacket(boolean excludeVanilla);
-
 }

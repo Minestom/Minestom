@@ -84,10 +84,6 @@ public final class Registry {
         public Collection<T> values() {
             return namespaces.values();
         }
-
-        public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Properties properties);
-        }
     }
 
     @ApiStatus.Internal
