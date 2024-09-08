@@ -31,7 +31,7 @@ public final class WhiteNoise {
         return (n * n * n * 60493) / 2147483648.0;
     }
 
-    private static double normalize(double value) {
+    public static double normalize(double value) {
         return (value + 1.0) * 0.5;
     }
 }

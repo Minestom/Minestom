@@ -56,5 +56,10 @@ record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
         public void operation2d(Painter.PosPredicate noise, Painter.Operation operation) {
             throw new UnsupportedOperationException("Noise operations are not supported in prepared operations");
         }
+
+        @Override
+        public void heightmap(Painter.HeightProvider heightProvider, Painter.Operation operation) {
+            throw new UnsupportedOperationException("Heightmap operations are not supported in prepared operations");
+        }
     }
 }

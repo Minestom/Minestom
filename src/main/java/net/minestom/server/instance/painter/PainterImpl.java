@@ -37,7 +37,10 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         record SetBlock(int x, int y, int z, Block block) implements Instruction {
         }
 
-        record Operation2d(PosPredicate test, PreparedOperation operation) implements Instruction {
+        record Operation2d(PosPredicate predicate, PreparedOperation operation) implements Instruction {
+        }
+
+        record Heightmap(HeightProvider heightProvider, PreparedOperation operation) implements Instruction {
         }
 
         record Cuboid(Vec min, Vec max, Block block) implements Instruction {
@@ -80,6 +83,13 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             if (prepared == null) return;
             append(new Instruction.Operation2d(noise, prepared));
         }
+
+        @Override
+        public void heightmap(HeightProvider heightProvider, Operation operation) {
+            PreparedOperation prepared = PreparedOperation.compile(operation);
+            if (prepared == null) return;
+            append(new Instruction.Heightmap(heightProvider, prepared));
+        }
     }
 
     static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette, Point offset, Instruction instruction) {
@@ -105,6 +115,25 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 final int localZ = ChunkUtils.toSectionRelativeCoordinate(absZ);
                 palette.set(localX, localY, localZ, setBlock.block().stateId());
             }
+            case Instruction.Cuboid cuboid -> {
+                for (int x = cuboid.min().blockX(); x < cuboid.max().blockX(); x++) {
+                    for (int y = cuboid.min().blockY(); y < cuboid.max().blockY(); y++) {
+                        for (int z = cuboid.min().blockZ(); z < cuboid.max().blockZ(); z++) {
+                            Block block = cuboid.block();
+
+                            if (x < minSectionX || x >= maxSectionX ||
+                                    y < minSectionY || y >= maxSectionY ||
+                                    z < minSectionZ || z >= maxSectionZ) continue;
+
+                            final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
+                            final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
+                            final int localZ = ChunkUtils.toSectionRelativeCoordinate(z);
+
+                            palette.set(localX, localY, localZ, block.stateId());
+                        }
+                    }
+                }
+            }
             case Instruction.Operation2d noise2D -> {
                 Bounds bounds = noise2D.operation().bounds();
 
@@ -125,7 +154,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                         int absX = x + Chunk.CHUNK_SECTION_SIZE * sectionX + offset.blockX();
                         int absZ = z + Chunk.CHUNK_SECTION_SIZE * sectionZ + offset.blockZ();
 
-                        if (!noise2D.test().test(absX, 0, absZ)) continue;
+                        if (!noise2D.predicate().test(absX, 0, absZ)) continue;
 
                         Vec spreadOffset = new Vec(absX, offset.y(), absZ);
                         for (Instruction opInstruction : noise2D.operation().instructions()) {
@@ -134,21 +163,32 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                     }
                 }
             }
-            case Instruction.Cuboid cuboid -> {
-                for (int x = cuboid.min().blockX(); x < cuboid.max().blockX(); x++) {
-                    for (int y = cuboid.min().blockY(); y < cuboid.max().blockY(); y++) {
-                        for (int z = cuboid.min().blockZ(); z < cuboid.max().blockZ(); z++) {
-                            Block block = cuboid.block();
+            case Instruction.Heightmap heightmap -> {
+                Bounds bounds = heightmap.operation().bounds();
 
-                            if (x < minSectionX || x >= maxSectionX ||
-                                    y < minSectionY || y >= maxSectionY ||
-                                    z < minSectionZ || z >= maxSectionZ) continue;
+                int maxX = bounds.max().blockX() + Chunk.CHUNK_SECTION_SIZE;
+                int minX = bounds.min().blockX() - Chunk.CHUNK_SECTION_SIZE;
 
-                            final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
-                            final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
-                            final int localZ = ChunkUtils.toSectionRelativeCoordinate(z);
+                int maxZ = bounds.max().blockZ() + Chunk.CHUNK_SECTION_SIZE;
+                int minZ = bounds.min().blockZ() - Chunk.CHUNK_SECTION_SIZE;
 
-                            palette.set(localX, localY, localZ, block.stateId());
+                // directions to start/end the loop
+                int negX = -Math.max(maxX, 0);
+                int negZ = -Math.max(maxZ, 0);
+                int posX = Math.max(0, -minX);
+                int posZ = Math.max(0, -minZ);
+
+                for (int x = negX; x < posX; x++) {
+                    for (int z = negZ; z < posZ; z++) {
+                        int absX = x + Chunk.CHUNK_SECTION_SIZE * sectionX + offset.blockX();
+                        int absZ = z + Chunk.CHUNK_SECTION_SIZE * sectionZ + offset.blockZ();
+
+                        Integer height = heightmap.heightProvider().test(absX, absZ);
+                        if (height == null) continue;
+
+                        Vec spreadOffset = new Vec(absX, height + offset.y(), absZ);
+                        for (Instruction opInstruction : heightmap.operation().instructions()) {
+                            applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
                         }
                     }
                 }
@@ -186,6 +226,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                         sectionZ >= minZ && sectionZ <= maxZ;
             }
             case Instruction.Operation2d noise2D -> true;
+            case Instruction.Heightmap heightmap -> true;
         };
     }
 }
