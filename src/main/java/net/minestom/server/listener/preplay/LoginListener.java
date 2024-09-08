@@ -87,8 +87,8 @@ public final class LoginListener {
                     CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
 
                 } catch (Exception exception) {
-                    MinecraftServer.getExceptionManager().handleException(exception);
                     connection.kick(Component.text(exception.getClass().getSimpleName() + ": " + exception.getMessage()));
+                    MinecraftServer.getExceptionManager().handleException(exception);
                 }
             });
         }
@@ -148,8 +148,8 @@ public final class LoginListener {
                 }
                 socketConnection.UNSAFE_setProfile(new GameProfile(profileUUID, profileName, propertyList));
             } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
                 socketConnection.kick(ERROR_DURING_LOGIN);
+                MinecraftServer.getExceptionManager().handleException(e);
             }
         });
     }
@@ -172,6 +172,7 @@ public final class LoginListener {
                 try {
                     address = InetAddress.getByName(buffer.read(STRING));
                 } catch (UnknownHostException e) {
+                    socketConnection.kick(INVALID_PROXY_RESPONSE);
                     MinecraftServer.getExceptionManager().handleException(e);
                     return;
                 }
@@ -195,8 +196,9 @@ public final class LoginListener {
             LoginPluginMessageProcessor messageProcessor = connection.loginPluginMessageProcessor();
             messageProcessor.handleResponse(packet.messageId(), packet.data());
         } catch (Throwable t) {
-            MinecraftServer.LOGGER.error("Error handling Login Plugin Response", t);
             connection.kick(ERROR_DURING_LOGIN);
+            MinecraftServer.LOGGER.error("Error handling Login Plugin Response", t);
+            MinecraftServer.getExceptionManager().handleException(t);
         }
     }
 
