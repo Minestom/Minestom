@@ -30,7 +30,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
     }
 
     sealed interface Instruction {
-        record SetBlock(int x, int y, int z, int id) implements Instruction {
+        record SetBlock(int x, int y, int z, Block block) implements Instruction {
         }
     }
 
@@ -44,7 +44,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
 
         @Override
         public void setBlock(int x, int y, int z, @NotNull Block block) {
-            append(new Instruction.SetBlock(x, y, z, block.id()));
+            append(new Instruction.SetBlock(x, y, z, block));
         }
 
         void append(Instruction instruction) {
