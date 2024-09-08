@@ -22,7 +22,7 @@ public class PainterTest {
         Painter painter = Painter.paint(world -> {
 
             // trees
-            world.spread2d(0.1, (relWorld) -> {
+            world.operation2d(WhiteNoise.noise(1.0 / (16 * 16), 42), (relWorld) -> {
 
                 // log
                 for (int i = 0; i < 10; i++) {

@@ -38,8 +38,8 @@ record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
         }
 
         @Override
-        public void cuboid(Point min, Point max, BlockProvider blockProvider) {
-            relInstructions.add(new Instruction.Cuboid(Vec.fromPoint(min), Vec.fromPoint(max), blockProvider));
+        public void cuboid(Point min, Point max, Block block) {
+            relInstructions.add(new Instruction.Cuboid(Vec.fromPoint(min), Vec.fromPoint(max), block));
 
             // adjust bounds to include the cuboid
             adjustBounds(min.blockX(), min.blockY(), min.blockZ());

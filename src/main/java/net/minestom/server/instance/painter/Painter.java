@@ -51,12 +51,12 @@ public interface Painter {
     interface World extends Block.Setter {
 
         /** Paints a cube at the given point with the given width. */
-        default void cube(Point mid, int size, BlockProvider blockProvider) {
+        default void cube(Point mid, int size, Block block) {
             Point min = mid.sub(size / 2.0, size / 2.0, size / 2.0);
             Point max = mid.add(size / 2.0, size / 2.0, size / 2.0);
-            cuboid(min, max, blockProvider);
+            cuboid(min, max, block);
         }
-        void cuboid(Point min, Point max, BlockProvider blockProvider);
+        void cuboid(Point min, Point max, Block block);
 
 //        /**
 //         * Runs the operation across the 3D space of the world, with an equal test of running the operation at each point.

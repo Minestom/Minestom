@@ -40,7 +40,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         record Operation2d(PosPredicate test, PreparedOperation operation) implements Instruction {
         }
 
-        record Cuboid(Vec min, Vec max, BlockProvider blockProvider) implements Instruction {
+        record Cuboid(Vec min, Vec max, Block block) implements Instruction {
         }
     }
 
@@ -70,40 +70,66 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         }
 
         @Override
-        public void cuboid(Point min, Point max, BlockProvider blockProvider) {
-            append(new Instruction.Cuboid(Vec.fromPoint(min), Vec.fromPoint(max), blockProvider));
+        public void cuboid(Point min, Point max, Block block) {
+            append(new Instruction.Cuboid(Vec.fromPoint(min), Vec.fromPoint(max), block));
         }
 
         @Override
         public void operation2d(PosPredicate noise, Operation operation) {
-            append(new Instruction.Operation2d(noise, PreparedOperation.compile(operation)));
+            PreparedOperation prepared = PreparedOperation.compile(operation);
+            if (prepared == null) return;
+            append(new Instruction.Operation2d(noise, prepared));
         }
     }
 
     static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette, Point offset, Instruction instruction) {
         if (!sectionRelevant(instruction, sectionX, sectionY, sectionZ, offset)) return;
+
+        int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionX = minSectionX + Chunk.CHUNK_SECTION_SIZE;
+        int minSectionY = sectionY * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionY = minSectionY + Chunk.CHUNK_SECTION_SIZE;
+        int minSectionZ = sectionZ * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionZ = minSectionZ + Chunk.CHUNK_SECTION_SIZE;
+
         switch (instruction) {
             case Instruction.SetBlock setBlock -> {
-                final int localX = ChunkUtils.toSectionRelativeCoordinate(setBlock.x() + offset.blockX());
-                final int localY = ChunkUtils.toSectionRelativeCoordinate(setBlock.y() + offset.blockY());
-                final int localZ = ChunkUtils.toSectionRelativeCoordinate(setBlock.z() + offset.blockZ());
+                final int absX = setBlock.x() + offset.blockX();
+                final int absY = setBlock.y() + offset.blockY();
+                final int absZ = setBlock.z() + offset.blockZ();
+                if (absX < minSectionX || absX >= maxSectionX ||
+                        absY < minSectionY || absY >= maxSectionY ||
+                        absZ < minSectionZ || absZ >= maxSectionZ) return;
+                final int localX = ChunkUtils.toSectionRelativeCoordinate(absX);
+                final int localY = ChunkUtils.toSectionRelativeCoordinate(absY);
+                final int localZ = ChunkUtils.toSectionRelativeCoordinate(absZ);
                 palette.set(localX, localY, localZ, setBlock.block().stateId());
             }
             case Instruction.Operation2d noise2D -> {
-
-                // TODO: judge how much we need to generate based on the operation's bounds
                 Bounds bounds = noise2D.operation().bounds();
 
-                for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
-                    for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
-                        int absX = sectionX * Chunk.CHUNK_SECTION_SIZE + x + offset.blockX();
-                        int absZ = sectionZ * Chunk.CHUNK_SECTION_SIZE + z + offset.blockZ();
+                int maxX = bounds.max().blockX() + Chunk.CHUNK_SECTION_SIZE;
+                int minX = bounds.min().blockX() - Chunk.CHUNK_SECTION_SIZE;
 
-                        if (noise2D.test().test(absX, 0, absZ)) {
-                            Vec spreadOffset = new Vec(absX, offset.y(), absZ);
-                            for (Instruction opInstruction : noise2D.operation().instructions()) {
-                                applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
-                            }
+                int maxZ = bounds.max().blockZ() + Chunk.CHUNK_SECTION_SIZE;
+                int minZ = bounds.min().blockZ() - Chunk.CHUNK_SECTION_SIZE;
+
+                // directions to start/end the loop
+                int negX = -Math.max(maxX, 0);
+                int negZ = -Math.max(maxZ, 0);
+                int posX = Math.max(0, -minX);
+                int posZ = Math.max(0, -minZ);
+
+                for (int x = negX; x < posX; x++) {
+                    for (int z = negZ; z < posZ; z++) {
+                        int absX = x + Chunk.CHUNK_SECTION_SIZE * sectionX + offset.blockX();
+                        int absZ = z + Chunk.CHUNK_SECTION_SIZE * sectionZ + offset.blockZ();
+
+                        if (!noise2D.test().test(absX, 0, absZ)) continue;
+
+                        Vec spreadOffset = new Vec(absX, offset.y(), absZ);
+                        for (Instruction opInstruction : noise2D.operation().instructions()) {
+                            applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
                         }
                     }
                 }
@@ -112,7 +138,11 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 for (int x = cuboid.min().blockX(); x < cuboid.max().blockX(); x++) {
                     for (int y = cuboid.min().blockY(); y < cuboid.max().blockY(); y++) {
                         for (int z = cuboid.min().blockZ(); z < cuboid.max().blockZ(); z++) {
-                            Block block = cuboid.blockProvider().get(x, y, z);
+                            Block block = cuboid.block();
+
+                            if (x < minSectionX || x >= maxSectionX ||
+                                    y < minSectionY || y >= maxSectionY ||
+                                    z < minSectionZ || z >= maxSectionZ) continue;
 
                             final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
                             final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
