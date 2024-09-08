@@ -7,12 +7,6 @@ public interface BlockProvider {
     Block get(int x, int y, int z);
 
     static BlockProvider constant(Block block) {
-        return new Constant(block);
-    }
-    record Constant(Block block) implements BlockProvider {
-        @Override
-        public Block get(int x, int y, int z) {
-            return block;
-        }
+        return (x, y, z) -> block; // TODO: Make this a record, and optimize for constant blocks
     }
 }

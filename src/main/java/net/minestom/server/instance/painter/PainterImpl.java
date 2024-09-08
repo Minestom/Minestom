@@ -32,18 +32,15 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
     record Bounds(Vec min, Vec max) {
     }
 
-    record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
-    }
-
-    private sealed interface Instruction {
+    sealed interface Instruction {
 
         record SetBlock(int x, int y, int z, Block block) implements Instruction {
         }
 
-        record Spread2d(long seed, double chance, PreparedOperation operation) implements Instruction {
+        record Operation2d(PosPredicate test, PreparedOperation operation) implements Instruction {
         }
 
-        record Prism(Vec min, Vec max, BlockProvider blockProvider) implements Instruction {
+        record Cuboid(Vec min, Vec max, BlockProvider blockProvider) implements Instruction {
         }
     }
 
@@ -73,13 +70,13 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         }
 
         @Override
-        public void prism(Point min, Point max, BlockProvider blockProvider) {
-
+        public void cuboid(Point min, Point max, BlockProvider blockProvider) {
+            append(new Instruction.Cuboid(Vec.fromPoint(min), Vec.fromPoint(max), blockProvider));
         }
 
         @Override
-        public void spread2d(double chance, Operation operation) {
-
+        public void operation2d(PosPredicate noise, Operation operation) {
+            append(new Instruction.Operation2d(noise, PreparedOperation.compile(operation)));
         }
     }
 
@@ -92,33 +89,30 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 final int localZ = ChunkUtils.toSectionRelativeCoordinate(setBlock.z() + offset.blockZ());
                 palette.set(localX, localY, localZ, setBlock.block().stateId());
             }
-            case Instruction.Spread2d spread2d -> {
+            case Instruction.Operation2d noise2D -> {
 
                 // TODO: judge how much we need to generate based on the operation's bounds
-                Bounds bounds = spread2d.operation().bounds();
+                Bounds bounds = noise2D.operation().bounds();
 
                 for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
                     for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
                         int absX = sectionX * Chunk.CHUNK_SECTION_SIZE + x + offset.blockX();
                         int absZ = sectionZ * Chunk.CHUNK_SECTION_SIZE + z + offset.blockZ();
 
-                        double noiseValue = WhiteNoise.evaluate2D(absX, absZ, spread2d.seed());
-                        double normNoise = (noiseValue + 1.0) / 2.0;
-
-                        if (normNoise < spread2d.chance()) {
+                        if (noise2D.test().test(absX, 0, absZ)) {
                             Vec spreadOffset = new Vec(absX, offset.y(), absZ);
-                            for (Instruction opInstruction : spread2d.operation().instructions()) {
+                            for (Instruction opInstruction : noise2D.operation().instructions()) {
                                 applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
                             }
                         }
                     }
                 }
             }
-            case Instruction.Prism prism -> {
-                for (int x = prism.min().blockX(); x < prism.max().blockX(); x++) {
-                    for (int y = prism.min().blockY(); y < prism.max().blockY(); y++) {
-                        for (int z = prism.min().blockZ(); z < prism.max().blockZ(); z++) {
-                            Block block = prism.blockProvider().get(x, y, z);
+            case Instruction.Cuboid cuboid -> {
+                for (int x = cuboid.min().blockX(); x < cuboid.max().blockX(); x++) {
+                    for (int y = cuboid.min().blockY(); y < cuboid.max().blockY(); y++) {
+                        for (int z = cuboid.min().blockZ(); z < cuboid.max().blockZ(); z++) {
+                            Block block = cuboid.blockProvider().get(x, y, z);
 
                             final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
                             final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
@@ -145,9 +139,9 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             case Instruction.SetBlock setBlock -> ChunkUtils.getChunkCoordinate(setBlock.x() + offset.blockX()) == sectionX &&
                     ChunkUtils.getChunkCoordinate(setBlock.y() + offset.blockY()) == sectionY &&
                     ChunkUtils.getChunkCoordinate(setBlock.z() + offset.blockZ()) == sectionZ;
-            case Instruction.Prism prism -> {
-                final Vec min = prism.min();
-                final Vec max = prism.max();
+            case Instruction.Cuboid cuboid -> {
+                final Vec min = cuboid.min();
+                final Vec max = cuboid.max();
 
                 final int minX = ChunkUtils.getChunkCoordinate(min.blockX() + offset.blockX());
                 final int minY = ChunkUtils.getChunkCoordinate(min.blockY() + offset.blockY());
@@ -161,7 +155,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                         sectionY >= minY && sectionY <= maxY &&
                         sectionZ >= minZ && sectionZ <= maxZ;
             }
-            case Instruction.Spread2d spread2d -> true;
+            case Instruction.Operation2d noise2D -> true;
         };
     }
 }

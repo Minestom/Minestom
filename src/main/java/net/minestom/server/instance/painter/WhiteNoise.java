@@ -34,4 +34,15 @@ final class WhiteNoise {
 
         return (n * n * n * 60493) / 2147483648.0;
     }
+
+    private static double normalize(double value) {
+        return (value + 1.0) * 0.5;
+    }
+
+    /**
+     * Returns a predicate that returns true if the noise value at the given position is less than the given chance.
+     */
+    public static Painter.PosPredicate noise(double chance, long seed) {
+        return (x, y, z) -> normalize(evaluate3D(x, y, z, seed)) < chance;
+    }
 }
