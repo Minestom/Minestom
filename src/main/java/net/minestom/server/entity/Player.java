@@ -1686,15 +1686,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param component the reason
      */
     public void kick(@NotNull Component component) {
-        // Packet type depends on the current player connection state
-        final ServerPacket disconnectPacket;
-        if (playerConnection.getConnectionState() == ConnectionState.LOGIN) {
-            disconnectPacket = new LoginDisconnectPacket(component);
-        } else {
-            disconnectPacket = new DisconnectPacket(component);
-        }
-        sendPacket(disconnectPacket);
-        playerConnection.disconnect();
+        this.getPlayerConnection().kick(component);
     }
 
     /**
