@@ -51,7 +51,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket.Play {
                         properties = reader.readCollection(Property::new, GameProfile.MAX_PROPERTIES);
                     }
                     case INITIALIZE_CHAT -> chatSession = new ChatSession(reader);
-                    case UPDATE_GAME_MODE -> gameMode = reader.readEnum(GameMode.class);
+                    case UPDATE_GAME_MODE -> gameMode = GameMode.fromId(reader.read(VAR_INT));
                     case UPDATE_LISTED -> listed = reader.read(BOOLEAN);
                     case UPDATE_LATENCY -> latency = reader.read(VAR_INT);
                     case UPDATE_DISPLAY_NAME -> displayName = reader.readOptional(COMPONENT);
@@ -139,7 +139,7 @@ public final class PlayerInfoUpdatePacket implements ServerPacket.Play {
             writer.writeCollection(entry.properties);
         }),
         INITIALIZE_CHAT((writer, entry) -> writer.writeOptional(entry.chatSession)),
-        UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, entry.gameMode.ordinal())),
+        UPDATE_GAME_MODE((writer, entry) -> writer.write(VAR_INT, (int) entry.gameMode.id())),
         UPDATE_LISTED((writer, entry) -> writer.write(BOOLEAN, entry.listed)),
         UPDATE_LATENCY((writer, entry) -> writer.write(VAR_INT, entry.latency)),
         UPDATE_DISPLAY_NAME((writer, entry) -> writer.writeOptional(COMPONENT, entry.displayName));

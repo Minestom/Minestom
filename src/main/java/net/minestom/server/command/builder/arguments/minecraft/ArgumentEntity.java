@@ -223,7 +223,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
                 final boolean include = !value.startsWith("!");
                 final String gameModeName = include ? value : value.substring(1);
                 try {
-                    final GameMode gameMode = GameMode.valueOf(gameModeName.toUpperCase());
+                    final GameMode gameMode = GameMode.fromName(gameModeName);
                     entityFinder.setGameMode(gameMode, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
                 } catch (IllegalArgumentException e) {
                     throw new ArgumentSyntaxException("Invalid entity game mode", input, INVALID_ARGUMENT_VALUE);

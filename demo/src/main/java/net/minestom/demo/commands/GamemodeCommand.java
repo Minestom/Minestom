@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
-import net.minestom.server.command.builder.arguments.ArgumentEnum;
+import net.minestom.server.command.builder.arguments.ArgumentString;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
@@ -27,8 +27,8 @@ public class GamemodeCommand extends Command {
     public GamemodeCommand() {
         super("gamemode", "gm");
 
-        //GameMode parameter
-        ArgumentEnum<GameMode> gamemode = ArgumentType.Enum("gamemode", GameMode.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
+        // GameMode parameter
+        ArgumentString gamemode = ArgumentType.String("gamemode");
         gamemode.setCallback((sender, exception) -> {
             sender.sendMessage(
                     Component.text("Invalid gamemode ", NamedTextColor.RED)
@@ -38,46 +38,60 @@ public class GamemodeCommand extends Command {
 
         ArgumentEntity player = ArgumentType.Entity("targets").onlyPlayers(true);
 
-        //Upon invalid usage, print the correct usage of the command to the sender
+        // Upon invalid usage, print the correct usage of the command to the sender
         setDefaultExecutor((sender, context) -> {
             String commandName = context.getCommandName();
 
             sender.sendMessage(Component.text("Usage: /" + commandName + " <gamemode> [targets]", NamedTextColor.RED), MessageType.SYSTEM);
         });
 
-        //Command Syntax for /gamemode <gamemode>
+        // Command Syntax for /gamemode <gamemode>
         addSyntax((sender, context) -> {
-            //Limit execution to players only
+            // Limit execution to players only
             if (!(sender instanceof Player p)) {
                 sender.sendMessage(Component.text("Please run this command in-game.", NamedTextColor.RED));
                 return;
             }
 
-            //Check permission, this could be replaced with hasPermission
+            // Check permission, this could be replaced with hasPermission
             if (p.getPermissionLevel() < 2) {
                 sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
                 return;
             }
 
-            GameMode mode = context.get(gamemode);
+            String gamemodeName = context.get(gamemode);
+            GameMode mode;
+            try {
+                mode = GameMode.fromName(gamemodeName); // Use fromName to get the corresponding GameMode
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(Component.text("Invalid gamemode: " + gamemodeName, NamedTextColor.RED));
+                return;
+            }
 
-            //Set the gamemode for the sender
+            // Set the gamemode for the sender
             executeSelf(p, mode);
         }, gamemode);
 
-        //Command Syntax for /gamemode <gamemode> [targets]
+        // Command Syntax for /gamemode <gamemode> [targets]
         addSyntax((sender, context) -> {
-            //Check permission for players only
-            //This allows the console to use this syntax too
+            // Check permission for players only
+            // This allows the console to use this syntax too
             if (sender instanceof Player p && p.getPermissionLevel() < 2) {
                 sender.sendMessage(Component.text("You don't have permission to use this command.", NamedTextColor.RED));
                 return;
             }
 
             EntityFinder finder = context.get(player);
-            GameMode mode = context.get(gamemode);
+            String gamemodeName = context.get(gamemode);
+            GameMode mode;
+            try {
+                mode = GameMode.fromName(gamemodeName); // Use fromName to get the corresponding GameMode
+            } catch (IllegalArgumentException e) {
+                sender.sendMessage(Component.text("Invalid gamemode: " + gamemodeName, NamedTextColor.RED));
+                return;
+            }
 
-            //Set the gamemode for the targets
+            // Set the gamemode for the targets
             executeOthers(sender, mode, finder.find(sender));
         }, gamemode, player);
     }
@@ -88,24 +102,24 @@ public class GamemodeCommand extends Command {
      */
     private void executeOthers(CommandSender sender, GameMode mode, List<Entity> entities) {
         if (entities.size() == 0) {
-            //If there are no players that could be modified, display an error message
+            // If there are no players that could be modified, display an error message
             if (sender instanceof Player)
                 sender.sendMessage(Component.translatable("argument.entity.notfound.player", NamedTextColor.RED), MessageType.SYSTEM);
             else sender.sendMessage(Component.text("No player was found", NamedTextColor.RED), MessageType.SYSTEM);
         } else for (Entity entity : entities) {
             if (entity instanceof Player p) {
                 if (p == sender) {
-                    //If the player is the same as the sender, call
-                    //executeSelf to display one message instead of two
+                    // If the player is the same as the sender, call
+                    // executeSelf to display one message instead of two
                     executeSelf((Player) sender, mode);
                 } else {
                     p.setGameMode(mode);
 
-                    String gamemodeString = "gameMode." + mode.name().toLowerCase(Locale.ROOT);
+                    String gamemodeString = "gameMode." + mode.getName().toLowerCase(Locale.ROOT);
                     Component gamemodeComponent = Component.translatable(gamemodeString);
                     Component playerName = p.getDisplayName() == null ? p.getName() : p.getDisplayName();
 
-                    //Send a message to the changed player and the sender
+                    // Send a message to the changed player and the sender
                     p.sendMessage(Component.translatable("gameMode.changed", gamemodeComponent), MessageType.SYSTEM);
                     sender.sendMessage(Component.translatable("commands.gamemode.success.other", playerName, gamemodeComponent), MessageType.SYSTEM);
                 }
@@ -120,12 +134,12 @@ public class GamemodeCommand extends Command {
     private void executeSelf(Player sender, GameMode mode) {
         sender.setGameMode(mode);
 
-        //The translation keys 'gameMode.survival', 'gameMode.creative', etc.
-        //correspond to the translated game mode names.
-        String gamemodeString = "gameMode." + mode.name().toLowerCase(Locale.ROOT);
+        // The translation keys 'gameMode.survival', 'gameMode.creative', etc.
+        // correspond to the translated game mode names.
+        String gamemodeString = "gameMode." + mode.getName().toLowerCase(Locale.ROOT);
         Component gamemodeComponent = Component.translatable(gamemodeString);
 
-        //Send the translated message to the player.
+        // Send the translated message to the player.
         sender.sendMessage(Component.translatable("commands.gamemode.success.self", gamemodeComponent), MessageType.SYSTEM);
     }
 }

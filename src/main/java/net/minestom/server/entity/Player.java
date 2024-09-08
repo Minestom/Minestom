@@ -1024,7 +1024,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
     @Override
     public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
-        if (!getGameMode().canTakeDamage()) {
+        if (!getGameMode().canTakeDamage(this)) {
             return !DamageType.OUT_OF_WORLD.equals(type);
         }
         return super.isImmune(type);
@@ -1611,13 +1611,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         }
 
         // The client updates their abilities based on the GameMode as follows
-        switch (gameMode) {
-            case CREATIVE -> {
+        switch (gameMode.id()) {
+            case 1 -> { // CREATIVE
                 this.allowFlying = true;
                 this.instantBreak = true;
                 this.invulnerable = true;
             }
-            case SPECTATOR -> {
+            case 3 -> { // SPECTATOR
                 this.allowFlying = true;
                 this.instantBreak = false;
                 this.invulnerable = true;
@@ -1627,7 +1627,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                     this.flying = true;
                 }
             }
-            default -> {
+            default -> { // SURVIVAL and ADVENTURE
                 this.allowFlying = false;
                 this.instantBreak = false;
                 this.invulnerable = false;
