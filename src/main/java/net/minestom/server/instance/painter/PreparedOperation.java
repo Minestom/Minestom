@@ -1,8 +1,5 @@
 package net.minestom.server.instance.painter;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -11,13 +8,16 @@ import net.minestom.server.instance.painter.PainterImpl.Instruction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
 
     static @Nullable PreparedOperation compile(Painter.Operation operation) {
         StagingRelWorld stagingRelWorld = new StagingRelWorld();
         operation.apply(stagingRelWorld);
         if (stagingRelWorld.relInstructions.isEmpty()) return null;
-        return new PreparedOperation(new Bounds(stagingRelWorld.min, stagingRelWorld.max.add(1, 1, 1)), stagingRelWorld.relInstructions);
+        return new PreparedOperation(new Bounds(stagingRelWorld.min, stagingRelWorld.max.add(Vec.ONE)), stagingRelWorld.relInstructions);
     }
 
     static final class StagingRelWorld implements Painter.World {

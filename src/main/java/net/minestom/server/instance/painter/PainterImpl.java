@@ -5,13 +5,15 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
+
+import static net.minestom.server.utils.chunk.ChunkUtils.getChunkCoordinate;
+import static net.minestom.server.utils.chunk.ChunkUtils.toSectionRelativeCoordinate;
 
 record PainterImpl(List<Instruction> instructions) implements Painter {
     public PainterImpl {
@@ -52,24 +54,14 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
 
         @Override
         public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
-            final int sectionX = ChunkUtils.getChunkCoordinate(x);
-            final int sectionY = ChunkUtils.getChunkCoordinate(y);
-            final int sectionZ = ChunkUtils.getChunkCoordinate(z);
-            final Palette palette = sectionAt(instructions, sectionX, sectionY, sectionZ);
-            final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
-            final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
-            final int localZ = ChunkUtils.toSectionRelativeCoordinate(z);
-            final int stateId = palette.get(localX, localY, localZ);
+            final Palette palette = sectionAt(instructions, getChunkCoordinate(x), getChunkCoordinate(y), getChunkCoordinate(z));
+            final int stateId = palette.get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
             return Block.fromStateId(stateId);
         }
 
         @Override
         public void setBlock(int x, int y, int z, @NotNull Block block) {
             append(new Instruction.SetBlock(x, y, z, block));
-        }
-
-        void append(Instruction instruction) {
-            instructions.add(instruction);
         }
 
         @Override
@@ -90,17 +82,21 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             if (prepared == null) return;
             append(new Instruction.Heightmap(heightProvider, prepared));
         }
+
+        void append(Instruction instruction) {
+            instructions.add(instruction);
+        }
     }
 
     static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette, Point offset, Instruction instruction) {
         if (!sectionRelevant(instruction, sectionX, sectionY, sectionZ, offset)) return;
 
-        int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
-        int maxSectionX = minSectionX + Chunk.CHUNK_SECTION_SIZE;
-        int minSectionY = sectionY * Chunk.CHUNK_SECTION_SIZE;
-        int maxSectionY = minSectionY + Chunk.CHUNK_SECTION_SIZE;
-        int minSectionZ = sectionZ * Chunk.CHUNK_SECTION_SIZE;
-        int maxSectionZ = minSectionZ + Chunk.CHUNK_SECTION_SIZE;
+        final int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
+        final int maxSectionX = minSectionX + Chunk.CHUNK_SECTION_SIZE;
+        final int minSectionY = sectionY * Chunk.CHUNK_SECTION_SIZE;
+        final int maxSectionY = minSectionY + Chunk.CHUNK_SECTION_SIZE;
+        final int minSectionZ = sectionZ * Chunk.CHUNK_SECTION_SIZE;
+        final int maxSectionZ = minSectionZ + Chunk.CHUNK_SECTION_SIZE;
 
         switch (instruction) {
             case Instruction.SetBlock setBlock -> {
@@ -110,9 +106,9 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 if (absX < minSectionX || absX >= maxSectionX ||
                         absY < minSectionY || absY >= maxSectionY ||
                         absZ < minSectionZ || absZ >= maxSectionZ) return;
-                final int localX = ChunkUtils.toSectionRelativeCoordinate(absX);
-                final int localY = ChunkUtils.toSectionRelativeCoordinate(absY);
-                final int localZ = ChunkUtils.toSectionRelativeCoordinate(absZ);
+                final int localX = toSectionRelativeCoordinate(absX);
+                final int localY = toSectionRelativeCoordinate(absY);
+                final int localZ = toSectionRelativeCoordinate(absZ);
                 palette.set(localX, localY, localZ, setBlock.block().stateId());
             }
             case Instruction.Cuboid cuboid -> {
@@ -125,10 +121,9 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                                     y < minSectionY || y >= maxSectionY ||
                                     z < minSectionZ || z >= maxSectionZ) continue;
 
-                            final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
-                            final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
-                            final int localZ = ChunkUtils.toSectionRelativeCoordinate(z);
-
+                            final int localX = toSectionRelativeCoordinate(x);
+                            final int localY = toSectionRelativeCoordinate(y);
+                            final int localZ = toSectionRelativeCoordinate(z);
                             palette.set(localX, localY, localZ, block.stateId());
                         }
                     }
@@ -206,27 +201,27 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
 
     static boolean sectionRelevant(Instruction instruction, int sectionX, int sectionY, int sectionZ, Point offset) {
         return switch (instruction) {
-            case Instruction.SetBlock setBlock -> ChunkUtils.getChunkCoordinate(setBlock.x() + offset.blockX()) == sectionX &&
-                    ChunkUtils.getChunkCoordinate(setBlock.y() + offset.blockY()) == sectionY &&
-                    ChunkUtils.getChunkCoordinate(setBlock.z() + offset.blockZ()) == sectionZ;
+            case Instruction.SetBlock setBlock -> getChunkCoordinate(setBlock.x() + offset.blockX()) == sectionX &&
+                    getChunkCoordinate(setBlock.y() + offset.blockY()) == sectionY &&
+                    getChunkCoordinate(setBlock.z() + offset.blockZ()) == sectionZ;
             case Instruction.Cuboid cuboid -> {
                 final Vec min = cuboid.min();
                 final Vec max = cuboid.max();
 
-                final int minX = ChunkUtils.getChunkCoordinate(min.blockX() + offset.blockX());
-                final int minY = ChunkUtils.getChunkCoordinate(min.blockY() + offset.blockY());
-                final int minZ = ChunkUtils.getChunkCoordinate(min.blockZ() + offset.blockZ());
+                final int minX = getChunkCoordinate(min.blockX() + offset.blockX());
+                final int minY = getChunkCoordinate(min.blockY() + offset.blockY());
+                final int minZ = getChunkCoordinate(min.blockZ() + offset.blockZ());
 
-                final int maxX = ChunkUtils.getChunkCoordinate(max.blockX() + offset.blockX());
-                final int maxY = ChunkUtils.getChunkCoordinate(max.blockY() + offset.blockY());
-                final int maxZ = ChunkUtils.getChunkCoordinate(max.blockZ() + offset.blockZ());
+                final int maxX = getChunkCoordinate(max.blockX() + offset.blockX());
+                final int maxY = getChunkCoordinate(max.blockY() + offset.blockY());
+                final int maxZ = getChunkCoordinate(max.blockZ() + offset.blockZ());
 
                 yield sectionX >= minX && sectionX <= maxX &&
                         sectionY >= minY && sectionY <= maxY &&
                         sectionZ >= minZ && sectionZ <= maxZ;
             }
-            case Instruction.Operation2d noise2D -> true;
-            case Instruction.Heightmap heightmap -> true;
+            case Instruction.Operation2d ignored -> true;
+            case Instruction.Heightmap ignored -> true;
         };
     }
 }
