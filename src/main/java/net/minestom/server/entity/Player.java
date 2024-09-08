@@ -297,6 +297,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 0, gameMode, null, false, levelFlat, deathLocation, portalCooldown, true);
         sendPacket(joinGamePacket);
 
+        // Start sending inventory updates
+        inventory.addViewer(this);
+
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
 
@@ -747,7 +750,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         if (dimensionChange || firstSpawn) {
-            inventory.addViewer(this);
             this.inventory.update();
             sendPacket(new HeldItemChangePacket(heldSlot));
 
