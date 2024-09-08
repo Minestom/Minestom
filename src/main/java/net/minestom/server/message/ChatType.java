@@ -7,6 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
 
     static @NotNull ChatType create(
@@ -28,10 +30,10 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
-                (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
-        );
+        final List<ChatType> chatTypes = Registry.loadRegistry(Registry.Resource.CHAT_TYPES, Registry.ChatTypeEntry::new).stream()
+                .<ChatType>map(ChatTypeImpl::new).toList();
+        return DynamicRegistry.create("minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, chatTypes,
+                chatType -> chatType.registry().namespace());
     }
 
     @NotNull ChatTypeDecoration chat();

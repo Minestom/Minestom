@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.BiFunction;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -46,125 +47,19 @@ import java.util.stream.Collectors;
  */
 public final class Registry {
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main) {
-        return new BlockEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static DimensionTypeEntry dimensionType(String namespace, @NotNull Properties main) {
-        return new DimensionTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static BiomeEntry biome(String namespace, Properties properties) {
-        return new BiomeEntry(namespace, properties, null);
-    }
-
-    @ApiStatus.Internal
-    public static MaterialEntry material(String namespace, @NotNull Properties main) {
-        return new MaterialEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static EntityEntry entity(String namespace, @NotNull Properties main) {
-        return new EntityEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static FeatureFlagEntry featureFlag(String namespace, @NotNull Properties main) {
-        return new FeatureFlagEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
-        return new PotionEffectEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static DamageTypeEntry damageType(String namespace, @NotNull Properties main) {
-        return new DamageTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static TrimMaterialEntry trimMaterial(String namespace, @NotNull Properties main) {
-        return new TrimMaterialEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
-        return new TrimPatternEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
-        return new AttributeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static BannerPatternEntry bannerPattern(String namespace, @NotNull Properties main) {
-        return new BannerPatternEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static WolfVariantEntry wolfVariant(String namespace, @NotNull Properties main) {
-        return new WolfVariantEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
-        return new ChatTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
-        return new EnchantmentEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static PaintingVariantEntry paintingVariant(String namespace, @NotNull Properties main) {
-        return new PaintingVariantEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
-        return new JukeboxSongEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static Map<String, Map<String, Object>> load(Resource resource) {
-        Map<String, Map<String, Object>> map = new HashMap<>();
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
-                reader.beginObject();
-                while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
-                reader.endObject();
-            }
-        } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
+    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(List<T> registryObjects) {
+        Map<String, T> namespaces = new HashMap<>(registryObjects.size());
+        ObjectArray<T> ids = ObjectArray.singleThread(registryObjects.size());
+        for (T registry : registryObjects) {
+            final NamespaceID namespace = registry.namespace();
+            ids.set(registry.id(), registry);
+            namespaces.put(namespace.asString(), registry);
         }
-        return map;
+        return new Container<>(namespaces, ids);
     }
 
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
-        ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
-        for (var entry : entries.entrySet()) {
-            final String namespace = entry.getKey();
-            final Properties properties = Properties.fromMap(entry.getValue());
-            final T value = loader.get(namespace, properties);
-            ids.set(value.id(), value);
-            namespaces.put(value.name(), value);
-        }
-        return new Container<>(resource, namespaces, ids);
-    }
-
-    @ApiStatus.Internal
-    public record Container<T extends StaticProtocolObject>(Resource resource,
-                                                            Map<String, T> namespaces,
-                                                            ObjectArray<T> ids) {
+    public record Container<T extends StaticProtocolObject>(Map<String, T> namespaces, ObjectArray<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
             ids.trim();
@@ -188,18 +83,6 @@ public final class Registry {
 
         public Collection<T> values() {
             return namespaces.values();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Container<?> container)) return false;
-            return resource == container.resource;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(resource);
         }
 
         public interface Loader<T extends ProtocolObject> {
@@ -271,10 +154,8 @@ public final class Registry {
         private final Shape shape;
         private final boolean redstoneConductor;
         private final boolean signalSource;
-        private final Properties custom;
 
-        private BlockEntry(String namespace, Properties main, Properties custom) {
-            this.custom = custom;
+        public BlockEntry(String namespace, Properties main) {
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.stateId = main.getInt("stateId");
@@ -400,11 +281,6 @@ public final class Registry {
         public Shape collisionShape() {
             return shape;
         }
-
-        @Override
-        public Properties custom() {
-            return custom;
-        }
     }
 
     public record DimensionTypeEntry(
@@ -424,11 +300,9 @@ public final class Registry {
             int minY,
             int height,
             String infiniburn,
-            String effects,
-            Properties custom
+            String effects
     ) implements Entry {
-
-        public DimensionTypeEntry(String namespace, Properties main, Properties custom) {
+        public DimensionTypeEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     main.getBoolean("ultrawarm"),
                     main.getBoolean("natural"),
@@ -445,13 +319,11 @@ public final class Registry {
                     main.getInt("min_y"),
                     main.getInt("height"),
                     main.getString("infiniburn"),
-                    main.getString("effects"),
-                    custom);
+                    main.getString("effects"));
         }
     }
 
     public static final class BiomeEntry implements Entry {
-        private final Properties custom;
         private final NamespaceID namespace;
         private final Integer foliageColor;
         private final Integer grassColor;
@@ -463,8 +335,7 @@ public final class Registry {
         private final float downfall;
         private final boolean hasPrecipitation;
 
-        private BiomeEntry(String namespace, Properties main, Properties custom) {
-            this.custom = custom;
+        public BiomeEntry(String namespace, Properties main) {
             this.namespace = NamespaceID.from(namespace);
 
             this.foliageColor = main.containsKey("foliageColor") ? main.getInt("foliageColor") : null;
@@ -477,11 +348,6 @@ public final class Registry {
             this.temperature = (float) main.getDouble("temperature", 0.5F);
             this.downfall = (float) main.getDouble("downfall", 0.5F);
             this.hasPrecipitation = main.getBoolean("has_precipitation", true);
-        }
-
-        @Override
-        public Properties custom() {
-            return custom;
         }
 
         public @NotNull NamespaceID namespace() {
@@ -535,11 +401,9 @@ public final class Registry {
 
         private final EquipmentSlot equipmentSlot;
         private final EntityType entityType;
-        private final Properties custom;
 
-        private MaterialEntry(String namespace, Properties main, Properties custom) {
+        public MaterialEntry(String namespace, Properties main) {
             this.main = main;
-            this.custom = custom;
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
@@ -625,11 +489,6 @@ public final class Registry {
         public @Nullable EntityType spawnEntityType() {
             return entityType;
         }
-
-        @Override
-        public Properties custom() {
-            return custom;
-        }
     }
 
     public static final class EntityEntry implements Entry {
@@ -643,9 +502,8 @@ public final class Registry {
         private final double height;
         private final double eyeHeight;
         private final BoundingBox boundingBox;
-        private final Properties custom;
 
-        public EntityEntry(String namespace, Properties main, Properties custom) {
+        public EntityEntry(String namespace, Properties main) {
             this.namespace = NamespaceID.from(namespace);
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
@@ -664,8 +522,6 @@ public final class Registry {
             if (attachments != null) {
                 //todo
             }
-
-            this.custom = custom;
         }
 
         public @NotNull NamespaceID namespace() {
@@ -707,19 +563,20 @@ public final class Registry {
         public @NotNull BoundingBox boundingBox() {
             return boundingBox;
         }
+    }
 
-        @Override
-        public Properties custom() {
-            return custom;
+    public record FeatureFlagEntry(NamespaceID namespace, int id) implements Entry {
+        public FeatureFlagEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id")
+            );
         }
     }
 
-    public record FeatureFlagEntry(NamespaceID namespace, int id, Properties custom) implements Entry {
-        public FeatureFlagEntry(String namespace, Properties main, Properties custom) {
+    public record SoundEntry(NamespaceID namespace, int id) implements Entry {
+        public SoundEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
-                    main.getInt("id"),
-                    null
-            );
+                    main.getInt("id"));
         }
     }
 
@@ -727,16 +584,14 @@ public final class Registry {
                                   String messageId,
                                   String scaling,
                                   @Nullable String effects,
-                                  @Nullable String deathMessageType,
-                                  Properties custom) implements Entry {
-        public DamageTypeEntry(String namespace, Properties main, Properties custom) {
+                                  @Nullable String deathMessageType) implements Entry {
+        public DamageTypeEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     (float) main.getDouble("exhaustion"),
                     main.getString("message_id"),
                     main.getString("scaling"),
                     main.getString("effects"),
-                    main.getString("death_message_type"),
-                    custom);
+                    main.getString("death_message_type"));
         }
     }
 
@@ -745,9 +600,8 @@ public final class Registry {
                                     @NotNull Material ingredient,
                                     float itemModelIndex,
                                     @NotNull Map<String, String> overrideArmorMaterials,
-                                    @NotNull Component description,
-                                    Properties custom) implements Entry {
-        public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+                                    @NotNull Component description) implements Entry {
+        public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main) {
             this(
                     NamespaceID.from(namespace),
                     main.getString("asset_name"),
@@ -755,8 +609,7 @@ public final class Registry {
                     (float) main.getDouble("item_model_index"),
                     Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
-                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
-                    custom
+                    JSONComponentSerializer.json().deserialize(main.section("description").toString())
             );
         }
     }
@@ -765,69 +618,75 @@ public final class Registry {
                                    @NotNull NamespaceID assetID,
                                    @NotNull Material template,
                                    @NotNull Component description,
-                                   boolean decal,
-                                   Properties custom) implements Entry {
-        public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
+                                   boolean decal) implements Entry {
+        public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main) {
             this(
                     NamespaceID.from(namespace),
                     NamespaceID.from(main.getString("asset_id")),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("template_item"))),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
-                    main.getBoolean("decal"),
-                    custom
+                    main.getBoolean("decal")
             );
+        }
+    }
+
+    public record StatisticEntry(NamespaceID namespace, int id) implements Entry {
+        public StatisticEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace), main.getInt("id"));
         }
     }
 
     public record PotionEffectEntry(NamespaceID namespace, int id,
                                     String translationKey,
                                     int color,
-                                    boolean isInstantaneous,
-                                    Properties custom) implements Entry {
-        public PotionEffectEntry(String namespace, Properties main, Properties custom) {
+                                    boolean isInstantaneous) implements Entry {
+        public PotionEffectEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getInt("color"),
-                    main.getBoolean("instantaneous"),
-                    custom);
+                    main.getBoolean("instantaneous"));
+        }
+    }
+
+    public record PotionTypeEntry(NamespaceID namespace, int id) implements Entry {
+        public PotionTypeEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace), main.getInt("id"));
         }
     }
 
     public record AttributeEntry(NamespaceID namespace, int id,
                                  String translationKey, double defaultValue,
                                  boolean clientSync,
-                                 double maxValue, double minValue,
-                                 Properties custom) implements Entry {
-        public AttributeEntry(String namespace, Properties main, Properties custom) {
+                                 double maxValue, double minValue) implements Entry {
+        public AttributeEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("defaultValue"),
                     main.getBoolean("clientSync"),
                     main.getDouble("maxValue"),
-                    main.getDouble("minValue"),
-                    custom);
+                    main.getDouble("minValue"));
         }
     }
 
-    public record BannerPatternEntry(NamespaceID namespace, NamespaceID assetId, String translationKey, Properties custom) implements Entry {
-        public BannerPatternEntry(String namespace, Properties main, Properties custom) {
+    public record BannerPatternEntry(NamespaceID namespace, NamespaceID assetId,
+                                     String translationKey) implements Entry {
+        public BannerPatternEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     NamespaceID.from(main.getString("asset_id")),
-                    main.getString("translation_key"),
-                    custom);
+                    main.getString("translation_key"));
         }
     }
 
-    public record WolfVariantEntry(NamespaceID namespace, NamespaceID wildTexture, NamespaceID tameTexture, NamespaceID angryTexture, List<String> biomes, Properties custom) implements Entry {
-        public WolfVariantEntry(String namespace, Properties main, Properties custom) {
+    public record WolfVariantEntry(NamespaceID namespace, NamespaceID wildTexture, NamespaceID tameTexture,
+                                   NamespaceID angryTexture, List<String> biomes) implements Entry {
+        public WolfVariantEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     NamespaceID.from(main.getString("wild_texture")),
                     NamespaceID.from(main.getString("tame_texture")),
                     NamespaceID.from(main.getString("angry_texture")),
-                    readBiomesList(main.asMap().get("biomes")),
-                    custom);
+                    readBiomesList(main.asMap().get("biomes")));
         }
 
         private static @NotNull List<String> readBiomesList(Object biomes) {
@@ -845,13 +704,11 @@ public final class Registry {
         private final NamespaceID namespace;
         private final ChatTypeDecoration chat;
         private final ChatTypeDecoration narration;
-        private final Properties custom;
 
-        public ChatTypeEntry(String namespace, Properties main, Properties custom) {
+        public ChatTypeEntry(String namespace, Properties main) {
             this.namespace = NamespaceID.from(namespace);
             this.chat = readChatTypeDecoration(main.section("chat"));
             this.narration = readChatTypeDecoration(main.section("narration"));
-            this.custom = custom;
         }
 
         public NamespaceID namespace() {
@@ -864,11 +721,6 @@ public final class Registry {
 
         public ChatTypeDecoration narration() {
             return narration;
-        }
-
-        @Override
-        public Properties custom() {
-            return custom;
         }
 
         private static @NotNull ChatTypeDecoration readChatTypeDecoration(Properties properties) {
@@ -894,60 +746,35 @@ public final class Registry {
 
     }
 
-    public record EnchantmentEntry(NamespaceID namespace, String raw, Properties custom) implements Entry {
-        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(NamespaceID.from(namespace), main.getString("raw"), custom);
+    public record EnchantmentEntry(NamespaceID namespace, String raw) implements Entry {
+        public EnchantmentEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace), main.getString("raw"));
         }
     }
 
-    public record PaintingVariantEntry(NamespaceID namespace, NamespaceID assetId, int width, int height, Properties custom) implements Entry {
-        public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
+    public record PaintingVariantEntry(NamespaceID namespace, NamespaceID assetId, int width,
+                                       int height) implements Entry {
+        public PaintingVariantEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     NamespaceID.from(main.getString("asset_id")),
                     main.getInt("width"),
-                    main.getInt("height"),
-                    custom);
+                    main.getInt("height"));
         }
     }
 
     public record JukeboxSongEntry(NamespaceID namespace, SoundEvent soundEvent, Component description,
-                                   float lengthInSeconds, int comparatorOutput, Properties custom) implements Entry {
-        public JukeboxSongEntry(String namespace, Properties main, Properties custom) {
+                                   float lengthInSeconds, int comparatorOutput) implements Entry {
+        public JukeboxSongEntry(String namespace, Properties main) {
             this(NamespaceID.from(namespace),
                     SoundEvent.fromNamespaceId(main.getString("sound_event")),
                     GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     (float) main.getDouble("length_in_seconds"),
-                    main.getInt("comparator_output"),
-                    custom);
+                    main.getInt("comparator_output"));
         }
     }
 
-    public interface Entry {
-        @ApiStatus.Experimental
-        Properties custom();
-    }
-
-    private static Object readObject(JsonReader reader) throws IOException {
-        return switch (reader.peek()) {
-            case BEGIN_ARRAY -> {
-                List<Object> list = new ArrayList<>();
-                reader.beginArray();
-                while (reader.hasNext()) list.add(readObject(reader));
-                reader.endArray();
-                yield list;
-            }
-            case BEGIN_OBJECT -> {
-                Map<String, Object> map = new HashMap<>();
-                reader.beginObject();
-                while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
-                reader.endObject();
-                yield map;
-            }
-            case STRING -> reader.nextString();
-            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
-            case BOOLEAN -> reader.nextBoolean();
-            default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
-        };
+    public sealed interface Entry {
+        NamespaceID namespace();
     }
 
     record PropertiesMap(Map<String, Object> map) implements Properties {
@@ -1076,5 +903,63 @@ public final class Registry {
         default int size() {
             return asMap().size();
         }
+    }
+
+    @ApiStatus.Internal
+    public static <T> List<T> loadRegistry(Resource resource, BiFunction<String, Properties, T> function) {
+        final Map<String, Map<String, Object>> map = load(resource);
+        return loadRegistry(map, function);
+    }
+
+    @ApiStatus.Internal
+    public static <T> List<T> loadRegistry(Map<String, Map<String, Object>> map,
+                                           BiFunction<String, Properties, T> function) {
+        List<T> result = new ArrayList<>();
+        for (Map.Entry<String, Map<String, Object>> entry : map.entrySet()) {
+            final String namespace = entry.getKey();
+            final Properties properties = Properties.fromMap(entry.getValue());
+            final T value = function.apply(namespace, properties);
+            result.add(value);
+        }
+        return result;
+    }
+
+    @ApiStatus.Internal
+    public static Map<String, Map<String, Object>> load(Resource resource) {
+        Map<String, Map<String, Object>> map = new HashMap<>();
+        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
+            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
+                reader.endObject();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return map;
+    }
+
+    private static Object readObject(JsonReader reader) throws IOException {
+        return switch (reader.peek()) {
+            case BEGIN_ARRAY -> {
+                List<Object> list = new ArrayList<>();
+                reader.beginArray();
+                while (reader.hasNext()) list.add(readObject(reader));
+                reader.endArray();
+                yield list;
+            }
+            case BEGIN_OBJECT -> {
+                Map<String, Object> map = new HashMap<>();
+                reader.beginObject();
+                while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
+                reader.endObject();
+                yield map;
+            }
+            case STRING -> reader.nextString();
+            case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
+            case BOOLEAN -> reader.nextBoolean();
+            default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
+        };
     }
 }

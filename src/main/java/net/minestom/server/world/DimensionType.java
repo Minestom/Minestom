@@ -8,6 +8,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 /**
  * https://minecraft.wiki/w/Custom_dimension
  */
@@ -27,10 +29,10 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
-                (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
-        );
+        final List<DimensionType> dimensionTypes = Registry.loadRegistry(Registry.Resource.DIMENSION_TYPES, Registry.DimensionTypeEntry::new).stream()
+                .<DimensionType>map(DimensionTypeImpl::new).toList();
+        return DynamicRegistry.create("minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, dimensionTypes,
+                dimensionType -> dimensionType.registry().namespace());
     }
 
     boolean ultrawarm();
@@ -72,6 +74,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     default int totalHeight() {
         return minY() + height();
     }
+
+    @Nullable Registry.DimensionTypeEntry registry();
 
     final class Builder {
         // Defaults match the vanilla overworld

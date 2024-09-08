@@ -11,8 +11,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
@@ -23,7 +23,6 @@ import java.util.List;
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
  * @param <T> The type of the registry entries
- *
  * @see Registries
  */
 public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
@@ -33,6 +32,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      *
      * @param <T> Unused, except to provide compile-time safety and self documentation.
      */
+    @SuppressWarnings("unused")
     sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
 
         static <T> @NotNull Key<T> of(@NotNull String namespace) {
@@ -74,30 +74,15 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
         return new DynamicRegistryImpl<>(id, nbtType);
     }
 
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, nbtType, resource, loader, null);
-    }
-
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
-            @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
+            @NotNull List<T> objects, Function<T, NamespaceID> namespaceFunction) {
+        DynamicRegistry<T> registry = create(id, nbtType);
+        for (T object : objects) {
+            final NamespaceID namespace = namespaceFunction.apply(object);
+            registry.register(namespace, object);
+        }
         return registry;
     }
 
@@ -118,15 +103,21 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     @NotNull String id();
 
     @Nullable T get(int id);
+
     @Nullable T get(@NotNull NamespaceID namespace);
+
     default @Nullable T get(@NotNull Key<T> key) {
         return get(key.namespace());
     }
 
     @Nullable Key<T> getKey(int id);
+
     @Nullable Key<T> getKey(@NotNull T value);
+
     @Nullable NamespaceID getName(int id);
+
     @Nullable DataPack getPack(int id);
+
     default @Nullable DataPack getPack(@NotNull Key<T> key) {
         final int id = getId(key);
         return id == -1 ? null : getPack(id);

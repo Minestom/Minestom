@@ -86,10 +86,10 @@ public class WolfMeta extends TameableAnimalMeta {
          */
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
-            return DynamicRegistry.create(
-                    "minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.WOLF_VARIANTS,
-                    (namespace, props) -> new WolfMeta.VariantImpl(Registry.wolfVariant(namespace, props))
-            );
+            final List<Variant> variants = Registry.loadRegistry(Registry.Resource.WOLF_VARIANTS, Registry.WolfVariantEntry::new).stream()
+                    .<Variant>map(WolfMeta.VariantImpl::new).toList();
+            return DynamicRegistry.create("minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, variants,
+                    variant -> variant.registry().namespace());
         }
 
         @NotNull NamespaceID wildTexture();

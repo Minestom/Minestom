@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimPattern);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
@@ -38,10 +40,10 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
-                (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
-        );
+        final List<TrimPattern> trimPatterns = Registry.loadRegistry(Registry.Resource.TRIM_PATTERNS, Registry.TrimPatternEntry::new).stream()
+                .<TrimPattern>map(TrimPatternImpl::new).toList();
+        return DynamicRegistry.create("minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, trimPatterns,
+                trimPattern -> trimPattern.registry().namespace());
     }
 
     @NotNull NamespaceID assetId();

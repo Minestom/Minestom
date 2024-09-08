@@ -9,8 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record BuiltinSoundEvent(NamespaceID namespace, int id) implements StaticProtocolObject, SoundEvent {
-    private static final Registry.Container<BuiltinSoundEvent> CONTAINER = Registry.createStaticContainer(Registry.Resource.SOUNDS,
-            (namespace, properties) -> new BuiltinSoundEvent(NamespaceID.from(namespace), properties.getInt("id")));
+    private static final Registry.Container<BuiltinSoundEvent> CONTAINER = Registry.createStaticContainer(
+            Registry.loadRegistry(Registry.Resource.SOUNDS, Registry.SoundEntry::new).stream()
+                    .map(soundEntry -> new BuiltinSoundEvent(soundEntry.namespace(), soundEntry.id())).toList());
 
     static SoundEvent get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

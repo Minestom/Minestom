@@ -12,6 +12,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits JukeboxSongImpl {
 
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<JukeboxSong>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::jukeboxSong);
@@ -37,10 +39,10 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, Registry.Resource.JUKEBOX_SONGS,
-                (namespace, props) -> new JukeboxSongImpl(Registry.jukeboxSong(namespace, props))
-        );
+        final List<JukeboxSong> jukeboxSongs = Registry.loadRegistry(Registry.Resource.JUKEBOX_SONGS, Registry.JukeboxSongEntry::new).stream()
+                .<JukeboxSong>map(JukeboxSongImpl::new).toList();
+        return DynamicRegistry.create("minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, jukeboxSongs,
+                jukeboxSong -> jukeboxSong.registry().namespace());
     }
 
     @NotNull SoundEvent soundEvent();

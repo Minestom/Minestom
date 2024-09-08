@@ -19,6 +19,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 1;
@@ -102,10 +104,10 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
          */
         @ApiStatus.Internal
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
-            return DynamicRegistry.create(
-                    "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
-                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props))
-            );
+            final List<Variant> variants = Registry.loadRegistry(Registry.Resource.PAINTING_VARIANTS, Registry.PaintingVariantEntry::new).stream()
+                    .<Variant>map(VariantImpl::new).toList();
+            return DynamicRegistry.create("minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, variants,
+                    variant -> variant.registry().namespace());
         }
 
         @NotNull NamespaceID assetId();
@@ -166,7 +168,8 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
                         .build()
         );
 
-        @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+        @SuppressWarnings("ConstantValue")
+            // The builder can violate the nullability constraints
         VariantImpl {
             Check.argCondition(assetId == null, "missing asset id");
             Check.argCondition(width <= 0, "width must be positive");

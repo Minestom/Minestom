@@ -19,7 +19,10 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.ReentrantLock;
@@ -200,16 +203,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             entries.add(new RegistryDataPacket.Entry(getKey(i).name(), data));
         }
         return new RegistryDataPacket(id, entries);
-    }
-
-    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
-        if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
-        for (var entry : entries) {
-            final String namespace = entry.getKey();
-            final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
-        }
     }
 
     static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {

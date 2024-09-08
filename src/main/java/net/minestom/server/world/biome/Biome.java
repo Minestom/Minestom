@@ -4,10 +4,13 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
@@ -22,13 +25,14 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
-                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
-                // We force plains to be first because it allows convenient palette initialization.
-                // Maybe worth switching to fetching plains in the palette in the future to avoid this.
-                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0
-        );
+        List<Biome> biomes = new java.util.ArrayList<>(Registry.loadRegistry(Registry.Resource.BIOMES, Registry.BiomeEntry::new).stream()
+                .<Biome>map(BiomeImpl::new).toList());
+        // We force plains to be first because it allows convenient palette initialization.
+        // Maybe worth switching to fetching plains in the palette in the future to avoid this.
+        final NamespaceID plains = NamespaceID.from("minecraft", "plains");
+        biomes.sort((a, b) -> a.registry().namespace().equals(plains) ? -1 : b.registry().namespace().equals(plains) ? 1 : 0);
+        return DynamicRegistry.create("minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, biomes,
+                biome -> biome.registry().namespace());
     }
 
     float temperature();

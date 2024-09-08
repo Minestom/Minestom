@@ -12,6 +12,8 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<BannerPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::bannerPattern);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
@@ -34,10 +36,10 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.BANNER_PATTERNS,
-                (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
-        );
+        final List<BannerPattern> bannerPatterns = Registry.loadRegistry(Registry.Resource.BANNER_PATTERNS, Registry.BannerPatternEntry::new).stream()
+                .<BannerPattern>map(BannerPatternImpl::new).toList();
+        return DynamicRegistry.create("minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, bannerPatterns,
+                bannerPattern -> bannerPattern.registry().namespace());
     }
 
     @NotNull NamespaceID assetId();

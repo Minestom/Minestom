@@ -7,8 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 record StatisticTypeImpl(NamespaceID namespace, int id) implements StatisticType {
-    private static final Registry.Container<StatisticType> CONTAINER = Registry.createStaticContainer(Registry.Resource.STATISTICS,
-            (namespace, properties) -> new StatisticTypeImpl(NamespaceID.from(namespace), properties.getInt("id")));
+    private static final Registry.Container<StatisticType> CONTAINER = Registry.createStaticContainer(
+            Registry.loadRegistry(Registry.Resource.STATISTICS, Registry.StatisticEntry::new).stream()
+                    .<StatisticType>map(statisticEntry -> new StatisticTypeImpl(statisticEntry.namespace(), statisticEntry.id())).toList());
 
     static StatisticType get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

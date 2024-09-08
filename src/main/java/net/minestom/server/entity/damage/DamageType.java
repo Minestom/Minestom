@@ -9,6 +9,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
 
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<DamageType>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::damageType);
@@ -32,10 +34,10 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DAMAGE_TYPES,
-                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
-        );
+        final List<DamageType> damageTypes = Registry.loadRegistry(Registry.Resource.DAMAGE_TYPES, Registry.DamageTypeEntry::new).stream()
+                .<DamageType>map(DamageTypeImpl::new).toList();
+        return DynamicRegistry.create("minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, damageTypes,
+                damageType -> damageType.registry().namespace());
     }
 
     float exhaustion();

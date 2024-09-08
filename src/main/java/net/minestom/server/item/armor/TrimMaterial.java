@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
@@ -44,10 +45,10 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
-                (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
-        );
+        final List<TrimMaterial> trimMaterials = Registry.loadRegistry(Registry.Resource.TRIM_MATERIALS, Registry.TrimMaterialEntry::new).stream()
+                .<TrimMaterial>map(TrimMaterialImpl::new).toList();
+        return DynamicRegistry.create("minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, trimMaterials,
+                trimMaterial -> trimMaterial.registry().namespace());
     }
 
     @NotNull String assetName();
