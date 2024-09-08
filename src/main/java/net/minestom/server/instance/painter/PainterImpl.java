@@ -1,5 +1,8 @@
 package net.minestom.server.instance.painter;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -15,7 +18,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         instructions = List.copyOf(instructions);
     }
 
-    static PainterImpl paint(Consumer<World> consumer) {
+    static PainterImpl paint(Consumer<ReadableWorld> consumer) {
         WorldImpl world = new WorldImpl();
         consumer.accept(world);
         return new PainterImpl(world.instructions);
@@ -26,12 +29,25 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         return sectionAt(instructions, sectionX, sectionY, sectionZ);
     }
 
-    sealed interface Instruction {
+    record Bounds(Vec min, Vec max) {
+    }
+
+    record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
+    }
+
+    private sealed interface Instruction {
+
         record SetBlock(int x, int y, int z, Block block) implements Instruction {
+        }
+
+        record Spread2d(long seed, double chance, PreparedOperation operation) implements Instruction {
+        }
+
+        record Prism(Vec min, Vec max, BlockProvider blockProvider) implements Instruction {
         }
     }
 
-    static final class WorldImpl implements World {
+    static final class WorldImpl implements ReadableWorld {
         private final List<Instruction> instructions = new ArrayList<>();
 
         @Override
@@ -55,29 +71,97 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         void append(Instruction instruction) {
             instructions.add(instruction);
         }
+
+        @Override
+        public void prism(Point min, Point max, BlockProvider blockProvider) {
+
+        }
+
+        @Override
+        public void spread2d(double chance, Operation operation) {
+
+        }
     }
 
-    static Palette sectionAt(List<Instruction> instructions, int x, int y, int z) {
-        Palette palette = Palette.blocks();
-        for (Instruction instruction : instructions) {
-            if (!sectionRelevant(instruction, x, y, z)) continue;
-            switch (instruction) {
-                case Instruction.SetBlock setBlock -> {
-                    final int localX = ChunkUtils.toSectionRelativeCoordinate(setBlock.x());
-                    final int localY = ChunkUtils.toSectionRelativeCoordinate(setBlock.y());
-                    final int localZ = ChunkUtils.toSectionRelativeCoordinate(setBlock.z());
-                    palette.set(localX, localY, localZ, setBlock.block().stateId());
+    static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette, Point offset, Instruction instruction) {
+        if (!sectionRelevant(instruction, sectionX, sectionY, sectionZ, offset)) return;
+        switch (instruction) {
+            case Instruction.SetBlock setBlock -> {
+                final int localX = ChunkUtils.toSectionRelativeCoordinate(setBlock.x() + offset.blockX());
+                final int localY = ChunkUtils.toSectionRelativeCoordinate(setBlock.y() + offset.blockY());
+                final int localZ = ChunkUtils.toSectionRelativeCoordinate(setBlock.z() + offset.blockZ());
+                palette.set(localX, localY, localZ, setBlock.block().stateId());
+            }
+            case Instruction.Spread2d spread2d -> {
+
+                // TODO: judge how much we need to generate based on the operation's bounds
+                Bounds bounds = spread2d.operation().bounds();
+
+                for (int x = 0; x < Chunk.CHUNK_SECTION_SIZE; x++) {
+                    for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
+                        int absX = sectionX * Chunk.CHUNK_SECTION_SIZE + x + offset.blockX();
+                        int absZ = sectionZ * Chunk.CHUNK_SECTION_SIZE + z + offset.blockZ();
+
+                        double noiseValue = WhiteNoise.evaluate2D(absX, absZ, spread2d.seed());
+                        double normNoise = (noiseValue + 1.0) / 2.0;
+
+                        if (normNoise < spread2d.chance()) {
+                            Vec spreadOffset = new Vec(absX, offset.y(), absZ);
+                            for (Instruction opInstruction : spread2d.operation().instructions()) {
+                                applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
+                            }
+                        }
+                    }
                 }
             }
+            case Instruction.Prism prism -> {
+                for (int x = prism.min().blockX(); x < prism.max().blockX(); x++) {
+                    for (int y = prism.min().blockY(); y < prism.max().blockY(); y++) {
+                        for (int z = prism.min().blockZ(); z < prism.max().blockZ(); z++) {
+                            Block block = prism.blockProvider().get(x, y, z);
+
+                            final int localX = ChunkUtils.toSectionRelativeCoordinate(x);
+                            final int localY = ChunkUtils.toSectionRelativeCoordinate(y);
+                            final int localZ = ChunkUtils.toSectionRelativeCoordinate(z);
+
+                            palette.set(localX, localY, localZ, block.stateId());
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static Palette sectionAt(List<Instruction> instructions, int sectionX, int sectionY, int sectionZ) {
+        Palette palette = Palette.blocks();
+        for (Instruction instruction : instructions) {
+            applyInstruction(sectionX, sectionY, sectionZ, palette, Vec.ZERO, instruction);
         }
         return palette;
     }
 
-    static boolean sectionRelevant(Instruction instruction, int sectionX, int sectionY, int sectionZ) {
+    static boolean sectionRelevant(Instruction instruction, int sectionX, int sectionY, int sectionZ, Point offset) {
         return switch (instruction) {
-            case Instruction.SetBlock setBlock -> ChunkUtils.getChunkCoordinate(setBlock.x()) == sectionX &&
-                    ChunkUtils.getChunkCoordinate(setBlock.y()) == sectionY &&
-                    ChunkUtils.getChunkCoordinate(setBlock.z()) == sectionZ;
+            case Instruction.SetBlock setBlock -> ChunkUtils.getChunkCoordinate(setBlock.x() + offset.blockX()) == sectionX &&
+                    ChunkUtils.getChunkCoordinate(setBlock.y() + offset.blockY()) == sectionY &&
+                    ChunkUtils.getChunkCoordinate(setBlock.z() + offset.blockZ()) == sectionZ;
+            case Instruction.Prism prism -> {
+                final Vec min = prism.min();
+                final Vec max = prism.max();
+
+                final int minX = ChunkUtils.getChunkCoordinate(min.blockX() + offset.blockX());
+                final int minY = ChunkUtils.getChunkCoordinate(min.blockY() + offset.blockY());
+                final int minZ = ChunkUtils.getChunkCoordinate(min.blockZ() + offset.blockZ());
+
+                final int maxX = ChunkUtils.getChunkCoordinate(max.blockX() + offset.blockX());
+                final int maxY = ChunkUtils.getChunkCoordinate(max.blockY() + offset.blockY());
+                final int maxZ = ChunkUtils.getChunkCoordinate(max.blockZ() + offset.blockZ());
+
+                yield sectionX >= minX && sectionX <= maxX &&
+                        sectionY >= minY && sectionY <= maxY &&
+                        sectionZ >= minZ && sectionZ <= maxZ;
+            }
+            case Instruction.Spread2d spread2d -> true;
         };
     }
 }

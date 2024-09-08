@@ -1,6 +1,7 @@
 package net.minestom.server.instance.painter;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
@@ -8,7 +9,7 @@ import net.minestom.server.instance.palette.Palette;
 import java.util.function.Consumer;
 
 public interface Painter {
-    static Painter paint(Consumer<World> consumer) {
+    static Painter paint(Consumer<ReadableWorld> consumer) {
         return PainterImpl.paint(consumer);
     }
 
@@ -48,6 +49,38 @@ public interface Painter {
         };
     }
 
-    interface World extends Block.Getter, Block.Setter {
+    interface World extends Block.Setter {
+
+        /** Paints a cube at the given point with the given width. */
+        default void cube(Point mid, double width, BlockProvider blockProvider) {
+            Point min = mid.sub(width / 2.0, width / 2.0, width / 2.0);
+            Point max = mid.add(width / 2.0, width / 2.0, width / 2.0);
+            prism(min, max, blockProvider);
+        }
+        void prism(Point min, Point max, BlockProvider blockProvider);
+
+//        /**
+//         * Runs the operation across the 3D space of the world, with an equal chance of running the operation at each point.
+//         * @param chance the chance of running the consumer at each point. Must be between 0 and 1.
+//         * @param operation the operation to run at each point.
+//         */
+//        void spread3d(double chance, Operation operation);
+
+        /**
+         * Runs the operation across the 2D space of the world, with an equal chance of running the operation at each point.
+         * @param chance the chance of running the consumer at each point. Must be between 0 and 1.
+         * @param operation the operation to run at each point. Note that the abs y value will always be 0.
+         */
+        void spread2d(double chance, Operation operation);
+    }
+
+    interface ReadableWorld extends World, Block.Getter {
+    }
+
+    /**
+     * Represents an operation relative to (0,0,0).
+     */
+    interface Operation {
+        void apply(World relWorld);
     }
 }
