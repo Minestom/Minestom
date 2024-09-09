@@ -77,6 +77,20 @@ public class TestInstabreakCommand extends Command {
         areaBatch.setBlock(3, 0, 0, Block.WATER);
         areaBatch.setBlock(2, 0, 1, Block.WATER);
         areaBatch.setBlock(3, 0, 1, Block.WATER);
+        areaBatch.setBlock(5, 1, 0, Block.WATER);
+        areaBatch.setBlock(6, 1, 0, Block.WATER);
+        areaBatch.setBlock(5, 1, 1, Block.WATER);
+        areaBatch.setBlock(6, 1, 1, Block.WATER);
+        areaBatch.setBlock(8, 1, 1, Block.WATER.withProperty("level", "0"));
+        areaBatch.setBlock(10, 1, 1, Block.WATER.withProperty("level", "1"));
+        areaBatch.setBlock(8, 1, 3, Block.WATER.withProperty("level", "2"));
+        areaBatch.setBlock(10, 1, 3, Block.WATER.withProperty("level", "3"));
+        areaBatch.setBlock(8, 1, 5, Block.WATER.withProperty("level", "4"));
+        areaBatch.setBlock(10, 1, 5, Block.WATER.withProperty("level", "5"));
+        areaBatch.setBlock(8, 1, 7, Block.WATER.withProperty("level", "6"));
+        areaBatch.setBlock(10, 1, 7, Block.WATER.withProperty("level", "7"));
+        areaBatch.setBlock(8, 1, 9, Block.WATER.withProperty("level", "8"));
+        areaBatch.setBlock(10, 1, 9, Block.WATER.withProperty("level", "13"));
         for (int x = -3; x < 0; x++) {
             for (int z = -3; z < 0; z++) {
                 for (int y = 0; y < 4; y++) {
