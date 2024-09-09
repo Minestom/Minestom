@@ -42,7 +42,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
     public static final BinaryTagSerializer<Food> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> new Food(
                     tag.getInt("nutrition"),
-                    tag.getFloat("saturation_modifier"),
+                    tag.getFloat("saturation"),
                     tag.getBoolean("can_always_eat"),
                     tag.getFloat("eat_seconds", DEFAULT_EAT_SECONDS),
                     tag.get("using_converts_to") instanceof BinaryTag usingConvertsTo
@@ -51,7 +51,7 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
             value -> {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
                         .putInt("nutrition", value.nutrition)
-                        .putFloat("saturation_odifier", value.saturationModifier)
+                        .putFloat("saturation", value.saturationModifier)
                         .putBoolean("can_always_eat", value.canAlwaysEat)
                         .putFloat("eat_seconds", value.eatSeconds)
                         .put("effects", EffectChance.NBT_LIST_TYPE.write(value.effects));
