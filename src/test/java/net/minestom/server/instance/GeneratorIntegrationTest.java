@@ -47,6 +47,7 @@ class GeneratorIntegrationTest {
         instance.loadChunk(0, 0).join();
 
         assertSame(exception, ref.get());
+        ref.set(null);
     }
 
     @Test

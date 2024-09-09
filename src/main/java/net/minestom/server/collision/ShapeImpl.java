@@ -4,100 +4,34 @@ import it.unimi.dsi.fastutil.doubles.DoubleArrayList;
 import it.unimi.dsi.fastutil.doubles.DoubleList;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ShapeImpl implements Shape {
+public record ShapeImpl(CollisionData collisionData, LightData lightData) implements Shape {
     private static final Pattern PATTERN = Pattern.compile("\\d.\\d+", Pattern.MULTILINE);
-    private final List<BoundingBox> collisionBoundingBoxes;
-    private final Point relativeStart, relativeEnd;
-    private final byte fullFaces;
 
-    private final List<BoundingBox> occlusionBoundingBoxes;
-    private final byte blockOcclusion;
-    private final byte airOcclusion;
-
-    private final Registry.BlockEntry blockEntry;
-    private Block block;
-
-    private ShapeImpl(BoundingBox[] boundingBoxes, BoundingBox[] occlusionBoundingBoxes, Registry.BlockEntry blockEntry) {
-        this.collisionBoundingBoxes = List.of(boundingBoxes);
-        this.occlusionBoundingBoxes = List.of(occlusionBoundingBoxes);
-        this.blockEntry = blockEntry;
-
-        // Find bounds of collision
-        if (!collisionBoundingBoxes.isEmpty()) {
-            double minX = 1, minY = 1, minZ = 1;
-            double maxX = 0, maxY = 0, maxZ = 0;
-            for (BoundingBox blockSection : collisionBoundingBoxes) {
-                // Min
-                if (blockSection.minX() < minX) minX = blockSection.minX();
-                if (blockSection.minY() < minY) minY = blockSection.minY();
-                if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
-                // Max
-                if (blockSection.maxX() > maxX) maxX = blockSection.maxX();
-                if (blockSection.maxY() > maxY) maxY = blockSection.maxY();
-                if (blockSection.maxZ() > maxZ) maxZ = blockSection.maxZ();
-            }
-            this.relativeStart = new Vec(minX, minY, minZ);
-            this.relativeEnd = new Vec(maxX, maxY, maxZ);
-        } else {
-            this.relativeStart = Vec.ZERO;
-            this.relativeEnd = Vec.ZERO;
+    record CollisionData(List<BoundingBox> collisionBoundingBoxes,
+                         Point relativeStart, Point relativeEnd,
+                         byte fullFaces) {
+        public CollisionData {
+            collisionBoundingBoxes = List.copyOf(collisionBoundingBoxes);
         }
-
-        byte fullCollisionFaces = 0;
-        for (BlockFace f : BlockFace.values()) {
-            final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
-            fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
-        }
-        this.fullFaces = fullCollisionFaces;
-
-        byte airFaces = 0;
-        byte fullFaces = 0;
-        for (BlockFace f : BlockFace.values()) {
-            final byte res = isFaceCovered(computeOcclusionSet(f, this.occlusionBoundingBoxes));
-            airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
-            fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
-        }
-
-        this.airOcclusion = airFaces;
-        this.blockOcclusion = fullFaces;
     }
 
-    private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
-        final Matcher matcher = PATTERN.matcher(str);
-        DoubleList vals = new DoubleArrayList();
-        while (matcher.find()) {
-            double newVal = Double.parseDouble(matcher.group());
-            vals.add(newVal);
+    record LightData(List<BoundingBox> occlusionBoundingBoxes,
+                     byte blockOcclusion, byte airOcclusion,
+                     int lightEmission) {
+        public LightData {
+            occlusionBoundingBoxes = List.copyOf(occlusionBoundingBoxes);
         }
-        final int count = vals.size() / 6;
-        BoundingBox[] boundingBoxes = new BoundingBox[count];
-        for (int i = 0; i < count; ++i) {
-            final double minX = vals.getDouble(0 + 6 * i);
-            final double minY = vals.getDouble(1 + 6 * i);
-            final double minZ = vals.getDouble(2 + 6 * i);
-
-            final double boundXSize = vals.getDouble(3 + 6 * i) - minX;
-            final double boundYSize = vals.getDouble(4 + 6 * i) - minY;
-            final double boundZSize = vals.getDouble(5 + 6 * i) - minZ;
-
-            final BoundingBox bb = new BoundingBox(boundXSize, boundYSize, boundZSize, new Vec(minX, minY, minZ));
-            assert bb.minX() == minX;
-            assert bb.minY() == minY;
-            assert bb.minZ() == minZ;
-            boundingBoxes[i] = bb;
-        }
-        return boundingBoxes;
     }
 
     /**
@@ -123,53 +57,48 @@ public final class ShapeImpl implements Shape {
         return 1;
     }
 
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
-        BoundingBox[] occlusionBoundingBoxes = blockEntry.occludes() ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
-        return new ShapeImpl(collisionBoundingBoxes, occlusionBoundingBoxes, blockEntry);
-    }
-
     @Override
     public @NotNull Point relativeStart() {
-        return relativeStart;
+        return collisionData.relativeStart;
     }
 
     @Override
     public @NotNull Point relativeEnd() {
-        return relativeEnd;
+        return collisionData.relativeEnd;
     }
 
     @Override
     public boolean isOccluded(@NotNull Shape shape, @NotNull BlockFace face) {
-        final ShapeImpl shapeImpl = ((ShapeImpl) shape);
-        final boolean hasBlockOcclusion = (((blockOcclusion >> face.ordinal()) & 1) == 1);
-        final boolean hasBlockOcclusionOther = ((shapeImpl.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+        final LightData lightData = this.lightData;
+        final LightData otherLightData = ((ShapeImpl) shape).lightData;
+        final boolean hasBlockOcclusion = (((lightData.blockOcclusion >> face.ordinal()) & 1) == 1);
+        final boolean hasBlockOcclusionOther = ((otherLightData.blockOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
 
-        if (blockEntry.lightEmission() > 0) return hasBlockOcclusionOther;
+        if (lightData.lightEmission > 0) return hasBlockOcclusionOther;
 
         // If either face is full, return true
         if (hasBlockOcclusion || hasBlockOcclusionOther) return true;
 
-        final boolean hasAirOcclusion = (((airOcclusion >> face.ordinal()) & 1) == 1);
-        final boolean hasAirOcclusionOther = ((shapeImpl.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
+        final boolean hasAirOcclusion = (((lightData.airOcclusion >> face.ordinal()) & 1) == 1);
+        final boolean hasAirOcclusionOther = ((otherLightData.airOcclusion >> face.getOppositeFace().ordinal()) & 1) == 1;
 
         // If a single face is air, return false
         if (hasAirOcclusion || hasAirOcclusionOther) return false;
 
         // Comparing two partial faces. Computation needed
-        List<Rectangle> allRectangles = computeOcclusionSet(face.getOppositeFace(), shapeImpl.occlusionBoundingBoxes);
-        allRectangles.addAll(computeOcclusionSet(face, occlusionBoundingBoxes));
+        List<Rectangle> allRectangles = computeOcclusionSet(face.getOppositeFace(), otherLightData.occlusionBoundingBoxes);
+        allRectangles.addAll(computeOcclusionSet(face, lightData.occlusionBoundingBoxes));
         return isFaceCovered(allRectangles) == 2;
     }
 
     @Override
     public boolean isFaceFull(@NotNull BlockFace face) {
-        return (((fullFaces >> face.ordinal()) & 1) == 1);
+        return (((collisionData.fullFaces >> face.ordinal()) & 1) == 1);
     }
 
     @Override
     public boolean intersectBox(@NotNull Point position, @NotNull BoundingBox boundingBox) {
-        for (BoundingBox blockSection : collisionBoundingBoxes) {
+        for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
             if (boundingBox.intersectBox(position, blockSection)) return true;
         }
         return false;
@@ -179,24 +108,20 @@ public final class ShapeImpl implements Shape {
     public boolean intersectBoxSwept(@NotNull Point rayStart, @NotNull Point rayDirection,
                                      @NotNull Point shapePos, @NotNull BoundingBox moving, @NotNull SweepResult finalResult) {
         boolean hitBlock = false;
-        for (BoundingBox blockSection : collisionBoundingBoxes) {
+        for (BoundingBox blockSection : collisionData.collisionBoundingBoxes) {
             // Update final result if the temp result collision is sooner than the current final result
             if (RayUtils.BoundingBoxIntersectionCheck(moving, rayStart, rayDirection, blockSection, shapePos, finalResult)) {
                 finalResult.collidedPositionX = rayStart.x() + rayDirection.x() * finalResult.res;
                 finalResult.collidedPositionY = rayStart.y() + rayDirection.y() * finalResult.res;
                 finalResult.collidedPositionZ = rayStart.z() + rayDirection.z() * finalResult.res;
-
+                finalResult.collidedShapeX = shapePos.x();
+                finalResult.collidedShapeY = shapePos.y();
+                finalResult.collidedShapeZ = shapePos.z();
                 finalResult.collidedShape = this;
                 hitBlock = true;
             }
         }
         return hitBlock;
-    }
-
-    public Block block() {
-        Block block = this.block;
-        if (block == null) this.block = block = Block.fromStateId((short) blockEntry.stateId());
-        return block;
     }
 
     /**
@@ -206,7 +131,7 @@ public final class ShapeImpl implements Shape {
      * @return the collision bounding boxes for this block
      */
     public @NotNull @Unmodifiable List<BoundingBox> collisionBoundingBoxes() {
-        return collisionBoundingBoxes;
+        return collisionData.collisionBoundingBoxes;
     }
 
     /**
@@ -215,7 +140,91 @@ public final class ShapeImpl implements Shape {
      * @return the occlusion bounding boxes for this block
      */
     public @NotNull @Unmodifiable List<BoundingBox> occlusionBoundingBoxes() {
-        return occlusionBoundingBoxes;
+        return lightData.occlusionBoundingBoxes;
+    }
+
+    static final Map<ShapeImpl, ShapeImpl> SHAPES = new ConcurrentHashMap<>();
+
+    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, int lightEmission) {
+        BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
+        BoundingBox[] occlusionBoundingBoxes = occludes ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
+        final CollisionData collisionData = collisionData(List.of(collisionBoundingBoxes));
+        final LightData lightData = lightData(List.of(occlusionBoundingBoxes), lightEmission);
+        final ShapeImpl shape = new ShapeImpl(collisionData, lightData);
+        return SHAPES.computeIfAbsent(shape, k -> k);
+    }
+
+    private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
+        final Matcher matcher = PATTERN.matcher(str);
+        DoubleList vals = new DoubleArrayList();
+        while (matcher.find()) {
+            double newVal = Double.parseDouble(matcher.group());
+            vals.add(newVal);
+        }
+        final int count = vals.size() / 6;
+        BoundingBox[] boundingBoxes = new BoundingBox[count];
+        for (int i = 0; i < count; ++i) {
+            final double minX = vals.getDouble(0 + 6 * i);
+            final double minY = vals.getDouble(1 + 6 * i);
+            final double minZ = vals.getDouble(2 + 6 * i);
+
+            final double boundXSize = vals.getDouble(3 + 6 * i) - minX;
+            final double boundYSize = vals.getDouble(4 + 6 * i) - minY;
+            final double boundZSize = vals.getDouble(5 + 6 * i) - minZ;
+
+            final Vec min = new Vec(minX, minY, minZ);
+            final Vec max = new Vec(minX + boundXSize, minY + boundYSize, minZ + boundZSize);
+            final BoundingBox bb = new BoundingBox(min, max);
+            assert bb.minX() == minX;
+            assert bb.minY() == minY;
+            assert bb.minZ() == minZ;
+            boundingBoxes[i] = bb;
+        }
+        return boundingBoxes;
+    }
+
+    private static CollisionData collisionData(List<BoundingBox> collisionBoundingBoxes) {
+        // Find bounds of collision
+        Vec relativeStart;
+        Vec relativeEnd;
+        if (!collisionBoundingBoxes.isEmpty()) {
+            double minX = 1, minY = 1, minZ = 1;
+            double maxX = 0, maxY = 0, maxZ = 0;
+            for (BoundingBox blockSection : collisionBoundingBoxes) {
+                // Min
+                if (blockSection.minX() < minX) minX = blockSection.minX();
+                if (blockSection.minY() < minY) minY = blockSection.minY();
+                if (blockSection.minZ() < minZ) minZ = blockSection.minZ();
+                // Max
+                if (blockSection.maxX() > maxX) maxX = blockSection.maxX();
+                if (blockSection.maxY() > maxY) maxY = blockSection.maxY();
+                if (blockSection.maxZ() > maxZ) maxZ = blockSection.maxZ();
+            }
+            relativeStart = new Vec(minX, minY, minZ);
+            relativeEnd = new Vec(maxX, maxY, maxZ);
+        } else {
+            relativeStart = Vec.ZERO;
+            relativeEnd = Vec.ZERO;
+        }
+
+        byte fullCollisionFaces = 0;
+        for (BlockFace f : BlockFace.values()) {
+            final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
+            fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
+        }
+
+        return new CollisionData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
+    }
+
+    private static LightData lightData(List<BoundingBox> occlusionBoundingBoxes, int lightEmission) {
+        byte fullFaces = 0;
+        byte airFaces = 0;
+        for (BlockFace f : BlockFace.values()) {
+            final byte res = isFaceCovered(computeOcclusionSet(f, occlusionBoundingBoxes));
+            fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
+            airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
+        }
+        return new LightData(occlusionBoundingBoxes, fullFaces, airFaces, lightEmission);
     }
 
     private static @NotNull List<Rectangle> computeOcclusionSet(BlockFace face, List<BoundingBox> boundingBoxes) {
@@ -287,5 +296,6 @@ public final class ShapeImpl implements Shape {
         return new Rectangle(x1, y1, x2, y2);
     }
 
-    private record Rectangle(double x1, double y1, double x2, double y2) { }
+    private record Rectangle(double x1, double y1, double x2, double y2) {
+    }
 }

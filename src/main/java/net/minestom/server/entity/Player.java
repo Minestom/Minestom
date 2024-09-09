@@ -613,15 +613,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public void updateOldViewer(@NotNull Player player) {
-        super.updateOldViewer(player);
-        // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            player.sendPacket(this.getTeam().createTeamDestructionPacket());
-        }
-    }
-
-    @Override
     public void sendPacketToViewersAndSelf(@NotNull SendablePacket packet) {
         sendPacket(packet);
         super.sendPacketToViewersAndSelf(packet);
@@ -1650,6 +1641,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
         if (isActive()) {
             refreshAbilities();
+            updateCollisions();
         }
 
         return true;
@@ -2332,6 +2324,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         return this.pointers;
     }
 
+    @Override
+    protected void updateCollisions() {
+        preventBlockPlacement = gameMode != GameMode.SPECTATOR;
+        collidesWithEntities = gameMode != GameMode.SPECTATOR;
+    }
+
     protected void sendChunkUpdates(Chunk newChunk) {
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
             final int newX = newChunk.getChunkX();
@@ -2468,6 +2466,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             // Clamp viewDistance to valid bounds
+            byte previousViewDistance = this.viewDistance;
             this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
@@ -2475,6 +2474,27 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
             this.enableTextFiltering = enableTextFiltering;
             this.allowServerListings = allowServerListings;
+
+            // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
+            if (instance != null) {
+                // Load/unload chunks if necessary due to view distance changes
+                if (previousViewDistance < this.viewDistance) {
+                    // View distance expanded, send chunks
+                    ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), this.viewDistance, (chunkX, chunkZ) -> {
+                        if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                            chunkAdder.accept(chunkX, chunkZ);
+                        }
+                    });
+                } else if (previousViewDistance > this.viewDistance) {
+                    // View distance shrunk, unload chunks
+                    ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
+                        if (Math.abs(chunkX - position.chunkX()) > this.viewDistance || Math.abs(chunkZ - position.chunkZ()) > this.viewDistance) {
+                            chunkRemover.accept(chunkX, chunkZ);
+                        }
+                    });
+                }
+                // Else previous and current are equal, do nothing
+            }
 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
             PlayerMeta playerMeta = getPlayerMeta();

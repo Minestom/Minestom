@@ -71,6 +71,8 @@ class EntityProjectileCollisionIntegrationTest {
         assertNotNull(event);
         assertNotNull(event2);
         assertEquals(blockPosition.withY(y -> y - 1), new Vec(event.getCollisionPosition().blockX(), event.getCollisionPosition().blockY(), event.getCollisionPosition().blockZ()));
+        eventRef.set(null);
+        eventRef2.set(null);
     }
 
     @Test
@@ -151,6 +153,6 @@ class EntityProjectileCollisionIntegrationTest {
         assertNotNull(event);
         assertSame(shooter, event.getTarget());
         assertTrue(shooter.getBoundingBox().intersectEntity(shooter.getPosition(), projectile));
+        eventRef.set(null);
     }
-
 }
