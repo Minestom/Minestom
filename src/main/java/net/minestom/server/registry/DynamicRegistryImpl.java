@@ -228,16 +228,4 @@ final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegi
         }
         return new RegistryDataPacket(id, entries);
     }
-
-    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
-        final Map<String, CompoundBinaryTag> map = Registry.loadSnbt(resource);
-        final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
-        for (var entry : map.entrySet()) {
-            final String namespace = entry.getKey();
-            final CompoundBinaryTag tag = entry.getValue();
-            // TODO must forward namespace
-            final T value = registry.nbtType.read(context, tag);
-            registry.register(value, DataPack.MINECRAFT_CORE);
-        }
-    }
 }

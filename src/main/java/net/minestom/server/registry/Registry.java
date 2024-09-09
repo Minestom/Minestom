@@ -961,6 +961,18 @@ public final class Registry {
         };
     }
 
+    public static <T extends ProtocolObject> List<T> loadSnbtRegistry(Map<String, CompoundBinaryTag> map,
+                                                                  BiFunction<String, CompoundBinaryTag, T> function) {
+        List<T> result = new ArrayList<>();
+        for (Map.Entry<String, CompoundBinaryTag> entry : map.entrySet()) {
+            final String namespace = entry.getKey();
+            final CompoundBinaryTag tag = entry.getValue();
+            final T value = function.apply(namespace, tag);
+            result.add(value);
+        }
+        return result;
+    }
+
     @ApiStatus.Internal
     public static Map<String, CompoundBinaryTag> loadSnbt(@NotNull Registry.Resource resource) {
         Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());

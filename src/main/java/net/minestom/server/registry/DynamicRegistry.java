@@ -82,20 +82,6 @@ public sealed interface DynamicRegistry<T extends ProtocolObject> permits Dynami
         return registry;
     }
 
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
-        return registry;
-    }
-
     @NotNull String id();
 
     @Nullable T get(int id);

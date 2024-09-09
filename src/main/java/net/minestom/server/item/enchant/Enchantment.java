@@ -31,10 +31,11 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
-        return DynamicRegistry.create(
-                "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE,
-                registries, Registry.Resource.ENCHANTMENTS
-        );
+        final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
+        final List<Enchantment> enchantments = Registry.loadSnbtRegistry(Registry.loadSnbt(Registry.Resource.ENCHANTMENTS),
+                // TODO must forward namespace
+                (namespace, binaryTag) -> EnchantmentImpl.REGISTRY_NBT_TYPE.read(context, binaryTag));
+        return DynamicRegistry.create("minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE, enchantments);
     }
 
     @NotNull Component description();
