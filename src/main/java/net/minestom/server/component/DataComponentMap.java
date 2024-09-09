@@ -72,7 +72,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
             final var protoComp = protoImpl.components().get(entry.getIntKey()); // Entry in prototype
             if (entry.getValue() == null) {
                 // If the component is removed, remove it from the diff if it is not in the prototype
-                if (protoImpl.components().containsKey(entry.getIntKey())) {
+                if (!protoImpl.components().containsKey(entry.getIntKey())) {
                     iter.remove();
                 }
             } else if (protoComp != null && protoComp.equals(entry.getValue())) {
