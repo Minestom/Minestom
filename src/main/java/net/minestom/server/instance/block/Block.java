@@ -92,6 +92,16 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @Contract(pure = true)
     @Nullable CompoundBinaryTag nbt();
 
+    /**
+     * Returns an unmodifiable view of the block nbt or an empty compound.
+     *
+     * @return the block nbt or an empty compound if not present
+     */
+    default @Nullable CompoundBinaryTag nbtOrEmpty() {
+        CompoundBinaryTag nbt = nbt();
+        return nbt == null ? CompoundBinaryTag.empty() : nbt;
+    }
+
     @Contract(pure = true)
     default boolean hasNbt() {
         return nbt() != null;
