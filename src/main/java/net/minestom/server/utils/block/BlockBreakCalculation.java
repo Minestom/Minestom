@@ -61,7 +61,7 @@ public class BlockBreakCalculation {
         if (isBestTool) {
             speedMultiplier = getMiningSpeed(tool, block);
 
-            // Also, the wiki's canBreak seems to be this >1
+            // wiki seems to be incorrect here, taken from minecraft's code
             if (speedMultiplier > 1F) {
                 // Wiki tells us about calculations for efficiency, but enchantments don't apply these calculations in minestom.
                 // If someone wants faster tools, they have to use player attributes or the TOOL component
@@ -91,7 +91,6 @@ public class BlockBreakCalculation {
         }
 
         double damage = speedMultiplier / blockHardness;
-
 
         if (isBestTool) {
             damage /= 30;
