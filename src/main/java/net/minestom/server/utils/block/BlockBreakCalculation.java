@@ -150,7 +150,7 @@ public class BlockBreakCalculation {
             // Set the level to 0 for full source block calculation
             level = 0;
         }
-        return level / 9F;
+        return (8 - level) / 9F;
     }
 
     private static float getMiningFatigueMultiplier(@NotNull Player player) {
