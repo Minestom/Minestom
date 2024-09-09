@@ -2,6 +2,7 @@ package net.minestom.server.world.biome;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Locale;
 
 record BiomeImpl(
+        NamespaceID namespace,
         float temperature,
         float downfall,
         @NotNull BiomeEffects effects,
@@ -38,7 +40,7 @@ record BiomeImpl(
     );
 
     BiomeImpl(Registry.BiomeEntry entry) {
-        this(entry.temperature(), entry.downfall(), getBuilder(entry).build(),
+        this(entry.namespace(), entry.temperature(), entry.downfall(), getBuilder(entry).build(),
                 entry.hasPrecipitation()
                         ? entry.temperature() < SNOW_TEMPERATURE
                         ? Precipitation.SNOW

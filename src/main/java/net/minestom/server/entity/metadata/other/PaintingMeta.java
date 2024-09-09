@@ -87,14 +87,15 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::paintingVariant);
 
         static @NotNull Variant create(
+                NamespaceID namespace,
                 @NotNull NamespaceID assetId,
                 int width, int height
         ) {
-            return new VariantImpl(assetId, width, height, null);
+            return new VariantImpl(namespace, assetId, width, height, null);
         }
 
-        static @NotNull Builder builder() {
-            return new Builder();
+        static @NotNull Builder builder(NamespaceID namespace) {
+            return new Builder(namespace);
         }
 
         /**
@@ -106,8 +107,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             final List<Variant> variants = Registry.loadRegistry(Registry.Resource.PAINTING_VARIANTS, Registry.PaintingVariantEntry::new).stream()
                     .<Variant>map(VariantImpl::new).toList();
-            return DynamicRegistry.create("minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, variants,
-                    variant -> variant.registry().namespace());
+            return DynamicRegistry.create("minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, variants);
         }
 
         @NotNull NamespaceID assetId();
@@ -120,11 +120,13 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         @Nullable Registry.PaintingVariantEntry registry();
 
         class Builder {
+            private final NamespaceID namespace;
             private NamespaceID assetId;
             private int width;
             private int height;
 
-            private Builder() {
+            private Builder(NamespaceID namespace) {
+                this.namespace = namespace;
             }
 
             @Contract(value = "_ -> this", pure = true)
@@ -146,12 +148,13 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
             }
 
             public @NotNull Variant build() {
-                return new VariantImpl(assetId, width, height, null);
+                return new VariantImpl(namespace, assetId, width, height, null);
             }
         }
     }
 
     record VariantImpl(
+            NamespaceID namespace,
             @NotNull NamespaceID assetId,
             int width,
             int height,
@@ -177,8 +180,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         }
 
         VariantImpl(@NotNull Registry.PaintingVariantEntry registry) {
-            this(registry.assetId(), registry.width(), registry.height(), registry);
+            this(registry.namespace(), registry.assetId(), registry.width(), registry.height(), registry);
         }
     }
-
 }

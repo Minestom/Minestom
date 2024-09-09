@@ -3,6 +3,7 @@ package net.minestom.server.world;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +19,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -31,8 +32,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
         final List<DimensionType> dimensionTypes = Registry.loadRegistry(Registry.Resource.DIMENSION_TYPES, Registry.DimensionTypeEntry::new).stream()
                 .<DimensionType>map(DimensionTypeImpl::new).toList();
-        return DynamicRegistry.create("minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, dimensionTypes,
-                dimensionType -> dimensionType.registry().namespace());
+        return DynamicRegistry.create("minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, dimensionTypes);
     }
 
     boolean ultrawarm();
@@ -78,6 +78,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     @Nullable Registry.DimensionTypeEntry registry();
 
     final class Builder {
+        private final NamespaceID namespace;
         // Defaults match the vanilla overworld
         private boolean ultrawarm = false;
         private boolean natural = true;
@@ -96,7 +97,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         private String infiniburn = "#minecraft:infiniburn_overworld";
         private String effects = "minecraft:overworld";
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -197,7 +199,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
         @Contract(pure = true)
         public @NotNull DimensionType build() {
-            return new DimensionTypeImpl(
+            return new DimensionTypeImpl(namespace,
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
                     infiniburn, effects, null

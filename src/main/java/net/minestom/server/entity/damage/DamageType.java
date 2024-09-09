@@ -4,6 +4,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,15 +17,16 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<DamageType>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::damageType);
 
     static @NotNull DamageType create(
+            NamespaceID namespace,
             float exhaustion,
             @NotNull String messageId,
             @NotNull String scaling
     ) {
-        return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+        return new DamageTypeImpl(namespace, exhaustion, messageId, scaling, null);
     }
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -36,8 +38,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
         final List<DamageType> damageTypes = Registry.loadRegistry(Registry.Resource.DAMAGE_TYPES, Registry.DamageTypeEntry::new).stream()
                 .<DamageType>map(DamageTypeImpl::new).toList();
-        return DynamicRegistry.create("minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, damageTypes,
-                damageType -> damageType.registry().namespace());
+        return DynamicRegistry.create("minecraft:damage_type", DamageTypeImpl.REGISTRY_NBT_TYPE, damageTypes);
     }
 
     float exhaustion();
@@ -49,11 +50,13 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     @Nullable Registry.DamageTypeEntry registry();
 
     final class Builder {
+        private final NamespaceID namespace;
         private float exhaustion = 0f;
         private String messageId;
         private String scaling;
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         public @NotNull Builder exhaustion(float exhaustion) {
@@ -72,8 +75,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
         }
 
         public @NotNull DamageType build() {
-            return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+            return new DamageTypeImpl(namespace, exhaustion, messageId, scaling, null);
         }
     }
-
 }

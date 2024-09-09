@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Map;
 
 record TrimMaterialImpl(
+        NamespaceID namespace,
         @NotNull String assetName,
         @NotNull Material ingredient,
         float itemModelIndex,
@@ -40,7 +42,8 @@ record TrimMaterialImpl(
             }
     );
 
-    @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+    // The builder can violate the nullability constraints
+    @SuppressWarnings("ConstantValue")
     TrimMaterialImpl {
         Check.argCondition(assetName == null || assetName.isEmpty(), "missing asset name");
         Check.argCondition(ingredient == null, "missing ingredient");
@@ -50,9 +53,8 @@ record TrimMaterialImpl(
     }
 
     TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
-        this(registry.assetName(), registry.ingredient(),
+        this(registry.namespace(), registry.assetName(), registry.ingredient(),
                 registry.itemModelIndex(), registry.overrideArmorMaterials(),
                 registry.description(), registry);
     }
-
 }

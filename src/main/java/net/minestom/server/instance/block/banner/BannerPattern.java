@@ -19,14 +19,15 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
 
     static @NotNull BannerPattern create(
+            NamespaceID namespace,
             @NotNull NamespaceID assetId,
             @NotNull String translationKey
     ) {
-        return new BannerPatternImpl(assetId, translationKey, null);
+        return new BannerPatternImpl(namespace, assetId, translationKey, null);
     }
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -38,8 +39,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
         final List<BannerPattern> bannerPatterns = Registry.loadRegistry(Registry.Resource.BANNER_PATTERNS, Registry.BannerPatternEntry::new).stream()
                 .<BannerPattern>map(BannerPatternImpl::new).toList();
-        return DynamicRegistry.create("minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, bannerPatterns,
-                bannerPattern -> bannerPattern.registry().namespace());
+        return DynamicRegistry.create("minecraft:banner_pattern", BannerPatternImpl.REGISTRY_NBT_TYPE, bannerPatterns);
     }
 
     @NotNull NamespaceID assetId();
@@ -49,10 +49,12 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
     @Nullable Registry.BannerPatternEntry registry();
 
     final class Builder {
+        private final NamespaceID namespace;
         private NamespaceID assetId;
         private String translationKey;
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -69,7 +71,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
 
         @Contract(pure = true)
         public @NotNull BannerPattern build() {
-            return new BannerPatternImpl(assetId, translationKey, null);
+            return new BannerPatternImpl(namespace, assetId, translationKey, null);
         }
     }
 }

@@ -1,8 +1,6 @@
 package net.minestom.server.registry;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
@@ -16,15 +14,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
-final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
+final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
     record KeyImpl<T>(@NotNull NamespaceID namespace) implements Key<T> {
@@ -133,7 +129,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID namespaceId, @NotNull T object, @Nullable DataPack pack) {
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull T object, @Nullable DataPack pack) {
         // This check is disabled in tests because we remake server processes over and over.
         // todo: re-enable this check
 //        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
@@ -142,10 +138,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 //                        "know what you're doing and would like this behavior, set the `minestom.registry.late-register` " +
 //                        "system property.", id);
 
+
+        final NamespaceID namespace = object.namespace();
         lock.lock();
         try {
             final Index<T> oldIndex = index;
-            int id = oldIndex.idToName.indexOf(namespaceId);
+            int id = oldIndex.idToName.indexOf(namespace);
             if (id == -1) id = oldIndex.nameToEntry.size();
 
             List<T> idToEntry = new ArrayList<>(oldIndex.idToEntry);
@@ -154,14 +152,14 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             List<DataPack> idToPack = new ArrayList<>(oldIndex.idToPack);
 
             idToEntry.add(id, object);
-            nameToEntry.put(namespaceId, object);
-            idToName.add(namespaceId);
+            nameToEntry.put(namespace, object);
+            idToName.add(namespace);
             idToPack.add(id, pack);
 
             this.index = new Index<>(idToEntry, nameToEntry, idToName, idToPack);
 
             vanillaRegistryDataPacket.invalidate();
-            return Key.of(namespaceId);
+            return Key.of(namespace);
         } finally {
             lock.unlock();
         }
@@ -232,23 +230,14 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
-        Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
-            if (!(tag instanceof CompoundBinaryTag compound)) {
-                throw new IllegalStateException("Root tag must be a compound tag");
-            }
-
-            final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
-            for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
-                final String namespace = entry.getKey();
-                final T value = registry.nbtType.read(context, entry.getValue());
-                Check.notNull(value, "Failed to read value for namespace {0}", namespace);
-                registry.register(namespace, value, DataPack.MINECRAFT_CORE);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        final Map<String, CompoundBinaryTag> map = Registry.loadSnbt(resource);
+        final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
+        for (var entry : map.entrySet()) {
+            final String namespace = entry.getKey();
+            final CompoundBinaryTag tag = entry.getValue();
+            // TODO must forward namespace
+            final T value = registry.nbtType.read(context, tag);
+            registry.register(value, DataPack.MINECRAFT_CORE);
         }
     }
 }

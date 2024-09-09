@@ -11,6 +11,7 @@ import net.minestom.server.item.Material;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 record EnchantmentImpl(
+        NamespaceID namespace,
         @NotNull Component description,
         @NotNull ObjectSet<Enchantment> exclusiveSet,
         @NotNull ObjectSet<Material> supportedItems,
@@ -57,7 +59,7 @@ record EnchantmentImpl(
         @Override
         public @NotNull Enchantment read(@NotNull Context context, @NotNull BinaryTag raw) {
             if (!(raw instanceof CompoundBinaryTag tag)) throw new IllegalArgumentException("Expected a compound tag");
-            return new EnchantmentImpl(
+            return new EnchantmentImpl(NamespaceID.from("test"),
                     BinaryTagSerializer.NBT_COMPONENT.read(context, tag.get("description")),
                     ENCHANTMENT_OBJECT_SET_NBT_TYPE.read(context, tag.get("exclusive_set")),
                     MATERIAL_OBJECT_SET_NBT_TYPE.read(context, tag.get("supported_items")),
@@ -70,7 +72,7 @@ record EnchantmentImpl(
                     SLOTS_NBT_TYPE.read(context, tag.get("slots")),
                     tag.get("effects") instanceof CompoundBinaryTag effects ? EffectComponent.MAP_NBT_TYPE.read(context, effects) : DataComponentMap.EMPTY,
                     null
-                );
+            );
         }
     };
 
@@ -83,7 +85,7 @@ record EnchantmentImpl(
     }
 
     EnchantmentImpl(@NotNull Enchantment enchantment, @NotNull Registry.EnchantmentEntry registry) {
-        this(enchantment.description(), enchantment.exclusiveSet(),
+        this(enchantment.namespace(), enchantment.description(), enchantment.exclusiveSet(),
                 enchantment.supportedItems(), enchantment.primaryItems(),
                 enchantment.weight(), enchantment.maxLevel(), enchantment.minCost(),
                 enchantment.maxCost(), enchantment.anvilCost(), enchantment.slots(),
@@ -98,5 +100,4 @@ record EnchantmentImpl(
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -7,6 +7,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,16 +21,17 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<JukeboxSong>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::jukeboxSong);
 
     static @NotNull JukeboxSong create(
+            NamespaceID namespace,
             @NotNull SoundEvent soundEvent,
             @NotNull Component description,
             float lengthInSeconds,
             int comparatorOutput
     ) {
-        return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput, null);
+        return new JukeboxSongImpl(namespace, soundEvent, description, lengthInSeconds, comparatorOutput, null);
     }
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -41,8 +43,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
         final List<JukeboxSong> jukeboxSongs = Registry.loadRegistry(Registry.Resource.JUKEBOX_SONGS, Registry.JukeboxSongEntry::new).stream()
                 .<JukeboxSong>map(JukeboxSongImpl::new).toList();
-        return DynamicRegistry.create("minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, jukeboxSongs,
-                jukeboxSong -> jukeboxSong.registry().namespace());
+        return DynamicRegistry.create("minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, jukeboxSongs);
     }
 
     @NotNull SoundEvent soundEvent();
@@ -57,12 +58,14 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     @Nullable Registry.JukeboxSongEntry registry();
 
     final class Builder {
+        private final NamespaceID namespace;
         private SoundEvent soundEvent;
         private Component description;
         private float lengthInSeconds;
         private int comparatorOutput = 0;
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         public @NotNull Builder soundEvent(@NotNull SoundEvent soundEvent) {
@@ -86,8 +89,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
         }
 
         public @NotNull JukeboxSong build() {
-            return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput, null);
+            return new JukeboxSongImpl(namespace, soundEvent, description, lengthInSeconds, comparatorOutput, null);
         }
     }
-
 }

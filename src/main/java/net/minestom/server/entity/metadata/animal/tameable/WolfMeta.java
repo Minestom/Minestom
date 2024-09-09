@@ -67,16 +67,17 @@ public class WolfMeta extends TameableAnimalMeta {
         @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
 
         static @NotNull Variant create(
+                NamespaceID namespace,
                 @NotNull NamespaceID wildTexture,
                 @NotNull NamespaceID tameTexture,
                 @NotNull NamespaceID angryTexture,
                 @NotNull String biome
         ) {
-            return new VariantImpl(wildTexture, tameTexture, angryTexture, List.of(biome), null);
+            return new VariantImpl(namespace, wildTexture, tameTexture, angryTexture, List.of(biome), null);
         }
 
-        static @NotNull Builder builder() {
-            return new Builder();
+        static @NotNull Builder builder(NamespaceID namespace) {
+            return new Builder(namespace);
         }
 
         /**
@@ -88,8 +89,7 @@ public class WolfMeta extends TameableAnimalMeta {
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             final List<Variant> variants = Registry.loadRegistry(Registry.Resource.WOLF_VARIANTS, Registry.WolfVariantEntry::new).stream()
                     .<Variant>map(WolfMeta.VariantImpl::new).toList();
-            return DynamicRegistry.create("minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, variants,
-                    variant -> variant.registry().namespace());
+            return DynamicRegistry.create("minecraft:wolf_variant", VariantImpl.REGISTRY_NBT_TYPE, variants);
         }
 
         @NotNull NamespaceID wildTexture();
@@ -104,12 +104,14 @@ public class WolfMeta extends TameableAnimalMeta {
         @Nullable Registry.WolfVariantEntry registry();
 
         final class Builder {
+            private final NamespaceID namespace;
             private NamespaceID wildTexture;
             private NamespaceID tameTexture;
             private NamespaceID angryTexture;
             private List<String> biomes;
 
-            private Builder() {
+            private Builder(NamespaceID namespace) {
+                this.namespace = namespace;
             }
 
             public @NotNull Builder wildTexture(@NotNull NamespaceID wildTexture) {
@@ -138,12 +140,13 @@ public class WolfMeta extends TameableAnimalMeta {
             }
 
             public @NotNull Variant build() {
-                return new VariantImpl(wildTexture, tameTexture, angryTexture, biomes, null);
+                return new VariantImpl(namespace, wildTexture, tameTexture, angryTexture, biomes, null);
             }
         }
     }
 
     record VariantImpl(
+            NamespaceID namespace,
             @NotNull NamespaceID wildTexture,
             @NotNull NamespaceID tameTexture,
             @NotNull NamespaceID angryTexture,
@@ -181,9 +184,8 @@ public class WolfMeta extends TameableAnimalMeta {
         }
 
         VariantImpl(@NotNull Registry.WolfVariantEntry registry) {
-            this(registry.wildTexture(), registry.tameTexture(),
+            this(registry.namespace(), registry.wildTexture(), registry.tameTexture(),
                     registry.angryTexture(), registry.biomes(), registry);
         }
     }
-
 }

@@ -14,8 +14,8 @@ import java.util.List;
 
 public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -31,8 +31,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
         // Maybe worth switching to fetching plains in the palette in the future to avoid this.
         final NamespaceID plains = NamespaceID.from("minecraft", "plains");
         biomes.sort((a, b) -> a.registry().namespace().equals(plains) ? -1 : b.registry().namespace().equals(plains) ? 1 : 0);
-        return DynamicRegistry.create("minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, biomes,
-                biome -> biome.registry().namespace());
+        return DynamicRegistry.create("minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, biomes);
     }
 
     float temperature();
@@ -79,13 +78,15 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
                 .waterFogColor(0x50533)
                 .build();
 
+        private final NamespaceID namespace;
         private float temperature = 0.25f;
         private float downfall = 0.8f;
         private BiomeEffects effects = DEFAULT_EFFECTS;
         private Precipitation precipitation = Precipitation.RAIN;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -120,7 +121,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(temperature, downfall, effects, precipitation, temperatureModifier, null);
+            return new BiomeImpl(namespace, temperature, downfall, effects, precipitation, temperatureModifier, null);
         }
     }
 }

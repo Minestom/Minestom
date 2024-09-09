@@ -21,16 +21,17 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
 
     static @NotNull TrimPattern create(
+            NamespaceID namespace,
             @NotNull NamespaceID assetId,
             @NotNull Material template,
             @NotNull Component description,
             boolean decal
     ) {
-        return new TrimPatternImpl(assetId, template, description, decal, null);
+        return new TrimPatternImpl(namespace, assetId, template, description, decal, null);
     }
 
-    static @NotNull Builder builder() {
-        return new Builder();
+    static @NotNull Builder builder(NamespaceID namespace) {
+        return new Builder(namespace);
     }
 
     /**
@@ -42,8 +43,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
         final List<TrimPattern> trimPatterns = Registry.loadRegistry(Registry.Resource.TRIM_PATTERNS, Registry.TrimPatternEntry::new).stream()
                 .<TrimPattern>map(TrimPatternImpl::new).toList();
-        return DynamicRegistry.create("minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, trimPatterns,
-                trimPattern -> trimPattern.registry().namespace());
+        return DynamicRegistry.create("minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, trimPatterns);
     }
 
     @NotNull NamespaceID assetId();
@@ -58,12 +58,14 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @Nullable Registry.TrimPatternEntry registry();
 
     final class Builder {
+        private final NamespaceID namespace;
         private NamespaceID assetId;
         private Material template;
         private Component description;
         private boolean decal;
 
-        private Builder() {
+        private Builder(NamespaceID namespace) {
+            this.namespace = namespace;
         }
 
         @Contract(value = "_ -> this", pure = true)
@@ -97,7 +99,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(pure = true)
         public @NotNull TrimPattern build() {
-            return new TrimPatternImpl(assetId, template, description, decal, null);
+            return new TrimPatternImpl(namespace, assetId, template, description, decal, null);
         }
     }
 }

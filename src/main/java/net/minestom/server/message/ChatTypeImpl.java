@@ -2,12 +2,14 @@ package net.minestom.server.message;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record ChatTypeImpl(
+        NamespaceID namespace,
         @NotNull ChatTypeDecoration chat,
         @NotNull ChatTypeDecoration narration,
         @Nullable Registry.ChatTypeEntry registry
@@ -29,7 +31,6 @@ record ChatTypeImpl(
     }
 
     ChatTypeImpl(@NotNull Registry.ChatTypeEntry registry) {
-        this(registry.chat(), registry.narration(), registry);
+        this(registry.namespace(), registry.chat(), registry.narration(), registry);
     }
-
 }

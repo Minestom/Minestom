@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -35,6 +36,7 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
@@ -957,5 +959,26 @@ public final class Registry {
             case BOOLEAN -> reader.nextBoolean();
             default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
         };
+    }
+
+    @ApiStatus.Internal
+    public static Map<String, CompoundBinaryTag> loadSnbt(@NotNull Registry.Resource resource) {
+        Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
+        Map<String, CompoundBinaryTag> map = new HashMap<>();
+        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
+            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
+            if (!(tag instanceof CompoundBinaryTag compound)) {
+                throw new IllegalStateException("Root tag must be a compound tag");
+            }
+            for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
+                final String namespace = entry.getKey();
+                final CompoundBinaryTag value = (CompoundBinaryTag) entry.getValue();
+                map.put(namespace, value);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return map;
     }
 }
