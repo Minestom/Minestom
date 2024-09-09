@@ -7,7 +7,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Responsible for parsing client & server packets.
+ * Responsible for parsing client and server packets.
  * <p>
  * You can retrieve the different packets per state (status/login/play)
  * from the {@link PacketRegistry} classes.
