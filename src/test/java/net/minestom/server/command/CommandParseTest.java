@@ -89,6 +89,7 @@ class CommandParseTest {
         assertValid(foo, "foo T", b);
         expectedFirstArg.set("A");
         assertValid(foo, "foo", b);
+        expectedFirstArg.set(null);
     }
 
     @Test

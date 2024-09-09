@@ -74,6 +74,7 @@ class AnvilLoaderIntegrationTest {
         });
         instance.saveChunksToStorage().join();
         assertNull(exception.get());
+        exception.set(null);
     }
 
     @Test

@@ -32,6 +32,7 @@ class GeneratorForkConsumerIntegrationTest {
         });
         instance.loadChunk(0, 0).join();
         assertNull(failed.get(), "Failed: " + failed.get());
+        failed.set(null);
     }
 
     @Test

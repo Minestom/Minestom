@@ -174,6 +174,9 @@ class CommandSyntaxSingleTest {
         if (expectedValues != null) {
             assertEquals(expectedValues, values.get());
         }
+
+        result.set(null);
+        values.set(null);
     }
 
     private static void assertSyntax(List<Argument<?>> args, String input, ExpectedExecution expectedExecution) {
