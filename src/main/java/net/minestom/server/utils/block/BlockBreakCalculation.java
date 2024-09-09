@@ -127,8 +127,8 @@ public class BlockBreakCalculation {
     }
 
     private static float getFluidHeight(Instance instance, int x, int y, int z, Block block) {
-        Block b = instance.getBlock(x, y + 1, z);
-        if (b.id() == block.id()) {
+        Block blockAbove = instance.getBlock(x, y + 1, z);
+        if (blockAbove.id() == block.id()) {
             // Full block if block above is same type
             return 1F;
         }
