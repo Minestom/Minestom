@@ -8,11 +8,10 @@ import net.minestom.server.instance.palette.Palette;
 import java.util.function.Consumer;
 
 import static net.minestom.server.instance.painter.PainterImpl.AreaImpl;
-import static net.minestom.server.instance.painter.PainterImpl.paint;
 
 public interface Painter {
     static Painter paint(Consumer<ReadableWorld> consumer) {
-        return paint(consumer);
+        return PainterImpl.paint(consumer);
     }
 
     Palette sectionAt(int sectionX, int sectionY, int sectionZ);
@@ -79,7 +78,12 @@ public interface Painter {
 
         Area height(HeightProvider heightProvider);
 
-        Area rate(double rate);
+        Area rate(PosPredicate predicate);
+    }
+
+    @FunctionalInterface
+    interface PosPredicate {
+        boolean test(int x, int y, int z);
     }
 
     @FunctionalInterface

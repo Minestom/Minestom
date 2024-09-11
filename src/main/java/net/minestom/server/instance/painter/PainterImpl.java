@@ -150,13 +150,12 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 final AreaImpl area = (AreaImpl) areaOperation.area();
                 final PreparedOperation operation = areaOperation.operation();
                 final HeightProvider heightProvider = area.heightProvider();
-                final double rate = area.rate();
+                final PosPredicate ratePredicate = area.ratePredicate();
                 switch (area.type()) {
                     case COLUMN -> {
                         for (int x = minSectionX; x < maxSectionX; x++) {
                             for (int z = minSectionZ; z < maxSectionZ; z++) {
-                                // TODO better random (to always get the same result)
-                                if (rate != 1 && Math.random() > rate) continue;
+                                if (ratePredicate != null && !ratePredicate.test(x, 0, z)) continue;
                                 final Bounds areaBounds;
                                 final Vec columnOffset;
                                 if (heightProvider != null) {
@@ -215,21 +214,21 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         };
     }
 
-    record AreaImpl(Type type, HeightProvider heightProvider, double rate) implements Area {
+    record AreaImpl(Type type,
+                    HeightProvider heightProvider,
+                    PosPredicate ratePredicate) implements Area {
         public AreaImpl(Type type) {
-            this(type, null, 1);
+            this(type, null, null);
         }
 
         @Override
         public Area height(HeightProvider heightProvider) {
-            return new AreaImpl(type, heightProvider, rate);
+            return new AreaImpl(type, heightProvider, ratePredicate);
         }
 
         @Override
-        public Area rate(double rate) {
-            if (rate <= 0) throw new IllegalArgumentException("Rate must be greater than 0");
-            if (rate > 1) throw new IllegalArgumentException("Rate must be less than or equal to 1");
-            return new AreaImpl(type, heightProvider, rate);
+        public Area rate(PosPredicate predicate) {
+            return new AreaImpl(type, heightProvider, predicate);
         }
 
         enum Type {

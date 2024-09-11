@@ -32,6 +32,7 @@ import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.instance.painter.Painter;
 import net.minestom.server.instance.painter.PerlinNoise;
+import net.minestom.server.instance.painter.WhiteNoise;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
@@ -221,14 +222,29 @@ public class PlayerInit {
         Painter painter = Painter.paint(world -> {
             var heightmap = Painter.Area.column()
                     .height(PerlinNoise.heightmap(16, 64, 99999));
-            var stone = Painter.Area.column().rate(0.05);
+            var tree = heightmap.rate(WhiteNoise.noise(0.01, 42));
 
             world.every(heightmap, (relWorld) -> {
                 relWorld.fill(Block.DIRT);
                 relWorld.setBlock(0, 0, 0, Block.GRASS_BLOCK);
             });
 
-            world.every(stone, relWorld -> relWorld.fill(Block.STONE));
+            world.every(tree, relWorld -> {
+                // log
+                for (int i = 0; i < 10; i++) {
+                    relWorld.setBlock(new Vec(0, i, 0), Block.OAK_LOG);
+                }
+                // leaves
+                for (int x = -2; x <= 2; x++) {
+                    for (int y = 5; y <= 10; y++) {
+                        for (int z = -2; z <= 2; z++) {
+                            if (Math.abs(x) + Math.abs(y - 7) + Math.abs(z) <= 4) {
+                                relWorld.setBlock(new Vec(x, y, z), Block.OAK_LEAVES);
+                            }
+                        }
+                    }
+                }
+            });
         });
         instanceContainer.setGenerator(painter.asGenerator());
         instanceContainer.setChunkSupplier(LightingChunk::new);
