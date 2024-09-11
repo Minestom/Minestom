@@ -35,17 +35,16 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
     }
 
     sealed interface Instruction {
-
         record SetBlock(int x, int y, int z, Block block) implements Instruction {
         }
 
-        record Operation2d(PosPredicate predicate, PreparedOperation operation) implements Instruction {
-        }
-
-        record Heightmap(HeightProvider heightProvider, PreparedOperation operation) implements Instruction {
-        }
-
         record Cuboid(Vec min, Vec max, Block block) implements Instruction {
+        }
+
+        record Fill(Block block) implements Instruction {
+        }
+
+        record AreaOperation(Area area, PreparedOperation operation) implements Instruction {
         }
     }
 
@@ -70,17 +69,15 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         }
 
         @Override
-        public void operation2d(PosPredicate noise, Operation operation) {
-            PreparedOperation prepared = PreparedOperation.compile(operation);
-            if (prepared == null) return;
-            append(new Instruction.Operation2d(noise, prepared));
+        public void fill(Block block) {
+            throw new UnsupportedOperationException("Not implemented");
         }
 
         @Override
-        public void heightmap(HeightProvider heightProvider, Operation operation) {
+        public void every(Area area, Operation operation) {
             PreparedOperation prepared = PreparedOperation.compile(operation);
             if (prepared == null) return;
-            append(new Instruction.Heightmap(heightProvider, prepared));
+            append(new Instruction.AreaOperation(area, prepared));
         }
 
         void append(Instruction instruction) {
@@ -88,7 +85,8 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         }
     }
 
-    static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette, Point offset, Instruction instruction) {
+    static void applyInstruction(int sectionX, int sectionY, int sectionZ, Palette palette,
+                                 Point offset, Bounds bounds, Instruction instruction) {
         if (!sectionRelevant(instruction, sectionX, sectionY, sectionZ, offset)) return;
 
         final int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
@@ -129,61 +127,53 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                     }
                 }
             }
-            case Instruction.Operation2d noise2D -> {
-                Bounds bounds = noise2D.operation().bounds();
-
-                int maxX = bounds.max().blockX() + Chunk.CHUNK_SECTION_SIZE;
-                int minX = bounds.min().blockX() - Chunk.CHUNK_SECTION_SIZE;
-
-                int maxZ = bounds.max().blockZ() + Chunk.CHUNK_SECTION_SIZE;
-                int minZ = bounds.min().blockZ() - Chunk.CHUNK_SECTION_SIZE;
-
-                // directions to start/end the loop
-                int negX = -Math.max(maxX, 0);
-                int negZ = -Math.max(maxZ, 0);
-                int posX = Math.max(0, -minX);
-                int posZ = Math.max(0, -minZ);
-
-                for (int x = negX; x < posX; x++) {
-                    for (int z = negZ; z < posZ; z++) {
-                        int absX = x + Chunk.CHUNK_SECTION_SIZE * sectionX + offset.blockX();
-                        int absZ = z + Chunk.CHUNK_SECTION_SIZE * sectionZ + offset.blockZ();
-
-                        if (!noise2D.predicate().test(absX, 0, absZ)) continue;
-
-                        Vec spreadOffset = new Vec(absX, offset.y(), absZ);
-                        for (Instruction opInstruction : noise2D.operation().instructions()) {
-                            applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
+            case Instruction.Fill fill -> {
+                assert bounds != null;
+                final Point min = bounds.min();
+                final Point max = bounds.max();
+                final Block block = fill.block();
+                for (int x = min.blockX(); x <= max.blockX(); x++) {
+                    for (int y = min.blockY(); y <= max.blockY(); y++) {
+                        for (int z = min.blockZ(); z <= max.blockZ(); z++) {
+                            if (x < minSectionX || x >= maxSectionX ||
+                                    y < minSectionY || y >= maxSectionY ||
+                                    z < minSectionZ || z >= maxSectionZ) continue;
+                            final int localX = toSectionRelativeCoordinate(x);
+                            final int localY = toSectionRelativeCoordinate(y);
+                            final int localZ = toSectionRelativeCoordinate(z);
+                            palette.set(localX, localY, localZ, block.stateId());
                         }
                     }
                 }
             }
-            case Instruction.Heightmap heightmap -> {
-                Bounds bounds = heightmap.operation().bounds();
-
-                int maxX = bounds.max().blockX() + Chunk.CHUNK_SECTION_SIZE;
-                int minX = bounds.min().blockX() - Chunk.CHUNK_SECTION_SIZE;
-
-                int maxZ = bounds.max().blockZ() + Chunk.CHUNK_SECTION_SIZE;
-                int minZ = bounds.min().blockZ() - Chunk.CHUNK_SECTION_SIZE;
-
-                // directions to start/end the loop
-                int negX = -Math.max(maxX, 0);
-                int negZ = -Math.max(maxZ, 0);
-                int posX = Math.max(0, -minX);
-                int posZ = Math.max(0, -minZ);
-
-                for (int x = negX; x < posX; x++) {
-                    for (int z = negZ; z < posZ; z++) {
-                        int absX = x + Chunk.CHUNK_SECTION_SIZE * sectionX + offset.blockX();
-                        int absZ = z + Chunk.CHUNK_SECTION_SIZE * sectionZ + offset.blockZ();
-
-                        Integer height = heightmap.heightProvider().test(absX, absZ);
-                        if (height == null) continue;
-
-                        Vec spreadOffset = new Vec(absX, height + offset.y(), absZ);
-                        for (Instruction opInstruction : heightmap.operation().instructions()) {
-                            applyInstruction(sectionX, sectionY, sectionZ, palette, spreadOffset, opInstruction);
+            case Instruction.AreaOperation areaOperation -> {
+                final AreaImpl area = (AreaImpl) areaOperation.area();
+                final PreparedOperation operation = areaOperation.operation();
+                final HeightProvider heightProvider = area.heightProvider();
+                final double rate = area.rate();
+                switch (area.type()) {
+                    case COLUMN -> {
+                        for (int x = minSectionX; x < maxSectionX; x++) {
+                            for (int z = minSectionZ; z < maxSectionZ; z++) {
+                                // TODO better random (to always get the same result)
+                                if (rate != 1 && Math.random() > rate) continue;
+                                final Bounds areaBounds;
+                                final Vec columnOffset;
+                                if (heightProvider != null) {
+                                    final int height = area.heightProvider().test(x, z);
+                                    final int minY = Math.min(minSectionY, height);
+                                    final int maxY = Math.min(maxSectionY, height);
+                                    areaBounds = new Bounds(new Vec(x, minY, z), new Vec(x, maxY, z));
+                                    columnOffset = new Vec(x, height, z);
+                                } else {
+                                    areaBounds = new Bounds(new Vec(x, minSectionY, z), new Vec(x, maxSectionY, z));
+                                    columnOffset = new Vec(x, 0, z);
+                                }
+                                for (Instruction opInstruction : operation.instructions()) {
+                                    applyInstruction(sectionX, sectionY, sectionZ, palette,
+                                            columnOffset, areaBounds, opInstruction);
+                                }
+                            }
                         }
                     }
                 }
@@ -194,7 +184,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
     static Palette sectionAt(List<Instruction> instructions, int sectionX, int sectionY, int sectionZ) {
         Palette palette = Palette.blocks();
         for (Instruction instruction : instructions) {
-            applyInstruction(sectionX, sectionY, sectionZ, palette, Vec.ZERO, instruction);
+            applyInstruction(sectionX, sectionY, sectionZ, palette, Vec.ZERO, null, instruction);
         }
         return palette;
     }
@@ -220,8 +210,30 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                         sectionY >= minY && sectionY <= maxY &&
                         sectionZ >= minZ && sectionZ <= maxZ;
             }
-            case Instruction.Operation2d ignored -> true;
-            case Instruction.Heightmap ignored -> true;
+            case Instruction.Fill ignored -> true;
+            case Instruction.AreaOperation ignored -> true;
         };
+    }
+
+    record AreaImpl(Type type, HeightProvider heightProvider, double rate) implements Area {
+        public AreaImpl(Type type) {
+            this(type, null, 1);
+        }
+
+        @Override
+        public Area height(HeightProvider heightProvider) {
+            return new AreaImpl(type, heightProvider, rate);
+        }
+
+        @Override
+        public Area rate(double rate) {
+            if (rate <= 0) throw new IllegalArgumentException("Rate must be greater than 0");
+            if (rate > 1) throw new IllegalArgumentException("Rate must be less than or equal to 1");
+            return new AreaImpl(type, heightProvider, rate);
+        }
+
+        enum Type {
+            COLUMN,
+        }
     }
 }

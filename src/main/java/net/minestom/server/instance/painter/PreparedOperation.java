@@ -21,7 +21,6 @@ record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
     }
 
     static final class StagingRelWorld implements Painter.World {
-
         private final List<Instruction> relInstructions = new ArrayList<>();
 
         private Vec min = new Vec(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
@@ -53,13 +52,13 @@ record PreparedOperation(Bounds bounds, List<Instruction> instructions) {
         }
 
         @Override
-        public void operation2d(Painter.PosPredicate noise, Painter.Operation operation) {
-            throw new UnsupportedOperationException("Noise operations are not supported in prepared operations");
+        public void fill(Block block) {
+            relInstructions.add(new Instruction.Fill(block));
         }
 
         @Override
-        public void heightmap(Painter.HeightProvider heightProvider, Painter.Operation operation) {
-            throw new UnsupportedOperationException("Heightmap operations are not supported in prepared operations");
+        public void every(Painter.Area area, Painter.Operation operation) {
+            throw new UnsupportedOperationException("Not implemented");
         }
     }
 }

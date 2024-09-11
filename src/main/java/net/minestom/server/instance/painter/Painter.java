@@ -4,13 +4,15 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
+import static net.minestom.server.instance.painter.PainterImpl.AreaImpl;
+import static net.minestom.server.instance.painter.PainterImpl.paint;
+
 public interface Painter {
     static Painter paint(Consumer<ReadableWorld> consumer) {
-        return PainterImpl.paint(consumer);
+        return paint(consumer);
     }
 
     Palette sectionAt(int sectionX, int sectionY, int sectionZ);
@@ -62,34 +64,27 @@ public interface Painter {
 
         void cuboid(Point min, Point max, Block block);
 
-        /**
-         * Runs the given operation on any point where the noise predicate returns true.
-         *
-         * @param noise     the noise predicate to determine where to run the operation. Note that the y value will always be 0.
-         * @param operation the operation to run at each point.
-         */
-        void operation2d(PosPredicate noise, Operation operation);
+        void fill(Block block);
 
-        /**
-         * Runs the given operation on any point where the height provider returns a point.
-         *
-         * @param heightProvider the height provider to determine where to run the operation.
-         * @param operation      the operation to run at each point.
-         */
-        void heightmap(HeightProvider heightProvider, Operation operation);
+        void every(Area area, Operation operation);
     }
 
     interface ReadableWorld extends World, Block.Getter {
     }
 
-    @FunctionalInterface
-    interface PosPredicate {
-        boolean test(int x, int y, int z);
+    interface Area {
+        static Area column() {
+            return new AreaImpl(AreaImpl.Type.COLUMN);
+        }
+
+        Area height(HeightProvider heightProvider);
+
+        Area rate(double rate);
     }
 
     @FunctionalInterface
     interface HeightProvider {
-        @Nullable Integer test(int x, int z);
+        int test(int x, int z);
     }
 
     /**
