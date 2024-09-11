@@ -148,35 +148,83 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             }
             case Instruction.AreaOperation areaOperation -> {
                 final AreaImpl area = (AreaImpl) areaOperation.area();
-                final PreparedOperation operation = areaOperation.operation();
-                final HeightProvider heightProvider = area.heightProvider();
-                final PosPredicate ratePredicate = area.ratePredicate();
                 switch (area.type()) {
-                    case COLUMN -> {
+                    case BLOCK -> {
                         for (int x = minSectionX; x < maxSectionX; x++) {
-                            for (int z = minSectionZ; z < maxSectionZ; z++) {
-                                if (ratePredicate != null && !ratePredicate.test(x, 0, z)) continue;
-                                final Bounds areaBounds;
-                                final Vec columnOffset;
-                                if (heightProvider != null) {
-                                    final int height = area.heightProvider().test(x, z);
-                                    final int minY = Math.min(minSectionY, height);
-                                    final int maxY = Math.min(maxSectionY, height);
-                                    areaBounds = new Bounds(new Vec(x, minY, z), new Vec(x, maxY, z));
-                                    columnOffset = new Vec(x, height, z);
-                                } else {
-                                    areaBounds = new Bounds(new Vec(x, minSectionY, z), new Vec(x, maxSectionY, z));
-                                    columnOffset = new Vec(x, 0, z);
-                                }
-                                for (Instruction opInstruction : operation.instructions()) {
-                                    applyInstruction(sectionX, sectionY, sectionZ, palette,
-                                            columnOffset, areaBounds, opInstruction);
+                            for (int y = minSectionY; y < maxSectionY; y++) {
+                                for (int z = minSectionZ; z < maxSectionZ; z++) {
+                                    applyArea(areaOperation,
+                                            sectionX, sectionY, sectionZ,
+                                            new Vec(x, y, z),
+                                            new Vec(x, y, z),
+                                            palette);
                                 }
                             }
                         }
                     }
+                    case SECTION -> applyArea(areaOperation,
+                            sectionX, sectionY, sectionZ,
+                            new Vec(minSectionX, minSectionY, minSectionZ),
+                            new Vec(maxSectionX, maxSectionY, maxSectionZ),
+                            palette);
+                    case COLUMN -> {
+                        for (int x = minSectionX; x < maxSectionX; x++) {
+                            for (int z = minSectionZ; z < maxSectionZ; z++) {
+                                applyArea(areaOperation,
+                                        sectionX, sectionY, sectionZ,
+                                        new Vec(x, minSectionY, z),
+                                        new Vec(x, maxSectionY, z),
+                                        palette);
+                            }
+                        }
+                    }
+                    case CHUNK -> applyArea(areaOperation,
+                            sectionX, sectionY, sectionZ,
+                            new Vec(minSectionX, minSectionY, minSectionZ),
+                            new Vec(maxSectionX, maxSectionY, maxSectionZ),
+                            palette);
+                    case REGION -> {
+                    }
+                    case RANGE -> {
+                        final Point range = (Point) area.object();
+                    }
                 }
             }
+        }
+    }
+
+    static void applyArea(Instruction.AreaOperation areaOperation,
+                          int sectionX, int sectionY, int sectionZ,
+                          Vec start, Vec end, Palette palette) {
+        final AreaImpl area = (AreaImpl) areaOperation.area();
+        final PreparedOperation operation = areaOperation.operation();
+        final HeightProvider heightProvider = area.heightProvider();
+        final PosPredicate ratePredicate = area.ratePredicate();
+
+        final int startX = start.blockX();
+        final int startY = start.blockY();
+        final int startZ = start.blockZ();
+
+        final int endX = end.blockX();
+        final int endY = end.blockY();
+        final int endZ = end.blockZ();
+
+        if (ratePredicate != null && !ratePredicate.test(startX, startY, startZ)) return;
+        for (Instruction opInstruction : operation.instructions()) {
+            final Bounds areaBounds;
+            final Vec sectionOffset;
+            if (heightProvider != null) {
+                final int height = area.heightProvider().test(startX, startZ);
+                final int minY = Math.min(startY, height);
+                final int maxY = Math.min(endY, height);
+                areaBounds = new Bounds(start.withY(minY), end.withY(maxY));
+                sectionOffset = start.withY(maxY);
+            } else {
+                areaBounds = new Bounds(start, end);
+                sectionOffset = start.withY(0);
+            }
+            applyInstruction(sectionX, sectionY, sectionZ, palette,
+                    sectionOffset, areaBounds, opInstruction);
         }
     }
 
@@ -196,43 +244,56 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             case Instruction.Cuboid cuboid -> {
                 final Vec min = cuboid.min();
                 final Vec max = cuboid.max();
-
-                final int minX = getChunkCoordinate(min.blockX() + offset.blockX());
-                final int minY = getChunkCoordinate(min.blockY() + offset.blockY());
-                final int minZ = getChunkCoordinate(min.blockZ() + offset.blockZ());
-
-                final int maxX = getChunkCoordinate(max.blockX() + offset.blockX());
-                final int maxY = getChunkCoordinate(max.blockY() + offset.blockY());
-                final int maxZ = getChunkCoordinate(max.blockZ() + offset.blockZ());
-
-                yield sectionX >= minX && sectionX <= maxX &&
-                        sectionY >= minY && sectionY <= maxY &&
-                        sectionZ >= minZ && sectionZ <= maxZ;
+                yield sectionInBound(min, max, sectionX, sectionY, sectionZ);
             }
             case Instruction.Fill ignored -> true;
+            // TODO: ensure the section contains the area
             case Instruction.AreaOperation ignored -> true;
         };
     }
 
-    record AreaImpl(Type type,
+    static boolean sectionInBound(Vec min, Vec max, int sectionX, int sectionY, int sectionZ) {
+        final int minX = getChunkCoordinate(min.blockX());
+        final int minY = getChunkCoordinate(min.blockY());
+        final int minZ = getChunkCoordinate(min.blockZ());
+
+        final int maxX = getChunkCoordinate(max.blockX());
+        final int maxY = getChunkCoordinate(max.blockY());
+        final int maxZ = getChunkCoordinate(max.blockZ());
+
+        return sectionX >= minX && sectionX <= maxX &&
+                sectionY >= minY && sectionY <= maxY &&
+                sectionZ >= minZ && sectionZ <= maxZ;
+    }
+
+    record AreaImpl(Type type, Object object,
                     HeightProvider heightProvider,
                     PosPredicate ratePredicate) implements Area {
+        public AreaImpl(Type type, Object object) {
+            this(type, object, null, null);
+        }
+
         public AreaImpl(Type type) {
-            this(type, null, null);
+            this(type, null, null, null);
         }
 
         @Override
         public Area height(HeightProvider heightProvider) {
-            return new AreaImpl(type, heightProvider, ratePredicate);
+            return new AreaImpl(type, object, heightProvider, ratePredicate);
         }
 
         @Override
         public Area rate(PosPredicate predicate) {
-            return new AreaImpl(type, heightProvider, predicate);
+            return new AreaImpl(type, object, heightProvider, predicate);
         }
 
         enum Type {
+            BLOCK,
+            SECTION,
             COLUMN,
+            CHUNK,
+            REGION,
+            RANGE,
         }
     }
 }

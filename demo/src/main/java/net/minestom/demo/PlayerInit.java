@@ -220,9 +220,9 @@ public class PlayerInit {
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
 
         Painter painter = Painter.paint(world -> {
-            var heightmap = Painter.Area.column()
-                    .height(PerlinNoise.heightmap(16, 64, 99999));
+            var heightmap = Painter.Area.column().height(PerlinNoise.heightmap(16, 64, 99999));
             var tree = heightmap.rate(WhiteNoise.noise(0.01, 42));
+            var sectionFill = Painter.Area.section().rate(WhiteNoise.noise(0.01, 42));
 
             world.every(heightmap, (relWorld) -> {
                 relWorld.fill(Block.DIRT);
@@ -232,19 +232,21 @@ public class PlayerInit {
             world.every(tree, relWorld -> {
                 // log
                 for (int i = 0; i < 10; i++) {
-                    relWorld.setBlock(new Vec(0, i, 0), Block.OAK_LOG);
+                    relWorld.setBlock(0, i + 1, 0, Block.OAK_LOG);
                 }
                 // leaves
                 for (int x = -2; x <= 2; x++) {
                     for (int y = 5; y <= 10; y++) {
                         for (int z = -2; z <= 2; z++) {
                             if (Math.abs(x) + Math.abs(y - 7) + Math.abs(z) <= 4) {
-                                relWorld.setBlock(new Vec(x, y, z), Block.OAK_LEAVES);
+                                relWorld.setBlock(x, y + 1, z, Block.OAK_LEAVES);
                             }
                         }
                     }
                 }
             });
+
+            world.every(sectionFill, relWorld -> relWorld.fill(Block.DIAMOND_BLOCK));
         });
         instanceContainer.setGenerator(painter.asGenerator());
         instanceContainer.setChunkSupplier(LightingChunk::new);

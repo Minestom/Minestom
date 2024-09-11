@@ -72,8 +72,28 @@ public interface Painter {
     }
 
     interface Area {
+        static Area block() {
+            return new AreaImpl(AreaImpl.Type.BLOCK);
+        }
+
+        static Area section() {
+            return new AreaImpl(AreaImpl.Type.SECTION);
+        }
+
         static Area column() {
             return new AreaImpl(AreaImpl.Type.COLUMN);
+        }
+
+        static Area chunk() {
+            return new AreaImpl(AreaImpl.Type.CHUNK);
+        }
+
+        static Area region() {
+            return new AreaImpl(AreaImpl.Type.REGION);
+        }
+
+        static Area range(Point range) {
+            return new AreaImpl(AreaImpl.Type.RANGE, range);
         }
 
         Area height(HeightProvider heightProvider);
