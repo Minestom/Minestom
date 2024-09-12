@@ -1,6 +1,7 @@
 package net.minestom.server.instance.painter;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.palette.Palette;
@@ -94,6 +95,10 @@ public interface Painter {
 
         static Area range(Point range) {
             return new AreaImpl(AreaImpl.Type.RANGE, range);
+        }
+
+        static Area range(int x, int y, int z) {
+            return new AreaImpl(AreaImpl.Type.RANGE, new Vec(x, y, z));
         }
 
         Area height(HeightProvider heightProvider);
