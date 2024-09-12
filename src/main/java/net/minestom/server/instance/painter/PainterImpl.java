@@ -157,6 +157,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                                             sectionX, sectionY, sectionZ,
                                             new Vec(x, y, z),
                                             new Vec(x, y, z),
+                                            new Vec(x, y, z),
                                             palette);
                                 }
                             }
@@ -166,6 +167,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                             sectionX, sectionY, sectionZ,
                             new Vec(minSectionX, minSectionY, minSectionZ),
                             new Vec(maxSectionX, maxSectionY, maxSectionZ),
+                            new Vec(minSectionX, minSectionY, minSectionZ),
                             palette);
                     case COLUMN -> {
                         for (int x = minSectionX; x < maxSectionX; x++) {
@@ -174,6 +176,7 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                                         sectionX, sectionY, sectionZ,
                                         new Vec(x, minSectionY, z),
                                         new Vec(x, maxSectionY, z),
+                                        new Vec(x, 0, z),
                                         palette);
                             }
                         }
@@ -182,8 +185,17 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                             sectionX, sectionY, sectionZ,
                             new Vec(minSectionX, minSectionY, minSectionZ),
                             new Vec(maxSectionX, maxSectionY, maxSectionZ),
+                            new Vec(minSectionX, 0, minSectionZ),
                             palette);
                     case REGION -> {
+                        final int regionX = sectionX / 32;
+                        final int regionZ = sectionZ / 32;
+                        applyArea(areaOperation,
+                                sectionX, sectionY, sectionZ,
+                                new Vec(minSectionX, minSectionY, minSectionZ),
+                                new Vec(maxSectionX, maxSectionY, maxSectionZ),
+                                new Vec(regionX * 512, 0, regionZ * 512),
+                                palette);
                     }
                     case RANGE -> {
                         final Point range = (Point) area.object();
@@ -195,21 +207,27 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
 
     static void applyArea(Instruction.AreaOperation areaOperation,
                           int sectionX, int sectionY, int sectionZ,
-                          Vec start, Vec end, Palette palette) {
+                          Vec boundStart, Vec boundEnd,
+                          Vec structureStart,
+                          Palette palette) {
         final AreaImpl area = (AreaImpl) areaOperation.area();
         final PreparedOperation operation = areaOperation.operation();
         final HeightProvider heightProvider = area.heightProvider();
         final PosPredicate ratePredicate = area.ratePredicate();
 
-        final int startX = start.blockX();
-        final int startY = start.blockY();
-        final int startZ = start.blockZ();
+        final int startX = boundStart.blockX();
+        final int startY = boundStart.blockY();
+        final int startZ = boundStart.blockZ();
 
-        final int endX = end.blockX();
-        final int endY = end.blockY();
-        final int endZ = end.blockZ();
+        final int endX = boundEnd.blockX();
+        final int endY = boundEnd.blockY();
+        final int endZ = boundEnd.blockZ();
 
-        if (ratePredicate != null && !ratePredicate.test(startX, startY, startZ)) return;
+        final int structureX = structureStart.blockX();
+        final int structureY = structureStart.blockY();
+        final int structureZ = structureStart.blockZ();
+
+        if (ratePredicate != null && !ratePredicate.test(structureX, structureY, structureZ)) return;
         for (Instruction opInstruction : operation.instructions()) {
             final Bounds areaBounds;
             final Vec sectionOffset;
@@ -217,11 +235,11 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 final int height = area.heightProvider().test(startX, startZ);
                 final int minY = Math.min(startY, height);
                 final int maxY = Math.min(endY, height);
-                areaBounds = new Bounds(start.withY(minY), end.withY(maxY));
-                sectionOffset = start.withY(maxY);
+                areaBounds = new Bounds(boundStart.withY(minY), boundEnd.withY(maxY));
+                sectionOffset = structureStart.withY(maxY);
             } else {
-                areaBounds = new Bounds(start, end);
-                sectionOffset = start.withY(0);
+                areaBounds = new Bounds(boundStart, boundEnd);
+                sectionOffset = structureStart;
             }
             applyInstruction(sectionX, sectionY, sectionZ, palette,
                     sectionOffset, areaBounds, opInstruction);
