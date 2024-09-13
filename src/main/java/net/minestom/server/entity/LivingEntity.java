@@ -260,7 +260,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
-        triggerStatus((byte) 3); // Start death animation status
+        triggerStatus((byte) EntityStatuses.LivingEntity.PLAY_DEATH_SOUND); // Start death animation status
         setPose(EntityPose.DYING);
         setHealth(0);
 
