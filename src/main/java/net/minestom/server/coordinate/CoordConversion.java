@@ -3,9 +3,6 @@ package net.minestom.server.coordinate;
 import org.jetbrains.annotations.NotNull;
 
 public final class CoordConversion {
-    private static final int CHUNK_SIZE_X = 16;
-    private static final int CHUNK_SIZE_Z = 16;
-
     // COORDINATE CONVERSIONS
 
     public static int globalToChunk(double xz) {
@@ -87,9 +84,9 @@ public final class CoordConversion {
     }
 
     public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
-        final int x = chunkBlockIndexGetX(index) + CHUNK_SIZE_X * chunkX;
+        final int x = chunkBlockIndexGetX(index) + 16 * chunkX;
         final int y = chunkBlockIndexGetY(index);
-        final int z = chunkBlockIndexGetZ(index) + CHUNK_SIZE_Z * chunkZ;
+        final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
         return new Vec(x, y, z);
     }
 }
