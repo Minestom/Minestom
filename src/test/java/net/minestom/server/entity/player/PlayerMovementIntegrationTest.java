@@ -72,7 +72,7 @@ public class PlayerMovementIntegrationTest {
         final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkRange.forChunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkRange.chunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
@@ -128,7 +128,7 @@ public class PlayerMovementIntegrationTest {
         Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkRange.forChunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkRange.chunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         player.refreshSettings(new ClientSettings(
                 Locale.US, (byte) viewDistance,
@@ -159,7 +159,7 @@ public class PlayerMovementIntegrationTest {
         int chunkDifference = ChunkRange.chunkCountFromRange(endViewDistance) - ChunkRange.chunkCountFromRange(startingViewDistance);
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
+        ChunkRange.chunksInRange(0, 0, endViewDistance, instance::loadChunk);
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,

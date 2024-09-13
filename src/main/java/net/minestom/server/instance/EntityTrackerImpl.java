@@ -157,7 +157,7 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         } else {
             // Multiple chunks
-            ChunkRange.forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+            ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(query);
@@ -185,7 +185,7 @@ final class EntityTrackerImpl implements EntityTracker {
         } else {
             // Multiple chunks
             final int chunkRange = (int) (range / Chunk.CHUNK_SECTION_SIZE) + 1;
-            ChunkRange.forChunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
+            ChunkRange.chunksInRange(point, chunkRange, (chunkX, chunkZ) -> {
                 final var chunkEntities = (List<T>) entities.get(CoordConversion.chunkIndex(chunkX, chunkZ));
                 if (chunkEntities == null || chunkEntities.isEmpty()) return;
                 chunkEntities.forEach(entity -> {
@@ -236,7 +236,7 @@ final class EntityTrackerImpl implements EntityTracker {
     private <T extends Entity> void difference(Point oldPoint, Point newPoint,
                                                @NotNull Target<T> target, @NotNull Update<T> update) {
         final TargetEntry<Entity> entry = targetEntries[target.ordinal()];
-        ChunkRange.forDifferingChunksInRange(newPoint.chunkX(), newPoint.chunkZ(), oldPoint.chunkX(), oldPoint.chunkZ(),
+        ChunkRange.chunksInRangeDiffering(newPoint.chunkX(), newPoint.chunkZ(), oldPoint.chunkX(), oldPoint.chunkZ(),
                 ServerFlag.ENTITY_VIEW_DISTANCE, (chunkX, chunkZ) -> {
                     // Add
                     final List<Entity> entities = entry.chunkEntities.get(CoordConversion.chunkIndex(chunkX, chunkZ));

@@ -19,9 +19,9 @@ public final class ChunkRange {
         return square * square;
     }
 
-    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
-                                                 int oldChunkX, int oldChunkZ,
-                                                 int range, @NotNull ChunkConsumer callback) {
+    public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
+                                              int oldChunkX, int oldChunkZ,
+                                              int range, @NotNull ChunkConsumer callback) {
         for (int x = newChunkX - range; x <= newChunkX + range; x++) {
             for (int z = newChunkZ - range; z <= newChunkZ + range; z++) {
                 if (Math.abs(x - oldChunkX) > range || Math.abs(z - oldChunkZ) > range) {
@@ -31,21 +31,21 @@ public final class ChunkRange {
         }
     }
 
-    public static void forDifferingChunksInRange(int newChunkX, int newChunkZ,
-                                                 int oldChunkX, int oldChunkZ,
-                                                 int range,
-                                                 @NotNull ChunkConsumer newCallback, @NotNull ChunkConsumer oldCallback) {
+    public static void chunksInRangeDiffering(int newChunkX, int newChunkZ,
+                                              int oldChunkX, int oldChunkZ,
+                                              int range,
+                                              @NotNull ChunkConsumer newCallback, @NotNull ChunkConsumer oldCallback) {
         // Find the new chunks
-        forDifferingChunksInRange(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
+        chunksInRangeDiffering(newChunkX, newChunkZ, oldChunkX, oldChunkZ, range, newCallback);
         // Find the old chunks
-        forDifferingChunksInRange(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
+        chunksInRangeDiffering(oldChunkX, oldChunkZ, newChunkX, newChunkZ, range, oldCallback);
     }
 
     /**
      * New implementation comes from <a href="https://github.com/KryptonMC/Krypton/blob/a9eff5463328f34072cdaf37aae3e77b14fcac93/server/src/main/kotlin/org/kryptonmc/krypton/util/math/Maths.kt#L62">Krypton</a>
      * which comes from kotlin port by <a href="https://github.com/Esophose">Esophose</a>, which comes from <a href="https://stackoverflow.com/questions/398299/looping-in-a-spiral">a stackoverflow answer</a>.
      */
-    public static void forChunksInRange(int chunkX, int chunkZ, int range, ChunkConsumer consumer) {
+    public static void chunksInRange(int chunkX, int chunkZ, int range, ChunkConsumer consumer) {
         // Send in spiral around the center chunk
         // Note: its not really required to start at the center anymore since the chunk queue is sorted by distance,
         //       however we still should send a circle so this method is still fine, and good for any other case a
@@ -73,8 +73,8 @@ public final class ChunkRange {
         }
     }
 
-    public static void forChunksInRange(@NotNull Point point, int range, ChunkConsumer consumer) {
-        forChunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
+    public static void chunksInRange(@NotNull Point point, int range, ChunkConsumer consumer) {
+        chunksInRange(point.chunkX(), point.chunkZ(), range, consumer);
     }
 
     @FunctionalInterface

@@ -44,7 +44,7 @@ public class PathfinderIntegrationTest {
     public void testTall(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -66,7 +66,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLine(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -85,7 +85,7 @@ public class PathfinderIntegrationTest {
     public void testShort(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -105,7 +105,7 @@ public class PathfinderIntegrationTest {
     public void testBug(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -142,7 +142,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLineBlocked(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -192,7 +192,7 @@ public class PathfinderIntegrationTest {
     public void testGravitySnap(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkRange.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
