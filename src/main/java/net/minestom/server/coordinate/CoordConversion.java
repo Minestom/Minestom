@@ -82,22 +82,10 @@ public final class CoordConversion {
         return y; // 4-28 bits
     }
 
-    /**
-     * Converts a block index to a chunk position Z.
-     *
-     * @param index an index computed from {@link #chunkBlockIndex(int, int, int)}
-     * @return the chunk position Z (O-15) of the specified index
-     */
     public static int chunkBlockIndexGetZ(int index) {
         return (index >> 28) & 0xF; // 28-32 bits
     }
 
-    /**
-     * @param index  an index computed from {@link #chunkBlockIndex(int, int, int)}
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return the instance position of the block located in {@code index}
-     */
     public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
         final int x = chunkBlockIndexGetX(index) + CHUNK_SIZE_X * chunkX;
         final int y = chunkBlockIndexGetY(index);
