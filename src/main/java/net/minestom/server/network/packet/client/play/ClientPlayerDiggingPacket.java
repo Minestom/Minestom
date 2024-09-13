@@ -12,7 +12,7 @@ public record ClientPlayerDiggingPacket(@NotNull Status status, @NotNull Point b
                                         @NotNull BlockFace blockFace, int sequence) implements ClientPacket {
     public ClientPlayerDiggingPacket(@NotNull NetworkBuffer reader) {
         this(reader.readEnum(Status.class), reader.read(BLOCK_POSITION),
-                BlockFace.values()[reader.read(BYTE)], reader.read(VAR_INT));
+                BlockFace.getValues()[reader.read(BYTE)], reader.read(VAR_INT));
     }
 
     @Override

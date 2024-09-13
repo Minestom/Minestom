@@ -208,7 +208,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         }
 
         byte fullCollisionFaces = 0;
-        for (BlockFace f : BlockFace.values()) {
+        for (BlockFace f : BlockFace.getValues()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, collisionBoundingBoxes));
             fullCollisionFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
         }
@@ -219,7 +219,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
     private static LightData lightData(List<BoundingBox> occlusionBoundingBoxes, int lightEmission) {
         byte fullFaces = 0;
         byte airFaces = 0;
-        for (BlockFace f : BlockFace.values()) {
+        for (BlockFace f : BlockFace.getValues()) {
             final byte res = isFaceCovered(computeOcclusionSet(f, occlusionBoundingBoxes));
             fullFaces |= ((res == 2) ? 0b1 : 0b0) << (byte) f.ordinal();
             airFaces |= ((res == 0) ? 0b1 : 0b0) << (byte) f.ordinal();
