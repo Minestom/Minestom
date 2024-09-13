@@ -2,7 +2,6 @@ package net.minestom.server.utils.mojang;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.url.URLUtils;
 import org.jetbrains.annotations.ApiStatus;
@@ -104,7 +103,7 @@ public final class MojangUtils {
 
     @Blocking
     @ApiStatus.Internal
-    public static @Nullable JsonObject authenticateSession(String loginUsername, String serverId, @Nullable SocketAddress userSocket) {
+    public static @NotNull JsonObject authenticateSession(String loginUsername, String serverId, @Nullable SocketAddress userSocket) throws IOException {
         final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
 
         final String url;
@@ -117,12 +116,7 @@ public final class MojangUtils {
             url = String.format(BASE_AUTH_URL, username, serverId);
         }
 
-        try {
-            return retrieve(url);
-        } catch (IOException e) {
-            MinecraftServer.getExceptionManager().handleException(e);
-            return null;
-        }
+        return retrieve(url);
     }
 
     /**

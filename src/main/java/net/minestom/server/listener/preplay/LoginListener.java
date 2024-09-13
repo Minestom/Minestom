@@ -27,6 +27,7 @@ import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.NotNull;
 
 import javax.crypto.SecretKey;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -125,15 +126,10 @@ public final class LoginListener {
             // Query Mojang's session server.
             final String serverId = new BigInteger(digestedData).toString(16);
 
-            final JsonObject gameProfile = MojangUtils.authenticateSession(loginUsername, serverId, socketConnection.getRemoteAddress());
-
-            if (gameProfile == null) {
-                socketConnection.kick(ERROR_MOJANG_RESPONSE);
-                return;
-            }
-
-            // We have verified the session, parse response.
             try {
+                final JsonObject gameProfile = MojangUtils.authenticateSession(loginUsername, serverId, socketConnection.getRemoteAddress());
+
+                // We have verified the session, parse response.
                 socketConnection.setEncryptionKey(getSecretKey(packet.sharedSecret()));
                 final UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString()
                         .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
@@ -147,6 +143,9 @@ public final class LoginListener {
                     propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
                 }
                 socketConnection.UNSAFE_setProfile(new GameProfile(profileUUID, profileName, propertyList));
+            } catch (IOException e) {
+                socketConnection.kick(ERROR_MOJANG_RESPONSE);
+                MinecraftServer.getExceptionManager().handleException(e);
             } catch (Exception e) {
                 socketConnection.kick(ERROR_DURING_LOGIN);
                 MinecraftServer.getExceptionManager().handleException(e);
