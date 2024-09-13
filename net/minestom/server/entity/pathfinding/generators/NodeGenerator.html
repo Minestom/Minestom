@@ -107,7 +107,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">canMoveTowards</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">canMoveTowards</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;end,
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
@@ -115,7 +115,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Check if we can move directly from one point to another</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">getWalkable</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">getWalkable</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;&nbsp;visited,
  @NotNull <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&nbsp;current,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;goal,
@@ -124,7 +124,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the walkable nodes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)" class="member-name-link">gravitySnap</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)" class="member-name-link">gravitySnap</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  double&nbsp;pointX,
  double&nbsp;pointY,
  double&nbsp;pointZ,
@@ -143,7 +143,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Heuristic use for the distance from the node to the target</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#pointInvalid(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">pointInvalid</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#pointInvalid(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">pointInvalid</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
@@ -164,11 +164,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<section class="detail" id="getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
 <h3>getWalkable</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</span>&nbsp;<span class="element-name">getWalkable</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</span>&nbsp;<span class="element-name">getWalkable</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;&nbsp;visited,
  @NotNull
@@ -180,7 +179,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the walkable nodes.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instance</code> - the instance</dd>
+<dd><code>getter</code> - the instance</dd>
 <dd><code>visited</code> - the visited nodes</dd>
 <dd><code>current</code> - the current node</dd>
 <dd><code>goal</code> - the goal</dd>
@@ -201,11 +200,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)">
+<section class="detail" id="gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)">
 <h3>gravitySnap</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></span>&nbsp;<span class="element-name">gravitySnap</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+</span><span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></span>&nbsp;<span class="element-name">gravitySnap</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  double&nbsp;pointX,
  double&nbsp;pointY,
  double&nbsp;pointZ,
@@ -215,7 +213,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Snap point to the ground</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instance</code> - the instance</dd>
+<dd><code>getter</code> - the block getter</dd>
 <dd><code>pointX</code> - the x coordinate</dd>
 <dd><code>pointY</code> - the y coordinate</dd>
 <dd><code>pointZ</code> - the z coordinate</dd>
@@ -227,10 +225,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<section class="detail" id="canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
 <h3>canMoveTowards</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canMoveTowards</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canMoveTowards</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;start,
  @NotNull
@@ -240,7 +237,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Check if we can move directly from one point to another</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instance</code> - </dd>
+<dd><code>getter</code> - </dd>
 <dd><code>start</code> - </dd>
 <dd><code>end</code> - </dd>
 <dd><code>boundingBox</code> - </dd>
@@ -250,10 +247,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="pointInvalid(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<section class="detail" id="pointInvalid(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
 <h3>pointInvalid</h3>
-<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">pointInvalid</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">pointInvalid</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point,
  @NotNull
@@ -261,7 +257,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Check if the point is invalid</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>instance</code> - </dd>
+<dd><code>getter</code> - </dd>
 <dd><code>point</code> - </dd>
 <dd><code>boundingBox</code> - </dd>
 <dt>Returns:</dt>

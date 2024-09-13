@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PathGenerator</span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">PathGenerator</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
@@ -120,7 +120,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="PPath.html" title="class in net.minestom.server.entity.pathfinding">PPath</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#generate(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Point,double,double,double,net.minestom.server.collision.BoundingBox,boolean,net.minestom.server.entity.pathfinding.generators.NodeGenerator,java.lang.Runnable)" class="member-name-link">generate</a><wbr>(@NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#generate(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Point,double,double,double,net.minestom.server.collision.BoundingBox,boolean,net.minestom.server.entity.pathfinding.generators.NodeGenerator,java.lang.Runnable)" class="member-name-link">generate</a><wbr>(@NotNull <a href="../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;orgStart,
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;orgTarget,
  double&nbsp;closeDistance,
@@ -163,11 +163,10 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="generate(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Point,double,double,double,net.minestom.server.collision.BoundingBox,boolean,net.minestom.server.entity.pathfinding.generators.NodeGenerator,java.lang.Runnable)">
+<section class="detail" id="generate(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Point,double,double,double,net.minestom.server.collision.BoundingBox,boolean,net.minestom.server.entity.pathfinding.generators.NodeGenerator,java.lang.Runnable)">
 <h3>generate</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="PPath.html" title="class in net.minestom.server.entity.pathfinding">PPath</a></span>&nbsp;<span class="element-name">generate</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="PPath.html" title="class in net.minestom.server.entity.pathfinding">PPath</a></span>&nbsp;<span class="element-name">generate</span><wbr><span class="parameters">(@NotNull <a href="../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;orgStart,
  @NotNull

@@ -125,7 +125,7 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">canMoveTowards</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">canMoveTowards</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;startOrg,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;endOrg,
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</code></div>
@@ -133,7 +133,7 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 <div class="block">Check if we can move directly from one point to another</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">getWalkable</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)" class="member-name-link">getWalkable</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;&nbsp;visited,
  @NotNull <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&nbsp;current,
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;goal,
@@ -142,7 +142,7 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 <div class="block">Gets the walkable nodes.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)" class="member-name-link">gravitySnap</a><wbr>(@NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)" class="member-name-link">gravitySnap</a><wbr>(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  double&nbsp;pointOrgX,
  double&nbsp;pointOrgY,
  double&nbsp;pointOrgZ,
@@ -162,7 +162,7 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.entity.pathfinding.generators.NodeGenerator">Methods inherited from interface&nbsp;net.minestom.server.entity.pathfinding.generators.<a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></h3>
-<code><a href="NodeGenerator.html#heuristic(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)">heuristic</a>, <a href="NodeGenerator.html#pointInvalid(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">pointInvalid</a></code></div>
+<code><a href="NodeGenerator.html#heuristic(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)">heuristic</a>, <a href="NodeGenerator.html#pointInvalid(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">pointInvalid</a></code></div>
 </section>
 </li>
 </ul>
@@ -189,11 +189,10 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<section class="detail" id="getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
 <h3>getWalkable</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</span>&nbsp;<span class="element-name">getWalkable</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;? extends <a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;</span>&nbsp;<span class="element-name">getWalkable</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../PNode.html" title="class in net.minestom.server.entity.pathfinding">PNode</a>&gt;&nbsp;visited,
  @NotNull
@@ -202,13 +201,13 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;goal,
  @NotNull
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">NodeGenerator</a></code></span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">NodeGenerator</a></code></span></div>
 <div class="block">Gets the walkable nodes.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="NodeGenerator.html#getWalkable(net.minestom.server.instance.Instance,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">getWalkable</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
+<dd><code><a href="NodeGenerator.html#getWalkable(net.minestom.server.instance.block.Block.Getter,java.util.Set,net.minestom.server.entity.pathfinding.PNode,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">getWalkable</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>instance</code> - the instance</dd>
+<dd><code>getter</code> - the instance</dd>
 <dd><code>visited</code> - the visited nodes</dd>
 <dd><code>current</code> - the current node</dd>
 <dd><code>goal</code> - the goal</dd>
@@ -231,24 +230,23 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 </section>
 </li>
 <li>
-<section class="detail" id="gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)">
+<section class="detail" id="gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)">
 <h3>gravitySnap</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></span>&nbsp;<span class="element-name">gravitySnap</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/OptionalDouble.html" title="class or interface in java.util" class="external-link">OptionalDouble</a></span>&nbsp;<span class="element-name">gravitySnap</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  double&nbsp;pointOrgX,
  double&nbsp;pointOrgY,
  double&nbsp;pointOrgZ,
  @NotNull
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox,
  double&nbsp;maxFall)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)">NodeGenerator</a></code></span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)">NodeGenerator</a></code></span></div>
 <div class="block">Snap point to the ground</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="NodeGenerator.html#gravitySnap(net.minestom.server.instance.Instance,double,double,double,net.minestom.server.collision.BoundingBox,double)">gravitySnap</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
+<dd><code><a href="NodeGenerator.html#gravitySnap(net.minestom.server.instance.block.Block.Getter,double,double,double,net.minestom.server.collision.BoundingBox,double)">gravitySnap</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>instance</code> - the instance</dd>
+<dd><code>getter</code> - the block getter</dd>
 <dd><code>pointOrgX</code> - the x coordinate</dd>
 <dd><code>pointOrgY</code> - the y coordinate</dd>
 <dd><code>pointOrgZ</code> - the z coordinate</dd>
@@ -260,23 +258,22 @@ implements <a href="NodeGenerator.html" title="interface in net.minestom.server.
 </section>
 </li>
 <li>
-<section class="detail" id="canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
+<section class="detail" id="canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">
 <h3>canMoveTowards</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canMoveTowards</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../instance/Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">canMoveTowards</span><wbr><span class="parameters">(@NotNull <a href="../../../instance/block/Block.Getter.html" title="interface in net.minestom.server.instance.block">Block.Getter</a>&nbsp;getter,
  @NotNull
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;startOrg,
  @NotNull
  @NotNull <a href="../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;endOrg,
  @NotNull
  @NotNull <a href="../../../collision/BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a>&nbsp;boundingBox)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">NodeGenerator</a></code></span></div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="NodeGenerator.html#canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">NodeGenerator</a></code></span></div>
 <div class="block">Check if we can move directly from one point to another</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="NodeGenerator.html#canMoveTowards(net.minestom.server.instance.Instance,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">canMoveTowards</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
+<dd><code><a href="NodeGenerator.html#canMoveTowards(net.minestom.server.instance.block.Block.Getter,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.collision.BoundingBox)">canMoveTowards</a></code>&nbsp;in interface&nbsp;<code><a href="NodeGenerator.html" title="interface in net.minestom.server.entity.pathfinding.generators">NodeGenerator</a></code></dd>
 <dt>Parameters:</dt>
-<dd><code>instance</code> - </dd>
+<dd><code>getter</code> - </dd>
 <dd><code>startOrg</code> - </dd>
 <dd><code>endOrg</code> - </dd>
 <dd><code>boundingBox</code> - </dd>
