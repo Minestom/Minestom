@@ -52,7 +52,7 @@ final class BlockLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
 
         for (int i = 0; i < neighbors.length; i++) {
-            final BlockFace face = BlockFace.values()[i];
+            final BlockFace face = BlockFace.getValues()[i];
             Point neighborSection = neighbors[i];
             if (neighborSection == null) continue;
 
@@ -203,7 +203,7 @@ final class BlockLight implements Light {
         for (int i = 0; i < neighbors.length; i++) {
             final Point neighbor = neighbors[i];
             if (neighbor == null) continue;
-            final BlockFace face = BlockFace.values()[i];
+            final BlockFace face = BlockFace.getValues()[i];
             if (!LightCompute.compareBorders(content, contentPropagation, contentPropagationTemp, face)) {
                 toUpdate.add(neighbor);
             }
