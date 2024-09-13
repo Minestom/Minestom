@@ -29,9 +29,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.*;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
@@ -89,8 +87,6 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
-import net.minestom.server.utils.chunk.ChunkUtils;
-import net.minestom.server.utils.function.IntegerBiConsumer;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -157,11 +153,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int maxChunkBatchLead = 1; // Maximum number of batches to send before waiting for a reply
     private int chunkBatchLead = 0; // Number of batches sent without a reply
 
-    final IntegerBiConsumer chunkAdder = (chunkX, chunkZ) -> {
+    final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
         // Load new chunks
         this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
     };
-    final IntegerBiConsumer chunkRemover = (chunkX, chunkZ) -> {
+    final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
         // Unload old chunks
         sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
@@ -530,7 +526,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkUtils.forChunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
+        ChunkRange.forChunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.effectiveViewDistance(),
@@ -596,7 +592,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final int chunkX = position.chunkX();
         final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkUtils.forChunksInRange(chunkX, chunkZ, settings.effectiveViewDistance(), chunkRemover);
+        ChunkRange.forChunksInRange(chunkX, chunkZ, settings.effectiveViewDistance(), chunkRemover);
         // Remove from the tab-list
         PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -644,7 +640,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Ensure that surrounding chunks are loaded
         List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
+        ChunkRange.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
             final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
             if (!future.isDone()) futures.add(future);
         });
@@ -717,7 +713,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
             if (updateChunks)
-                ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
+                ChunkRange.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
@@ -732,7 +728,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
             // Load the nearby chunks and queue them to be sent to them
-            ChunkUtils.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkAdder);
+            ChunkRange.forChunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkAdder);
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
@@ -775,7 +771,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (!chunk.isLoaded()) return;
         chunkQueueLock.lock();
         try {
-            chunkQueue.enqueue(ChunkUtils.getChunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
+            chunkQueue.enqueue(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
         } finally {
             chunkQueueLock.unlock();
         }
@@ -795,7 +791,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             sendPacket(new ChunkBatchStartPacket());
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
-                int chunkX = ChunkUtils.getChunkCoordX(chunkIndex), chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                int chunkX = CoordConversion.chunkIndexToChunkX(chunkIndex), chunkZ = CoordConversion.chunkIndexToChunkZ(chunkIndex);
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
@@ -1570,14 +1566,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // Load/unload chunks if necessary due to view distance changes
             if (previousViewDistance < newViewDistance) {
                 // View distance expanded, send chunks
-                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
+                ChunkRange.forChunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
                     if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
                         chunkAdder.accept(chunkX, chunkZ);
                     }
                 });
             } else if (previousViewDistance > newViewDistance) {
                 // View distance shrunk, unload chunks
-                ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
+                ChunkRange.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
                     if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
                         chunkRemover.accept(chunkX, chunkZ);
                     }
@@ -2363,7 +2359,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             final int newZ = newChunk.getChunkZ();
             final Vec old = chunksLoadedByClient;
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkUtils.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
+            ChunkRange.forDifferingChunksInRange(newX, newZ, (int) old.x(), (int) old.z(),
                     settings.effectiveViewDistance(), chunkAdder, chunkRemover);
             this.chunksLoadedByClient = new Vec(newX, newZ);
         }
@@ -2396,10 +2392,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // Settings enum
 
     private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
-        int chunkAX = ChunkUtils.getChunkCoordX(chunkIndexA);
-        int chunkAZ = ChunkUtils.getChunkCoordZ(chunkIndexA);
-        int chunkBX = ChunkUtils.getChunkCoordX(chunkIndexB);
-        int chunkBZ = ChunkUtils.getChunkCoordZ(chunkIndexB);
+        int chunkAX = CoordConversion.chunkIndexToChunkX(chunkIndexA);
+        int chunkAZ = CoordConversion.chunkIndexToChunkZ(chunkIndexA);
+        int chunkBX = CoordConversion.chunkIndexToChunkX(chunkIndexB);
+        int chunkBZ = CoordConversion.chunkIndexToChunkZ(chunkIndexB);
         int chunkDistanceA = Math.abs(chunkAX - chunksLoadedByClient.blockX()) + Math.abs(chunkAZ - chunksLoadedByClient.blockZ());
         int chunkDistanceB = Math.abs(chunkBX - chunksLoadedByClient.blockX()) + Math.abs(chunkBZ - chunksLoadedByClient.blockZ());
         return Integer.compare(chunkDistanceA, chunkDistanceB);

@@ -2,11 +2,12 @@ package net.minestom.server.coordinate;
 
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
+
+import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
 
 /**
  * Represents a 3D point.
@@ -69,17 +70,17 @@ public sealed interface Point permits Vec, Pos, BlockVec {
 
     @Contract(pure = true)
     default int chunkX() {
-        return ChunkUtils.getChunkCoordinate(x());
+        return globalToChunk(x());
     }
 
     @Contract(pure = true)
     default int section() {
-        return ChunkUtils.getChunkCoordinate(y());
+        return globalToChunk(y());
     }
 
     @Contract(pure = true)
     default int chunkZ() {
-        return ChunkUtils.getChunkCoordinate(z());
+        return globalToChunk(z());
     }
 
     /**
