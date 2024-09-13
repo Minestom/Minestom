@@ -14,16 +14,16 @@ public class CoordinateTest {
     @Test
     public void chunkIndex() {
         var index = CoordConversion.chunkIndex(2, 5);
-        assertEquals(2, CoordConversion.chunkIndexToChunkX(index));
-        assertEquals(5, CoordConversion.chunkIndexToChunkZ(index));
+        assertEquals(2, CoordConversion.chunkIndexGetX(index));
+        assertEquals(5, CoordConversion.chunkIndexGetZ(index));
 
         index = CoordConversion.chunkIndex(-5, 25);
-        assertEquals(-5, CoordConversion.chunkIndexToChunkX(index));
-        assertEquals(25, CoordConversion.chunkIndexToChunkZ(index));
+        assertEquals(-5, CoordConversion.chunkIndexGetX(index));
+        assertEquals(25, CoordConversion.chunkIndexGetZ(index));
 
         index = CoordConversion.chunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
-        assertEquals(Integer.MAX_VALUE, CoordConversion.chunkIndexToChunkX(index));
-        assertEquals(Integer.MIN_VALUE, CoordConversion.chunkIndexToChunkZ(index));
+        assertEquals(Integer.MAX_VALUE, CoordConversion.chunkIndexGetX(index));
+        assertEquals(Integer.MIN_VALUE, CoordConversion.chunkIndexGetZ(index));
     }
 
     @Test

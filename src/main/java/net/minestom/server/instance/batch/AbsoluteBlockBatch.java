@@ -132,8 +132,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
-                final int chunkX = CoordConversion.chunkIndexToChunkX(chunkIndex);
-                final int chunkZ = CoordConversion.chunkIndexToChunkZ(chunkIndex);
+                final int chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
+                final int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
                 ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, c -> {
                     final boolean isLast = counter.incrementAndGet() == chunkBatchesMap.size();

@@ -39,16 +39,6 @@ public final class CoordConversion {
 
     // CHUNK INDEX
 
-    /**
-     * Gets the chunk index of chunk coordinates.
-     * <p>
-     * Used when you want to store a chunk somewhere without using a reference to the whole object
-     * (as this can lead to memory leaks).
-     *
-     * @param chunkX the chunk X
-     * @param chunkZ the chunk Z
-     * @return a number storing the chunk X and Z
-     */
     public static long chunkIndex(int chunkX, int chunkZ) {
         return (((long) chunkX) << 32) | (chunkZ & 0xffffffffL);
     }
@@ -57,23 +47,11 @@ public final class CoordConversion {
         return chunkIndex(point.chunkX(), point.chunkZ());
     }
 
-    /**
-     * Converts a chunk index to its chunk X position.
-     *
-     * @param index the chunk index computed by {@link #chunkIndex(int, int)}
-     * @return the chunk X based on the index
-     */
-    public static int chunkIndexToChunkX(long index) {
+    public static int chunkIndexGetX(long index) {
         return (int) (index >> 32);
     }
 
-    /**
-     * Converts a chunk index to its chunk Z position.
-     *
-     * @param index the chunk index computed by {@link #chunkIndex(int, int)}
-     * @return the chunk Z based on the index
-     */
-    public static int chunkIndexToChunkZ(long index) {
+    public static int chunkIndexGetZ(long index) {
         return (int) index;
     }
 

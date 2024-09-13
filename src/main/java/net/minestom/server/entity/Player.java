@@ -791,7 +791,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             sendPacket(new ChunkBatchStartPacket());
             while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
                 long chunkIndex = chunkQueue.dequeueLong();
-                int chunkX = CoordConversion.chunkIndexToChunkX(chunkIndex), chunkZ = CoordConversion.chunkIndexToChunkZ(chunkIndex);
+                int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
@@ -2392,10 +2392,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // Settings enum
 
     private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
-        int chunkAX = CoordConversion.chunkIndexToChunkX(chunkIndexA);
-        int chunkAZ = CoordConversion.chunkIndexToChunkZ(chunkIndexA);
-        int chunkBX = CoordConversion.chunkIndexToChunkX(chunkIndexB);
-        int chunkBZ = CoordConversion.chunkIndexToChunkZ(chunkIndexB);
+        int chunkAX = CoordConversion.chunkIndexGetX(chunkIndexA);
+        int chunkAZ = CoordConversion.chunkIndexGetZ(chunkIndexA);
+        int chunkBX = CoordConversion.chunkIndexGetX(chunkIndexB);
+        int chunkBZ = CoordConversion.chunkIndexGetZ(chunkIndexB);
         int chunkDistanceA = Math.abs(chunkAX - chunksLoadedByClient.blockX()) + Math.abs(chunkAZ - chunksLoadedByClient.blockZ());
         int chunkDistanceB = Math.abs(chunkBX - chunksLoadedByClient.blockX()) + Math.abs(chunkBZ - chunksLoadedByClient.blockZ());
         return Integer.compare(chunkDistanceA, chunkDistanceB);

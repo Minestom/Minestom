@@ -37,7 +37,7 @@ public final class ChunkUtils {
         AtomicInteger counter = new AtomicInteger(0);
         for (long visibleChunk : chunks) {
             // WARNING: if autoload is disabled and no chunks are loaded beforehand, player will be stuck.
-            instance.loadOptionalChunk(CoordConversion.chunkIndexToChunkX(visibleChunk), CoordConversion.chunkIndexToChunkZ(visibleChunk))
+            instance.loadOptionalChunk(CoordConversion.chunkIndexGetX(visibleChunk), CoordConversion.chunkIndexGetZ(visibleChunk))
                     .thenAccept((chunk) -> {
                         if (eachCallback != null) eachCallback.accept(chunk);
                         if (counter.incrementAndGet() == chunks.length) {
