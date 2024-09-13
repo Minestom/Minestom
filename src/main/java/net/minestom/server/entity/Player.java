@@ -66,7 +66,6 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
