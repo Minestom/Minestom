@@ -3,7 +3,13 @@ package net.minestom.server.instance.block;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The enumeration contains all faces which a block can have in the game.
+ * It's possible that specific blocks doesn't have all faces
+ * @version 1.0.1
+ */
 public enum BlockFace {
+
     BOTTOM(Direction.DOWN),
     TOP(Direction.UP),
     NORTH(Direction.NORTH),
@@ -11,13 +17,25 @@ public enum BlockFace {
     WEST(Direction.WEST),
     EAST(Direction.EAST);
 
+    private static final BlockFace[] VALUES = values();
+
     private final Direction direction;
 
-    BlockFace(Direction direction) {
+    /**
+     * Creates a new enum entry
+     *
+     * @param direction the direction for the entry
+     */
+    BlockFace(@NotNull Direction direction) {
         this.direction = direction;
     }
 
-    public Direction toDirection() {
+    /**
+     * Returns the {@link Direction} which correspond with the face.
+     *
+     * @return the given direction
+     */
+    public @NotNull Direction toDirection() {
         return direction;
     }
 
@@ -76,5 +94,13 @@ public enum BlockFace {
             case WEST -> WEST;
             case EAST -> EAST;
         };
+    }
+
+    /**
+     * Returns the static accessor which caches all entries from the values call.
+     * @return the given array
+     */
+    public static @NotNull BlockFace[] getValues() {
+        return VALUES;
     }
 }
