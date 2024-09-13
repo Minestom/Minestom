@@ -89,12 +89,12 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                                  Point offset, Bounds bounds, Instruction instruction) {
         if (!sectionRelevant(instruction, sectionX, sectionY, sectionZ, offset)) return;
 
-        final int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
-        final int maxSectionX = minSectionX + Chunk.CHUNK_SECTION_SIZE;
-        final int minSectionY = sectionY * Chunk.CHUNK_SECTION_SIZE;
-        final int maxSectionY = minSectionY + Chunk.CHUNK_SECTION_SIZE;
-        final int minSectionZ = sectionZ * Chunk.CHUNK_SECTION_SIZE;
-        final int maxSectionZ = minSectionZ + Chunk.CHUNK_SECTION_SIZE;
+        int minSectionX = sectionX * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionX = minSectionX + Chunk.CHUNK_SECTION_SIZE;
+        int minSectionY = sectionY * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionY = minSectionY + Chunk.CHUNK_SECTION_SIZE;
+        int minSectionZ = sectionZ * Chunk.CHUNK_SECTION_SIZE;
+        int maxSectionZ = minSectionZ + Chunk.CHUNK_SECTION_SIZE;
 
         switch (instruction) {
             case Instruction.SetBlock setBlock -> {
@@ -128,7 +128,6 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
                 }
             }
             case Instruction.Fill fill -> {
-                assert bounds != null;
                 final Point min = bounds.min();
                 final Point max = bounds.max();
                 final Block block = fill.block();
@@ -148,6 +147,17 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
             }
             case Instruction.AreaOperation areaOperation -> {
                 final AreaImpl area = (AreaImpl) areaOperation.area();
+                // modify the min/max section coordinates to fit the area
+                Bounds areaBounds = areaOperation.operation.bounds();
+
+                minSectionX -= Math.max(0, (int) areaBounds.max().x());
+                minSectionY -= Math.max(0, (int) areaBounds.max().y());
+                minSectionZ -= Math.max(0, (int) areaBounds.max().z());
+
+                maxSectionX += Math.max(0, (int) -areaBounds.min().x());
+                maxSectionY += Math.max(0, (int) -areaBounds.min().y());
+                maxSectionZ += Math.max(0, (int) -areaBounds.min().z());
+
                 switch (area.type()) {
                     case BLOCK -> {
                         for (int x = minSectionX; x < maxSectionX; x++) {
@@ -248,8 +258,11 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
 
     static Palette sectionAt(List<Instruction> instructions, int sectionX, int sectionY, int sectionZ) {
         Palette palette = Palette.blocks();
+        Vec min = new Vec(sectionX, sectionY, sectionZ).mul(Chunk.CHUNK_SECTION_SIZE);
+        Vec max = min.add(Chunk.CHUNK_SECTION_SIZE);
+        Bounds bounds = new Bounds(min, max);
         for (Instruction instruction : instructions) {
-            applyInstruction(sectionX, sectionY, sectionZ, palette, Vec.ZERO, null, instruction);
+            applyInstruction(sectionX, sectionY, sectionZ, palette, Vec.ZERO, bounds, instruction);
         }
         return palette;
     }

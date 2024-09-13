@@ -1,5 +1,8 @@
 package net.minestom.demo;
 
+import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
@@ -51,6 +54,7 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -252,6 +256,16 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
+
+        // load 100 chunks
+        long startTime = System.currentTimeMillis();
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        ChunkUtils.forChunksInRange(Vec.ZERO, 10, (x, z) -> futures.add(instanceContainer.loadChunk(x, z)));
+        futures.forEach(CompletableFuture::join);
+        long endTime = System.currentTimeMillis();
+
+        double chunksPerSecond = 100 / ((endTime - startTime) / 1000.0);
+        System.out.println("Loaded 100 chunks in " + (endTime - startTime) + "ms (" + String.format("%.2f", chunksPerSecond) + " chunks/s)");
 
 //        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
 //        instanceManager.registerInstance(i2);
