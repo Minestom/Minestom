@@ -122,11 +122,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
 
-    // Magic values: https://wiki.vg/Entity_statuses#Player
-    private static final int STATUS_ENABLE_REDUCED_DEBUG_INFO = 22;
-    private static final int STATUS_DISABLE_REDUCED_DEBUG_INFO = 23;
-    private static final int STATUS_PERMISSION_LEVEL_OFFSET = 24;
-
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
@@ -364,7 +359,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties
-        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
+        triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
@@ -429,7 +424,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Eating animation
         if (isUsingItem()) {
             if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
-                triggerStatus((byte) 9); // Mark item use as finished
+                triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
                 ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
                 // Refresh hand
@@ -550,7 +545,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), false));
         sendPacket(new UpdateHealthPacket(this.getHealth(), food, foodSaturation));
         sendPacket(new SetExperiencePacket(exp, level, 0));
-        triggerStatus((byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel)); // Set permission level
+        triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshAbilities();
     }
 
@@ -1924,7 +1919,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Condition to prevent sending the packets before spawning the player
         if (isActive()) {
 
-            final byte permissionLevelStatus = (byte) (STATUS_PERMISSION_LEVEL_OFFSET + permissionLevel);
+            final byte permissionLevelStatus = (byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel);
             triggerStatus(permissionLevelStatus);
         }
     }
@@ -1937,7 +1932,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void setReducedDebugScreenInformation(boolean reduced) {
         this.reducedDebugScreenInformation = reduced;
 
-        final byte debugScreenStatus = (byte) (reduced ? STATUS_ENABLE_REDUCED_DEBUG_INFO : STATUS_DISABLE_REDUCED_DEBUG_INFO);
+        final byte debugScreenStatus = (byte) (reduced ? EntityStatuses.Player.ENABLE_DEBUG_SCREEN : EntityStatuses.Player.DISABLE_DEBUG_SCREEN);
         triggerStatus(debugScreenStatus);
     }
 

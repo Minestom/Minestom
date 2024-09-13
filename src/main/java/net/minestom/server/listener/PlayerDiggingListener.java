@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityStatuses;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
@@ -153,7 +154,7 @@ public final class PlayerDiggingListener {
         ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
 
         player.clearItemUse();
-        player.triggerStatus((byte) 9);
+        player.triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
 
         final boolean isOffHand = itemUpdateStateEvent.getHand() == PlayerHand.OFF;
         player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
