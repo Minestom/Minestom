@@ -238,19 +238,21 @@ record PainterImpl(List<Instruction> instructions) implements Painter {
         final int structureZ = structureStart.blockZ();
 
         if (ratePredicate != null && !ratePredicate.test(structureX, structureY, structureZ)) return;
+
+        final Bounds areaBounds;
+        final Vec sectionOffset;
+        if (heightProvider != null) {
+            final int height = heightProvider.test(startX, startZ);
+            final int minY = Math.min(startY, height);
+            final int maxY = Math.min(endY, height);
+            areaBounds = new Bounds(boundStart.withY(minY), boundEnd.withY(maxY));
+            sectionOffset = structureStart.withY(maxY);
+        } else {
+            areaBounds = new Bounds(boundStart, boundEnd);
+            sectionOffset = structureStart;
+        }
+
         for (Instruction opInstruction : operation.instructions()) {
-            final Bounds areaBounds;
-            final Vec sectionOffset;
-            if (heightProvider != null) {
-                final int height = area.heightProvider().test(startX, startZ);
-                final int minY = Math.min(startY, height);
-                final int maxY = Math.min(endY, height);
-                areaBounds = new Bounds(boundStart.withY(minY), boundEnd.withY(maxY));
-                sectionOffset = structureStart.withY(maxY);
-            } else {
-                areaBounds = new Bounds(boundStart, boundEnd);
-                sectionOffset = structureStart;
-            }
             applyInstruction(sectionX, sectionY, sectionZ, palette,
                     sectionOffset, areaBounds, opInstruction);
         }
