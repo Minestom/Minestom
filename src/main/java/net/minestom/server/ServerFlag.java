@@ -53,6 +53,7 @@ public final class ServerFlag {
 
     // Online Mode
     public static final @NotNull String AUTH_URL = stringProperty("minestom.auth.url", "https://sessionserver.mojang.com/session/minecraft/hasJoined");
+    public static final boolean AUTH_PREVENT_PROXY_CONNECTIONS = booleanProperty("minestom.auth.prevent-proxy-connections", false);
 
     // World
     public static final int WORLD_BORDER_SIZE = intProperty("minestom.world-border-size", 29999984);

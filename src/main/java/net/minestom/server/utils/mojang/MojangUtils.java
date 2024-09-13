@@ -2,12 +2,19 @@ package net.minestom.server.utils.mojang;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.url.URLUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Blocking;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -16,6 +23,10 @@ import java.util.UUID;
 public final class MojangUtils {
     private static final String FROM_UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
     private static final String FROM_USERNAME_URL = "https://api.mojang.com/users/profiles/minecraft/%s";
+
+    // Auth
+    private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
+    private static final String PREVENT_PROXY_CONNECTIONS_AUTH_URL = BASE_AUTH_URL.concat("&ip=%s");
 
     /**
      * Gets a player's UUID from their username
@@ -88,6 +99,24 @@ public final class MojangUtils {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    @Blocking
+    @ApiStatus.Internal
+    public static @NotNull JsonObject authenticateSession(String loginUsername, String serverId, @Nullable SocketAddress userSocket) throws IOException {
+        final String username = URLEncoder.encode(loginUsername, StandardCharsets.UTF_8);
+
+        final String url;
+        if (ServerFlag.AUTH_PREVENT_PROXY_CONNECTIONS
+                && userSocket instanceof InetSocketAddress inetSocketAddress
+                && inetSocketAddress.getAddress() instanceof InetAddress address
+        ) {
+            url = String.format(PREVENT_PROXY_CONNECTIONS_AUTH_URL, username, serverId, address.getHostAddress());
+        } else {
+            url = String.format(BASE_AUTH_URL, username, serverId);
+        }
+
+        return retrieve(url);
     }
 
     /**
