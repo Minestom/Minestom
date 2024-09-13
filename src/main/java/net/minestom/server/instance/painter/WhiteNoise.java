@@ -8,8 +8,15 @@ public final class WhiteNoise {
     /**
      * Returns a predicate that returns true if the noise value at the given position is less than the given chance.
      */
-    public static Painter.PosPredicate noise(double chance, long seed) {
+    public static Painter.PosPredicate noise3d(double chance, long seed) {
         return (x, y, z) -> normalize(evaluate3D(x, y, z, seed)) < chance;
+    }
+
+    /**
+     * Returns a predicate that returns true if the noise value at the given position is less than the given chance.
+     */
+    public static Painter.PosPredicate noise2d(double chance, long seed) {
+        return (x, y, z) -> normalize(evaluate2D(x, z, seed)) < chance;
     }
 
     private static final int X_PRIME = 1619;

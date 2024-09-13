@@ -225,8 +225,8 @@ public class PlayerInit {
 
         Painter painter = Painter.paint(world -> {
             var heightmap = Painter.Area.column().height(PerlinNoise.heightmap(16, 64, 99999));
-            var tree = heightmap.rate(WhiteNoise.noise(0.01, 42));
-            var sectionFill = Painter.Area.section().rate(WhiteNoise.noise(0.01, 42));
+            var tree = heightmap.rate(WhiteNoise.noise2d(0.01, 44));
+            var sectionFill = Painter.Area.section().rate(WhiteNoise.noise3d(0.01, 45));
 
             world.every(heightmap, (relWorld) -> {
                 relWorld.fill(Block.DIRT);
@@ -234,19 +234,22 @@ public class PlayerInit {
             });
 
             world.every(tree, relWorld -> {
-                // log
-                for (int i = 0; i < 10; i++) {
-                    relWorld.setBlock(0, i + 1, 0, Block.OAK_LOG);
-                }
                 // leaves
-                for (int x = -2; x <= 2; x++) {
-                    for (int y = 5; y <= 10; y++) {
-                        for (int z = -2; z <= 2; z++) {
-                            if (Math.abs(x) + Math.abs(y - 7) + Math.abs(z) <= 4) {
-                                relWorld.setBlock(x, y + 1, z, Block.OAK_LEAVES);
-                            }
+                double radius = 2.5;
+                int height = 4;
+                for (int x = (int) -radius; x <= radius; x++) {
+                    for (int y = (int) -radius; y <= radius; y++) {
+                        for (int z = (int) -radius; z <= radius; z++) {
+                            double dist = Math.sqrt(x * x + y * y + z * z);
+                            if (dist > radius) continue;
+                            relWorld.setBlock(x, y + height, z, Block.OAK_LEAVES);
                         }
                     }
+                }
+
+                // log
+                for (int i = 1; i < height; i++) {
+                    relWorld.setBlock(0, i, 0, Block.OAK_LOG);
                 }
             });
 
