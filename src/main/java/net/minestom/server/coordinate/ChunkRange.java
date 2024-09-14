@@ -13,7 +13,7 @@ public final class ChunkRange {
      * @param range the range
      * @return the amount of chunks in the square range
      */
-    public static int chunkCountFromRange(int range) {
+    public static int chunksCount(int range) {
         if (range < 0) throw new IllegalArgumentException("Range cannot be negative");
         final int square = range * 2 + 1;
         return square * square;

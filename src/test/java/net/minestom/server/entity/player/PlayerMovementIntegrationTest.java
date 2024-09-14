@@ -156,7 +156,7 @@ public class PlayerMovementIntegrationTest {
         Pos startingPlayerPos = new Pos(0, 42, 0);
         var player = connection.connect(instance, startingPlayerPos).join();
 
-        int chunkDifference = ChunkRange.chunkCountFromRange(endViewDistance) - ChunkRange.chunkCountFromRange(startingViewDistance);
+        int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
         ChunkRange.chunksInRange(0, 0, endViewDistance, instance::loadChunk);
@@ -172,7 +172,7 @@ public class PlayerMovementIntegrationTest {
                 ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT, false, true)));
         player.interpretPacketQueue();
 
-        int chunkDifference1 = ChunkRange.chunkCountFromRange(endViewDistance) - ChunkRange.chunkCountFromRange(finalViewDistance);
+        int chunkDifference1 = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(finalViewDistance);
         tracker1.assertCount(chunkDifference1);
     }
 }

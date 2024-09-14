@@ -38,7 +38,7 @@ public class ChunkViewerIntegrationTest {
     @Test
     public void renderDistance(Env env) {
         final int viewRadius = MinecraftServer.getChunkViewDistance();
-        final int count = ChunkRange.chunkCountFromRange(viewRadius);
+        final int count = ChunkRange.chunksCount(viewRadius);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         // Check initial load

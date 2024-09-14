@@ -42,12 +42,12 @@ public class CoordinateTest {
 
     @Test
     public void chunkCount() {
-        assertEquals(289, ChunkRange.chunkCountFromRange(8));
-        assertEquals(169, ChunkRange.chunkCountFromRange(6));
-        assertEquals(121, ChunkRange.chunkCountFromRange(5));
-        assertEquals(9, ChunkRange.chunkCountFromRange(1));
-        assertEquals(1, ChunkRange.chunkCountFromRange(0));
-        assertThrows(IllegalArgumentException.class, () -> ChunkRange.chunkCountFromRange(-1));
+        assertEquals(289, ChunkRange.chunksCount(8));
+        assertEquals(169, ChunkRange.chunksCount(6));
+        assertEquals(121, ChunkRange.chunksCount(5));
+        assertEquals(9, ChunkRange.chunksCount(1));
+        assertEquals(1, ChunkRange.chunksCount(0));
+        assertThrows(IllegalArgumentException.class, () -> ChunkRange.chunksCount(-1));
     }
 
     @Test
