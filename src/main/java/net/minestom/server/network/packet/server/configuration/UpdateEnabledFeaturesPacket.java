@@ -19,7 +19,7 @@ public record UpdateEnabledFeaturesPacket(@NotNull Set<NamespaceID> features) im
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.writeCollection(features, (b, feature) -> b.write(STRING, feature.namespace().toString()));
+        writer.writeCollection(features, (b, feature) -> b.write(STRING, feature.asString()));
     }
 
     @Override
