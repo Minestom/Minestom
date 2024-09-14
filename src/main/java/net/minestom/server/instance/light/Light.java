@@ -51,8 +51,10 @@ public interface Light {
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
 
-        Point[] links = new Vec[BlockFace.values().length];
-        for (BlockFace face : BlockFace.values()) {
+        final BlockFace[] faces = BlockFace.getValues();
+
+        Point[] links = new Vec[faces.length];
+        for (BlockFace face : faces) {
             final Direction direction = face.toDirection();
             final int x = chunkX + direction.normalX();
             final int z = chunkZ + direction.normalZ();
