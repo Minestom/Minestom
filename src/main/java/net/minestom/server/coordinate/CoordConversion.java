@@ -5,8 +5,13 @@ import org.jetbrains.annotations.NotNull;
 public final class CoordConversion {
     // COORDINATE CONVERSIONS
 
+    public static int globalToBlock(double xyz) {
+        return (int) Math.floor(xyz);
+    }
+
     public static int globalToChunk(double xz) {
-        return globalToChunk((int) Math.floor(xz));
+        final int block = globalToBlock(xz);
+        return globalToChunk(block);
     }
 
     public static int globalToChunk(int xz) {

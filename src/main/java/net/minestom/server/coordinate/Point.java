@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.function.DoubleUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.globalToBlock;
 import static net.minestom.server.coordinate.CoordConversion.globalToChunk;
 
 /**
@@ -45,7 +46,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default int blockX() {
-        return (int) Math.floor(x());
+        return globalToBlock(x());
     }
 
     /**
@@ -55,7 +56,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default int blockY() {
-        return (int) Math.floor(y());
+        return globalToBlock(y());
     }
 
     /**
@@ -65,7 +66,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
      */
     @Contract(pure = true)
     default int blockZ() {
-        return (int) Math.floor(z());
+        return globalToBlock(z());
     }
 
     @Contract(pure = true)
