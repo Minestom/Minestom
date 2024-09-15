@@ -20,8 +20,8 @@ public class EntityMetaIntegrationTest {
     public void notifyAboutChanges(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var otherPlayer = connection.connect(instance, new Pos(0, 42, 0)).join();
-        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+        var otherPlayer = connection.connect(instance, new Pos(0, 42, 0));
+        var player = connection.connect(instance, new Pos(0, 42, 1));
 
         assertTrue(player.getViewers().contains(otherPlayer));
 
@@ -92,7 +92,7 @@ public class EntityMetaIntegrationTest {
         Pos startPos = new Pos(0, 42, 1);
 
         //Viewer.
-        var player = connection.connect(instance, startPos).join();
+        var player = connection.connect(instance, startPos);
 
         //Tracks incoming packets.
         var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);

@@ -135,7 +135,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         player.setFlying(true);
         var witness = env.createConnection();
-        witness.connect(instance, new Pos(0, 42, 0)).join();
+        witness.connect(instance, new Pos(0, 42, 0));
 
         var tracker = witness.trackIncoming(EntityVelocityPacket.class);
         env.tick(); // Process gravity velocity
@@ -173,9 +173,9 @@ public class EntityVelocityIntegrationTest {
     public void countVelocityPackets(Env env) {
         var instance = env.createFlatInstance();
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
+        viewerConnection.connect(instance, new Pos(1, 40, 1));
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0,40,0)).join();
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
         instance.setBlock(new Vec(0, 39, 0), Block.STONE);
         env.tick(); // Tick because the entity is in the air, they'll send velocity from gravity
 

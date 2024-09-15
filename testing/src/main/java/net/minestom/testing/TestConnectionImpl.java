@@ -37,7 +37,7 @@ final class TestConnectionImpl implements TestConnection {
     }
 
     @Override
-    public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
+    public @NotNull Player connect(@NotNull Instance instance, @NotNull Pos pos) {
         // Use player provider to disable queued chunk sending
         process.connection().setPlayerProvider(TestPlayerImpl::new);
 
@@ -54,11 +54,12 @@ final class TestConnectionImpl implements TestConnection {
         Thread.startVirtualThread(() -> {
             process.connection().doConfiguration(player, true);
             process.connection().transitionConfigToPlay(player);
-            process.connection().updateWaitingPlayers();
             future.complete(player);
         });
         playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
-        return future;
+        future.join();
+        process.connection().updateWaitingPlayers();
+        return player;
     }
 
     @Override
