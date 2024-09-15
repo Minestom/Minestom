@@ -34,8 +34,8 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     public synchronized void clear() {
         cursorItem = ItemStack.AIR;
         super.clear();
-        // Update equipments
 
+        // Update equipments
         viewers.forEach(viewer -> viewer.sendPacketToViewersAndSelf(viewer.getEquipmentsPacket()));
     }
 
@@ -77,7 +77,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         if (slot == EquipmentSlot.BODY)
             Check.fail("PlayerInventory does not support body equipment");
 
-        safeItemInsert(getSlotId(slot, heldSlot), itemStack);
+        setItemStack(getSlotId(slot, heldSlot), itemStack);
     }
 
     @Override
@@ -106,31 +106,29 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
         for (Player player : getViewers()) {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot == null) continue;
 
-            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, itemStack, equipmentSlot);
+            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, item, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
-            itemStack = entityEquipEvent.getEquippedItem();
+            item = entityEquipEvent.getEquippedItem();
         }
 
-        ItemStack oldItem = this.itemStacks[slot];
-        this.itemStacks[slot] = itemStack;
-
-        if (sendPacket) handleSlotRefresh(slot, oldItem, itemStack);
+        super.UNSAFE_itemInsert(slot, item, previous, sendPacket);
     }
 
-    protected void handleSlotRefresh(int slot, ItemStack oldItem, ItemStack itemStack) {
+    @Override
+    public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
         for (Player player : getViewers()) {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot != null) {
-                player.updateEquipmentAttributes(oldItem, itemStack, equipmentSlot);
+                player.updateEquipmentAttributes(previous, item, equipmentSlot);
                 player.syncEquipment(equipmentSlot);
             }
 
-            sendSlotRefresh(player, (short) convertToPacketSlot(slot), itemStack);
+            sendSlotRefresh(player, (short) convertToPacketSlot(slot), item);
         }
     }
 

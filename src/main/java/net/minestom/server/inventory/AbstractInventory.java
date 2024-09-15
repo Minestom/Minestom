@@ -8,6 +8,7 @@ import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
+import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -99,42 +100,38 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param slot      the slot to set the item
      * @param itemStack the item to set
      */
-    public synchronized void setItemStack(int slot, @NotNull ItemStack itemStack) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
-                "Inventory does not have the slot " + slot);
-        safeItemInsert(slot, itemStack);
+    public void setItemStack(int slot, @NotNull ItemStack itemStack) {
+        setItemStack(slot, itemStack, true);
     }
 
     /**
-     * Inserts safely an item into the inventory.
-     * <p>
-     * This will update the slot for all viewers and warn the inventory that
-     * the window items packet is not up-to-date.
+     * Sets an {@link ItemStack} at the specified slot and send relevant update to the viewer(s).
      *
-     * @param slot      the internal slot id
-     * @param itemStack the item to insert (use air instead of null)
-     * @throws IllegalArgumentException if the slot {@code slot} does not exist
+     * @param slot      the slot to set the item
+     * @param itemStack the item to set
+     * @param sendPacket whether or not to send packets
      */
-    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+    public void setItemStack(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+                "Inventory does not have the slot " + slot);
+
         ItemStack previous;
         synchronized (this) {
-            Check.argCondition(
-                    !MathUtils.isBetween(slot, 0, getSize()),
-                    "The slot {0} does not exist in this inventory",
-                    slot
-            );
             previous = itemStacks[slot];
             if (itemStack.equals(previous)) return; // Avoid sending updates if the item has not changed
-            UNSAFE_itemInsert(slot, itemStack, sendPacket);
+            UNSAFE_itemInsert(slot, itemStack, previous, sendPacket);
         }
         EventDispatcher.call(new InventoryItemChangeEvent(this, slot, previous, itemStack));
     }
 
-    protected final void safeItemInsert(int slot, @NotNull ItemStack itemStack) {
-        safeItemInsert(slot, itemStack, true);
+    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
+        itemStacks[slot] = item;
+        if (sendPacket) sendSlotRefresh(slot, item, previous);
     }
 
-    protected abstract void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket);
+    public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
+        sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, item));
+    }
 
     public synchronized <T> @NotNull T processItemStack(@NotNull ItemStack itemStack,
                                                         @NotNull TransactionType type,
@@ -212,7 +209,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     public synchronized void clear() {
         // Clear the item array
         for (int i = 0; i < size; i++) {
-            safeItemInsert(i, ItemStack.AIR, false);
+            setItemStack(i, ItemStack.AIR, false);
         }
         // Send the cleared inventory to viewers
         update();
