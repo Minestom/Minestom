@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -16,7 +17,6 @@ import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -107,7 +107,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public @NotNull Section getSectionAt(int blockY) {
-        return getSection(ChunkUtils.getChunkCoordinate(blockY));
+        return getSection(CoordConversion.globalToChunk(blockY));
     }
 
     /**
