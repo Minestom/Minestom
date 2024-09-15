@@ -1,12 +1,12 @@
 package net.minestom.server.entity.player;
 
 import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class PlayerRespawnChunkIntegrationTest {
         player.setHealth(0);
         player.respawn();
         // Player should have all their chunks reloaded
-        int chunkLoads = ChunkUtils.getChunkCount(Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().viewDistance()));
+        int chunkLoads = ChunkRange.chunksCount(Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().viewDistance()));
         loadChunkTracker.assertCount(chunkLoads);
     }
 
@@ -63,7 +63,7 @@ public class PlayerRespawnChunkIntegrationTest {
         List<ChunkDataPacket> dataPacketList = loadChunkTracker.collect();
         Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
         int actualViewDistance = Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().viewDistance());
-        int chunkLoads = ChunkUtils.getChunkCount(actualViewDistance);
+        int chunkLoads = ChunkRange.chunksCount(actualViewDistance);
         loadChunkTracker.assertCount(chunkLoads);
         for (ChunkDataPacket packet : dataPacketList) {
             assertFalse(duplicateCheck.contains(packet));
