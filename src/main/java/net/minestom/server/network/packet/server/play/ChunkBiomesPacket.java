@@ -14,6 +14,10 @@ public record ChunkBiomesPacket(@NotNull List<@NotNull ChunkBiomeData> chunks) i
             ChunkBiomeData.SERIALIZER.list(), ChunkBiomesPacket::chunks,
             ChunkBiomesPacket::new);
 
+    public ChunkBiomesPacket {
+        chunks = List.copyOf(chunks);
+    }
+
     public record ChunkBiomeData(int chunkX, int chunkZ, byte[] data) {
         public static final NetworkBuffer.Type<ChunkBiomeData> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
