@@ -3,6 +3,7 @@ package net.minestom.server.instance.anvil;
 import it.unimi.dsi.fastutil.ints.*;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -14,7 +15,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -126,8 +126,8 @@ public class AnvilLoader implements IChunkLoader {
         // Cache the index of the loaded chunk
         perRegionLoadedChunksLock.lock();
         try {
-            int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-            int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+            int regionX = CoordConversion.chunkToRegion(chunkX);
+            int regionZ = CoordConversion.chunkToRegion(chunkZ);
             var chunks = perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
             chunks.add(new IntIntImmutablePair(chunkX, chunkZ));
         } finally {
@@ -137,8 +137,8 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
-        final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-        final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+        final int regionX = CoordConversion.chunkToRegion(chunkX);
+        final int regionZ = CoordConversion.chunkToRegion(chunkZ);
         return alreadyLoaded.computeIfAbsent(RegionFile.getFileName(regionX, regionZ), n -> {
             final Path regionPath = this.regionPath.resolve(n);
             if (!Files.exists(regionPath)) {
@@ -334,8 +334,8 @@ public class AnvilLoader implements IChunkLoader {
         try {
             mcaFile = getMCAFile(chunkX, chunkZ);
             if (mcaFile == null) {
-                final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-                final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+                final int regionX = CoordConversion.chunkToRegion(chunkX);
+                final int regionZ = CoordConversion.chunkToRegion(chunkZ);
                 final String regionFileName = RegionFile.getFileName(regionX, regionZ);
                 try {
                     Path regionFile = regionPath.resolve(regionFileName);
@@ -521,8 +521,8 @@ public class AnvilLoader implements IChunkLoader {
      */
     @Override
     public void unloadChunk(Chunk chunk) {
-        final int regionX = ChunkUtils.toRegionCoordinate(chunk.getChunkX());
-        final int regionZ = ChunkUtils.toRegionCoordinate(chunk.getChunkZ());
+        final int regionX = CoordConversion.chunkToRegion(chunk.getChunkX());
+        final int regionZ = CoordConversion.chunkToRegion(chunk.getChunkZ());
         final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
 
         perRegionLoadedChunksLock.lock();
