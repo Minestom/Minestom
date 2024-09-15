@@ -1,13 +1,14 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.instance.block.Block;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -202,15 +203,15 @@ public class EntityVelocityIntegrationTest {
 
     private void loadChunks(Instance instance) {
         ChunkUtils.optionalLoadAll(instance, new long[]{
-                ChunkUtils.getChunkIndex(-1, -1),
-                ChunkUtils.getChunkIndex(-1, 0),
-                ChunkUtils.getChunkIndex(-1, 1),
-                ChunkUtils.getChunkIndex(0, -1),
-                ChunkUtils.getChunkIndex(0, 0),
-                ChunkUtils.getChunkIndex(0, 1),
-                ChunkUtils.getChunkIndex(1, -1),
-                ChunkUtils.getChunkIndex(1, 0),
-                ChunkUtils.getChunkIndex(1, 1),
+                CoordConversion.chunkIndex(-1, -1),
+                CoordConversion.chunkIndex(-1, 0),
+                CoordConversion.chunkIndex(-1, 1),
+                CoordConversion.chunkIndex(0, -1),
+                CoordConversion.chunkIndex(0, 0),
+                CoordConversion.chunkIndex(0, 1),
+                CoordConversion.chunkIndex(1, -1),
+                CoordConversion.chunkIndex(1, 0),
+                CoordConversion.chunkIndex(1, 1),
         }, null).join();
     }
 }
