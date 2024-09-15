@@ -11,7 +11,6 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
@@ -23,23 +22,29 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
+    private final AtomicBoolean connected = new AtomicBoolean(false);
+
     private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     TestConnectionImpl(Env env) {
         this.env = env;
         this.process = env.process();
+        // Use player provider to disable queued chunk sending
+        env.process().connection().setPlayerProvider(TestPlayerImpl::new);
     }
 
     @Override
     public @NotNull Player connect(@NotNull Instance instance, @NotNull Pos pos) {
-        // Use player provider to disable queued chunk sending
-        process.connection().setPlayerProvider(TestPlayerImpl::new);
+        if (!connected.compareAndSet(false, true)) {
+            throw new IllegalStateException("Already connected");
+        }
 
         playerConnection.setConnectionState(ConnectionState.LOGIN);
         final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
@@ -52,11 +57,13 @@ final class TestConnectionImpl implements TestConnection {
         // Force the player through the entirety of the login process manually
         CompletableFuture<Player> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
-            process.connection().doConfiguration(player, true);
+            // `isFirstConfig` is set to false in order to not block the thread
+            // waiting for known packs.
+            // The consequence is that registry packets cannot be listened to.
+            process.connection().doConfiguration(player, false);
             process.connection().transitionConfigToPlay(player);
             future.complete(player);
         });
-        playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
         future.join();
         process.connection().updateWaitingPlayers();
         return player;
