@@ -3,12 +3,12 @@ package net.minestom.server.instance.batch;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,9 +54,9 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(x);
-        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        final int chunkX = CoordConversion.globalToChunk(x);
+        final int chunkZ = CoordConversion.globalToChunk(z);
+        final long chunkIndex = CoordConversion.chunkIndex(chunkX, chunkZ);
 
         final ChunkBatch chunkBatch;
         synchronized (chunkBatchesMap) {
@@ -132,8 +132,8 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
 
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
-                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                final int chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
+                final int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
                 ChunkBatch chunkInverse = batch.apply(instance, chunkX, chunkZ, c -> {
                     final boolean isLast = counter.incrementAndGet() == chunkBatchesMap.size();
