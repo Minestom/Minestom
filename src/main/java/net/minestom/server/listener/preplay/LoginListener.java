@@ -197,11 +197,11 @@ public final class LoginListener {
         final GameProfile gameProfile = socketConnection.gameProfile();
         assert gameProfile != null;
         final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
-        Thread.startVirtualThread(() -> MinecraftServer.getConnectionManager().doConfiguration(player, true));
+        executeConfig(player, true);
     }
 
     public static void configAckListener(@NotNull ClientConfigurationAckPacket packet, @NotNull Player player) {
-        Thread.startVirtualThread(() -> MinecraftServer.getConnectionManager().doConfiguration(player, false));
+        executeConfig(player, false);
     }
 
     private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
@@ -209,5 +209,18 @@ public final class LoginListener {
         if (connection instanceof PlayerSocketConnection socketConnection) {
             socketConnection.UNSAFE_setProfile(gameProfile);
         }
+    }
+
+    private static void executeConfig(Player player, boolean isFirstConfig) {
+        // We have to create another thread (even though we should already be in a virtual thread)
+        // because configuration handling involves waiting for the client to send a known packs packet.
+        // Which mean that we have to free up the current thread to continue reading the socket.
+        Thread.startVirtualThread(() -> {
+            try {
+                MinecraftServer.getConnectionManager().doConfiguration(player, isFirstConfig);
+            } catch (Throwable t) {
+                MinecraftServer.getExceptionManager().handleException(t);
+            }
+        });
     }
 }
