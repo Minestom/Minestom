@@ -14,7 +14,6 @@ import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -82,26 +80,24 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         if (!Files.exists(path)) {
             // No world folder
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
         try {
             return loadMCA(instance, chunkX, chunkZ);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
     }
 
-    private @NotNull CompletableFuture<@Nullable Chunk> loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException {
+    private @Nullable Chunk loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException {
         final RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
-        if (mcaFile == null)
-            return CompletableFuture.completedFuture(null);
+        if (mcaFile == null) return null;
         final CompoundBinaryTag chunkData = mcaFile.readChunkData(chunkX, chunkZ);
-        if (chunkData == null)
-            return CompletableFuture.completedFuture(null);
+        if (chunkData == null) return null;
 
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
@@ -113,7 +109,6 @@ public class AnvilLoader implements IChunkLoader {
                 // TODO: Parallelize block, block entities and biome loading
                 // Blocks + Biomes
                 loadSections(chunk, chunkData);
-
                 // Block entities
                 loadBlockEntities(chunk, chunkData);
 
@@ -133,7 +128,7 @@ public class AnvilLoader implements IChunkLoader {
         } finally {
             perRegionLoadedChunksLock.unlock();
         }
-        return CompletableFuture.completedFuture(chunk);
+        return chunk;
     }
 
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
@@ -309,22 +304,21 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
+    public void saveInstance(@NotNull Instance instance) {
         final CompoundBinaryTag nbt = instance.tagHandler().asCompound();
         if (nbt.size() == 0) {
             // Instance has no data
-            return AsyncUtils.VOID_FUTURE;
+            return;
         }
         try (OutputStream os = Files.newOutputStream(levelPath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             BinaryTagIO.writer().writeNamed(Map.entry("", nbt), os, BinaryTagIO.Compression.GZIP);
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        return AsyncUtils.VOID_FUTURE;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
+    public void saveChunk(@NotNull Chunk chunk) {
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
 
@@ -349,7 +343,7 @@ public class AnvilLoader implements IChunkLoader {
                 } catch (IOException e) {
                     LOGGER.error("Failed to create region file for " + chunkX + ", " + chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
-                    return AsyncUtils.VOID_FUTURE;
+                    return;
                 }
             }
         } finally {
@@ -373,7 +367,6 @@ public class AnvilLoader implements IChunkLoader {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        return AsyncUtils.VOID_FUTURE;
     }
 
     private void saveSectionData(@NotNull Chunk chunk, @NotNull CompoundBinaryTag.Builder chunkData) {
