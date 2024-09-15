@@ -27,7 +27,7 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
+import static net.minestom.server.coordinate.CoordConversion.*;
 
 @ApiStatus.Internal
 public final class SnapshotImpl {
@@ -52,7 +52,7 @@ public final class SnapshotImpl {
                            TagReadable tagReadable) implements InstanceSnapshot {
         @Override
         public @Nullable ChunkSnapshot chunk(int chunkX, int chunkZ) {
-            var ref = chunksMap.get(getChunkIndex(chunkX, chunkZ));
+            var ref = chunksMap.get(chunkIndex(chunkX, chunkZ));
             return Objects.requireNonNull(ref, "Chunk not found").getPlain();
         }
 
@@ -88,23 +88,23 @@ public final class SnapshotImpl {
             // Verify if the block object is present
             if (condition != Condition.TYPE) {
                 final Block entry = !blockEntries.isEmpty() ?
-                        blockEntries.get(getBlockIndex(x, y, z)) : null;
+                        blockEntries.get(chunkBlockIndex(x, y, z)) : null;
                 if (entry != null || condition == Condition.CACHED) {
                     return entry;
                 }
             }
             // Retrieve the block from state id
-            final Section section = sections[getChunkCoordinate(y) - minSection];
+            final Section section = sections[globalToChunk(y) - minSection];
             final int blockStateId = section.blockPalette()
-                    .get(toSectionRelativeCoordinate(x), toSectionRelativeCoordinate(y), toSectionRelativeCoordinate(z));
+                    .get(globalToSectionRelative(x), globalToSectionRelative(y), globalToSectionRelative(z));
             return Objects.requireNonNullElse(Block.fromStateId((short) blockStateId), Block.AIR);
         }
 
         @Override
         public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
-            final Section section = sections[getChunkCoordinate(y) - minSection];
+            final Section section = sections[globalToChunk(y) - minSection];
             final int id = section.biomePalette()
-                    .get(toSectionRelativeCoordinate(x) / 4, toSectionRelativeCoordinate(y) / 4, toSectionRelativeCoordinate(z) / 4);
+                    .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
             DynamicRegistry.Key<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
             Check.notNull(key, "Biome with id {0} is not registered", id);
             return key;
