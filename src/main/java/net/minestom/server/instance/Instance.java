@@ -884,9 +884,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     /**
      * Plays a {@link Sound} at a given point, except to the excluded player
+     *
      * @param excludedPlayer The player in the instance who won't receive the sound
-     * @param sound The sound to play
-     * @param point The point in this instance at which to play the sound
+     * @param sound          The sound to play
+     * @param point          The point in this instance at which to play the sound
      */
     public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, @NotNull Point point) {
         playSoundExcept(excludedPlayer, sound, point.x(), point.y(), point.z());
@@ -894,13 +895,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, double x, double y, double z) {
         ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, x, y, z);
-        PacketUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
     }
 
     public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, Sound.@NotNull Emitter emitter) {
         if (emitter != Sound.Emitter.self()) {
             ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
-            PacketUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+            PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
         } else {
             // if we're playing on self, we need to delegate to each audience member
             for (Audience audience : this.audiences()) {
