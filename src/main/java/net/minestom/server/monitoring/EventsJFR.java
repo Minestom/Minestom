@@ -4,8 +4,16 @@ import jdk.jfr.*;
 
 @SuppressWarnings("ALL")
 public final class EventsJFR {
-    public static final String CHUNK_GENERATION = "net.minestom.chunkgen";
-    public static final String CHUNK_LOADING = "net.minestom.chunkload";
+    public static final String SERVER_TICK = "minestom.ServerTickTime";
+    public static final String CHUNK_GENERATION = "minestom.ChunkGeneration";
+    public static final String CHUNK_LOADING = "minestom.ChunkLoading";
+
+    @Name(SERVER_TICK)
+    @Label("Server Tick")
+    @Category({"Minestom", "Server"})
+    @Description("Time spent ticking the server once")
+    public static final class ServerTick extends Event {
+    }
 
     @Name(CHUNK_GENERATION)
     @Label("Chunk Generation")
@@ -34,7 +42,7 @@ public final class EventsJFR {
     public static final class ChunkLoading extends Event {
         @Label("Instance UUID")
         String instance;
-        @Label("Loader class")
+        @Label("Loader Class")
         Class loader;
         @Label("Chunk X")
         int chunkX;
