@@ -121,33 +121,23 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     @Override
     public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
+        SetSlotPacket defaultPacket = new SetSlotPacket(getWindowId(), 0, (byte) slot, item);
+
         for (Player player : getViewers()) {
+            // Equipment handling
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot != null) {
                 player.updateEquipmentAttributes(previous, item, equipmentSlot);
                 player.syncEquipment(equipmentSlot);
             }
 
-            sendSlotRefresh(player, (short) convertToPacketSlot(slot), item);
-        }
-    }
-
-    /**
-     * Refreshes an inventory slot.
-     *
-     * @param player    the specific player to update for
-     * @param slot      the packet slot,
-     *                  see {@link net.minestom.server.utils.inventory.PlayerInventoryUtils#convertToPacketSlot(int)}
-     * @param itemStack the item stack in the slot
-     */
-    protected void sendSlotRefresh(@NotNull Player player, short slot, ItemStack itemStack) {
-        SetSlotPacket defaultPacket = new SetSlotPacket((byte) 0, 0, slot, itemStack);
-
-        AbstractInventory openInventory = player.getOpenInventory();
-        if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-            player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), itemStack));
-        } else if (openInventory == null || slot == OFFHAND_SLOT) {
-            player.sendPacket(defaultPacket);
+            // Slot handling
+            AbstractInventory openInventory = player.getOpenInventory();
+            if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
+                player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), item));
+            } else if (openInventory == null || slot == OFFHAND_SLOT) {
+                player.sendPacket(defaultPacket);
+            }
         }
     }
 
