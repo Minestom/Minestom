@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.concurrent.Phaser;
 
 /**
  * Interface implemented to change the way chunks are loaded/saved.
@@ -54,9 +55,15 @@ public interface IChunkLoader {
      */
     default void saveChunks(@NotNull Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
+            Phaser phaser = new Phaser(1);
             for (Chunk chunk : chunks) {
-                Thread.startVirtualThread(() -> saveChunk(chunk));
+                phaser.register();
+                Thread.startVirtualThread(() -> {
+                    saveChunk(chunk);
+                    phaser.arriveAndDeregister();
+                });
             }
+            phaser.arriveAndAwaitAdvance();
         } else {
             for (Chunk chunk : chunks) {
                 saveChunk(chunk);
