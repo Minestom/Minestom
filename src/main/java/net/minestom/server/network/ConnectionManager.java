@@ -172,19 +172,15 @@ public final class ConnectionManager {
         this.playerProvider = playerProvider != null ? playerProvider : Player::new;
     }
 
-    /**
-     * Creates a player object and begins the transition from the login state to the config state.
-     */
     @ApiStatus.Internal
     public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
-        gameProfile = transitionLoginToConfig(connection, gameProfile);
         final Player player = playerProvider.createPlayer(connection, gameProfile);
         this.connectionPlayerMap.put(connection, player);
         return player;
     }
 
-    private GameProfile transitionLoginToConfig(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
+    public GameProfile transitionLoginToConfig(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
         // Compression
         if (connection instanceof PlayerSocketConnection socketConnection) {
@@ -244,9 +240,7 @@ public final class ConnectionManager {
         final Instance spawningInstance = event.getSpawningInstance();
         Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
-        if (event.willClearChat()) {
-            player.sendPacket(new ResetChatPacket());
-        }
+        if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
 
         // Registry data (if it should be sent)
         if (event.willSendRegistryData()) {

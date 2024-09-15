@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @SuppressWarnings("ConstantConditions")
 public class CommandPacketFilteringTest {
-    private static final Player PLAYER = new Player(null, new GameProfile(UUID.randomUUID(), ""));
+    private static final Player PLAYER = new Player(null, new GameProfile(UUID.randomUUID(), "Test"));
 
     @Test
     public void singleCommandFilteredFalse() {

@@ -32,7 +32,10 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
@@ -86,7 +89,7 @@ public final class LoginListener {
             } else {
                 gameProfile = new GameProfile(packet.profileId(), packet.username());
             }
-            createPlayer(connection, gameProfile);
+            enterConfig(connection, gameProfile);
         }
     }
 
@@ -136,9 +139,7 @@ public final class LoginListener {
                 JsonObject object = element.getAsJsonObject();
                 propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
             }
-            final GameProfile gameProfile = new GameProfile(profileUUID, profileName, propertyList);
-            socketConnection.UNSAFE_setProfile(gameProfile);
-            createPlayer(connection, gameProfile);
+            enterConfig(connection, new GameProfile(profileUUID, profileName, propertyList));
         } catch (IOException e) {
             socketConnection.kick(ERROR_MOJANG_RESPONSE);
             MinecraftServer.getExceptionManager().handleException(e);
@@ -176,8 +177,7 @@ public final class LoginListener {
             return;
         }
         socketConnection.setRemoteAddress(socketAddress);
-        socketConnection.UNSAFE_setProfile(gameProfile);
-        createPlayer(socketConnection, gameProfile);
+        enterConfig(socketConnection, gameProfile);
     }
 
     public static void loginPluginResponseListener(@NotNull ClientLoginPluginResponsePacket packet, @NotNull PlayerConnection connection) {
@@ -192,7 +192,11 @@ public final class LoginListener {
     }
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
-        final Player player = Objects.requireNonNull(connection.getPlayer());
+        if (!(connection instanceof PlayerSocketConnection socketConnection))
+            throw new UnsupportedOperationException("Only socket");
+        final GameProfile gameProfile = socketConnection.gameProfile();
+        assert gameProfile != null;
+        final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
         Thread.startVirtualThread(() -> MinecraftServer.getConnectionManager().doConfiguration(player, true));
     }
 
@@ -200,7 +204,10 @@ public final class LoginListener {
         Thread.startVirtualThread(() -> MinecraftServer.getConnectionManager().doConfiguration(player, false));
     }
 
-    private static void createPlayer(PlayerConnection connection, GameProfile gameProfile) {
-        MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
+    private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
+        gameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
+        if (connection instanceof PlayerSocketConnection socketConnection) {
+            socketConnection.UNSAFE_setProfile(gameProfile);
+        }
     }
 }

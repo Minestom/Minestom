@@ -50,12 +50,15 @@ final class TestConnectionImpl implements TestConnection {
         });
 
         // Force the player through the entirety of the login process manually
-        Thread.startVirtualThread(() -> process.connection().doConfiguration(player, true));
+        CompletableFuture<Player> future = new CompletableFuture<>();
+        Thread.startVirtualThread(() -> {
+            process.connection().doConfiguration(player, true);
+            process.connection().transitionConfigToPlay(player);
+            process.connection().updateWaitingPlayers();
+            future.complete(player);
+        });
         playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
-
-        process.connection().transitionConfigToPlay(player);
-        process.connection().updateWaitingPlayers();
-        return CompletableFuture.completedFuture(player);
+        return future;
     }
 
     @Override
