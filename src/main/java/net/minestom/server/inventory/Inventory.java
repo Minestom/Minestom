@@ -22,11 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public non-sealed class Inventory extends AbstractInventory {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
-    // the id of this inventory
     private final byte id;
-    // the type of this inventory
     private final InventoryType inventoryType;
-    // the title of this inventory
     private Component title;
 
     private final int offset;
@@ -134,12 +131,6 @@ public non-sealed class Inventory extends AbstractInventory {
     @Deprecated
     public void setCursorItem(@NotNull Player player, @NotNull ItemStack cursorItem) {
         player.getInventory().setCursorItem(cursorItem);
-    }
-
-    @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        itemStacks[slot] = itemStack;
-        if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
     }
 
     /**

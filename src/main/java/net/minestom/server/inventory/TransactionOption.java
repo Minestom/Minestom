@@ -14,7 +14,7 @@ public interface TransactionOption<T> {
      * The remaining, can be air.
      */
     TransactionOption<ItemStack> ALL = (inventory, result, itemChangesMap) -> {
-        itemChangesMap.forEach(inventory::safeItemInsert);
+        itemChangesMap.forEach(inventory::setItemStack);
         return result;
     };
 
@@ -26,7 +26,7 @@ public interface TransactionOption<T> {
     TransactionOption<Boolean> ALL_OR_NOTHING = (inventory, result, itemChangesMap) -> {
         if (result.isAir()) {
             // Item can be fully placed inside the inventory, do so
-            itemChangesMap.forEach(inventory::safeItemInsert);
+            itemChangesMap.forEach(inventory::setItemStack);
             return true;
         } else {
             // Inventory cannot accept the item fully
