@@ -1,7 +1,6 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -98,7 +97,6 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
      * Free if the element is already present in the current thread, blocking otherwise.
      *
      * @param consumer the callback to execute once the element has been safely acquired
-     * @see #async(Consumer)
      */
     default void sync(@NotNull Consumer<T> consumer) {
         Acquired<T> acquired = lock();
@@ -107,17 +105,6 @@ public sealed interface Acquirable<T> permits AcquirableImpl {
         } finally {
             acquired.unlock();
         }
-    }
-
-    /**
-     * Async version of {@link #sync(Consumer)}.
-     *
-     * @param consumer the callback to execute once the element has been safely acquired
-     * @see #sync(Consumer)
-     */
-    default void async(@NotNull Consumer<T> consumer) {
-        // TODO per-thread list
-        AsyncUtils.runAsync(() -> sync(consumer));
     }
 
     /**

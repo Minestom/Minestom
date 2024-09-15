@@ -47,9 +47,8 @@ final class TestConnectionImpl implements TestConnection {
         });
 
         // Force the player through the entirety of the login process manually
-        var configFuture = process.connection().doConfiguration(player, true);
+        process.connection().doConfiguration(player, true);
         playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
-        configFuture.join();
 
         process.connection().transitionConfigToPlay(player);
         process.connection().updateWaitingPlayers();
@@ -75,7 +74,8 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
+            if (!(packet instanceof ServerPacket serverPacket))
+                return SendablePacket.extractServerPacket(getConnectionState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;

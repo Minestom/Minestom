@@ -23,6 +23,7 @@ import net.minestom.server.network.packet.client.login.ClientEncryptionResponseP
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -55,15 +56,16 @@ import java.util.zip.DataFormatException;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
+            ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
             StatusRequestPacket.class,
-            ClientLoginStartPacket.class,
             ClientPingRequestPacket.class,
-            ClientKeepAlivePacket.class,
-            ClientEncryptionResponsePacket.class,
-            ClientHandshakePacket.class,
+            ClientKeepAlivePacket.class, // Used to calculate latency
+            ClientLoginStartPacket.class,
+            ClientEncryptionResponsePacket.class, // Auth request
             ClientLoginPluginResponsePacket.class,
-            ClientLoginAcknowledgedPacket.class
+            ClientConfigurationAckPacket.class, // Handle config state
+            ClientLoginAcknowledgedPacket.class // Handle config state
     );
 
     private final SocketChannel channel;
