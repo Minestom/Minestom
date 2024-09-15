@@ -225,9 +225,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
     private CompletableFuture<Void> resourcePackFuture = null;
 
-    public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
-        super(EntityType.PLAYER, uuid);
-        this.username = username;
+    public Player(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+        super(EntityType.PLAYER, gameProfile.uuid());
+        this.username = gameProfile.name();
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
@@ -248,7 +248,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // FakePlayer init its connection there
         playerConnectionInit();
 
-        this.identity = Identity.identity(uuid);
+        this.identity = Identity.identity(gameProfile.uuid());
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUuid)
                 .withDynamic(Identity.NAME, this::getUsername)
@@ -375,13 +375,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void startConfigurationPhase() {
         Check.stateCondition(playerConnection.getConnectionState() != ConnectionState.PLAY,
                 "Player must be in the play state for reconfiguration.");
-
         // Remove the player, then send them back to configuration
         remove(false);
-
-        var connectionManager = MinecraftServer.getConnectionManager();
-        connectionManager.transitionPlayToConfig(this);
-
+        MinecraftServer.getConnectionManager().transitionPlayToConfig(this);
     }
 
     /**

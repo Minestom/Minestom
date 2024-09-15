@@ -1,6 +1,7 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.event.Event;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -14,28 +15,21 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AsyncPlayerPreLoginEvent implements Event {
 
-    private UUID uuid;
-    private String username;
+    private GameProfile gameProfile;
     private final LoginPluginMessageProcessor pluginMessageProcessor;
 
-    public AsyncPlayerPreLoginEvent(@NotNull UUID uuid,
-                                    @NotNull String username,
+    public AsyncPlayerPreLoginEvent(@NotNull GameProfile gameProfile,
                                     @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
-        this.uuid = uuid;
-        this.username = username;
+        this.gameProfile = gameProfile;
         this.pluginMessageProcessor = pluginMessageProcessor;
     }
 
-    public @NotNull String getUsername() {
-        return username;
+    public GameProfile getGameProfile() {
+        return gameProfile;
     }
 
-    public void setUsername(@NotNull String username) {
-        this.username = username;
-    }
-
-    public @NotNull UUID getPlayerUuid() {
-        return uuid;
+    public void setGameProfile(GameProfile gameProfile) {
+        this.gameProfile = gameProfile;
     }
 
     /**
@@ -48,5 +42,20 @@ public class AsyncPlayerPreLoginEvent implements Event {
      */
     public @NotNull CompletableFuture<LoginPlugin.Response> sendPluginRequest(String channel, byte[] requestPayload) {
         return pluginMessageProcessor.request(channel, requestPayload);
+    }
+
+    @Deprecated
+    public @NotNull String getUsername() {
+        return gameProfile.name();
+    }
+
+    @Deprecated
+    public void setUsername(@NotNull String username) {
+        this.gameProfile = new GameProfile(gameProfile.uuid(), username, gameProfile.properties());
+    }
+
+    @Deprecated
+    public @NotNull UUID getPlayerUuid() {
+        return gameProfile.uuid();
     }
 }
