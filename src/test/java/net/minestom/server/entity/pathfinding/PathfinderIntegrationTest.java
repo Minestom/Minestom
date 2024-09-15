@@ -1,12 +1,12 @@
 package net.minestom.server.entity.pathfinding;
 
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -24,6 +24,7 @@ public class PathfinderIntegrationTest {
     /**
      * Validate that the path is valid
      * Currently only checks to make sure path is not null, and that nodes are not inside blocks
+     *
      * @param nodes the nodes to validate
      * @return true if the path is valid
      */
@@ -44,7 +45,7 @@ public class PathfinderIntegrationTest {
     public void testTall(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -56,9 +57,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -66,7 +68,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLine(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -75,9 +77,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -85,7 +88,7 @@ public class PathfinderIntegrationTest {
     public void testShort(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -95,9 +98,10 @@ public class PathfinderIntegrationTest {
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(2, 40, 2));
 
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -105,7 +109,7 @@ public class PathfinderIntegrationTest {
     public void testBug(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -118,17 +122,18 @@ public class PathfinderIntegrationTest {
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(43.5, 40, -41.5));
 
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
 
         validateNodes(nav.getNodes(), i);
     }
 
     @Test
     public void testPFNodeEqual(Env env) {
-        PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.NodeType.WALK, null);
-        PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.NodeType.WALK, node1);
+        PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.Type.WALK, null);
+        PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.Type.WALK, node1);
 
         Set<PNode> nodes = new HashSet<>();
         nodes.add(node1);
@@ -142,7 +147,7 @@ public class PathfinderIntegrationTest {
     public void testStraightLineBlocked(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 
@@ -182,9 +187,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -192,7 +198,7 @@ public class PathfinderIntegrationTest {
     public void testGravitySnap(Env env) {
         var i = env.createFlatInstance();
 
-        ChunkUtils.forChunksInRange(0, 0, 10, (x, z) -> {
+        ChunkRange.chunksInRange(0, 0, 10, (x, z) -> {
             i.loadChunk(x, z).join();
         });
 

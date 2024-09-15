@@ -1,14 +1,18 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.ServerProcess;
 import net.minestom.server.Tickable;
+import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
@@ -25,6 +29,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
@@ -40,7 +45,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
@@ -206,8 +210,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
      * and send particle packets
      *
-     * @param player        the {@link Player} who break the block
-     * @param blockPosition the position of the broken block
+     * @param player         the {@link Player} who break the block
+     * @param blockPosition  the position of the broken block
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
@@ -331,6 +335,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     /**
      * Gets the chunk supplier of the instance.
+     *
      * @return the chunk supplier of the instance
      */
     public abstract ChunkSupplier getChunkSupplier();
@@ -415,6 +420,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     /**
      * Gets the instance dimension name.
+     *
      * @return the dimension name of the instance
      */
     public @NotNull String getDimensionName() {
@@ -532,10 +538,9 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Set the instance {@link WorldBorder} with a smooth transition.
      *
-     * @param worldBorder the desired final state of the world border
+     * @param worldBorder    the desired final state of the world border
      * @param transitionTime the time in seconds this world border's diameter
      *                       will transition for (0 makes this instant)
-     *
      */
     public void setWorldBorder(@NotNull WorldBorder worldBorder, double transitionTime) {
         Check.stateCondition(transitionTime < 0, "Transition time cannot be lower than 0");
@@ -573,13 +578,15 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (this.worldBorder.centerX() != newBorder.centerX() || this.worldBorder.centerZ() != newBorder.centerZ()) {
             sendGroupedPacket(newBorder.createCenterPacket());
         }
-        if (this.worldBorder.warningTime() != newBorder.warningTime()) sendGroupedPacket(newBorder.createWarningDelayPacket());
-        if (this.worldBorder.warningDistance() != newBorder.warningDistance()) sendGroupedPacket(newBorder.createWarningReachPacket());
+        if (this.worldBorder.warningTime() != newBorder.warningTime())
+            sendGroupedPacket(newBorder.createWarningDelayPacket());
+        if (this.worldBorder.warningDistance() != newBorder.warningDistance())
+            sendGroupedPacket(newBorder.createWarningReachPacket());
     }
 
     private @NotNull WorldBorder transitionWorldBorder(long remainingTicks) {
         if (remainingTicks <= 1) return worldBorder.withDiameter(targetBorderDiameter);
-        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double)remainingTicks));
+        return worldBorder.withDiameter(worldBorder.diameter() + (targetBorderDiameter - worldBorder.diameter()) * (1 / (double) remainingTicks));
     }
 
     /**
@@ -716,7 +723,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the chunk at the given position, null if not loaded
      */
     public @Nullable Chunk getChunkAt(double x, double z) {
-        return getChunk(ChunkUtils.getChunkCoordinate(x), ChunkUtils.getChunkCoordinate(z));
+        return getChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
     }
 
     /**
@@ -800,7 +807,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the weather on this instance, transitions over time
      *
-     * @param weather the new weather
+     * @param weather         the new weather
      * @param transitionTicks the ticks to transition to new weather
      */
     public void setWeather(@NotNull Weather weather, int transitionTicks) {
@@ -824,15 +831,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private void sendWeatherPackets(@NotNull Weather previousWeather) {
         boolean toggledRain = (transitioningWeather.isRaining() != previousWeather.isRaining());
         if (toggledRain) sendGroupedPacket(transitioningWeather.createIsRainingPacket());
-        if (transitioningWeather.rainLevel() != previousWeather.rainLevel()) sendGroupedPacket(transitioningWeather.createRainLevelPacket());
-        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel()) sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
+        if (transitioningWeather.rainLevel() != previousWeather.rainLevel())
+            sendGroupedPacket(transitioningWeather.createRainLevelPacket());
+        if (transitioningWeather.thunderLevel() != previousWeather.thunderLevel())
+            sendGroupedPacket(transitioningWeather.createThunderLevelPacket());
     }
 
     private @NotNull Weather transitionWeather(int remainingRainTransitionTicks, int remainingThunderTransitionTicks) {
         Weather target = weather;
         Weather current = transitioningWeather;
-        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float)Math.max(1, remainingRainTransitionTicks));
-        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float)Math.max(1, remainingThunderTransitionTicks));
+        float rainLevel = current.rainLevel() + (target.rainLevel() - current.rainLevel()) * (1 / (float) Math.max(1, remainingRainTransitionTicks));
+        float thunderLevel = current.thunderLevel() + (target.thunderLevel() - current.thunderLevel()) * (1 / (float) Math.max(1, remainingThunderTransitionTicks));
         return new Weather(rainLevel, thunderLevel);
     }
 
@@ -854,11 +863,41 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
-        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(), ChunkUtils::getChunkIndex);
+        final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
+                value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
         final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
                 tagHandler.readableCopy());
+    }
+
+    /**
+     * Plays a {@link Sound} at a given point, except to the excluded player
+     *
+     * @param excludedPlayer The player in the instance who won't receive the sound
+     * @param sound          The sound to play
+     * @param point          The point in this instance at which to play the sound
+     */
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, @NotNull Point point) {
+        playSoundExcept(excludedPlayer, sound, point.x(), point.y(), point.z());
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, double x, double y, double z) {
+        ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, x, y, z);
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+    }
+
+    public void playSoundExcept(@Nullable Player excludedPlayer, @NotNull Sound sound, Sound.@NotNull Emitter emitter) {
+        if (emitter != Sound.Emitter.self()) {
+            ServerPacket packet = AdventurePacketConvertor.createSoundPacket(sound, emitter);
+            PacketSendingUtils.sendGroupedPacket(getPlayers(), packet, p -> p != excludedPlayer);
+        } else {
+            // if we're playing on self, we need to delegate to each audience member
+            for (Audience audience : this.audiences()) {
+                if (audience == excludedPlayer) continue;
+                audience.playSound(sound, emitter);
+            }
+        }
     }
 
     /**
@@ -921,13 +960,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.blockLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        int coordX = CoordConversion.globalToSectionRelative(blockX);
+        int coordY = CoordConversion.globalToSectionRelative(blockY);
+        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        if (light.requiresUpdate())
+            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 
@@ -936,13 +976,14 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         if (chunk == null) return 0;
         Section section = chunk.getSectionAt(blockY);
         Light light = section.skyLight();
-        int sectionCoordinate = ChunkUtils.getChunkCoordinate(blockY);
+        int sectionCoordinate = CoordConversion.globalToChunk(blockY);
 
-        int coordX = ChunkUtils.toSectionRelativeCoordinate(blockX);
-        int coordY = ChunkUtils.toSectionRelativeCoordinate(blockY);
-        int coordZ = ChunkUtils.toSectionRelativeCoordinate(blockZ);
+        int coordX = CoordConversion.globalToSectionRelative(blockX);
+        int coordY = CoordConversion.globalToSectionRelative(blockY);
+        int coordZ = CoordConversion.globalToSectionRelative(blockZ);
 
-        if (light.requiresUpdate()) LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
+        if (light.requiresUpdate())
+            LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
 }

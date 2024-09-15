@@ -59,9 +59,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class PlayerInit {
 
-    private static final Inventory inventory;
+    private final Inventory inventory;
 
-    private static final EventNode<Event> DEMO_NODE = EventNode.all("demo")
+    private final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
                 final Entity source = event.getEntity();
                 final Entity entity = event.getTarget();
@@ -222,7 +222,7 @@ public class PlayerInit {
                 event.getInstance().setBlock(event.getBlockPosition(), block);
             });
 
-    static {
+    {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
@@ -257,9 +257,9 @@ public class PlayerInit {
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
 
-    private static final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
+    private final AtomicReference<TickMonitor> LAST_TICK = new AtomicReference<>();
 
-    public static void init() {
+    public void init() {
         var eventHandler = MinecraftServer.getGlobalEventHandler();
         eventHandler.addChild(DEMO_NODE);
 

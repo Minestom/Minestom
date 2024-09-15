@@ -141,7 +141,7 @@ public class Main {
         );
         MinecraftServer.getRecipeManager().addRecipe(recipe);
 
-        PlayerInit.init();
+        new PlayerInit().init();
 
 //        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();

@@ -1,14 +1,18 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
 import net.minestom.server.network.packet.server.common.CookieStorePacket;
+import net.minestom.server.network.packet.server.common.DisconnectPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
+import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
@@ -110,6 +114,24 @@ public abstract class PlayerConnection {
      */
     public int getServerPort() {
         return MinecraftServer.getServer().getPort();
+    }
+
+
+    /**
+     * Kicks the player with a reason.
+     *
+     * @param component the reason
+     */
+    public void kick(@NotNull Component component) {
+        // Packet type depends on the current player connection state
+        final ServerPacket disconnectPacket;
+        if (connectionState == ConnectionState.LOGIN) {
+            disconnectPacket = new LoginDisconnectPacket(component);
+        } else {
+            disconnectPacket = new DisconnectPacket(component);
+        }
+        sendPacket(disconnectPacket);
+        disconnect();
     }
 
     /**
