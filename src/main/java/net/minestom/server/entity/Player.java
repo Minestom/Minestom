@@ -63,7 +63,10 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.common.*;
+import net.minestom.server.network.packet.server.common.KeepAlivePacket;
+import net.minestom.server.network.packet.server.common.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
+import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
@@ -1263,17 +1266,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public @NotNull String getUsername() {
         return username;
-    }
-
-    /**
-     * Changes the internal player name, used for the {@link AsyncPlayerPreLoginEvent}
-     * mostly unsafe outside of it.
-     *
-     * @param username the new player name
-     */
-    public void setUsernameField(@NotNull String username) {
-        this.username = username;
-        this.usernameComponent = Component.text(username);
     }
 
     /**

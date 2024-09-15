@@ -79,12 +79,8 @@ public final class LoginListener {
             final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
             try {
-                final UUID playerUuid;
-                if (bungee && isSocketConnection)
-                    playerUuid = ((PlayerSocketConnection) connection).gameProfile().uuid();
-                else playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
+                final UUID playerUuid = bungee && isSocketConnection ? ((PlayerSocketConnection) connection).gameProfile().uuid() : null;
                 CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
-
             } catch (Exception exception) {
                 connection.kick(Component.text(exception.getClass().getSimpleName() + ": " + exception.getMessage()));
                 MinecraftServer.getExceptionManager().handleException(exception);

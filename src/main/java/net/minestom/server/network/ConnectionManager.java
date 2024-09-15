@@ -10,7 +10,6 @@ import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.AsyncPlayerPreLoginEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.listener.preplay.LoginListener;
-import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
@@ -171,28 +170,13 @@ public final class ConnectionManager {
      * <p>
      * Shouldn't be override if already defined.
      * <p>
-     * Be aware that it is possible for an UUID provider to be ignored, for example in the case of a proxy (eg: velocity).
+     * Be aware that it is possible for a UUID provider to be ignored, for example in the case of a proxy (eg: velocity).
      *
      * @param uuidProvider the new player connection uuid provider,
      *                     setting it to null would apply a random UUID for each player connection
-     * @see #getPlayerConnectionUuid(PlayerConnection, String)
      */
     public void setUuidProvider(@Nullable UuidProvider uuidProvider) {
         this.uuidProvider = uuidProvider != null ? uuidProvider : (playerConnection, username) -> UUID.randomUUID();
-    }
-
-    /**
-     * Computes the UUID of the specified connection.
-     * Used in {@link ClientLoginStartPacket} in order
-     * to give the player the right {@link UUID}.
-     *
-     * @param playerConnection the player connection
-     * @param username         the username given by the connection
-     * @return the uuid based on {@code playerConnection}
-     * return a random UUID if no UUID provider is defined see {@link #setUuidProvider(UuidProvider)}
-     */
-    public @NotNull UUID getPlayerConnectionUuid(@NotNull PlayerConnection playerConnection, @NotNull String username) {
-        return uuidProvider.provide(playerConnection, username);
     }
 
     /**
@@ -208,50 +192,43 @@ public final class ConnectionManager {
      * Creates a player object and begins the transition from the login state to the config state.
      */
     @ApiStatus.Internal
-    public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
+    public @NotNull Player createPlayer(@NotNull PlayerConnection connection, @Nullable UUID uuid, @NotNull String username) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
-        final Player player = playerProvider.createPlayer(uuid, username, connection);
+        if (uuid == null) uuid = uuidProvider.provide(connection, username);
+        final PlayerInfo info = transitionLoginToConfig(connection, uuid, username);
+        final Player player = playerProvider.createPlayer(info.uuid(), info.username(), connection);
         this.connectionPlayerMap.put(connection, player);
-        transitionLoginToConfig(player);
         return player;
     }
 
-    @ApiStatus.Internal
-    public void transitionLoginToConfig(@NotNull Player player) {
+    private PlayerInfo transitionLoginToConfig(@NotNull PlayerConnection connection, @NotNull UUID uuid, @NotNull String username) {
         assert ServerFlag.INSIDE_TEST || Thread.currentThread().isVirtual();
-        final PlayerConnection playerConnection = player.getPlayerConnection();
         // Compression
-        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
+        if (connection instanceof PlayerSocketConnection socketConnection) {
             final int threshold = MinecraftServer.getCompressionThreshold();
             if (threshold > 0) socketConnection.startCompression();
         }
         // Call pre login event
-        LoginPluginMessageProcessor pluginMessageProcessor = playerConnection.loginPluginMessageProcessor();
-        AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(player, pluginMessageProcessor);
+        LoginPluginMessageProcessor pluginMessageProcessor = connection.loginPluginMessageProcessor();
+        AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(uuid, username, pluginMessageProcessor);
         EventDispatcher.call(asyncPlayerPreLoginEvent);
-        if (!player.isOnline())
-            return; // Player has been kicked
-
+        if (!connection.isOnline()) return null; // Player has been kicked
         // Change UUID/Username based on the event
-        {
-            final String eventUsername = asyncPlayerPreLoginEvent.getUsername();
-            final UUID eventUuid = asyncPlayerPreLoginEvent.getPlayerUuid();
-            if (!player.getUsername().equals(eventUsername)) {
-                player.setUsernameField(eventUsername);
-            }
-        }
-
+        uuid = asyncPlayerPreLoginEvent.getPlayerUuid();
+        username = asyncPlayerPreLoginEvent.getUsername();
         // Wait for pending login plugin messages
         try {
             pluginMessageProcessor.awaitReplies(ServerFlag.LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
         } catch (Throwable t) {
-            player.kick(LoginListener.INVALID_PROXY_RESPONSE);
+            connection.kick(LoginListener.INVALID_PROXY_RESPONSE);
             throw new RuntimeException("Error getting replies for login plugin messages", t);
         }
-
         // Send login success packet (and switch to configuration phase)
-        LoginSuccessPacket loginSuccessPacket = new LoginSuccessPacket(player.getUuid(), player.getUsername(), 0, true);
-        playerConnection.sendPacket(loginSuccessPacket);
+        connection.sendPacket(new LoginSuccessPacket(uuid, username, 0, true));
+        return new PlayerInfo(uuid, username);
+    }
+
+    record PlayerInfo(UUID uuid, String username) {
     }
 
     @ApiStatus.Internal
