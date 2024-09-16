@@ -222,13 +222,9 @@ public final class ConnectionManager {
             configurationPlayers.add(player);
             keepAlivePlayers.add(player);
         }
-
-        final PlayerConnection connection = player.getPlayerConnection();
-        connection.setConnectionState(ConnectionState.CONFIGURATION);
-
         player.sendPacket(PluginMessagePacket.brandPacket(MinecraftServer.getBrandName()));
         // Request known packs immediately, but don't wait for the response until required (sending registry data).
-        final var knownPacksFuture = connection.requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
+        final var knownPacksFuture = player.getPlayerConnection().requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
 
         var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
         EventDispatcher.call(event);
@@ -329,7 +325,6 @@ public final class ConnectionManager {
     public void updateWaitingPlayers() {
         this.waitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join
-            player.getPlayerConnection().setConnectionState(ConnectionState.PLAY);
             playPlayers.add(player);
             keepAlivePlayers.add(player);
 

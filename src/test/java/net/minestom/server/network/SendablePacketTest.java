@@ -61,7 +61,7 @@ public class SendablePacketTest {
             return;
         }
         assertEquals(1, success.packets().size());
-        var readPacket = success.packets().getFirst();
+        ClientPacket readPacket = success.packets().getFirst().packet();
         assertEquals(packet, readPacket);
     }
 }
