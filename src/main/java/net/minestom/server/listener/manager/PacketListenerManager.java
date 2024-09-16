@@ -5,7 +5,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.listener.*;
 import net.minestom.server.listener.common.*;
-import net.minestom.server.listener.preplay.ConfigListener;
 import net.minestom.server.listener.preplay.HandshakeListener;
 import net.minestom.server.listener.preplay.LoginListener;
 import net.minestom.server.listener.preplay.StatusListener;
@@ -56,8 +55,8 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setConfigurationListener(ClientPongPacket.class, (packet, player) -> {/* empty */});
         setConfigurationListener(ClientResourcePackStatusPacket.class, ResourcePackListener::listener);
-        setConfigurationListener(ClientSelectKnownPacksPacket.class, ConfigListener::selectKnownPacks);
-        setConfigurationListener(ClientFinishConfigurationPacket.class, ConfigListener::finishConfigListener);
+        setConfigurationListener(ClientSelectKnownPacksPacket.class, LoginListener::selectKnownPacks);
+        setConfigurationListener(ClientFinishConfigurationPacket.class, LoginListener::finishConfigListener);
         setListener(ConnectionState.CONFIGURATION, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
 
         setPlayListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);

@@ -18,6 +18,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientCookieResponsePacket;
 import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
 import net.minestom.server.network.packet.client.common.ClientPingRequestPacket;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
@@ -64,7 +65,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             ClientLoginPluginResponsePacket.class,
             ClientSelectKnownPacksPacket.class, // Immediate answer to server request on config
             ClientConfigurationAckPacket.class, // Handle config state
-            ClientLoginAcknowledgedPacket.class // Handle config state
+            ClientLoginAcknowledgedPacket.class, // Handle config state
+            ClientFinishConfigurationPacket.class // Enter play state
     );
 
     private final SocketChannel channel;
@@ -116,12 +118,13 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private void processPackets(NetworkBuffer readBuffer, PacketParser<ClientPacket> packetParser) {
         // Read all packets
+        final ConnectionState startingState = getConnectionState();
         final PacketReading.Result<ClientPacket> result;
         try {
             result = PacketReading.readPackets(
                     readBuffer,
                     packetParser,
-                    getConnectionState(), PacketVanilla::nextClientState,
+                    startingState, PacketVanilla::nextClientState,
                     compression()
             );
         } catch (DataFormatException e) {
@@ -131,7 +134,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         switch (result) {
             case PacketReading.Result.Success<ClientPacket> success -> {
-                for (ClientPacket packet : success.packets()) {
+                for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : success.packets()) {
+                    final ClientPacket packet = parsedPacket.packet();
                     try {
                         final boolean processImmediately = IMMEDIATE_PROCESS_PACKETS.contains(packet.getClass());
                         if (processImmediately) {
@@ -144,6 +148,11 @@ public class PlayerSocketConnection extends PlayerConnection {
                         }
                     } catch (Exception e) {
                         MinecraftServer.getExceptionManager().handleException(e);
+                    }
+                    // Update state to properly interpret next packet
+                    final ConnectionState nextState = parsedPacket.nextState();
+                    if (nextState != getConnectionState()) {
+                        setConnectionState(nextState);
                     }
                 }
                 // Compact in case of incomplete read

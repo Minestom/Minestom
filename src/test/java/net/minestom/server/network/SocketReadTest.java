@@ -27,7 +27,7 @@ public class SocketReadTest {
         if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        var packets = success.packets();
+        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
     }
 
@@ -44,7 +44,7 @@ public class SocketReadTest {
         if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        var packets = success.packets();
+        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet, packet), packets);
     }
 
@@ -63,7 +63,7 @@ public class SocketReadTest {
         if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        var packets = success.packets();
+        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(List.of(packet), packets);
 
         readResult = PacketReading.readClients(buffer, ConnectionState.PLAY, compressed);
@@ -87,7 +87,7 @@ public class SocketReadTest {
         if (!(readResult instanceof PacketReading.Result.Success<ClientPacket> success)) {
             throw new AssertionError("Expected a success result, got " + readResult);
         }
-        var packets = success.packets();
+        List<ClientPacket> packets = success.packets().stream().map(PacketReading.ParsedPacket::packet).toList();
         assertEquals(1, buffer.readableBytes());
 
         assertEquals(List.of(packet), packets);
