@@ -1,5 +1,7 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.adventure.MinestomAdventure;
@@ -25,6 +27,7 @@ import net.minestom.server.network.packet.client.login.ClientLoginPluginResponse
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
+import net.minestom.server.network.packet.server.common.KeepAlivePacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jctools.queues.MpscUnboundedXaddArrayQueue;
@@ -65,6 +68,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             ClientLoginPluginResponsePacket.class,
             ClientLoginAcknowledgedPacket.class
     );
+
+    private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
 
     private final SocketChannel channel;
     private SocketAddress remoteAddress;
@@ -110,6 +115,8 @@ public class PlayerSocketConnection extends PlayerConnection {
         }
         // Process packets
         processPackets(readBuffer, packetParser);
+        // Handle keep alive
+        handleKeepAlive();
     }
 
     private boolean compression() {
@@ -161,6 +168,19 @@ public class PlayerSocketConnection extends PlayerConnection {
                         "New capacity should be greater than the current one: " + requiredCapacity + " <= " + readBuffer.capacity();
                 readBuffer.resize(requiredCapacity);
             }
+        }
+    }
+
+    private void handleKeepAlive() {
+        final Player player = getPlayer();
+        if (player == null) return;
+        final long time = System.currentTimeMillis();
+        final long lastKeepAlive = time - player.getLastKeepAlive();
+        if (lastKeepAlive > ServerFlag.KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+            player.refreshKeepAlive(time);
+            player.sendPacket(new KeepAlivePacket(time));
+        } else if (lastKeepAlive >= ServerFlag.KEEP_ALIVE_KICK) {
+            player.kick(TIMEOUT_TEXT);
         }
     }
 
