@@ -61,13 +61,13 @@ public final class CommandManager {
     }
 
     /**
-     * Register multiple {@link Command}.
+     * Register multiple {@link Command}s.
      *
      * @param commands the array of commands
      * @throws IllegalStateException if a command with the same name already exists
      */
-    public synchronized void register(@NotNull Command ...commands) {
-        for(Command command : commands) {
+    public synchronized void register(@NotNull Command... commands) {
+        for (Command command : commands) {
             register(command);
         }
     }
