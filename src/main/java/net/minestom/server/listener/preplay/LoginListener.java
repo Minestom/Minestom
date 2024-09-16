@@ -11,6 +11,8 @@ import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
+import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
@@ -202,6 +204,14 @@ public final class LoginListener {
 
     public static void configAckListener(@NotNull ClientConfigurationAckPacket packet, @NotNull Player player) {
         executeConfig(player, false);
+    }
+
+    public static void selectKnownPacks(@NotNull ClientSelectKnownPacksPacket packet, @NotNull Player player) {
+        player.getPlayerConnection().receiveKnownPacksResponse(packet.entries());
+    }
+
+    public static void finishConfigListener(@NotNull ClientFinishConfigurationPacket packet, @NotNull Player player) {
+        MinecraftServer.getConnectionManager().transitionConfigToPlay(player);
     }
 
     private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
