@@ -63,13 +63,15 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.common.*;
+import net.minestom.server.network.packet.server.common.KeepAlivePacket;
+import net.minestom.server.network.packet.server.common.PluginMessagePacket;
+import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
+import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -121,6 +123,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
+    private final GameProfile gameProfile;
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
@@ -222,9 +225,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     // The future is non-null when a resource pack is in-flight, and completed when all statuses have been received.
     private CompletableFuture<Void> resourcePackFuture = null;
 
-    public Player(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection playerConnection) {
-        super(EntityType.PLAYER, uuid);
-        this.username = username;
+    public Player(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+        super(EntityType.PLAYER, gameProfile.uuid());
+        this.gameProfile = gameProfile;
+        this.username = gameProfile.name();
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
 
@@ -245,7 +249,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // FakePlayer init its connection there
         playerConnectionInit();
 
-        this.identity = Identity.identity(uuid);
+        this.identity = Identity.identity(gameProfile.uuid());
         this.pointers = Pointers.builder()
                 .withDynamic(Identity.UUID, this::getUuid)
                 .withDynamic(Identity.NAME, this::getUsername)
@@ -297,15 +301,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Add player to list with spawning skin
         PlayerSkin profileSkin = null;
-        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-            final GameProfile gameProfile = socketConnection.gameProfile();
-            if (gameProfile != null) {
-                for (GameProfile.Property property : gameProfile.properties()) {
-                    if (property.name().equals("textures")) {
-                        profileSkin = new PlayerSkin(property.value(), property.signature());
-                        break;
-                    }
-                }
+        for (GameProfile.Property property : gameProfile.properties()) {
+            if (property.name().equals("textures")) {
+                profileSkin = new PlayerSkin(property.value(), property.signature());
+                break;
             }
         }
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
@@ -372,13 +371,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void startConfigurationPhase() {
         Check.stateCondition(playerConnection.getConnectionState() != ConnectionState.PLAY,
                 "Player must be in the play state for reconfiguration.");
-
         // Remove the player, then send them back to configuration
         remove(false);
-
-        var connectionManager = MinecraftServer.getConnectionManager();
-        connectionManager.transitionPlayToConfig(this);
-
+        MinecraftServer.getConnectionManager().transitionPlayToConfig(this);
     }
 
     /**
@@ -1263,17 +1258,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public @NotNull String getUsername() {
         return username;
-    }
-
-    /**
-     * Changes the internal player name, used for the {@link AsyncPlayerPreLoginEvent}
-     * mostly unsafe outside of it.
-     *
-     * @param username the new player name
-     */
-    public void setUsernameField(@NotNull String username) {
-        this.username = username;
-        this.usernameComponent = Component.text(username);
     }
 
     /**

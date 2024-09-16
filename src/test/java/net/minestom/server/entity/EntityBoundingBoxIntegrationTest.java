@@ -18,7 +18,7 @@ public class EntityBoundingBoxIntegrationTest {
     public void pose(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         // Bounding box should be from the registry
         assertEquals(player.getEntityType().registry().boundingBox(), player.getBoundingBox());
@@ -39,7 +39,7 @@ public class EntityBoundingBoxIntegrationTest {
     public void eyeHeight(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         assertEquals(1.62, player.getEyeHeight());
 

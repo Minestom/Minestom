@@ -27,7 +27,7 @@ public class InstanceBlockPacketIntegrationTest {
     public void replaceAir(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        connection.connect(instance, new Pos(0, 40, 0)).join();
+        connection.connect(instance, new Pos(0, 40, 0));
 
         var blockPoint = new Vec(5, 41, 0);
 
@@ -47,7 +47,7 @@ public class InstanceBlockPacketIntegrationTest {
     public void placeBlockEntity(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        connection.connect(instance, new Pos(0, 40, 0)).join();
+        connection.connect(instance, new Pos(0, 40, 0));
 
         var blockPoint = new Vec(5, 41, 0);
 

@@ -37,7 +37,7 @@ public class TranslationIntegrationTest {
     public void testTranslationEnabled(final Env env) {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
-        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SystemChatPacket.class);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
@@ -56,7 +56,7 @@ public class TranslationIntegrationTest {
     public void testTranslationDisabled(final Env env) {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
-        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SystemChatPacket.class);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = false;
@@ -73,7 +73,7 @@ public class TranslationIntegrationTest {
     public void testItemStackTranslation(final Env env) {
         final var instance = env.createFlatInstance();
         final var connection = env.createConnection();
-        final var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        final var player = connection.connect(instance, new Pos(0, 40, 0));
         final var collector = connection.trackIncoming(SetSlotPacket.class);
 
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
