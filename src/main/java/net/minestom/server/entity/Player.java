@@ -72,7 +72,6 @@ import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
@@ -124,6 +123,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
+    private final GameProfile gameProfile;
     private String username;
     private Component usernameComponent;
     protected final PlayerConnection playerConnection;
@@ -227,6 +227,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public Player(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
         super(EntityType.PLAYER, gameProfile.uuid());
+        this.gameProfile = gameProfile;
         this.username = gameProfile.name();
         this.usernameComponent = Component.text(username);
         this.playerConnection = playerConnection;
@@ -300,15 +301,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Add player to list with spawning skin
         PlayerSkin profileSkin = null;
-        if (playerConnection instanceof PlayerSocketConnection socketConnection) {
-            final GameProfile gameProfile = socketConnection.gameProfile();
-            if (gameProfile != null) {
-                for (GameProfile.Property property : gameProfile.properties()) {
-                    if (property.name().equals("textures")) {
-                        profileSkin = new PlayerSkin(property.value(), property.signature());
-                        break;
-                    }
-                }
+        for (GameProfile.Property property : gameProfile.properties()) {
+            if (property.name().equals("textures")) {
+                profileSkin = new PlayerSkin(property.value(), property.signature());
+                break;
             }
         }
         PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
