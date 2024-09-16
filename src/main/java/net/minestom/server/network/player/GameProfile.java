@@ -22,6 +22,10 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name,
         properties = List.copyOf(properties);
     }
 
+    public GameProfile(@NotNull UUID uuid, @NotNull String name) {
+        this(uuid, name, List.of());
+    }
+
     public static final NetworkBuffer.Type<GameProfile> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.UUID, GameProfile::uuid,
             STRING, GameProfile::name,

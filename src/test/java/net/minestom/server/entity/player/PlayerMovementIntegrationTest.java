@@ -20,7 +20,6 @@ import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.testing.TestConnection;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
@@ -54,7 +53,7 @@ public class PlayerMovementIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
-        connection.connect(instance, new Pos(0, 40, 0)).join();
+        connection.connect(instance, new Pos(0, 40, 0));
 
         p1.addPacketToQueue(new ClientTeleportConfirmPacket(p1.getLastSentTeleportId()));
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.2, 40, 0), true));
@@ -76,8 +75,7 @@ public class PlayerMovementIntegrationTest {
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
-        final Player player = future.join();
+        final Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Initial join
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
@@ -125,7 +123,7 @@ public class PlayerMovementIntegrationTest {
         int viewDistance = 4;
         final Instance flatInstance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
+        Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
         ChunkRange.chunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
@@ -154,7 +152,7 @@ public class PlayerMovementIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos).join();
+        var player = connection.connect(instance, startingPlayerPos);
 
         int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
 
