@@ -8,7 +8,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
-import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
@@ -40,9 +39,9 @@ public final class HandshakeListener {
     public static void listener(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
         String address = packet.serverAddress();
         switch (packet.intent()) {
-            case STATUS -> connection.setConnectionState(ConnectionState.STATUS);
+            case STATUS -> {
+            }
             case LOGIN -> {
-                connection.setConnectionState(ConnectionState.LOGIN);
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
                     connection.kick(INVALID_VERSION_TEXT);
@@ -114,9 +113,8 @@ public final class HandshakeListener {
                     }
                 }
             }
-            case TRANSFER -> {
-                throw new UnsupportedOperationException("Transfer intent is not supported in HandshakeListener");
-            }
+            case TRANSFER ->
+                    throw new UnsupportedOperationException("Transfer intent is not supported in HandshakeListener");
             default -> {
                 // Unexpected error
             }
