@@ -41,10 +41,7 @@ import java.nio.channels.SocketChannel;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.zip.DataFormatException;
 
 /**
@@ -87,9 +84,6 @@ public class PlayerSocketConnection extends PlayerConnection {
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
-
-    final ReentrantLock writeLock = new ReentrantLock();
-    final Condition writeCondition = writeLock.newCondition();
 
     private final ListenerHandle<PlayerPacketOutEvent> outgoing = EventDispatcher.getHandle(PlayerPacketOutEvent.class);
 
@@ -191,13 +185,11 @@ public class PlayerSocketConnection extends PlayerConnection {
     @Override
     public void sendPacket(@NotNull SendablePacket packet) {
         this.packetQueue.relaxedOffer(packet);
-        signalWrite();
     }
 
     @Override
     public void sendPackets(@NotNull Collection<SendablePacket> packets) {
         for (SendablePacket packet : packets) this.packetQueue.relaxedOffer(packet);
-        signalWrite();
     }
 
     @Override
@@ -403,7 +395,13 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Consume queued packets
         var packetQueue = this.packetQueue;
         if (packetQueue.isEmpty()) {
-            awaitWrite();
+            try {
+                // Can probably be improved by waking up at the end of the tick
+                // But this work well enough and without additional state.
+                Thread.sleep(1000 / ServerFlag.SERVER_TICKS_PER_SECOND / 2);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
         }
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
@@ -419,27 +417,6 @@ public class PlayerSocketConnection extends PlayerConnection {
         // Keep the buffer if not fully written
         if (success) PacketVanilla.PACKET_POOL.add(buffer);
         else this.writeLeftover = buffer;
-    }
-
-    public void awaitWrite() {
-        try {
-            this.writeLock.lock();
-            //noinspection ResultOfMethodCallIgnored
-            this.writeCondition.await(50, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        } finally {
-            this.writeLock.unlock();
-        }
-    }
-
-    public void signalWrite() {
-        try {
-            this.writeLock.lock();
-            this.writeCondition.signal();
-        } finally {
-            this.writeLock.unlock();
-        }
     }
 
     record EncryptionContext(Cipher encrypt, Cipher decrypt) {
