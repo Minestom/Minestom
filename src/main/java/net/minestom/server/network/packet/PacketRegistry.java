@@ -92,7 +92,7 @@ public interface PacketRegistry<T> {
             super(
                     entry(ClientTeleportConfirmPacket.class, ClientTeleportConfirmPacket.SERIALIZER),
                     entry(ClientQueryBlockNbtPacket.class, ClientQueryBlockNbtPacket.SERIALIZER),
-                    null, // difficulty packet
+                    entry(ClientChangeDifficultyPacket.class, ClientChangeDifficultyPacket.SERIALIZER),
                     entry(ClientChatAckPacket.class, ClientChatAckPacket.SERIALIZER),
                     entry(ClientCommandChatPacket.class, ClientCommandChatPacket.SERIALIZER),
                     entry(ClientSignedCommandChatPacket.class, ClientSignedCommandChatPacket.SERIALIZER),
@@ -115,7 +115,7 @@ public interface PacketRegistry<T> {
                     entry(ClientInteractEntityPacket.class, ClientInteractEntityPacket.SERIALIZER),
                     entry(ClientGenerateStructurePacket.class, ClientGenerateStructurePacket.SERIALIZER),
                     entry(ClientKeepAlivePacket.class, ClientKeepAlivePacket.SERIALIZER),
-                    null, // lock difficulty
+                    entry(ClientLockDifficultyPacket.class, ClientLockDifficultyPacket.SERIALIZER),
                     entry(ClientPlayerPositionPacket.class, ClientPlayerPositionPacket.SERIALIZER),
                     entry(ClientPlayerPositionAndRotationPacket.class, ClientPlayerPositionAndRotationPacket.SERIALIZER),
                     entry(ClientPlayerRotationPacket.class, ClientPlayerRotationPacket.SERIALIZER),
@@ -141,7 +141,7 @@ public interface PacketRegistry<T> {
                     entry(ClientUpdateCommandBlockPacket.class, ClientUpdateCommandBlockPacket.SERIALIZER),
                     entry(ClientUpdateCommandBlockMinecartPacket.class, ClientUpdateCommandBlockMinecartPacket.SERIALIZER),
                     entry(ClientCreativeInventoryActionPacket.class, ClientCreativeInventoryActionPacket.SERIALIZER),
-                    null, // Update Jigsaw Block
+                    entry(ClientUpdateJigsawBlockPacket.class, ClientUpdateJigsawBlockPacket.SERIALIZER),
                     entry(ClientUpdateStructureBlockPacket.class, ClientUpdateStructureBlockPacket.SERIALIZER),
                     entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
                     entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
@@ -230,7 +230,7 @@ public interface PacketRegistry<T> {
                     entry(ServerDifficultyPacket.class, ServerDifficultyPacket.SERIALIZER),
                     entry(ChunkBatchFinishedPacket.class, ChunkBatchFinishedPacket.SERIALIZER),
                     entry(ChunkBatchStartPacket.class, ChunkBatchStartPacket.SERIALIZER),
-                    null, // CHUNK_BIOMES
+                    entry(ChunkBiomesPacket.class, ChunkBiomesPacket.SERIALIZER),
                     entry(ClearTitlesPacket.class, ClearTitlesPacket.SERIALIZER),
                     entry(TabCompletePacket.class, TabCompletePacket.SERIALIZER),
                     entry(DeclareCommandsPacket.class, DeclareCommandsPacket.SERIALIZER),
@@ -246,7 +246,7 @@ public interface PacketRegistry<T> {
                     entry(DebugSamplePacket.class, DebugSamplePacket.SERIALIZER),
                     entry(DeleteChatPacket.class, DeleteChatPacket.SERIALIZER),
                     entry(DisconnectPacket.class, DisconnectPacket.SERIALIZER),
-                    null, // DISGUISED_CHAT
+                    entry(DisguisedChatPacket.class, DisguisedChatPacket.SERIALIZER),
                     entry(EntityStatusPacket.class, EntityStatusPacket.SERIALIZER),
                     entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
                     entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
