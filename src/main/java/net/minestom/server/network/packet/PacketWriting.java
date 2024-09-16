@@ -8,6 +8,9 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Queue;
+import java.util.function.BiPredicate;
+
 /**
  * Tools to write packets into a {@link NetworkBuffer} for network processing.
  * <p>
@@ -43,6 +46,17 @@ public final class PacketWriting {
                                              @NotNull T packet,
                                              int compressionThreshold) throws IndexOutOfBoundsException {
         final PacketRegistry.PacketInfo<T> packetInfo = registry.packetInfo(packet);
+        writeFramedPacket(
+                buffer,
+                packetInfo, packet,
+                compressionThreshold
+        );
+    }
+
+    public static <T> void writeFramedPacket(@NotNull NetworkBuffer buffer,
+                                             @NotNull PacketRegistry.PacketInfo<T> packetInfo,
+                                             @NotNull T packet,
+                                             int compressionThreshold) throws IndexOutOfBoundsException {
         final int id = packetInfo.id();
         final NetworkBuffer.Type<T> serializer = packetInfo.serializer();
         writeFramedPacket(
@@ -158,6 +172,43 @@ public final class PacketWriting {
             tmpBuffer.writeIndex(0);
             writeFramedPacket(tmpBuffer, serializer, id, packet, compressionThreshold);
             return tmpBuffer.copy(0, tmpBuffer.writeIndex());
+        }
+    }
+
+    public static <T> void writeQueue(NetworkBuffer buffer, Queue<T> queue, int minWrite,
+                                      BiPredicate<NetworkBuffer, T> writer) {
+        // The goal of this method is to write at the very least `minWrite` packets if the queue permits it.
+        // The buffer is resized if it cannot hold this minimum.
+        final int size = queue.size();
+        minWrite = Math.min(minWrite, size);
+        T packet;
+        int written = 0;
+        while ((packet = queue.peek()) != null) {
+            final long index = buffer.writeIndex();
+            boolean success;
+            try {
+                success = writer.test(buffer, packet);
+            } catch (IndexOutOfBoundsException e) {
+                success = false;
+            }
+            assert !success || buffer.writeIndex() > 0;
+            // Poll the packet only if fully written
+            if (success) {
+                // Packet fully written
+                queue.poll();
+                written++;
+            } else {
+                buffer.writeIndex(index);
+                if (written < minWrite) {
+                    // Try again with a bigger buffer
+                    final long newSize = Math.min(buffer.capacity() * 2, ServerFlag.MAX_PACKET_SIZE);
+                    buffer.resize(newSize);
+                } else {
+                    // At least one packet has been written
+                    // Not worth resizing to fit more, we'll try again next flush
+                    break;
+                }
+            }
         }
     }
 }
