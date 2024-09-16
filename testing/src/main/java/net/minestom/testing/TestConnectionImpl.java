@@ -46,7 +46,6 @@ final class TestConnectionImpl implements TestConnection {
             throw new IllegalStateException("Already connected");
         }
 
-        playerConnection.setConnectionState(ConnectionState.LOGIN);
         final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
         var player = process.connection().createPlayer(playerConnection, gameProfile);
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -65,6 +64,7 @@ final class TestConnectionImpl implements TestConnection {
             future.complete(player);
         });
         future.join();
+        playerConnection.setConnectionState(ConnectionState.PLAY);
         process.connection().updateWaitingPlayers();
         return player;
     }

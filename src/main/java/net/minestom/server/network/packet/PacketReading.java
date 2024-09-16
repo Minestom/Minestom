@@ -36,15 +36,16 @@ public final class PacketReading {
          * At least one packet was read.
          * The buffer may still contain half-read packets and should therefore be compacted for next read.
          */
-        record Success<T>(List<T> packets, ConnectionState newState) implements Result<T> {
+        record Success<T>(List<ParsedPacket<T>> packets) implements Result<T> {
             public Success {
                 if (packets.isEmpty()) {
                     throw new IllegalArgumentException("Empty packets");
                 }
+                packets = List.copyOf(packets);
             }
 
-            public Success(T packet, ConnectionState newState) {
-                this(List.of(packet), newState);
+            public Success(ParsedPacket<T> packet) {
+                this(List.of(packet));
             }
         }
 
@@ -65,6 +66,9 @@ public final class PacketReading {
          */
         record Failure<T>(long requiredCapacity) implements Result<T> {
         }
+    }
+
+    public record ParsedPacket<T>(ConnectionState nextState, T packet) {
     }
 
     public static Result<ClientPacket> readClients(
@@ -90,7 +94,7 @@ public final class PacketReading {
             @NotNull BiFunction<T, ConnectionState, ConnectionState> stateUpdater,
             boolean compressed
     ) throws DataFormatException {
-        List<T> packets = new ArrayList<>();
+        List<ParsedPacket<T>> packets = new ArrayList<>();
         readLoop:
         while (buffer.readableBytes() > 0) {
             final Result<T> result = readPacket(buffer, parser, state, stateUpdater, compressed);
@@ -98,18 +102,19 @@ public final class PacketReading {
             switch (result) {
                 case Result.Success<T> success -> {
                     assert success.packets().size() == 1;
-                    packets.add(success.packets().getFirst());
-                    state = success.newState();
+                    final ParsedPacket<T> parsedPacket = success.packets().getFirst();
+                    packets.add(parsedPacket);
+                    state = parsedPacket.nextState();
                 }
                 case Result.Empty<T> ignored -> {
                     break readLoop;
                 }
                 case Result.Failure<T> failure -> {
-                    return packets.isEmpty() ? failure : new Result.Success<>(packets, state);
+                    return packets.isEmpty() ? failure : new Result.Success<>(packets);
                 }
             }
         }
-        return !packets.isEmpty() ? new Result.Success<>(packets, state) : EMPTY_CLIENT_PACKET;
+        return !packets.isEmpty() ? new Result.Success<>(packets) : EMPTY_CLIENT_PACKET;
     }
 
     public static Result<ClientPacket> readClient(
@@ -172,7 +177,7 @@ public final class PacketReading {
         final T packet = readFramedPacket(buffer, registry, compressed);
         final ConnectionState nextState = stateUpdater.apply(packet, state);
         buffer.index(readerEnd, writerEnd);
-        return new Result.Success<>(packet, nextState);
+        return new Result.Success<>(new ParsedPacket<>(nextState, packet));
     }
 
     private static <T> T readFramedPacket(NetworkBuffer buffer,
