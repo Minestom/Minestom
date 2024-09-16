@@ -26,7 +26,7 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testChunkUnloadsOnRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
         player.teleport(new Pos(32, 40, 32)).join();
 
         var unloadChunkTracker = connection.trackIncoming(UnloadChunkPacket.class);
@@ -40,7 +40,7 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testChunkReloadCount(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
@@ -54,7 +54,7 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testPlayerTryRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);

@@ -10,19 +10,18 @@ import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
-import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
 import net.minestom.server.network.packet.server.login.EncryptionRequestPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.mojang.MojangUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,14 +32,15 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public final class LoginListener {
-    private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
-
     private static final Component ALREADY_CONNECTED = Component.text("You are already on this server", NamedTextColor.RED);
     private static final Component ERROR_DURING_LOGIN = Component.text("Error during login!", NamedTextColor.RED);
     private static final Component ERROR_MALFORMED_USERNAME = Component.text("Error malformed username", NamedTextColor.RED);
@@ -65,7 +65,7 @@ public final class LoginListener {
 
         if (MojangAuth.isEnabled() && isSocketConnection) {
             // Mojang auth
-            if (CONNECTION_MANAGER.getOnlinePlayerByUsername(packet.username()) != null) {
+            if (MinecraftServer.getConnectionManager().getOnlinePlayerByUsername(packet.username()) != null) {
                 connection.kick(ALREADY_CONNECTED);
                 return;
             }
@@ -77,84 +77,76 @@ public final class LoginListener {
             socketConnection.setNonce(nonce);
             socketConnection.sendPacket(new EncryptionRequestPacket("", publicKey, nonce, true));
         } else {
-            final boolean bungee = BungeeCordProxy.isEnabled();
             // Offline
-            AsyncUtils.runAsync(() -> {
-                try {
-                    final UUID playerUuid;
-                    if (bungee && isSocketConnection)
-                        playerUuid = ((PlayerSocketConnection) connection).gameProfile().uuid();
-                    else playerUuid = CONNECTION_MANAGER.getPlayerConnectionUuid(connection, packet.username());
-                    CONNECTION_MANAGER.createPlayer(connection, playerUuid, packet.username());
-
-                } catch (Exception exception) {
-                    connection.kick(Component.text(exception.getClass().getSimpleName() + ": " + exception.getMessage()));
-                    MinecraftServer.getExceptionManager().handleException(exception);
-                }
-            });
+            final GameProfile gameProfile;
+            if (BungeeCordProxy.isEnabled()) {
+                // LEGACY FORWARDING
+                // Use game profile set during handshake
+                assert connection instanceof PlayerSocketConnection;
+                final GameProfile bungeeProfile = ((PlayerSocketConnection) connection).gameProfile();
+                assert bungeeProfile != null;
+                gameProfile = new GameProfile(bungeeProfile.uuid(), packet.username(), bungeeProfile.properties());
+            } else {
+                gameProfile = new GameProfile(packet.profileId(), packet.username());
+            }
+            enterConfig(connection, gameProfile);
         }
     }
 
     public static void loginEncryptionResponseListener(@NotNull ClientEncryptionResponsePacket packet, @NotNull PlayerConnection connection) {
         // Encryption is only support for socket connection
         if (!(connection instanceof PlayerSocketConnection socketConnection)) return;
-        AsyncUtils.runAsync(() -> {
-            final String loginUsername = socketConnection.getLoginUsername();
-            if (loginUsername == null || loginUsername.isEmpty()) {
-                // Shouldn't happen, but in case
-                connection.kick(ERROR_MALFORMED_USERNAME);
-                return;
+        final String loginUsername = socketConnection.getLoginUsername();
+        if (loginUsername == null || loginUsername.isEmpty()) {
+            // Shouldn't happen, but in case
+            connection.kick(ERROR_MALFORMED_USERNAME);
+            return;
+        }
+
+        final boolean hasPublicKey = connection.playerPublicKey() != null;
+        final boolean verificationFailed = hasPublicKey || !Arrays.equals(socketConnection.getNonce(),
+                MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), packet.encryptedVerifyToken()));
+
+        if (verificationFailed) {
+            MinecraftServer.LOGGER.error("Encryption failed for {}", loginUsername);
+            connection.kick(ENCRYPTION_FAILED);
+            return;
+        }
+
+        final SecretKey secretKey = MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), packet.sharedSecret());
+        final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), secretKey);
+        if (digestedData == null) {
+            // Incorrect key, probably because of the client
+            MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
+            connection.kick(ENCRYPTION_FAILED);
+            return;
+        }
+        // Query Mojang's session server.
+        final String serverId = new BigInteger(digestedData).toString(16);
+
+        try {
+            final JsonObject gameProfileJson = MojangUtils.authenticateSession(loginUsername, serverId, socketConnection.getRemoteAddress());
+
+            // We have verified the session, parse response.
+            socketConnection.setEncryptionKey(secretKey);
+            final UUID profileUUID = UUID.fromString(gameProfileJson.get("id").getAsString()
+                    .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
+            final String profileName = gameProfileJson.get("name").getAsString();
+
+            MinecraftServer.LOGGER.info("UUID of player {} is {}", profileName, profileUUID);
+            List<GameProfile.Property> propertyList = new ArrayList<>();
+            for (JsonElement element : gameProfileJson.get("properties").getAsJsonArray()) {
+                JsonObject object = element.getAsJsonObject();
+                propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
             }
-
-            final boolean hasPublicKey = connection.playerPublicKey() != null;
-            final boolean verificationFailed = hasPublicKey || !Arrays.equals(socketConnection.getNonce(),
-                    MojangCrypt.decryptUsingKey(MojangAuth.getKeyPair().getPrivate(), packet.encryptedVerifyToken()));
-
-            if (verificationFailed) {
-                MinecraftServer.LOGGER.error("Encryption failed for {}", loginUsername);
-                connection.kick(ENCRYPTION_FAILED);
-                return;
-            }
-
-            final byte[] digestedData = MojangCrypt.digestData("", MojangAuth.getKeyPair().getPublic(), getSecretKey(packet.sharedSecret()));
-            if (digestedData == null) {
-                // Incorrect key, probably because of the client
-                MinecraftServer.LOGGER.error("Connection {} failed initializing encryption.", socketConnection.getRemoteAddress());
-                connection.kick(ENCRYPTION_FAILED);
-                return;
-            }
-            // Query Mojang's session server.
-            final String serverId = new BigInteger(digestedData).toString(16);
-
-            try {
-                final JsonObject gameProfile = MojangUtils.authenticateSession(loginUsername, serverId, socketConnection.getRemoteAddress());
-
-                // We have verified the session, parse response.
-                socketConnection.setEncryptionKey(getSecretKey(packet.sharedSecret()));
-                final UUID profileUUID = UUID.fromString(gameProfile.get("id").getAsString()
-                        .replaceFirst("(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})", "$1-$2-$3-$4-$5"));
-                final String profileName = gameProfile.get("name").getAsString();
-
-                MinecraftServer.LOGGER.info("UUID of player {} is {}", profileName, profileUUID);
-                CONNECTION_MANAGER.createPlayer(connection, profileUUID, profileName);
-                List<GameProfile.Property> propertyList = new ArrayList<>();
-                for (JsonElement element : gameProfile.get("properties").getAsJsonArray()) {
-                    JsonObject object = element.getAsJsonObject();
-                    propertyList.add(new GameProfile.Property(object.get("name").getAsString(), object.get("value").getAsString(), object.get("signature").getAsString()));
-                }
-                socketConnection.UNSAFE_setProfile(new GameProfile(profileUUID, profileName, propertyList));
-            } catch (IOException e) {
-                socketConnection.kick(ERROR_MOJANG_RESPONSE);
-                MinecraftServer.getExceptionManager().handleException(e);
-            } catch (Exception e) {
-                socketConnection.kick(ERROR_DURING_LOGIN);
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-        });
-    }
-
-    private static SecretKey getSecretKey(byte[] sharedSecret) {
-        return MojangCrypt.decryptByteToSecretKey(MojangAuth.getKeyPair().getPrivate(), sharedSecret);
+            enterConfig(connection, new GameProfile(profileUUID, profileName, propertyList));
+        } catch (IOException e) {
+            socketConnection.kick(ERROR_MOJANG_RESPONSE);
+            MinecraftServer.getExceptionManager().handleException(e);
+        } catch (Exception e) {
+            socketConnection.kick(ERROR_DURING_LOGIN);
+            MinecraftServer.getExceptionManager().handleException(e);
+        }
     }
 
     private static void handleVelocityProxyResponse(PlayerSocketConnection socketConnection, LoginPlugin.Response response) {
@@ -180,14 +172,12 @@ public final class LoginListener {
                 gameProfile = GameProfile.SERIALIZER.read(buffer);
             }
         }
-
-        if (success) {
-            socketConnection.setRemoteAddress(socketAddress);
-            socketConnection.UNSAFE_setProfile(gameProfile);
-            CONNECTION_MANAGER.createPlayer(socketConnection, gameProfile.uuid(), gameProfile.name());
-        } else {
+        if (!success) {
             socketConnection.kick(INVALID_PROXY_RESPONSE);
+            return;
         }
+        socketConnection.setRemoteAddress(socketAddress);
+        enterConfig(socketConnection, gameProfile);
     }
 
     public static void loginPluginResponseListener(@NotNull ClientLoginPluginResponsePacket packet, @NotNull PlayerConnection connection) {
@@ -202,8 +192,35 @@ public final class LoginListener {
     }
 
     public static void loginAckListener(@NotNull ClientLoginAcknowledgedPacket ignored, @NotNull PlayerConnection connection) {
-        final Player player = Objects.requireNonNull(connection.getPlayer());
-        CONNECTION_MANAGER.doConfiguration(player, true);
+        if (!(connection instanceof PlayerSocketConnection socketConnection))
+            throw new UnsupportedOperationException("Only socket");
+        final GameProfile gameProfile = socketConnection.gameProfile();
+        assert gameProfile != null;
+        final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
+        executeConfig(player, true);
     }
 
+    public static void configAckListener(@NotNull ClientConfigurationAckPacket packet, @NotNull Player player) {
+        executeConfig(player, false);
+    }
+
+    private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
+        gameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
+        if (connection instanceof PlayerSocketConnection socketConnection) {
+            socketConnection.UNSAFE_setProfile(gameProfile);
+        }
+    }
+
+    private static void executeConfig(Player player, boolean isFirstConfig) {
+        // We have to create another thread (even though we should already be in a virtual thread)
+        // because configuration handling involves waiting for the client to send a known packs packet.
+        // Which mean that we have to free up the current thread to continue reading the socket.
+        Thread.startVirtualThread(() -> {
+            try {
+                MinecraftServer.getConnectionManager().doConfiguration(player, isFirstConfig);
+            } catch (Throwable t) {
+                MinecraftServer.getExceptionManager().handleException(t);
+            }
+        });
+    }
 }
