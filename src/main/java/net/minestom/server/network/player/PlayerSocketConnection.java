@@ -408,31 +408,12 @@ public class PlayerSocketConnection extends PlayerConnection {
         if (!channel.isConnected()) throw new EOFException("Channel is closed");
         NetworkBuffer buffer = PacketVanilla.PACKET_POOL.get();
         // Write to buffer
-        SendablePacket packet;
-        int written = 0;
-        while ((packet = packetQueue.peek()) != null) {
+        PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;
-            final boolean success = writeSendable(buffer, packet, compressed);
-            assert !success || buffer.writeIndex() > 0;
-            // Poll the packet only if fully written
-            if (success) {
-                // Packet fully written
-                packetQueue.poll();
-                sentPacketCounter.getAndIncrement();
-                written++;
-            } else {
-                if (written == 0) {
-                    assert buffer.writeIndex() == 0;
-                    // Try again with a bigger buffer
-                    final long newSize = Math.min(buffer.capacity() * 2, ServerFlag.MAX_PACKET_SIZE);
-                    buffer.resize(newSize);
-                } else {
-                    // At least one packet has been written
-                    // Not worth resizing to fit more, we'll try again next flush
-                    break;
-                }
-            }
-        }
+            final boolean success = writeSendable(b, packet, compressed);
+            if (success) sentPacketCounter.getAndIncrement();
+            return success;
+        });
         // Write to channel
         final boolean success = buffer.writeChannel(channel);
         // Keep the buffer if not fully written
