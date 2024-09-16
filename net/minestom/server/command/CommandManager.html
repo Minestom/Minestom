@@ -191,13 +191,18 @@ loadScripts(document, 'script');</script>
 <div class="block">Registers a <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnknownCommandCallback(net.minestom.server.utils.callback.CommandCallback)" class="member-name-link">setUnknownCommandCallback</a><wbr>(@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a>&nbsp;unknownCommandCallback)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(net.minestom.server.command.builder.Command...)" class="member-name-link">register</a><wbr>(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>...&nbsp;commands)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sets the callback executed once an unknown command is run.</div>
+<div class="block">Register multiple <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a>s.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(net.minestom.server.command.builder.Command)" class="member-name-link">unregister</a><wbr>(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUnknownCommandCallback(net.minestom.server.utils.callback.CommandCallback)" class="member-name-link">setUnknownCommandCallback</a><wbr>(@Nullable <a href="../utils/callback/CommandCallback.html" title="interface in net.minestom.server.utils.callback">CommandCallback</a>&nbsp;unknownCommandCallback)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sets the callback executed once an unknown command is run.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(net.minestom.server.command.builder.Command)" class="member-name-link">unregister</a><wbr>(@NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>&nbsp;command)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes a command from the currently registered commands.</div>
 </div>
 </div>
@@ -262,6 +267,20 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>command</code> - the command to register</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - if a command with the same name already exists</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="register(net.minestom.server.command.builder.Command...)">
+<h3>register</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="builder/Command.html" title="class in net.minestom.server.command.builder">Command</a>...&nbsp;commands)</span></div>
+<div class="block">Register multiple <a href="builder/Command.html" title="class in net.minestom.server.command.builder"><code>Command</code></a>s.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>commands</code> - the array of commands</dd>
 <dt>Throws:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalStateException.html" title="class or interface in java.lang" class="external-link">IllegalStateException</a></code> - if a command with the same name already exists</dd>
 </dl>
