@@ -38,7 +38,7 @@ public class PlayerIntegrationTest {
     public void gamemodeTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         // Abilities
@@ -86,7 +86,7 @@ public class PlayerIntegrationTest {
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
         env.tick();
         env.tick();
@@ -134,7 +134,7 @@ public class PlayerIntegrationTest {
 
         var trackerAll = connection.trackIncoming(ServerPacket.class);
 
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
         assertEquals(instance, player.getInstance());
         assertEquals(new Pos(0, 40, 0), player.getPosition());
 
@@ -157,7 +157,7 @@ public class PlayerIntegrationTest {
         var instance2 = env.process().instance().createInstanceContainer(testDimension);
 
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var tracker1 = connection.trackIncoming(UpdateHealthPacket.class);
@@ -190,7 +190,7 @@ public class PlayerIntegrationTest {
 
         var instance = env.process().instance().createInstanceContainer(testDimension);
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(5, 42, 2)).join();
+        var player = connection.connect(instance, new Pos(5, 42, 2));
 
         assertNull(player.getDeathLocation());
         player.damage(DamageType.OUT_OF_WORLD, 30);
@@ -205,13 +205,13 @@ public class PlayerIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(PlayerInfoUpdatePacket.class);
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         player.setDisplayName(Component.text("Display Name!"));
 
         var connection2 = env.createConnection();
         var tracker2 = connection2.trackIncoming(PlayerInfoUpdatePacket.class);
-        connection2.connect(instance, new Pos(0, 42, 0)).join();
+        connection2.connect(instance, new Pos(0, 42, 0));
 
         var displayNamePackets = tracker2.collect().stream().filter((packet) ->
                         packet.actions().stream().anyMatch((act) -> act == PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME))
@@ -238,7 +238,7 @@ public class PlayerIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos).join();
+        var player = connection.connect(instance, startingPlayerPos);
 
         var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
         player.setView(30, 20);
@@ -256,7 +256,7 @@ public class PlayerIntegrationTest {
         var connection = env.createConnection();
         var tracker = connection.trackIncoming(FacePlayerPacket.class);
         Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos).join();
+        var player = connection.connect(instance, startingPlayerPos);
 
         Point pointLookAt = new Vec(3, 3, 3);
         player.lookAt(pointLookAt);

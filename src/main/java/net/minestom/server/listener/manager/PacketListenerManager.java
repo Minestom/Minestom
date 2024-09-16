@@ -65,7 +65,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientChatMessagePacket.class, ChatMessageListener::chatMessageListener);
         setPlayListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setPlayListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
-        setPlayListener(ClientConfigurationAckPacket.class, PlayConfigListener::configAckListener);
+        setPlayListener(ClientConfigurationAckPacket.class, LoginListener::configAckListener);
         setPlayListener(ClientPongPacket.class, WindowListener::pong);
         setPlayListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         setPlayListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);

@@ -31,7 +31,7 @@ public class PlayerBlockPlacementIntegrationTest {
     public void placeBlockFromAdventureMode(Block baseBlock, BlockPredicates canPlaceOn, Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         instance.setBlock(2, 41, 0, baseBlock);
 
