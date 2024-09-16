@@ -1,10 +1,9 @@
 package net.minestom.server.network;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.UUID;
 
 /**
  * Used when you want to provide your own player object instead of using the default one.
@@ -19,10 +18,9 @@ public interface PlayerProvider {
      * <p>
      * Called once a client want to join the server and need to have an assigned player object.
      *
-     * @param uuid       the player {@link UUID}
-     * @param username   the player username
-     * @param connection the player connection
+     * @param connection  the player connection
+     * @param gameProfile the player game profile
      * @return a newly create {@link Player} object
      */
-    @NotNull Player createPlayer(@NotNull UUID uuid, @NotNull String username, @NotNull PlayerConnection connection);
+    @NotNull Player createPlayer(@NotNull PlayerConnection connection, @NotNull GameProfile gameProfile);
 }

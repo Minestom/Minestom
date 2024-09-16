@@ -20,8 +20,9 @@ public class EntityMetaIntegrationTest {
     public void notifyAboutChanges(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var otherPlayer = connection.connect(instance, new Pos(0, 42, 0)).join();
-        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+        var connection2 = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 1));
+        var otherPlayer = connection2.connect(instance, new Pos(0, 42, 0));
 
         assertTrue(player.getViewers().contains(otherPlayer));
 
@@ -38,8 +39,7 @@ public class EntityMetaIntegrationTest {
         player.getEntityMeta().setNotifyAboutChanges(true);
 
         var packets = incomingPackets.collect();
-        // Two packets should be received: One for the player, one for the viewer
-        assertEquals(2, packets.size());
+        assertEquals(1, packets.size());
         validMetaDataPackets(packets, player.getEntityId(), entry -> {
             final Object content = entry.value();
             if (entry.type() == Metadata.TYPE_BYTE) {
@@ -71,8 +71,7 @@ public class EntityMetaIntegrationTest {
                 Assertions.fail("Invalid MetaData entry");
             }
         });
-        // 4 changes, for two viewers
-        assertEquals(4 * 2, packets.size());
+        assertEquals(4, packets.size());
     }
 
     private void validMetaDataPackets(List<EntityMetaDataPacket> packets, int entityId, Consumer<Metadata.Entry<?>> contentChecker) {
@@ -92,7 +91,7 @@ public class EntityMetaIntegrationTest {
         Pos startPos = new Pos(0, 42, 1);
 
         //Viewer.
-        var player = connection.connect(instance, startPos).join();
+        var player = connection.connect(instance, startPos);
 
         //Tracks incoming packets.
         var incomingPackets = connection.trackIncoming(EntityMetaDataPacket.class);

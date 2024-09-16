@@ -21,6 +21,7 @@ import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeCategory;
 import org.junit.jupiter.api.BeforeAll;
@@ -53,7 +54,7 @@ public class PacketWriteReadTest {
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));
         //SERVER_PACKETS.add(new LoginPluginRequestPacket(5, "id", generateByteArray(16)));
-        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911", 0, false));
+        SERVER_PACKETS.add(new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "TheMode911"), false));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
         SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
