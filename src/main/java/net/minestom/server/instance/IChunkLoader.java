@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -59,8 +60,12 @@ public interface IChunkLoader {
             for (Chunk chunk : chunks) {
                 phaser.register();
                 Thread.startVirtualThread(() -> {
-                    saveChunk(chunk);
-                    phaser.arriveAndDeregister();
+                    try {
+                        saveChunk(chunk);
+                        phaser.arriveAndDeregister();
+                    } catch (Throwable e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
+                    }
                 });
             }
             phaser.arriveAndAwaitAdvance();

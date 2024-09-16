@@ -46,6 +46,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
@@ -297,16 +298,6 @@ public class InstanceContainer extends Instance {
         return optionalAsync(chunkLoader.supportsParallelSaving(), () -> chunkLoader.saveChunks(getChunks()));
     }
 
-    private <T> CompletableFuture<T> optionalAsync(boolean async, Supplier<T> supplier) {
-        if (!async) return CompletableFuture.completedFuture(supplier.get());
-        final CompletableFuture<T> future = new CompletableFuture<>();
-        Thread.startVirtualThread(() -> {
-            final T result = supplier.get();
-            future.complete(result);
-        });
-        return future;
-    }
-
     private CompletableFuture<Void> optionalAsync(boolean async, Runnable runnable) {
         if (!async) {
             runnable.run();
@@ -314,8 +305,12 @@ public class InstanceContainer extends Instance {
         }
         final CompletableFuture<Void> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
-            runnable.run();
-            future.complete(null);
+            try {
+                runnable.run();
+                future.complete(null);
+            } catch (Throwable e) {
+                MinecraftServer.getExceptionManager().handleException(e);
+            }
         });
         return future;
     }
@@ -326,11 +321,7 @@ public class InstanceContainer extends Instance {
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
         if (prev != null) return prev;
         final IChunkLoader loader = chunkLoader;
-        // Try to load the chunk from storage
-        final CompletableFuture<Chunk> loadedChunkFuture = optionalAsync(loader.supportsParallelLoading(),
-                () -> loader.loadChunk(this, chunkX, chunkZ));
-        Thread.startVirtualThread(() -> {
-            Chunk chunk = loadedChunkFuture.join();
+        final Consumer<Chunk> generate = chunk -> {
             if (chunk == null) {
                 // Loader couldn't load the chunk, generate it
                 chunk = createChunk(chunkX, chunkZ);
@@ -345,7 +336,26 @@ public class InstanceContainer extends Instance {
             final CompletableFuture<Chunk> future = this.loadingChunks.remove(index);
             assert future == completableFuture : "Invalid future: " + future;
             completableFuture.complete(chunk);
-        });
+        };
+        if (loader.supportsParallelLoading()) {
+            Thread.startVirtualThread(() -> {
+                try {
+                    final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+                    generate.accept(chunk);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            });
+        } else {
+            final Chunk chunk = loader.loadChunk(this, chunkX, chunkZ);
+            Thread.startVirtualThread(() -> {
+                try {
+                    generate.accept(chunk);
+                } catch (Throwable e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
+            });
+        }
         return completableFuture;
     }
 
