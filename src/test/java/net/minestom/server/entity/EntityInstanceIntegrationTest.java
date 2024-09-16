@@ -1,8 +1,8 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -35,7 +35,7 @@ public class EntityInstanceIntegrationTest {
         var instance = env.createFlatInstance();
         var instance2 = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
         // #join may cause the thread to hang as scheduled for the next tick when initially in a pool
         Assertions.assertTimeout(Duration.ofSeconds(2), () -> player.setInstance(instance2).join());
