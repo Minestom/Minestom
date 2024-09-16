@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,17 +15,10 @@ import java.util.List;
 public record WritableBookContent(@NotNull List<FilteredText<String>> pages) {
     public static final WritableBookContent EMPTY = new WritableBookContent(List.of());
 
-    public static final NetworkBuffer.Type<WritableBookContent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, WritableBookContent value) {
-            buffer.writeCollection(FilteredText.STRING_NETWORK_TYPE, value.pages);
-        }
-
-        @Override
-        public WritableBookContent read(@NotNull NetworkBuffer buffer) {
-            return new WritableBookContent(buffer.readCollection(FilteredText.STRING_NETWORK_TYPE, 100));
-        }
-    };
+    public static final NetworkBuffer.Type<WritableBookContent> NETWORK_TYPE = NetworkBufferTemplate.template(
+            FilteredText.STRING_NETWORK_TYPE.list(100), WritableBookContent::pages,
+            WritableBookContent::new
+    );
 
     public static final BinaryTagSerializer<WritableBookContent> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override

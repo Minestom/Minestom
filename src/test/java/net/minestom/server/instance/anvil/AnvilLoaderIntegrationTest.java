@@ -4,6 +4,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.world.biome.Biome;
@@ -19,6 +20,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
+import static net.minestom.server.network.NetworkBuffer.SHORT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -202,8 +204,16 @@ public class AnvilLoaderIntegrationTest {
             Section reloadedSection = reloadedChunk.getSection(section);
 
             // easiest equality check to write is a memory compare on written output
-            var original = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(originalSection));
-            var reloaded = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(reloadedSection));
+            var original = NetworkBuffer.makeArray(buffer -> {
+                buffer.write(SHORT, (short) originalSection.blockPalette().count());
+                buffer.write(Palette.BLOCK_SERIALIZER, originalSection.blockPalette());
+                buffer.write(Palette.BIOME_SERIALIZER, originalSection.biomePalette());
+            });
+            var reloaded = NetworkBuffer.makeArray(buffer -> {
+                buffer.write(SHORT, (short) reloadedSection.blockPalette().count());
+                buffer.write(Palette.BLOCK_SERIALIZER, reloadedSection.blockPalette());
+                buffer.write(Palette.BIOME_SERIALIZER, reloadedSection.biomePalette());
+            });
             Assertions.assertArrayEquals(original, reloaded);
         }
 

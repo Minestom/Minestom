@@ -58,7 +58,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             return ItemStackImpl.create(material, amount, components);
         }
     };
-    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.map(itemStack -> {
+    @NotNull NetworkBuffer.Type<ItemStack> STRICT_NETWORK_TYPE = NETWORK_TYPE.transform(itemStack -> {
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     }, itemStack -> {

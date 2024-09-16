@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,26 +15,10 @@ import java.util.Map;
 public record ItemBlockState(@NotNull Map<String, String> properties) {
     public static final ItemBlockState EMPTY = new ItemBlockState(Map.of());
 
-    public static final NetworkBuffer.Type<ItemBlockState> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, ItemBlockState value) {
-            buffer.write(NetworkBuffer.VAR_INT, value.properties.size());
-            for (Map.Entry<String, String> entry : value.properties.entrySet()) {
-                buffer.write(NetworkBuffer.STRING, entry.getKey());
-                buffer.write(NetworkBuffer.STRING, entry.getValue());
-            }
-        }
-
-        @Override
-        public ItemBlockState read(@NotNull NetworkBuffer buffer) {
-            int size = buffer.read(NetworkBuffer.VAR_INT);
-            Map<String, String> properties = new HashMap<>(size);
-            for (int i = 0; i < size; i++) {
-                properties.put(buffer.read(NetworkBuffer.STRING), buffer.read(NetworkBuffer.STRING));
-            }
-            return new ItemBlockState(properties);
-        }
-    };
+    public static final NetworkBuffer.Type<ItemBlockState> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING), ItemBlockState::properties,
+            ItemBlockState::new
+    );
 
     public static final BinaryTagSerializer<ItemBlockState> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> {

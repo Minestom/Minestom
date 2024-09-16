@@ -6,11 +6,12 @@ import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
+import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
+import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,39 +22,51 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 final class TestConnectionImpl implements TestConnection {
     private final Env env;
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
 
+    private final AtomicBoolean connected = new AtomicBoolean(false);
+
     private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     TestConnectionImpl(Env env) {
         this.env = env;
         this.process = env.process();
+        // Use player provider to disable queued chunk sending
+        env.process().connection().setPlayerProvider(TestPlayerImpl::new);
     }
 
     @Override
-    public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
-        // Use player provider to disable queued chunk sending
-        process.connection().setPlayerProvider(TestPlayerImpl::new);
+    public @NotNull Player connect(@NotNull Instance instance, @NotNull Pos pos) {
+        if (!connected.compareAndSet(false, true)) {
+            throw new IllegalStateException("Already connected");
+        }
 
         playerConnection.setConnectionState(ConnectionState.LOGIN);
-        var player = process.connection().createPlayer(playerConnection, UUID.randomUUID(), "RandName");
+        final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
+        var player = process.connection().createPlayer(playerConnection, gameProfile);
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
             event.setSpawningInstance(instance);
             event.getPlayer().setRespawnPoint(pos);
         });
 
         // Force the player through the entirety of the login process manually
-        var configFuture = process.connection().doConfiguration(player, true);
-        playerConnection.receiveKnownPacksResponse(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
-        configFuture.join();
-
-        process.connection().transitionConfigToPlay(player);
+        CompletableFuture<Player> future = new CompletableFuture<>();
+        Thread.startVirtualThread(() -> {
+            // `isFirstConfig` is set to false in order to not block the thread
+            // waiting for known packs.
+            // The consequence is that registry packets cannot be listened to.
+            process.connection().doConfiguration(player, false);
+            process.connection().transitionConfigToPlay(player);
+            future.complete(player);
+        });
+        future.join();
         process.connection().updateWaitingPlayers();
-        return CompletableFuture.completedFuture(player);
+        return player;
     }
 
     @Override
@@ -75,7 +88,8 @@ final class TestConnectionImpl implements TestConnection {
         }
 
         private ServerPacket extractPacket(final SendablePacket packet) {
-            if (!(packet instanceof ServerPacket serverPacket)) return SendablePacket.extractServerPacket(getConnectionState(), packet);
+            if (!(packet instanceof ServerPacket serverPacket))
+                return SendablePacket.extractServerPacket(getConnectionState(), packet);
 
             final Player player = getPlayer();
             if (player == null) return serverPacket;
@@ -116,6 +130,18 @@ final class TestConnectionImpl implements TestConnection {
         public @NotNull List<T> collect() {
             incomingTrackers.remove(this);
             return List.copyOf(packets);
+        }
+    }
+
+    final class TestPlayerImpl extends Player {
+        public TestPlayerImpl(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
+            super(playerConnection, gameProfile);
+        }
+
+        @Override
+        public void sendChunk(@NotNull Chunk chunk) {
+            // Send immediately
+            sendPacket(chunk.getFullDataPacket());
         }
     }
 }

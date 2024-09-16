@@ -1,9 +1,9 @@
 package net.minestom.server.entity;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -126,7 +126,7 @@ public class EntityViewIntegrationTest {
     public void livingVehicle(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
 
         var vehicle = new Entity(EntityType.ZOMBIE);
         var passenger = new Entity(EntityType.ZOMBIE);

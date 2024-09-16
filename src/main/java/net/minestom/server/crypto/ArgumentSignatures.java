@@ -1,37 +1,30 @@
 package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record ArgumentSignatures(@NotNull List<@NotNull Entry> entries) implements NetworkBuffer.Writer {
+public record ArgumentSignatures(@NotNull List<@NotNull Entry> entries) {
     public static final int MAX_ENTRIES = 8;
 
     public ArgumentSignatures {
         entries = List.copyOf(entries);
     }
 
-    public ArgumentSignatures(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(Entry::new, MAX_ENTRIES));
-    }
+    public static final NetworkBuffer.Type<ArgumentSignatures> SERIALIZER = NetworkBufferTemplate.template(
+            Entry.SERIALIZER.list(MAX_ENTRIES), ArgumentSignatures::entries,
+            ArgumentSignatures::new
+    );
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeCollection(entries);
-    }
-
-    public record Entry(@NotNull String name, @NotNull MessageSignature signature) implements NetworkBuffer.Writer {
-        public Entry(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), new MessageSignature(reader));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, name);
-            writer.write(signature);
-        }
+    public record Entry(@NotNull String name, @NotNull MessageSignature signature) {
+        public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Entry::name,
+                MessageSignature.SERIALIZER, Entry::signature,
+                Entry::new
+        );
     }
 }

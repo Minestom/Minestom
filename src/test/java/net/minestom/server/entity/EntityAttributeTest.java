@@ -14,7 +14,6 @@ import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class EntityAttributeTest {
@@ -49,7 +48,7 @@ public class EntityAttributeTest {
     public void testPlayerUpdatesAttributes(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 1));
 
         double baseHealth = 20;
         double addition = 10;
@@ -77,7 +76,7 @@ public class EntityAttributeTest {
     public void testDirectlyAddAttributes(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 1)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 1));
 
         double baseHealth = 20;
         double addition = 10;

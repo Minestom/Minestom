@@ -9,7 +9,6 @@ jetbrainsAnnotations = "24.1.0"
 slf4j = "2.0.7"
 
 # Performance / Data Structures
-caffeine = "3.1.8"
 fastutil = "8.5.14"
 flare = "2.0.1"
 gson = "2.11.0"
@@ -49,7 +48,6 @@ jetbrainsAnnotations = { group = "org.jetbrains", name = "annotations", version.
 slf4j = { group = "org.slf4j", name = "slf4j-api", version.ref = "slf4j"}
 
 # Performance / Data Structures
-caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
 fastutil = { group = "it.unimi.dsi", name = "fastutil", version.ref = "fastutil" }
 flare = { group = "space.vectrix.flare", name = "flare", version.ref = "flare" }
 flare-fastutil = { group = "space.vectrix.flare", name = "flare-fastutil", version.ref = "flare" }

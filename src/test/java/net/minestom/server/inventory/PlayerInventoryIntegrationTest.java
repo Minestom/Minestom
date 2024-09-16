@@ -1,7 +1,5 @@
 package net.minestom.server.inventory;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
@@ -9,11 +7,13 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class PlayerInventoryIntegrationTest {
@@ -24,7 +24,7 @@ public class PlayerInventoryIntegrationTest {
     public void setSlotDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
@@ -44,7 +44,7 @@ public class PlayerInventoryIntegrationTest {
     public void setCursorItemDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(SetSlotPacket.class);
@@ -64,7 +64,7 @@ public class PlayerInventoryIntegrationTest {
     public void clearInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
@@ -108,9 +108,9 @@ public class PlayerInventoryIntegrationTest {
     public void equipmentViewTest(Env env) {
         var instance = env.createFlatInstance();
         var connectionArmored = env.createConnection();
-        var playerArmored = connectionArmored.connect(instance, new Pos(0, 42, 0)).join();
+        var playerArmored = connectionArmored.connect(instance, new Pos(0, 42, 0));
         var connectionViewer = env.createConnection();
-        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0)).join();
+        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0));
 
         assertEquals(instance, playerArmored.getInstance());
         assertEquals(instance, playerViewer.getInstance());
@@ -140,9 +140,9 @@ public class PlayerInventoryIntegrationTest {
     public void heldItemViewTest(Env env) {
         var instance = env.createFlatInstance();
         var connectionHolder = env.createConnection();
-        var playerHolder = connectionHolder.connect(instance, new Pos(0, 42, 0)).join();
+        var playerHolder = connectionHolder.connect(instance, new Pos(0, 42, 0));
         var connectionViewer = env.createConnection();
-        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0)).join();
+        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0));
 
         assertEquals(instance, playerHolder.getInstance());
         assertEquals(instance, playerViewer.getInstance());

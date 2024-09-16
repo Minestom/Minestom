@@ -10,7 +10,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.extras.bungee.BungeeCordProxy;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
-import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +45,7 @@ public final class HandshakeListener {
                 connection.setConnectionState(ConnectionState.LOGIN);
                 if (packet.protocolVersion() != MinecraftServer.PROTOCOL_VERSION) {
                     // Incorrect client version
-                    disconnect(connection, INVALID_VERSION_TEXT);
+                    connection.kick(INVALID_VERSION_TEXT);
                 }
 
                 // Bungee support (IP forwarding)
@@ -61,11 +61,11 @@ public final class HandshakeListener {
 
                         address = split[0];
 
-                        final SocketAddress socketAddress = new java.net.InetSocketAddress(split[1],
-                                ((java.net.InetSocketAddress) connection.getRemoteAddress()).getPort());
+                        final SocketAddress socketAddress = new InetSocketAddress(split[1],
+                                ((InetSocketAddress) connection.getRemoteAddress()).getPort());
                         socketConnection.setRemoteAddress(socketAddress);
 
-                        UUID playerUuid = java.util.UUID.fromString(
+                        UUID playerUuid = UUID.fromString(
                                 split[2]
                                         .replaceFirst(
                                                 "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)", "$1-$2-$3-$4-$5"
@@ -128,14 +128,9 @@ public final class HandshakeListener {
         }
     }
 
-    private static void disconnect(@NotNull PlayerConnection connection, @NotNull Component reason) {
-        connection.sendPacket(new LoginDisconnectPacket(reason));
-        connection.disconnect();
-    }
-
     private static void bungeeDisconnect(@NotNull PlayerConnection connection) {
         LOGGER.warn("{} tried to log in without valid BungeeGuard forwarding information.", connection.getIdentifier());
-        disconnect(connection, INVALID_BUNGEE_FORWARDING);
+        connection.kick(INVALID_BUNGEE_FORWARDING);
     }
 
 }

@@ -65,7 +65,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientChatMessagePacket.class, ChatMessageListener::chatMessageListener);
         setPlayListener(ClientClickWindowPacket.class, WindowListener::clickWindowListener);
         setPlayListener(ClientCloseWindowPacket.class, WindowListener::closeWindowListener);
-        setPlayListener(ClientConfigurationAckPacket.class, PlayConfigListener::configAckListener);
+        setPlayListener(ClientConfigurationAckPacket.class, LoginListener::configAckListener);
         setPlayListener(ClientPongPacket.class, WindowListener::pong);
         setPlayListener(ClientEntityActionPacket.class, EntityActionListener::listener);
         setPlayListener(ClientHeldItemChangePacket.class, PlayerHeldListener::heldListener);
@@ -114,7 +114,7 @@ public final class PacketListenerManager {
 
         // Listener can be null if none has been set before, call PacketConsumer anyway
         if (packetListenerConsumer == null) {
-            LOGGER.warn("Packet " + clazz + " does not have any default listener! (The issue comes from Minestom)");
+            LOGGER.warn("Packet {}:{} does not have any default listener! (The issue likely comes from Minestom)", clazz, state);
             return;
         }
 

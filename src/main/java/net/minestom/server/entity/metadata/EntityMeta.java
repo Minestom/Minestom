@@ -2,6 +2,7 @@ package net.minestom.server.entity.metadata;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
@@ -143,11 +144,11 @@ public class EntityMeta {
         this.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
     }
 
-    public Entity.Pose getPose() {
-        return this.metadata.getIndex(OFFSET + 6, Entity.Pose.STANDING);
+    public EntityPose getPose() {
+        return this.metadata.getIndex(OFFSET + 6, EntityPose.STANDING);
     }
 
-    public void setPose(Entity.Pose value) {
+    public void setPose(EntityPose value) {
         this.metadata.setIndex(OFFSET + 6, Metadata.Pose(value));
     }
 

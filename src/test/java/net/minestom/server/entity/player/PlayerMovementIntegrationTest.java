@@ -1,7 +1,7 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
@@ -14,18 +14,16 @@ import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacke
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.testing.TestConnection;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
-import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
@@ -55,7 +53,7 @@ public class PlayerMovementIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var p1 = env.createPlayer(instance, new Pos(0, 40, 0));
-        connection.connect(instance, new Pos(0, 40, 0)).join();
+        connection.connect(instance, new Pos(0, 40, 0));
 
         p1.addPacketToQueue(new ClientTeleportConfirmPacket(p1.getLastSentTeleportId()));
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.2, 40, 0), true));
@@ -73,12 +71,11 @@ public class PlayerMovementIntegrationTest {
         final int viewDiameter = ServerFlag.CHUNK_VIEW_DISTANCE * 2 + 1;
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(0, 0, viewDiameter+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkRange.chunksInRange(0, 0, viewDiameter + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
         final TestConnection connection = env.createConnection();
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
-        final CompletableFuture<@NotNull Player> future = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
-        final Player player = future.join();
+        final Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Initial join
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDiameter));
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
@@ -126,12 +123,17 @@ public class PlayerMovementIntegrationTest {
         int viewDistance = 4;
         final Instance flatInstance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5)).join();
+        Player player = connection.connect(flatInstance, new Pos(0.5, 40, 0.5));
         // Preload all possible chunks to avoid issues due to async loading
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
-        ChunkUtils.forChunksInRange(10, 10, viewDistance+2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
+        ChunkRange.chunksInRange(10, 10, viewDistance + 2, (x, z) -> chunks.add(flatInstance.loadChunk(x, z)));
         CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        player.getSettings().refresh("en_US", (byte) viewDistance, ChatMessageType.FULL, true, (byte) 0, Player.MainHand.RIGHT, false, true);
+        player.refreshSettings(new ClientSettings(
+                Locale.US, (byte) viewDistance,
+                ChatMessageType.FULL, true,
+                (byte) 0, ClientSettings.MainHand.RIGHT,
+                false, true
+        ));
 
         Collector<ChunkDataPacket> chunkDataPacketCollector = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientTeleportConfirmPacket(player.getLastSentTeleportId()));
@@ -150,23 +152,25 @@ public class PlayerMovementIntegrationTest {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos).join();
+        var player = connection.connect(instance, startingPlayerPos);
 
-        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
+        int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkUtils.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
+        ChunkRange.chunksInRange(0, 0, endViewDistance, instance::loadChunk);
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
+                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT, false, true)));
         player.interpretPacketQueue();
         tracker.assertCount(chunkDifference);
 
         var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", finalViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
+        player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, finalViewDistance,
+                ChatMessageType.FULL, false, (byte) 0, ClientSettings.MainHand.RIGHT, false, true)));
         player.interpretPacketQueue();
 
-        int chunkDifference1 = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(finalViewDistance);
+        int chunkDifference1 = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(finalViewDistance);
         tracker1.assertCount(chunkDifference1);
     }
 }

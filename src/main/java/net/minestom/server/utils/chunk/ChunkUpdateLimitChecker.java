@@ -1,5 +1,6 @@
 package net.minestom.server.utils.chunk;
 
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -23,7 +24,7 @@ public final class ChunkUpdateLimitChecker {
      * @return {@code true} if it's a new chunk in the history
      */
     public boolean addToHistory(Chunk chunk) {
-        final long index = ChunkUtils.getChunkIndex(chunk);
+        final long index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         boolean result = true;
         final int lastIndex = historySize - 1;
         for (int i = 0; i < lastIndex; i++) {

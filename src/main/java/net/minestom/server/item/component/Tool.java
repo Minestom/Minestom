@@ -6,6 +6,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.FloatBinaryTag;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,23 +63,12 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
 
     public record Rule(@NotNull BlockTypeFilter blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
-        public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Rule value) {
-                buffer.write(BlockTypeFilter.NETWORK_TYPE, value.blocks());
-                buffer.writeOptional(NetworkBuffer.FLOAT, value.speed());
-                buffer.writeOptional(NetworkBuffer.BOOLEAN, value.correctForDrops());
-            }
-
-            @Override
-            public Rule read(@NotNull NetworkBuffer buffer) {
-                return new Rule(
-                        buffer.read(BlockTypeFilter.NETWORK_TYPE),
-                        buffer.readOptional(NetworkBuffer.FLOAT),
-                        buffer.readOptional(NetworkBuffer.BOOLEAN)
-                );
-            }
-        };
+        public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
+                BlockTypeFilter.NETWORK_TYPE, Rule::blocks,
+                NetworkBuffer.FLOAT, Rule::speed,
+                NetworkBuffer.BOOLEAN.optional(), Rule::correctForDrops,
+                Rule::new
+        );
         public static final BinaryTagSerializer<Rule> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Rule(
                         BlockTypeFilter.NBT_TYPE.read(Objects.requireNonNull(tag.get("blocks"))),

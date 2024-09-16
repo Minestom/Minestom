@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import it.unimi.dsi.fastutil.booleans.BooleanList;
 import net.kyori.adventure.nbt.BinaryTagIO;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -137,7 +137,7 @@ final class RegionFile implements AutoCloseable {
     }
 
     private int getChunkIndex(int chunkX, int chunkZ) {
-        return (ChunkUtils.toRegionLocal(chunkZ) << 5) | ChunkUtils.toRegionLocal(chunkX);
+        return (CoordConversion.chunkToRegionLocal(chunkZ) << 5) | CoordConversion.chunkToRegionLocal(chunkX);
     }
 
     private void readHeader() throws IOException {

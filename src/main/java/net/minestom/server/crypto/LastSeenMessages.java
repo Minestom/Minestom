@@ -1,50 +1,41 @@
 package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.BitSet;
 import java.util.List;
 
+import static net.minestom.server.network.NetworkBuffer.FixedBitSet;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries) implements NetworkBuffer.Writer {
+public record LastSeenMessages(@NotNull List<@NotNull MessageSignature> entries) {
     public static final int MAX_ENTRIES = 20;
 
     public LastSeenMessages {
         entries = List.copyOf(entries);
     }
 
-    public LastSeenMessages(@NotNull NetworkBuffer reader) {
-        this(reader.readCollection(MessageSignature::new, MAX_ENTRIES));
-    }
+    public static final NetworkBuffer.Type<LastSeenMessages> SERIALIZER = NetworkBufferTemplate.template(
+            MessageSignature.SERIALIZER.list(MAX_ENTRIES), LastSeenMessages::entries,
+            LastSeenMessages::new
+    );
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-    }
-
-    public record Packed(@NotNull List<MessageSignature.@NotNull Packed> entries) implements NetworkBuffer.Writer {
+    public record Packed(@NotNull List<MessageSignature.@NotNull Packed> entries) {
         public static final Packed EMPTY = new Packed(List.of());
 
-        public Packed(@NotNull NetworkBuffer reader) {
-            this(reader.readCollection(MessageSignature.Packed::new, MAX_ENTRIES));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeCollection(entries);
-        }
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = NetworkBufferTemplate.template(
+                MessageSignature.Packed.SERIALIZER.list(MAX_ENTRIES), Packed::entries,
+                Packed::new
+        );
     }
 
-    public record Update(int offset, @NotNull BitSet acknowledged) implements NetworkBuffer.Writer {
-        public Update(@NotNull NetworkBuffer reader) {
-            this(reader.read(VAR_INT), reader.readFixedBitSet(20));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, offset);
-            writer.writeFixedBitSet(acknowledged, 20);
-        }
+    public record Update(int offset, @NotNull BitSet acknowledged) {
+        public static final NetworkBuffer.Type<Update> SERIALIZER = NetworkBufferTemplate.template(
+                VAR_INT, Update::offset,
+                FixedBitSet(20), Update::acknowledged,
+                Update::new
+        );
     }
 }

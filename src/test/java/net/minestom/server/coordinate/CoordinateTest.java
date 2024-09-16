@@ -3,53 +3,51 @@ package net.minestom.server.coordinate;
 import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
 import it.unimi.dsi.fastutil.longs.LongSet;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static net.minestom.server.utils.chunk.ChunkUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class CoordinateTest {
 
     @Test
     public void chunkIndex() {
-        var index = getChunkIndex(2, 5);
-        assertEquals(2, getChunkCoordX(index));
-        assertEquals(5, getChunkCoordZ(index));
+        var index = CoordConversion.chunkIndex(2, 5);
+        assertEquals(2, CoordConversion.chunkIndexGetX(index));
+        assertEquals(5, CoordConversion.chunkIndexGetZ(index));
 
-        index = getChunkIndex(-5, 25);
-        assertEquals(-5, getChunkCoordX(index));
-        assertEquals(25, getChunkCoordZ(index));
+        index = CoordConversion.chunkIndex(-5, 25);
+        assertEquals(-5, CoordConversion.chunkIndexGetX(index));
+        assertEquals(25, CoordConversion.chunkIndexGetZ(index));
 
-        index = getChunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
-        assertEquals(Integer.MAX_VALUE, getChunkCoordX(index));
-        assertEquals(Integer.MIN_VALUE, getChunkCoordZ(index));
+        index = CoordConversion.chunkIndex(Integer.MAX_VALUE, Integer.MIN_VALUE);
+        assertEquals(Integer.MAX_VALUE, CoordConversion.chunkIndexGetX(index));
+        assertEquals(Integer.MIN_VALUE, CoordConversion.chunkIndexGetZ(index));
     }
 
     @Test
     public void chunkCoordinate() {
-        assertEquals(0, getChunkCoordinate(15));
-        assertEquals(1, getChunkCoordinate(16));
-        assertEquals(-1, getChunkCoordinate(-16));
-        assertEquals(3, getChunkCoordinate(48));
+        assertEquals(0, CoordConversion.globalToChunk(15));
+        assertEquals(1, CoordConversion.globalToChunk(16));
+        assertEquals(-1, CoordConversion.globalToChunk(-16));
+        assertEquals(3, CoordConversion.globalToChunk(48));
 
-        assertEquals(4, getChunkCoordinate(65));
-        assertEquals(4, getChunkCoordinate(64));
-        assertEquals(3, getChunkCoordinate(63));
-        assertEquals(-2, getChunkCoordinate(-25));
-        assertEquals(23, getChunkCoordinate(380));
+        assertEquals(4, CoordConversion.globalToChunk(65));
+        assertEquals(4, CoordConversion.globalToChunk(64));
+        assertEquals(3, CoordConversion.globalToChunk(63));
+        assertEquals(-2, CoordConversion.globalToChunk(-25));
+        assertEquals(23, CoordConversion.globalToChunk(380));
     }
 
     @Test
     public void chunkCount() {
-        assertEquals(289, getChunkCount(8));
-        assertEquals(169, getChunkCount(6));
-        assertEquals(121, getChunkCount(5));
-        assertEquals(9, getChunkCount(1));
-        assertEquals(1, getChunkCount(0));
-        assertThrows(IllegalArgumentException.class, () -> getChunkCount(-1));
+        assertEquals(289, ChunkRange.chunksCount(8));
+        assertEquals(169, ChunkRange.chunksCount(6));
+        assertEquals(121, ChunkRange.chunksCount(5));
+        assertEquals(9, ChunkRange.chunksCount(1));
+        assertEquals(1, ChunkRange.chunksCount(0));
+        assertThrows(IllegalArgumentException.class, () -> ChunkRange.chunksCount(-1));
     }
 
     @Test
@@ -95,15 +93,15 @@ public class CoordinateTest {
 
     @Test
     public void toSectionRelativeCoordinate() {
-        assertEquals(8, ChunkUtils.toSectionRelativeCoordinate(-40));
-        assertEquals(12, ChunkUtils.toSectionRelativeCoordinate(-20));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(0));
-        assertEquals(5, ChunkUtils.toSectionRelativeCoordinate(5));
-        assertEquals(15, ChunkUtils.toSectionRelativeCoordinate(15));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(16));
-        assertEquals(4, ChunkUtils.toSectionRelativeCoordinate(20));
-        assertEquals(0, ChunkUtils.toSectionRelativeCoordinate(32));
-        assertEquals(1, ChunkUtils.toSectionRelativeCoordinate(33));
+        assertEquals(8, CoordConversion.globalToSectionRelative(-40));
+        assertEquals(12, CoordConversion.globalToSectionRelative(-20));
+        assertEquals(0, CoordConversion.globalToSectionRelative(0));
+        assertEquals(5, CoordConversion.globalToSectionRelative(5));
+        assertEquals(15, CoordConversion.globalToSectionRelative(15));
+        assertEquals(0, CoordConversion.globalToSectionRelative(16));
+        assertEquals(4, CoordConversion.globalToSectionRelative(20));
+        assertEquals(0, CoordConversion.globalToSectionRelative(32));
+        assertEquals(1, CoordConversion.globalToSectionRelative(33));
     }
 
     @Test
@@ -130,7 +128,7 @@ public class CoordinateTest {
         );
 
         for (Vec vec : tempEquals) {
-            assertEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+            assertEquals(CoordConversion.chunkBlockIndexGetGlobal(CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
 
@@ -145,7 +143,7 @@ public class CoordinateTest {
         );
 
         for (Vec vec : tempNotEquals) {
-            assertNotEquals(getBlockPosition(getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
+            assertNotEquals(CoordConversion.chunkBlockIndexGetGlobal(CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ()),
                     vec.chunkX(), vec.chunkZ()), vec);
         }
     }
@@ -158,13 +156,13 @@ public class CoordinateTest {
             for (int z = 0; z < Chunk.CHUNK_SIZE_Z; z++) {
                 for (int y = -64; y < 364; y++) {
                     var vec = new Vec(x, y, z);
-                    var index = getBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
+                    var index = CoordConversion.chunkBlockIndex(vec.blockX(), vec.blockY(), vec.blockZ());
                     assertTrue(temp.add(index), "Duplicate block index found: " + index + " " + vec);
-                    assertEquals(getBlockPosition(index, vec.chunkX(), vec.chunkZ()), vec);
+                    assertEquals(CoordConversion.chunkBlockIndexGetGlobal(index, vec.chunkX(), vec.chunkZ()), vec);
 
-                    assertEquals(blockIndexToChunkPositionX(index), x);
-                    assertEquals(blockIndexToChunkPositionY(index), y);
-                    assertEquals(blockIndexToChunkPositionZ(index), z);
+                    assertEquals(CoordConversion.chunkBlockIndexGetX(index), x);
+                    assertEquals(CoordConversion.chunkBlockIndexGetY(index), y);
+                    assertEquals(CoordConversion.chunkBlockIndexGetZ(index), z);
                 }
             }
         }

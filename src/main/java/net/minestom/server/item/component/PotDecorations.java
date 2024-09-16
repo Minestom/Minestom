@@ -16,7 +16,7 @@ public record PotDecorations(
     public static final @NotNull Material DEFAULT_ITEM = Material.BRICK;
     public static final PotDecorations EMPTY = new PotDecorations(DEFAULT_ITEM, DEFAULT_ITEM, DEFAULT_ITEM, DEFAULT_ITEM);
 
-    public static NetworkBuffer.Type<PotDecorations> NETWORK_TYPE = Material.NETWORK_TYPE.list(4).map(PotDecorations::new, PotDecorations::asList);
+    public static final NetworkBuffer.Type<PotDecorations> NETWORK_TYPE = Material.NETWORK_TYPE.list(4).transform(PotDecorations::new, PotDecorations::asList);
     public static BinaryTagSerializer<PotDecorations> NBT_TYPE = Material.NBT_TYPE.list().map(PotDecorations::new, PotDecorations::asList);
 
     public PotDecorations(@NotNull List<Material> list) {

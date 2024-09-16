@@ -25,18 +25,18 @@ public record PotionContents(
         @Override
         public void write(@NotNull NetworkBuffer buffer, PotionContents value) {
             Integer typeId = value.potion == null ? null : value.potion.id();
-            buffer.writeOptional(NetworkBuffer.VAR_INT, typeId);
-            buffer.writeOptional(Color.NETWORK_TYPE, value.customColor);
-            buffer.writeCollection(CustomPotionEffect.NETWORK_TYPE, value.customEffects);
+            buffer.write(NetworkBuffer.VAR_INT.optional(), typeId);
+            buffer.write(Color.NETWORK_TYPE.optional(), value.customColor);
+            buffer.write(CustomPotionEffect.NETWORK_TYPE.list(), value.customEffects);
         }
 
         @Override
         public PotionContents read(@NotNull NetworkBuffer buffer) {
-            Integer typeId = buffer.readOptional(NetworkBuffer.VAR_INT);
+            Integer typeId = buffer.read(NetworkBuffer.VAR_INT.optional());
             return new PotionContents(
                     typeId == null ? null : PotionType.fromId(typeId),
-                    buffer.readOptional(Color.NETWORK_TYPE),
-                    buffer.readCollection(CustomPotionEffect.NETWORK_TYPE, Short.MAX_VALUE)
+                    buffer.read(Color.NETWORK_TYPE.optional()),
+                    buffer.read(CustomPotionEffect.NETWORK_TYPE.list(Short.MAX_VALUE))
             );
         }
     };

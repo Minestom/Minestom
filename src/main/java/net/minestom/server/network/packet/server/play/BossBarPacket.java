@@ -5,9 +5,8 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.packet.server.ServerPacket.ComponentHolding;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -17,31 +16,43 @@ import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public BossBarPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), switch (reader.read(VAR_INT)) {
-            case 0 -> new AddAction(reader);
-            case 1 -> new RemoveAction();
-            case 2 -> new UpdateHealthAction(reader);
-            case 3 -> new UpdateTitleAction(reader);
-            case 4 -> new UpdateStyleAction(reader);
-            case 5 -> new UpdateFlagsAction(reader);
-            default -> throw new RuntimeException("Unknown action id");
-        });
-    }
+public record BossBarPacket(@NotNull UUID uuid,
+                            @NotNull Action action) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+    public static final NetworkBuffer.Type<BossBarPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BossBarPacket value) {
+            buffer.write(NetworkBuffer.UUID, value.uuid);
+            buffer.write(VAR_INT, value.action.id());
+            @SuppressWarnings("unchecked") final Type<Action> serializer = (Type<Action>) actionSerializer(value.action.id());
+            buffer.write(serializer, value.action);
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, uuid);
-        writer.write(VAR_INT, action.id());
-        writer.write(action);
-    }
+        @Override
+        public BossBarPacket read(@NotNull NetworkBuffer buffer) {
+            final UUID uuid = buffer.read(NetworkBuffer.UUID);
+            final int id = buffer.read(VAR_INT);
+            final Type<? extends Action> serializer = actionSerializer(id);
+            return new BossBarPacket(uuid, serializer.read(buffer));
+        }
+    };
 
     @Override
     public @NotNull Collection<Component> components() {
         return this.action instanceof ComponentHolder<?> holder
                 ? holder.components()
                 : List.of();
+    }
+
+    private static Type<? extends Action> actionSerializer(int id) {
+        return switch (id) {
+            case 0 -> AddAction.SERIALIZER;
+            case 1 -> RemoveAction.SERIALIZER;
+            case 2 -> UpdateHealthAction.SERIALIZER;
+            case 3 -> UpdateTitleAction.SERIALIZER;
+            case 4 -> UpdateStyleAction.SERIALIZER;
+            case 5 -> UpdateFlagsAction.SERIALIZER;
+            default -> throw new RuntimeException("Unknown action id");
+        };
     }
 
     @Override
@@ -51,8 +62,9 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
                 : this;
     }
 
-    public sealed interface Action extends NetworkBuffer.Writer
-            permits AddAction, RemoveAction, UpdateHealthAction, UpdateTitleAction, UpdateStyleAction, UpdateFlagsAction {
+    public sealed interface Action permits
+            AddAction, RemoveAction, UpdateHealthAction,
+            UpdateTitleAction, UpdateStyleAction, UpdateFlagsAction {
         int id();
     }
 
@@ -64,20 +76,14 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
                     AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public AddAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(COMPONENT), reader.read(FLOAT),
-                    BossBar.Color.values()[reader.read(VAR_INT)],
-                    BossBar.Overlay.values()[reader.read(VAR_INT)], reader.read(BYTE));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(COMPONENT, title);
-            writer.write(FLOAT, health);
-            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarColorValue(color));
-            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarOverlayValue(overlay));
-            writer.write(BYTE, flags);
-        }
+        public static final NetworkBuffer.Type<AddAction> SERIALIZER = NetworkBufferTemplate.template(
+                COMPONENT, AddAction::title,
+                FLOAT, AddAction::health,
+                Enum(BossBar.Color.class), AddAction::color,
+                Enum(BossBar.Overlay.class), AddAction::overlay,
+                BYTE, AddAction::flags,
+                AddAction::new
+        );
 
         @Override
         public int id() {
@@ -96,9 +102,7 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
     }
 
     public record RemoveAction() implements Action {
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-        }
+        public static final NetworkBuffer.Type<RemoveAction> SERIALIZER = NetworkBufferTemplate.template(RemoveAction::new);
 
         @Override
         public int id() {
@@ -111,14 +115,10 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.progress());
         }
 
-        public UpdateHealthAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(FLOAT));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(FLOAT, health);
-        }
+        public static final NetworkBuffer.Type<UpdateHealthAction> SERIALIZER = NetworkBufferTemplate.template(
+                FLOAT, UpdateHealthAction::health,
+                UpdateHealthAction::new
+        );
 
         @Override
         public int id() {
@@ -131,14 +131,10 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.name());
         }
 
-        public UpdateTitleAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(COMPONENT));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(COMPONENT, title);
-        }
+        public static final NetworkBuffer.Type<UpdateTitleAction> SERIALIZER = NetworkBufferTemplate.template(
+                COMPONENT, UpdateTitleAction::title,
+                UpdateTitleAction::new
+        );
 
         @Override
         public int id() {
@@ -162,15 +158,11 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(bar.color(), bar.overlay());
         }
 
-        public UpdateStyleAction(@NotNull NetworkBuffer reader) {
-            this(BossBar.Color.values()[reader.read(VAR_INT)], BossBar.Overlay.values()[reader.read(VAR_INT)]);
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarColorValue(color));
-            writer.write(VAR_INT, AdventurePacketConvertor.getBossBarOverlayValue(overlay));
-        }
+        public static final NetworkBuffer.Type<UpdateStyleAction> SERIALIZER = NetworkBufferTemplate.template(
+                Enum(BossBar.Color.class), UpdateStyleAction::color,
+                Enum(BossBar.Overlay.class), UpdateStyleAction::overlay,
+                UpdateStyleAction::new
+        );
 
         @Override
         public int id() {
@@ -183,23 +175,14 @@ public record BossBarPacket(@NotNull UUID uuid, @NotNull Action action) implemen
             this(AdventurePacketConvertor.getBossBarFlagValue(bar.flags()));
         }
 
-        public UpdateFlagsAction(@NotNull NetworkBuffer reader) {
-            this(reader.read(BYTE));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(BYTE, flags);
-        }
+        public static final NetworkBuffer.Type<UpdateFlagsAction> SERIALIZER = NetworkBufferTemplate.template(
+                BYTE, UpdateFlagsAction::flags,
+                UpdateFlagsAction::new
+        );
 
         @Override
         public int id() {
             return 5;
         }
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.BOSS_BAR;
     }
 }
