@@ -18,11 +18,13 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.ClientCookieResponsePacket;
 import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
 import net.minestom.server.network.packet.client.common.ClientPingRequestPacket;
+import net.minestom.server.network.packet.client.configuration.ClientSelectKnownPacksPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientEncryptionResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
 import net.minestom.server.network.packet.client.login.ClientLoginPluginResponsePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginStartPacket;
+import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
 import net.minestom.server.network.packet.client.status.StatusRequestPacket;
 import net.minestom.server.network.packet.server.*;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
@@ -52,15 +54,17 @@ import java.util.zip.DataFormatException;
 @ApiStatus.Internal
 public class PlayerSocketConnection extends PlayerConnection {
     private static final Set<Class<? extends ClientPacket>> IMMEDIATE_PROCESS_PACKETS = Set.of(
+            ClientHandshakePacket.class, // First received packet
             ClientCookieResponsePacket.class,
             StatusRequestPacket.class,
-            ClientLoginStartPacket.class,
             ClientPingRequestPacket.class,
-            ClientKeepAlivePacket.class,
-            ClientEncryptionResponsePacket.class,
-            ClientHandshakePacket.class,
+            ClientKeepAlivePacket.class, // Used to calculate latency
+            ClientLoginStartPacket.class,
+            ClientEncryptionResponsePacket.class, // Auth request
             ClientLoginPluginResponsePacket.class,
-            ClientLoginAcknowledgedPacket.class
+            ClientSelectKnownPacksPacket.class, // Immediate answer to server request on config
+            ClientConfigurationAckPacket.class, // Handle config state
+            ClientLoginAcknowledgedPacket.class // Handle config state
     );
 
     private final SocketChannel channel;
