@@ -86,6 +86,7 @@ import net.minestom.server.statistic.PlayerStatistic;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
+import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.server.utils.time.Cooldown;
@@ -115,6 +116,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
+
+    private final Set<Class<? extends ClientPacket>> MOVEMENTS_PACKETS = Set.of(
+            ClientPlayerPacket.class,
+            ClientPlayerRotationPacket.class,
+            ClientPlayerPositionPacket.class,
+            ClientPlayerPositionAndRotationPacket.class,
+            ClientTeleportConfirmPacket.class,
+            ClientVehicleMovePacket.class
+    );
 
     private long lastKeepAlive;
     private boolean answerKeepAlive;
@@ -387,6 +397,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final Pos currentPosition = this.position;
         Pos position = currentPosition;
         boolean onGround = this.onGround;
+
+        Entity vehicle = this.vehicle;
+        Pos vehiclePos = null;
+
         ClientPacket packet;
         while ((packet = movementPackets.poll()) != null) {
             if (packet instanceof ClientTeleportConfirmPacket p) {
@@ -407,6 +421,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                     case ClientPlayerPositionAndRotationPacket p -> {
                         position = p.position();
                         onGround = p.onGround();
+                    }
+                    case ClientVehicleMovePacket p -> {
+                        if (vehicle == null) continue;
+                        vehiclePos = p.position();
+                        position = vehiclePos.withY(y -> y + EntityUtils.getPassengerHeightOffset(vehicle, this));
                     }
                     default -> throw new IllegalStateException("Unexpected value: " + packet);
                 }
@@ -429,6 +448,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // Teleport to previous position
             sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, getNextTeleportId()));
             return currentPosition;
+        }
+
+        if (vehiclePos != null) {
+            vehicle.vehiclePos = vehiclePos;
         }
 
         return position;
@@ -711,8 +734,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
-        this.instance = currentInstance;
-
+        this.instance = currentInstance; // so `Entity#setInstance` can view the previous instance
         return super.setInstance(instance, spawnPosition);
     }
 
@@ -2075,17 +2097,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param packet the packet to add in the queue
      */
     public void addPacketToQueue(@NotNull ClientPacket packet) {
-        switch (packet) {
-            case ClientPlayerPacket p -> movementPackets.relaxedOffer(p);
-            case ClientPlayerRotationPacket p -> movementPackets.relaxedOffer(p);
-            case ClientPlayerPositionPacket p -> movementPackets.relaxedOffer(p);
-            case ClientPlayerPositionAndRotationPacket p -> movementPackets.relaxedOffer(p);
-            case ClientTeleportConfirmPacket p -> movementPackets.relaxedOffer(p);
-            default -> {
-                final boolean success = packets.offer(packet);
-                if (!success) {
-                    kick(Component.text("Too Many Packets", NamedTextColor.RED));
-                }
+        if (MOVEMENTS_PACKETS.contains(packet.getClass())) {
+            this.movementPackets.relaxedOffer(packet);
+        } else {
+            final boolean success = packets.offer(packet);
+            if (!success) {
+                kick(Component.text("Too Many Packets", NamedTextColor.RED));
             }
         }
     }

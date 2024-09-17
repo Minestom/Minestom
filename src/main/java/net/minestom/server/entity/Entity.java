@@ -113,6 +113,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private PhysicsResult previousPhysicsResult = null;
 
     protected Entity vehicle;
+    protected Pos vehiclePos; // Forced position from player passenger caused by `ClientVehicleMovePacket`
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
@@ -550,10 +551,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         handleTeleportRequest();
         final Pos currentPosition = this.position;
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-        if (vehicle != null) return currentPosition;
 
-        boolean entityIsPlayer = this instanceof Player;
-        boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
+        // Vehicles are responsible for their passengers position
+        // (unless for players)
+        if (vehicle != null) return currentPosition;
+        final Pos vehiclePos = this.vehiclePos;
+        if (vehiclePos != null) {
+            // Position set by player
+            this.vehiclePos = null;
+            return vehiclePos;
+        }
+
+        final boolean entityIsPlayer = this instanceof Player;
+        final boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
         final Block.Getter chunkCache = new ChunkCache(instance, currentChunk, Block.STONE);
         PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
                 instance.getWorldBorder(), chunkCache, aerodynamics, hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
@@ -1266,7 +1276,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView, boolean sendPackets) {
-        System.out.println("REFRESH POSITION");
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
@@ -1309,13 +1318,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView) {
-        refreshPosition(newPosition, ignoreView, true);
-    }
-
-    @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos newPosition) {
-        refreshPosition(newPosition, false);
+        refreshPosition(newPosition, false, true);
     }
 
     /**
