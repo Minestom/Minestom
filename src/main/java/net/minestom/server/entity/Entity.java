@@ -7,10 +7,7 @@ import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.*;
 import net.minestom.server.collision.*;
-import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
@@ -29,7 +26,10 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.CachedPacket;
+import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.permission.Permission;
 import net.minestom.server.permission.PermissionHandler;
@@ -49,7 +49,6 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.PacketViewableUtils;
-import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUtils;
@@ -102,6 +101,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
+
+    protected TeleportRequest teleportRequest;
+
+    protected record TeleportRequest(Instance instance, Pos pos,
+                                     CompletableFuture<Void> chunkFuture,
+                                     boolean shouldConfirm) {
+    }
 
     protected BoundingBox boundingBox;
     private PhysicsResult previousPhysicsResult = null;
@@ -278,56 +284,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Teleports the entity only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
-     *
-     * @param position      the teleport position
-     * @param chunks        the chunk indexes to load before teleporting the entity,
-     *                      indexes are from {@link CoordConversion#chunkIndex(int, int)},
-     *                      can be null or empty to only load the chunk at {@code position}
-     * @param flags         flags used to teleport the entity relatively rather than absolutely
-     *                      use {@link RelativeFlags} to see available flags
-     * @param shouldConfirm if false, the teleportation will be done without confirmation
-     * @throws IllegalStateException if you try to teleport an entity before settings its instance
-     */
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
-                                                     boolean shouldConfirm) {
-        Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
-        final Runnable endCallback = () -> {
-            this.previousPosition = this.position;
-            this.position = globalPosition;
-            refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
-            else synchronizePosition();
-        };
-
-        if (chunks != null && chunks.length > 0) {
-            // Chunks need to be loaded before the teleportation can happen
-            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
-        }
-        final Pos currentPosition = this.position;
-        if (!currentPosition.sameChunk(globalPosition)) {
-            // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(globalPosition).thenRun(endCallback);
-        } else {
-            // Position is in the same chunk, keep it sync
-            endCallback.run();
-            return AsyncUtils.empty();
-        }
-    }
-
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        return teleport(position, chunks, flags, true);
-    }
-
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        return teleport(position, null, RelativeFlags.NONE);
-    }
-
-    /**
      * Changes the view of the entity.
      *
      * @param yaw   the new yaw
@@ -337,7 +293,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos currentPosition = this.position;
         if (currentPosition.sameView(yaw, pitch)) return;
         this.position = currentPosition.withView(yaw, pitch);
-        synchronizeView();
+        sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+        sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
     }
 
     /**
@@ -487,6 +444,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return viewers;
     }
 
+    @Override
+    public void sendPacketToViewers(@NotNull SendablePacket packet) {
+        final Chunk chunk = this.currentChunk;
+        if (chunk == null) return;
+        final ServerPacket extracted = SendablePacket.extractServerPacket(ConnectionState.PLAY, packet);
+        assert extracted != null;
+        PacketViewableUtils.prepareViewablePacket(chunk, extracted, this);
+    }
+
     /**
      * Gets if this entity's viewers (surrounding players) can be predicted from surrounding chunks.
      */
@@ -543,7 +509,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Entity tick
         {
             // handle position and velocity updates
-            movementTick();
+            final Pos oldPos = this.position;
+            final Pos movement = movementTick();
+            if (!oldPos.equals(movement)) {
+                // Entity moved
+                this.position = movement;
+                this.previousPosition = oldPos;
+                refreshCoordinate(movement);
+                if (!SYNCHRONIZE_ONLY_ENTITIES.contains(entityType)) {
+                    sendPacketToViewers(new EntityTeleportPacket(id, movement, onGround));
+                }
+            }
 
             // handle block contacts
             touchTick();
@@ -566,10 +542,15 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.scheduler.processTickEnd();
     }
 
+    /**
+     * Retrieves the position this entity should have for the following tick.
+     */
     @ApiStatus.Internal
-    protected void movementTick() {
+    protected Pos movementTick() {
+        handleTeleportRequest();
+        final Pos currentPosition = this.position;
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
-        if (vehicle != null) return;
+        if (vehicle != null) return currentPosition;
 
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
@@ -579,13 +560,55 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.previousPhysicsResult = physicsResult;
 
         Chunk finalChunk = ChunkUtils.retrieve(instance, currentChunk, physicsResult.newPosition());
-        if (!ChunkUtils.isLoaded(finalChunk)) return;
+        if (!ChunkUtils.isLoaded(finalChunk)) return currentPosition;
 
         velocity = physicsResult.newVelocity().mul(ServerFlag.SERVER_TICKS_PER_SECOND);
         if (!(this instanceof Player)) {
             onGround = physicsResult.isOnGround();
-            refreshPosition(physicsResult.newPosition(), true, !SYNCHRONIZE_ONLY_ENTITIES.contains(entityType));
+            return physicsResult.newPosition();
         }
+        return currentPosition;
+    }
+
+    private void handleTeleportRequest() {
+        final TeleportRequest teleportRequest = this.teleportRequest;
+        if (teleportRequest == null) return;
+        var future = teleportRequest.chunkFuture();
+        if (!future.isDone()) return;
+
+        // Entity has been teleported
+        var teleportInstance = teleportRequest.instance();
+        if (teleportInstance != null) {
+            // Teleported to a new instance
+        }
+
+        teleportedAt(teleportRequest.pos());
+        this.teleportRequest = null;
+    }
+
+    @ApiStatus.Internal
+    protected void teleportedAt(Pos position) {
+
+    }
+
+    private void addToInstance(Instance instance, Pos position) {
+        final Chunk chunk = instance.loadOptionalChunk(position).join();
+        Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+        refreshCurrentChunk(chunk);
+        if (this instanceof Player player) {
+            player.sendPacket(instance.createInitializeWorldBorderPacket());
+            player.sendPacket(instance.createTimePacket());
+            player.sendPackets(instance.getWeather().createWeatherPackets());
+        }
+        instance.getEntityTracker().register(this, position, trackingTarget, trackingUpdate);
+        spawn();
+        EventDispatcher.call(new EntitySpawnEvent(this, instance));
+    }
+
+    private void removeFromInstance(Instance instance) {
+        EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
+        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+        this.viewEngine.forManuals(this::removeViewer);
     }
 
     private void touchTick() {
@@ -775,22 +798,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
-        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
-            try {
-                Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
-                refreshCurrentChunk(chunk);
-                if (this instanceof Player player) {
-                    player.sendPacket(instance.createInitializeWorldBorderPacket());
-                    player.sendPacket(instance.createTimePacket());
-                    player.sendPackets(instance.getWeather().createWeatherPackets());
-                }
-                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
-                spawn();
-                EventDispatcher.call(new EntitySpawnEvent(this, instance));
-            } catch (Exception e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-        });
+
+        Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
+        ChunkRange.chunksInRange(0, 0, ServerFlag.CHUNK_VIEW_DISTANCE, (x, z) -> chunks.add(instance.loadChunk(x, z)));
+        CompletableFuture<Void> future = CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).thenAccept(unused -> addToInstance(instance, spawnPosition));
+        this.teleportRequest = new TeleportRequest(instance, spawnPosition, future, true);
+        return future;
     }
 
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Point spawnPosition) {
@@ -810,10 +823,44 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return setInstance(instance, this.position);
     }
 
-    private void removeFromInstance(Instance instance) {
-        EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
-        this.viewEngine.forManuals(this::removeViewer);
+    /**
+     * Teleports the entity as soon as the relevant chunks are loaded
+     *
+     * @param position      the teleport position
+     * @param chunks        the chunk indexes to load before teleporting the entity,
+     *                      indexes are from {@link CoordConversion#chunkIndex(int, int)},
+     *                      can be null or empty to only load the chunk at {@code position}
+     * @param flags         flags used to teleport the entity relatively rather than absolutely
+     *                      use {@link RelativeFlags} to see available flags
+     * @param shouldConfirm if false, the teleportation will be done without confirmation
+     * @throws IllegalStateException if you try to teleport an entity before settings its instance
+     */
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+                                                     boolean shouldConfirm) {
+        final Instance currentInstance = this.instance;
+        Check.stateCondition(currentInstance == null, "You need to use Entity#setInstance before teleporting an entity!");
+        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
+        CompletableFuture<Void> future;
+        {
+            if (chunks != null && chunks.length > 0) {
+                // Chunks need to be loaded before the teleportation can happen
+                future = ChunkUtils.optionalLoadAll(currentInstance, chunks, null);
+            } else {
+                future = (CompletableFuture) currentInstance.loadOptionalChunk(globalPosition);
+            }
+        }
+        this.teleportRequest = new TeleportRequest(null, globalPosition, future, shouldConfirm);
+        return future;
+    }
+
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        return teleport(position, chunks, flags, true);
+    }
+
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
+        return teleport(position, null, RelativeFlags.NONE);
     }
 
     /**
@@ -1219,6 +1266,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView, boolean sendPackets) {
+        System.out.println("REFRESH POSITION");
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
@@ -1529,18 +1577,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     protected void synchronizePosition() {
-        final Pos posCache = this.position;
-        PacketViewableUtils.prepareViewablePacket(currentChunk, new EntityTeleportPacket(getEntityId(), posCache, isOnGround()), this);
-        if (posCache.yaw() != lastSyncedPosition.yaw()) {
-            PacketViewableUtils.prepareViewablePacket(currentChunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
+        final Pos position = this.position;
+        sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
+        if (position.yaw() != lastSyncedPosition.yaw()) {
+            sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
         }
         nextSynchronizationTick = ticks + synchronizationTicks;
-        this.lastSyncedPosition = posCache;
-    }
-
-    private void synchronizeView() {
-        sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
-        sendPacketToViewers(new EntityRotationPacket(getEntityId(), position.yaw(), position.pitch(), onGround));
+        this.lastSyncedPosition = position;
     }
 
     /**
