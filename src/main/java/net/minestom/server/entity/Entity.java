@@ -637,15 +637,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (!future.isDone()) return;
         // Entity has been teleported
         final Pos teleportPos = teleportRequest.pos();
-        updatedTeleport(teleportPos);
         this.teleportRequest = null;
         this.previousPosition = teleportPos;
         this.lastSyncedPosition = teleportPos;
         this.position = teleportPos;
+        final Chunk chunk = instance.getChunk(teleportPos.chunkX(), teleportPos.chunkZ());
+        assert chunk != null;
+        updatedChunk(chunk);
+        updatedTeleport(teleportPos);
     }
 
     @ApiStatus.Internal
     protected void updatedTeleport(Pos position) {
+        assert currentChunk != null;
+        sendPacketToViewers(new EntityTeleportPacket(id, position, true));
     }
 
     @ApiStatus.Internal

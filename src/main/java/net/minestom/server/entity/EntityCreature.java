@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
@@ -60,9 +59,9 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     }
 
     @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    protected void updatedInstance(Instance instance, Pos position) {
         this.navigator.reset();
-        return super.setInstance(instance, spawnPosition);
+        super.updatedInstance(instance, position);
     }
 
     @Override
