@@ -432,13 +432,22 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
         }
 
+        // Prevent the player from moving more than a section per tick
+        if (Math.abs(currentPosition.chunkX() - position.chunkX()) > 1 ||
+                Math.abs(currentPosition.section() - position.section()) > 1 ||
+                Math.abs(currentPosition.chunkZ() - position.chunkZ()) > 1) {
+            kick(Component.text("You moved too quickly!", NamedTextColor.RED));
+            return position;
+        }
+
         // Prevent the player from moving too far
         // Doubles close to max size can cause overflow, or simply have precision issues
-        final double MAX_COORDINATE = 30_000_000;
-        if (Math.abs(position.x()) > MAX_COORDINATE ||
-                Math.abs(position.y()) > MAX_COORDINATE ||
-                Math.abs(position.z()) > MAX_COORDINATE) {
-            kick(Component.text("You moved too far away!"));
+        final double MAX_COORDINATE_XZ = 30_000_000;
+        final double MAX_COORDINATE_Y = 400_000;
+        if (Math.abs(position.x()) > MAX_COORDINATE_XZ ||
+                Math.abs(position.y()) > MAX_COORDINATE_Y ||
+                Math.abs(position.z()) > MAX_COORDINATE_XZ) {
+            kick(Component.text("You moved too far away!", NamedTextColor.RED));
             return position;
         }
 

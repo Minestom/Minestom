@@ -630,6 +630,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         teleportedAt(teleportRequest.pos());
         this.teleportRequest = null;
+        this.position = teleportRequest.pos();
     }
 
     @ApiStatus.Internal
