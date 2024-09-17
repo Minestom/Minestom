@@ -102,6 +102,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
+    protected Pos nextPosition;
     protected TeleportRequest teleportRequest;
 
     protected record TeleportRequest(Instance instance, Pos pos,
@@ -511,16 +512,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         {
             // handle position and velocity updates
             final Pos oldPos = this.position;
-            final Pos movement = movementTick();
+            final Pos movement = this.nextPosition;
+            assert movement != null;
             if (!oldPos.equals(movement)) {
                 // Entity moved
-                this.position = movement;
-                this.previousPosition = oldPos;
-                refreshCoordinate(movement);
-                if (!SYNCHRONIZE_ONLY_ENTITIES.contains(entityType)) {
-                    sendPacketToViewers(new EntityTeleportPacket(id, movement, onGround));
-                }
+                handleMove(movement);
             }
+            this.nextPosition = null;
 
             // handle block contacts
             touchTick();
@@ -541,6 +539,46 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         // End of tick scheduled tasks
         this.scheduler.processTickEnd();
+    }
+
+    protected void handleMove(Pos newPosition) {
+        final Pos oldPos = this.position;
+        this.position = newPosition;
+        this.previousPosition = oldPos;
+        refreshCoordinate(newPosition);
+        if (!SYNCHRONIZE_ONLY_ENTITIES.contains(entityType)) {
+            if (nextSynchronizationTick <= ticks + 1) {
+                // The entity will be synchronized at the end of its tick
+                // not returning here will duplicate position packets
+                return;
+            }
+            // Update viewers
+            final boolean viewChange = !position.sameView(lastSyncedPosition);
+            final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
+            final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
+            final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
+            final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
+
+            if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
+                sendPacketToViewers(new EntityTeleportPacket(getEntityId(), position, isOnGround()));
+                nextSynchronizationTick = synchronizationTicks + 1;
+            } else if (positionChange && viewChange) {
+                sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                        lastSyncedPosition, isOnGround()));
+                // Fix head rotation
+                sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+            } else if (positionChange) {
+                // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
+                // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
+                sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                        lastSyncedPosition, onGround));
+            } else if (viewChange) {
+                sendPacketToViewers(new EntityHeadLookPacket(getEntityId(), position.yaw()));
+                sendPacketToViewers(EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
+                        lastSyncedPosition, isOnGround()));
+            }
+            this.lastSyncedPosition = position;
+        }
     }
 
     /**

@@ -5,6 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPositionUpdater;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
@@ -397,6 +398,7 @@ final class ServerProcessImpl implements ServerProcess {
             for (Instance instance : instance().getInstances()) {
                 try {
                     instance.tick(tickStart);
+                    EntityPositionUpdater.update(instance);
                 } catch (Exception e) {
                     exception().handleException(e);
                 }
