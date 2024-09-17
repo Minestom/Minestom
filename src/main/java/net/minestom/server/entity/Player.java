@@ -708,7 +708,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
         }
 
-        if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
+        if (dimensionChange) {
+            this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(instance.getDimensionType());
+            sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
+                    0, gameMode, gameMode, false, levelFlat,
+                    deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
+            refreshClientStateAfterRespawn();
+        }
 
         sendPacket(new PlayerPositionAndLookPacket(spawnPosition, (byte) 0, getNextTeleportId())); // So the player doesn't get stuck
 
@@ -1635,22 +1641,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         return true;
-    }
-
-    /**
-     * Changes the dimension of the player.
-     * Mostly unsafe since it requires sending chunks after.
-     *
-     * @param dimensionType the new player dimension
-     */
-    protected void sendDimension(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull String dimensionName) {
-        Check.argCondition(instance.getDimensionName().equals(dimensionName),
-                "The dimension needs to be different than the current one!");
-        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
-        sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
-                0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
-        refreshClientStateAfterRespawn();
     }
 
     /**
