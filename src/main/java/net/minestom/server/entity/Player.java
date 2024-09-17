@@ -364,7 +364,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         refreshHealth(); // Heal and send health packet
         refreshAbilities(); // Send abilities packet
 
-        return setInstance(spawnInstance);
+        return setInstance(spawnInstance, respawnPoint);
     }
 
     /**
@@ -449,11 +449,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, getNextTeleportId()));
             return currentPosition;
         }
-
-        if (vehiclePos != null) {
-            vehicle.vehiclePos = vehiclePos;
-        }
-
+        if (vehiclePos != null) vehicle.vehiclePos = vehiclePos;
         return position;
     }
 
@@ -687,6 +683,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         final Instance currentInstance = this.instance;
+        CompletableFuture<Void> future = super.setInstance(instance, spawnPosition);
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
 
         // Reset chunk queue state
@@ -698,9 +695,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final boolean sameChunks = SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position);
 
-        System.out.println("set instance " + firstSpawn + " " + dimensionChange + " " + sameChunks);
-
-        this.instance = instance;
         if (!firstSpawn) {
             ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
         }
@@ -732,24 +726,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // Tell the client to leave the loading terrain screen
             sendPacket(new ChangeGameStatePacket(ChangeGameStatePacket.Reason.LEVEL_CHUNKS_LOAD_START, 0));
         }
-
         EventDispatcher.call(new PlayerSpawnEvent(this, instance, firstSpawn));
-        this.instance = currentInstance; // so `Entity#setInstance` can view the previous instance
-        return super.setInstance(instance, spawnPosition);
-    }
-
-    /**
-     * Changes the player instance without changing its position (defaulted to {@link #getRespawnPoint()}
-     * if the player is not in any instance).
-     *
-     * @param instance the new player instance
-     * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load for players
-     * @see #setInstance(Instance, Pos)
-     */
-    @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance) {
-        return setInstance(instance, this.instance != null ? getPosition() : getRespawnPoint());
+        return future;
     }
 
     @ApiStatus.Internal

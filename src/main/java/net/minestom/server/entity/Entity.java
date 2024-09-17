@@ -628,14 +628,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (teleportInstance != null) {
             // Teleported to a new instance
         }
-
         teleportedAt(teleportRequest.pos());
         this.teleportRequest = null;
     }
 
     @ApiStatus.Internal
     protected void teleportedAt(Pos position) {
-
     }
 
     private void addToInstance(Instance instance, Pos position) {
@@ -845,10 +843,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
+        addToInstance(instance, spawnPosition); // FIXME: currently block to load the chunk at `spawnPosition`
 
         Set<CompletableFuture<Chunk>> chunks = new HashSet<>();
         ChunkRange.chunksInRange(0, 0, ServerFlag.CHUNK_VIEW_DISTANCE, (x, z) -> chunks.add(instance.loadChunk(x, z)));
-        CompletableFuture<Void> future = CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).thenAccept(unused -> addToInstance(instance, spawnPosition));
+        CompletableFuture<Void> future = CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new));
         this.teleportRequest = new TeleportRequest(instance, spawnPosition, future, true);
         return future;
     }
@@ -896,6 +895,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             } else {
                 future = (CompletableFuture) currentInstance.loadOptionalChunk(globalPosition);
             }
+        }
+        if (this instanceof Player player) {
+            final int teleportId = shouldConfirm ? player.getNextTeleportId() : -1;
+            player.sendPacket(new PlayerPositionAndLookPacket(globalPosition, (byte) flags, teleportId));
         }
         this.teleportRequest = new TeleportRequest(null, globalPosition, future, shouldConfirm);
         return future;
