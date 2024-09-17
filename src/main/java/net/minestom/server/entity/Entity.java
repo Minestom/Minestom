@@ -102,7 +102,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos lastSyncedPosition;
     protected boolean onGround;
 
-    protected Pos nextPosition;
+    protected Pos nextPosition; // Set from `EntityPositionUpdater` for all entities before ticking
     protected TeleportRequest teleportRequest;
 
     protected record TeleportRequest(Instance instance, Pos pos,
@@ -118,7 +118,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
