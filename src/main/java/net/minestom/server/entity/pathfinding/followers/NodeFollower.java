@@ -1,19 +1,15 @@
 package net.minestom.server.entity.pathfinding.followers;
 
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public interface NodeFollower {
     /**
      * Move towards the specified point
-     *
-     * @param target the point to move towards
-     * @param speed  the speed to move at
-     * @param lookAt the point to look at
      */
-    void moveTowards(@NotNull Point target, double speed, @NotNull Point lookAt);
+    Pos moveTowards(@NotNull Pos position, @NotNull Point target, double speed, @NotNull Point lookAt);
 
     /**
      * Jump
@@ -22,6 +18,7 @@ public interface NodeFollower {
 
     /**
      * Check if the follower is at the specified point
+     *
      * @param point the point to check
      * @return true if the follower is at the point
      */
@@ -29,6 +26,7 @@ public interface NodeFollower {
 
     /**
      * Get the movement speed of the follower
+     *
      * @return the movement speed
      */
     double movementSpeed();

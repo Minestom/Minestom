@@ -16,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -47,12 +48,15 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     public void update(long time) {
         // AI
         aiTick(time);
-
-        // Path finding
-        this.navigator.tick();
-
         // Fire, item pickup, ...
         super.update(time);
+    }
+
+    @Override
+    protected Pos movementTick() {
+        final Pos pos = super.movementTick();
+        final Pos navigationPos = navigator.computeNextPosition(pos);
+        return Objects.requireNonNullElse(navigationPos, pos);
     }
 
     @Override

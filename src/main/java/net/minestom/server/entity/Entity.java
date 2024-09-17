@@ -536,10 +536,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected Pos movementTick() {
         handleTeleportRequest();
         final Pos currentPosition = this.position;
+        assert this.instance != null;
+        assert currentPosition != null;
         this.gravityTickCount = onGround ? 0 : gravityTickCount + 1;
 
-        // Vehicles are responsible for their passengers position
-        // (unless for players)
+        // Vehicles are responsible for their passengers position (except for players)
         if (vehicle != null) return currentPosition;
         final Pos vehiclePos = this.vehiclePos;
         if (vehiclePos != null) {
@@ -551,7 +552,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final boolean entityIsPlayer = this instanceof Player;
         final boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
         final Block.Getter chunkCache = new ChunkCache(instance, currentChunk, Block.STONE);
-        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
+        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(currentPosition, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
                 instance.getWorldBorder(), chunkCache, aerodynamics, hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
         this.previousPhysicsResult = physicsResult;
 
@@ -1310,59 +1311,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public void setNoGravity(boolean noGravity) {
         this.entityMeta.setHasNoGravity(noGravity);
-    }
-
-    /**
-     * Updates internal fields and sends updates.
-     *
-     * @param newPosition the new position
-     */
-    @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos newPosition, boolean ignoreView, boolean sendPackets) {
-        final var previousPosition = this.position;
-        final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
-        if (position.equals(lastSyncedPosition)) return;
-        this.position = position;
-        this.previousPosition = previousPosition;
-        //if (!position.samePoint(previousPosition)) refreshCoordinate(position);
-        if (nextSynchronizationTick <= ticks + 1 || !sendPackets) {
-            // The entity will be synchronized at the end of its tick
-            // not returning here will duplicate position packets
-            return;
-        }
-        // Update viewers
-        final boolean viewChange = !position.sameView(lastSyncedPosition);
-        final double distanceX = Math.abs(position.x() - lastSyncedPosition.x());
-        final double distanceY = Math.abs(position.y() - lastSyncedPosition.y());
-        final double distanceZ = Math.abs(position.z() - lastSyncedPosition.z());
-        final boolean positionChange = (distanceX + distanceY + distanceZ) > 0;
-
-        final Chunk chunk = getChunk();
-        assert chunk != null;
-        if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
-            nextSynchronizationTick = synchronizationTicks + 1;
-        } else if (positionChange && viewChange) {
-            PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()), this);
-            // Fix head rotation
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
-        } else if (positionChange) {
-            // This is a confusing fix for a confusing issue. If rotation is only sent when the entity actually changes, then spawning an entity
-            // on the ground causes the entity not to update its rotation correctly. It works fine if the entity is spawned in the air. Very weird.
-            PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, onGround), this);
-        } else if (viewChange) {
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
-            PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
-                    lastSyncedPosition, isOnGround()), this);
-        }
-        this.lastSyncedPosition = position;
-    }
-
-    @ApiStatus.Internal
-    public void refreshPosition(@NotNull final Pos newPosition) {
-        refreshPosition(newPosition, false, true);
     }
 
     /**
