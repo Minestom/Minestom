@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -15,6 +16,7 @@ public final class EntityPositionUpdater {
             Set<Entity> toRemove = new HashSet<>(entities);
             for (Entity entity : entities) {
                 final Entity vehicle = entity.vehicle;
+                assert vehicle != entity : "vehicle shouldn't be itself";
                 if (entity instanceof Player && !(vehicle instanceof Player)) {
                     toRemove.add(entity);
                 } else {
@@ -25,7 +27,12 @@ public final class EntityPositionUpdater {
             }
             entities.removeAll(toRemove);
             for (Entity entity : toRemove) {
-                entity.nextPosition = entity.movementTick();
+                final Pos currentPosition = entity.getPosition();
+                final Pos nextPosition = entity.movementTick();
+                if (!currentPosition.equals(nextPosition)) {
+                    entity.nextPosition = nextPosition;
+                    entity.updatedPosition(currentPosition, nextPosition);
+                }
             }
         }
     }

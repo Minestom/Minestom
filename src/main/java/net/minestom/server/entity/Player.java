@@ -463,8 +463,23 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    protected void teleportedAt(Pos position) {
+    protected void updatedTeleport(Pos position) {
         sendPacket(new PlayerPositionAndLookPacket(position, (byte) 0x00, getNextTeleportId()));
+        super.updatedTeleport(position);
+    }
+
+    @Override
+    protected void updatedInstance(Instance instance, Pos position) {
+        super.updatedInstance(instance, position);
+        sendPacket(instance.createInitializeWorldBorderPacket());
+        sendPacket(instance.createTimePacket());
+        sendPackets(instance.getWeather().createWeatherPackets());
+    }
+
+    @Override
+    protected void updatedChunk(Chunk chunk) {
+        sendChunkUpdates(chunk);
+        super.updatedChunk(chunk);
     }
 
     @Override
