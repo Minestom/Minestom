@@ -91,12 +91,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EntityTeleportEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
+implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></span></div>
 <div class="block">Called with <a href="../../entity/Entity.html#teleport(net.minestom.server.coordinate.Pos)"><code>Entity.teleport(Pos)</code></a> and its overloads.</div>
 </section>
 <section class="summary">
@@ -109,9 +109,9 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)" class="member-name-link">EntityTeleportEvent</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
- @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;oldPos,
- @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPos)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Pos,int)" class="member-name-link">EntityTeleportEvent</a><wbr>(@NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;teleportPosition,
+ int&nbsp;relativeFlags)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -135,21 +135,11 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNewPosition()" class="member-name-link">getNewPosition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getOldPosition()" class="member-name-link">getOldPosition</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRelativeFlags()" class="member-name-link">getRelativeFlags</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setCancelled(boolean)" class="member-name-link">setCancelled</a><wbr>(boolean&nbsp;cancel)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNewPosition(net.minestom.server.coordinate.Pos)" class="member-name-link">setNewPosition</a><wbr>(@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;to)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getTeleportPosition()" class="member-name-link">getTeleportPosition</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -169,14 +159,14 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Pos,net.minestom.server.coordinate.Pos)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Entity,net.minestom.server.coordinate.Pos,int)">
 <h3>EntityTeleportEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">EntityTeleportEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
  @NotNull
- @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;oldPos,
- @NotNull
- @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;newPos)</span></div>
+ @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;teleportPosition,
+ @MagicConstant(flagsFromClass=<a href="../../entity/RelativeFlags.html" title="class in net.minestom.server.entity">RelativeFlags.class</a>)
+ int&nbsp;relativeFlags)</span></div>
 </section>
 </li>
 </ul>
@@ -203,63 +193,35 @@ implements <a href="../trait/EntityEvent.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="getOldPosition()">
-<h3>getOldPosition</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></span>&nbsp;<span class="element-name">getOldPosition</span>()</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>The position that the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> was at before they teleported.</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getNewPosition()">
 <h3>getNewPosition</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></span>&nbsp;<span class="element-name">getNewPosition</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>The position that the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is about to teleport to.</dd>
+<dd>The position that the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is about to teleport to. This is an absolute position.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setNewPosition(net.minestom.server.coordinate.Pos)">
-<h3>setNewPosition</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setNewPosition</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;to)</span></div>
+<section class="detail" id="getTeleportPosition()">
+<h3>getTeleportPosition</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a></span>&nbsp;<span class="element-name">getTeleportPosition</span>()</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>to</code> - The position that the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is teleporting to.</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="isCancelled()">
-<h3>isCancelled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isCancelled</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#isCancelled()">CancellableEvent</a></code></span></div>
-<div class="block">Gets if the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> should be cancelled or not.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../trait/CancellableEvent.html#isCancelled()">isCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
 <dt>Returns:</dt>
-<dd>true if the event should be cancelled</dd>
+<dd>The position that the <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> is about to teleport to. This may be (partially) relative depending on the flags.</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="setCancelled(boolean)">
-<h3>setCancelled</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setCancelled</span><wbr><span class="parameters">(boolean&nbsp;cancel)</span></div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">CancellableEvent</a></code></span></div>
-<div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
+<section class="detail" id="getRelativeFlags()">
+<h3>getRelativeFlags</h3>
+<div class="member-signature"><span class="annotations">@MagicConstant(flagsFromClass=<a href="../../entity/RelativeFlags.html" title="class in net.minestom.server.entity">RelativeFlags.class</a>)
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">getRelativeFlags</span>()</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../trait/CancellableEvent.html#setCancelled(boolean)">setCancelled</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></code></dd>
-<dt>Parameters:</dt>
-<dd><code>cancel</code> - true if the event should be cancelled, false otherwise</dd>
+<dt>Returns:</dt>
+<dd>The flags that determine which fields of the position are relative.</dd>
 </dl>
 </section>
 </li>
