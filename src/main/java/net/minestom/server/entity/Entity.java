@@ -294,21 +294,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                                                      boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
 
-        EntityTeleportEvent event = new EntityTeleportEvent(this, this.position, position);
+        EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
         EventDispatcher.call(event);
 
-        if (event.isCancelled()) {  // The event was cancelled, don't move the entity
-            return AsyncUtils.empty();
-        }
-
-        // Initial target pos, it can be modified by the event handlers
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, event.getNewPosition(), flags);
+        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
 
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(event.getNewPosition(), flags, shouldConfirm);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
             else synchronizePosition();
         };
 

@@ -2,24 +2,25 @@ package net.minestom.server.event.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.event.trait.EntityEvent;
+import net.minestom.server.utils.position.PositionUtils;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Called with {@link Entity#teleport(Pos)} and its overloads.
  */
-public class EntityTeleportEvent implements EntityEvent, CancellableEvent {
+public class EntityTeleportEvent implements EntityEvent {
 
-    private boolean cancelled;
     private final Entity entity;
-    private final Pos oldPos;
-    private Pos newPos;
+    private final Pos teleportPosition;
+    private final int relativeFlags;
 
-    public EntityTeleportEvent(@NotNull Entity entity, @NotNull Pos oldPos, @NotNull Pos newPos) {
+    public EntityTeleportEvent(@NotNull Entity entity, @NotNull Pos teleportPosition, @MagicConstant(flagsFromClass = RelativeFlags.class) int relativeFlags) {
         this.entity = entity;
-        this.oldPos = oldPos;
-        this.newPos = newPos;
+        this.teleportPosition = teleportPosition;
+        this.relativeFlags = relativeFlags;
     }
 
     /**
@@ -32,35 +33,24 @@ public class EntityTeleportEvent implements EntityEvent, CancellableEvent {
     }
 
     /**
-     * @return The position that the {@link Entity} was at before they teleported.
+     * @return The position that the {@link Entity} is about to teleport to. This is an absolute position.
      */
-    @NotNull
-    public Pos getOldPosition() {
-        return oldPos;
+    public @NotNull Pos getNewPosition() {
+        return PositionUtils.getPositionWithRelativeFlags(this.getEntity().getPosition(), getTeleportPosition(), relativeFlags);
     }
 
     /**
-     * @return The position that the {@link Entity} is about to teleport to.
+     * @return The position that the {@link Entity} is about to teleport to. This may be (partially) relative depending on the flags.
      */
-    @NotNull
-    public Pos getNewPosition() {
-        return newPos;
+    public @NotNull Pos getTeleportPosition() {
+        return teleportPosition;
     }
 
     /**
-     * @param to The position that the {@link Entity} is teleporting to.
+     * @return The flags that determine which fields of the position are relative.
      */
-    public void setNewPosition(@NotNull Pos to) {
-        this.newPos = to;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    @MagicConstant(flagsFromClass = RelativeFlags.class)
+    public int getRelativeFlags() {
+        return relativeFlags;
     }
 }
