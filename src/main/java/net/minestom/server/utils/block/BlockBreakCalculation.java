@@ -63,7 +63,7 @@ public class BlockBreakCalculation {
 
             // wiki seems to be incorrect here, taken from minecraft's code
             if (speedMultiplier > 1F) {
-                // Wiki tells us about calculations for efficiency, but enchantments don't apply these calculations in minestom.
+                // since data driven enchantments efficiency uses the PLAYER_MINING_EFFICIENCY attribute
                 // If someone wants faster tools, they have to use player attributes or the TOOL component
                 speedMultiplier += (float) player.getAttributeValue(Attribute.PLAYER_MINING_EFFICIENCY);
             }
