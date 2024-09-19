@@ -293,12 +293,22 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                                                      @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                                      boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
+
+        EntityTeleportEvent event = new EntityTeleportEvent(this, this.position, position);
+        EventDispatcher.call(event);
+
+        if (event.isCancelled()) {  // The event was cancelled, don't move the entity
+            return AsyncUtils.empty();
+        }
+
+        // Initial target pos, it can be modified by the event handlers
+        final Pos finalGlobalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, event.getNewPosition(), flags);
+
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            this.position = globalPosition;
-            refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, flags, shouldConfirm);
+            this.position = finalGlobalPosition;
+            refreshCoordinate(finalGlobalPosition);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(finalGlobalPosition, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -307,9 +317,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
         final Pos currentPosition = this.position;
-        if (!currentPosition.sameChunk(globalPosition)) {
+        if (!currentPosition.sameChunk(finalGlobalPosition)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(globalPosition).thenRun(endCallback);
+            return instance.loadOptionalChunk(finalGlobalPosition).thenRun(endCallback);
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
