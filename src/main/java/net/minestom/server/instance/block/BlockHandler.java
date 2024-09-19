@@ -199,15 +199,17 @@ public interface BlockHandler {
     final class Interaction {
         private final Block block;
         private final Instance instance;
+        private final BlockFace blockFace;
         private final Point blockPosition;
         private final Point cursorPosition;
         private final Player player;
         private final Player.Hand hand;
 
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, Point blockPosition, Point cursorPosition, Player player, Player.Hand hand) {
+        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, Player.Hand hand) {
             this.block = block;
             this.instance = instance;
+            this.blockFace = blockFace;
             this.blockPosition = blockPosition;
             this.cursorPosition = cursorPosition;
             this.player = player;
@@ -220,6 +222,10 @@ public interface BlockHandler {
 
         public @NotNull Instance getInstance() {
             return instance;
+        }
+
+        public @NotNull BlockFace getBlockFace() {
+            return blockFace;
         }
 
         public @NotNull Point getBlockPosition() {
