@@ -302,13 +302,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
 
         // Initial target pos, it can be modified by the event handlers
-        final Pos finalGlobalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, event.getNewPosition(), flags);
+        final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, event.getNewPosition(), flags);
 
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            this.position = finalGlobalPosition;
-            refreshCoordinate(finalGlobalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(finalGlobalPosition, flags, shouldConfirm);
+            this.position = globalPosition;
+            refreshCoordinate(globalPosition);
+            if (this instanceof Player player) player.synchronizePositionAfterTeleport(globalPosition, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -317,9 +317,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
         }
         final Pos currentPosition = this.position;
-        if (!currentPosition.sameChunk(finalGlobalPosition)) {
+        if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(finalGlobalPosition).thenRun(endCallback);
+            return instance.loadOptionalChunk(globalPosition).thenRun(endCallback);
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
