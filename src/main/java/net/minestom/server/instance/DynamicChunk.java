@@ -270,8 +270,7 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    @NotNull
-    UpdateLightPacket createLightPacket() {
+    @NotNull UpdateLightPacket createLightPacket() {
         return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
     }
 
