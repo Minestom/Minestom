@@ -1,22 +1,16 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.OpenWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.network.packet.server.play.WindowPropertyPacket;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -25,21 +19,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * You can create one with {@link Inventory#Inventory(InventoryType, String)} or by making your own subclass.
  * It can then be opened using {@link Player#openInventory(Inventory)}.
  */
-public non-sealed class Inventory extends AbstractInventory implements Viewable {
+public non-sealed class Inventory extends AbstractInventory {
     private static final AtomicInteger ID_COUNTER = new AtomicInteger();
 
-    // the id of this inventory
     private final byte id;
-    // the type of this inventory
     private final InventoryType inventoryType;
-    // the title of this inventory
     private Component title;
 
     private final int offset;
-
-    // the players currently viewing this inventory
-    private final Set<Player> viewers = new CopyOnWriteArraySet<>();
-    private final Set<Player> unmodifiableViewers = Collections.unmodifiableSet(viewers);
 
     public Inventory(@NotNull InventoryType inventoryType, @NotNull Component title) {
         super(inventoryType.getSize());
@@ -89,40 +76,9 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         update();
     }
 
-    /**
-     * Gets this window id.
-     * <p>
-     * This is the id that the client will send to identify the affected inventory, mostly used by packets.
-     *
-     * @return the window id
-     */
+    @Override
     public byte getWindowId() {
         return id;
-    }
-
-    /**
-     * Refreshes the inventory for all viewers.
-     */
-    @Override
-    public void update() {
-        this.viewers.forEach(p -> p.sendPacket(createNewWindowItemsPacket(p)));
-    }
-
-    /**
-     * Refreshes the inventory for a specific viewer.
-     * <p>
-     * The player needs to be a viewer, otherwise nothing is sent.
-     *
-     * @param player the player to update the inventory
-     */
-    public void update(@NotNull Player player) {
-        if (!isViewer(player)) return;
-        player.sendPacket(createNewWindowItemsPacket(player));
-    }
-
-    @Override
-    public @NotNull Set<Player> getViewers() {
-        return unmodifiableViewers;
     }
 
     /**
@@ -133,9 +89,12 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     @Override
     public boolean addViewer(@NotNull Player player) {
-        final boolean result = this.viewers.add(player);
+        if (!this.viewers.add(player)) return false;
+
+        // Also send the open window packet
+        player.sendPacket(new OpenWindowPacket(id, inventoryType.getWindowType(), title));
         update(player);
-        return result;
+        return true;
     }
 
     /**
@@ -146,9 +105,10 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
      */
     @Override
     public boolean removeViewer(@NotNull Player player) {
-        final boolean result = this.viewers.remove(player);
+        if (!super.removeViewer(player)) return false;
+
         this.clickProcessor.clearCache(player);
-        return result;
+        return true;
     }
 
     /**
@@ -173,16 +133,6 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         player.getInventory().setCursorItem(cursorItem);
     }
 
-    @Override
-    protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        itemStacks[slot] = itemStack;
-        if (sendPacket) sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, itemStack));
-    }
-
-    private @NotNull WindowItemsPacket createNewWindowItemsPacket(Player player) {
-        return new WindowItemsPacket(getWindowId(), 0, List.of(getItemStacks()), player.getInventory().getCursorItem());
-    }
-
     /**
      * Sends a window property to all viewers.
      *
@@ -200,9 +150,9 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final ItemStack cursor = playerInventory.getCursorItem();
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
+        final AbstractInventory clickedInventory = isInWindow ? this : playerInventory;
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final InventoryClickResult clickResult = clickProcessor.leftClick(player,
-                isInWindow ? this : playerInventory, clickSlot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.leftClick(player, clickedInventory, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -213,7 +163,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         playerInventory.setCursorItem(clickResult.getCursor());
-        callClickEvent(player, isInWindow ? this : null, slot, ClickType.LEFT_CLICK, clicked, cursor);
+        callClickEvent(player, clickedInventory, slot, ClickType.LEFT_CLICK, clicked, cursor);
         return true;
     }
 
@@ -224,8 +174,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final boolean isInWindow = isClickInWindow(slot);
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
-        final InventoryClickResult clickResult = clickProcessor.rightClick(player,
-                isInWindow ? this : playerInventory, clickSlot, clicked, cursor);
+        final AbstractInventory clickedInventory = isInWindow ? this : playerInventory;
+        final InventoryClickResult clickResult = clickProcessor.rightClick(player, clickedInventory, clickSlot, clicked, cursor);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -236,7 +186,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         playerInventory.setCursorItem(clickResult.getCursor());
-        callClickEvent(player, isInWindow ? this : null, slot, ClickType.RIGHT_CLICK, clicked, cursor);
+        callClickEvent(player, clickedInventory, slot, ClickType.RIGHT_CLICK, clicked, cursor);
         return true;
     }
 
@@ -274,8 +224,8 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final int clickSlot = isInWindow ? slot : PlayerInventoryUtils.convertSlot(slot, offset);
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack heldItem = playerInventory.getItemStack(convertedKey);
-        final InventoryClickResult clickResult = clickProcessor.changeHeld(player,
-                isInWindow ? this : playerInventory, clickSlot, convertedKey, clicked, heldItem);
+        final AbstractInventory clickedInventory = isInWindow ? this : playerInventory;
+        final InventoryClickResult clickResult = clickProcessor.changeHeld(player, clickedInventory, clickSlot, convertedKey, clicked, heldItem);
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -286,7 +236,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
         playerInventory.setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, isInWindow ? this : null, slot, ClickType.CHANGE_HELD, clicked, playerInventory.getCursorItem());
+        callClickEvent(player, clickedInventory, slot, ClickType.CHANGE_HELD, clicked, playerInventory.getCursorItem());
         return true;
     }
 

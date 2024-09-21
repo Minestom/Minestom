@@ -3,6 +3,7 @@ package net.minestom.server.inventory.click.integration;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
@@ -82,7 +83,7 @@ public class HeldClickIntegrationTest {
             });
             heldClick(player, 3, 40);
             assertEquals(ItemStack.AIR, inventory.getItemStack(3));
-            assertEquals(ItemStack.of(Material.EGG), inventory.getItemInOffHand());
+            assertEquals(ItemStack.of(Material.EGG), player.getItemInOffHand());
         }
         // Cancel event
         {
@@ -151,7 +152,7 @@ public class HeldClickIntegrationTest {
             });
             heldClickOpenInventory(player, 3, 40);
             assertEquals(ItemStack.AIR, inventory.getItemStack(3));
-            assertEquals(ItemStack.of(Material.EGG), playerInv.getItemInOffHand());
+            assertEquals(ItemStack.of(Material.EGG), player.getItemInOffHand());
         }
         // Cancel event
         {
@@ -171,7 +172,7 @@ public class HeldClickIntegrationTest {
         _heldClick(player.getOpenInventory(), false, player, slot, target);
     }
 
-    private void _heldClick(Inventory openInventory, boolean clickOpenInventory, Player player, int slot, int target) {
+    private void _heldClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, int target) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assert openInventory != null;

@@ -4,23 +4,23 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
- * Called when a player open an {@link Inventory}.
+ * Called when a player open an {@link AbstractInventory}.
  * <p>
  * Executed by {@link Player#openInventory(Inventory)}.
  */
 public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
-    private Inventory inventory;
+    private AbstractInventory inventory;
     private final Player player;
 
     private boolean cancelled;
 
-    public InventoryOpenEvent(@Nullable Inventory inventory, @NotNull Player player) {
+    public InventoryOpenEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
         this.inventory = inventory;
         this.player = player;
     }
@@ -36,13 +36,12 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
     }
 
     /**
-     * Gets the inventory to open, this could have been change by the {@link #setInventory(Inventory)}.
+     * Gets the inventory to open, this could have been change by the {@link #setInventory(AbstractInventory)}.
      *
      * @return the inventory to open, null to just close the current inventory if any
      */
-    @Nullable
     @Override
-    public Inventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 
@@ -53,7 +52,7 @@ public class InventoryOpenEvent implements InventoryEvent, PlayerInstanceEvent, 
      *
      * @param inventory the inventory to open
      */
-    public void setInventory(@Nullable Inventory inventory) {
+    public void setInventory(@NotNull AbstractInventory inventory) {
         this.inventory = inventory;
     }
 
