@@ -4,7 +4,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
     private PNode tempNode = null;
 
     @Override
-    public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
+    public @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
@@ -40,13 +40,13 @@ public class FlyingNodeGenerator implements NodeGenerator {
                 double downPointY = current.blockY() - 1 + 0.5;
                 double downPointZ = current.blockZ() + 0.5 + z;
 
-                var nodeWalk = createFly(instance, new Vec(currentLevelPointX, currentLevelPointY, currentLevelPointZ), boundingBox, cost, current, goal, visited);
+                var nodeWalk = createFly(getter, new Vec(currentLevelPointX, currentLevelPointY, currentLevelPointZ), boundingBox, cost, current, goal, visited);
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
-                var nodeJump = createFly(instance, new Vec(upPointX, upPointY, upPointZ), boundingBox, cost, current, goal, visited);
+                var nodeJump = createFly(getter, new Vec(upPointX, upPointY, upPointZ), boundingBox, cost, current, goal, visited);
                 if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
 
-                var nodeFall = createFly(instance, new Vec(downPointX, downPointY, downPointZ), boundingBox, cost, current, goal, visited);
+                var nodeFall = createFly(getter, new Vec(downPointX, downPointY, downPointZ), boundingBox, cost, current, goal, visited);
                 if (nodeFall != null && !visited.contains(nodeFall)) nearby.add(nodeFall);
             }
         }
@@ -56,7 +56,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
         double upPointY = current.blockY() + 1 + 0.5;
         double upPointZ = current.z();
 
-        var nodeJump = createFly(instance, new Vec(upPointX, upPointY, upPointZ), boundingBox, 2, current, goal, visited);
+        var nodeJump = createFly(getter, new Vec(upPointX, upPointY, upPointZ), boundingBox, 2, current, goal, visited);
         if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
 
         // Straight down
@@ -64,7 +64,7 @@ public class FlyingNodeGenerator implements NodeGenerator {
         double downPointY = current.blockY() - 1 + 0.5;
         double downPointZ = current.z();
 
-        var nodeFall = createFly(instance, new Vec(downPointX, downPointY, downPointZ), boundingBox, 2, current, goal, visited);
+        var nodeFall = createFly(getter, new Vec(downPointX, downPointY, downPointZ), boundingBox, 2, current, goal, visited);
         if (nodeFall != null && !visited.contains(nodeFall)) nearby.add(nodeFall);
 
         return nearby;
@@ -75,11 +75,11 @@ public class FlyingNodeGenerator implements NodeGenerator {
         return false;
     }
 
-    private PNode createFly(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
+    private PNode createFly(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         var n = newNode(start, cost, point, goal);
         if (closed.contains(n)) return null;
-        if (!canMoveTowards(instance, new Vec(start.x(), start.y(), start.z()), point, boundingBox)) return null;
-        n.setType(PNode.NodeType.FLY);
+        if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), point, boundingBox)) return null;
+        n.setType(PNode.Type.FLY);
         return n;
     }
 
@@ -89,13 +89,13 @@ public class FlyingNodeGenerator implements NodeGenerator {
         tempNode.setPoint(point.x(), point.y(), point.z());
 
         var newNode = tempNode;
-        tempNode = new PNode(0, 0, 0, 0, 0, PNode.NodeType.WALK, current);
+        tempNode = new PNode(0, 0, 0, 0, 0, PNode.Type.WALK, current);
 
         return newNode;
     }
 
     @Override
-    public @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall) {
+    public @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointX, double pointY, double pointZ, @NotNull BoundingBox boundingBox, double maxFall) {
         return OptionalDouble.of(pointY);
     }
 }

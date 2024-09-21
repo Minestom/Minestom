@@ -4,8 +4,6 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.pathfinding.PNode;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +18,7 @@ public class GroundNodeGenerator implements NodeGenerator {
     private final static int MAX_FALL_DISTANCE = 5;
 
     @Override
-    public @NotNull Collection<? extends PNode> getWalkable(@NotNull Instance instance, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
+    public @NotNull Collection<? extends PNode> getWalkable(Block.@NotNull Getter getter, @NotNull Set<PNode> visited, @NotNull PNode current, @NotNull Point goal, @NotNull BoundingBox boundingBox) {
         Collection<PNode> nearby = new ArrayList<>();
         tempNode = new PNode(0, 0, 0, 0, 0, current);
 
@@ -36,23 +34,23 @@ public class GroundNodeGenerator implements NodeGenerator {
                 double floorPointY = current.blockY();
                 double floorPointZ = current.blockZ() + 0.5 + z;
 
-                var optionalFloorPointY = gravitySnap(instance, floorPointX, floorPointY, floorPointZ, boundingBox, MAX_FALL_DISTANCE);
+                var optionalFloorPointY = gravitySnap(getter, floorPointX, floorPointY, floorPointZ, boundingBox, MAX_FALL_DISTANCE);
                 if (optionalFloorPointY.isEmpty()) continue;
                 floorPointY = optionalFloorPointY.getAsDouble();
 
                 var floorPoint = new Vec(floorPointX, floorPointY, floorPointZ);
 
-                var nodeWalk = createWalk(instance, floorPoint, boundingBox, cost, current, goal, visited);
+                var nodeWalk = createWalk(getter, floorPoint, boundingBox, cost, current, goal, visited);
                 if (nodeWalk != null && !visited.contains(nodeWalk)) nearby.add(nodeWalk);
 
                 for (int i = 1; i <= 1; ++i) {
                     Point jumpPoint = new Vec(current.blockX() + 0.5 + x, current.blockY() + i, current.blockZ() + 0.5 + z);
-                    OptionalDouble jumpPointY = gravitySnap(instance, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
+                    OptionalDouble jumpPointY = gravitySnap(getter, jumpPoint.x(), jumpPoint.y(), jumpPoint.z(), boundingBox, MAX_FALL_DISTANCE);
                     if (jumpPointY.isEmpty()) continue;
                     jumpPoint = jumpPoint.withY(jumpPointY.getAsDouble());
 
                     if (!floorPoint.sameBlock(jumpPoint)) {
-                        var nodeJump = createJump(instance, jumpPoint, boundingBox, cost + 0.2, current, goal, visited);
+                        var nodeJump = createJump(getter, jumpPoint, boundingBox, cost + 0.2, current, goal, visited);
                         if (nodeJump != null && !visited.contains(nodeJump)) nearby.add(nodeJump);
                     }
                 }
@@ -62,26 +60,22 @@ public class GroundNodeGenerator implements NodeGenerator {
         return nearby;
     }
 
-    @Override
-    public boolean hasGravitySnap() {
-        return true;
-    }
-
-    private PNode createWalk(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
+    private PNode createWalk(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         var n = newNode(start, cost, point, goal);
         if (closed.contains(n)) return null;
 
         if (Math.abs(point.y() - start.y()) > Vec.EPSILON && point.y() < start.y()) {
             if (start.y() - point.y() > MAX_FALL_DISTANCE) return null;
-            if (!canMoveTowards(instance, new Vec(start.x(), start.y(), start.z()), point.withY(start.y()), boundingBox)) return null;
-            n.setType(PNode.NodeType.FALL);
+            if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), point.withY(start.y()), boundingBox))
+                return null;
+            n.setType(PNode.Type.FALL);
         } else {
-            if (!canMoveTowards(instance, new Vec(start.x(), start.y(), start.z()), point, boundingBox)) return null;
+            if (!canMoveTowards(getter, new Vec(start.x(), start.y(), start.z()), point, boundingBox)) return null;
         }
         return n;
     }
 
-    private PNode createJump(Instance instance, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
+    private PNode createJump(Block.Getter getter, Point point, BoundingBox boundingBox, double cost, PNode start, Point goal, Set<PNode> closed) {
         if (Math.abs(point.y() - start.y()) < Vec.EPSILON) return null;
         if (point.y() - start.y() > 2) return null;
         if (point.blockX() != start.blockX() && point.blockZ() != start.blockZ()) return null;
@@ -89,10 +83,10 @@ public class GroundNodeGenerator implements NodeGenerator {
         var n = newNode(start, cost, point, goal);
         if (closed.contains(n)) return null;
 
-        if (pointInvalid(instance, point, boundingBox)) return null;
-        if (pointInvalid(instance, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
+        if (pointInvalid(getter, point, boundingBox)) return null;
+        if (pointInvalid(getter, new Vec(start.x(), start.y() + 1, start.z()), boundingBox)) return null;
 
-        n.setType(PNode.NodeType.JUMP);
+        n.setType(PNode.Type.JUMP);
         return n;
     }
 
@@ -102,32 +96,35 @@ public class GroundNodeGenerator implements NodeGenerator {
         tempNode.setPoint(point.x(), point.y(), point.z());
 
         var newNode = tempNode;
-        tempNode = new PNode(0, 0, 0, 0, 0, PNode.NodeType.WALK, current);
+        tempNode = new PNode(0, 0, 0, 0, 0, PNode.Type.WALK, current);
 
         return newNode;
     }
 
     @Override
-    public @NotNull OptionalDouble gravitySnap(@NotNull Instance instance, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
-        double pointX = (int) Math.floor(pointOrgX) + 0.5;
-        double pointY = (int) Math.floor(pointOrgY);
-        double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
+    public boolean hasGravitySnap() {
+        return true;
+    }
 
-        Chunk c = instance.getChunkAt(pointX, pointZ);
-        if (c == null) return OptionalDouble.of(pointY);
+    @Override
+    public @NotNull OptionalDouble gravitySnap(Block.@NotNull Getter getter, double pointOrgX, double pointOrgY, double pointOrgZ, @NotNull BoundingBox boundingBox, double maxFall) {
+        final double pointX = (int) Math.floor(pointOrgX) + 0.5;
+        final double pointY = (int) Math.floor(pointOrgY);
+        final double pointZ = (int) Math.floor(pointOrgZ) + 0.5;
+
+        //Chunk c = instance.getChunkAt(pointX, pointZ);
+        //if (c == null) return OptionalDouble.of(pointY);
 
         for (int axis = 1; axis <= maxFall; ++axis) {
             pointIterator.reset(boundingBox, pointX, pointY, pointZ, BoundingBox.AxisMask.Y, -axis);
 
             while (pointIterator.hasNext()) {
                 var block = pointIterator.next();
-
-                if (instance.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
+                if (getter.getBlock(block.blockX(), block.blockY(), block.blockZ(), Block.Getter.Condition.TYPE).isSolid()) {
                     return OptionalDouble.of(block.blockY() + 1);
                 }
             }
         }
-
         return OptionalDouble.empty();
     }
 }

@@ -293,7 +293,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                                                      @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                                      boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
+
+        EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
+        EventDispatcher.call(event);
+
         final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
+
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
