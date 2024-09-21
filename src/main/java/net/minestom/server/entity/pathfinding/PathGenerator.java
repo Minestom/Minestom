@@ -114,7 +114,7 @@ public final class PathGenerator {
             return;
         }
 
-        var lastNode = path.getNodes().get(path.getNodes().size() - 1);
+        var lastNode = path.getNodes().getLast();
         if (getDistanceSquared(lastNode.x(), lastNode.y(), lastNode.z(), target) > (closeDistance * closeDistance)) {
             path.setState(PPath.State.BEST_EFFORT);
             return;

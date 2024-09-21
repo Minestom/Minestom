@@ -121,16 +121,16 @@ public final class Navigator {
     }
 
     @ApiStatus.Internal
-    public synchronized void tick() {
-        if (goalPosition == null) return; // No path
+    public synchronized Pos computeNextPosition(Pos position) {
+        if (goalPosition == null) return null; // No path
         if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
-            return; // No pathfinding tick for dead entities
+            return null; // No pathfinding tick for dead entities
         if (computingPath != null && (computingPath.getState() == PPath.State.COMPUTED || computingPath.getState() == PPath.State.BEST_EFFORT)) {
             path = computingPath;
             computingPath = null;
         }
 
-        if (path == null) return;
+        if (path == null) return null;
 
         // If the path is computed start following it
         if (path.getState() == PPath.State.COMPUTED || path.getState() == PPath.State.BEST_EFFORT) {
@@ -145,14 +145,13 @@ public final class Navigator {
         }
 
         // If the state is not following, wait until it is
-        if (path.getState() != PPath.State.FOLLOWING) return;
+        if (path.getState() != PPath.State.FOLLOWING) return null;
 
         // If we're near the entity, we're done
         if (this.entity.getPosition().distance(goalPosition) < minimumDistance) {
             path.runComplete();
             path = null;
-
-            return;
+            return null;
         }
 
         Point currentTarget = path.getCurrent();
@@ -160,27 +159,26 @@ public final class Navigator {
 
         // Repath
         if (currentTarget == null || path.getCurrentType() == PNode.Type.REPATH || path.getCurrentType() == null) {
-            if (computingPath != null && computingPath.getState() == PPath.State.CALCULATING) return;
-
+            if (computingPath != null && computingPath.getState() == PPath.State.CALCULATING) return null;
             computingPath = PathGenerator.generate(entity.getInstance(),
                     entity.getPosition(),
                     Pos.fromPoint(goalPosition),
                     minimumDistance, path.maxDistance(),
                     path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
-
-            return;
+            return null;
         }
 
         if (nextTarget == null) {
             path.setState(PPath.State.INVALID);
-            return;
+            return null;
         }
 
-        boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
-        nodeFollower.moveTowards(currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
+        final boolean nextIsRepath = nextTarget.sameBlock(Pos.ZERO);
+        final Pos nextPosition = nodeFollower.moveTowards(position, currentTarget, nodeFollower.movementSpeed(), nextIsRepath ? currentTarget : nextTarget);
 
         if (nodeFollower.isAtPoint(currentTarget)) path.next();
         else if (path.getCurrentType() == PNode.Type.JUMP) nodeFollower.jump(currentTarget, nextTarget);
+        return nextPosition;
     }
 
     /**

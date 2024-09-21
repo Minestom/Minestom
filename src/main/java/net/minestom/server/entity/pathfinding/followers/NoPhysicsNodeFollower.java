@@ -25,8 +25,8 @@ public class NoPhysicsNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
-        final Pos position = entity.getPosition();
+    @Override
+    public Pos moveTowards(@NotNull Pos position, @NotNull Point direction, double speed, @NotNull Point lookAt) {
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
         final double dz = direction.z() - position.z();
@@ -49,8 +49,8 @@ public class NoPhysicsNodeFollower implements NodeFollower {
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        var newPosition = position.add(speedX, 0, speedZ);
-        this.entity.refreshPosition(newPosition.withView(yaw, pitch));
+        final Pos newPosition = position.add(speedX, 0, speedZ);
+        return newPosition.withView(yaw, pitch);
     }
 
     @Override

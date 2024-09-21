@@ -16,9 +16,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.time.Duration;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class EntityCreature extends LivingEntity implements NavigableEntity, EntityAI {
@@ -47,18 +47,21 @@ public class EntityCreature extends LivingEntity implements NavigableEntity, Ent
     public void update(long time) {
         // AI
         aiTick(time);
-
-        // Path finding
-        this.navigator.tick();
-
         // Fire, item pickup, ...
         super.update(time);
     }
 
     @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    protected Pos movementTick() {
+        final Pos pos = super.movementTick();
+        final Pos navigationPos = navigator.computeNextPosition(pos);
+        return Objects.requireNonNullElse(navigationPos, pos);
+    }
+
+    @Override
+    protected void updatedInstance(Instance instance, Pos position) {
         this.navigator.reset();
-        return super.setInstance(instance, spawnPosition);
+        super.updatedInstance(instance, position);
     }
 
     @Override

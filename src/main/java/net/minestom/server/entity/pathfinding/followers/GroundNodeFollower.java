@@ -1,7 +1,6 @@
 package net.minestom.server.entity.pathfinding.followers;
 
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -27,8 +26,8 @@ public class GroundNodeFollower implements NodeFollower {
      * @param direction the targeted position
      * @param speed     define how far the entity will move
      */
-    public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
-        final Pos position = entity.getPosition();
+    @Override
+    public Pos moveTowards(@NotNull Pos position, @NotNull Point direction, double speed, @NotNull Point lookAt) {
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
         final double dz = direction.z() - position.z();
@@ -50,7 +49,7 @@ public class GroundNodeFollower implements NodeFollower {
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
         final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, 0, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        return Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch);
     }
 
     @Override

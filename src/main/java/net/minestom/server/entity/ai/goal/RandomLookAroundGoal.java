@@ -1,8 +1,8 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.GoalSelector;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -68,7 +68,8 @@ public class RandomLookAroundGoal extends GoalSelector {
     @Override
     public void tick(long time) {
         --lookTime;
-        entityCreature.refreshPosition(entityCreature.getPosition().withDirection(lookDirection));
+        final Vec direction = lookDirection;
+        entityCreature.setView((float) direction.x(), (float) direction.z());
     }
 
     @Override

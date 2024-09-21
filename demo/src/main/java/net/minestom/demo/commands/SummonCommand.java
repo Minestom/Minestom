@@ -10,6 +10,7 @@ import net.minestom.server.command.builder.arguments.minecraft.registry.Argument
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,9 +38,22 @@ public class SummonCommand extends Command {
     }
 
     private void execute(@NotNull CommandSender commandSender, @NotNull CommandContext commandContext) {
+        final Player player = (Player) commandSender;
+        final Instance instance = player.getInstance();
+        final Vec entityPosition = commandContext.get(pos).fromSender(commandSender);
         final Entity entity = commandContext.get(entityClass).instantiate(commandContext.get(this.entity));
-        //noinspection ConstantConditions - One couldn't possibly execute a command without being in an instance
-        entity.setInstance(((Player) commandSender).getInstance(), commandContext.get(pos).fromSender(commandSender));
+        final Entity passenger = new Entity(EntityType.SHEEP);
+
+        entity.setInstance(instance, entityPosition);
+        passenger.setInstance(instance, entityPosition.add(0, 0, 5));
+
+        entity.addPassenger(passenger);
+
+        {
+                var boat = new Entity(EntityType.BOAT);
+                boat.setInstance(instance, player.getPosition());
+                boat.addPassenger(player);
+        }
     }
 
     @SuppressWarnings("unused")
