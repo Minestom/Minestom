@@ -57,19 +57,21 @@ public final class PPath {
         return nodes.toString();
     }
 
-    @Nullable PNode.Type getCurrentType() {
+    @Nullable
+    public PNode.Type getCurrentType() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
         return current.getType();
     }
 
-    @Nullable Point getCurrent() {
+    @Nullable
+    public Point getCurrent() {
         if (index >= nodes.size()) return null;
         var current = nodes.get(index);
         return new Vec(current.x(), current.y(), current.z());
     }
 
-    void next() {
+    public void next() {
         if (index >= nodes.size()) return;
         index++;
     }
