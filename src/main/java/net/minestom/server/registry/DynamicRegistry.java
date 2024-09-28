@@ -11,7 +11,6 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -23,16 +22,16 @@ import java.util.List;
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
  * @param <T> The type of the registry entries
- *
  * @see Registries
  */
-public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
+public sealed interface DynamicRegistry<T extends ProtocolObject> permits DynamicRegistryImpl {
 
     /**
      * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
      *
      * @param <T> Unused, except to provide compile-time safety and self documentation.
      */
+    @SuppressWarnings("unused")
     sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
 
         static <T> @NotNull Key<T> of(@NotNull String namespace) {
@@ -59,7 +58,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     }
 
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id) {
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(@NotNull String id) {
         return new DynamicRegistryImpl<>(id, null);
     }
 
@@ -69,64 +68,38 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(
+    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
         return new DynamicRegistryImpl<>(id, nbtType);
     }
 
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
             @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, nbtType, resource, loader, null);
-    }
-
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
-            @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
-        return registry;
-    }
-
-    /**
-     * Creates a new empty registry of the given type. Should only be used internally.
-     *
-     * @see Registries
-     */
-    @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
+            @NotNull List<T> objects) {
+        DynamicRegistry<T> registry = create(id, nbtType);
+        for (T object : objects) registry.register(object);
         return registry;
     }
 
     @NotNull String id();
 
     @Nullable T get(int id);
+
     @Nullable T get(@NotNull NamespaceID namespace);
+
     default @Nullable T get(@NotNull Key<T> key) {
         return get(key.namespace());
     }
 
     @Nullable Key<T> getKey(int id);
+
     @Nullable Key<T> getKey(@NotNull T value);
+
     @Nullable NamespaceID getName(int id);
+
     @Nullable DataPack getPack(int id);
+
     default @Nullable DataPack getPack(@NotNull Key<T> key) {
         final int id = getId(key);
         return id == -1 ? null : getPack(id);
@@ -135,14 +108,14 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     /**
      * Returns the protocol ID associated with the given {@link NamespaceID}, or -1 if none is registered.
      *
-     * @see #register(NamespaceID, T)
+     * @see #register(T)
      */
     int getId(@NotNull NamespaceID id);
 
     /**
      * Returns the protocol ID associated with the given {@link Key}, or -1 if none is registered.
      *
-     * @see #register(NamespaceID, T)
+     * @see #register(T)
      */
     default int getId(@NotNull Key<T> key) {
         return getId(key.namespace());
@@ -173,23 +146,12 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object) {
-        return register(NamespaceID.from(id), object, null);
-    }
-
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object) {
-        return register(id, object, null);
+    default @NotNull DynamicRegistry.Key<T> register(@NotNull T object) {
+        return register(object, null);
     }
 
     @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
-        return register(NamespaceID.from(id), object, pack);
-    }
-
-    @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID id, @NotNull T object, @Nullable DataPack pack) {
-        return register(id, object);
-    }
+    @NotNull DynamicRegistry.Key<T> register(@NotNull T object, @Nullable DataPack pack);
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -211,12 +173,11 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
-     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(NamespaceID, T)}.</p>
+     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(T)}.</p>
      *
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */
     @ApiStatus.Internal
     @NotNull SendablePacket registryDataPacket(boolean excludeVanilla);
-
 }

@@ -5,9 +5,8 @@ import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
-
-    private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.FEATURE_FLAGS,
-            (namespace, properties) -> new FeatureFlagImpl(Registry.featureFlag(namespace, properties)));
+    private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(
+            Registry.loadRegistry(Registry.Resource.FEATURE_FLAGS, Registry.FeatureFlagEntry::new).stream().map(FeatureFlagImpl::new).toList());
 
     static FeatureFlag get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

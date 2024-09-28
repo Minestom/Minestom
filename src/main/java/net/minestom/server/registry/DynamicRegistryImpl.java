@@ -1,8 +1,6 @@
 package net.minestom.server.registry;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
@@ -12,53 +10,54 @@ import net.minestom.server.network.packet.server.configuration.RegistryDataPacke
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantLock;
 
-@ApiStatus.Internal
-final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
+final class DynamicRegistryImpl<T extends ProtocolObject> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
     record KeyImpl<T>(@NotNull NamespaceID namespace) implements Key<T> {
-
         @Override
         public String toString() {
             return namespace.asString();
-        }
-
-        @Override
-        public int hashCode() {
-            return namespace.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            KeyImpl<?> key = (KeyImpl<?>) obj;
-            return namespace.equals(key.namespace);
         }
     }
 
     private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(true));
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
-    private final List<T> entryById = new CopyOnWriteArrayList<>();
-    private final Map<NamespaceID, T> entryByName = new ConcurrentHashMap<>();
-    private final List<NamespaceID> idByName = new CopyOnWriteArrayList<>();
-    private final List<DataPack> packById = new CopyOnWriteArrayList<>();
+
+    /**
+     * The index of the registry. This is a volatile field because it is only ever replaced, never mutated. This means
+     * that reads are always consistent and up-to-date, and writes are atomic and do not require synchronization.
+     * <p>
+     * Be careful to only read this field once, and store the result in a local variable.
+     */
+    private volatile Index<T> index = new Index<>(List.of(), Map.of(), List.of(), List.of());
 
     private final String id;
     private final BinaryTagSerializer<T> nbtType;
+
+    record Index<T>(
+            List<T> idToEntry,
+            Map<NamespaceID, T> nameToEntry,
+            List<NamespaceID> idToName,
+            List<DataPack> idToPack
+    ) {
+        public Index {
+            idToEntry = List.copyOf(idToEntry);
+            nameToEntry = Map.copyOf(nameToEntry);
+            idToName = List.copyOf(idToName);
+            idToPack = new ArrayList<>(idToPack); // Can contain nulls
+        }
+    }
 
     DynamicRegistryImpl(@NotNull String id, @Nullable BinaryTagSerializer<T> nbtType) {
         this.id = id;
@@ -76,6 +75,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @Nullable T get(int id) {
+        final List<T> entryById = index.idToEntry;
         if (id < 0 || id >= entryById.size()) {
             return null;
         }
@@ -84,31 +84,35 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @Nullable T get(@NotNull NamespaceID namespace) {
-        return entryByName.get(namespace);
+        return index.nameToEntry.get(namespace);
     }
 
     @Override
     public @Nullable Key<T> getKey(@NotNull T value) {
-        int index = entryById.indexOf(value);
-        return index == -1 ? null : getKey(index);
+        final Index<T> index = this.index;
+        final List<T> entryById = index.idToEntry;
+        final int id = entryById.indexOf(value);
+        if (id == -1 || id >= entryById.size()) return null;
+        return Key.of(index.idToName.get(id));
     }
 
     @Override
     public @Nullable Key<T> getKey(int id) {
-        if (id < 0 || id >= entryById.size())
-            return null;
-        return Key.of(idByName.get(id));
+        final Index<T> index = this.index;
+        if (id < 0 || id >= index.idToEntry.size()) return null;
+        return Key.of(index.idToName.get(id));
     }
 
     @Override
     public @Nullable NamespaceID getName(int id) {
-        if (id < 0 || id >= entryById.size())
-            return null;
-        return idByName.get(id);
+        final Index<T> index = this.index;
+        if (id < 0 || id >= index.idToEntry.size()) return null;
+        return index.idToName.get(id);
     }
 
     @Override
     public @Nullable DataPack getPack(int id) {
+        final List<DataPack> packById = index.idToPack;
         if (id < 0 || id >= packById.size())
             return null;
         return packById.get(id);
@@ -116,16 +120,16 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public int getId(@NotNull NamespaceID id) {
-        return idByName.indexOf(id);
+        return index.idToName.indexOf(id);
     }
 
     @Override
     public @NotNull List<T> values() {
-        return Collections.unmodifiableList(entryById);
+        return index.idToEntry;
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID namespaceId, @NotNull T object, @Nullable DataPack pack) {
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull T object, @Nullable DataPack pack) {
         // This check is disabled in tests because we remake server processes over and over.
         // todo: re-enable this check
 //        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
@@ -134,17 +138,28 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 //                        "know what you're doing and would like this behavior, set the `minestom.registry.late-register` " +
 //                        "system property.", id);
 
+
+        final NamespaceID namespace = object.namespace();
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
-            if (id == -1) id = entryById.size();
+            final Index<T> oldIndex = index;
+            int id = oldIndex.idToName.indexOf(namespace);
+            if (id == -1) id = oldIndex.nameToEntry.size();
 
-            entryById.add(id, object);
-            entryByName.put(namespaceId, object);
-            idByName.add(namespaceId);
-            packById.add(id, pack);
+            List<T> idToEntry = new ArrayList<>(oldIndex.idToEntry);
+            Map<NamespaceID, T> nameToEntry = new HashMap<>(oldIndex.nameToEntry);
+            List<NamespaceID> idToName = new ArrayList<>(oldIndex.idToName);
+            List<DataPack> idToPack = new ArrayList<>(oldIndex.idToPack);
+
+            idToEntry.add(id, object);
+            nameToEntry.put(namespace, object);
+            idToName.add(namespace);
+            idToPack.add(id, pack);
+
+            this.index = new Index<>(idToEntry, nameToEntry, idToName, idToPack);
+
             vanillaRegistryDataPacket.invalidate();
-            return Key.of(namespaceId);
+            return Key.of(namespace);
         } finally {
             lock.unlock();
         }
@@ -156,13 +171,22 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
+            final Index<T> oldIndex = index;
+            final int id = oldIndex.idToName.indexOf(namespaceId);
             if (id == -1) return false;
 
-            entryById.remove(id);
-            entryByName.remove(namespaceId);
-            idByName.remove(id);
-            packById.remove(id);
+            List<T> idToEntry = new ArrayList<>(oldIndex.idToEntry);
+            Map<NamespaceID, T> nameToEntry = new HashMap<>(oldIndex.nameToEntry);
+            List<NamespaceID> idToName = new ArrayList<>(oldIndex.idToName);
+            List<DataPack> idToPack = new ArrayList<>(oldIndex.idToPack);
+
+            idToEntry.remove(id);
+            nameToEntry.remove(namespaceId);
+            idToName.remove(id);
+            idToPack.remove(id);
+
+            this.index = new Index<>(idToEntry, nameToEntry, idToName, idToPack);
+
             vanillaRegistryDataPacket.invalidate();
             return true;
         } finally {
@@ -180,6 +204,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private @NotNull RegistryDataPacket createRegistryDataPacket(boolean excludeVanilla) {
         Check.notNull(nbtType, "Cannot create registry data packet for server-only registry");
         BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), true);
+        final Index<T> index = this.index;
+        final List<T> entryById = index.idToEntry;
+        final List<DataPack> packById = index.idToPack;
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());
         for (int i = 0; i < entryById.size(); i++) {
             CompoundBinaryTag data = null;
@@ -200,36 +227,5 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             entries.add(new RegistryDataPacket.Entry(getKey(i).name(), data));
         }
         return new RegistryDataPacket(id, entries);
-    }
-
-    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
-        if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
-        for (var entry : entries) {
-            final String namespace = entry.getKey();
-            final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
-        }
-    }
-
-    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
-        Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
-            if (!(tag instanceof CompoundBinaryTag compound)) {
-                throw new IllegalStateException("Root tag must be a compound tag");
-            }
-
-            final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
-            for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
-                final String namespace = entry.getKey();
-                final T value = registry.nbtType.read(context, entry.getValue());
-                Check.notNull(value, "Failed to read value for namespace {0}", namespace);
-                registry.register(namespace, value, DataPack.MINECRAFT_CORE);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }

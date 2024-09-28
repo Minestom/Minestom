@@ -30,8 +30,8 @@ import java.util.function.Supplier;
  */
 public abstract class Argument<T> {
     @ApiStatus.Internal
-    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.COMMAND_ARGUMENTS,
-            (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id")));
+    public static final Registry.Container<ArgumentImpl> CONTAINER = Registry.createStaticContainer(
+            Registry.loadRegistry(Registry.Resource.COMMAND_ARGUMENTS, (namespace, properties) -> new ArgumentImpl(NamespaceID.from(namespace), properties.getInt("id"))));
 
     record ArgumentImpl(NamespaceID namespace, int id) implements StaticProtocolObject {
         @Override

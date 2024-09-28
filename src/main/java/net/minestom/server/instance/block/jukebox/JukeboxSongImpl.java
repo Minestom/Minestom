@@ -4,12 +4,14 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record JukeboxSongImpl(
+        NamespaceID namespace,
         @NotNull SoundEvent soundEvent,
         @NotNull Component description,
         float lengthInSeconds,
@@ -29,14 +31,14 @@ record JukeboxSongImpl(
                     .build()
     );
 
-    @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
+    // The builder can violate the nullability constraints
+    @SuppressWarnings("ConstantValue")
     JukeboxSongImpl {
         Check.argCondition(soundEvent == null, "missing sound event");
         Check.argCondition(description == null, "missing description");
     }
 
     JukeboxSongImpl(@NotNull Registry.JukeboxSongEntry registry) {
-        this(registry.soundEvent(), registry.description(), registry.lengthInSeconds(), registry.comparatorOutput(), registry);
+        this(registry.namespace(), registry.soundEvent(), registry.description(), registry.lengthInSeconds(), registry.comparatorOutput(), registry);
     }
-
 }

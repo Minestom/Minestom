@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 
 final class ParticleImpl {
-    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
-            (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id")));
+    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(
+            Registry.loadRegistry(Registry.Resource.PARTICLES, (namespace, properties) -> defaultParticle(NamespaceID.from(namespace), properties.getInt("id"))));
 
     static Particle get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
