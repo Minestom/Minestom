@@ -1443,7 +1443,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        if (isNotDisguised()) sendPacketToViewers(getPropertiesPacket());
+        if (shouldBroadcastProperties()) sendPacketToViewers(getPropertiesPacket());
         sendPacket(getPropertiesPacket());
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
