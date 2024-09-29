@@ -237,6 +237,20 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
+     * Gets the last time at which a block changed.
+     *
+     * @return the time at which the last block changed in milliseconds, 0 if never
+     */
+    public abstract long getLastBlockChangeTime();
+
+    /**
+     * Signals the instance that a block changed.
+     * <p>
+     * Useful if you change blocks values directly using a {@link Chunk} object.
+     */
+    public abstract void refreshLastBlockChangeTime();
+
+    /**
      * Loads the chunk if the chunk is already loaded or if
      * {@link #hasEnabledAutoChunkLoad()} returns true.
      *

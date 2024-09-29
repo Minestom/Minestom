@@ -11,8 +11,8 @@ public class BatchOption {
 
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
-    private boolean unsafeApply = false;
     private boolean sendUpdate = true;
+    private boolean updateLight = true;
 
     public BatchOption() {
     }
@@ -33,34 +33,15 @@ public class BatchOption {
     /**
      * Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.
      * <p>
-     * This flag will determine the return value of {@link Batch#apply(Instance, Object)} (and other variants).
+     * This flag will determine the return value of {@link Batch#apply(Instance)} (and other variants).
      * If true, a {@link Batch} will be returned. Otherwise null will be returned.
      * <p>
      * Defaults to false.
      *
      * @return true if the batch will calculate its inverse on application
-     * @see #isUnsafeApply()
      */
     public boolean shouldCalculateInverse() {
         return calculateInverse;
-    }
-
-    /**
-     * Gets if the batch will wait ignore whether it is ready or not when applying it.
-     * <p>
-     * If set, the batch may not be ready, or it may be partially ready which will cause an undefined result.
-     * {@link Batch#isReady()} and {@link Batch#awaitReady()} may be used to check if it is ready and block
-     * until it is ready.
-     * <p>
-     * The default implementations of {@link ChunkBatch}, {@link AbsoluteBlockBatch}, and {@link RelativeBlockBatch}
-     * are always ready unless they are an inverse batch. This is not a safe assumption, and may change in the future.
-     * <p>
-     * Defaults to false.
-     *
-     * @return true if the batch will immediately
-     */
-    public boolean isUnsafeApply() {
-        return this.unsafeApply;
     }
 
     public boolean shouldSendUpdate() {
@@ -88,19 +69,6 @@ public class BatchOption {
     @Contract("_ -> this")
     public BatchOption setCalculateInverse(boolean calculateInverse) {
         this.calculateInverse = calculateInverse;
-        return this;
-    }
-
-    /**
-     * @param unsafeApply true to make this batch apply without checking if it is ready to apply.
-     * @return 'this' for chaining
-     * @see #isUnsafeApply()
-     * @see Batch#isReady()
-     */
-    @NotNull
-    @Contract("_ -> this")
-    public BatchOption setUnsafeApply(boolean unsafeApply) {
-        this.unsafeApply = unsafeApply;
         return this;
     }
 

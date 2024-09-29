@@ -555,6 +555,7 @@ public class InstanceContainer extends Instance {
      *
      * @return the time at which the last block changed in milliseconds, 0 if never
      */
+    @Override
     public long getLastBlockChangeTime() {
         return lastBlockChangeTime;
     }
@@ -564,6 +565,7 @@ public class InstanceContainer extends Instance {
      * <p>
      * Useful if you change blocks values directly using a {@link Chunk} object.
      */
+    @Override
     public void refreshLastBlockChangeTime() {
         this.lastBlockChangeTime = System.currentTimeMillis();
     }
