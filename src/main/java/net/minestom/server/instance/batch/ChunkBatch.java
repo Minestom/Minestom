@@ -89,7 +89,9 @@ public class ChunkBatch implements Batch {
                                @NotNull Chunk chunk) {
         return CompletableFuture.supplyAsync(() -> {
             final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(options) : null;
-            singleThreadFlush(instance, chunk, inverse);
+            synchronized (chunk) {
+                singleThreadFlush(instance, chunk, inverse);
+            }
             return inverse;
         });
     }
@@ -116,6 +118,7 @@ public class ChunkBatch implements Batch {
             }
 
             final IntSet sections = new IntArraySet();
+
             synchronized (blocks) {
                 for (var entry : Int2ObjectMaps.fastIterable(blocks)) {
                     final int position = entry.getIntKey();

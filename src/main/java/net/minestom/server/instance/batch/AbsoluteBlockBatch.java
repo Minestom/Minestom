@@ -93,7 +93,6 @@ public class AbsoluteBlockBatch implements Batch {
                 }
             }
 
-            instance.refreshLastBlockChangeTime();
             // TODO: send light updates?
 
             return inverse;
