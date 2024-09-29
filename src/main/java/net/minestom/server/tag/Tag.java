@@ -314,7 +314,17 @@ public class Tag<T> {
     public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
         return View(TagRecord.serializer(type));
     }
-
+    
+    /**
+    * Creates a transient tag with the specified key. This tag does not get serialized
+    * to NBT (Named Binary Tag) format and is not sent to the client. Unlike other tags,
+    * which are serialized, transient tags are used for temporary data
+    * that only needs to exist on the server side.
+    *
+    * @param <T> The type of the tag's value.
+    * @param key The key.
+    * @return A transient tag with the key.
+    */    
     public static <T> @NotNull Tag<T> Transient(@NotNull String key) {
         //noinspection unchecked
         return (Tag<T>) tag(key, Serializers.EMPTY);
