@@ -21,10 +21,6 @@ import java.util.concurrent.CompletableFuture;
  * @see RelativeBlockBatch
  */
 public interface Batch extends Block.Setter {
-    /**
-     * Removes all block data from this batch.
-     */
-    void clear();
 
     /**
      * Called to apply the batch to the given instance.
