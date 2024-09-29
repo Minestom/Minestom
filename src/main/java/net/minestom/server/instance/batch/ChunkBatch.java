@@ -4,7 +4,6 @@ import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -13,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 
 /**
  * A Batch used when all the blocks changed are contained inside a single chunk.
@@ -163,9 +161,6 @@ public class ChunkBatch implements Batch {
             chunk.sendChunk();
         }
 
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
-        }
+        instance.refreshLastBlockChangeTime();
     }
 }

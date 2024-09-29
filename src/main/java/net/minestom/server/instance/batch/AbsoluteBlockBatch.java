@@ -2,7 +2,6 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.*;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
