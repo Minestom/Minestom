@@ -517,7 +517,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void updateNewViewer(@NotNull Player player) {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
-        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+        if (isNotDisguised()) player.sendPacket(new LazyPacket(this::getPropertiesPacket));
     }
 
     @Override
@@ -615,6 +615,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
+    }
+
+    protected boolean isNotDisguised() {
+        return switch (getEntityType().registry().spawnType()) {
+            case PLAYER, LIVING ->  false;
+            default -> true;
+        };
     }
 
     /**
