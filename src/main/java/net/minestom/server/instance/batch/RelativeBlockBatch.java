@@ -5,7 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.utils.location.LocationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,10 +15,6 @@ import java.util.concurrent.CompletableFuture;
  * A {@link Batch} which can be used when changes are required across chunk borders, and
  * are going to be reused in different places. If translation is not required, {@link AbsoluteBlockBatch}
  * should be used instead for efficiency purposes.
- * <p>
- * Coordinates are relative to (0, 0, 0) with some limitations. All coordinates must
- * fit within a 16 bit integer of the first coordinate (32,767 blocks). If blocks must
- * be spread out over a larger area, an {@link AbsoluteBlockBatch} should be used.
  * <p>
  * All inverses are {@link AbsoluteBlockBatch}s and represent the inverse of the application
  * at the position which it was applied.
@@ -31,16 +27,11 @@ import java.util.concurrent.CompletableFuture;
  * @see AbsoluteBlockBatch
  */
 public class RelativeBlockBatch implements Batch {
-    // relative pos format: nothing/relative x/relative y/relative z (16/16/16/16 bits)
-
     // Need to be synchronized manually
-    // Format: relative pos - block
+    // Format: global position index - block
     private final Long2ObjectMap<Block> blockIdMap = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
-
-    private volatile boolean firstEntry = true;
-    private int offsetX, offsetY, offsetZ;
 
     public RelativeBlockBatch() {
         this(new BatchOption());
@@ -52,32 +43,12 @@ public class RelativeBlockBatch implements Batch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        // Save the offsets if it is the first entry
-        if (firstEntry) {
-            this.firstEntry = false;
-
-            this.offsetX = x;
-            this.offsetY = y;
-            this.offsetZ = z;
-        }
-
-        // Subtract offset
-        x -= offsetX;
-        y -= offsetY;
-        z -= offsetZ;
-
-        // Verify that blocks are not too far from each other
-        Check.argCondition(Math.abs(x) > Short.MAX_VALUE, "Relative x position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
-
-        long pos = Short.toUnsignedLong((short)x);
-        pos = (pos << 16) | Short.toUnsignedLong((short)y);
-        pos = (pos << 16) | Short.toUnsignedLong((short)z);
+        LocationUtils.verifyPositionInIndexBounds(x, y, z);
+        final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
 
         //final int block = (blockStateId << 16) | customBlockId;
         synchronized (blockIdMap) {
-            this.blockIdMap.put(pos, block);
+            this.blockIdMap.put(index, block);
         }
     }
 
@@ -140,15 +111,12 @@ public class RelativeBlockBatch implements Batch {
         synchronized (blockIdMap) {
             for (var entry : blockIdMap.long2ObjectEntrySet()) {
                 final long pos = entry.getLongKey();
-                final short relZ = (short) (pos & 0xFFFF);
-                final short relY = (short) ((pos >> 16) & 0xFFFF);
-                final short relX = (short) ((pos >> 32) & 0xFFFF);
 
                 final Block block = entry.getValue();
 
-                final int finalX = x + offsetX + relX;
-                final int finalY = y + offsetY + relY;
-                final int finalZ = z + offsetZ + relZ;
+                final int finalX = x + LocationUtils.blockIndexToPositionX(pos);
+                final int finalY = y + LocationUtils.blockIndexToPositionY(pos);
+                final int finalZ = z + LocationUtils.blockIndexToPositionZ(pos);
 
                 batch.setBlock(finalX, finalY, finalZ, block);
             }

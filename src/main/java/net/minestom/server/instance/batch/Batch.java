@@ -21,7 +21,6 @@ import java.util.concurrent.CompletableFuture;
  * @see RelativeBlockBatch
  */
 public interface Batch extends Block.Setter {
-
     /**
      * Called to apply the batch to the given instance.
      * See the specific batch classes for alternative application methods.
