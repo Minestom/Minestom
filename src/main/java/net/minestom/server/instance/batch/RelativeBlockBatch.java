@@ -114,9 +114,9 @@ public class RelativeBlockBatch implements Batch {
 
                 final Block block = entry.getValue();
 
-                final int finalX = x + LocationUtils.blockIndexToPositionX(pos);
-                final int finalY = y + LocationUtils.blockIndexToPositionY(pos);
-                final int finalZ = z + LocationUtils.blockIndexToPositionZ(pos);
+                final int finalX = x + LocationUtils.globalBlockIndexToPositionX(pos);
+                final int finalY = y + LocationUtils.globalBlockIndexToPositionY(pos);
+                final int finalZ = z + LocationUtils.globalBlockIndexToPositionZ(pos);
 
                 batch.setBlock(finalX, finalY, finalZ, block);
             }

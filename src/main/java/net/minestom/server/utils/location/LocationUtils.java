@@ -30,10 +30,10 @@ public class LocationUtils {
      * @param index  an index computed from {@link #getGlobalBlockIndex(int, int, int)}
      * @return the instance position of the block located in {@code index}
      */
-    public static @NotNull BlockVec getBlockPosition(long index) {
-        final int x = blockIndexToPositionX(index);
-        final int y = blockIndexToPositionY(index);
-        final int z = blockIndexToPositionZ(index);
+    public static @NotNull BlockVec getGlobalBlockPosition(long index) {
+        final int x = globalBlockIndexToPositionX(index);
+        final int y = globalBlockIndexToPositionY(index);
+        final int z = globalBlockIndexToPositionZ(index);
         return new BlockVec(x, y, z);
     }
 
@@ -43,7 +43,7 @@ public class LocationUtils {
      * @param index an index computed from {@link #getGlobalBlockIndex(int, int, int)}
      * @return the position X of the index
      */
-    public static int blockIndexToPositionX(long index) {
+    public static int globalBlockIndexToPositionX(long index) {
         return (int) (index >> 38); // 38-64 bits
     }
 
@@ -53,7 +53,7 @@ public class LocationUtils {
      * @param index an index computed from {@link #getGlobalBlockIndex(int, int, int)}
      * @return the position Y of the index
      */
-    public static int blockIndexToPositionY(long index) {
+    public static int globalBlockIndexToPositionY(long index) {
         return (int) (index << 52 >> 52); // 0-12 bits
     }
 
@@ -63,7 +63,7 @@ public class LocationUtils {
      * @param index an index computed from {@link #getGlobalBlockIndex(int, int, int)}
      * @return the position Z of the index
      */
-    public static int blockIndexToPositionZ(long index) {
+    public static int globalBlockIndexToPositionZ(long index) {
         return (int) (index << 26 >> 38); // 12-38 bits
     }
 
