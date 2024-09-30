@@ -110,6 +110,7 @@ public class RelativeBlockBatch implements Batch {
     @NotNull
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
+        batch.setInverseOption(getInverseOption());
         synchronized (blockIdMap) {
             for (var entry : blockIdMap.long2ObjectEntrySet()) {
                 final long pos = entry.getLongKey();

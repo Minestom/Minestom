@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
  * A Batch used when all the blocks changed are contained inside a single chunk.
  * If more than one chunk is needed, use an {@link AbsoluteBlockBatch} instead.
  * <p>
- * The batch can be placed in any chunk in any instance, however it will always remain
+ * The batch can be placed in any chunk in any instance; however, it will always remain
  * aligned to a chunk border. If completely translatable block changes are needed, use a
  * {@link RelativeBlockBatch} instead.
  * <p>
