@@ -12,7 +12,6 @@ public class BatchOption {
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
     private boolean sendUpdate = true;
-    private boolean updateLight = true;
 
     public BatchOption() {
     }

@@ -110,18 +110,18 @@ public class ChunkBatch implements Batch {
                 return;
             }
 
-            final IntSet sections = new IntArraySet();
-
             synchronized (blocks) {
                 for (var entry : Int2ObjectMaps.fastIterable(blocks)) {
                     final int position = entry.getIntKey();
                     final Block block = entry.getValue();
-                    final int section = applyBlock(chunk, position, block, inverse);
-                    sections.add(section);
+                    applyBlock(chunk, position, block, inverse);
                 }
             }
 
-            updateChunk(instance, chunk, sections);
+            if (options.shouldSendUpdate()) {
+                chunk.sendChunk();
+            }
+            instance.refreshLastBlockChangeTime();
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -133,9 +133,8 @@ public class ChunkBatch implements Batch {
      * @param chunk The chunk to apply the change
      * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
      * @param block the block to place
-     * @return The chunk section which the block was placed
      */
-    private int applyBlock(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
+    private void applyBlock(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
@@ -144,19 +143,5 @@ public class ChunkBatch implements Batch {
             inverse.setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
-        return ChunkUtils.getChunkCoordinate(y);
-    }
-
-    /**
-     * Updates the given chunk for all of its viewers, and executes the callback.
-     */
-    private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections) {
-        // Refresh chunk for viewers
-        if (options.shouldSendUpdate()) {
-            // TODO update all sections from `updatedSections`
-            chunk.sendChunk();
-        }
-
-        instance.refreshLastBlockChangeTime();
     }
 }
