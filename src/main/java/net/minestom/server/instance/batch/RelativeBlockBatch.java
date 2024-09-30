@@ -33,6 +33,8 @@ public class RelativeBlockBatch implements Batch {
 
     private final BatchOption options;
 
+    private volatile BatchOption inverseOption = new BatchOption();
+
     public RelativeBlockBatch() {
         this(new BatchOption());
     }
@@ -122,5 +124,13 @@ public class RelativeBlockBatch implements Batch {
             }
         }
         return batch;
+    }
+
+    public @NotNull BatchOption getInverseOption() {
+        return inverseOption;
+    }
+
+    public void setInverseOption(@NotNull BatchOption inverseOption) {
+        this.inverseOption = inverseOption;
     }
 }
