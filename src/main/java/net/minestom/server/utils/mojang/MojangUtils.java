@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 /**
  * Utils class using mojang API.
@@ -16,6 +17,12 @@ import java.util.UUID;
 public final class MojangUtils {
     private static final String FROM_UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
     private static final String FROM_USERNAME_URL = "https://api.mojang.com/users/profiles/minecraft/%s";
+    private static final Pattern UUID_PATTERN =
+            Pattern.compile("(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)");
+
+    private MojangUtils() {
+        // Private constructor to prevent instantiation of the utility class
+    }
 
     /**
      * Gets a player's UUID from their username
@@ -27,14 +34,8 @@ public final class MojangUtils {
     @Blocking
     public static @NotNull UUID getUUID(String username) throws IOException {
         // Thanks stackoverflow: https://stackoverflow.com/a/19399768/13247146
-        return UUID.fromString(
-                retrieve(String.format(FROM_USERNAME_URL, username)).get("id")
-                        .getAsString()
-                        .replaceFirst(
-                                "(\\p{XDigit}{8})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}{4})(\\p{XDigit}+)",
-                                "$1-$2-$3-$4-$5"
-                        )
-        );
+        String uuidString = retrieve(String.format(FROM_USERNAME_URL, username)).get("id").getAsString();
+        return UUID.fromString(UUID_PATTERN.matcher(uuidString).replaceFirst("$1-$2-$3-$4-$5"));
     }
 
     /**
