@@ -16,7 +16,7 @@ import java.util.Objects;
 public final class AlphaColor extends Color {
     private static final int BIT_MASK = 0xff;
 
-    public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = new NetworkBuffer.Type<AlphaColor>() {
+    public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, AlphaColor value) {
             buffer.write(NetworkBuffer.INT, value.asARGB());

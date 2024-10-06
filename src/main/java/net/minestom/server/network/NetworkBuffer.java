@@ -191,13 +191,12 @@ public final class NetworkBuffer {
         return values;
     }
 
-    public <K, V> @NotNull Map<K, V> writeMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, @NotNull Map<K, V> map) {
+    public <K, V> void writeMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, @NotNull Map<K, V> map) {
         write(VAR_INT, map.size());
         for (Map.Entry<K, V> entry : map.entrySet()) {
             write(keyType, entry.getKey());
             write(valueType, entry.getValue());
         }
-        return map;
     }
 
     public <K, V> @NotNull Map<K, V> readMap(@NotNull NetworkBuffer.Type<K> keyType, @NotNull NetworkBuffer.Type<V> valueType, int maxSize) {

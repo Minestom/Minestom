@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 
 public record Bee(@NotNull CustomData entityData, int ticksInHive, int minTicksInHive) {
 
-    public static @NotNull NetworkBuffer.Type<Bee> NETWORK_TYPE = new NetworkBuffer.Type<Bee>() {
+    public static @NotNull NetworkBuffer.Type<Bee> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Bee value) {
             buffer.write(CustomData.NETWORK_TYPE, value.entityData);
