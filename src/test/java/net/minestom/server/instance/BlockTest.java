@@ -96,4 +96,13 @@ public class BlockTest {
             }
         }
     }
+
+    @Test
+    public void testStateIdConversion() {
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+            }
+        }
+    }
 }
