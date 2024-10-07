@@ -122,9 +122,28 @@ public interface ServerProcess extends Registries, Snapshotable {
 
     void start(@NotNull SocketAddress socketAddress);
 
+    /**
+     * Request the server to stop
+     */
     void stop();
 
+    /**
+     * Shutdown all sub processes
+     * <p>
+     * Order:
+     * <ul>
+     * {@link SchedulerManager#shutdown()}
+     * {@link ConnectionManager#shutdown()}
+     * {@link Server#stop()}
+     * {@link BenchmarkManager#disable()}
+     * {@link ThreadDispatcher#shutdown()}
+     * </ul>
+     */
+    void shutdown();
+
     boolean isAlive();
+
+    boolean isStopped();
 
     @ApiStatus.NonExtendable
     interface Ticker {
