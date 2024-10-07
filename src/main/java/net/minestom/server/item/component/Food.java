@@ -74,7 +74,8 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
         public static final NetworkBuffer.Type<EffectChance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, EffectChance value) {
-
+                CustomPotionEffect.NETWORK_TYPE.write(buffer, value.effect);
+                buffer.write(NetworkBuffer.FLOAT, value.probability);
             }
 
             @Override

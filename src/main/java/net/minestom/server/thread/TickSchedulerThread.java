@@ -27,7 +27,7 @@ public final class TickSchedulerThread extends MinestomThread {
             final long tickStart = System.nanoTime();
             try {
                 serverProcess.ticker().tick(tickStart);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 serverProcess.exception().handleException(e);
             }
 

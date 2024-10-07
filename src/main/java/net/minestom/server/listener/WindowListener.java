@@ -51,6 +51,7 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
             successful = inventory.shiftClick(player, slot);
         } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
+            if (slot < 0 || button < 0) return;
             successful = inventory.changeHeld(player, slot, button);
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
             successful = player.getGameMode() == GameMode.CREATIVE;
