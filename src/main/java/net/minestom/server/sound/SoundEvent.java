@@ -6,6 +6,7 @@ import net.kyori.adventure.sound.Sound;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +18,7 @@ import java.util.Collection;
  */
 public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
+    @NotNull BinaryTagSerializer<SoundEvent> NBT_TYPE = BinaryTagSerializer.keyed(SoundEvent::fromNamespaceId);
     @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, SoundEvent value) {
