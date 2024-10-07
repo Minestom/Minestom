@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * https://minecraft.wiki/w/Custom_dimension
+ * <a href="https://minecraft.wiki/w/Custom_dimension">...</a>
  */
 public sealed interface DimensionType extends ProtocolObject, DimensionTypes permits DimensionTypeImpl {
 
@@ -65,6 +65,10 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
     int height();
 
+    int monsterSpawnBlockLightLimit();
+
+    @NotNull IntProvider monsterSpawnLightLevel();
+
     @NotNull String infiniburn();
 
     @NotNull String effects();
@@ -89,6 +93,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         private int logicalHeight = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
+        private IntProvider monsterSpawnLightLevel = IntProvider.createIntProvider(0);
+        private int monsterSpawnBlockLightLimit = 0;
         private String infiniburn = "#minecraft:infiniburn_overworld";
         private String effects = "minecraft:overworld";
 
@@ -180,6 +186,24 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         }
 
         @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder monsterSpawnBlockLightLimit(int blockLightLimit) {
+            this.monsterSpawnBlockLightLimit = blockLightLimit;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder monsterSpawnLightLevel(int spawnLightLevel) {
+            this.monsterSpawnLightLevel = IntProvider.createIntProvider(spawnLightLevel);
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder monsterSpawnLightLevel(@NotNull IntProvider spawnLightLevel) {
+            this.monsterSpawnLightLevel = spawnLightLevel;
+            return this;
+        }
+
+        @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder infiniburn(@NotNull String infiniburn) {
             this.infiniburn = infiniburn;
             return this;
@@ -196,7 +220,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                    infiniburn, effects, null
+                    monsterSpawnBlockLightLimit, monsterSpawnLightLevel, infiniburn, effects, null
             );
         }
     }

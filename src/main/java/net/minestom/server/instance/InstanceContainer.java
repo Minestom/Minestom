@@ -6,6 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
@@ -241,7 +242,7 @@ public class InstanceContainer extends Instance {
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
+                    new EffectPacket(Effects.BLOCK_BREAK.getId(), blockPosition, block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -454,7 +455,6 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean isInVoid(@NotNull Point point) {
-        // TODO: more customizable
         return point.y() < getCachedDimensionType().minY() - 64;
     }
 
