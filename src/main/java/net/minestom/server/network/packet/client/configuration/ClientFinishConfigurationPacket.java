@@ -14,4 +14,8 @@ public record ClientFinishConfigurationPacket() implements ClientPacket {
     public void write(@NotNull NetworkBuffer writer) {
     }
 
+    @Override
+    public boolean processImmediately() {
+        return true;
+    }
 }
