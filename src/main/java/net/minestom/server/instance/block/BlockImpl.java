@@ -30,7 +30,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
      */
     private static final int BITS_PER_INDEX = 5;
 
-    private static final int MAX_STATES = Integer.SIZE / BITS_PER_INDEX;
+    private static final int MAX_STATES = Long.SIZE / BITS_PER_INDEX;
 
     // Block state -> block object
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
