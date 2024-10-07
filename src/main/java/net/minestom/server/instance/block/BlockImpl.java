@@ -28,7 +28,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
      * <p>
      * Block states are all stored within a single number.
      */
-    private static final int BITS_PER_INDEX = 7;
+    private static final int BITS_PER_INDEX = 5;
 
     private static final int MAX_STATES = Long.SIZE / BITS_PER_INDEX;
     private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
@@ -58,7 +58,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         for (var entry : stateProperties) {
                             final var k = entry.getKey();
                             final var v = (List<String>) entry.getValue();
-                            assert v.size() <= MAX_VALUES;
+                            assert v.size() < MAX_VALUES;
                             propertyTypes[i++] = new PropertyType(k, v);
                         }
                     } else {
