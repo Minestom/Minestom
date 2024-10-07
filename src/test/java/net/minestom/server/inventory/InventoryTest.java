@@ -2,10 +2,16 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.testing.TestUtils;
 import org.junit.jupiter.api.Test;
+
+import java.lang.ref.WeakReference;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,6 +81,28 @@ public class InventoryTest {
         assertTrue(inventory.addItemStack(ItemStack.of(Material.ANDESITE_WALL, 32), TransactionOption.ALL_OR_NOTHING));
         assertTrue(inventory.addItemStack(ItemStack.of(Material.ANDESITE, 32), TransactionOption.ALL_OR_NOTHING));
         assertFalse(inventory.addItemStack(ItemStack.of(Material.BLUE_CONCRETE, 32), TransactionOption.ALL_OR_NOTHING));
+    }
+
+    @Test
+    public void testInventoryGC() {
+        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        WeakReference<Inventory> ref = new WeakReference<>(inventory);
+
+        inventory.eventNode().addListener(InventoryPreClickEvent.class, event -> {});
+
+        inventory = null;
+        TestUtils.waitUntilCleared(ref);
+    }
+
+    @Test
+    public void testEventNodeGC() {
+        Inventory inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
+        WeakReference<EventNode<InventoryEvent>> ref = new WeakReference<>(inventory.eventNode());
+
+        inventory.eventNode().addListener(InventoryPreClickEvent.class, event -> {});
+
+        inventory = null;
+        TestUtils.waitUntilCleared(ref);
     }
 
     @Test
