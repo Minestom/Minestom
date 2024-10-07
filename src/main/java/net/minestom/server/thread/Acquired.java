@@ -22,7 +22,7 @@ public final class Acquired<T> {
     Acquired(T value, TickThread tickThread) {
         this.value = value;
         this.owner = Thread.currentThread();
-        this.lock = AcquirableImpl.enter(owner, tickThread);
+        this.lock = AcquirableImpl.enter(tickThread);
     }
 
     public @NotNull T get() {
