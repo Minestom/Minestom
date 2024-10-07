@@ -28,7 +28,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
      * <p>
      * Block states are all stored within a single number.
      */
-    private static final int BITS_PER_INDEX = 4;
+    private static final int BITS_PER_INDEX = 5;
 
     private static final int MAX_STATES = Integer.SIZE / BITS_PER_INDEX;
 
