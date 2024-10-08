@@ -54,6 +54,11 @@ public class ChunkBatch implements Batch {
         }
     }
 
+    void setBlock_UNSAFE(int x, int y, int z, @NotNull Block block) {
+        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        this.blocks.put(index, block);
+    }
+
     @Override
     public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance) {
         return apply(instance, 0, 0);
@@ -146,7 +151,7 @@ public class ChunkBatch implements Batch {
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
         if (inverse != null) {
             Block prevBlock = chunk.getBlock(x, y, z);
-            inverse.setBlock(x, y, z, prevBlock);
+            inverse.setBlock_UNSAFE(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
     }

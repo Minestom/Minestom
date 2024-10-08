@@ -56,6 +56,17 @@ public class AbsoluteBlockBatch implements Batch {
         chunkBatch.setBlock(x, y, z, block);
     }
 
+    void setBlock_UNSAFE(int x, int y, int z, @NotNull Block block) {
+        final int chunkX = ChunkUtils.getChunkCoordinate(x);
+        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
+        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+
+        final ChunkBatch chunkBatch = chunkBatchesMap
+                .computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options, this.inverseOption));
+
+        chunkBatch.setBlock(x, y, z, block);
+    }
+
     /**
      * Applies this batch to the given instance.
      *
