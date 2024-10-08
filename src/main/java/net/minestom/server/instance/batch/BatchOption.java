@@ -19,7 +19,7 @@ public class BatchOption {
     /**
      * Gets if the batch is responsible for composing the whole chunk.
      * <p>
-     * Having it to true means that the batch will clear the chunk data before placing the blocks.
+     * Setting it to true means that the batch will clear the chunk data before placing the blocks.
      * <p>
      * Defaults to false.
      *
@@ -43,6 +43,15 @@ public class BatchOption {
         return calculateInverse;
     }
 
+    /**
+     * Gets if the batch will send the chunk to viewers on application.
+     * <p>
+     * Setting it to false means that viewers (players) will not see the updated blocks.
+     * <p>
+     * Defaults to true.
+     *
+     * @return true if the batch will send block updates to viewers
+     */
     public boolean shouldSendUpdate() {
         return sendUpdate;
     }
@@ -71,6 +80,12 @@ public class BatchOption {
         return this;
     }
 
+    /**
+     * @param sendUpdate true to make this batch send the chunk to viewers on application
+     * @return 'this' for chaining
+     * @see #shouldSendUpdate()
+     */
+    @NotNull
     @Contract("_ -> this")
     public BatchOption setSendUpdate(boolean sendUpdate) {
         this.sendUpdate = sendUpdate;

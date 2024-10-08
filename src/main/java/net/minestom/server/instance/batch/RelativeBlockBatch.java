@@ -32,15 +32,19 @@ public class RelativeBlockBatch implements Batch {
     private final Long2ObjectMap<Block> blockIdMap = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
-
-    private volatile BatchOption inverseOption = new BatchOption();
+    private final BatchOption inverseOption;
 
     public RelativeBlockBatch() {
         this(new BatchOption());
     }
 
-    public RelativeBlockBatch(BatchOption options) {
+    public RelativeBlockBatch(@NotNull BatchOption options) {
+        this(options, new BatchOption());
+    }
+
+    public RelativeBlockBatch(@NotNull BatchOption options, @NotNull BatchOption inverseOption) {
         this.options = options;
+        this.inverseOption = inverseOption;
     }
 
     @Override
@@ -48,7 +52,6 @@ public class RelativeBlockBatch implements Batch {
         LocationUtils.verifyPositionInIndexBounds(x, y, z);
         final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
 
-        //final int block = (blockStateId << 16) | customBlockId;
         synchronized (blockIdMap) {
             this.blockIdMap.put(index, block);
         }
@@ -77,7 +80,7 @@ public class RelativeBlockBatch implements Batch {
     }
 
     /**
-     * Applies this batch to the given instance at the given position, execute the callback depending on safeCallback.
+     * Applies this batch to the given instance at the given position.
      *
      * @param instance     The instance in which the batch should be applied
      * @param x            The x position to apply the batch
@@ -86,7 +89,8 @@ public class RelativeBlockBatch implements Batch {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, int x, int y, int z) {
-        return this.toAbsoluteBatch(x, y, z).apply(instance);
+        return CompletableFuture.supplyAsync(() -> this.toAbsoluteBatch(x, y, z))
+                .thenApplyAsync((batch) -> batch.apply(instance).join());
     }
 
     /**
@@ -109,8 +113,8 @@ public class RelativeBlockBatch implements Batch {
      */
     @NotNull
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
-        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
-        batch.setInverseOption(getInverseOption());
+        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options, this.inverseOption);
+
         synchronized (blockIdMap) {
             for (var entry : blockIdMap.long2ObjectEntrySet()) {
                 final long pos = entry.getLongKey();
@@ -125,13 +129,5 @@ public class RelativeBlockBatch implements Batch {
             }
         }
         return batch;
-    }
-
-    public @NotNull BatchOption getInverseOption() {
-        return inverseOption;
-    }
-
-    public void setInverseOption(@NotNull BatchOption inverseOption) {
-        this.inverseOption = inverseOption;
     }
 }

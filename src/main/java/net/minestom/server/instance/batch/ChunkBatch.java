@@ -26,18 +26,24 @@ import java.util.concurrent.CompletableFuture;
  * @see Batch
  */
 public class ChunkBatch implements Batch {
-
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
     private final Int2ObjectMap<Block> blocks = new Int2ObjectOpenHashMap<>();
+
     private final BatchOption options;
+    private final BatchOption inverseOption;
 
     public ChunkBatch() {
         this(new BatchOption());
     }
 
-    public ChunkBatch(BatchOption options) {
+    public ChunkBatch(@NotNull BatchOption options) {
+        this(options, new BatchOption());
+    }
+
+    public ChunkBatch(@NotNull BatchOption options, @NotNull BatchOption inverseOption) {
         this.options = options;
+        this.inverseOption = inverseOption;
     }
 
     @Override
@@ -81,7 +87,7 @@ public class ChunkBatch implements Batch {
     protected @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance,
                                @NotNull Chunk chunk) {
         return CompletableFuture.supplyAsync(() -> {
-            final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(options) : null;
+            final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(inverseOption) : null;
             synchronized (chunk) {
                 singleThreadFlush(instance, chunk, inverse);
             }

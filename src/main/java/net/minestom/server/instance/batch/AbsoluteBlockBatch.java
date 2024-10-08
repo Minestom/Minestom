@@ -27,15 +27,19 @@ public class AbsoluteBlockBatch implements Batch {
     private final Long2ObjectMap<ChunkBatch> chunkBatchesMap = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
-
-    private volatile BatchOption inverseOption = new BatchOption();
+    private final BatchOption inverseOption;
 
     public AbsoluteBlockBatch() {
         this(new BatchOption());
     }
 
-    public AbsoluteBlockBatch(BatchOption options) {
+    public AbsoluteBlockBatch(@NotNull BatchOption options) {
+        this(options, new BatchOption());
+    }
+
+    public AbsoluteBlockBatch(@NotNull BatchOption options, @NotNull BatchOption inverseOption) {
         this.options = options;
+        this.inverseOption = inverseOption;
     }
 
     @Override
@@ -46,7 +50,7 @@ public class AbsoluteBlockBatch implements Batch {
 
         final ChunkBatch chunkBatch;
         synchronized (chunkBatchesMap) {
-            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options));
+            chunkBatch = chunkBatchesMap.computeIfAbsent(chunkIndex, i -> new ChunkBatch(this.options, this.inverseOption));
         }
 
         chunkBatch.setBlock(x, y, z, block);
@@ -87,17 +91,9 @@ public class AbsoluteBlockBatch implements Batch {
                 }
             }
 
-            // TODO: send light updates?
+            // TODO: light updates?
 
             return inverse;
         });
-    }
-
-    public @NotNull BatchOption getInverseOption() {
-        return inverseOption;
-    }
-
-    public void setInverseOption(@NotNull BatchOption inverseOption) {
-        this.inverseOption = inverseOption;
     }
 }
