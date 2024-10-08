@@ -89,8 +89,7 @@ public class RelativeBlockBatch implements Batch {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, int x, int y, int z) {
-        return CompletableFuture.supplyAsync(() -> this.toAbsoluteBatch(x, y, z))
-                .thenApplyAsync((batch) -> batch.apply(instance).join());
+        return CompletableFuture.supplyAsync(() -> this.toAbsoluteBatch(x, y, z).apply(instance).join());
     }
 
     /**

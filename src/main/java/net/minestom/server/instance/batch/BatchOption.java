@@ -33,7 +33,13 @@ public class BatchOption {
      * Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.
      * <p>
      * This flag will determine the return value of {@link Batch#apply(Instance)} (and other variants).
-     * If true, a {@link Batch} will be returned. Otherwise null will be returned.
+     * If true, a {@link Batch} will be returned.
+     * Otherwise, null will be returned.
+     * <p>
+     * WARNING:
+     * The inverse returned by {@link Batch#apply(Instance)} will revert to the cleared chunk
+     * if {@link #isFullChunk()} is true.
+     * This may change in the future.
      * <p>
      * Defaults to false.
      *
