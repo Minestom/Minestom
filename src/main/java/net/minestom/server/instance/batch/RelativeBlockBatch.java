@@ -125,7 +125,7 @@ public class RelativeBlockBatch implements Batch {
                 final int finalZ = z + LocationUtils.globalBlockIndexToPositionZ(pos);
 
                 // this batch was made in the function, no one else has it
-                batch.setBlock_UNSAFE(finalX, finalY, finalZ, block);
+                batch.UNSAFE_setBlock(finalX, finalY, finalZ, block);
             }
         }
         return batch;

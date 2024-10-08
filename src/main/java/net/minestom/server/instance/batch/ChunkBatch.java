@@ -54,7 +54,7 @@ public class ChunkBatch implements Batch {
         }
     }
 
-    void setBlock_UNSAFE(int x, int y, int z, @NotNull Block block) {
+    void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
         final int index = ChunkUtils.getBlockIndex(x, y, z);
         this.blocks.put(index, block);
     }
@@ -113,6 +113,7 @@ public class ChunkBatch implements Batch {
 
             if (this.options.isFullChunk()) {
                 // Clear the chunk
+                // TODO: take inverse batch from before this
                 chunk.reset();
             }
 
@@ -130,6 +131,7 @@ public class ChunkBatch implements Batch {
             }
 
             if (options.shouldSendUpdate()) {
+                // update viewers
                 chunk.sendChunk();
             }
             instance.refreshLastBlockChangeTime();
@@ -151,7 +153,7 @@ public class ChunkBatch implements Batch {
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
         if (inverse != null) {
             Block prevBlock = chunk.getBlock(x, y, z);
-            inverse.setBlock_UNSAFE(x, y, z, prevBlock);
+            inverse.UNSAFE_setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
     }

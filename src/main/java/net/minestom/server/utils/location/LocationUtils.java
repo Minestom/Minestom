@@ -13,7 +13,8 @@ public class LocationUtils {
     private LocationUtils() {}
 
     /**
-     * Gets the block index of a position.
+     * Gets the global block index of a position.
+     * This index is the same as the network encoding of a block location (as of 1.21.1).
      *
      * @param x the block X
      * @param y the block Y

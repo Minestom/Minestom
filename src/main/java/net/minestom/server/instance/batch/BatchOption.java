@@ -37,7 +37,7 @@ public class BatchOption {
      * Otherwise, null will be returned.
      * <p>
      * WARNING:
-     * The inverse returned by {@link Batch#apply(Instance)} will revert to the cleared chunk
+     * The inverse returned by {@link Batch#apply(Instance)} will revert to the cleared chunk(s)
      * if {@link #isFullChunk()} is true.
      * This may change in the future.
      * <p>
