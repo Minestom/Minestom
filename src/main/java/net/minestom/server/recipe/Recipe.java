@@ -124,14 +124,6 @@ public record Recipe(@NotNull String id, @NotNull Data data) {
         public static final NetworkBuffer.Type<SpecialShieldDecoration> SERIALIZER = RecipeSerializers.SHIELD_DECORATION;
     }
 
-    public record SpecialShulkerBoxColoring(RecipeCategory.Crafting category) implements Data {
-        public static final NetworkBuffer.Type<SpecialShulkerBoxColoring> SERIALIZER = RecipeSerializers.SPECIAL_SHULKER_BOX_COLORING;
-    }
-
-    public record SpecialSuspiciousStew(RecipeCategory.Crafting category) implements Data {
-        public static final NetworkBuffer.Type<SpecialSuspiciousStew> SERIALIZER = RecipeSerializers.SUSPICIOUS_STEW;
-    }
-
     public record SpecialRepairItem(RecipeCategory.Crafting category) implements Data {
         public static final NetworkBuffer.Type<SpecialRepairItem> SERIALIZER = RecipeSerializers.REPAIR_ITEM;
     }
