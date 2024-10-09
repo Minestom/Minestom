@@ -72,7 +72,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSteerVehiclePacket.class, PlayerVehicleListener::steerVehicleListener);
         setPlayListener(ClientVehicleMovePacket.class, PlayerVehicleListener::vehicleMoveListener);
         setPlayListener(ClientSteerBoatPacket.class, PlayerVehicleListener::boatSteerListener);
-        setPlayListener(ClientPlayerPacket.class, PlayerPositionListener::playerPacketListener);
+        setPlayListener(ClientPlayerPositionStatusPacket.class, PlayerPositionListener::playerPacketListener);
         setPlayListener(ClientPlayerRotationPacket.class, PlayerPositionListener::playerLookListener);
         setPlayListener(ClientPlayerPositionPacket.class, PlayerPositionListener::playerPositionListener);
         setPlayListener(ClientPlayerPositionAndRotationPacket.class, PlayerPositionListener::playerPositionAndLookListener);
@@ -84,7 +84,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
-        setPlayListener(ClientCraftRecipeRequest.class, RecipeListener::listener);
+        setPlayListener(ClientPlaceRecipePacket.class, RecipeListener::listener);
         setPlayListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         setPlayListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);
         setPlayListener(ClientPlayerAbilitiesPacket.class, AbilitiesListener::listener);

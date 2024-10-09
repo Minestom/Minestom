@@ -14,7 +14,7 @@ public record RespawnPacket(
         int dimensionType, @NotNull String worldName,
         long hashedSeed, @NotNull GameMode gameMode, @NotNull GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation,
-        int portalCooldown, byte copyData
+        int portalCooldown, byte copyData, int seaLevel
 ) implements ServerPacket.Play {
     public static final int COPY_NONE = 0x0;
     public static final int COPY_ATTRIBUTES = 0x1;
@@ -32,5 +32,6 @@ public record RespawnPacket(
             WorldPos.NETWORK_TYPE.optional(), RespawnPacket::deathLocation,
             VAR_INT, RespawnPacket::portalCooldown,
             BYTE, RespawnPacket::copyData,
+            VAR_INT, RespawnPacket::seaLevel,
             RespawnPacket::new);
 }
