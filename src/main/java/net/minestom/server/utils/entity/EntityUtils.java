@@ -1,10 +1,7 @@
 package net.minestom.server.utils.entity;
 
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
@@ -21,7 +18,7 @@ public final class EntityUtils {
      */
     public static double getPassengerHeightOffset(@NotNull Entity vehicle, @NotNull Entity passenger) {
         // TODO: Refactor this in 1.20.5
-        if (vehicle.getEntityType() == EntityType.BOAT) return -0.1;
+        if (vehicle.getEntityType().name().contains("boat")) return -0.1;
         if (vehicle.getEntityType() == EntityType.MINECART) return 0.0;
         if (SITTING_ENTITIES.contains(passenger.getEntityType()))
             return vehicle.getBoundingBox().height() * 0.75;
