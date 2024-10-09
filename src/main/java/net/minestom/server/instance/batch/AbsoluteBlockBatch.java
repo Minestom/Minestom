@@ -115,7 +115,7 @@ public class AbsoluteBlockBatch implements Batch {
      * Send light updates to viewers of LightingChunks
      */
     protected void trySendLighting(Instance instance, LongList chunkIndexes) {
-        if (options.shouldSendUpdate()){
+        if (options.shouldSendUpdate() && options.shouldSendLight()) {
             LongSet lightingChunks = new LongOpenHashSet();
             for (long index : chunkIndexes) {
                 int chunkX = ChunkUtils.getChunkCoordX(index);

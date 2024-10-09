@@ -12,6 +12,7 @@ public class BatchOption {
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
     private boolean sendUpdate = true;
+    private boolean sendLight = true;
 
     public BatchOption() {
     }
@@ -52,7 +53,7 @@ public class BatchOption {
     /**
      * Gets if the batch will send the chunk to viewers on application.
      * <p>
-     * Setting it to false means that viewers (players) will not see the updated blocks.
+     * Setting it to false means that viewers will not see the updated blocks.
      * <p>
      * Defaults to true.
      *
@@ -60,6 +61,20 @@ public class BatchOption {
      */
     public boolean shouldSendUpdate() {
         return sendUpdate;
+    }
+
+    /**
+     * Gets if the batch will send light updates to viewers upon application
+     * <p>
+     * Setting to false means that viewers will not see light updates,
+     * if {@link #shouldSendUpdate()} is false, viewers will not get updates anyway.
+     * <p>
+     * Defaults to true.
+     *
+     * @return true if the batch will send light updates to viewers
+     */
+    public boolean shouldSendLight() {
+        return sendLight;
     }
 
     /**
@@ -87,7 +102,7 @@ public class BatchOption {
     }
 
     /**
-     * @param sendUpdate true to make this batch send the chunk to viewers on application
+     * @param sendUpdate true to make this batch send the block updates to viewers on application
      * @return 'this' for chaining
      * @see #shouldSendUpdate()
      */
@@ -95,6 +110,17 @@ public class BatchOption {
     @Contract("_ -> this")
     public BatchOption setSendUpdate(boolean sendUpdate) {
         this.sendUpdate = sendUpdate;
+        return this;
+    }
+    /**
+     * @param sendLight true to make this batch send the light updates to viewers on application
+     * @return 'this' for chaining
+     * @see #shouldSendLight()
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public BatchOption setSendLight(boolean sendLight) {
+        this.sendLight = sendLight;
         return this;
     }
 }

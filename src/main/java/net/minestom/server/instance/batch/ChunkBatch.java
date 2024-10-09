@@ -176,7 +176,7 @@ public class ChunkBatch implements Batch {
             chunk.sendChunk();
 
             // send light
-            if (!subBatch) {
+            if (!subBatch && options.shouldSendLight()) {
                 int chunkX = chunk.getChunkX();
                 int chunkZ = chunk.getChunkZ();
                 for (int x = chunkX - 1; x <= chunkX + 1; x++) {
