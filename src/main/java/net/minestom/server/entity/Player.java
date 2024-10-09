@@ -120,6 +120,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
 
+    // TODO(1.21.2): Should this be configurable? What does it actually do?
+    private static final int DEFAULT_SEA_LEVEL = 63;
+
     private long lastKeepAlive;
     private boolean answerKeepAlive;
 
@@ -244,7 +247,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.gameMode = GameMode.SURVIVAL;
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(DimensionType.OVERWORLD); // Default dimension
         this.levelFlat = true;
-        getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(0.1);
+        getAttribute(Attribute.MOVEMENT_SPEED).setBaseValue(0.1);
 
         // FakePlayer init its connection there
         playerConnectionInit();
@@ -286,8 +289,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
                 ServerFlag.CHUNK_VIEW_DISTANCE, ServerFlag.CHUNK_VIEW_DISTANCE,
-                false, true, false, dimensionTypeId, spawnInstance.getDimensionName(),
-                0, gameMode, null, false, levelFlat, deathLocation, portalCooldown, true);
+                false, true, false,
+                dimensionTypeId, spawnInstance.getDimensionName(), 0,
+                gameMode, null, false, levelFlat,
+                deathLocation, portalCooldown, DEFAULT_SEA_LEVEL,
+                true);
         sendPacket(joinGamePacket);
 
         // Difficulty
@@ -341,13 +347,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 recipesIdentifier.add(recipe.id());
             }
             if (!recipesIdentifier.isEmpty()) {
-                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
-                        false, false,
-                        false, false,
-                        false, false,
-                        false, false,
-                        recipesIdentifier, recipesIdentifier);
-                sendPacket(unlockRecipesPacket);
+                // TODO(1.21.2): Recipes
+//                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
+//                        false, false,
+//                        false, false,
+//                        false, false,
+//                        false, false,
+//                        recipesIdentifier, recipesIdentifier);
+//                sendPacket(unlockRecipesPacket);
             }
         }
         // Recipes end
@@ -503,8 +510,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         entityMeta.setOnFire(false);
         refreshHealth();
 
-        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(), 0, gameMode, gameMode,
-                false, levelFlat, deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
+        sendPacket(new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
+                0, gameMode, gameMode, false, levelFlat,
+                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
+                DEFAULT_SEA_LEVEL));
         refreshClientStateAfterRespawn();
 
         PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
@@ -726,7 +735,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
             sendPacket(instance.createInitializeWorldBorderPacket());
-            sendPacket(new TimeUpdatePacket(instance.getWorldAge(), instance.getTime()));
+            sendPacket(instance.createTimePacket());
         }
 
         if (dimensionChange || firstSpawn) {
@@ -1186,8 +1195,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final PlayerInfoRemovePacket removePlayerPacket = getRemovePlayerToList();
         final PlayerInfoUpdatePacket addPlayerPacket = getAddPlayerToList();
 
-        RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId, instance.getDimensionName(),
-                0, gameMode, gameMode, false, levelFlat, deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL);
+        final RespawnPacket respawnPacket = new RespawnPacket(dimensionTypeId,
+                instance.getDimensionName(), 0, gameMode, gameMode,
+                false, levelFlat, deathLocation, portalCooldown,
+                (byte) RespawnPacket.COPY_ALL, DEFAULT_SEA_LEVEL);
 
         sendPacket(removePlayerPacket);
         sendPacket(destroyEntitiesPacket);
@@ -1650,7 +1661,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);
         sendPacket(new RespawnPacket(dimensionTypeId, dimensionName,
                 0, gameMode, gameMode, false, levelFlat,
-                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL));
+                deathLocation, portalCooldown, (byte) RespawnPacket.COPY_ALL,
+                DEFAULT_SEA_LEVEL));
         refreshClientStateAfterRespawn();
     }
 
@@ -1833,7 +1845,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags, boolean shouldConfirm) {
         int teleportId = shouldConfirm ? getNextTeleportId() : -1;
-        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, teleportId));
+        // TODO(1.21.2): Fix/reenable this
+//        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, teleportId));
         super.synchronizePosition();
     }
 
@@ -2241,7 +2254,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature())) :
                 List.of();
         return new PlayerInfoUpdatePacket.Entry(getUuid(), getUsername(), prop,
-                true, getLatency(), getGameMode(), displayName, null);
+                true, getLatency(), getGameMode(), displayName, null, 0);
     }
 
     /**
@@ -2293,7 +2306,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         final ClientSettings settings = this.settings;
         refreshSettings(new ClientSettings(
                 locale, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
-                settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(), settings.allowServerListings()
+                settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(),
+                settings.allowServerListings(), settings.particleStatus()
         ));
     }
 

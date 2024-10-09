@@ -11,9 +11,6 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
-import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -47,7 +44,6 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -102,7 +98,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.BUNDLE);
+                event.addFeatureFlag(FeatureFlag.WINTER_DROP);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -112,18 +108,6 @@ public class PlayerInit {
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
-            .addListener(PlayerHandAnimationEvent.class, event -> {
-                class A {
-                    static boolean b = false;
-                }
-                if (A.b) {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(NamespaceID.from("test"));
-                } else {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(NamespaceID.from("test"), 0.5, AttributeOperation.ADD_VALUE));
-                }
-                A.b = !A.b;
-            })
-
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
