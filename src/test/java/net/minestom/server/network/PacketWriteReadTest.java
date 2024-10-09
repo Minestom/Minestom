@@ -76,7 +76,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new ClearTitlesPacket(false));
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
-        SERVER_PACKETS.add(new CraftRecipeResponse((byte) 2, "recipe"));
+        SERVER_PACKETS.add(new PlaceGhostRecipePacket((byte) 2, "recipe"));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(
                 List.of(new Recipe(

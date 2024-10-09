@@ -13,12 +13,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetSlotPacket(byte windowId, int stateId, short slot,
+public record SetSlotPacket(int windowId, int stateId, short slot,
                             @NotNull ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final NetworkBuffer.Type<SetSlotPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, SetSlotPacket::windowId,
+            VAR_INT, SetSlotPacket::windowId,
             VAR_INT, SetSlotPacket::stateId,
             SHORT, SetSlotPacket::slot,
             ItemStack.NETWORK_TYPE, SetSlotPacket::itemStack,

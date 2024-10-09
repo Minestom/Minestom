@@ -13,15 +13,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record WindowItemsPacket(byte windowId, int stateId, @NotNull List<ItemStack> items,
+public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemStack> items,
                                 @NotNull ItemStack carriedItem) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 128;
 
     public static final NetworkBuffer.Type<WindowItemsPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, WindowItemsPacket::windowId,
+            VAR_INT, WindowItemsPacket::windowId,
             VAR_INT, WindowItemsPacket::stateId,
             ItemStack.NETWORK_TYPE.list(MAX_ENTRIES), WindowItemsPacket::items,
             ItemStack.NETWORK_TYPE, WindowItemsPacket::carriedItem,

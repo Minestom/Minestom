@@ -33,9 +33,7 @@ public enum RecipeType implements StaticProtocolObject {
 
     SPECIAL_SHIELDDECORATION(NamespaceID.from("minecraft:crafting_special_shielddecoration")),
 
-    SPECIAL_SHULKERBOXCOLORING(NamespaceID.from("minecraft:crafting_special_shulkerboxcoloring")),
-
-    SPECIAL_SUSPICIOUSSTEW(NamespaceID.from("minecraft:crafting_special_suspiciousstew")),
+    TRANSMUTE(NamespaceID.from("minecraft:crafting_transmute")),
 
     SPECIAL_REPAIRITEM(NamespaceID.from("minecraft:crafting_special_repairitem")),
 
