@@ -528,13 +528,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @ApiStatus.Internal
     public @NotNull TimeUpdatePacket createTimePacket() {
-        long time = this.time;
-        if (timeRate == 0) {
-            //Negative values stop the sun and moon from moving
-            //0 as a long cannot be negative
-            time = time == 0 ? -24000L : -Math.abs(time);
-        }
-        return new TimeUpdatePacket(worldAge, time);
+        return new TimeUpdatePacket(worldAge, time, timeRate != 0);
     }
 
     /**

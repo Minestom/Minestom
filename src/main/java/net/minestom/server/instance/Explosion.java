@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
-import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -70,10 +69,11 @@ public abstract class Explosion {
         }
 
         // TODO send only to close players
-        ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
-                records, 0, 0, 0);
-        postExplosion(instance, blocks, packet);
-        PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
+        // TODO(1.21.2) simplified packet
+//        ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
+//                records, 0, 0, 0);
+//        postExplosion(instance, blocks, packet);
+//        PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
 
         postSend(instance, blocks);
     }

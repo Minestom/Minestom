@@ -7,7 +7,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
-import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -73,7 +72,8 @@ public class PlayerPositionListener {
         }
         if (playerMoveEvent.isCancelled()) {
             // Teleport to previous position
-            player.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId()));
+            // TODO(1.21.2)
+//            player.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId()));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();
