@@ -2,15 +2,21 @@ package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+
+import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 
 /**
  * Can represent a builtin/vanilla sound or a custom sound.
@@ -37,6 +43,32 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
 
             NamespaceID namespace = NamespaceID.from(buffer.read(NetworkBuffer.STRING));
             return new CustomSoundEvent(namespace, buffer.read(NetworkBuffer.FLOAT.optional()));
+        }
+    };
+    @NotNull BinaryTagSerializer<SoundEvent> NBT_TYPE = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Context context, @NotNull SoundEvent value) {
+            return switch (value) {
+                case BuiltinSoundEvent soundEvent -> stringBinaryTag(soundEvent.name());
+                case CustomSoundEvent soundEvent -> {
+                    final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                            .putString("sound_id", soundEvent.name());
+                    if (soundEvent.range() != null) {
+                        builder.putFloat("range", soundEvent.range());
+                    }
+                    yield builder.build();
+                }
+            };
+        }
+
+        @Override
+        public @NotNull SoundEvent read(@NotNull Context context, @NotNull BinaryTag tag) {
+            if (tag instanceof CompoundBinaryTag compound) {
+                final String soundId = compound.getString("sound_id");
+                final Float range = compound.getFloat("range");
+                return new CustomSoundEvent(NamespaceID.from(soundId), range);
+            }
+            return BuiltinSoundEvent.getSafe(((StringBinaryTag) tag).value());
         }
     };
 

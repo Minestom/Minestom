@@ -184,14 +184,6 @@ public final class RecipeSerializers {
             Enum(Crafting.class), SpecialShieldDecoration::category, SpecialShieldDecoration::new
     );
 
-    public static final Type<SpecialShulkerBoxColoring> SPECIAL_SHULKER_BOX_COLORING = NetworkBufferTemplate.template(
-            Enum(Crafting.class), SpecialShulkerBoxColoring::category, SpecialShulkerBoxColoring::new
-    );
-
-    public static final Type<SpecialSuspiciousStew> SUSPICIOUS_STEW = NetworkBufferTemplate.template(
-            Enum(Crafting.class), SpecialSuspiciousStew::category, SpecialSuspiciousStew::new
-    );
-
     public static final Type<SpecialRepairItem> REPAIR_ITEM = NetworkBufferTemplate.template(
             Enum(Crafting.class), SpecialRepairItem::category, SpecialRepairItem::new
     );
@@ -216,8 +208,9 @@ public final class RecipeSerializers {
             case SPECIAL_TIPPEDARROW -> TIPPED_ARROW;
             case SPECIAL_BANNERDUPLICATE -> BANNER_DUPLICATE;
             case SPECIAL_SHIELDDECORATION -> SHIELD_DECORATION;
-            case SPECIAL_SHULKERBOXCOLORING -> SPECIAL_SHULKER_BOX_COLORING;
-            case SPECIAL_SUSPICIOUSSTEW -> SUSPICIOUS_STEW;
+//            case SPECIAL_SHULKERBOXCOLORING -> SPECIAL_SHULKER_BOX_COLORING;
+//            case SPECIAL_SUSPICIOUSSTEW -> SUSPICIOUS_STEW;
+            case TRANSMUTE -> null; // TODO(1.21.2)
             case SPECIAL_REPAIRITEM -> REPAIR_ITEM;
             case SMELTING -> SMELTING;
             case BLASTING -> BLASTING;
@@ -252,8 +245,6 @@ public final class RecipeSerializers {
             case SpecialMapExtending ignored -> RecipeType.SPECIAL_MAPEXTENDING;
             case SpecialRepairItem ignored -> RecipeType.SPECIAL_REPAIRITEM;
             case SpecialShieldDecoration ignored -> RecipeType.SPECIAL_SHIELDDECORATION;
-            case SpecialShulkerBoxColoring ignored -> RecipeType.SPECIAL_SHULKERBOXCOLORING;
-            case SpecialSuspiciousStew ignored -> RecipeType.SPECIAL_SUSPICIOUSSTEW;
             case SpecialTippedArrow ignored -> RecipeType.SPECIAL_TIPPEDARROW;
         };
     }
