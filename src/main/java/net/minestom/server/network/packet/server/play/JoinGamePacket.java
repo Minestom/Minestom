@@ -17,7 +17,7 @@ public record JoinGamePacket(
         boolean doLimitedCrafting, int dimensionType,
         String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation, int portalCooldown,
-        boolean enforcesSecureChat
+        int seaLevel, boolean enforcesSecureChat
 ) implements ServerPacket.Play {
     public static final int MAX_WORLDS = Short.MAX_VALUE;
 
@@ -44,6 +44,7 @@ public record JoinGamePacket(
             BOOLEAN, JoinGamePacket::isFlat,
             WorldPos.NETWORK_TYPE.optional(), JoinGamePacket::deathLocation,
             VAR_INT, JoinGamePacket::portalCooldown,
+            VAR_INT, JoinGamePacket::seaLevel,
             BOOLEAN, JoinGamePacket::enforcesSecureChat,
             JoinGamePacket::new
     );

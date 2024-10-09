@@ -15,7 +15,7 @@ public class PlayerPositionListener {
     private static final double MAX_COORDINATE = 30_000_000;
     private static final Component KICK_MESSAGE = Component.text("You moved too far away!");
 
-    public static void playerPacketListener(ClientPlayerPacket packet, Player player) {
+    public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
         player.refreshOnGround(packet.onGround());
     }
 
