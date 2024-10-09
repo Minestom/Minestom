@@ -13,7 +13,9 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
                                    @Nullable String title) implements ClientPacket {
-    public static final int MAX_PAGES = 200;
+    public static final int MAX_PAGES = 100;
+    public static final int MAX_TITLE_LENGTH = 32;
+    public static final int MAX_PAGE_LENGTH = 1024;
 
     public static final NetworkBuffer.Type<ClientEditBookPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, ClientEditBookPacket::slot,
@@ -22,9 +24,14 @@ public record ClientEditBookPacket(int slot, @NotNull List<String> pages,
             ClientEditBookPacket::new);
 
     public ClientEditBookPacket {
-        pages = List.copyOf(pages);
-        if (title != null && title.length() > 128) {
-            throw new IllegalArgumentException("Title length cannot be greater than 128");
+        for (var page : pages) {
+            if (page.length() > MAX_PAGE_LENGTH) {
+                throw new IllegalArgumentException("Page length cannot be greater than " + MAX_PAGE_LENGTH);
+            }
         }
+        if (title != null && title.length() > MAX_TITLE_LENGTH) {
+            throw new IllegalArgumentException("Title length cannot be greater than " + MAX_TITLE_LENGTH);
+        }
+        pages = List.copyOf(pages);
     }
 }

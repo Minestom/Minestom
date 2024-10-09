@@ -4,10 +4,10 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record ClientCloseWindowPacket(byte windowId) implements ClientPacket {
+public record ClientCloseWindowPacket(int windowId) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientCloseWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, ClientCloseWindowPacket::windowId,
+            VAR_INT, ClientCloseWindowPacket::windowId,
             ClientCloseWindowPacket::new);
 }
