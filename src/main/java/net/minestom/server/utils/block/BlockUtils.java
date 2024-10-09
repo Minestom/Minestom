@@ -109,4 +109,21 @@ public class BlockUtils {
         // Necessary to support all vanilla blocks
         return blockNbt;
     }
+
+    public static @NotNull String toString(@NotNull Block block) {
+        if (block.properties().isEmpty())
+            return block.name();
+
+        var builder = new StringBuilder(block.name());
+        builder.append('[');
+        for (var entry : block.properties().entrySet()) {
+            builder.append(entry.getKey())
+                    .append('=')
+                    .append(entry.getValue())
+                    .append(',');
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append(']');
+        return builder.toString();
+    }
 }
