@@ -5,6 +5,7 @@ import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -14,12 +15,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 public record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
                              byte displayedSkinParts, MainHand mainHand,
-                             boolean enableTextFiltering, boolean allowServerListings) {
+                             boolean enableTextFiltering, boolean allowServerListings,
+                             @NotNull ParticleStatus particleStatus) {
     public static ClientSettings DEFAULT = new ClientSettings(
             Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
             ChatMessageType.FULL, true,
             (byte) 0x7F, MainHand.RIGHT,
-            true, true
+            true, true,
+            ParticleStatus.ALL
     );
 
     private static final NetworkBuffer.Type<Locale> LOCALE_SERIALIZER = STRING.transform(
@@ -39,6 +42,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
             Enum(MainHand.class), ClientSettings::mainHand,
             BOOLEAN, ClientSettings::enableTextFiltering,
             BOOLEAN, ClientSettings::allowServerListings,
+            ParticleStatus.NETWORK_TYPE, ClientSettings::particleStatus,
             ClientSettings::new);
 
     public ClientSettings {
@@ -59,5 +63,13 @@ public record ClientSettings(Locale locale, byte viewDistance,
     public enum MainHand {
         LEFT,
         RIGHT
+    }
+
+    public enum ParticleStatus {
+        ALL,
+        DECREASED,
+        MINIMAL;
+
+        public static final NetworkBuffer.Type<ParticleStatus> NETWORK_TYPE = Enum(ParticleStatus.class);
     }
 }

@@ -13,7 +13,8 @@ public class PlayerVehicleListener {
         final byte flags = packet.flags();
         final boolean jump = (flags & 0x1) != 0;
         final boolean unmount = (flags & 0x2) != 0;
-        player.refreshVehicleSteer(packet.sideways(), packet.forward(), jump, unmount);
+        // TODO(1.21.2)
+//        player.refreshVehicleSteer(packet.sideways(), packet.forward(), jump, unmount);
     }
 
     public static void vehicleMoveListener(ClientVehicleMovePacket packet, Player player) {
