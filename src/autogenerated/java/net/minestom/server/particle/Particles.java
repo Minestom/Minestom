@@ -96,6 +96,8 @@ interface Particles {
 
     Particle.Vibration VIBRATION = (Particle.Vibration) ParticleImpl.get("minecraft:vibration");
 
+    Particle.Trail TRAIL = (Particle.Trail) ParticleImpl.get("minecraft:trail");
+
     Particle ITEM_SLIME = ParticleImpl.get("minecraft:item_slime");
 
     Particle ITEM_COBWEB = ParticleImpl.get("minecraft:item_cobweb");
@@ -221,4 +223,6 @@ interface Particles {
     Particle RAID_OMEN = ParticleImpl.get("minecraft:raid_omen");
 
     Particle TRIAL_OMEN = ParticleImpl.get("minecraft:trial_omen");
+
+    Particle.BlockCrumble BLOCK_CRUMBLE = (Particle.BlockCrumble) ParticleImpl.get("minecraft:block_crumble");
 }

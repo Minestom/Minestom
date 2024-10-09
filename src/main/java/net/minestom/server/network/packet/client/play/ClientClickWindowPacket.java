@@ -10,14 +10,14 @@ import java.util.List;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientClickWindowPacket(byte windowId, int stateId,
+public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, @NotNull ClickType clickType,
                                       @NotNull List<ChangedSlot> changedSlots,
                                       @NotNull ItemStack clickedItem) implements ClientPacket {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, ClientClickWindowPacket::windowId,
+            VAR_INT, ClientClickWindowPacket::windowId,
             VAR_INT, ClientClickWindowPacket::stateId,
             SHORT, ClientClickWindowPacket::slot,
             BYTE, ClientClickWindowPacket::button,
