@@ -2,13 +2,16 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.*;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -84,7 +87,7 @@ public class AbsoluteBlockBatch implements Batch {
                 final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
 
-                chunkBatchFutures.add(batch.apply(instance, chunkX, chunkZ));
+                chunkBatchFutures.add(batch.apply(instance, chunkX, chunkZ, true));
                 chunkBatchIndexes.add(chunkIndex);
             }
         }
@@ -102,9 +105,34 @@ public class AbsoluteBlockBatch implements Batch {
                 }
             }
 
-            // TODO: light updates?
+            trySendLighting(instance, chunkBatchIndexes);
 
             return inverse;
         });
+    }
+
+    /**
+     * Send light updates to viewers of LightingChunks
+     */
+    protected void trySendLighting(Instance instance, LongList chunkIndexes) {
+        if (options.shouldSendUpdate()){
+            LongSet lightingChunks = new LongOpenHashSet();
+            for (long index : chunkIndexes) {
+                int chunkX = ChunkUtils.getChunkCoordX(index);
+                int chunkZ = ChunkUtils.getChunkCoordZ(index);
+                for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+                    for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                        lightingChunks.add(ChunkUtils.getChunkIndex(x, z));
+                    }
+                }
+            }
+            for (long chunkIndex : lightingChunks) {
+                int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
+                int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                if (instance.getChunk(chunkX, chunkZ) instanceof LightingChunk lightingChunk) {
+                    lightingChunk.sendLighting();
+                }
+            }
+        }
     }
 }

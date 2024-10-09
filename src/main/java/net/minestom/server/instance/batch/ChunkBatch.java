@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
@@ -72,14 +73,29 @@ public class ChunkBatch implements Batch {
      * @param chunkZ   The z chunk coordinate of the target chunk
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, int chunkX, int chunkZ) {
+        return apply(instance, chunkX, chunkZ, false);
+    }
+
+    /**
+     * Apply this batch to the given chunk.
+     *
+     * @param instance The instance in which the batch should be applied
+     * @param chunkX   The x chunk coordinate of the target chunk
+     * @param chunkZ   The z chunk coordinate of the target chunk
+     * @param subBatch Whether this batch is part of a bigger batch, used to optimize lighting updates.
+     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     */
+    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, int chunkX, int chunkZ, boolean subBatch) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
                     chunkX, chunkZ, instance.getUniqueId());
             return CompletableFuture.completedFuture(null);
         }
-        return apply(instance, chunk);
+        return apply(instance, chunk, subBatch);
     }
 
     /**
@@ -89,12 +105,12 @@ public class ChunkBatch implements Batch {
      * @param chunk        The target chunk
      * @return A completable future to the inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance,
-                               @NotNull Chunk chunk) {
+    protected @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, @NotNull Chunk chunk, boolean subBatch) {
         return CompletableFuture.supplyAsync(() -> {
             final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(inverseOption) : null;
             synchronized (chunk) {
-                singleThreadFlush(instance, chunk, inverse);
+                singleThreadFlush(instance, chunk, inverse, subBatch);
             }
             return inverse;
         });
@@ -103,7 +119,7 @@ public class ChunkBatch implements Batch {
     /**
      * Applies this batch in the current thread.
      */
-    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse) {
+    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse, boolean subBatch) {
         try {
             if (!chunk.isLoaded()) {
                 LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
@@ -130,11 +146,7 @@ public class ChunkBatch implements Batch {
                 }
             }
 
-            if (options.shouldSendUpdate()) {
-                // update viewers
-                chunk.sendChunk();
-            }
-            instance.refreshLastBlockChangeTime();
+            updateChunk(instance, chunk, subBatch);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
@@ -156,5 +168,26 @@ public class ChunkBatch implements Batch {
             inverse.UNSAFE_setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
+    }
+
+    private void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, boolean subBatch) {
+        if (options.shouldSendUpdate()) {
+            // update viewers
+            chunk.sendChunk();
+
+            // send light
+            if (!subBatch) {
+                int chunkX = chunk.getChunkX();
+                int chunkZ = chunk.getChunkZ();
+                for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+                    for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                        if (instance.getChunk(x, z) instanceof LightingChunk lightingChunk) {
+                            lightingChunk.sendLighting();
+                        }
+                    }
+                }
+            }
+        }
+        instance.refreshLastBlockChangeTime();
     }
 }
