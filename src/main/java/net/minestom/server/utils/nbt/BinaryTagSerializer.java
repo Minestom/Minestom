@@ -28,6 +28,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static net.kyori.adventure.nbt.DoubleBinaryTag.doubleBinaryTag;
 import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 
 /**
@@ -261,6 +262,21 @@ public interface BinaryTagSerializer<T> {
                 return Vec.ZERO;
             int[] value = intArrayTag.value();
             return new Vec(value[0], value[1], value[2]);
+        }
+    };
+
+    BinaryTagSerializer<Point> VECTOR3D = new BinaryTagSerializer<Point>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Point value) {
+            return ListBinaryTag.listBinaryTag(BinaryTagTypes.DOUBLE, List.of(
+                    doubleBinaryTag(value.x()), doubleBinaryTag(value.y()), doubleBinaryTag(value.z())));
+        }
+
+        @Override
+        public @NotNull Point read(@NotNull BinaryTag tag) {
+            if (!(tag instanceof ListBinaryTag listTag && listTag.elementType() == BinaryTagTypes.DOUBLE))
+                return Vec.ZERO;
+            return new Vec(listTag.getDouble(0), listTag.getDouble(1), listTag.getDouble(2));
         }
     };
 
