@@ -3,6 +3,7 @@ package net.minestom.server.color;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,10 @@ public final class AlphaColor extends Color {
     private static final int BIT_MASK = 0xff;
 
     public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = NetworkBuffer.INT.transform(AlphaColor::new, AlphaColor::asARGB);
+    public static final BinaryTagSerializer<AlphaColor> NBT_TYPE = BinaryTagSerializer.INT.map(AlphaColor::new, AlphaColor::asARGB);
+
+    public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
+
     private final int alpha;
 
     public AlphaColor(int alpha, int red, int green, int blue) {

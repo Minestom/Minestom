@@ -23,6 +23,9 @@ public class Color implements RGBLike {
     );
     public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
             .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
+
+    public static final RGBLike WHITE = new Color(255, 255, 255);
+
     private final int red;
     private final int green;
     private final int blue;
