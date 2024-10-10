@@ -250,6 +250,7 @@ public interface PacketRegistry<T> {
                     entry(DisconnectPacket.class, DisconnectPacket.SERIALIZER),
                     entry(DisguisedChatPacket.class, DisguisedChatPacket.SERIALIZER),
                     entry(EntityStatusPacket.class, EntityStatusPacket.SERIALIZER),
+                    entry(EntityPositionSyncPacket.class, EntityPositionSyncPacket.SERIALIZER),
                     entry(ExplosionPacket.class, ExplosionPacket.SERIALIZER),
                     entry(UnloadChunkPacket.class, UnloadChunkPacket.SERIALIZER),
                     entry(ChangeGameStatePacket.class, ChangeGameStatePacket.SERIALIZER),
