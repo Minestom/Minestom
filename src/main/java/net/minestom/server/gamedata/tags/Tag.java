@@ -103,7 +103,9 @@ public final class Tag implements ProtocolObject, Keyed {
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
-                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name)));
+                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name))),
+        BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
+                name -> MinecraftServer.getBiomeRegistry().getId(DynamicRegistry.Key.of(name)));
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
