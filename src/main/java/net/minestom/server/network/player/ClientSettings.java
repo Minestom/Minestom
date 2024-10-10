@@ -16,13 +16,13 @@ public record ClientSettings(Locale locale, byte viewDistance,
                              ChatMessageType chatMessageType, boolean chatColors,
                              byte displayedSkinParts, MainHand mainHand,
                              boolean enableTextFiltering, boolean allowServerListings,
-                             @NotNull ParticleStatus particleStatus) {
+                             @NotNull ClientSettings.ParticleSetting particleSetting) {
     public static ClientSettings DEFAULT = new ClientSettings(
             Locale.US, (byte) ServerFlag.CHUNK_VIEW_DISTANCE,
             ChatMessageType.FULL, true,
             (byte) 0x7F, MainHand.RIGHT,
             true, true,
-            ParticleStatus.ALL
+            ParticleSetting.ALL
     );
 
     private static final NetworkBuffer.Type<Locale> LOCALE_SERIALIZER = STRING.transform(
@@ -42,7 +42,7 @@ public record ClientSettings(Locale locale, byte viewDistance,
             Enum(MainHand.class), ClientSettings::mainHand,
             BOOLEAN, ClientSettings::enableTextFiltering,
             BOOLEAN, ClientSettings::allowServerListings,
-            ParticleStatus.NETWORK_TYPE, ClientSettings::particleStatus,
+            ParticleSetting.NETWORK_TYPE, ClientSettings::particleSetting,
             ClientSettings::new);
 
     public ClientSettings {
@@ -65,11 +65,11 @@ public record ClientSettings(Locale locale, byte viewDistance,
         RIGHT
     }
 
-    public enum ParticleStatus {
+    public enum ParticleSetting {
         ALL,
         DECREASED,
         MINIMAL;
 
-        public static final NetworkBuffer.Type<ParticleStatus> NETWORK_TYPE = Enum(ParticleStatus.class);
+        public static final NetworkBuffer.Type<ParticleSetting> NETWORK_TYPE = Enum(ParticleSetting.class);
     }
 }
