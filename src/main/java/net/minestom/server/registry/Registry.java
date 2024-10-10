@@ -228,6 +228,7 @@ public final class Registry {
         GAMEPLAY_TAGS("tags/game_event.json"),
         ITEM_TAGS("tags/item.json"),
         ENCHANTMENT_TAGS("tags/enchantment.json"),
+        BIOME_TAGS("tags/biome.json"),
         DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
