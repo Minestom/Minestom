@@ -2307,7 +2307,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         refreshSettings(new ClientSettings(
                 locale, settings.viewDistance(), settings.chatMessageType(), settings.chatColors(),
                 settings.displayedSkinParts(), settings.mainHand(), settings.enableTextFiltering(),
-                settings.allowServerListings(), settings.particleStatus()
+                settings.allowServerListings(), settings.particleSetting()
         ));
     }
 
