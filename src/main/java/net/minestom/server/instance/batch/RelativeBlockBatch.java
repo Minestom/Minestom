@@ -1,6 +1,7 @@
 package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
@@ -29,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 public class RelativeBlockBatch implements Batch {
     // Need to be synchronized manually
     // Format: global position index - block
-    private final Long2ObjectMap<Block> blockIdMap = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<Block> blockMap = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
     private final BatchOption inverseOption;
@@ -49,11 +50,10 @@ public class RelativeBlockBatch implements Batch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        LocationUtils.verifyPositionInIndexBounds(x, y, z);
         final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
 
-        synchronized (blockIdMap) {
-            this.blockIdMap.put(index, block);
+        synchronized (blockMap) {
+            this.blockMap.put(index, block);
         }
     }
 
@@ -114,8 +114,8 @@ public class RelativeBlockBatch implements Batch {
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options, this.inverseOption);
 
-        synchronized (blockIdMap) {
-            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+        synchronized (blockMap) {
+            for (var entry : Long2ObjectMaps.fastIterable(blockMap)) {
                 final long pos = entry.getLongKey();
 
                 final Block block = entry.getValue();
