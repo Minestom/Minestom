@@ -460,18 +460,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
     // METADATA
 
-    record BlockStateType() implements NetworkBufferTypeImpl<Integer> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.write(VAR_INT, value);
-        }
-
-        @Override
-        public Integer read(@NotNull NetworkBuffer buffer) {
-            return buffer.read(VAR_INT);
-        }
-    }
-
     record VillagerDataType() implements NetworkBufferTypeImpl<int[]> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, int[] value) {
@@ -487,18 +475,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             value[1] = buffer.read(VAR_INT);
             value[2] = buffer.read(VAR_INT);
             return value;
-        }
-    }
-
-    record DeathLocationType() implements NetworkBufferTypeImpl<WorldPos> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, WorldPos value) {
-            buffer.writeOptional(value);
-        }
-
-        @Override
-        public WorldPos read(@NotNull NetworkBuffer buffer) {
-            return buffer.readOptional(WorldPos::new);
         }
     }
 
