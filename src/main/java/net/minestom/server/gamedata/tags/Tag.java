@@ -87,6 +87,11 @@ public final class Tag implements ProtocolObject, Keyed {
         return name;
     }
 
+    @Override
+    public String toString() {
+        return "#" + name.asString();
+    }
+
     public enum BasicType {
         BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
                 name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
