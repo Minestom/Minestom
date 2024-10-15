@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
@@ -18,26 +19,31 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 final class TestConnectionImpl implements TestConnection {
-    private final Env env;
     private final ServerProcess process;
     private final PlayerConnectionImpl playerConnection = new PlayerConnectionImpl();
+    private volatile Optional<PlayerProvider> playerProvider = Optional.of(TestPlayerImpl::new);
 
     private final List<IncomingCollector<ServerPacket>> incomingTrackers = new CopyOnWriteArrayList<>();
 
     TestConnectionImpl(Env env) {
-        this.env = env;
         this.process = env.process();
+    }
+
+    @Override
+    public void setCustomPlayerProvider(@NotNull PlayerProvider provider) {
+        this.playerProvider = Optional.ofNullable(provider);
     }
 
     @Override
     public @NotNull CompletableFuture<Player> connect(@NotNull Instance instance, @NotNull Pos pos) {
         // Use player provider to disable queued chunk sending
-        process.connection().setPlayerProvider(TestPlayerImpl::new);
+        process.connection().setPlayerProvider(playerProvider.orElse(TestPlayerImpl::new));
 
         playerConnection.setConnectionState(ConnectionState.LOGIN);
         var player = process.connection().createPlayer(playerConnection, UUID.randomUUID(), "RandName");
