@@ -20,9 +20,9 @@ import java.util.List;
 
 record EnchantmentImpl(
         @NotNull Component description,
-        @NotNull ObjectSet<Enchantment> exclusiveSet,
-        @NotNull ObjectSet<Material> supportedItems,
-        @NotNull ObjectSet<Material> primaryItems,
+        @NotNull ObjectSet exclusiveSet,
+        @NotNull ObjectSet supportedItems,
+        @NotNull ObjectSet primaryItems,
         int weight,
         int maxLevel,
         @NotNull Cost minCost,
@@ -33,8 +33,8 @@ record EnchantmentImpl(
         @Nullable Registry.EnchantmentEntry registry
 ) implements Enchantment {
 
-    private static final BinaryTagSerializer<ObjectSet<Enchantment>> ENCHANTMENT_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ENCHANTMENTS);
-    private static final BinaryTagSerializer<ObjectSet<Material>> MATERIAL_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ITEMS);
+    private static final BinaryTagSerializer<ObjectSet> ENCHANTMENT_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ENCHANTMENTS);
+    private static final BinaryTagSerializer<ObjectSet> MATERIAL_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ITEMS);
     private static final BinaryTagSerializer<List<EquipmentSlotGroup>> SLOTS_NBT_TYPE = EquipmentSlotGroup.NBT_TYPE.list();
     static final BinaryTagSerializer<Enchantment> REGISTRY_NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
