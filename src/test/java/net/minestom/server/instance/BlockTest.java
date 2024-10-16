@@ -7,10 +7,12 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.tag.Tag;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class BlockTest {
 
@@ -83,5 +85,24 @@ public class BlockTest {
 
         assertEquals(start, new Vec(0.3125, 0, 0.3125));
         assertEquals(end, new Vec(0.6875, 0.5625, 0.6875));
+    }
+
+    @Test
+    public void testDuplicateProperties() {
+        HashSet<Integer> assignedStates = new HashSet<>();
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertTrue(assignedStates.add(blockWithState.stateId()));
+            }
+        }
+    }
+
+    @Test
+    public void testStateIdConversion() {
+        for (Block block : Block.values()) {
+            for (Block blockWithState : block.possibleStates()) {
+                assertEquals(blockWithState, Block.fromStateId(blockWithState.stateId()));
+            }
+        }
     }
 }
