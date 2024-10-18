@@ -1,8 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:base",
-    ":semanticCommitsDisabled"
+    "config:base"
   ],
   "regexManagers": [
     {
@@ -18,8 +17,33 @@
       "datasourceTemplate": "maven"
     }
   ],
+  "packageRules": [
+    {
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "automerge": true,
+      "automergeType": "branch",
+      "groupName": "patch",
+      "schedule": [
+        "after 10pm and before 6:00am every day"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "minor"
+      ],
+      "automerge": false,
+      "schedule": [
+        "before 6:00am every friday"
+      ]
+    }
+  ],
   "ignoreDeps": [],
   "labels": ["Renovate"],
   "rebaseWhen": "conflicted",
-  "schedule": ["on the first day of the month"]
+  "vulnerabilityAlerts": {
+    "labels": ["Component::security"],
+    "automerge": true
+  }
 }
