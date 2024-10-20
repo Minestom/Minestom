@@ -10,11 +10,13 @@ import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
 public class PlayerVehicleListener {
 
     public static void steerVehicleListener(ClientSteerVehiclePacket packet, Player player) {
-        final byte flags = packet.flags();
-        final boolean jump = (flags & 0x1) != 0;
-        final boolean unmount = (flags & 0x2) != 0;
-        // TODO(1.21.2)
-//        player.refreshVehicleSteer(packet.sideways(), packet.forward(), jump, unmount);
+        player.refreshVehicleSteer(
+                packet.forward(), packet.backward(),
+                packet.left(), packet.right(),
+                packet.jump(),
+                packet.shift(),
+                packet.sprint()
+        );
     }
 
     public static void vehicleMoveListener(ClientVehicleMovePacket packet, Player player) {
