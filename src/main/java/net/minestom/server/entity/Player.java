@@ -1846,8 +1846,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @ApiStatus.Internal
     void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags, boolean shouldConfirm) {
         int teleportId = shouldConfirm ? getNextTeleportId() : -1;
-        // TODO(1.21.2): Fix/reenable this
-//        sendPacket(new PlayerPositionAndLookPacket(position, (byte) relativeFlags, teleportId));
+        var posCache = this.position;
+        // TODO(1.21.2): should delta be zero?
+        sendPacket(new PlayerPositionAndLookPacket(teleportId, posCache, Vec.ZERO, posCache.yaw(), posCache.pitch(), (byte) relativeFlags));
         super.synchronizePosition();
     }
 
