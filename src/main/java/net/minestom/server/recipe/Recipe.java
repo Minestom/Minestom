@@ -1,6 +1,7 @@
 package net.minestom.server.recipe;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
@@ -130,5 +131,10 @@ public record Recipe(@NotNull String id, @NotNull Data data) {
 
     public record DecoratedPot(RecipeCategory.Crafting category) implements Data {
         public static final NetworkBuffer.Type<DecoratedPot> SERIALIZER = RecipeSerializers.DECORATED_POT;
+    }
+
+    public record Transmute(String group, RecipeCategory.Crafting category, Ingredient input,
+                            Ingredient material, Material result) implements Data {
+        public static final NetworkBuffer.Type<Transmute> SERIALIZER = RecipeSerializers.TRANSMUTE;
     }
 }
