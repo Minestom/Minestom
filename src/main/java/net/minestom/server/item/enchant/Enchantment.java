@@ -31,9 +31,8 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.create(
-                // TODO(1.21.2) new enchantment types
-                "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE//,
-                //registries, Registry.Resource.ENCHANTMENTS
+                "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE,
+                registries, Registry.Resource.ENCHANTMENTS
         );
     }
 
