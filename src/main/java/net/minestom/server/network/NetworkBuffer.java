@@ -39,6 +39,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Float> FLOAT = new NetworkBufferTypeImpl.FloatType();
     Type<Double> DOUBLE = new NetworkBufferTypeImpl.DoubleType();
     Type<Integer> VAR_INT = new NetworkBufferTypeImpl.VarIntType();
+    Type<@Nullable Integer> OPTIONAL_VAR_INT = new NetworkBufferTypeImpl.OptionalVarIntType();
     Type<Integer> VAR_INT_3 = new NetworkBufferTypeImpl.VarInt3Type();
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
@@ -200,6 +201,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
         default @NotNull Type<T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
+        }
+
+        default <R> @NotNull Type<R> unionType(@NotNull Function<T, NetworkBuffer.Type<R>> serializers, @NotNull Function<R, T> keyFunc) {
+            return new NetworkBufferTypeImpl.UnionType<>(this, keyFunc, serializers);
         }
     }
 
