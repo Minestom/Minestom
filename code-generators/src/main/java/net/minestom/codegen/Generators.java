@@ -32,6 +32,8 @@ public class Generators {
                 resource("slot_display_types.json"), outputFolder).generate();
         new GenericEnumGenerator("net.minestom.server.recipe", "RecipeBookCategory",
                 resource("recipe_book_categories.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.item.component", "ConsumeEffectType",
+                resource("consume_effects.json"), outputFolder).packagePrivate().generate();
 
         var generator = new CodeGenerator(outputFolder);
 

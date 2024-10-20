@@ -1,7 +1,5 @@
 package net.minestom.server.item;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
@@ -57,20 +55,7 @@ public final class ItemComponent {
     public static final DataComponent<Consumable> CONSUMABLE = register("consumable", Consumable.NETWORK_TYPE, Consumable.NBT_TYPE);
     public static final DataComponent<ItemStack> USE_REMAINDER = register("use_remainder", ItemStack.NETWORK_TYPE, BinaryTagSerializer.ITEM);
     public static final DataComponent<UseCooldown> USE_COOLDOWN = register("use_cooldown", UseCooldown.NETWORK_TYPE, UseCooldown.NBT_TYPE);
-    public static final DataComponent<String> DAMAGE_RESISTANT = register("damage_resistant", NetworkBuffer.STRING, new BinaryTagSerializer<String>() {
-        // TODO(1.21.2): This is a key to a game tag in the DamageType registry. We should probably have some fancier type to represent this.
-        //               Also this serializer should not be inlined here.
-
-        @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull String value) {
-            return CompoundBinaryTag.builder().putString("value", value).build();
-        }
-
-        @Override
-        public @NotNull String read(@NotNull Context context, @NotNull BinaryTag tag) {
-            return ((CompoundBinaryTag) tag).getString("value");
-        }
-    });
+    public static final DataComponent<DamageResistant> DAMAGE_RESISTANT = register("damage_resistant", DamageResistant.NETWORK_TYPE, DamageResistant.NBT_TYPE);
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
     public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", BinaryTagSerializer.INT));
     public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.NBT_TYPE);

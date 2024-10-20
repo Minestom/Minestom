@@ -47,7 +47,7 @@ public record Consumable(
             "animation", Animation.NBT_TYPE.optional(Animation.EAT), Consumable::animation,
             "sound", SoundEvent.NBT_TYPE.optional(SoundEvent.ENTITY_GENERIC_EAT), Consumable::sound,
             "has_consume_particles", BinaryTagSerializer.BOOLEAN.optional(true), Consumable::hasConsumeParticles,
-            "consume_effects", ConsumeEffect.NBT_TYPE.list().optional(List.of()), Consumable::effects,
+            "on_consume_effects", ConsumeEffect.NBT_TYPE.list().optional(List.of()), Consumable::effects,
             Consumable::new);
 
     public int consumeTicks() {
