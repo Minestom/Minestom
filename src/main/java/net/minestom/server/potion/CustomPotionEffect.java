@@ -88,7 +88,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                 tag -> {
                     byte amplifier = tag.getByte("amplifier");
                     int duration = tag.getInt("duration");
-                    boolean ambient = tag.getBoolean("ambient");
+                    boolean ambient = tag.getBoolean("ambient", false);
                     boolean showParticles = tag.getBoolean("show_particles", true);
                     boolean showIcon = tag.getBoolean("show_icon", showParticles);
                     Settings hiddenEffect = null;
@@ -98,12 +98,12 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                     return new Settings(amplifier, duration, ambient, showParticles, showIcon, hiddenEffect);
                 },
                 value -> {
-                    CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-                            .putByte("amplifier", (byte) value.amplifier)
-                            .putInt("duration", value.duration)
-                            .putBoolean("ambient", value.isAmbient)
-                            .putBoolean("show_particles", value.showParticles)
-                            .putBoolean("show_icon", value.showIcon);
+                    CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                    if (value.amplifier != 0) builder.putByte("amplifier", (byte) value.amplifier);
+                    builder.putInt("duration", value.duration);
+                    if (value.isAmbient) builder.putBoolean("ambient", true);
+                    if (!value.showParticles) builder.putBoolean("show_particles", false);
+                    builder.putBoolean("show_icon", value.showIcon);
                     if (value.hiddenEffect != null) {
                         builder.put("hidden_effect", self.write(value.hiddenEffect));
                     }
