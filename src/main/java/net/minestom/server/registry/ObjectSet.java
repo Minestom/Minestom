@@ -1,12 +1,12 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Set;
 
 /**
  * A set of some protocol objects. May contain a single element, multiple elements, or a single tag (which itself contains multiple elements).
@@ -21,11 +21,15 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
     }
 
     static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<NamespaceID> entries) {
-        return new ObjectSetImpl.Entries<>(Set.copyOf(entries));
+        return new ObjectSetImpl.Entries<>(java.util.List.copyOf(entries));
     }
 
     static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Tag tag) {
         return new ObjectSetImpl.Tag<>(tag);
+    }
+
+    static <T extends ProtocolObject> NetworkBuffer.@NotNull Type<ObjectSet<T>> networkType(@NotNull Tag.BasicType tagType) {
+        return new ObjectSetImpl.NetworkType<>(tagType);
     }
 
     static <T extends ProtocolObject> @NotNull BinaryTagSerializer<ObjectSet<T>> nbtType(@NotNull Tag.BasicType tagType) {
