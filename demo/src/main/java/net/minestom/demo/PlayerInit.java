@@ -8,6 +8,9 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
+import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.attribute.AttributeModifier;
+import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -81,6 +84,22 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
+
+                var zombie = new EntityCreature(EntityType.ZOMBIE){
+
+                    {
+                        getAttribute(Attribute.MOVEMENT_SPEED).addModifier(new AttributeModifier("slow_down_please", -0.75, AttributeOperation.MULTIPLY_TOTAL));
+                    }
+
+                    @Override
+                    public void update(long time) {
+                        super.update(time);
+
+                        getNavigator().setPathTo(player.getPosition());
+                    }
+                };
+
+                zombie.setInstance(player.getInstance(), playerPos.add(10, 0, 10));
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
