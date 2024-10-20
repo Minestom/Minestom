@@ -3,6 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -36,6 +37,8 @@ public enum RecipeBookCategory implements StaticProtocolObject {
     CAMPFIRE(NamespaceID.from("minecraft:campfire"));
 
     public static final NetworkBuffer.Type<RecipeBookCategory> NETWORK_TYPE = NetworkBuffer.Enum(RecipeBookCategory.class);
+
+    public static final BinaryTagSerializer<RecipeBookCategory> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(RecipeBookCategory.class);
 
     private final NamespaceID namespace;
 

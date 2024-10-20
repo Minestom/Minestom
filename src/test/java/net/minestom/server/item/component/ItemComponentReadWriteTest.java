@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.Objects;
 
 import static java.util.Map.entry;
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,8 +64,6 @@ public class ItemComponentReadWriteTest {
     }
 
     private static void readWriteTestImpl(@NotNull DataComponent<Object> component, @NotNull String input) {
-        if (Objects.equals(ItemComponent.DAMAGE_RESISTANT, component) || Objects.equals(ItemComponent.CONSUMABLE, component) || Objects.equals(ItemComponent.DEATH_PROTECTION, component))
-            return;
         try {
             var nbt = TagStringIOExt.readTag(input);
             var value = component.read(CONTEXT, nbt);

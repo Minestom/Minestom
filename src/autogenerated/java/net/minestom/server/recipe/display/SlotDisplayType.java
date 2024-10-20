@@ -3,6 +3,7 @@ package net.minestom.server.recipe.display;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,6 +27,8 @@ public enum SlotDisplayType implements StaticProtocolObject {
     COMPOSITE(NamespaceID.from("minecraft:composite"));
 
     public static final NetworkBuffer.Type<SlotDisplayType> NETWORK_TYPE = NetworkBuffer.Enum(SlotDisplayType.class);
+
+    public static final BinaryTagSerializer<SlotDisplayType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(SlotDisplayType.class);
 
     private final NamespaceID namespace;
 

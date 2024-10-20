@@ -99,7 +99,7 @@ public final class Tag implements ProtocolObject, Keyed {
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
-        POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
+        POTION_EFFECTS("minecraft:potion_effect", null, null), // Seems not to be included in server data
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
