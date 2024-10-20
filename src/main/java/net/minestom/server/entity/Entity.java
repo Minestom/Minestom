@@ -1245,7 +1245,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Chunk chunk = getChunk();
         assert chunk != null;
         if (distanceX > 8 || distanceY > 8 || distanceZ > 8) {
-            PacketViewableUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, isOnGround()), this);
+            PacketViewableUtils.prepareViewablePacket(chunk, new EntityTeleportPacket(getEntityId(), position, Vec.ZERO, 0, isOnGround()), this);
             nextSynchronizationTick = synchronizationTicks + 1;
         } else if (positionChange && viewChange) {
             PacketViewableUtils.prepareViewablePacket(chunk, EntityPositionAndRotationPacket.getPacket(getEntityId(), position,
@@ -1535,7 +1535,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void synchronizePosition() {
         final Pos posCache = this.position;
-        PacketViewableUtils.prepareViewablePacket(currentChunk, new EntityTeleportPacket(getEntityId(), posCache, isOnGround()), this);
+        PacketViewableUtils.prepareViewablePacket(currentChunk, new EntityTeleportPacket(getEntityId(), posCache, Vec.ZERO, 0, isOnGround()), this);
         if (posCache.yaw() != lastSyncedPosition.yaw()) {
             PacketViewableUtils.prepareViewablePacket(currentChunk, new EntityHeadLookPacket(getEntityId(), position.yaw()), this);
         }
