@@ -9,7 +9,6 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
-import net.minestom.server.entity.metadata.projectile.FireworkRocketMeta;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
@@ -82,13 +81,6 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
-
-                var firework = new Entity(EntityType.FIREWORK_ROCKET);
-                firework.setInstance(player.getInstance());
-                var meta = (FireworkRocketMeta) firework.getEntityMeta();
-                meta.setFireworkInfo(ItemStack.of(Material.FIREWORK_ROCKET));
-                meta.setShooter(player);
-                player.addPassenger(firework);
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
@@ -119,8 +111,6 @@ public class PlayerInit {
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"
                 )));
-
-                player.setChestplate(ItemStack.of(Material.ELYTRA));
 
                 player.sendPacket(new ServerLinksPacket(
                         new ServerLinksPacket.Entry(ServerLinksPacket.KnownLinkType.NEWS, "https://minestom.net"),
