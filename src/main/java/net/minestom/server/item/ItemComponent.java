@@ -8,12 +8,15 @@ import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,9 +72,9 @@ public final class ItemComponent {
         }
     });
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
-    public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
+    public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", BinaryTagSerializer.INT));
     public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.NBT_TYPE);
-    public static final DataComponent<List<Material>> REPAIRABLE = register("repairable", Material.NETWORK_TYPE.list(Short.MAX_VALUE), Material.NBT_TYPE.list());
+    public static final DataComponent<ObjectSet<Material>> REPAIRABLE = register("repairable", ObjectSet.networkType(Tag.BasicType.ITEMS), wrapObject("items", ObjectSet.nbtType(Tag.BasicType.ITEMS)));
     public static final DataComponent<Unit> GLIDER = register("glider", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<String> TOOLTIP_STYLE = register("tooltip_style", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     public static final DataComponent<DeathProtection> DEATH_PROTECTION = register("death_protection", DeathProtection.NETWORK_TYPE, DeathProtection.NBT_TYPE);
@@ -134,6 +137,11 @@ public final class ItemComponent {
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
+    }
+
+    // There are some components that are serialized to nbt as an object containing a single field, for now we just inline them here.
+    private static <T> @NotNull BinaryTagSerializer<T> wrapObject(@NotNull String fieldName, @NotNull BinaryTagSerializer<T> serializer) {
+        return BinaryTagTemplate.object(fieldName, serializer, t -> t, t -> t);
     }
 
     private ItemComponent() {

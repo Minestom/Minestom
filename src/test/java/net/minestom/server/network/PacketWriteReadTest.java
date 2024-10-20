@@ -22,8 +22,6 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.GameProfile;
-import net.minestom.server.recipe.Recipe;
-import net.minestom.server.recipe.RecipeCategory;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -33,6 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -54,7 +53,7 @@ public class PacketWriteReadTest {
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));
         //SERVER_PACKETS.add(new LoginPluginRequestPacket(5, "id", generateByteArray(16)));
-        SERVER_PACKETS.add(new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "TheMode911"), false));
+        SERVER_PACKETS.add(new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "TheMode911")));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
         SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
@@ -78,47 +77,48 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
         SERVER_PACKETS.add(new PlaceGhostRecipePacket((byte) 2, "recipe"));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
-        SERVER_PACKETS.add(new DeclareRecipesPacket(
-                List.of(new Recipe(
-                                "minecraft:sticks",
-                                new Recipe.Shapeless("sticks", RecipeCategory.Crafting.MISC,
-                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-                                        ItemStack.of(Material.STICK))
-                        ),
-                        new Recipe(
-                                "minecraft:torch",
-                                new Recipe.Shaped("",
-                                        RecipeCategory.Crafting.MISC,
-                                        1,
-                                        2,
-                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                                new Recipe.Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                                        ItemStack.of(Material.TORCH),
-                                        true)
-                        ),
-                        new Recipe(
-                                "minecraft:coal",
-                                new Recipe.Blasting("forging",
-                                        RecipeCategory.Cooking.MISC,
-                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                        ItemStack.of(Material.IRON_INGOT),
-                                        5,
-                                        5)
-                        ),
-                        new Recipe(
-                                "minecraft:iron_to_diamond",
-                                new Recipe.SmithingTransform(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
-                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                        ItemStack.of(Material.DIAMOND))
-                        ),
-                        new Recipe(
-                                "minecraft:iron_to_coast",
-                                new Recipe.SmithingTrim(new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))))
-                        )
-                )));
+//        SERVER_PACKETS.add(new DeclareRecipesPacket(
+//                List.of(new Recipe(
+//                                "minecraft:sticks",
+//                                new Recipe.Shapeless("sticks", RecipeCategory.Crafting.MISC,
+//                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
+//                                        ItemStack.of(Material.STICK))
+//                        ),
+//                        new Recipe(
+//                                "minecraft:torch",
+//                                new Recipe.Shaped("",
+//                                        RecipeCategory.Crafting.MISC,
+//                                        1,
+//                                        2,
+//                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
+//                                                new Recipe.Ingredient(List.of(ItemStack.of(Material.STICK)))),
+//                                        ItemStack.of(Material.TORCH),
+//                                        true)
+//                        ),
+//                        new Recipe(
+//                                "minecraft:coal",
+//                                new Recipe.Blasting("forging",
+//                                        RecipeCategory.Cooking.MISC,
+//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
+//                                        ItemStack.of(Material.IRON_INGOT),
+//                                        5,
+//                                        5)
+//                        ),
+//                        new Recipe(
+//                                "minecraft:iron_to_diamond",
+//                                new Recipe.SmithingTransform(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
+//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
+//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+//                                        ItemStack.of(Material.DIAMOND))
+//                        ),
+//                        new Recipe(
+//                                "minecraft:iron_to_coast",
+//                                new Recipe.SmithingTrim(new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
+//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
+//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))))
+//                        )
+//                )));
+        fail("TODO(1.21.2) recipe packet change");
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
@@ -140,15 +140,17 @@ public class PacketWriteReadTest {
         List<PlayerInfoUpdatePacket.Property> prop = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
 
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop, false, 0, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop, false, 0, GameMode.SURVIVAL, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, Component.text("NotTheMode911"), null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, Component.text("NotTheMode911"), null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.SURVIVAL, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0)));
+        SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 42)));
         SERVER_PACKETS.add(new PlayerInfoRemovePacket(UUID.randomUUID()));
     }
 

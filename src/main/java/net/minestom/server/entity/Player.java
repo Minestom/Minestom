@@ -120,7 +120,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private static final Component REMOVE_MESSAGE = Component.text("You have been removed from the server without reason.", NamedTextColor.RED);
     private static final Component MISSING_REQUIRED_RESOURCE_PACK = Component.text("Required resource pack was not loaded.", NamedTextColor.RED);
 
-    // TODO(1.21.2): Should this be configurable? What does it actually do?
+    // This probably should be configurable (eg an instance field). However I(matt) am unclear
+    // on what it actually does so am holding off on adding API for this until I understand.
     private static final int DEFAULT_SEA_LEVEL = 63;
 
     private long lastKeepAlive;
