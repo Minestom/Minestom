@@ -1,8 +1,12 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
+import net.minestom.server.particle.Particle;
+import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -56,24 +60,15 @@ public abstract class Explosion {
      */
     public void apply(@NotNull Instance instance) {
         List<Point> blocks = prepare(instance);
-        byte[] records = new byte[3 * blocks.size()];
-        for (int i = 0; i < blocks.size(); i++) {
-            final var pos = blocks.get(i);
+        for (final Point pos : blocks) {
             instance.setBlock(pos, Block.AIR);
-            final byte x = (byte) (pos.x() - Math.floor(getCenterX()));
-            final byte y = (byte) (pos.y() - Math.floor(getCenterY()));
-            final byte z = (byte) (pos.z() - Math.floor(getCenterZ()));
-            records[i * 3 + 0] = x;
-            records[i * 3 + 1] = y;
-            records[i * 3 + 2] = z;
         }
 
-        // TODO send only to close players
-        // TODO(1.21.2) simplified packet
-//        ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
-//                records, 0, 0, 0);
-//        postExplosion(instance, blocks, packet);
-//        PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
+        ExplosionPacket packet = new ExplosionPacket(
+                new Vec(centerX, centerY, centerZ), Vec.ZERO,
+                Particle.EXPLOSION, SoundEvent.ENTITY_GENERIC_EXPLODE);
+        postExplosion(instance, blocks, packet);
+        PacketSendingUtils.sendGroupedPacket(instance.getPlayers(), packet);
 
         postSend(instance, blocks);
     }
