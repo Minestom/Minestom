@@ -2,11 +2,13 @@ package net.minestom.server.listener;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.client.play.*;
+import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -72,8 +74,8 @@ public class PlayerPositionListener {
         }
         if (playerMoveEvent.isCancelled()) {
             // Teleport to previous position
-            // TODO(1.21.2)
-//            player.sendPacket(new PlayerPositionAndLookPacket(currentPosition, (byte) 0x00, player.getNextTeleportId()));
+            // TODO(1.21.2) verify that setting to zero delta is correct. might need to send opposite of intended move
+            player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition, Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();

@@ -2,7 +2,6 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record EntityTeleportPacket(int entityId, Pos position, Point delta, int flags, boolean onGround) implements ServerPacket.Play {
+
+    // TODO(1.21.2) these flags are duplicated multiple times now i(matt) think
     public static final int FLAG_X = 1;
     public static final int FLAG_Y = 1 << 1;
     public static final int FLAG_Z = 1 << 2;
