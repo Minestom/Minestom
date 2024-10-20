@@ -3,6 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,6 +25,8 @@ public enum RecipeType implements StaticProtocolObject {
     SMITHING(NamespaceID.from("minecraft:smithing"));
 
     public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.Enum(RecipeType.class);
+
+    public static final BinaryTagSerializer<RecipeType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(RecipeType.class);
 
     private final NamespaceID namespace;
 
