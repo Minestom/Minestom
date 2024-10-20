@@ -340,8 +340,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Recipes start
         {
             RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-            // TODO(1.21.2): Recipes
-//            sendPacket(recipeManager.getDeclareRecipesPacket());
+            sendPacket(recipeManager.getDeclareRecipesPacket());
 
             List<String> recipesIdentifier = new ArrayList<>();
             for (Recipe recipe : recipeManager.consumeRecipes(this)) {

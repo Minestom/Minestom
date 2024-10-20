@@ -205,6 +205,19 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record OptionalVarIntType() implements NetworkBufferTypeImpl<@Nullable Integer> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @Nullable Integer value) {
+            buffer.write(VAR_INT, value == null ? 0 : value + 1);
+        }
+
+        @Override
+        public @Nullable Integer read(@NotNull NetworkBuffer buffer) {
+            final int value = buffer.read(VAR_INT);
+            return value == 0 ? null : value - 1;
+        }
+    }
+
     record VarInt3Type() implements NetworkBufferTypeImpl<Integer> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Integer boxed) {
@@ -753,6 +766,30 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             T[] values = (T[]) new Object[size];
             for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
             return List.of(values);
+        }
+    }
+
+    record UnionType<K, T>(
+            @NotNull Type<K> keyType, @NotNull Function<T, K> keyFunc,
+            @NotNull Function<K, NetworkBuffer.Type<T>> serializers
+    ) implements NetworkBufferTypeImpl<T> {
+
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final K key = keyFunc.apply(value);
+            buffer.write(keyType, key);
+            var serializer = serializers.apply(key);
+            if (serializer == null)
+                throw new UnsupportedOperationException("Unrecognized type: " + key);
+            serializer.write(buffer, value);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final K key = buffer.read(keyType);
+            var serializer = serializers.apply(key);
+            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
+            return serializer.read(buffer);
         }
     }
 
