@@ -1,5 +1,6 @@
 package net.minestom.server.utils.nbt;
 
+import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -107,6 +108,24 @@ public interface BinaryTagSerializer<T> {
                 }
 
                 throw new IllegalArgumentException("Expected " + type + " but got " + tag);
+            }
+        };
+    }
+
+    static <E extends Enum<E> & Keyed> @NotNull BinaryTagSerializer<E> fromEnumKeyed(@NotNull Class<E> enumClass) {
+        final E[] values = enumClass.getEnumConstants();
+        final Map<NamespaceID, E> nameMap = Arrays.stream(values).collect(Collectors.toMap(e -> NamespaceID.from(e.key()), Function.identity()));
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull E value) {
+                return stringBinaryTag(value.key().asString());
+            }
+
+            @Override
+            public @NotNull E read(@NotNull BinaryTag tag) {
+                if (!(tag instanceof StringBinaryTag string))
+                    throw new IllegalArgumentException("Expected string, got " + tag.type());
+                return nameMap.getOrDefault(NamespaceID.from(string.value()), values[0]);
             }
         };
     }
@@ -738,6 +757,36 @@ public interface BinaryTagSerializer<T> {
                     map.put(key, value);
                 }
                 return Map.copyOf(map);
+            }
+        };
+    }
+
+    default <R> BinaryTagSerializer<R> unionType(@NotNull Function<T, BinaryTagSerializer<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        return unionType("type", serializers, keyFunc);
+    }
+
+    default <R> BinaryTagSerializer<R> unionType(@NotNull String keyField, @NotNull Function<T, BinaryTagSerializer<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull R value) {
+                final T key = keyFunc.apply(value);
+                Check.notNull(key, "unknown key: {0}", key);
+                var serializer = serializers.apply(key);
+
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                builder.put((CompoundBinaryTag) serializer.write(context, value));
+                builder.put(keyField, BinaryTagSerializer.this.write(context, key));
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull R read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound)) return null;
+
+                final T key = BinaryTagSerializer.this.read(context, compound.get(keyField));
+                Check.notNull(key, "unknown key: {0}", key);
+
+                return serializers.apply(key).read(context, compound);
             }
         };
     }
