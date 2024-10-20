@@ -8,7 +8,7 @@ public class AttributeInstanceTest {
 
     @Test
     void testReplaceAttributeSameValue() {
-        var attribute = new AttributeInstance(Attribute.GENERIC_SAFE_FALL_DISTANCE, null);
+        var attribute = new AttributeInstance(Attribute.SAFE_FALL_DISTANCE, null);
         var modifier = new AttributeModifier("test", 1.0, AttributeOperation.ADD_VALUE);
 
         attribute.addModifier(modifier);
@@ -20,7 +20,7 @@ public class AttributeInstanceTest {
 
     @Test
     void testReplaceAttributeNewValue() {
-        var attribute = new AttributeInstance(Attribute.GENERIC_SAFE_FALL_DISTANCE, null);
+        var attribute = new AttributeInstance(Attribute.SAFE_FALL_DISTANCE, null);
 
         attribute.addModifier(new AttributeModifier("test", 1.0, AttributeOperation.ADD_VALUE));
         assertEquals(4, attribute.getValue());
