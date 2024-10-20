@@ -2,39 +2,49 @@ package net.minestom.server.entity.vehicle;
 
 public class PlayerVehicleInformation {
 
-    private float sideways;
-    private float forward;
+    private boolean forward;
+    private boolean backward;
+    private boolean left;
+    private boolean right;
     private boolean jump;
-    private boolean unmount;
+    private boolean shift;
+    private boolean sprint;
 
-    public float getSideways() {
-        return sideways;
-    }
-
-    public float getForward() {
+    public boolean forward() {
         return forward;
     }
 
-    public boolean shouldJump() {
+    public boolean backward() {
+        return backward;
+    }
+
+    public boolean left() {
+        return left;
+    }
+
+    public boolean right() {
+        return right;
+    }
+
+    public boolean jump() {
         return jump;
     }
 
-    public boolean shouldUnmount() {
-        return unmount;
+    public boolean shift() {
+        return shift;
     }
 
-    /**
-     * Refresh internal data
-     *
-     * @param sideways the new sideways value
-     * @param forward  the new forward value
-     * @param jump     the new jump value
-     * @param unmount  the new unmount value
-     */
-    public void refresh(float sideways, float forward, boolean jump, boolean unmount) {
-        this.sideways = sideways;
+    public boolean sprint() {
+        return sprint;
+    }
+
+    public void refresh(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
         this.forward = forward;
+        this.backward = backward;
+        this.left = left;
+        this.right = right;
         this.jump = jump;
-        this.unmount = unmount;
+        this.shift = shift;
+        this.sprint = sprint;
     }
 }
