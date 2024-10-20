@@ -711,4 +711,34 @@ public interface BinaryTagSerializer<T> {
             }
         };
     }
+
+    default <V> BinaryTagSerializer<Map<T, V>> mapValue(@NotNull BinaryTagSerializer<V> valueType) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull Map<T, V> value) {
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                for (Map.Entry<T, V> entry : value.entrySet()) {
+                    var rawKey = BinaryTagSerializer.this.write(context, entry.getKey());
+                    if (!(rawKey instanceof StringBinaryTag keyTag)) {
+                        throw new IllegalArgumentException("Map key must be a string, got " + rawKey);
+                    }
+                    BinaryTag val = valueType.write(context, entry.getValue());
+                    if (val != null) builder.put(keyTag.value(), val);
+                }
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull Map<T, V> read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof CompoundBinaryTag compound)) return Map.of();
+                Map<T, V> map = new HashMap<>();
+                for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
+                    T key = BinaryTagSerializer.this.read(context, stringBinaryTag(entry.getKey()));
+                    V value = valueType.read(context, entry.getValue());
+                    map.put(key, value);
+                }
+                return Map.copyOf(map);
+            }
+        };
+    }
 }

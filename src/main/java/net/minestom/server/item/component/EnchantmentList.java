@@ -23,6 +23,9 @@ public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Int
             NetworkBuffer.BOOLEAN, EnchantmentList::showInTooltip,
             EnchantmentList::new
     );
+    // TODO: this is non trivial for binary tag serializer because the root can either be {levels: {...} or {...}.
+    //       we should support a serializer which can try multiple in order failing to the next (always writing with
+    //       either first or last not sure).
     public static BinaryTagSerializer<EnchantmentList> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull EnchantmentList value) {
@@ -31,10 +34,10 @@ public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Int
                 levels.put(entry.getKey().name(), BinaryTagSerializer.INT.write(context, entry.getValue()));
             }
 
-            return CompoundBinaryTag.builder()
-                    .put("levels", levels.build())
-                    .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build();
+            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                    .put("levels", levels.build());
+            if (!value.showInTooltip) builder.putBoolean("show_in_tooltip", false);
+            return builder.build();
         }
 
         @Override

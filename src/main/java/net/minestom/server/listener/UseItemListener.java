@@ -11,8 +11,7 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.Food;
-import net.minestom.server.item.component.PotionContents;
+import net.minestom.server.item.component.Consumable;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
@@ -82,16 +81,7 @@ public class UseItemListener {
     }
 
     private static int defaultUseItemTime(@NotNull ItemStack itemStack) {
-        final Food food = itemStack.get(ItemComponent.FOOD);
-        if (food != null) return food.eatDurationTicks();
-        else if (itemStack.material() == Material.POTION) return PotionContents.POTION_DRINK_TIME;
-        else if (itemStack.material() == Material.BOW
-                || itemStack.material() == Material.CROSSBOW
-                || itemStack.material() == Material.SHIELD
-                || itemStack.material() == Material.TRIDENT
-                || itemStack.material() == Material.SPYGLASS
-                || itemStack.material() == Material.GOAT_HORN
-                || itemStack.material() == Material.BRUSH) return -1;
-        return 0;
+        final Consumable consumable = itemStack.get(ItemComponent.CONSUMABLE);
+        return consumable != null ? consumable.consumeTicks() : 0;
     }
 }

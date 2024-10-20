@@ -81,7 +81,8 @@ public class PlayerIntegrationTest {
                 Locale.US, (byte) 16,
                 ChatMessageType.FULL, true,
                 (byte) 127, ClientSettings.MainHand.LEFT,
-                true, true
+                true, true,
+                ClientSettings.ParticleSetting.ALL
         ));
 
         var instance = env.createFlatInstance();
@@ -106,7 +107,9 @@ public class PlayerIntegrationTest {
                     "EntityMetaDataPacket has the incorrect hand after client settings update.");
             found = true;
         }
-        Assertions.assertTrue(found, "EntityMetaDataPacket not sent after client settings update.");
+        assertTrue(found, "EntityMetaDataPacket not sent after client settings update.");
+
+        assertEquals(ClientSettings.ParticleSetting.ALL, player.getSettings().particleSetting());
     }
 
     private void assertAbilities(Player player, boolean isInvulnerable, boolean isFlying, boolean isAllowFlying,
