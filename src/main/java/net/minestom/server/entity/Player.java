@@ -2211,8 +2211,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         return itemUpdateStateEvent;
     }
 
-    public void refreshVehicleSteer(float sideways, float forward, boolean jump, boolean unmount) {
-        this.vehicleInformation.refresh(sideways, forward, jump, unmount);
+    public void refreshVehicleSteer(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
+        this.vehicleInformation.refresh(forward, backward, left, right, jump, shift, sprint);
     }
 
     /**
