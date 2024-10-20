@@ -33,10 +33,11 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
             for (Modifier modifier : value.modifiers) {
                 modifiers.add(Modifier.NBT_TYPE.write(modifier));
             }
-            return CompoundBinaryTag.builder()
-                    .put("modifiers", modifiers.build())
-                    .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build();
+
+            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                    .put("modifiers", modifiers.build());
+            if (!value.showInTooltip) builder.putBoolean("show_in_tooltip", false);
+            return builder.build();
         }
 
         @Override
@@ -58,8 +59,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
                 Attribute.NETWORK_TYPE, Modifier::attribute,
                 AttributeModifier.NETWORK_TYPE, Modifier::modifier,
                 NetworkBuffer.Enum(EquipmentSlotGroup.class), Modifier::slot,
-                Modifier::new
-        );
+                Modifier::new);
         public static final BinaryTagSerializer<Modifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Modifier(
                         Attribute.NBT_TYPE.read(tag.get("type")),

@@ -29,19 +29,19 @@ public class EntityAttributeTest {
         double baseHealth = 20;
         double addition = 10;
 
-        double baseAmount = entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double baseAmount = entity.getAttribute(Attribute.MAX_HEALTH).getValue();
         assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
 
         ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
-                new AttributeList(new AttributeList.Modifier(Attribute.GENERIC_MAX_HEALTH,
+                new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
                         new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.HEAD))).build();
 
         entity.setBoots(itemStack);
-        assertEquals(0, Double.compare(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
+        assertEquals(0, Double.compare(entity.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
         entity.setHelmet(itemStack);
-        assertEquals(0, Double.compare(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth + addition)); // Should change
+        assertEquals(0, Double.compare(entity.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition)); // Should change
         entity.setHelmet(ItemStack.AIR);
-        assertEquals(0, Double.compare(entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth)); // Reset back to base
+        assertEquals(0, Double.compare(entity.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // Reset back to base
     }
 
     @Test
@@ -53,23 +53,23 @@ public class EntityAttributeTest {
         double baseHealth = 20;
         double addition = 10;
 
-        double baseAmount = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+        double baseAmount = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         assertEquals(0, Double.compare(baseAmount, baseHealth)); // Avoid floating-point rounding issues
 
         ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
-                new AttributeList(new AttributeList.Modifier(Attribute.GENERIC_MAX_HEALTH,
+                new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
                         new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
 
         player.setBoots(itemStack);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // No change since we are in the wrong slot
         player.setItemInMainHand(itemStack);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth + addition)); // Should change
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition)); // Should change
         player.refreshHeldSlot((byte) 1);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth)); // Changes since the player switched the main hand item
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth)); // Changes since the player switched the main hand item
         player.refreshHeldSlot((byte) 0);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth + addition)); // Switched back
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition)); // Switched back
         player.setItemInMainHand(ItemStack.AIR);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth));
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth));
     }
 
     @Test
@@ -83,10 +83,10 @@ public class EntityAttributeTest {
         // Don't compare against base health first (that will initialize the attribute, and we want to make sure we don't error when we add an item with attribute modifiers)
 
         ItemStack itemStack = ItemStack.builder(Material.DIAMOND).set(ItemComponent.ATTRIBUTE_MODIFIERS,
-                new AttributeList(new AttributeList.Modifier(Attribute.GENERIC_MAX_HEALTH,
+                new AttributeList(new AttributeList.Modifier(Attribute.MAX_HEALTH,
                         new AttributeModifier(NamespaceID.from("minestom:health"), addition, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))).build();
 
         player.setItemInMainHand(itemStack);
-        assertEquals(0, Double.compare(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), baseHealth + addition));
+        assertEquals(0, Double.compare(player.getAttribute(Attribute.MAX_HEALTH).getValue(), baseHealth + addition));
     }
 }
