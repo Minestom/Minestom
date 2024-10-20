@@ -49,6 +49,7 @@ public final class RecipeManager {
     }
 
     private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
-        return new DeclareRecipesPacket(List.copyOf(recipes.keySet()));
+        //TODO(1.21.2): Recipe property lists & stonecutter recipes
+        return new DeclareRecipesPacket(Map.of(), List.of());
     }
 }

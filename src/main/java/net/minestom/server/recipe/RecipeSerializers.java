@@ -1,6 +1,7 @@
 package net.minestom.server.recipe;
 
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,31 +17,32 @@ import static net.minestom.server.recipe.RecipeCategory.Crafting;
 
 @ApiStatus.Internal
 public final class RecipeSerializers {
-    public static final Type<Recipe> RECIPE = new Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Recipe shaped) {
-            buffer.write(STRING, shaped.id());
-            final RecipeType recipeType = recipeToType(shaped.data());
-            buffer.write(RecipeType.NETWORK_TYPE, recipeType);
-            var serializer = RecipeSerializers.dataSerializer(recipeType);
-            if (serializer == null)
-                throw new UnsupportedOperationException("Unrecognized type: " + recipeType);
-            serializer.write(buffer, shaped.data());
-        }
+    public static final Type<Data> DATA = RecipeType.NETWORK_TYPE
+            .unionType(RecipeSerializers::dataSerializer, RecipeSerializers::recipeToType);
 
-        @Override
-        public Recipe read(@NotNull NetworkBuffer buffer) {
-            final String identifier = buffer.read(STRING);
-            final RecipeType type = buffer.read(RecipeType.NETWORK_TYPE);
-            var serializer = RecipeSerializers.dataSerializer(type);
-            if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + type);
-            final Data data = serializer.read(buffer);
-            return new Recipe(identifier, data);
-        }
-    };
+    public static final Type<Recipe> RECIPE = NetworkBufferTemplate.template(
+            STRING, Recipe::id,
+            DATA, Recipe::data,
+            Recipe::new);
 
     public static final Type<Ingredient> INGREDIENT = NetworkBufferTemplate.template(
-            ItemStack.STRICT_NETWORK_TYPE.list(MAX_INGREDIENTS), Ingredient::items,
+            // FIXME(1.21.2): This is really an ObjectSet, but currently ObjectSet does not properly support
+            //  non-dynamic registry types. We need to improve how the tag system works generally.
+            new Type<>() {
+                @Override
+                public void write(@NotNull NetworkBuffer buffer, List<ItemStack> value) {
+                    // +1 because 0 indicates that an item tag name follows (in this case it does not).
+                    buffer.write(VAR_INT, value.size() + 1);
+                    for (ItemStack itemStack : value) {
+                        buffer.write(ItemStack.STRICT_NETWORK_TYPE, itemStack);
+                    }
+                }
+
+                @Override
+                public List<ItemStack> read(@NotNull NetworkBuffer buffer) {
+                    throw new UnsupportedOperationException("cannot read ingredients yet");
+                }
+            }, Ingredient::items,
             Ingredient::new
     );
 
@@ -192,60 +194,37 @@ public final class RecipeSerializers {
             Enum(Crafting.class), DecoratedPot::category, DecoratedPot::new
     );
 
+    public static final Type<Transmute> TRANSMUTE = NetworkBufferTemplate.template(
+            STRING, Transmute::group,
+            Enum(Crafting.class), Transmute::category,
+            INGREDIENT, Transmute::input,
+            INGREDIENT, Transmute::material,
+            Material.NETWORK_TYPE, Transmute::result,
+            Transmute::new
+    );
+
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     public static Type<Data> dataSerializer(RecipeType type) {
         return (Type) switch (type) {
-            case SHAPED -> SHAPED;
-            case SHAPELESS -> SHAPELESS;
-            case SPECIAL_ARMORDYE -> ARMOR_DYE;
-            case SPECIAL_BOOKCLONING -> BOOK_CLONING;
-            case SPECIAL_MAPCLONING -> MAP_CLONING;
-            case SPECIAL_MAPEXTENDING -> MAP_EXTENDING;
-            case SPECIAL_FIREWORK_ROCKET -> FIREWORK_ROCKET;
-            case SPECIAL_FIREWORK_STAR -> FIREWORK_STAR;
-            case SPECIAL_FIREWORK_STAR_FADE -> FIREWORK_STAR_FADE;
-            case SPECIAL_TIPPEDARROW -> TIPPED_ARROW;
-            case SPECIAL_BANNERDUPLICATE -> BANNER_DUPLICATE;
-            case SPECIAL_SHIELDDECORATION -> SHIELD_DECORATION;
-//            case SPECIAL_SHULKERBOXCOLORING -> SPECIAL_SHULKER_BOX_COLORING;
-//            case SPECIAL_SUSPICIOUSSTEW -> SUSPICIOUS_STEW;
-            case TRANSMUTE -> null; // TODO(1.21.2)
-            case SPECIAL_REPAIRITEM -> REPAIR_ITEM;
+            case CRAFTING -> null;
             case SMELTING -> SMELTING;
             case BLASTING -> BLASTING;
             case SMOKING -> SMOKING;
             case CAMPFIRE_COOKING -> CAMPFIRE_COOKING;
             case STONECUTTING -> STONECUTTING;
-            case SMITHING_TRANSFORM -> SMITHING_TRANSFORM;
-            case SMITHING_TRIM -> SMITHING_TRIM;
-            case DECORATED_POT -> DECORATED_POT;
+            case SMITHING -> null;
         };
     }
 
     public static RecipeType recipeToType(Data data) {
         return switch (data) {
-            case Shaped ignored -> RecipeType.SHAPED;
-            case Shapeless ignored -> RecipeType.SHAPELESS;
             case Smelting ignored -> RecipeType.SMELTING;
             case Blasting ignored -> RecipeType.BLASTING;
             case Smoking ignored -> RecipeType.SMOKING;
             case CampfireCooking ignored -> RecipeType.CAMPFIRE_COOKING;
             case Stonecutting ignored -> RecipeType.STONECUTTING;
-            case SmithingTransform ignored -> RecipeType.SMITHING_TRANSFORM;
-            case SmithingTrim ignored -> RecipeType.SMITHING_TRIM;
-            case SpecialArmorDye ignored -> RecipeType.SPECIAL_ARMORDYE;
-            case SpecialBannerDuplicate ignored -> RecipeType.SPECIAL_BANNERDUPLICATE;
-            case SpecialBookCloning ignored -> RecipeType.SPECIAL_BOOKCLONING;
-            case DecoratedPot ignored -> RecipeType.DECORATED_POT;
-            case SpecialFireworkRocket ignored -> RecipeType.SPECIAL_FIREWORK_ROCKET;
-            case SpecialFireworkStar ignored -> RecipeType.SPECIAL_FIREWORK_STAR;
-            case SpecialFireworkStarFade ignored -> RecipeType.SPECIAL_FIREWORK_STAR_FADE;
-            case SpecialMapCloning ignored -> RecipeType.SPECIAL_MAPCLONING;
-            case SpecialMapExtending ignored -> RecipeType.SPECIAL_MAPEXTENDING;
-            case SpecialRepairItem ignored -> RecipeType.SPECIAL_REPAIRITEM;
-            case SpecialShieldDecoration ignored -> RecipeType.SPECIAL_SHIELDDECORATION;
-            case SpecialTippedArrow ignored -> RecipeType.SPECIAL_TIPPEDARROW;
+            default -> throw new IllegalStateException("Unexpected value: " + data);
         };
     }
 }
