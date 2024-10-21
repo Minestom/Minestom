@@ -1,6 +1,7 @@
 package net.minestom.server.network.packet.server.common;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
@@ -11,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerPacket.Configuration, ServerPacket.Play {
-    private static final int MAX_ENTRIES = 100;
 
     public ServerLinksPacket {
         entries = List.copyOf(entries);
@@ -64,7 +64,7 @@ public record ServerLinksPacket(@NotNull List<Entry> entries) implements ServerP
                 }
             }
         };
-        public static final NetworkBuffer.Type<List<Entry>> LIST_NETWORK_TYPE = NETWORK_TYPE.list(MAX_ENTRIES);
+        public static final NetworkBuffer.Type<List<Entry>> LIST_NETWORK_TYPE = NETWORK_TYPE.list(ServerFlag.SERVER_LINK_AMOUNT);
 
         public Entry {
             Check.argCondition(knownType == null && customType == null, "One of knownType and customType must be present");
