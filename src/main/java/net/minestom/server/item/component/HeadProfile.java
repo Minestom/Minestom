@@ -15,7 +15,7 @@ import java.util.UUID;
 public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull List<Property> properties) {
     public static final HeadProfile EMPTY = new HeadProfile(null, null, List.of());
 
-    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = new NetworkBuffer.Type<HeadProfile>() {
+    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, HeadProfile value) {
             buffer.writeOptional(NetworkBuffer.STRING, value.name);
@@ -57,7 +57,7 @@ public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull L
     }
 
     public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
-        public static final NetworkBuffer.Type<Property> NETWORK_TYPE = new NetworkBuffer.Type<Property>() {
+        public static final NetworkBuffer.Type<Property> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Property value) {
                 buffer.write(NetworkBuffer.STRING, value.name);

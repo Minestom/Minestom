@@ -80,7 +80,10 @@ public record Food(int nutrition, float saturationModifier, boolean canAlwaysEat
 
             @Override
             public EffectChance read(@NotNull NetworkBuffer buffer) {
-                return null;
+                return new EffectChance(
+                        CustomPotionEffect.NETWORK_TYPE.read(buffer),
+                        buffer.read(NetworkBuffer.FLOAT)
+                );
             }
         };
         public static final BinaryTagSerializer<EffectChance> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
