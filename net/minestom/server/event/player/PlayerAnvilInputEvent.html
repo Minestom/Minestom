@@ -10,7 +10,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
 <script type="text/javascript" src="../../../../../script.js"></script>
-<script type="text/javascript" src="../../../../../script-dir/jquery-3.6.1.min.js"></script>
+<script type="text/javascript" src="../../../../../script-dir/jquery-3.7.1.min.js"></script>
 <script type="text/javascript" src="../../../../../script-dir/jquery-ui.min.js"></script>
 </head>
 <body class="class-declaration-page">
@@ -91,12 +91,12 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a></code>, <code><a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code>, <code><a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a></code></dd>
+<dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/EntityEvent.html" title="interface in net.minestom.server.event.trait">EntityEvent</a></code>, <code><a href="../trait/EntityInstanceEvent.html" title="interface in net.minestom.server.event.trait">EntityInstanceEvent</a></code>, <code><a href="../trait/InstanceEvent.html" title="interface in net.minestom.server.event.trait">InstanceEvent</a></code>, <code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code>, <code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code>, <code><a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PlayerAnvilInputEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a></span></div>
+implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a>, <a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></span></div>
 <div class="block">Called every time a <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> types a letter in an anvil GUI.</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -117,7 +117,8 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.lang.String)" class="member-name-link">PlayerAnvilInputEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,java.lang.String)" class="member-name-link">PlayerAnvilInputEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ @NotNull <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -137,9 +138,14 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInput()" class="member-name-link">getInput</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the inventory.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player.</div>
 </div>
 </div>
@@ -166,10 +172,12 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,java.lang.String)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,java.lang.String)">
 <h3>PlayerAnvilInputEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerAnvilInputEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ @NotNull
+ @NotNull <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;input)</span></div>
 </section>
@@ -202,6 +210,21 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h3>getInput</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getInput</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getInventory()">
+<h3>getInventory</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../trait/InventoryEvent.html#getInventory()">InventoryEvent</a></code></span></div>
+<div class="block">Gets the inventory.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="../trait/InventoryEvent.html#getInventory()">getInventory</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code></dd>
+<dt>Returns:</dt>
+<dd>the inventory, null if this is a player's inventory</dd>
+</dl>
 </section>
 </li>
 </ul>
