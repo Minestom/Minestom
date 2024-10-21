@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 public class ServerProcessTest {
@@ -21,6 +20,8 @@ public class ServerProcessTest {
         assertDoesNotThrow(() -> process.get().start(new InetSocketAddress("localhost", 25565)));
         assertThrows(Exception.class, () -> process.get().start(new InetSocketAddress("localhost", 25566)));
         assertDoesNotThrow(() -> process.get().stop());
+        assertFalse(() -> process.get().isAlive(), "Server is still alive");
+        assertDoesNotThrow(() -> process.get().shutdown());
     }
 
     @Test
@@ -33,5 +34,7 @@ public class ServerProcessTest {
         var ticker = process.ticker();
         assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));
         assertDoesNotThrow(process::stop);
+        assertFalse(process::isAlive, "Server is still alive");
+        assertDoesNotThrow(process::shutdown);
     }
 }
