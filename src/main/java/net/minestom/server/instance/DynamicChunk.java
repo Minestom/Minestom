@@ -119,9 +119,11 @@ public class DynamicChunk extends Chunk {
         }
         if (handler != null) {
             // New placement
+
+            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
             final Block finalBlock = block;
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
+                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
