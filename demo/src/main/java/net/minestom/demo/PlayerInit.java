@@ -1,5 +1,8 @@
 package net.minestom.demo;
 
+import java.util.ArrayList;
+import java.util.concurrent.CompletableFuture;
+
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
@@ -15,9 +18,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -33,6 +33,9 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
+import net.minestom.server.instance.painter.Painter;
+import net.minestom.server.instance.painter.PerlinNoise;
+import net.minestom.server.instance.painter.WhiteNoise;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemComponent;
@@ -51,7 +54,7 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -116,18 +119,6 @@ public class PlayerInit {
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
-            .addListener(PlayerHandAnimationEvent.class, event -> {
-                class A {
-                    static boolean b = false;
-                }
-                if (A.b) {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(NamespaceID.from("test"));
-                } else {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(NamespaceID.from("test"), 0.5, AttributeOperation.ADD_VALUE));
-                }
-                A.b = !A.b;
-            })
-
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
@@ -231,16 +222,53 @@ public class PlayerInit {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
-        instanceContainer.setGenerator(unit -> {
-            unit.modifier().fillHeight(0, 40, Block.STONE);
 
-            if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
-                unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
-            }
+        Painter painter = Painter.paint(world -> {
+            var heightmap = Painter.Area.column().height(PerlinNoise.heightmap(16, 64, 99999));
+            var tree = heightmap.rate(WhiteNoise.noise2d(0.01, 44));
+            var sectionFill = Painter.Area.section().rate(WhiteNoise.noise3d(0.01, 45));
+
+            world.every(heightmap, (relWorld) -> {
+                relWorld.fill(Block.DIRT);
+                relWorld.setBlock(0, 0, 0, Block.GRASS_BLOCK);
+            });
+
+            world.every(tree, relWorld -> {
+                // leaves
+                double radius = 2.5;
+                int height = 4;
+                for (int x = (int) -radius; x <= radius; x++) {
+                    for (int y = (int) -radius; y <= radius; y++) {
+                        for (int z = (int) -radius; z <= radius; z++) {
+                            double dist = Math.sqrt(x * x + y * y + z * z);
+                            if (dist > radius) continue;
+                            relWorld.setBlock(x, y + height, z, Block.OAK_LEAVES);
+                        }
+                    }
+                }
+
+                // log
+                for (int i = 1; i < height; i++) {
+                    relWorld.setBlock(0, i, 0, Block.OAK_LOG);
+                }
+            });
+
+            world.every(sectionFill, relWorld -> relWorld.fill(Block.DIAMOND_BLOCK));
         });
+        instanceContainer.setGenerator(painter.asGenerator());
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
+
+        // load 100 chunks
+        long startTime = System.currentTimeMillis();
+        List<CompletableFuture<?>> futures = new ArrayList<>();
+        ChunkUtils.forChunksInRange(Vec.ZERO, 10, (x, z) -> futures.add(instanceContainer.loadChunk(x, z)));
+        futures.forEach(CompletableFuture::join);
+        long endTime = System.currentTimeMillis();
+
+        double chunksPerSecond = 100 / ((endTime - startTime) / 1000.0);
+        System.out.println("Loaded 100 chunks in " + (endTime - startTime) + "ms (" + String.format("%.2f", chunksPerSecond) + " chunks/s)");
 
 //        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
 //        instanceManager.registerInstance(i2);
