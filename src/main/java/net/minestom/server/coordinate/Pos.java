@@ -145,10 +145,29 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
      * Gets a unit-vector pointing in the direction that this Location is
      * facing.
      *
+     * @return a vector pointing in the direction of this location's {@link
+     * #pitch() pitch} and {@link #yaw() yaw}
+     * @deprecated This method has been superseded by {@link #lookVector() lookVector()}.
+     * Use {@link #lookVector()} instead for improved clarity.
+     */
+    @Deprecated
+    public @NotNull Vec direction() {
+        final float rotX = yaw;
+        final float rotY = pitch;
+        final double xz = Math.cos(Math.toRadians(rotY));
+        return new Vec(-xz * Math.sin(Math.toRadians(rotX)),
+                -Math.sin(Math.toRadians(rotY)),
+                xz * Math.cos(Math.toRadians(rotX)));
+    }
+
+    /**
+     * Gets a unit-vector pointing in the direction that this Location is
+     * facing.
+     *
      * @return a vector pointing the direction of this location's {@link
      * #pitch() pitch} and {@link #yaw() yaw}
      */
-    public @NotNull Vec direction() {
+    public @NotNull Vec lookVector() {
         final float rotX = yaw;
         final float rotY = pitch;
         final double xz = Math.cos(Math.toRadians(rotY));

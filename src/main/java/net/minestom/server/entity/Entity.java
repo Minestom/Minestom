@@ -1662,7 +1662,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Pos end = entity.position.withY(entity.position.y() + entity.getEyeHeight());
-        final Vec direction = exactView ? position.direction() : end.sub(start).asVec().normalize();
+        final Vec direction = exactView ? position.lookVector() : end.sub(start).asVec().normalize();
         if (!entity.boundingBox.boundingBoxRayIntersectionCheck(start.asVec(), direction, entity.getPosition())) {
             return false;
         }
@@ -1694,7 +1694,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos start = position.withY(position.y() + getEyeHeight());
         final Vec startAsVec = start.asVec();
         final Predicate<Entity> finalPredicate = e -> e != this
-                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.direction(), e.getPosition())
+                && e.boundingBox.boundingBoxRayIntersectionCheck(startAsVec, position.lookVector(), e.getPosition())
                 && predicate.test(e)
                 && CollisionUtils.isLineOfSightReachingShape(instance, currentChunk, start,
                 e.position.withY(e.position.y() + e.getEyeHeight()), e.boundingBox);
