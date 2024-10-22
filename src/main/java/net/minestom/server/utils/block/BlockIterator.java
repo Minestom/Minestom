@@ -131,7 +131,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset, int maxDistance) {
-        this(pos.asVec(), pos.direction(), yOffset, maxDistance, false);
+        this(pos.asVec(), pos.lookVector(), yOffset, maxDistance, false);
     }
 
     /**
@@ -145,7 +145,7 @@ public class BlockIterator implements Iterator<Point> {
      */
 
     public BlockIterator(@NotNull Pos pos, double yOffset) {
-        this(pos.asVec(), pos.direction(), yOffset, 0, false);
+        this(pos.asVec(), pos.lookVector(), yOffset, 0, false);
     }
 
     /**

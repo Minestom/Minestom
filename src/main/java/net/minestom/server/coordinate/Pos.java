@@ -142,17 +142,16 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
     }
 
     /**
-     * Gets a unit-vector representing the direction this Location is
-     * facing, commonly referred to as the "look vector".
-     * 
-     * Renamed to {@code lookVector()} from {@code direction()}.
+     * Gets a unit-vector pointing in the direction that this Location is
+     * facing.
      *
-     * This vector is derived from the {@link #pitch() pitch} and {@link #yaw() yaw}
-     * of the Location, representing where it is looking in 3D space.
-     *
-     * @return a vector pointing in the direction of this Location's {@link #pitch() pitch} and {@link #yaw() yaw}
+     * @return a vector pointing in the direction of this location's {@link
+     * #pitch() pitch} and {@link #yaw() yaw}
+     * @deprecated This method has been superseded by {@link #lookVector() lookVector()}.
+     * Use {@link #lookVector()} instead for improved clarity.
      */
-    public @NotNull Vec getLookVector() {
+    @Deprecated
+    public @NotNull Vec direction() {
         final float rotX = yaw;
         final float rotY = pitch;
         final double xz = Math.cos(Math.toRadians(rotY));
@@ -161,6 +160,21 @@ public record Pos(double x, double y, double z, float yaw, float pitch) implemen
                 xz * Math.cos(Math.toRadians(rotX)));
     }
 
+    /**
+     * Gets a unit-vector pointing in the direction that this Location is
+     * facing.
+     *
+     * @return a vector pointing the direction of this location's {@link
+     * #pitch() pitch} and {@link #yaw() yaw}
+     */
+    public @NotNull Vec lookVector() {
+        final float rotX = yaw;
+        final float rotY = pitch;
+        final double xz = Math.cos(Math.toRadians(rotY));
+        return new Vec(-xz * Math.sin(Math.toRadians(rotX)),
+                -Math.sin(Math.toRadians(rotY)),
+                xz * Math.cos(Math.toRadians(rotX)));
+    }
 
     /**
      * Returns a new position based on this position fields.
