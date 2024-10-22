@@ -8,12 +8,11 @@ import net.minestom.testing.Env;
 import net.minestom.testing.extension.MicrotusExtension;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
 import java.util.List;
 
 
 @ExtendWith(MicrotusExtension.class)
-public class ExplosionIntegrationTest {
+class ExplosionIntegrationTest {
 
     // Checks that only nearby players actually receive the packet from the server
     @Test
@@ -38,18 +37,19 @@ public class ExplosionIntegrationTest {
         packetTracker1.assertSingle();
         packetTracker2.assertSingle();
         packetTracker3.assertEmpty();
+        env.destroyInstance(instance, true);
     }
 
 
-    public class TestExplosionSupplierImpl implements ExplosionSupplier {
+    class TestExplosionSupplierImpl implements ExplosionSupplier {
         @Override
         public Explosion createExplosion(float centerX, float centerY, float centerZ, float strength, CompoundBinaryTag additionalData) {
             return new TestExplosionImpl(centerX, centerY, centerZ, strength);
         }
 
-        public class TestExplosionImpl extends Explosion {
+        class TestExplosionImpl extends Explosion {
 
-            protected TestExplosionImpl(float centerX, float centerY, float centerZ, float strength) {
+            TestExplosionImpl(float centerX, float centerY, float centerZ, float strength) {
                 super(centerX, centerY, centerZ, strength);
             }
             @Override
