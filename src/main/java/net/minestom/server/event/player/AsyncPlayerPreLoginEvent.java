@@ -16,16 +16,20 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AsyncPlayerPreLoginEvent implements Event {
 
-    private GameProfile gameProfile;
     private final PlayerConnection connection;
+    private GameProfile gameProfile;
     private final LoginPluginMessageProcessor pluginMessageProcessor;
 
-    public AsyncPlayerPreLoginEvent(@NotNull GameProfile gameProfile,
-                                    @NotNull PlayerConnection connection,
+    public AsyncPlayerPreLoginEvent(@NotNull PlayerConnection connection,
+                                    @NotNull GameProfile gameProfile,
                                     @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
-        this.gameProfile = gameProfile;
         this.connection = connection;
+        this.gameProfile = gameProfile;
         this.pluginMessageProcessor = pluginMessageProcessor;
+    }
+
+    public @NotNull PlayerConnection getConnection() {
+        return connection;
     }
 
     public GameProfile getGameProfile() {
@@ -34,10 +38,6 @@ public class AsyncPlayerPreLoginEvent implements Event {
 
     public void setGameProfile(GameProfile gameProfile) {
         this.gameProfile = gameProfile;
-    }
-
-    public @NotNull PlayerConnection getConnection() {
-        return connection;
     }
 
     /**
