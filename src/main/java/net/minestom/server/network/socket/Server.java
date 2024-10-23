@@ -98,7 +98,8 @@ public final class Server {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                boolean isExpected = e instanceof SocketException && e.getMessage().equals("Connection reset");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
                 connection.disconnect();
                 break;
             }
@@ -113,7 +114,9 @@ public final class Server {
                 connection.disconnect();
                 break;
             } catch (Throwable e) {
-                MinecraftServer.getExceptionManager().handleException(e);
+                boolean isExpected = e instanceof IOException && e.getMessage().equals("Broken pipe");
+                if (!isExpected) MinecraftServer.getExceptionManager().handleException(e);
+
                 connection.disconnect();
                 break;
             }

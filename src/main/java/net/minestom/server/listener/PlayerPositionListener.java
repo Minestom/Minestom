@@ -17,6 +17,7 @@ public class PlayerPositionListener {
     private static final Component KICK_MESSAGE = Component.text("You moved too far away!");
 
     public static void playerPacketListener(ClientPlayerPositionStatusPacket packet, Player player) {
+        // TODO: Should we expose horizontal collision here and the methods below?
         player.refreshOnGround(packet.onGround());
     }
 
@@ -73,9 +74,9 @@ public class PlayerPositionListener {
             return;
         }
         if (playerMoveEvent.isCancelled()) {
-            // Teleport to previous position
-            // TODO(1.21.2) verify that setting to zero delta is correct. might need to send opposite of intended move
-            player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition, Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));
+            // Teleport to previous position & cancel any velocity
+            player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition,
+                    Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));
             return;
         }
         final Pos eventPosition = playerMoveEvent.getNewPosition();

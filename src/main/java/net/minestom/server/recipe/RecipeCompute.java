@@ -56,8 +56,8 @@ public final class RecipeCompute {
                         if (ingredient.items().isEmpty() && item.isAir()) {
                             validIngredient = true;
                         } else {
-                            for (ItemStack ingredientItem : ingredient.items()) {
-                                if (ingredientItem.isSimilar(item)) {
+                            for (Material ingredientItem : ingredient.items()) {
+                                if (ingredientItem.equals(item.material())) {
                                     validIngredient = true;
                                     break;
                                 }
@@ -88,8 +88,7 @@ public final class RecipeCompute {
         // Check if the recipe is valid
         for (Recipe.Ingredient ingredient : recipe.ingredients()) {
             boolean success = false;
-            for (ItemStack item : ingredient.items()) {
-                final Material material = item.material();
+            for (Material material : ingredient.items()) {
                 final int occurrences = materials.getOrDefault(material, 0);
                 if (occurrences == 0) continue;
                 final int reduced = occurrences - 1;
