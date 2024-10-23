@@ -1,6 +1,5 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
@@ -12,6 +11,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
+import net.minestom.server.item.component.Equippable;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
@@ -34,10 +34,10 @@ public class UseItemListener {
         }
 
         // Equip armor with right click
-        final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
-        if (equipmentSlot != null) {
-            final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
-            player.setEquipment(equipmentSlot, itemStack);
+        final Equippable equippable = itemStack.get(ItemComponent.EQUIPPABLE);
+        if (equippable != null && equippable.swappable()) {
+            final ItemStack currentlyEquipped = player.getEquipment(equippable.slot());
+            player.setEquipment(equippable.slot(), itemStack);
             player.setItemInHand(hand, currentlyEquipped);
         }
 

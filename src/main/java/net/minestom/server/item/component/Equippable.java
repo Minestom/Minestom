@@ -42,4 +42,36 @@ public record Equippable(
             "swappable", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::swappable,
             "damage_on_hurt", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::damageOnHurt,
             Equippable::new);
+
+    public @NotNull Equippable withSlot(@NotNull EquipmentSlot slot) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withEquipSound(@NotNull SoundEvent equipSound) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withModel(@Nullable String model) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withCameraOverlay(@Nullable String cameraOverlay) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withAllowedEntities(@Nullable ObjectSet<EntityType> allowedEntities) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withDispensable(boolean dispensable) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withSwappable(boolean swappable) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
+
+    public @NotNull Equippable withDamageOnHurt(boolean damageOnHurt) {
+        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    }
 }

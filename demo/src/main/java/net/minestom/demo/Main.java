@@ -122,10 +122,10 @@ public class Main {
                 "minestom:test",
                 new Recipe.Shaped("", RecipeCategory.Crafting.MISC, 2, 2,
                         List.of(
-                                new Recipe.Ingredient(ItemStack.of(Material.IRON_INGOT)),
-                                new Recipe.Ingredient(ItemStack.of(Material.IRON_INGOT)),
-                                new Recipe.Ingredient(ItemStack.of(Material.IRON_INGOT)),
-                                new Recipe.Ingredient(ItemStack.of(Material.IRON_INGOT))
+                                new Recipe.Ingredient(Material.IRON_INGOT),
+                                new Recipe.Ingredient(Material.IRON_INGOT),
+                                new Recipe.Ingredient(Material.IRON_INGOT),
+                                new Recipe.Ingredient(Material.IRON_INGOT)
                         ), ItemStack.of(Material.IRON_BLOCK), true));
         MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
         var recipe = new Recipe(
@@ -133,7 +133,7 @@ public class Main {
                 new Recipe.Shapeless("abc",
                         RecipeCategory.Crafting.MISC,
                         List.of(
-                                new Recipe.Ingredient(ItemStack.of(Material.DIRT))
+                                new Recipe.Ingredient(Material.DIRT)
                         ),
                         ItemStack.builder(Material.GOLD_BLOCK)
                                 .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))

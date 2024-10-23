@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
@@ -22,6 +23,9 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.RecipeProperty;
+import net.minestom.server.recipe.display.SlotDisplay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +35,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -45,6 +48,8 @@ public class PacketWriteReadTest {
 
     @BeforeAll
     public static void setupServer() {
+        MinecraftServer.init(); // Need some tags in here, pretty gross.
+
         // Handshake
         SERVER_PACKETS.add(new ResponsePacket(new JsonObject().toString()));
         // Status
@@ -77,48 +82,18 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
         SERVER_PACKETS.add(new PlaceGhostRecipePacket((byte) 2, "recipe"));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
-//        SERVER_PACKETS.add(new DeclareRecipesPacket(
-//                List.of(new Recipe(
-//                                "minecraft:sticks",
-//                                new Recipe.Shapeless("sticks", RecipeCategory.Crafting.MISC,
-//                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-//                                        ItemStack.of(Material.STICK))
-//                        ),
-//                        new Recipe(
-//                                "minecraft:torch",
-//                                new Recipe.Shaped("",
-//                                        RecipeCategory.Crafting.MISC,
-//                                        1,
-//                                        2,
-//                                        List.of(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
-//                                                new Recipe.Ingredient(List.of(ItemStack.of(Material.STICK)))),
-//                                        ItemStack.of(Material.TORCH),
-//                                        true)
-//                        ),
-//                        new Recipe(
-//                                "minecraft:coal",
-//                                new Recipe.Blasting("forging",
-//                                        RecipeCategory.Cooking.MISC,
-//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))),
-//                                        ItemStack.of(Material.IRON_INGOT),
-//                                        5,
-//                                        5)
-//                        ),
-//                        new Recipe(
-//                                "minecraft:iron_to_diamond",
-//                                new Recipe.SmithingTransform(new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
-//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-//                                        ItemStack.of(Material.DIAMOND))
-//                        ),
-//                        new Recipe(
-//                                "minecraft:iron_to_coast",
-//                                new Recipe.SmithingTrim(new Recipe.Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-//                                        new Recipe.Ingredient(List.of(ItemStack.of(Material.COAL))))
-//                        )
-//                )));
-        fail("TODO(1.21.2) recipe packet change");
+        SERVER_PACKETS.add(new DeclareRecipesPacket(Map.of(
+                RecipeProperty.SMITHING_BASE, List.of(Material.STONE),
+                RecipeProperty.SMITHING_TEMPLATE, List.of(Material.STONE),
+                RecipeProperty.SMITHING_ADDITION, List.of(Material.STONE),
+                RecipeProperty.FURNACE_INPUT, List.of(Material.STONE),
+                RecipeProperty.BLAST_FURNACE_INPUT, List.of(Material.IRON_HOE, Material.DANDELION),
+                RecipeProperty.SMOKER_INPUT, List.of(Material.STONE),
+                RecipeProperty.CAMPFIRE_INPUT, List.of(Material.STONE)),
+                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Recipe.Ingredient(Material.DIAMOND),
+                        new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
+        ));
+        // TODO(1.21.2) recipe book add/remove
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
@@ -150,7 +125,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
                 new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 42)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 42)));
         SERVER_PACKETS.add(new PlayerInfoRemovePacket(UUID.randomUUID()));
     }
 
