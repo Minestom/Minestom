@@ -36,8 +36,6 @@ final class TestConnectionImpl implements TestConnection {
     TestConnectionImpl(Env env) {
         this.env = env;
         this.process = env.process();
-        // Use player provider to disable queued chunk sending
-        env.process().connection().setPlayerProvider(TestPlayerImpl::new);
     }
 
     @Override
@@ -133,7 +131,7 @@ final class TestConnectionImpl implements TestConnection {
         }
     }
 
-    final class TestPlayerImpl extends Player {
+    static final class TestPlayerImpl extends Player {
         public TestPlayerImpl(@NotNull PlayerConnection playerConnection, @NotNull GameProfile gameProfile) {
             super(playerConnection, gameProfile);
         }
