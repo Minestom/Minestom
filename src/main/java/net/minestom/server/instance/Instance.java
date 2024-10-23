@@ -444,7 +444,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     public void setWorldAge(long worldAge) {
         this.worldAge = worldAge;
-        PacketUtils.sendGroupedPacket(getPlayers(), createTimePacket());
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), createTimePacket());
     }
 
     /**
