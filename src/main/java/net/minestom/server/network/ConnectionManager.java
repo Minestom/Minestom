@@ -189,7 +189,7 @@ public final class ConnectionManager {
         }
         // Call pre login event
         LoginPluginMessageProcessor pluginMessageProcessor = connection.loginPluginMessageProcessor();
-        AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(gameProfile, pluginMessageProcessor);
+        AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(connection, gameProfile, pluginMessageProcessor);
         EventDispatcher.call(asyncPlayerPreLoginEvent);
         if (!connection.isOnline()) return gameProfile; // Player has been kicked
         // Change UUID/Username based on the event
