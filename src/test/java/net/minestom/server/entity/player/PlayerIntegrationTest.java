@@ -249,7 +249,7 @@ public class PlayerIntegrationTest {
         assertEquals(startingPlayerPos.withView(30, 20), player.getPosition());
         tracker.assertSingle(PlayerPositionAndLookPacket.class, packet -> {
             assertEquals(RelativeFlags.COORD, packet.flags());
-            assertEquals(packet.position(), new Pos(0, 0, 0, 30, 20));
+            assertEquals(new Pos(0, 0, 0, 30, 20), packet.position());
         });
     }
 
