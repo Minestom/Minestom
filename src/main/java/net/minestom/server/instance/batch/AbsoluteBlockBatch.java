@@ -57,6 +57,9 @@ public class AbsoluteBlockBatch implements Batch {
         chunkBatch.setBlock(x, y, z, block);
     }
 
+    /**
+     * Unlike the safe counterpart, this function is not thread safe.
+     */
     void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
         final int chunkX = ChunkUtils.getChunkCoordinate(x);
         final int chunkZ = ChunkUtils.getChunkCoordinate(z);
@@ -112,7 +115,7 @@ public class AbsoluteBlockBatch implements Batch {
     /**
      * Send light updates to viewers of LightingChunks
      */
-    protected void trySendLighting(Instance instance, LongList chunkIndexes) {
+    protected void trySendLighting(@NotNull Instance instance, @NotNull LongList chunkIndexes) {
         if (options.shouldSendUpdate() && options.shouldSendLight()) {
             LongSet lightingChunks = new LongOpenHashSet();
             for (long index : chunkIndexes) {

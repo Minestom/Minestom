@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents options for {@link Batch}s.
+ * Represents options for {@link Batch}es.
  */
 public class BatchOption {
 
@@ -67,7 +67,7 @@ public class BatchOption {
      * Gets if the batch will send light updates to viewers upon application
      * <p>
      * Setting to false means that viewers will not see light updates,
-     * if {@link #shouldSendUpdate()} is false, viewers will not get updates anyway.
+     * if {@link #shouldSendUpdate()} is false, viewers will not get light updates anyway.
      * <p>
      * Defaults to true.
      *
@@ -78,7 +78,7 @@ public class BatchOption {
     }
 
     /**
-     * @param fullChunk true to make this batch composes the whole chunk
+     * @param fullChunk true to make this batch compose the whole chunk
      * @return 'this' for chaining
      * @see #isFullChunk()
      */

@@ -129,7 +129,7 @@ public class ChunkBatch implements Batch {
 
             if (this.options.isFullChunk()) {
                 // Clear the chunk
-                // TODO: take inverse batch from before this
+                // FIXME: take inverse batch from before this
                 chunk.reset();
             }
 

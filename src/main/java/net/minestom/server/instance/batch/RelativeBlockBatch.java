@@ -17,6 +17,10 @@ import java.util.concurrent.CompletableFuture;
  * are going to be reused in different places. If translation is not required, {@link AbsoluteBlockBatch}
  * should be used instead for efficiency purposes.
  * <p>
+ * Coordinates are relative to (0, 0, 0) with some limitations.
+ * The Y position must fit within a 12-bit signed integer,
+ * and the X/Z positions must fit within a 26-bit signed integer.
+ * <p>
  * All inverses are {@link AbsoluteBlockBatch}s and represent the inverse of the application
  * at the position which it was applied.
  * <p>
@@ -30,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 public class RelativeBlockBatch implements Batch {
     // Need to be synchronized manually
     // Format: global position index - block
-    private final Long2ObjectMap<Block> blockMap = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<Block> blocks = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
     private final BatchOption inverseOption;
@@ -52,8 +56,8 @@ public class RelativeBlockBatch implements Batch {
     public void setBlock(int x, int y, int z, @NotNull Block block) {
         final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
 
-        synchronized (blockMap) {
-            this.blockMap.put(index, block);
+        synchronized (blocks) {
+            this.blocks.put(index, block);
         }
     }
 
@@ -89,6 +93,7 @@ public class RelativeBlockBatch implements Batch {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, int x, int y, int z) {
+        // TODO: figure out a way to make this nice
         return CompletableFuture.supplyAsync(() -> this.toAbsoluteBatch(x, y, z).apply(instance).join());
     }
 
@@ -114,8 +119,8 @@ public class RelativeBlockBatch implements Batch {
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
         final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options, this.inverseOption);
 
-        synchronized (blockMap) {
-            for (var entry : Long2ObjectMaps.fastIterable(blockMap)) {
+        synchronized (blocks) {
+            for (var entry : Long2ObjectMaps.fastIterable(blocks)) {
                 final long pos = entry.getLongKey();
 
                 final Block block = entry.getValue();
