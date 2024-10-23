@@ -4,6 +4,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,17 +31,26 @@ public final class RecipeSerializers {
             //  non-dynamic registry types. We need to improve how the tag system works generally.
             new Type<>() {
                 @Override
-                public void write(@NotNull NetworkBuffer buffer, List<ItemStack> value) {
+                public void write(@NotNull NetworkBuffer buffer, List<Material> value) {
                     // +1 because 0 indicates that an item tag name follows (in this case it does not).
                     buffer.write(VAR_INT, value.size() + 1);
-                    for (ItemStack itemStack : value) {
-                        buffer.write(ItemStack.STRICT_NETWORK_TYPE, itemStack);
+                    for (Material material : value) {
+                        buffer.write(Material.NETWORK_TYPE, material);
                     }
                 }
 
                 @Override
-                public List<ItemStack> read(@NotNull NetworkBuffer buffer) {
-                    throw new UnsupportedOperationException("cannot read ingredients yet");
+                public List<Material> read(@NotNull NetworkBuffer buffer) {
+                    int size = buffer.read(VAR_INT) - 1;
+                    Check.notNull(size > Short.MAX_VALUE, "too many ingredients");
+                    if (size == -1) {
+                        throw new UnsupportedOperationException("cannot read ingredient tags yet");
+                    }
+
+                    final List<Material> materials = new ArrayList<>(size);
+                    for (int i = 0; i < size; i++)
+                        materials.add(buffer.read(Material.NETWORK_TYPE));
+                    return materials;
                 }
             }, Ingredient::items,
             Ingredient::new

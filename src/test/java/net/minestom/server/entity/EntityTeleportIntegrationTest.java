@@ -2,14 +2,11 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
-import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
+import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -62,15 +59,12 @@ public class EntityTeleportIntegrationTest {
                 packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
 
-        viewerTracker.assertCount(2);
-        List<ServerPacket> packets = viewerTracker.collect();
-        var teleportPacket = (EntityTeleportPacket) packets.get(0);
-        assertEquals(player.getEntityId(), teleportPacket.entityId());
-        assertEquals(teleportPosition, teleportPacket.position());
-
-        var headLookPacket = (EntityHeadLookPacket) packets.get(1);
-        assertEquals(player.getEntityId(), headLookPacket.entityId());
-        assertEquals(teleportPosition.yaw(), headLookPacket.yaw());
+        viewerTracker.assertCount(1);
+        viewerTracker.assertSingle(EntityPositionSyncPacket.class, packet -> {
+            assertEquals(player.getEntityId(), packet.entityId());
+            assertEquals(teleportPosition, packet.position());
+            assertEquals(teleportPosition.yaw(), packet.yaw());
+        });
     }
 
     @Test

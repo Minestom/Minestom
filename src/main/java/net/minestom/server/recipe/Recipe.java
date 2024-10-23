@@ -3,6 +3,7 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -75,12 +76,14 @@ public record Recipe(@NotNull String id, @NotNull Data data) {
         public static final NetworkBuffer.Type<SmithingTrim> SERIALIZER = RecipeSerializers.SMITHING_TRIM;
     }
 
-    public record Ingredient(@NotNull List<@NotNull ItemStack> items) {
+    public record Ingredient(@NotNull List<@NotNull Material> items) {
         public Ingredient {
             items = List.copyOf(items);
+            Check.argCondition(items.isEmpty(), "Ingredients can't be empty");
+            Check.argCondition(items.contains(Material.AIR), "Ingredient can't contain air");
         }
 
-        public Ingredient(@NotNull ItemStack @NotNull ... items) {
+        public Ingredient(@NotNull Material @NotNull ... items) {
             this(List.of(items));
         }
     }
