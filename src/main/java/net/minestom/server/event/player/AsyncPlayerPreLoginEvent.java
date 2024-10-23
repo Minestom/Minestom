@@ -2,6 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -15,13 +16,20 @@ import java.util.concurrent.CompletableFuture;
  */
 public class AsyncPlayerPreLoginEvent implements Event {
 
+    private final PlayerConnection connection;
     private GameProfile gameProfile;
     private final LoginPluginMessageProcessor pluginMessageProcessor;
 
-    public AsyncPlayerPreLoginEvent(@NotNull GameProfile gameProfile,
+    public AsyncPlayerPreLoginEvent(@NotNull PlayerConnection connection,
+                                    @NotNull GameProfile gameProfile,
                                     @NotNull LoginPluginMessageProcessor pluginMessageProcessor) {
+        this.connection = connection;
         this.gameProfile = gameProfile;
         this.pluginMessageProcessor = pluginMessageProcessor;
+    }
+
+    public @NotNull PlayerConnection getConnection() {
+        return connection;
     }
 
     public GameProfile getGameProfile() {
