@@ -1,8 +1,11 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.FrameType;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
@@ -29,14 +32,22 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
+import net.minestom.server.item.component.EnchantmentList;
+import net.minestom.server.item.component.LodestoneTracker;
+import net.minestom.server.item.component.PotionContents;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.potion.CustomPotionEffect;
+import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
@@ -118,48 +129,49 @@ public class PlayerInit {
                         new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
                 ));
 
-//                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-//                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
-//                                ItemStack.of(Material.DIAMOND, 5),
-//                                ItemStack.of(Material.RABBIT_FOOT, 5)
-//                        ))
-//                        .build();
-//                player.getInventory().addItemStack(bundle);
-//
-//                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
-//                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
-//                        .build());
-//
-//                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-//                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
-//                                Enchantment.SHARPNESS, 10
-//                        )))
-//                        .build());
-//
-//                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-//                        .build());
-//
-//                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
-//                        .build());
-//
-//                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
-//                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
-//                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
-//                                        45 * 20, false, true, true, null))
-//                        )))
-//                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
-//                        .build());
-//
-//
-//                if (event.isFirstSpawn()) {
-//                    event.getPlayer().sendNotification(new Notification(
-//                            Component.text("Welcome!"),
-//                            FrameType.TASK,
-//                            Material.IRON_SWORD
-//                    ));
-//
-//                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
-//                }
+                // TODO(1.21.2): Handle bundle slot selection
+                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
+                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
+                                ItemStack.of(Material.DIAMOND, 5),
+                                ItemStack.of(Material.RABBIT_FOOT, 5)
+                        ))
+                        .build();
+                player.getInventory().addItemStack(bundle);
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
+                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
+                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
+                                Enchantment.SHARPNESS, 10
+                        )))
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
+                        .build());
+
+                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
+                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
+                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
+                                        45 * 20, false, true, true, null))
+                        )))
+                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
+                        .build());
+
+
+                if (event.isFirstSpawn()) {
+                    event.getPlayer().sendNotification(new Notification(
+                            Component.text("Welcome!"),
+                            FrameType.TASK,
+                            Material.IRON_SWORD
+                    ));
+
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+                }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());

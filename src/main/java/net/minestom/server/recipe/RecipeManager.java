@@ -1,9 +1,11 @@
 package net.minestom.server.recipe;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
+import net.minestom.server.recipe.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -50,6 +52,8 @@ public final class RecipeManager {
 
     private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
         //TODO(1.21.2): Recipe property lists & stonecutter recipes
-        return new DeclareRecipesPacket(Map.of(), List.of());
+        return new DeclareRecipesPacket(Map.of(), List.of(new DeclareRecipesPacket.StonecutterRecipe(
+                new Recipe.Ingredient(Material.DIAMOND),
+                SlotDisplay.AnyFuel.INSTANCE)));
     }
 }
