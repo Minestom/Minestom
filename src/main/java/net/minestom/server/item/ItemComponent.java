@@ -95,6 +95,7 @@ public final class ItemComponent {
     public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.NBT_TYPE);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.NBT_TYPE.list());
+    // TODO(1.21.2) Updated NBT format > https://minecraft.wiki/w/Java_Edition_1.21.2#Data_components_3
     public static final DataComponent<String> LOCK = register("lock", null, BinaryTagSerializer.STRING);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
