@@ -147,7 +147,7 @@ public class PlayerInit {
                                 Enchantment.SHARPNESS, 10
                         )))
                         .build());
-
+//
                 player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
                         .build());
 
