@@ -9,7 +9,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -106,7 +108,7 @@ public class AbsoluteBlockBatch implements Batch {
                 }
             }
 
-            trySendLighting(instance, chunkBatchIndexes);
+            sendLighting(instance, chunkBatchIndexes);
 
             return inverse;
         });
@@ -115,24 +117,24 @@ public class AbsoluteBlockBatch implements Batch {
     /**
      * Send light updates to viewers of LightingChunks
      */
-    protected void trySendLighting(@NotNull Instance instance, @NotNull LongList chunkIndexes) {
+    protected void sendLighting(@NotNull Instance instance, @NotNull LongList chunkIndexes) {
         if (options.shouldSendUpdate() && options.shouldSendLight()) {
-            LongSet lightingChunks = new LongOpenHashSet();
+            // expand to include surrounding chunks
+            final Set<LightingChunk> expanded = new HashSet<>();
             for (long index : chunkIndexes) {
                 int chunkX = ChunkUtils.getChunkCoordX(index);
                 int chunkZ = ChunkUtils.getChunkCoordZ(index);
                 for (int x = chunkX - 1; x <= chunkX + 1; x++) {
                     for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                        lightingChunks.add(ChunkUtils.getChunkIndex(x, z));
+                        if (instance.getChunk(x, z) instanceof LightingChunk lightingChunk) {
+                            expanded.add(lightingChunk);
+                        }
                     }
                 }
             }
-            for (long chunkIndex : lightingChunks) {
-                int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
-                if (instance.getChunk(chunkX, chunkZ) instanceof LightingChunk lightingChunk) {
-                    lightingChunk.sendLighting();
-                }
+
+            for (LightingChunk lightingChunk : expanded) {
+                lightingChunk.sendLighting();
             }
         }
     }
