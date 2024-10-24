@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -44,8 +45,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:item_stack";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.ITEM_STACK;
     }
 
     /**

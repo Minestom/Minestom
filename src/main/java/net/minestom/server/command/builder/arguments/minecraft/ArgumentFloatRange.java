@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.utils.Range;
 
 /**
@@ -14,8 +15,8 @@ public class ArgumentFloatRange extends ArgumentRange<Range.Float, Float> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:float_range";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.FLOAT_RANGE;
     }
 
     @Override
