@@ -7,6 +7,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -55,11 +56,6 @@ public class ChunkBatch implements Batch {
         }
     }
 
-    void UNSAFE_setBlock(int x, int y, int z, @NotNull Block block) {
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
-        this.blocks.put(index, block);
-    }
-
     @Override
     public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance) {
         return apply(instance, 0, 0);
@@ -87,6 +83,7 @@ public class ChunkBatch implements Batch {
      * @param subBatch Whether this batch is part of a bigger batch, used to optimize lighting updates.
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
+    @ApiStatus.Internal
     public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
             @NotNull Instance instance, int chunkX, int chunkZ, boolean subBatch) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
@@ -165,7 +162,7 @@ public class ChunkBatch implements Batch {
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
         if (inverse != null) {
             Block prevBlock = chunk.getBlock(x, y, z);
-            inverse.UNSAFE_setBlock(x, y, z, prevBlock);
+            inverse.setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
     }

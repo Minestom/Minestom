@@ -93,8 +93,7 @@ public class RelativeBlockBatch implements Batch {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, int x, int y, int z) {
-        // TODO: figure out a way to make this nice
-        return CompletableFuture.supplyAsync(() -> this.toAbsoluteBatch(x, y, z).apply(instance).join());
+        return this.toAbsoluteBatch(x, y, z).apply(instance);
     }
 
     /**
@@ -130,7 +129,7 @@ public class RelativeBlockBatch implements Batch {
                 final int finalZ = z + LocationUtils.globalBlockIndexToPositionZ(pos);
 
                 // this batch was made in the function, no one else has it
-                batch.UNSAFE_setBlock(finalX, finalY, finalZ, block);
+                batch.setBlock(finalX, finalY, finalZ, block);
             }
         }
         return batch;
