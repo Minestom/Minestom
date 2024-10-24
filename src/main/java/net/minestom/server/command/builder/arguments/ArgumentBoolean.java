@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +30,8 @@ public class ArgumentBoolean extends Argument<Boolean> {
     }
 
     @Override
-    public String parser() {
-        return "brigadier:bool";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.BOOL;
     }
     @Override
     public String toString() {

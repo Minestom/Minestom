@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -74,8 +75,8 @@ public class ArgumentTime extends Argument<Duration> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:time";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.TIME;
     }
 
     @Override
