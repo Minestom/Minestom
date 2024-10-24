@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -28,8 +29,8 @@ public class ArgumentResource extends Argument<String> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:resource";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.RESOURCE;
     }
 
     @Override
