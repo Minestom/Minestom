@@ -130,7 +130,7 @@ public interface PacketRegistry<T> {
                     entry(ClientPlayerAbilitiesPacket.class, ClientPlayerAbilitiesPacket.SERIALIZER),
                     entry(ClientPlayerDiggingPacket.class, ClientPlayerDiggingPacket.SERIALIZER),
                     entry(ClientEntityActionPacket.class, ClientEntityActionPacket.SERIALIZER),
-                    entry(ClientSteerVehiclePacket.class, ClientSteerVehiclePacket.SERIALIZER),
+                    entry(ClientInputPacket.class, ClientInputPacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientSetRecipeBookStatePacket.class, ClientSetRecipeBookStatePacket.SERIALIZER),
                     entry(ClientRecipeBookSeenRecipePacket.class, ClientRecipeBookSeenRecipePacket.SERIALIZER),
