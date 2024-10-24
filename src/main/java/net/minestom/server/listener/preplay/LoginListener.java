@@ -215,10 +215,16 @@ public final class LoginListener {
     }
 
     private static void enterConfig(PlayerConnection connection, GameProfile gameProfile) {
-        gameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
-        if (connection instanceof PlayerSocketConnection socketConnection) {
-            socketConnection.UNSAFE_setProfile(gameProfile);
-        }
+        Thread.startVirtualThread(() -> {
+            try {
+                var newGameProfile = MinecraftServer.getConnectionManager().transitionLoginToConfig(connection, gameProfile);
+                if (connection instanceof PlayerSocketConnection socketConnection) {
+                    socketConnection.UNSAFE_setProfile(newGameProfile);
+                }
+            } catch (Throwable t) {
+                MinecraftServer.getExceptionManager().handleException(t);
+            }
+        });
     }
 
     private static void executeConfig(Player player, boolean isFirstConfig) {
