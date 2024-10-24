@@ -464,7 +464,7 @@ public class AnvilLoader implements IChunkLoader {
                 blockStates.put("palette", ListBinaryTag.listBinaryTag(BinaryTagTypes.COMPOUND, blockPaletteEntries));
                 if (blockPaletteEntries.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
-                    var bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
+                    var bitsPerEntry = (int) Math.max(4, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
                     blockStates.putLongArray("data", ArrayUtils.pack(blockIndices, bitsPerEntry));
                 }
                 sectionData.put("block_states", blockStates.build());
