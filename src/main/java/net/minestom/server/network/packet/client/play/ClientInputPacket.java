@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 
-public record ClientSteerVehiclePacket(byte flags) implements ClientPacket {
+public record ClientInputPacket(byte flags) implements ClientPacket {
     private static final byte FLAG_FORWARD = 1;
     private static final byte FLAG_BACKWARD = 1 << 1;
     private static final byte FLAG_LEFT = 1 << 2;
@@ -15,11 +15,11 @@ public record ClientSteerVehiclePacket(byte flags) implements ClientPacket {
     private static final byte FLAG_SHIFT = 1 << 5;
     private static final byte FLAG_SPRINT = 1 << 6;
 
-    public static final NetworkBuffer.Type<ClientSteerVehiclePacket> SERIALIZER = NetworkBufferTemplate.template(
-            BYTE, ClientSteerVehiclePacket::flags,
-            ClientSteerVehiclePacket::new);
+    public static final NetworkBuffer.Type<ClientInputPacket> SERIALIZER = NetworkBufferTemplate.template(
+            BYTE, ClientInputPacket::flags,
+            ClientInputPacket::new);
 
-    public ClientSteerVehiclePacket(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
+    public ClientInputPacket(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
         this((byte) ((forward ? FLAG_FORWARD : 0) |
                 (backward ? FLAG_BACKWARD : 0) |
                 (left ? FLAG_LEFT : 0) |

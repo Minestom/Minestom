@@ -1,6 +1,6 @@
 package net.minestom.server.entity.vehicle;
 
-public class PlayerVehicleInformation {
+public class PlayerInputs {
 
     private boolean forward;
     private boolean backward;
