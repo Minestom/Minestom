@@ -2,29 +2,18 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.RelativeFlags;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record EntityTeleportPacket(int entityId, Pos position, Point delta, int flags, boolean onGround) implements ServerPacket.Play {
-
-    // TODO(1.21.2) these flags are duplicated multiple times now i(matt) think
-    public static final int FLAG_X = 1;
-    public static final int FLAG_Y = 1 << 1;
-    public static final int FLAG_Z = 1 << 2;
-    public static final int FLAG_Y_ROT = 1 << 3;
-    public static final int FLAG_X_ROT = 1 << 4;
-    public static final int FLAG_DELTA_X = 1 << 5;
-    public static final int FLAG_DELTA_Y = 1 << 6;
-    public static final int FLAG_DELTA_Z = 1 << 7;
-    public static final int FLAG_ROTATE_DELTA = 1 << 8;
-
-    public static final int FLAG_DELTA = FLAG_DELTA_X | FLAG_DELTA_Y | FLAG_DELTA_Z | FLAG_ROTATE_DELTA;
-    public static final int FLAG_ROTATION = FLAG_X_ROT | FLAG_Y_ROT;
-    public static final int FLAG_ALL = FLAG_X | FLAG_Y | FLAG_Z | FLAG_ROTATION | FLAG_DELTA;
-
+public record EntityTeleportPacket(
+        int entityId, Pos position, Point delta,
+        @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
+        boolean onGround) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<EntityTeleportPacket> SERIALIZER = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, @NotNull EntityTeleportPacket value) {
