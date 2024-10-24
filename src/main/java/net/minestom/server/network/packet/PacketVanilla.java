@@ -8,6 +8,7 @@ import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.configuration.ClientFinishConfigurationPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.client.login.ClientLoginAcknowledgedPacket;
+import net.minestom.server.network.packet.client.play.ClientConfigurationAckPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.configuration.FinishConfigurationPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
@@ -39,6 +40,7 @@ public final class PacketVanilla {
                 case LOGIN, TRANSFER -> ConnectionState.LOGIN;
             };
             case ClientLoginAcknowledgedPacket ignored -> ConnectionState.CONFIGURATION;
+            case ClientConfigurationAckPacket ignored -> ConnectionState.CONFIGURATION;
             case ClientFinishConfigurationPacket ignored -> ConnectionState.PLAY;
             default -> currentState;
         };
