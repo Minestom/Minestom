@@ -35,7 +35,7 @@ import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
-import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
+import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -211,11 +211,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private float flyingSpeed = 0.05f;
     private float fieldViewModifier = 0.1f;
 
-    // Statistics
     private final Map<PlayerStatistic, Integer> statisticValueMap = new Hashtable<>();
 
-    // Vehicle
-    private final PlayerVehicleInformation vehicleInformation = new PlayerVehicleInformation();
+    private final PlayerInputs inputs = new PlayerInputs();
 
     // Adventure
     private final Identity identity;
@@ -2083,12 +2081,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Gets the player vehicle information.
+     * Gets the last reported set of player inputs.
      *
-     * @return the player vehicle information
+     * <p>This information comes from the client so should be considered as such.</p>
      */
-    public @NotNull PlayerVehicleInformation getVehicleInformation() {
-        return vehicleInformation;
+    public @NotNull PlayerInputs inputs() {
+        return inputs;
     }
 
     /**
@@ -2212,8 +2210,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         return itemUpdateStateEvent;
     }
 
-    public void refreshVehicleSteer(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
-        this.vehicleInformation.refresh(forward, backward, left, right, jump, shift, sprint);
+    public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
+        this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
     }
 
     /**
