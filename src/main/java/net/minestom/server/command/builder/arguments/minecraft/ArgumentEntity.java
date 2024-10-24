@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -72,8 +73,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:entity";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.ENTITY;
     }
 
     @Override

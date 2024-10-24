@@ -1,10 +1,9 @@
 package net.minestom.server.network.packet.server.play;
 
-import net.minestom.server.command.builder.arguments.Argument;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
         public int[] children = new int[0];
         public int redirectedNode; // Only if flags & 0x08
         public String name = ""; // Only for literal and argument
-        public String parser; // Only for argument
+        public ArgumentParserType parser; // Only for argument
         public byte[] properties; // Only for argument
         public String suggestionsType = ""; // Only if flags 0x10
 
@@ -59,8 +58,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 }
 
                 if (value.isArgument()) {
-                    final int parserId = Argument.CONTAINER.toId(value.parser);
-                    writer.write(VAR_INT, parserId);
+                    writer.write(ArgumentParserType.NETWORK_TYPE, value.parser);
                     if (value.properties != null) {
                         writer.write(RAW_BYTES, value.properties);
                     }
@@ -84,8 +82,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 }
 
                 if (node.isArgument()) {
-                    final StaticProtocolObject object = Argument.CONTAINER.getId(reader.read(VAR_INT));
-                    node.parser = object.name();
+                    node.parser = reader.read(ArgumentParserType.NETWORK_TYPE);
                     node.properties = node.getProperties(reader, node.parser);
                 }
 
@@ -96,7 +93,7 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
             }
         };
 
-        private byte[] getProperties(@NotNull NetworkBuffer reader, String parser) {
+        private byte[] getProperties(@NotNull NetworkBuffer reader, @NotNull ArgumentParserType parser) {
             final Function<Function<NetworkBuffer, ?>, byte[]> minMaxExtractor = (via) -> reader.extractBytes((extractor) -> {
                 byte flags = extractor.read(BYTE);
                 if ((flags & 0x01) == 0x01) {
@@ -107,15 +104,14 @@ public record DeclareCommandsPacket(@NotNull List<Node> nodes,
                 }
             });
             return switch (parser) {
-                case "brigadier:double" -> minMaxExtractor.apply(b -> b.read(DOUBLE));
-                case "brigadier:integer" -> minMaxExtractor.apply(b -> b.read(INT));
-                case "brigadier:float" -> minMaxExtractor.apply(b -> b.read(FLOAT));
-                case "brigadier:long" -> minMaxExtractor.apply(b -> b.read(LONG));
-                case "brigadier:string" -> reader.extractBytes(b -> b.read(VAR_INT));
-                case "minecraft:entity", "minecraft:score_holder" -> reader.extractBytes(b -> b.read(BYTE));
-                case "minecraft:range" ->
-                        reader.extractBytes(b -> b.read(BOOLEAN)); // https://wiki.vg/Command_Data#minecraft:range, looks fishy
-                case "minecraft:resource_or_tag", "minecraft:registry" -> reader.extractBytes(b -> b.read(STRING));
+                case DOUBLE -> minMaxExtractor.apply(b -> b.read(DOUBLE));
+                case INTEGER -> minMaxExtractor.apply(b -> b.read(INT));
+                case FLOAT -> minMaxExtractor.apply(b -> b.read(FLOAT));
+                case LONG -> minMaxExtractor.apply(b -> b.read(LONG));
+                case STRING -> reader.extractBytes(b -> b.read(VAR_INT));
+                case ENTITY, SCORE_HOLDER -> reader.extractBytes(b -> b.read(BYTE));
+                case TIME -> reader.extractBytes(b -> b.read(INT));
+                case RESOURCE_OR_TAG, RESOURCE_OR_TAG_KEY, RESOURCE, RESOURCE_KEY -> reader.extractBytes(b -> b.read(STRING));
                 default -> new byte[0]; // unknown
             };
         }
