@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.number;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -22,13 +23,13 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     protected boolean hasMin, hasMax;
     protected T min, max;
 
-    protected final String parserName;
+    protected final ArgumentParserType parserName;
     protected final BiFunction<String, Integer, T> radixParser;
     protected final Function<String, T> parser;
     protected final NetworkBuffer.Type<T> networkType;
     protected final Comparator<T> comparator;
 
-    ArgumentNumber(@NotNull String id, String parserName, Function<String, T> parser,
+    ArgumentNumber(@NotNull String id, ArgumentParserType parserName, Function<String, T> parser,
                    BiFunction<String, Integer, T> radixParser, NetworkBuffer.Type<T> networkType,
                    Comparator<T> comparator) {
         super(id);
@@ -65,7 +66,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
     }
 
     @Override
-    public String parser() {
+    public ArgumentParserType parser() {
         return parserName;
     }
 

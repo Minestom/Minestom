@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.network.NetworkBuffer;
@@ -69,8 +70,8 @@ public class ArgumentWord extends Argument<String> {
     }
 
     @Override
-    public String parser() {
-        return "brigadier:string";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.STRING;
     }
 
     @Override

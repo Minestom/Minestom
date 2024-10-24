@@ -214,7 +214,6 @@ public final class Registry {
         ENTITIES("entities.json"),
         FEATURE_FLAGS("feature_flags.json"),
         SOUNDS("sounds.json"),
-        COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
