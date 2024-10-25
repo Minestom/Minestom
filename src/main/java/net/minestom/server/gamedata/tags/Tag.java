@@ -99,11 +99,13 @@ public final class Tag implements ProtocolObject, Keyed {
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
                 name -> FluidRegistries.getFluid(name).ordinal()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
-        POTION_EFFECTS("minecraft:sound_event", null, null), // Seems not to be included in server data
+        POTION_EFFECTS("minecraft:potion_effect", null, null), // Seems not to be included in server data
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
-                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name)));
+                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name))),
+        BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
+                name -> MinecraftServer.getBiomeRegistry().getId(DynamicRegistry.Key.of(name)));
 
         private final static BasicType[] VALUES = values();
         private final String identifier;

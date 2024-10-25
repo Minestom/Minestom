@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -16,30 +17,17 @@ import java.util.List;
 public record PotionContents(
         @Nullable PotionType potion,
         @Nullable RGBLike customColor,
-        @NotNull List<CustomPotionEffect> customEffects
+        @NotNull List<CustomPotionEffect> customEffects,
+        @Nullable String customName
 ) {
-    public static final int POTION_DRINK_TIME = 32; // 32 ticks, in ms
-    public static final PotionContents EMPTY = new PotionContents(null, null, List.of());
+    public static final PotionContents EMPTY = new PotionContents(null, null, List.of(), null);
 
-    public static final NetworkBuffer.Type<PotionContents> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, PotionContents value) {
-            Integer typeId = value.potion == null ? null : value.potion.id();
-            buffer.writeOptional(NetworkBuffer.VAR_INT, typeId);
-            buffer.writeOptional(Color.NETWORK_TYPE, value.customColor);
-            buffer.writeCollection(CustomPotionEffect.NETWORK_TYPE, value.customEffects);
-        }
-
-        @Override
-        public PotionContents read(@NotNull NetworkBuffer buffer) {
-            Integer typeId = buffer.readOptional(NetworkBuffer.VAR_INT);
-            return new PotionContents(
-                    typeId == null ? null : PotionType.fromId(typeId),
-                    buffer.readOptional(Color.NETWORK_TYPE),
-                    buffer.readCollection(CustomPotionEffect.NETWORK_TYPE, Short.MAX_VALUE)
-            );
-        }
-    };
+    public static final NetworkBuffer.Type<PotionContents> NETWORK_TYPE = NetworkBufferTemplate.template(
+            PotionType.NETWORK_TYPE.optional(), PotionContents::potion,
+            Color.NETWORK_TYPE.optional(), PotionContents::customColor,
+            CustomPotionEffect.NETWORK_TYPE.list(Short.MAX_VALUE), PotionContents::customEffects,
+            NetworkBuffer.STRING.optional(), PotionContents::customName,
+            PotionContents::new);
 
     public static final BinaryTagSerializer<PotionContents> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
@@ -62,6 +50,10 @@ public record PotionContents(
                 builder.put("custom_effects", effectsBuilder.build());
             }
 
+            if (value.customName != null) {
+                builder.putString("custom_name", value.customName);
+            }
+
             return builder.build();
         }
 
@@ -69,7 +61,7 @@ public record PotionContents(
         public @NotNull PotionContents read(@NotNull BinaryTag tag) {
             // Can be a string with just a potion effect id
             if (tag instanceof StringBinaryTag string) {
-                return new PotionContents(PotionType.fromNamespaceId(string.value()), null, List.of());
+                return new PotionContents(PotionType.fromNamespaceId(string.value()), null, List.of(), null);
             }
 
             // Otherwise must be a compound
@@ -95,7 +87,11 @@ public record PotionContents(
                 customEffects.add(CustomPotionEffect.NBT_TYPE.read(customEffectCompound));
             }
 
-            return new PotionContents(potion, customColor, customEffects);
+            String customName = null;
+            if (compound.get("custom_name") instanceof StringBinaryTag customNameTag)
+                customName = customNameTag.value();
+
+            return new PotionContents(potion, customColor, customEffects, customName);
         }
     };
 
@@ -104,19 +100,23 @@ public record PotionContents(
     }
 
     public PotionContents(@NotNull PotionType potion) {
-        this(potion, null, List.of());
+        this(potion, null, List.of(), null);
     }
 
     public PotionContents(@NotNull PotionType potion, @NotNull RGBLike customColor) {
-        this(potion, customColor, List.of());
+        this(potion, customColor, List.of(), null);
     }
 
     public PotionContents(@NotNull List<CustomPotionEffect> customEffects) {
-        this(null, null, customEffects);
+        this(null, null, customEffects, null);
     }
 
     public PotionContents(@NotNull CustomPotionEffect customEffect) {
-        this(null, null, List.of(customEffect));
+        this(null, null, List.of(customEffect), null);
+    }
+
+    public PotionContents(@Nullable PotionType potion, @Nullable RGBLike customColor, @NotNull List<CustomPotionEffect> customEffects) {
+        this(potion, customColor, customEffects, null);
     }
 
 }

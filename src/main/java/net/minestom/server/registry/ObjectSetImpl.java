@@ -5,11 +5,13 @@ import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
@@ -25,10 +27,10 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record Entries<T extends ProtocolObject>(@NotNull Set<NamespaceID> entries) implements ObjectSetImpl<T> {
+    record Entries<T extends ProtocolObject>(@NotNull List<NamespaceID> entries) implements ObjectSetImpl<T> {
 
         public Entries {
-            entries = Set.copyOf(entries);
+            entries = List.copyOf(entries);
         }
 
         @Override
@@ -75,6 +77,20 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
+    record NetworkType<T extends ProtocolObject>(
+            @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
+    ) implements NetworkBuffer.Type<ObjectSet<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ObjectSet<T> value) {
+            throw new UnsupportedOperationException("todo");
+        }
+
+        @Override
+        public ObjectSet<T> read(@NotNull NetworkBuffer buffer) {
+            throw new UnsupportedOperationException("todo");
+        }
+    }
+
     record NbtType<T extends ProtocolObject>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
     ) implements BinaryTagSerializer<ObjectSet<T>> {
@@ -86,7 +102,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                 case ListBinaryTag list -> {
                     if (list.size() == 0) yield ObjectSet.empty();
 
-                    final Set<NamespaceID> entries = new HashSet<>(list.size());
+                    final List<NamespaceID> entries = new ArrayList<>(list.size());
                     for (BinaryTag entryTag : list) {
                         if (!(entryTag instanceof StringBinaryTag stringTag))
                             throw new IllegalArgumentException("Invalid entry type: " + entryTag.type());
@@ -100,7 +116,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                     if (value.startsWith("#")) {
                         yield new Tag<>(tagType(), value.substring(1));
                     } else {
-                        yield new Entries<>(Set.of(NamespaceID.from(value)));
+                        yield new Entries<>(List.of(NamespaceID.from(value)));
                     }
                 }
                 default -> throw new IllegalArgumentException("Invalid tag type: " + tag.type());

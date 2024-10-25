@@ -1,9 +1,9 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -37,14 +37,14 @@ public class ChunkViewerIntegrationTest {
 
     @Test
     public void renderDistance(Env env) {
-        final int viewRadius = MinecraftServer.getChunkViewDistance();
-        final int count = ChunkUtils.getChunkCount(viewRadius);
+        final int viewRadius = ServerFlag.CHUNK_VIEW_DISTANCE;
+        final int count = ChunkRange.chunksCount(viewRadius);
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         // Check initial load
         {
             var tracker = connection.trackIncoming(ChunkDataPacket.class);
-            var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+            var player = connection.connect(instance, new Pos(0, 40, 0));
             assertEquals(instance, player.getInstance());
             assertEquals(new Pos(0, 40, 0), player.getPosition());
             assertEquals(count, tracker.collect().size());

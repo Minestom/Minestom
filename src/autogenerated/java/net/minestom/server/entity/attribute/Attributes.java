@@ -5,65 +5,67 @@ package net.minestom.server.entity.attribute;
  */
 @SuppressWarnings("unused")
 interface Attributes {
-    Attribute GENERIC_ARMOR = AttributeImpl.get("minecraft:generic.armor");
+    Attribute ARMOR = AttributeImpl.get("minecraft:armor");
 
-    Attribute GENERIC_ARMOR_TOUGHNESS = AttributeImpl.get("minecraft:generic.armor_toughness");
+    Attribute ARMOR_TOUGHNESS = AttributeImpl.get("minecraft:armor_toughness");
 
-    Attribute GENERIC_ATTACK_DAMAGE = AttributeImpl.get("minecraft:generic.attack_damage");
+    Attribute ATTACK_DAMAGE = AttributeImpl.get("minecraft:attack_damage");
 
-    Attribute GENERIC_ATTACK_KNOCKBACK = AttributeImpl.get("minecraft:generic.attack_knockback");
+    Attribute ATTACK_KNOCKBACK = AttributeImpl.get("minecraft:attack_knockback");
 
-    Attribute GENERIC_ATTACK_SPEED = AttributeImpl.get("minecraft:generic.attack_speed");
+    Attribute ATTACK_SPEED = AttributeImpl.get("minecraft:attack_speed");
 
-    Attribute PLAYER_BLOCK_BREAK_SPEED = AttributeImpl.get("minecraft:player.block_break_speed");
+    Attribute BLOCK_BREAK_SPEED = AttributeImpl.get("minecraft:block_break_speed");
 
-    Attribute PLAYER_BLOCK_INTERACTION_RANGE = AttributeImpl.get("minecraft:player.block_interaction_range");
+    Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get("minecraft:block_interaction_range");
 
-    Attribute GENERIC_BURNING_TIME = AttributeImpl.get("minecraft:generic.burning_time");
+    Attribute BURNING_TIME = AttributeImpl.get("minecraft:burning_time");
 
-    Attribute GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:generic.explosion_knockback_resistance");
+    Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:explosion_knockback_resistance");
 
-    Attribute PLAYER_ENTITY_INTERACTION_RANGE = AttributeImpl.get("minecraft:player.entity_interaction_range");
+    Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get("minecraft:entity_interaction_range");
 
-    Attribute GENERIC_FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("minecraft:generic.fall_damage_multiplier");
+    Attribute FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("minecraft:fall_damage_multiplier");
 
-    Attribute GENERIC_FLYING_SPEED = AttributeImpl.get("minecraft:generic.flying_speed");
+    Attribute FLYING_SPEED = AttributeImpl.get("minecraft:flying_speed");
 
-    Attribute GENERIC_FOLLOW_RANGE = AttributeImpl.get("minecraft:generic.follow_range");
+    Attribute FOLLOW_RANGE = AttributeImpl.get("minecraft:follow_range");
 
-    Attribute GENERIC_GRAVITY = AttributeImpl.get("minecraft:generic.gravity");
+    Attribute GRAVITY = AttributeImpl.get("minecraft:gravity");
 
-    Attribute GENERIC_JUMP_STRENGTH = AttributeImpl.get("minecraft:generic.jump_strength");
+    Attribute JUMP_STRENGTH = AttributeImpl.get("minecraft:jump_strength");
 
-    Attribute GENERIC_KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:generic.knockback_resistance");
+    Attribute KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:knockback_resistance");
 
-    Attribute GENERIC_LUCK = AttributeImpl.get("minecraft:generic.luck");
+    Attribute LUCK = AttributeImpl.get("minecraft:luck");
 
-    Attribute GENERIC_MAX_ABSORPTION = AttributeImpl.get("minecraft:generic.max_absorption");
+    Attribute MAX_ABSORPTION = AttributeImpl.get("minecraft:max_absorption");
 
-    Attribute GENERIC_MAX_HEALTH = AttributeImpl.get("minecraft:generic.max_health");
+    Attribute MAX_HEALTH = AttributeImpl.get("minecraft:max_health");
 
-    Attribute PLAYER_MINING_EFFICIENCY = AttributeImpl.get("minecraft:player.mining_efficiency");
+    Attribute MINING_EFFICIENCY = AttributeImpl.get("minecraft:mining_efficiency");
 
-    Attribute GENERIC_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:generic.movement_efficiency");
+    Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:movement_efficiency");
 
-    Attribute GENERIC_MOVEMENT_SPEED = AttributeImpl.get("minecraft:generic.movement_speed");
+    Attribute MOVEMENT_SPEED = AttributeImpl.get("minecraft:movement_speed");
 
-    Attribute GENERIC_OXYGEN_BONUS = AttributeImpl.get("minecraft:generic.oxygen_bonus");
+    Attribute OXYGEN_BONUS = AttributeImpl.get("minecraft:oxygen_bonus");
 
-    Attribute GENERIC_SAFE_FALL_DISTANCE = AttributeImpl.get("minecraft:generic.safe_fall_distance");
+    Attribute SAFE_FALL_DISTANCE = AttributeImpl.get("minecraft:safe_fall_distance");
 
-    Attribute GENERIC_SCALE = AttributeImpl.get("minecraft:generic.scale");
+    Attribute SCALE = AttributeImpl.get("minecraft:scale");
 
-    Attribute PLAYER_SNEAKING_SPEED = AttributeImpl.get("minecraft:player.sneaking_speed");
+    Attribute SNEAKING_SPEED = AttributeImpl.get("minecraft:sneaking_speed");
 
-    Attribute ZOMBIE_SPAWN_REINFORCEMENTS = AttributeImpl.get("minecraft:zombie.spawn_reinforcements");
+    Attribute SPAWN_REINFORCEMENTS = AttributeImpl.get("minecraft:spawn_reinforcements");
 
-    Attribute GENERIC_STEP_HEIGHT = AttributeImpl.get("minecraft:generic.step_height");
+    Attribute STEP_HEIGHT = AttributeImpl.get("minecraft:step_height");
 
-    Attribute PLAYER_SUBMERGED_MINING_SPEED = AttributeImpl.get("minecraft:player.submerged_mining_speed");
+    Attribute SUBMERGED_MINING_SPEED = AttributeImpl.get("minecraft:submerged_mining_speed");
 
-    Attribute PLAYER_SWEEPING_DAMAGE_RATIO = AttributeImpl.get("minecraft:player.sweeping_damage_ratio");
+    Attribute SWEEPING_DAMAGE_RATIO = AttributeImpl.get("minecraft:sweeping_damage_ratio");
 
-    Attribute GENERIC_WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:generic.water_movement_efficiency");
+    Attribute TEMPT_RANGE = AttributeImpl.get("minecraft:tempt_range");
+
+    Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:water_movement_efficiency");
 }

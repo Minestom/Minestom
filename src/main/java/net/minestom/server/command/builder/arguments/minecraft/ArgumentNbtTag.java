@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -35,8 +36,8 @@ public class ArgumentNbtTag extends Argument<BinaryTag> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:nbt_tag";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.NBT_TAG;
     }
 
     @Override

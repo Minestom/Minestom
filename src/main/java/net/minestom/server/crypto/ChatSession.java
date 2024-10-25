@@ -1,18 +1,17 @@
 package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public record ChatSession(@NotNull UUID sessionId, @NotNull PlayerPublicKey publicKey) implements NetworkBuffer.Writer {
-    public ChatSession(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), new PlayerPublicKey(reader));
-    }
+import static net.minestom.server.network.NetworkBuffer.UUID;
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, sessionId);
-        writer.write(publicKey);
-    }
+public record ChatSession(@NotNull UUID sessionId, @NotNull PlayerPublicKey publicKey) {
+    public static final NetworkBuffer.Type<ChatSession> SERIALIZER = NetworkBufferTemplate.template(
+            UUID, ChatSession::sessionId,
+            PlayerPublicKey.SERIALIZER, ChatSession::publicKey,
+            ChatSession::new
+    );
 }

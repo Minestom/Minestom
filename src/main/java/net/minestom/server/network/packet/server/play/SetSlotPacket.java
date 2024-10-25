@@ -4,8 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -13,27 +13,17 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record SetSlotPacket(byte windowId, int stateId, short slot,
+public record SetSlotPacket(int windowId, int stateId, short slot,
                             @NotNull ItemStack itemStack) implements ServerPacket.Play, ServerPacket.ComponentHolding {
-    public SetSlotPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BYTE), reader.read(VAR_INT), reader.read(SHORT),
-                reader.read(ItemStack.NETWORK_TYPE));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, windowId);
-        writer.write(VAR_INT, stateId);
-        writer.write(SHORT, slot);
-        writer.write(ItemStack.NETWORK_TYPE, itemStack);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SET_SLOT;
-    }
+    public static final NetworkBuffer.Type<SetSlotPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, SetSlotPacket::windowId,
+            VAR_INT, SetSlotPacket::stateId,
+            SHORT, SetSlotPacket::slot,
+            ItemStack.NETWORK_TYPE, SetSlotPacket::itemStack,
+            SetSlotPacket::new);
 
     @Override
     public @NotNull Collection<Component> components() {

@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -13,7 +14,6 @@ import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -160,7 +160,7 @@ public class LightingChunk extends DynamicChunk {
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
-        int coordinate = ChunkUtils.getChunkCoordinate(y);
+        int coordinate = CoordConversion.globalToChunk(y);
         if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();

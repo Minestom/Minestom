@@ -1,7 +1,6 @@
 package net.minestom.server.entity.pathfinding.followers;
 
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.PhysicsResult;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -72,7 +71,7 @@ public class GroundNodeFollower implements NodeFollower {
     @Override
     public double movementSpeed() {
         if (entity instanceof LivingEntity living) {
-            return living.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue();
+            return living.getAttribute(Attribute.MOVEMENT_SPEED).getValue();
         }
 
         return 0.1f;

@@ -5,19 +5,12 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.notifications.Notification;
-import net.minestom.server.advancements.notifications.NotificationCenter;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
@@ -51,7 +44,6 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
@@ -100,13 +92,15 @@ public class PlayerInit {
                 itemEntity.setInstance(player.getInstance(), playerPos.withY(y -> y + 1.5));
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
+
+                player.openInventory(new Inventory(InventoryType.STONE_CUTTER, Component.text("Hi")));
             })
             .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.BUNDLE);
+                event.addFeatureFlag(FeatureFlag.WINTER_DROP);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -116,18 +110,6 @@ public class PlayerInit {
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
-            .addListener(PlayerHandAnimationEvent.class, event -> {
-                class A {
-                    static boolean b = false;
-                }
-                if (A.b) {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(NamespaceID.from("test"));
-                } else {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(NamespaceID.from("test"), 0.5, AttributeOperation.ADD_VALUE));
-                }
-                A.b = !A.b;
-            })
-
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
@@ -149,6 +131,7 @@ public class PlayerInit {
                         new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
                 ));
 
+                // TODO(1.21.2): Handle bundle slot selection
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
                         .set(ItemComponent.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
@@ -166,7 +149,7 @@ public class PlayerInit {
                                 Enchantment.SHARPNESS, 10
                         )))
                         .build());
-
+//
                 player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
                         .build());
 
@@ -183,12 +166,11 @@ public class PlayerInit {
 
 
                 if (event.isFirstSpawn()) {
-                    Notification notification = new Notification(
+                    event.getPlayer().sendNotification(new Notification(
                             Component.text("Welcome!"),
                             FrameType.TASK,
                             Material.IRON_SWORD
-                    );
-                    NotificationCenter.send(notification, event.getPlayer());
+                    ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
                 }
@@ -201,7 +183,7 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN) return;
+                if (event.getHand() != PlayerHand.MAIN) return;
 
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());

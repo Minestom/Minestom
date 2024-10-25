@@ -12,7 +12,7 @@ import java.util.Collection;
 
 public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects permits PotionEffectImpl {
 
-    NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(PotionEffectImpl::getId, PotionEffect::id);
+    NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffectImpl::getId, PotionEffect::id);
 
     @Contract(pure = true)
     @NotNull Registry.PotionEffectEntry registry();

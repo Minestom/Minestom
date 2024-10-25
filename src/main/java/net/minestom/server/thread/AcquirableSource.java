@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 public interface AcquirableSource<T> {
     /**
      * Obtains an {@link Acquirable}. To safely perform operations on this object, the user must call
-     * {@link Acquirable#sync(Consumer)}, {@link Acquirable#async(Consumer)}, or {@link Acquirable#lock()} (followed by
+     * {@link Acquirable#sync(Consumer)} or {@link Acquirable#lock()} (followed by
      * a subsequent unlock) on the Acquirable instance.
      *
      * @return an Acquirable which can be used to synchronize access to this object

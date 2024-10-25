@@ -1,13 +1,14 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.instance.block.Block;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicInteger;
@@ -134,7 +135,7 @@ public class EntityVelocityIntegrationTest {
         var player = env.createPlayer(instance, new Pos(0, 42, 0));
         player.setFlying(true);
         var witness = env.createConnection();
-        witness.connect(instance, new Pos(0, 42, 0)).join();
+        witness.connect(instance, new Pos(0, 42, 0));
 
         var tracker = witness.trackIncoming(EntityVelocityPacket.class);
         env.tick(); // Process gravity velocity
@@ -172,9 +173,9 @@ public class EntityVelocityIntegrationTest {
     public void countVelocityPackets(Env env) {
         var instance = env.createFlatInstance();
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(1, 40, 1)).join();
+        viewerConnection.connect(instance, new Pos(1, 40, 1));
         var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0,40,0)).join();
+        entity.setInstance(instance, new Pos(0, 40, 0)).join();
         instance.setBlock(new Vec(0, 39, 0), Block.STONE);
         env.tick(); // Tick because the entity is in the air, they'll send velocity from gravity
 
@@ -202,15 +203,15 @@ public class EntityVelocityIntegrationTest {
 
     private void loadChunks(Instance instance) {
         ChunkUtils.optionalLoadAll(instance, new long[]{
-                ChunkUtils.getChunkIndex(-1, -1),
-                ChunkUtils.getChunkIndex(-1, 0),
-                ChunkUtils.getChunkIndex(-1, 1),
-                ChunkUtils.getChunkIndex(0, -1),
-                ChunkUtils.getChunkIndex(0, 0),
-                ChunkUtils.getChunkIndex(0, 1),
-                ChunkUtils.getChunkIndex(1, -1),
-                ChunkUtils.getChunkIndex(1, 0),
-                ChunkUtils.getChunkIndex(1, 1),
+                CoordConversion.chunkIndex(-1, -1),
+                CoordConversion.chunkIndex(-1, 0),
+                CoordConversion.chunkIndex(-1, 1),
+                CoordConversion.chunkIndex(0, -1),
+                CoordConversion.chunkIndex(0, 0),
+                CoordConversion.chunkIndex(0, 1),
+                CoordConversion.chunkIndex(1, -1),
+                CoordConversion.chunkIndex(1, 0),
+                CoordConversion.chunkIndex(1, 1),
         }, null).join();
     }
 }

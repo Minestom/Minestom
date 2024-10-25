@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.IntArrayBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.PlayerSkin;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,22 +13,19 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.UUID;
 
+import static net.minestom.server.network.NetworkBuffer.STRING;
+import static net.minestom.server.network.NetworkBuffer.UUID;
+
 public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull List<Property> properties) {
     public static final HeadProfile EMPTY = new HeadProfile(null, null, List.of());
 
-    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = new NetworkBuffer.Type<HeadProfile>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, HeadProfile value) {
-            buffer.writeOptional(NetworkBuffer.STRING, value.name);
-            buffer.writeOptional(NetworkBuffer.UUID, value.uuid);
-            buffer.writeCollection(Property.NETWORK_TYPE, value.properties);
-        }
+    public static final NetworkBuffer.Type<HeadProfile> NETWORK_TYPE = NetworkBufferTemplate.template(
+            STRING.optional(), HeadProfile::name,
+            UUID.optional(), HeadProfile::uuid,
+            Property.NETWORK_TYPE.list(Short.MAX_VALUE), HeadProfile::properties,
+            HeadProfile::new
+    );
 
-        @Override
-        public HeadProfile read(@NotNull NetworkBuffer buffer) {
-            return new HeadProfile(buffer.readOptional(NetworkBuffer.STRING), buffer.readOptional(NetworkBuffer.UUID), buffer.readCollection(Property.NETWORK_TYPE, Short.MAX_VALUE));
-        }
-    };
     public static final BinaryTagSerializer<HeadProfile> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
             tag -> new HeadProfile(
                     tag.get("name") instanceof StringBinaryTag string ? string.value() : null,
@@ -38,7 +36,8 @@ public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull L
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
                 if (profile.name != null) builder.putString("name", profile.name);
                 if (profile.uuid != null) builder.put("uuid", BinaryTagSerializer.UUID.write(profile.uuid));
-                if (!profile.properties.isEmpty()) builder.put("properties", Property.NBT_LIST_TYPE.write(profile.properties));
+                if (!profile.properties.isEmpty())
+                    builder.put("properties", Property.NBT_LIST_TYPE.write(profile.properties));
                 return builder.build();
             }
     );
@@ -57,19 +56,13 @@ public record HeadProfile(@Nullable String name, @Nullable UUID uuid, @NotNull L
     }
 
     public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
-        public static final NetworkBuffer.Type<Property> NETWORK_TYPE = new NetworkBuffer.Type<Property>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Property value) {
-                buffer.write(NetworkBuffer.STRING, value.name);
-                buffer.write(NetworkBuffer.STRING, value.value);
-                buffer.writeOptional(NetworkBuffer.STRING, value.signature);
-            }
+        public static final NetworkBuffer.Type<Property> NETWORK_TYPE = NetworkBufferTemplate.template(
+                STRING, Property::name,
+                STRING, Property::value,
+                STRING.optional(), Property::signature,
+                Property::new
+        );
 
-            @Override
-            public Property read(@NotNull NetworkBuffer buffer) {
-                return new Property(buffer.read(NetworkBuffer.STRING), buffer.read(NetworkBuffer.STRING), buffer.readOptional(NetworkBuffer.STRING));
-            }
-        };
         public static final BinaryTagSerializer<Property> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Property(tag.getString("name"), tag.getString("value"),
                         tag.get("signature") instanceof StringBinaryTag signature ? signature.value() : null),

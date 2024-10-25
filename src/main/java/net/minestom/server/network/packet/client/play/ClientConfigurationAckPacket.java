@@ -1,15 +1,9 @@
 package net.minestom.server.network.packet.client.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import org.jetbrains.annotations.NotNull;
 
 public record ClientConfigurationAckPacket() implements ClientPacket {
-    public ClientConfigurationAckPacket(@NotNull NetworkBuffer buffer) {
-        this();
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-    }
+    public static final NetworkBuffer.Type<ClientConfigurationAckPacket> SERIALIZER = NetworkBufferTemplate.template(ClientConfigurationAckPacket::new);
 }

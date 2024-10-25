@@ -1,9 +1,6 @@
 package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
@@ -11,6 +8,9 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +24,7 @@ public class InventoryIntegrationTest {
     public void setSlotDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
@@ -48,7 +48,7 @@ public class InventoryIntegrationTest {
     public void setCursorItemDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
@@ -72,7 +72,7 @@ public class InventoryIntegrationTest {
     public void clearInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
@@ -116,7 +116,7 @@ public class InventoryIntegrationTest {
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
@@ -148,7 +148,7 @@ public class InventoryIntegrationTest {
     public void closeInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         final var inventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(inventory);
         assertSame(inventory, player.getOpenInventory());
@@ -160,7 +160,7 @@ public class InventoryIntegrationTest {
     public void openInventoryOnItemDropFromInventoryClosingTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         var listener = env.listen(ItemDropEvent.class);
         final var firstInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
         player.openInventory(firstInventory);
@@ -186,7 +186,7 @@ public class InventoryIntegrationTest {
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
@@ -221,5 +221,4 @@ public class InventoryIntegrationTest {
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
     }
-
 }

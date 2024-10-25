@@ -48,7 +48,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_PARTICLE_LIST, ParticleList(List.of()));
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(0, 0, 0));
         EMPTY_VALUES.set(TYPE_OPT_VARINT, OptVarInt(null));
-        EMPTY_VALUES.set(TYPE_POSE, Pose(Entity.Pose.STANDING));
+        EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatMeta.Variant.TABBY));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfMeta.Variant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
@@ -61,22 +61,23 @@ final class MetadataImpl {
         EMPTY_VALUES.trim();
     }
 
+    @SuppressWarnings({"rawtypes", "unchecked"})
     record EntryImpl<T>(int type, @UnknownNullability T value,
                         @NotNull NetworkBuffer.Type<T> serializer) implements Metadata.Entry<T> {
-        static Entry<?> read(int type, @NotNull NetworkBuffer reader) {
-            final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
-            if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);
-            return value.withValue(reader);
-        }
+        static final NetworkBuffer.Type<EntryImpl<?>> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, EntryImpl value) {
+                buffer.write(VAR_INT, value.type);
+                buffer.write(value.serializer, value.value);
+            }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, type);
-            writer.write(serializer, value);
-        }
-
-        private EntryImpl<T> withValue(@NotNull NetworkBuffer reader) {
-            return new EntryImpl<>(type, reader.read(serializer), serializer);
-        }
+            @Override
+            public EntryImpl read(@NotNull NetworkBuffer buffer) {
+                final int type = buffer.read(VAR_INT);
+                final EntryImpl<?> value = (EntryImpl<?>) EMPTY_VALUES.get(type);
+                if (value == null) throw new UnsupportedOperationException("Unknown value type: " + type);
+                return new EntryImpl(type, value.serializer.read(buffer), value.serializer);
+            }
+        };
     }
 }

@@ -30,8 +30,6 @@ public final class MinestomAdventure {
     // todo: Need to properly add a translator interface so it can check for presence of a key for the flattener.
     public static BiFunction<Component, Locale, Component> COMPONENT_TRANSLATOR = GlobalTranslator::render;
 
-    static final Localizable NULL_LOCALIZABLE = () -> null;
-
     private static Locale defaultLocale = Locale.getDefault();
 
     private MinestomAdventure() {

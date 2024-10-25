@@ -22,7 +22,7 @@ public class CommandSuggestionIntegrationTest {
     public void suggestion(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var command = new Command("test");
         command.addSyntax((sender, context) -> {
@@ -53,7 +53,7 @@ public class CommandSuggestionIntegrationTest {
     public void suggestionWithDefaults(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var suggestArg = Word("suggestArg").setSuggestionCallback(
                 (sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("suggestion"))
@@ -78,7 +78,7 @@ public class CommandSuggestionIntegrationTest {
     public void suggestionWithSubcommand(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var command = new Command("foo");
 
@@ -112,7 +112,7 @@ public class CommandSuggestionIntegrationTest {
     public void suggestionWithTwoLiterals(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
 
         var command = new Command("foo");
 
@@ -137,5 +137,4 @@ public class CommandSuggestionIntegrationTest {
             assertEquals(List.of(new TabCompletePacket.Match("suggestionB", null)), tabCompletePacket.matches());
         });
     }
-
 }

@@ -7,8 +7,8 @@ import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
-public class DolphinMeta extends WaterAnimalMeta {
-    public static final byte OFFSET = WaterAnimalMeta.MAX_OFFSET;
+public class DolphinMeta extends AgeableWaterAnimalMeta {
+    public static final byte OFFSET = AgeableWaterAnimalMeta.MAX_OFFSET;
     public static final byte MAX_OFFSET = OFFSET + 3;
 
     public DolphinMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {

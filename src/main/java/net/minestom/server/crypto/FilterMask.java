@@ -5,20 +5,25 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.BitSet;
 
-import static net.minestom.server.network.NetworkBuffer.LONG_ARRAY;
+import static net.minestom.server.network.NetworkBuffer.BITSET;
 
-public record FilterMask(@NotNull Type type, @NotNull BitSet mask) implements NetworkBuffer.Writer {
-    public FilterMask(@NotNull NetworkBuffer reader) {
-        this(reader.readEnum(Type.class), BitSet.valueOf(reader.read(LONG_ARRAY)));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.writeEnum(Type.class, type);
-        if (type == Type.PARTIALLY_FILTERED) {
-            writer.write(LONG_ARRAY, mask.toLongArray());
+public record FilterMask(@NotNull Type type, @NotNull BitSet mask) {
+    public static final NetworkBuffer.Type<FilterMask> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, FilterMask value) {
+            buffer.write(NetworkBuffer.Enum(Type.class), value.type);
+            if (value.type == Type.PARTIALLY_FILTERED) {
+                buffer.write(BITSET, value.mask);
+            }
         }
-    }
+
+        @Override
+        public FilterMask read(@NotNull NetworkBuffer buffer) {
+            Type type = buffer.read(NetworkBuffer.Enum(Type.class));
+            BitSet mask = type == Type.PARTIALLY_FILTERED ? buffer.read(BITSET) : new BitSet();
+            return new FilterMask(type, mask);
+        }
+    };
 
     public enum Type {
         PASS_THROUGH,

@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerItemAnimationEvent;
 import net.minestom.server.event.player.PlayerPreEatEvent;
@@ -10,8 +10,8 @@ import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.Food;
-import net.minestom.server.item.component.PotionContents;
+import net.minestom.server.item.component.Consumable;
+import net.minestom.server.item.component.Equippable;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
-        final Player.Hand hand = packet.hand();
+        final PlayerHand hand = packet.hand();
         final ItemStack itemStack = player.getInventory().getItemInHand(hand);
         final Material material = itemStack.material();
 
@@ -34,10 +34,10 @@ public class UseItemListener {
         }
 
         // Equip armor with right click
-        final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
-        if (equipmentSlot != null) {
-            final ItemStack currentlyEquipped = player.getEquipment(equipmentSlot);
-            player.setEquipment(equipmentSlot, itemStack);
+        final Equippable equippable = itemStack.get(ItemComponent.EQUIPPABLE);
+        if (equippable != null && equippable.swappable()) {
+            final ItemStack currentlyEquipped = player.getEquipment(equippable.slot());
+            player.setEquipment(equippable.slot(), itemStack);
             player.setItemInHand(hand, currentlyEquipped);
         }
 
@@ -74,23 +74,14 @@ public class UseItemListener {
 
             PlayerItemAnimationEvent playerItemAnimationEvent = new PlayerItemAnimationEvent(player, itemAnimationType, hand);
             EventDispatcher.callCancellable(playerItemAnimationEvent, () -> {
-                player.refreshActiveHand(true, hand == Player.Hand.OFF, false);
+                player.refreshActiveHand(true, hand == PlayerHand.OFF, false);
                 player.sendPacketToViewers(player.getMetadataPacket());
             });
         }
     }
 
     private static int defaultUseItemTime(@NotNull ItemStack itemStack) {
-        final Food food = itemStack.get(ItemComponent.FOOD);
-        if (food != null) return food.eatDurationTicks();
-        else if (itemStack.material() == Material.POTION) return PotionContents.POTION_DRINK_TIME;
-        else if (itemStack.material() == Material.BOW
-                || itemStack.material() == Material.CROSSBOW
-                || itemStack.material() == Material.SHIELD
-                || itemStack.material() == Material.TRIDENT
-                || itemStack.material() == Material.SPYGLASS
-                || itemStack.material() == Material.GOAT_HORN
-                || itemStack.material() == Material.BRUSH) return -1;
-        return 0;
+        final Consumable consumable = itemStack.get(ItemComponent.CONSUMABLE);
+        return consumable != null ? consumable.consumeTicks() : 0;
     }
 }

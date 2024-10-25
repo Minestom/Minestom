@@ -1,21 +1,22 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.minestom.server.utils.math.FloatRange;
+import net.minestom.server.command.ArgumentParserType;
+import net.minestom.server.utils.Range;
 
 /**
- * Represents an argument which will give you an {@link FloatRange}.
+ * Represents an argument which will give you an {@link Range.Float}.
  * <p>
  * Example: ..3, 3.., 5..10, 15
  */
-public class ArgumentFloatRange extends ArgumentRange<FloatRange, Float> {
+public class ArgumentFloatRange extends ArgumentRange<Range.Float, Float> {
 
     public ArgumentFloatRange(String id) {
-        super(id, -Float.MAX_VALUE, Float.MAX_VALUE, Float::parseFloat, FloatRange::new);
+        super(id, -Float.MAX_VALUE, Float.MAX_VALUE, Float::parseFloat, Range.Float::new);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:float_range";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.FLOAT_RANGE;
     }
 
     @Override

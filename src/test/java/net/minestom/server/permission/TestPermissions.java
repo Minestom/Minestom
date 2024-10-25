@@ -3,6 +3,7 @@ package net.minestom.server.permission;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
+import net.minestom.server.network.player.GameProfile;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ public class TestPermissions {
     @BeforeEach
     public void init() {
         MinecraftServer.init(); // for entity manager
-        player = new Player(UUID.randomUUID(), "TestPlayer", null) {
+        player = new Player(null, new GameProfile(UUID.randomUUID(), "TestPlayer")) {
             @Override
             protected void playerConnectionInit() {
             }

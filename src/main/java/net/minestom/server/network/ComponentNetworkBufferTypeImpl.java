@@ -221,7 +221,8 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(BYTE, TAG_END);
     }
 
-    @SuppressWarnings("unchecked") private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
+    @SuppressWarnings("unchecked")
+    private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
         writeUtf(buffer, "hoverEvent");
 
@@ -279,9 +280,9 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     /**
      * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)}. We need the data in the java
      * modified utf-8 format, and I couldnt find a method without creating a new buffer for it.
-     * 
+     *
      * @param buffer the buffer to write to
-     * @param str the string to write
+     * @param str    the string to write
      */
     private static void writeUtf(@NotNull NetworkBuffer buffer, @NotNull String str) {
         final int strlen = str.length();
@@ -297,27 +298,31 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             throw new RuntimeException("UTF-8 string too long");
 
         buffer.write(SHORT, (short) utflen);
-        buffer.ensureSize(utflen);
+        buffer.ensureWritable(utflen);
+        var impl = (NetworkBufferImpl) buffer;
         int i;
         for (i = 0; i < strlen; i++) { // optimized for initial run of ASCII
             int c = str.charAt(i);
             if (c >= 0x80 || c == 0) break;
-            buffer.nioBuffer.put(buffer.writeIndex++, (byte) c);
+            impl._putByte(buffer.writeIndex(), (byte) c);
+            impl.advanceWrite(1);
         }
 
         for (; i < strlen; i++) {
             int c = str.charAt(i);
             if (c < 0x80 && c != 0) {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) c);
+                impl._putByte(buffer.writeIndex(), (byte) c);
+                impl.advanceWrite(1);
             } else if (c >= 0x800) {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0xE0 | ((c >> 12) & 0x0F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  6) & 0x3F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  0) & 0x3F)));
+                impl._putByte(buffer.writeIndex(), (byte) (0xE0 | ((c >> 12) & 0x0F)));
+                impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 6) & 0x3F)));
+                impl._putByte(buffer.writeIndex() + 2, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                impl.advanceWrite(3);
             } else {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0xC0 | ((c >>  6) & 0x1F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  0) & 0x3F)));
+                impl._putByte(buffer.writeIndex(), (byte) (0xC0 | ((c >> 6) & 0x1F)));
+                impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                impl.advanceWrite(2);
             }
         }
     }
-
 }

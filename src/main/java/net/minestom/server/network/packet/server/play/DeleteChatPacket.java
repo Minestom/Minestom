@@ -2,22 +2,13 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.crypto.MessageSignature;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public record DeleteChatPacket(@NotNull MessageSignature signature) implements ServerPacket.Play {
-    public DeleteChatPacket(@NotNull NetworkBuffer reader) {
-        this(new MessageSignature(reader));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(signature);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.DELETE_CHAT_MESSAGE;
-    }
+    public static final NetworkBuffer.Type<DeleteChatPacket> SERIALIZER = NetworkBufferTemplate.template(
+            MessageSignature.SERIALIZER, DeleteChatPacket::signature,
+            DeleteChatPacket::new
+    );
 }

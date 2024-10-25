@@ -2,10 +2,9 @@ package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -18,7 +17,7 @@ public record JoinGamePacket(
         boolean doLimitedCrafting, int dimensionType,
         String world, long hashedSeed, GameMode gameMode, GameMode previousGameMode,
         boolean isDebug, boolean isFlat, @Nullable WorldPos deathLocation, int portalCooldown,
-        boolean enforcesSecureChat
+        int seaLevel, boolean enforcesSecureChat
 ) implements ServerPacket.Play {
     public static final int MAX_WORLDS = Short.MAX_VALUE;
 
@@ -26,70 +25,27 @@ public record JoinGamePacket(
         worlds = List.copyOf(worlds);
     }
 
-    public JoinGamePacket(@NotNull NetworkBuffer reader) {
-        this(
-                reader.read(INT),
-                reader.read(BOOLEAN),
-                reader.readCollection(STRING, MAX_WORLDS),
-                reader.read(VAR_INT),
-                reader.read(VAR_INT),
-                reader.read(VAR_INT),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.read(VAR_INT),
-                reader.read(STRING),
-                reader.read(LONG),
-                GameMode.fromId(reader.read(BYTE)),
-                getNullableGameMode(reader.read(BYTE)),
-                reader.read(BOOLEAN),
-                reader.read(BOOLEAN),
-                reader.readOptional(WorldPos.NETWORK_TYPE),
-                reader.read(VAR_INT),
-                reader.read(BOOLEAN)
-        );
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(INT, entityId);
-        writer.write(BOOLEAN, isHardcore);
-        writer.writeCollection(STRING, worlds);
-        writer.write(VAR_INT, maxPlayers);
-        writer.write(VAR_INT, viewDistance);
-        writer.write(VAR_INT, simulationDistance);
-        writer.write(BOOLEAN, reducedDebugInfo);
-        writer.write(BOOLEAN, enableRespawnScreen);
-        writer.write(BOOLEAN, doLimitedCrafting);
-        writer.write(VAR_INT, dimensionType);
-        writer.write(STRING, world);
-        writer.write(LONG, hashedSeed);
-        writer.write(BYTE, gameMode.id());
-        if (previousGameMode != null) {
-            writer.write(BYTE, previousGameMode.id());
-        } else {
-            writer.write(BYTE, (byte) -1);
-        }
-        writer.write(BOOLEAN, isDebug);
-        writer.write(BOOLEAN, isFlat);
-        writer.writeOptional(WorldPos.NETWORK_TYPE, deathLocation);
-        writer.write(VAR_INT, portalCooldown);
-        writer.write(BOOLEAN, enforcesSecureChat);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.JOIN_GAME;
-    }
-
-    /**
-     * This method exists in lieu of a NetworkBufferType since -1 is only a
-     * valid value in this packet and changing behaviour of GameMode.fromId()
-     * to be nullable would be too big of a change. Also, game modes are often
-     * represented as other data types, including floats.
-     */
-    private static @Nullable GameMode getNullableGameMode(final byte id) {
-        return id == (byte) -1 ? null : GameMode.fromId(id);
-    }
-
+    public static final NetworkBuffer.Type<JoinGamePacket> SERIALIZER = NetworkBufferTemplate.template(
+            INT, JoinGamePacket::entityId,
+            BOOLEAN, JoinGamePacket::isHardcore,
+            STRING.list(MAX_WORLDS), JoinGamePacket::worlds,
+            VAR_INT, JoinGamePacket::maxPlayers,
+            VAR_INT, JoinGamePacket::viewDistance,
+            VAR_INT, JoinGamePacket::simulationDistance,
+            BOOLEAN, JoinGamePacket::reducedDebugInfo,
+            BOOLEAN, JoinGamePacket::enableRespawnScreen,
+            BOOLEAN, JoinGamePacket::doLimitedCrafting,
+            VAR_INT, JoinGamePacket::dimensionType,
+            STRING, JoinGamePacket::world,
+            LONG, JoinGamePacket::hashedSeed,
+            GameMode.NETWORK_TYPE, JoinGamePacket::gameMode,
+            GameMode.OPT_NETWORK_TYPE, JoinGamePacket::previousGameMode,
+            BOOLEAN, JoinGamePacket::isDebug,
+            BOOLEAN, JoinGamePacket::isFlat,
+            WorldPos.NETWORK_TYPE.optional(), JoinGamePacket::deathLocation,
+            VAR_INT, JoinGamePacket::portalCooldown,
+            VAR_INT, JoinGamePacket::seaLevel,
+            BOOLEAN, JoinGamePacket::enforcesSecureChat,
+            JoinGamePacket::new
+    );
 }

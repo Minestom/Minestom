@@ -1,10 +1,11 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.StringUtils;
-import net.minestom.server.utils.binary.BinaryWriter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -28,8 +29,8 @@ public class ArgumentResourceOrTag extends Argument<String> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:resource_or_tag";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.RESOURCE_OR_TAG;
     }
 
     @Override
@@ -39,8 +40,6 @@ public class ArgumentResourceOrTag extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter ->
-                packetWriter.writeSizedString(this.identifier)
-        );
+        return NetworkBuffer.makeArray(NetworkBuffer.STRING, identifier);
     }
 }

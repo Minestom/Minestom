@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.utils.StringUtils;
@@ -62,7 +63,7 @@ public class ArgumentLoop<T> extends Argument<List<T>> {
     }
 
     @Override
-    public String parser() {
+    public ArgumentParserType parser() {
         return null;
     }
 }

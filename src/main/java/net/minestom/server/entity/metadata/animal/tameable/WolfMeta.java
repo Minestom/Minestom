@@ -28,8 +28,6 @@ public class WolfMeta extends TameableAnimalMeta {
         super(entity, metadata);
     }
 
-    //todo variant
-
     public boolean isBegging() {
         return super.metadata.getIndex(OFFSET, false);
     }

@@ -17,19 +17,15 @@ import java.util.Objects;
 public class Color implements RGBLike {
     private static final int BIT_MASK = 0xff;
 
-    public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = new NetworkBuffer.Type<RGBLike>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, RGBLike value) {
-            buffer.write(NetworkBuffer.INT, Color.fromRGBLike(value).asRGB());
-        }
-
-        @Override
-        public RGBLike read(@NotNull NetworkBuffer buffer) {
-            return new Color(buffer.read(NetworkBuffer.INT));
-        }
-    };
+    public static final NetworkBuffer.Type<RGBLike> NETWORK_TYPE = NetworkBuffer.INT.transform(
+            Color::new,
+            color -> Color.fromRGBLike(color).asRGB()
+    );
     public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
             .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
+
+    public static final RGBLike WHITE = new Color(255, 255, 255);
+
     private final int red;
     private final int green;
     private final int blue;

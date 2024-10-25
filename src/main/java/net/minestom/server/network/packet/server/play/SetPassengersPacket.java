@@ -1,8 +1,8 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,22 +13,12 @@ public record SetPassengersPacket(int vehicleEntityId,
                                   @NotNull List<Integer> passengersId) implements ServerPacket.Play {
     public static final int MAX_PASSENGERS = 16384;
 
+    public static final NetworkBuffer.Type<SetPassengersPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, SetPassengersPacket::vehicleEntityId,
+            VAR_INT.list(MAX_PASSENGERS), SetPassengersPacket::passengersId,
+            SetPassengersPacket::new);
+
     public SetPassengersPacket {
         passengersId = List.copyOf(passengersId);
-    }
-
-    public SetPassengersPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), reader.readCollection(VAR_INT, MAX_PASSENGERS));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, vehicleEntityId);
-        writer.writeCollection(VAR_INT, passengersId);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.SET_PASSENGERS;
     }
 }

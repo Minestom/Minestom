@@ -1,12 +1,11 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,24 +34,10 @@ public record JukeboxPlayable(@NotNull DynamicRegistry.Key<JukeboxSong> song, bo
             return new JukeboxPlayable(song, buffer.read(NetworkBuffer.BOOLEAN));
         }
     };
-    public static final BinaryTagSerializer<JukeboxPlayable> NBT_TYPE = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull JukeboxPlayable value) {
-            return CompoundBinaryTag.builder()
-                    .put("song", JukeboxSong.NBT_TYPE.write(context, value.song))
-                    .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build();
-        }
-
-        @Override
-        public @NotNull JukeboxPlayable read(@NotNull Context context, @NotNull BinaryTag raw) {
-            if (!(raw instanceof CompoundBinaryTag tag)) throw new IllegalArgumentException("expected compound tag");
-            return new JukeboxPlayable(
-                    JukeboxSong.NBT_TYPE.read(context, tag.get("song")),
-                    tag.getBoolean("show_in_tooltip")
-            );
-        }
-    };
+    public static final BinaryTagSerializer<JukeboxPlayable> NBT_TYPE = BinaryTagTemplate.object(
+            "song", JukeboxSong.NBT_TYPE, JukeboxPlayable::song,
+            "show_in_tooltip", BinaryTagSerializer.BOOLEAN.optional(true), JukeboxPlayable::showInTooltip,
+            JukeboxPlayable::new);
 
     public JukeboxPlayable(@NotNull DynamicRegistry.Key<JukeboxSong> song) {
         this(song, true);
