@@ -10,10 +10,10 @@ import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPlayerBlockPlacementPacket(@NotNull PlayerHand hand, @NotNull Point blockPosition,
-                                               @NotNull BlockFace blockFace,
-                                               float cursorPositionX, float cursorPositionY, float cursorPositionZ,
-                                               boolean insideBlock, int sequence) implements ClientPacket {
+public record ClientPlayerBlockPlacementPacket(
+        @NotNull PlayerHand hand, @NotNull Point blockPosition, @NotNull BlockFace blockFace,
+        float cursorPositionX, float cursorPositionY, float cursorPositionZ,
+        boolean insideBlock, boolean hitWorldBorder, int sequence) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlayerBlockPlacementPacket> SERIALIZER = NetworkBufferTemplate.template(
             Enum(PlayerHand.class), ClientPlayerBlockPlacementPacket::hand,
             BLOCK_POSITION, ClientPlayerBlockPlacementPacket::blockPosition,
@@ -22,6 +22,7 @@ public record ClientPlayerBlockPlacementPacket(@NotNull PlayerHand hand, @NotNul
             FLOAT, ClientPlayerBlockPlacementPacket::cursorPositionY,
             FLOAT, ClientPlayerBlockPlacementPacket::cursorPositionZ,
             BOOLEAN, ClientPlayerBlockPlacementPacket::insideBlock,
+            BOOLEAN, ClientPlayerBlockPlacementPacket::hitWorldBorder,
             VAR_INT, ClientPlayerBlockPlacementPacket::sequence,
             ClientPlayerBlockPlacementPacket::new);
 }
