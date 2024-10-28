@@ -4,18 +4,17 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
  */
 public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEvent, CancellableEvent {
 
-    private final Inventory inventory;
+    private final AbstractInventory inventory;
     private final Player player;
     private final int slot;
     private final ClickType clickType;
@@ -24,7 +23,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@Nullable Inventory inventory,
+    public InventoryPreClickEvent(@NotNull AbstractInventory inventory,
                                   @NotNull Player player,
                                   int slot, @NotNull ClickType clickType,
                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
@@ -114,7 +113,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     @Override
-    public @Nullable Inventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }
