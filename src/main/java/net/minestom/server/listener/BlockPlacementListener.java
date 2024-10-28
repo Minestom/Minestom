@@ -37,7 +37,6 @@ public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
-        final PlayerInventory playerInventory = player.getInventory();
         final PlayerHand hand = packet.hand();
         final BlockFace blockFace = packet.blockFace();
         Point blockPosition = packet.blockPosition();
@@ -179,10 +178,10 @@ public class BlockPlacementListener {
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.consume(1);
-            playerInventory.setItemInHand(hand, newUsedItem);
+            player.setItemInHand(hand, newUsedItem);
         } else {
             // Prevent invisible item on client
-            playerInventory.update();   
+            player.getInventory().update();
         }
     }
 
