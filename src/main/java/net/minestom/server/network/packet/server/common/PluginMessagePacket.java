@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.common;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -9,15 +10,15 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
-public record PluginMessagePacket(String channel,
+public record PluginMessagePacket(Key channel,
                                   byte[] data) implements ServerPacket.Configuration, ServerPacket.Play {
     public PluginMessagePacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(STRING), reader.read(RAW_BYTES));
+        this(Key.key(reader.read(STRING)), reader.read(RAW_BYTES));
     }
 
     @Override
     public void write(@NotNull NetworkBuffer writer) {
-        writer.write(STRING, channel);
+        writer.write(STRING, channel.asString());
         writer.write(RAW_BYTES, data);
     }
 
@@ -41,6 +42,6 @@ public record PluginMessagePacket(String channel,
     public static @NotNull PluginMessagePacket getBrandPacket() {
         final String brandName = MinecraftServer.getBrandName();
         final byte[] data = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(STRING, brandName));
-        return new PluginMessagePacket("minecraft:brand", data);
+        return new PluginMessagePacket(Key.key("minecraft:brand"), data);
     }
 }

@@ -7,6 +7,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.pointer.Pointers;
 import net.kyori.adventure.resource.ResourcePackCallback;
 import net.kyori.adventure.resource.ResourcePackInfo;
@@ -904,8 +905,20 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param channel the message channel
      * @param data    the message data
+     * @deprecated Use {@link #sendPluginMessage(Key, byte[])} instead.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void sendPluginMessage(@NotNull String channel, byte @NotNull [] data) {
+        sendPluginMessage(Key.key(channel), data);
+    }
+
+    /**
+     * Sends a plugin message to the player.
+     *
+     * @param channel the message channel
+     * @param data    the message data
+     */
+    public void sendPluginMessage(@NotNull Key channel, byte @NotNull [] data) {
         sendPacket(new PluginMessagePacket(channel, data));
     }
 
@@ -916,7 +929,9 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      *
      * @param channel the message channel
      * @param message the message
+     * @deprecated Use {@link #sendPluginMessage(Key, byte[])} instead.
      */
+    @Deprecated(forRemoval = true, since = "1.5.0")
     public void sendPluginMessage(@NotNull String channel, @NotNull String message) {
         sendPluginMessage(channel, message.getBytes(StandardCharsets.UTF_8));
     }
