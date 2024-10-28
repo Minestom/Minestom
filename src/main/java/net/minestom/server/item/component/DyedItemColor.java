@@ -23,7 +23,7 @@ public record DyedItemColor(@NotNull RGBLike color, boolean showInTooltip) {
         @Override
         public @NotNull BinaryTag write(@NotNull DyedItemColor value) {
             return CompoundBinaryTag.builder()
-                    .putInt("color", Color.fromRGBLike(value.color).asRGB())
+                    .putInt("rgb", Color.fromRGBLike(value.color).asRGB())
                     .putBoolean("show_in_tooltip", value.showInTooltip)
                     .build();
         }
@@ -31,7 +31,7 @@ public record DyedItemColor(@NotNull RGBLike color, boolean showInTooltip) {
         @Override
         public @NotNull DyedItemColor read(@NotNull BinaryTag tag) {
             if (tag instanceof CompoundBinaryTag compoundTag) {
-                int color = compoundTag.getInt("color");
+                int color = compoundTag.getInt("rgb");
                 boolean showInTooltip = compoundTag.getBoolean("show_in_tooltip", true);
                 return new DyedItemColor(new Color(color), showInTooltip);
             } else if (tag instanceof IntBinaryTag intTag) {
