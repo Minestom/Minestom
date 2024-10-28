@@ -3,6 +3,7 @@ package net.minestom.server.inventory.click.integration;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.click.ClickType;
@@ -175,7 +176,7 @@ public class RightClickIntegrationTest {
         _rightClick(player.getOpenInventory(), false, player, slot);
     }
 
-    private void _rightClick(Inventory openInventory, boolean clickOpenInventory, Player player, int slot) {
+    private void _rightClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assert openInventory != null;

@@ -76,7 +76,7 @@ public sealed interface InventoryClickHandler permits AbstractInventory {
      */
     boolean doubleClick(@NotNull Player player, int slot);
 
-    default void callClickEvent(@NotNull Player player, Inventory inventory, int slot,
+    default void callClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
     }

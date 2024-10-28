@@ -20,7 +20,7 @@ public class UseItemListener {
 
     public static void useItemListener(ClientUseItemPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
-        final ItemStack itemStack = player.getInventory().getItemInHand(hand);
+        final ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
 
         PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, defaultUseItemTime(itemStack));
