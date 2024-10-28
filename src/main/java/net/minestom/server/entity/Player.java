@@ -48,6 +48,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemComponent;
@@ -175,7 +176,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int portalCooldown = 0;
 
     protected PlayerInventory inventory;
-    private Inventory openInventory;
+    private AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
     private boolean didCloseInventory;
 
@@ -236,7 +237,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         setRespawnPoint(Pos.ZERO);
 
-        this.inventory = new PlayerInventory(this);
+        this.inventory = new PlayerInventory();
 
         setCanPickupItem(true); // By default
 
@@ -294,6 +295,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 deathLocation, portalCooldown, DEFAULT_SEA_LEVEL,
                 true);
         sendPacket(joinGamePacket);
+
+        // Start sending inventory updates
+        inventory.addViewer(this);
 
         // Difficulty
         sendPacket(new ServerDifficultyPacket(MinecraftServer.getDifficulty(), true));
@@ -573,8 +577,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         super.remove(permanent);
 
-        final Inventory currentInventory = getOpenInventory();
+        final AbstractInventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
+
         MinecraftServer.getBossBarManager().removeAllBossBars(this);
         // Advancement tabs cache
         {
@@ -1724,7 +1729,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @return the currently open inventory, null if there is not (player inventory is not detected)
      */
-    public @Nullable Inventory getOpenInventory() {
+    public @Nullable AbstractInventory getOpenInventory() {
         return openInventory;
     }
 
@@ -1738,19 +1743,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
-            Inventory openInventory = getOpenInventory();
+            AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
             }
 
-            Inventory newInventory = inventoryOpenEvent.getInventory();
-            if (newInventory == null) {
-                // just close the inventory
-                return;
-            }
+            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
 
-            sendPacket(new OpenWindowPacket(newInventory.getWindowId(),
-                    newInventory.getInventoryType().getWindowType(), newInventory.getTitle()));
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
@@ -1767,31 +1766,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @ApiStatus.Internal
     public void closeInventory(boolean fromClient) {
-        Inventory openInventory = getOpenInventory();
+        AbstractInventory openInventory = getOpenInventory();
+        if (openInventory == null) return;
 
-        // Drop cursor item when closing inventory
-        ItemStack cursorItem = getInventory().getCursorItem();
-        getInventory().setCursorItem(ItemStack.AIR);
+        this.openInventory = null;
+        openInventory.removeViewer(this);
+        inventory.update();
 
-        if (!cursorItem.isAir()) {
-            // Add item to inventory if he hasn't been able to drop it
-            if (!dropItem(cursorItem)) {
-                getInventory().addItemStack(cursorItem);
-            }
-        }
-
-        if (openInventory == getOpenInventory()) {
-            CloseWindowPacket closeWindowPacket;
-            if (openInventory == null) {
-                closeWindowPacket = new CloseWindowPacket((byte) 0);
-            } else {
-                closeWindowPacket = new CloseWindowPacket(openInventory.getWindowId());
-                openInventory.removeViewer(this); // Clear cache
-                this.openInventory = null;
-            }
-            if (!fromClient) sendPacket(closeWindowPacket);
-            inventory.update();
-            this.didCloseInventory = true;
+        if (!fromClient) {
+            didCloseInventory = true;
         }
     }
 
@@ -2277,12 +2260,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @Override
     public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
-        return inventory.getEquipment(slot);
+        return inventory.getEquipment(slot, heldSlot);
     }
 
     @Override
     public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
-        inventory.setEquipment(slot, itemStack);
+        inventory.setEquipment(slot, heldSlot, itemStack);
     }
 
     @Override
