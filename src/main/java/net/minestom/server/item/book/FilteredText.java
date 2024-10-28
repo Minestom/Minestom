@@ -36,7 +36,7 @@ public record FilteredText<T>(@NotNull T text, @Nullable T filtered) {
             @Override
             public @NotNull BinaryTag write(@NotNull FilteredText<T> value) {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-                builder.put("text", inner.write(value.text));
+                builder.put("raw", inner.write(value.text));
                 if (value.filtered != null) {
                     builder.put("filtered", inner.write(value.filtered));
                 }
@@ -46,7 +46,7 @@ public record FilteredText<T>(@NotNull T text, @Nullable T filtered) {
             @Override
             public @NotNull FilteredText<T> read(@NotNull BinaryTag tag) {
                 if (tag instanceof CompoundBinaryTag compound) {
-                    BinaryTag textTag = compound.get("text");
+                    BinaryTag textTag = compound.get("raw");
                     if (textTag != null) {
                         BinaryTag filteredTag = compound.get("filtered");
                         T filtered = filteredTag == null ? null : inner.read(filteredTag);
