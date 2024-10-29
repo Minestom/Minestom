@@ -85,7 +85,7 @@ public class BlockBreakCalculationTest {
     }
 
     private void assertBreakSpeed(double instantBreakSpeed) {
-        if (instantBreakSpeed > Attribute.PLAYER_BLOCK_BREAK_SPEED.maxValue()) return;
+        if (instantBreakSpeed > Attribute.BLOCK_BREAK_SPEED.maxValue()) return;
         resetBreakEfficiency();
         updateBreakSpeed(instantBreakSpeed);
         assertInstabreak.run();
@@ -116,18 +116,18 @@ public class BlockBreakCalculationTest {
     }
 
     private void resetBreakSpeed() {
-        player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(Attribute.PLAYER_BLOCK_BREAK_SPEED.defaultValue());
+        player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(Attribute.BLOCK_BREAK_SPEED.defaultValue());
     }
 
     private void resetBreakEfficiency() {
-        player.getAttribute(Attribute.PLAYER_MINING_EFFICIENCY).setBaseValue(Attribute.PLAYER_MINING_EFFICIENCY.defaultValue());
+        player.getAttribute(Attribute.MINING_EFFICIENCY).setBaseValue(Attribute.MINING_EFFICIENCY.defaultValue());
     }
 
     private void updateBreakSpeed(double speed) {
-        player.getAttribute(Attribute.PLAYER_BLOCK_BREAK_SPEED).setBaseValue(speed);
+        player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(speed);
     }
 
     private void updateEfficiency(double efficiency) {
-        player.getAttribute(Attribute.PLAYER_MINING_EFFICIENCY).setBaseValue(efficiency);
+        player.getAttribute(Attribute.MINING_EFFICIENCY).setBaseValue(efficiency);
     }
 }
