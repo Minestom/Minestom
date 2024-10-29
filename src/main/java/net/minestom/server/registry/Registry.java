@@ -263,6 +263,7 @@ public final class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final boolean occludes;
+        private final boolean requiresTool;
         private final int lightEmission;
         private final boolean replaceable;
         private final String blockEntity;
@@ -288,6 +289,7 @@ public final class Registry {
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
             this.occludes = main.getBoolean("occludes", true);
+            this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
             {
@@ -363,6 +365,10 @@ public final class Registry {
 
         public boolean occludes() {
             return occludes;
+        }
+
+        public boolean requiresTool() {
+            return requiresTool;
         }
 
         public int lightEmission() {

@@ -24,6 +24,7 @@ import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
+import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -70,31 +71,26 @@ public final class PlayerDiggingListener {
 
     private static DiggingResult startDigging(Player player, Instance instance, Point blockPosition, BlockFace blockFace) {
         final Block block = instance.getBlock(blockPosition);
-        final GameMode gameMode = player.getGameMode();
 
         // Prevent spectators and check players in adventure mode
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
         }
 
-        if (gameMode == GameMode.CREATIVE) {
-            return breakBlock(instance, player, blockPosition, block, blockFace);
-        }
-
-        // Survival digging
-        // FIXME: verify mineable tag and enchantment
-        final boolean instantBreak = player.isInstantBreak() || block.registry().hardness() == 0;
+        final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
+        final boolean instantBreak = breakTicks == 0;
         if (!instantBreak) {
             PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
-        // Client only send a single STARTED_DIGGING when insta-break is enabled
+        // Client only sends a single STARTED_DIGGING when insta-break is enabled
         return breakBlock(instance, player, blockPosition, block, blockFace);
     }
 
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
+
         PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
@@ -106,6 +102,17 @@ public final class PlayerDiggingListener {
         if (shouldPreventBreaking(player, block)) {
             return new DiggingResult(block, false);
         }
+
+        final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
+        // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
+        // If the block is unbreakable, prevent a hacked client from breaking it!
+        if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+            EventDispatcher.call(playerCancelDiggingEvent);
+            return new DiggingResult(block, false);
+        }
+        // TODO maybe add a check if the player has spent enough time mining the block.
+        //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
 
         PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
