@@ -65,7 +65,7 @@ public class BlockBreakCalculation {
             if (speedMultiplier > 1F) {
                 // since data driven enchantments efficiency uses the PLAYER_MINING_EFFICIENCY attribute
                 // If someone wants faster tools, they have to use player attributes or the TOOL component
-                speedMultiplier += (float) player.getAttributeValue(Attribute.PLAYER_MINING_EFFICIENCY);
+                speedMultiplier += (float) player.getAttributeValue(Attribute.MINING_EFFICIENCY);
             }
         } else {
             speedMultiplier = 1;
@@ -80,10 +80,10 @@ public class BlockBreakCalculation {
             speedMultiplier *= getMiningFatigueMultiplier(player);
         }
 
-        speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_BLOCK_BREAK_SPEED);
+        speedMultiplier *= (float) player.getAttributeValue(Attribute.BLOCK_BREAK_SPEED);
 
         if (isInWater(player)) {
-            speedMultiplier *= (float) player.getAttributeValue(Attribute.PLAYER_SUBMERGED_MINING_SPEED);
+            speedMultiplier *= (float) player.getAttributeValue(Attribute.SUBMERGED_MINING_SPEED);
         }
 
         if (!player.isOnGround()) {
