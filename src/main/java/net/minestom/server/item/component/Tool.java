@@ -3,6 +3,7 @@ package net.minestom.server.item.component;
 import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.FloatBinaryTag;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -51,5 +52,25 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
                     return builder.build();
                 }
         );
+    }
+
+    public boolean isCorrectForDrops(@NotNull Block block) {
+        for (Rule rule : rules) {
+            if (rule.correctForDrops != null && rule.blocks.test(block)) {
+                // First matching rule is picked, other rules are ignored
+                return rule.correctForDrops;
+            }
+        }
+        return false;
+    }
+
+    public float getSpeed(@NotNull Block block) {
+        for (Rule rule : rules) {
+            if (rule.speed != null && rule.blocks.test(block)) {
+                // First matching rule is picked, other rules are ignored
+                return rule.speed;
+            }
+        }
+        return defaultMiningSpeed;
     }
 }
