@@ -15,7 +15,7 @@ Discord for discussion: [OneLiteFeather.net](https://discord.onelitefeather.net)
 - Make useful decisions
     - Include new features
     - Try to stay updated with original minecraft cycle
-- Release cycle of 2 weeks
+- Release cycle of we often we can (weekly, monthly, etc.) with a changelog, and it needed for the community
 
 ## Project contribution:
 
