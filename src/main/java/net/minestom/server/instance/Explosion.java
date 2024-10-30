@@ -1,6 +1,9 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.utils.PacketUtils;
@@ -69,11 +72,14 @@ public abstract class Explosion {
             records[i * 3 + 2] = z;
         }
 
-        // TODO send only to close players
         ExplosionPacket packet = new ExplosionPacket(centerX, centerY, centerZ, strength,
                 records, 0, 0, 0);
         postExplosion(instance, blocks, packet);
-        PacketUtils.sendGroupedPacket(instance.getPlayers(), packet);
+        List<Player> players = instance.getNearbyEntities(new Pos(centerX, centerY, centerZ), ServerFlag.EXPLOSION_SEND_DISTANCE)
+                .stream()
+                .filter(Player.class::isInstance)
+                .map(Player.class::cast).toList();
+        PacketUtils.sendGroupedPacket(players, packet);
 
         postSend(instance, blocks);
     }

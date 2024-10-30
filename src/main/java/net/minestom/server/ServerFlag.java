@@ -27,6 +27,7 @@ public final class ServerFlag {
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 262_143);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
     public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
+    public static final int EXPLOSION_SEND_DISTANCE = intProperty("minestom.explosion-send-distance", 100);
     public static final int SERVER_LINK_AMOUNT = intProperty("minestom.server-link-amount", 100);
 
     // Network rate limiting
