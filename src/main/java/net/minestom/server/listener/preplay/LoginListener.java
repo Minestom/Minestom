@@ -62,13 +62,14 @@ public final class LoginListener {
             }
         }
 
+        if (CONNECTION_MANAGER.getOnlinePlayerByUsername(packet.username()) != null) {
+            connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED));
+            connection.disconnect();
+            return;
+        }
+
         if (MojangAuth.isEnabled() && isSocketConnection) {
             // Mojang auth
-            if (CONNECTION_MANAGER.getOnlinePlayerByUsername(packet.username()) != null) {
-                connection.sendPacket(new LoginDisconnectPacket(ALREADY_CONNECTED));
-                connection.disconnect();
-                return;
-            }
             final PlayerSocketConnection socketConnection = (PlayerSocketConnection) connection;
 
             final byte[] publicKey = MojangAuth.getKeyPair().getPublic().getEncoded();
