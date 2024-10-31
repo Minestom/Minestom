@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public record FluidImpl(Registry.FluidEntry registry, NamespaceID namespace, int id) implements Fluid {
 
-    private static final Registry.Container<Fluid> CONTAINER = Registry.createStaticContainer(Registry.Resource.FLUIDS, FluidImpl::createImpl);
     private static final AtomicInteger INDEX = new AtomicInteger();
+    private static final Registry.Container<Fluid> CONTAINER = Registry.createStaticContainer(Registry.Resource.FLUIDS, FluidImpl::createImpl);
 
     private static FluidImpl createImpl(String namespace, Registry.Properties properties) {
         return new FluidImpl(Registry.fluidEntry(namespace, properties));
