@@ -7,6 +7,8 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.inventory.click.ClickType;
 import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.validate.Check;
@@ -102,7 +104,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     public void setCursorItem(@NotNull ItemStack cursorItem) {
         if (this.cursorItem.equals(cursorItem)) return;
         this.cursorItem = cursorItem;
-        sendPacketToViewers(SetSlotPacket.createCursorPacket(cursorItem));
+        sendPacketToViewers(new SetCursorItemPacket(cursorItem));
     }
 
     @Override
@@ -121,8 +123,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     @Override
     public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
-        SetSlotPacket defaultPacket = new SetSlotPacket(getWindowId(), 0, (byte) slot, item);
-
         for (Player player : getViewers()) {
             // Equipment handling
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
@@ -136,7 +136,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
                 player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), item));
             } else if (openInventory == null || slot == OFFHAND_SLOT) {
-                player.sendPacket(defaultPacket);
+                player.sendPacket(new SetPlayerInventorySlotPacket(slot, item));
             }
         }
     }
