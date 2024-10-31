@@ -47,13 +47,4 @@ public record SetSlotPacket(int windowId, int stateId, short slot,
                 }));
     }
 
-    /**
-     * Returns a {@link SetSlotPacket} used to change a player cursor item.
-     *
-     * @param cursorItem the cursor item
-     * @return a set slot packet to change a player cursor item
-     */
-    public static @NotNull SetSlotPacket createCursorPacket(@NotNull ItemStack cursorItem) {
-        return new SetSlotPacket((byte) -1, 0, (short) -1, cursorItem);
-    }
 }
