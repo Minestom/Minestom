@@ -2106,7 +2106,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void interpretPacketQueue() {
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
-        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerFlag.PLAYER_PACKET_PER_TICK);
+        this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection,
+                getPlayerConnection().getConnectionState()), ServerFlag.PLAYER_PACKET_PER_TICK);
     }
 
     /**
