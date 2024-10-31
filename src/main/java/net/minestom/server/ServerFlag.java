@@ -58,6 +58,9 @@ public final class ServerFlag {
     public static final @NotNull String MAP_RGB_MAPPING = stringProperty("minestom.map.rgbmapping", "lazy");
     public static final @Nullable String MAP_RGB_REDUCTION = stringProperty("minestom.map.rgbreduction"); // Only used if rgb mapping is "approximate"
 
+    // Entities
+    public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
+
     // Experimental/Unstable
     public static final boolean REGISTRY_LATE_REGISTER = booleanProperty("minestom.registry.late-register");
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
