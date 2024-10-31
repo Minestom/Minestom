@@ -36,6 +36,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -1060,6 +1061,10 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      */
     public @NotNull PlayerMeta getPlayerMeta() {
         return (PlayerMeta) super.getEntityMeta();
+    }
+
+    protected @NotNull EntityMeta getUnsafeEntityMeta() {
+        return super.getEntityMeta();
     }
 
     /**
@@ -2512,7 +2517,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             }
 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            PlayerMeta playerMeta = getUnsafeEntityMeta();
+            PlayerMeta playerMeta = getPlayerMeta();
             if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
             playerMeta.setDisplayedSkinParts(displayedSkinParts);
             playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
