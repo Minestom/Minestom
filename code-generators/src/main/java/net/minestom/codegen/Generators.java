@@ -1,7 +1,6 @@
 package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
-import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
 import org.slf4j.Logger;
@@ -38,6 +37,9 @@ public class Generators {
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
+        generator.generate(resource("villager_professions.json"), "net.minestom.server.entity.villager", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
+        generator.generate(resource("villager_types.json"), "net.minestom.server.entity.villager", "VillagerType", "VillagerTypeImpl", "VillagerTypes");
+        generator.generate(resource("fluids.json"), "net.minestom.server.fluid", "Fluid", "FluidImpl", "Fluids");
 
         // Dynamic registries
         generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
@@ -52,19 +54,6 @@ public class Generators {
         generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingMeta.Variant", "PaintingVariants");
         generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
 
-        // Generate fluids
-        new FluidGenerator(resource("fluids.json"), outputFolder).generate();
-
-        // TODO: Generate villager professions
-//        new VillagerProfessionGenerator(
-//                new File(inputFolder, targetVersion + "_villager_professions.json"),
-//                outputFolder
-//        ).generate();
-        // TODO: Generate villager types
-//        new VillagerTypeGenerator(
-//                new File(inputFolder, targetVersion + "_villager_types.json"),
-//                outputFolder
-//        ).generate();
         LOGGER.info("Finished generating code");
     }
 

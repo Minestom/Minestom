@@ -28,7 +28,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MicrotusExtension.class)
-public class LightParityIntegrationTest {
+class LightParityIntegrationTest {
     private static final int REGION_SIZE = 3;
 
     @Test

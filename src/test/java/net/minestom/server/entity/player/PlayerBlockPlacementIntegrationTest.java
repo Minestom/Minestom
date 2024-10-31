@@ -25,11 +25,11 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MicrotusExtension.class)
-public class PlayerBlockPlacementIntegrationTest {
+class PlayerBlockPlacementIntegrationTest {
 
     @ParameterizedTest
     @MethodSource("placeBlockFromAdventureModeParams")
-    public void placeBlockFromAdventureMode(Block baseBlock, BlockPredicates canPlaceOn, Env env) {
+    void placeBlockFromAdventureMode(Block baseBlock, BlockPredicates canPlaceOn, Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
         var player = connection.connect(instance, new Pos(0, 42, 0)).join();

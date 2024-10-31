@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MicrotusExtension.class)
-public class WorldBorderIntegrationTest {
+class WorldBorderIntegrationTest {
 
     @Test
     public void setWorldborderSize(Env env) {

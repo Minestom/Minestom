@@ -25,6 +25,7 @@ public class PathfinderIntegrationTest {
     /**
      * Validate that the path is valid
      * Currently only checks to make sure path is not null, and that nodes are not inside blocks
+     *
      * @param nodes the nodes to validate
      * @return true if the path is valid
      */
@@ -57,9 +58,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -76,9 +78,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -96,9 +99,10 @@ public class PathfinderIntegrationTest {
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(2, 40, 2));
 
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 
@@ -119,17 +123,18 @@ public class PathfinderIntegrationTest {
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(43.5, 40, -41.5));
 
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
 
         validateNodes(nav.getNodes(), i);
     }
 
     @Test
     public void testPFNodeEqual(Env env) {
-        PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.NodeType.WALK, null);
-        PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.NodeType.WALK, node1);
+        PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.Type.WALK, null);
+        PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.Type.WALK, node1);
 
         Set<PNode> nodes = new HashSet<>();
         nodes.add(node1);
@@ -183,9 +188,10 @@ public class PathfinderIntegrationTest {
 
         Navigator nav = new Navigator(zombie);
         nav.setPathTo(new Pos(0, 40, 10));
-        while (nav.getState() == PPath.PathState.CALCULATING) {}
+        while (nav.getState() == PPath.State.CALCULATING) {
+        }
 
-        assert(nav.getNodes() != null);
+        assert (nav.getNodes() != null);
         validateNodes(nav.getNodes(), i);
     }
 

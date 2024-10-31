@@ -35,14 +35,6 @@ public abstract class MinestomCodeGenerator implements CodeExporter {
         return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);
     }
 
-    protected static @NotNull String extractNamespaces(@NotNull String namespace, @NotNull Map<String, String> arguments) {
-        if (arguments.isEmpty()) return extractNamespace(namespace);
-
-        for (Map.Entry<String, String> entry : arguments.entrySet()) {
-            namespace = namespace.replace(entry.getKey(), entry.getValue());
-        }
-        return namespace.toUpperCase(Locale.ROOT);
-    }
 
     protected static String toConstant(String namespace) {
         return namespace.replace("minecraft:", "").toUpperCase(Locale.ROOT);

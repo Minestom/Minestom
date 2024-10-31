@@ -1,6 +1,6 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Objects;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
-                 int propertiesArray,
+                 long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
     /**
@@ -28,74 +28,18 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
      * <p>
      * Block states are all stored within a single number.
      */
-    private static final int BITS_PER_INDEX = 4;
+    private static final int BITS_PER_INDEX = 5;
 
-    private static final int MAX_STATES = Integer.SIZE / BITS_PER_INDEX;
+    private static final int MAX_STATES = Long.SIZE / BITS_PER_INDEX;
+    private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
 
     // Block state -> block object
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
     // Block id -> valid property keys (order is important for lookup)
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
-    // Block id -> Map<Properties, Block>
-    private static final ObjectArray<Int2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
-            (namespace, properties) -> {
-                final int blockId = properties.getInt("id");
-                final Registry.Properties stateObject = properties.section("states");
-
-                // Retrieve properties
-                PropertyType[] propertyTypes;
-                {
-                    Registry.Properties stateProperties = properties.section("properties");
-                    if (stateProperties != null) {
-                        final int stateCount = stateProperties.size();
-                        if (stateCount > MAX_STATES) {
-                            throw new IllegalStateException("Too many properties for block " + namespace);
-                        }
-                        propertyTypes = new PropertyType[stateCount];
-                        int i = 0;
-                        for (var entry : stateProperties) {
-                            final var k = entry.getKey();
-                            final var v = (List<String>) entry.getValue();
-                            propertyTypes[i++] = new PropertyType(k, v);
-                        }
-                    } else {
-                        propertyTypes = new PropertyType[0];
-                    }
-                }
-                PROPERTIES_TYPE.set(blockId, propertyTypes);
-
-                // Retrieve block states
-                {
-                    final int propertiesCount = stateObject.size();
-                    int[] propertiesKeys = new int[propertiesCount];
-                    BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
-                    int propertiesOffset = 0;
-                    for (var stateEntry : stateObject) {
-                        final String query = stateEntry.getKey();
-                        final var stateOverride = (Map<String, Object>) stateEntry.getValue();
-                        final var propertyMap = BlockUtils.parseProperties(query);
-                        assert propertyTypes.length == propertyMap.size();
-                        int propertiesValue = 0;
-                        for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
-                            final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
-                            final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
-                            propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
-                        }
-
-                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
-                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
-                                propertiesValue, null, null);
-                        BLOCK_STATE_MAP.set(block.stateId(), block);
-                        propertiesKeys[propertiesOffset] = propertiesValue;
-                        blocksValues[propertiesOffset++] = block;
-                    }
-                    POSSIBLE_STATES.set(blockId, new Int2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
-                }
-                // Register default state
-                final int defaultState = properties.getInt("defaultStateId");
-                return getState(defaultState);
-            });
+    // Block id -> Map<PropertiesValues, Block>
+    private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
+    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS, BlockImpl::createImpl);
 
     static {
         PROPERTIES_TYPE.trim();
@@ -129,7 +73,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         assert propertyTypes != null;
         final byte keyIndex = findKeyIndex(propertyTypes, property, this);
         final byte valueIndex = findValueIndex(propertyTypes[keyIndex], value, this);
-        final int updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
+        final long updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
         return compute(updatedProperties);
     }
 
@@ -138,7 +82,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (properties.isEmpty()) return this;
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
-        int updatedProperties = this.propertiesArray;
+        long updatedProperties = this.propertiesArray;
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), this);
             final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), this);
@@ -178,8 +122,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         for (int i = 0; i < length; i++) {
             PropertyType property = propertyTypes[i];
             keys[i] = property.key();
-            final int index = extractIndex(propertiesArray, i);
-            values[i] = property.values().get(index);
+            final long index = extractIndex(propertiesArray, i);
+            values[i] = property.values().get((int) index);
         }
         return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
     }
@@ -199,7 +143,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return tag.read(Objects.requireNonNullElse(nbt, CompoundBinaryTag.empty()));
     }
 
-    private Int2ObjectArrayMap<BlockImpl> possibleProperties() {
+    private Long2ObjectArrayMap<BlockImpl> possibleProperties() {
         return POSSIBLE_STATES.get(id());
     }
 
@@ -220,7 +164,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return Objects.hash(stateId(), nbt, handler);
     }
 
-    private Block compute(int updatedProperties) {
+    private Block compute(long updatedProperties) {
         if (updatedProperties == this.propertiesArray) return this;
         final BlockImpl block = possibleProperties().get(updatedProperties);
         assert block != null;
@@ -228,6 +172,65 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (nbt == null && handler == null) return block;
         // Otherwise copy with the nbt and handler
         return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
+    }
+
+    private static Block createImpl(String namespace, Registry.Properties properties) {
+        final int blockId = properties.getInt("id");
+        final Registry.Properties stateObject = properties.section("states");
+
+        // Retrieve properties
+        PropertyType[] propertyTypes;
+        {
+            Registry.Properties stateProperties = properties.section("properties");
+            if (stateProperties != null) {
+                final int stateCount = stateProperties.size();
+                if (stateCount > MAX_STATES) {
+                    throw new IllegalStateException("Too many properties for block " + namespace);
+                }
+                propertyTypes = new PropertyType[stateCount];
+                int i = 0;
+                for (var entry : stateProperties) {
+                    final var k = entry.getKey();
+                    final var v = (List<String>) entry.getValue();
+                    assert v.size() < MAX_VALUES;
+                    propertyTypes[i++] = new PropertyType(k, v);
+                }
+            } else {
+                propertyTypes = new PropertyType[0];
+            }
+        }
+        PROPERTIES_TYPE.set(blockId, propertyTypes);
+
+        // Retrieve block states
+        {
+            final int propertiesCount = stateObject.size();
+            long[] propertiesKeys = new long[propertiesCount];
+            BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
+            int propertiesOffset = 0;
+            for (var stateEntry : stateObject) {
+                final String query = stateEntry.getKey();
+                final var stateOverride = (Map<String, Object>) stateEntry.getValue();
+                final var propertyMap = BlockUtils.parseProperties(query);
+                assert propertyTypes.length == propertyMap.size();
+                long propertiesValue = 0;
+                for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
+                    final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
+                    final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
+                    propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
+                }
+
+                var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
+                final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
+                        propertiesValue, null, null);
+                BLOCK_STATE_MAP.set(block.stateId(), block);
+                propertiesKeys[propertiesOffset] = propertiesValue;
+                blocksValues[propertiesOffset++] = block;
+            }
+            POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
+        }
+        // Register default state
+        final int defaultState = properties.getInt("defaultStateId");
+        return getState(defaultState);
     }
 
     private static byte findKeyIndex(PropertyType[] properties, String key, BlockImpl block) {
@@ -255,15 +258,15 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private record PropertyType(String key, List<String> values) {
     }
 
-    static int updateIndex(int value, int index, byte newValue) {
+    static long updateIndex(long value, int index, byte newValue) {
         final int position = index * BITS_PER_INDEX;
         final int mask = (1 << BITS_PER_INDEX) - 1;
-        value &= ~(mask << position); // Clear the bits at the specified position
-        value |= (newValue & mask) << position; // Set the new bits
+        value &= ~((long) mask << position); // Clear the bits at the specified position
+        value |= (long) (newValue & mask) << position; // Set the new bits
         return value;
     }
 
-    static int extractIndex(int value, int index) {
+    static long extractIndex(long value, int index) {
         final int position = index * BITS_PER_INDEX;
         final int mask = (1 << BITS_PER_INDEX) - 1;
         return ((value >> position) & mask);

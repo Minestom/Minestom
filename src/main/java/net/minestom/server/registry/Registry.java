@@ -131,6 +131,21 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static FluidEntry fluidEntry(String namespace, @NotNull Properties main) {
+        return new FluidEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static VillagerProfession villagerProfession(String namespace, @NotNull Properties main) {
+        return new VillagerProfession(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static VillagerType villagerType(String namespace, @NotNull Properties main) {
+        return new VillagerType(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -236,7 +251,11 @@ public final class Registry {
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
-        JUKEBOX_SONGS("jukebox_songs.json");
+        JUKEBOX_SONGS("jukebox_songs.json"),
+        VILLAGER_PROFESSION("villager_professions.json"),
+        VILLAGER_TYPES("villager_types.json"),
+        FLUIDS("fluids.json"),
+        ;
 
         private final String name;
 
@@ -246,6 +265,20 @@ public final class Registry {
 
         public @NotNull String fileName() {
             return name;
+        }
+    }
+
+    public record FluidEntry(
+            @NotNull NamespaceID namespace,
+            @NotNull NamespaceID bucketId,
+            @Nullable Properties custom
+    ) implements Entry {
+
+        public FluidEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("bucketId")),
+                    custom
+            );
         }
     }
 
@@ -776,6 +809,25 @@ public final class Registry {
                     main.getBoolean("decal"),
                     custom
             );
+        }
+    }
+
+    public record VillagerProfession(NamespaceID namespace, int id, SoundEvent soundEvent, Properties custom) implements Entry {
+        public VillagerProfession(String namespace,
+                                  Properties main,
+                                  Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    SoundEvent.fromNamespaceId(main.getString("workSound")),
+                    custom);
+        }
+    }
+
+    public record VillagerType(NamespaceID namespace, int id, Properties custom) implements Entry {
+        public VillagerType(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    main.getInt("id"),
+                    custom);
         }
     }
 
