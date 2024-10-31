@@ -92,15 +92,10 @@ public enum MapColors {
         mappingStrategy = strategy;
 
         int reduction = 10;
-        if (ServerFlag.MAP_RGB_REDUCTION != null) {
-            try {
-                reduction = Integer.parseInt(ServerFlag.MAP_RGB_REDUCTION);
-            } catch (NumberFormatException e) {
-                logger.error("Invalid integer in reduction argument: {}", ServerFlag.MAP_RGB_REDUCTION);
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
+        if (ServerFlag.MAP_RGB_REDUCTION != -1) {
+            reduction = ServerFlag.MAP_RGB_REDUCTION;
 
-            if (reduction < 0 || reduction >= 255) {
+            if (reduction < 0 || reduction > 255) {
                 logger.warn("Reduction was found to be invalid: {}. Must in 0-255, defaulting to 10.", reduction);
                 reduction = 10;
             }
