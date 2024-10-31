@@ -320,7 +320,7 @@ public interface PacketRegistry<T> {
                     entry(HeldItemChangePacket.class, HeldItemChangePacket.SERIALIZER),
                     entry(ScoreboardObjectivePacket.class, ScoreboardObjectivePacket.SERIALIZER),
                     entry(SetPassengersPacket.class, SetPassengersPacket.SERIALIZER),
-                    entry(SetPlayerInventoryPacket.class, SetPlayerInventoryPacket.SERIALIZER),
+                    entry(SetPlayerInventorySlotPacket.class, SetPlayerInventorySlotPacket.SERIALIZER),
                     entry(TeamsPacket.class, TeamsPacket.SERIALIZER),
                     entry(UpdateScorePacket.class, UpdateScorePacket.SERIALIZER),
                     entry(UpdateSimulationDistancePacket.class, UpdateSimulationDistancePacket.SERIALIZER),

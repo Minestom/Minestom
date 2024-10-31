@@ -5,7 +5,8 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
+import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -27,15 +28,15 @@ public class PlayerInventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        var packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
@@ -47,15 +48,15 @@ public class PlayerInventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        var packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
@@ -67,7 +68,8 @@ public class PlayerInventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
+        var setSlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        var setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
 
         player.getInventory().setItemStack(1, MAGIC_STACK);
         player.getInventory().setItemStack(3, MAGIC_STACK);
@@ -75,17 +77,20 @@ public class PlayerInventoryIntegrationTest {
         player.getInventory().setItemStack(40, MAGIC_STACK);
         player.getInventory().setCursorItem(MAGIC_STACK);
 
-        setSlotTracker.assertCount(5);
+        setSlotTracker.assertCount(4);
+        setCursorTracker.assertCount(1);
 
-        setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
+        setSlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
         var updateWindowTracker = connection.trackIncoming(WindowItemsPacket.class);
         var equipmentTracker = connection.trackIncoming(EntityEquipmentPacket.class);
 
         // Perform the clear operation we are testing
         player.getInventory().clear();
 
-        // Make sure not individual SetSlotPackets get sent
+        // Make sure no individual set slot / set cursor item packets get sent
         setSlotTracker.assertEmpty();
+        setCursorTracker.assertEmpty();
 
         // Make sure WindowItemsPacket is empty
         updateWindowTracker.assertSingle(windowItemsPacket -> {
