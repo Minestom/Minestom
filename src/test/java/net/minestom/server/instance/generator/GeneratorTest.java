@@ -23,10 +23,11 @@ import static net.minestom.server.utils.chunk.ChunkUtils.floorSection;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GeneratorTest {
+
     @Test
     void unitSize() {
-        assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, new Vec(16)));
-        assertDoesNotThrow(() -> dummyUnit(new Vec(16), new Vec(32)));
+        assertDoesNotThrow(() -> dummyUnit(Vec.ZERO, Vec.SECTION));
+        assertDoesNotThrow(() -> dummyUnit(Vec.SECTION, new Vec(32)));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), Vec.ZERO));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(32)));
         assertThrows(IllegalArgumentException.class, () -> dummyUnit(new Vec(15), new Vec(31)));
@@ -300,7 +301,7 @@ class GeneratorTest {
     }
 
     @Test
-    public void sectionFill() {
+    void sectionFill() {
         GenSection section = new GenSection();
         var chunkUnit = GeneratorImpl.section(null, section, -1, -1, 0);
         Generator generator = chunk -> chunk.modifier().fill(Block.STONE);
@@ -310,7 +311,7 @@ class GeneratorTest {
     }
 
     @Test
-    public void testForkAcrossBorders() {
+    void testForkAcrossBorders() {
         final int minSection = -4;
         final int maxSection = 4;
 

@@ -116,7 +116,6 @@ dependencies {
     // Only here to ensure J9 module support for extensions and our classloaders
     testCompileOnly(libs.mockito.core)
 }
-
 sonar {
     properties {
         property("sonar.projectKey", "OneLiteFeatherNET_Microtus")

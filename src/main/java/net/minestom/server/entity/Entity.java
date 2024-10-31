@@ -293,12 +293,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                                                      @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                                      boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
-
-        EntityTeleportEvent event = new EntityTeleportEvent(this, position, flags);
-        EventDispatcher.call(event);
-
         final Pos globalPosition = PositionUtils.getPositionWithRelativeFlags(this.position, position, flags);
-
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
             this.position = globalPosition;
@@ -1745,26 +1740,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected void updateCollisions() {
         preventBlockPlacement = !ALLOW_BLOCK_PLACEMENT_ENTITIES.contains(entityType);
         collidesWithEntities = !NO_ENTITY_COLLISION_ENTITIES.contains(entityType);
-    }
-
-    /**
-     * Acquires this entity.
-     *
-     * @param <T> the type of object to be acquired
-     * @return the acquirable for this entity
-     * @deprecated It's preferred to use {@link AcquirableSource#acquirable()} instead, as it is overridden by
-     * subclasses
-     */
-    @Deprecated
-    @ApiStatus.Experimental
-    public <T extends Entity> @NotNull Acquirable<T> getAcquirable() {
-        return (Acquirable<T>) acquirable;
-    }
-
-    @ApiStatus.Experimental
-    @Override
-    public @NotNull Acquirable<? extends Entity> acquirable() {
-        return acquirable;
     }
 
     /**
