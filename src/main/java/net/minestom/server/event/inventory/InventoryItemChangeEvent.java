@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * Called when {@link AbstractInventory#setItemStack(int, ItemStack)} is being invoked.
  * This event cannot be cancelled and items related to the change are already moved.
  */
-@SuppressWarnings("JavadocReference")
 public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
 
     private final AbstractInventory inventory;
