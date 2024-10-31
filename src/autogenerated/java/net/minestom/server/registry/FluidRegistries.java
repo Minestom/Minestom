@@ -2,7 +2,6 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.fluid.Fluid;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 

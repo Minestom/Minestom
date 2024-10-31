@@ -46,7 +46,7 @@ public enum DyeColor implements RGBLike {
 
     public static final BinaryTagSerializer<DyeColor> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(DyeColor.class);
 
-    private static final DyeColor[] VALUES = DyeColor.values();
+    private static final DyeColor[] VALUES = values();
 
     private final Color textureDiffuseColor;
 
@@ -95,8 +95,7 @@ public enum DyeColor implements RGBLike {
         return this.mapColorId;
     }
 
-    @Nullable
-    public static DyeColor getValue(int id) {
+    public static @Nullable DyeColor getValue(int id) {
         return VALUES[id];
     }
 }
