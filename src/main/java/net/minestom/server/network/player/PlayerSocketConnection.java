@@ -136,10 +136,20 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Success<ClientPacket> success -> {
                 for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : success.packets()) {
                     final ClientPacket packet = parsedPacket.packet();
+
+                    // Update connection state 'as we receive' the packet, aka before we send any responses
+                    // from processing. This is important for disconnection during start of handshake.
+                    final ConnectionState currState = getConnectionState();
+                    final ConnectionState nextState = parsedPacket.nextState();
+                    if (nextState != currState) {
+                        setConnectionState(nextState);
+                    }
+
                     try {
                         final boolean processImmediately = IMMEDIATE_PROCESS_PACKETS.contains(packet.getClass());
                         if (processImmediately) {
-                            MinecraftServer.getPacketListenerManager().processClientPacket(packet, this);
+                            // Interpret the packet using the connection state we received it.
+                            MinecraftServer.getPacketListenerManager().processClientPacket(packet, this, currState);
                         } else {
                             // To be processed during the next player tick
                             final Player player = getPlayer();
@@ -148,11 +158,6 @@ public class PlayerSocketConnection extends PlayerConnection {
                         }
                     } catch (Exception e) {
                         MinecraftServer.getExceptionManager().handleException(e);
-                    }
-                    // Update state to properly interpret next packet
-                    final ConnectionState nextState = parsedPacket.nextState();
-                    if (nextState != getConnectionState()) {
-                        setConnectionState(nextState);
                     }
                 }
                 // Compact in case of incomplete read
