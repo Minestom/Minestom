@@ -136,6 +136,16 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static VillagerProfession villagerProfession(String namespace, @NotNull Properties main) {
+        return new VillagerProfession(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static VillagerType villagerType(String namespace, @NotNull Properties main) {
+        return new VillagerType(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
