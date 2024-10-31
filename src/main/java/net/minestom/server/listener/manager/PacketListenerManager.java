@@ -107,8 +107,7 @@ public final class PacketListenerManager {
      * @param connection the connection of the player who sent the packet
      * @param <T>        the packet type
      */
-    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull PlayerConnection connection) {
-        final ConnectionState state = connection.getConnectionState();
+    public <T extends ClientPacket> void processClientPacket(@NotNull T packet, @NotNull PlayerConnection connection, @NotNull ConnectionState state) {
         final Class clazz = packet.getClass();
         PacketPrePlayListenerConsumer<T> packetListenerConsumer = listeners[state.ordinal()].get(clazz);
 
