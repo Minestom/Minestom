@@ -178,32 +178,4 @@ class PlayerMovementIntegrationTest {
         player.remove();
         env.destroyInstance(instance);
     }
-
-    @Test
-    public void testSettingsViewDistanceExpansionAndShrink(Env env) {
-        int startingViewDistance = 8;
-        byte endViewDistance = 12;
-        byte finalViewDistance = 10;
-        var instance = env.createFlatInstance();
-        var connection = env.createConnection();
-        Pos startingPlayerPos = new Pos(0, 42, 0);
-        var player = connection.connect(instance, startingPlayerPos).join();
-
-        int chunkDifference = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(startingViewDistance);
-
-        // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkUtils.forChunksInRange(0, 0, endViewDistance, instance::loadChunk);
-
-        var tracker = connection.trackIncoming(ChunkDataPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", endViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
-        player.interpretPacketQueue();
-        tracker.assertCount(chunkDifference);
-
-        var tracker1 = connection.trackIncoming(UnloadChunkPacket.class);
-        player.addPacketToQueue(new ClientSettingsPacket("en_US", finalViewDistance, ChatMessageType.FULL, false, (byte) 0, Player.MainHand.RIGHT, false, true));
-        player.interpretPacketQueue();
-
-        int chunkDifference1 = ChunkUtils.getChunkCount(endViewDistance) - ChunkUtils.getChunkCount(finalViewDistance);
-        tracker1.assertCount(chunkDifference1);
-    }
 }

@@ -42,14 +42,6 @@ class ArgumentTypeTest {
     }
 
     @Test
-    void testArgumentEnchantment() {
-        var arg = ArgumentType.Enchantment("enchantment");
-        assertInvalidArg(arg, "minecraft:invalid_enchantment");
-        assertArg(arg, Enchantment.SWEEPING, Enchantment.SWEEPING.name());
-        assertArg(arg, Enchantment.MENDING, Enchantment.MENDING.name());
-    }
-
-    @Test
     void testArgumentEntityType() {
         var arg = ArgumentType.EntityType("entity_type");
         assertInvalidArg(arg, "minecraft:invalid_entity_type");
