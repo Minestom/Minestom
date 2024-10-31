@@ -7,10 +7,8 @@ import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when {@link AbstractInventory#safeItemInsert(int, ItemStack)} is being invoked.
+ * Called when {@link AbstractInventory#setItemStack(int, ItemStack)} is being invoked.
  * This event cannot be cancelled and items related to the change are already moved.
- *
- * @see PlayerInventoryItemChangeEvent
  */
 @SuppressWarnings("JavadocReference")
 public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
