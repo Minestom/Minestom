@@ -1,6 +1,5 @@
 package net.minestom.server.map;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
