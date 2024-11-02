@@ -1,12 +1,17 @@
 package net.minestom.server.recipe.display;
 
+import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
-public sealed interface RecipeDisplay {
+public sealed interface RecipeDisplay extends ComponentHolder<RecipeDisplay> {
     @NotNull NetworkBuffer.Type<RecipeDisplay> NETWORK_TYPE = RecipeDisplayType.NETWORK_TYPE
             .unionType(RecipeDisplay::dataSerializer, RecipeDisplay::recipeDisplayToType);
 
@@ -22,6 +27,24 @@ public sealed interface RecipeDisplay {
                 SlotDisplay.NETWORK_TYPE, CraftingShapeless::result,
                 SlotDisplay.NETWORK_TYPE, CraftingShapeless::craftingStation,
                 CraftingShapeless::new);
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            final var components = new ArrayList<Component>();
+            for (SlotDisplay ingredient : ingredients)
+                components.addAll(ingredient.components());
+            components.addAll(result.components());
+            components.addAll(craftingStation.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            final var newIngredients = new ArrayList<SlotDisplay>();
+            for (SlotDisplay ingredient : ingredients)
+                newIngredients.add(ingredient.copyWithOperator(operator));
+            return new CraftingShapeless(newIngredients, result.copyWithOperator(operator), craftingStation.copyWithOperator(operator));
+        }
     }
 
     record CraftingShaped(
@@ -45,6 +68,24 @@ public sealed interface RecipeDisplay {
                 throw new IllegalArgumentException("Invalid shaped recipe, ingredients size must be equal to width * height");
             ingredients = List.copyOf(ingredients);
         }
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            final var components = new ArrayList<Component>();
+            for (SlotDisplay ingredient : ingredients)
+                components.addAll(ingredient.components());
+            components.addAll(result.components());
+            components.addAll(craftingStation.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            final var newIngredients = new ArrayList<SlotDisplay>();
+            for (SlotDisplay ingredient : ingredients)
+                newIngredients.add(ingredient.copyWithOperator(operator));
+            return new CraftingShaped(width, height, newIngredients, result.copyWithOperator(operator), craftingStation.copyWithOperator(operator));
+        }
     }
 
     record Furnace(
@@ -62,6 +103,23 @@ public sealed interface RecipeDisplay {
                 NetworkBuffer.VAR_INT, Furnace::duration,
                 NetworkBuffer.FLOAT, Furnace::experience,
                 Furnace::new);
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            final var components = new ArrayList<Component>();
+            components.addAll(ingredient.components());
+            components.addAll(fuel.components());
+            components.addAll(result.components());
+            components.addAll(craftingStation.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new Furnace(ingredient.copyWithOperator(operator), fuel.copyWithOperator(operator),
+                    result.copyWithOperator(operator), craftingStation.copyWithOperator(operator),
+                    duration, experience);
+        }
     }
 
     record Stonecutter(
@@ -74,6 +132,21 @@ public sealed interface RecipeDisplay {
                 SlotDisplay.NETWORK_TYPE, Stonecutter::result,
                 SlotDisplay.NETWORK_TYPE, Stonecutter::craftingStation,
                 Stonecutter::new);
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            final var components = new ArrayList<Component>();
+            components.addAll(ingredient.components());
+            components.addAll(result.components());
+            components.addAll(craftingStation.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new Stonecutter(ingredient.copyWithOperator(operator), result.copyWithOperator(operator),
+                    craftingStation.copyWithOperator(operator));
+        }
     }
 
     record Smithing(
@@ -90,6 +163,23 @@ public sealed interface RecipeDisplay {
                 SlotDisplay.NETWORK_TYPE, Smithing::result,
                 SlotDisplay.NETWORK_TYPE, Smithing::craftingStation,
                 Smithing::new);
+
+        @Override
+        public @NotNull Collection<Component> components() {
+            final var components = new ArrayList<Component>();
+            components.addAll(template.components());
+            components.addAll(base.components());
+            components.addAll(addition.components());
+            components.addAll(result.components());
+            components.addAll(craftingStation.components());
+            return List.copyOf(components);
+        }
+
+        @Override
+        public @NotNull RecipeDisplay copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+            return new Smithing(template.copyWithOperator(operator), base.copyWithOperator(operator),
+                    addition.copyWithOperator(operator), result.copyWithOperator(operator), craftingStation.copyWithOperator(operator));
+        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

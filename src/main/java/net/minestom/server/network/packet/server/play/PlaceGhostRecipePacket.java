@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-// TODO: Recipe is now a RecipeDisplay object need to look further into it.
+// TODO(1.21.2): Recipe is now a RecipeDisplay object need to look further into it.
 public record PlaceGhostRecipePacket(int windowId, @NotNull String recipe) implements ServerPacket.Play {
     public static final NetworkBuffer.Type<PlaceGhostRecipePacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, PlaceGhostRecipePacket::windowId,
