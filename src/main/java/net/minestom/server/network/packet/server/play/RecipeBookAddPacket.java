@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet.server.play;
 
+import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -10,11 +11,14 @@ import net.minestom.server.recipe.display.RecipeDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 
-public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace) implements ServerPacket.Play {
+public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final byte FLAG_NOTIFICATION = 1;
     public static final byte FLAG_HIGHLIGHT = 1 << 1;
 
@@ -55,4 +59,21 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
         }
     }
 
+    @Override
+    public @NotNull Collection<Component> components() {
+        final var components = new ArrayList<Component>();
+        for (Entry entry : entries)
+            components.addAll(entry.display.components());
+        return components;
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        final var entries = new ArrayList<Entry>();
+        for (Entry entry : this.entries) {
+            entries.add(new Entry(entry.displayId, entry.display.copyWithOperator(operator),
+                    entry.group, entry.category, entry.craftingRequirements, entry.flags));
+        }
+        return new RecipeBookAddPacket(entries, replace);
+    }
 }

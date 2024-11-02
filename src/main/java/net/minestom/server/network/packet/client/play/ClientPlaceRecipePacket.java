@@ -6,15 +6,10 @@ import net.minestom.server.network.packet.client.ClientPacket;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientPlaceRecipePacket(byte windowId, String recipe, boolean makeAll) implements ClientPacket {
+public record ClientPlaceRecipePacket(byte windowId, int recipeDisplayId, boolean makeAll) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientPlaceRecipePacket> SERIALIZER = NetworkBufferTemplate.template(
             BYTE, ClientPlaceRecipePacket::windowId,
-            STRING, ClientPlaceRecipePacket::recipe,
+            VAR_INT, ClientPlaceRecipePacket::recipeDisplayId,
             BOOLEAN, ClientPlaceRecipePacket::makeAll,
             ClientPlaceRecipePacket::new);
-    public ClientPlaceRecipePacket {
-        if (recipe.length() > 256) {
-            throw new IllegalArgumentException("'recipe' cannot be longer than 256 characters.");
-        }
-    }
 }
