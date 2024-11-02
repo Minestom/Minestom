@@ -2,18 +2,13 @@ package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
@@ -48,19 +43,18 @@ public record EntityEquipmentPacket(int entityId,
 
     @Override
     public @NotNull Collection<Component> components() {
-        return this.equipments.values()
-                .stream()
-                .map(item -> item.get(ItemComponent.CUSTOM_NAME))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        final var components = new ArrayList<Component>();
+        for (var itemStack : this.equipments.values())
+            components.addAll(ItemStack.textComponents(itemStack));
+        return List.copyOf(components);
     }
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        final var map = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
-        this.equipments.forEach((key, value) -> map.put(key, value.with(ItemComponent.CUSTOM_NAME, operator)));
-
-        return new EntityEquipmentPacket(this.entityId, map);
+        final var newEquipment = new EnumMap<EquipmentSlot, ItemStack>(EquipmentSlot.class);
+        for (var entry : this.equipments.entrySet())
+            newEquipment.put(entry.getKey(), ItemStack.copyWithOperator(entry.getValue(), operator));
+        return new EntityEquipmentPacket(this.entityId, newEquipment);
     }
 
     private static Map<EquipmentSlot, ItemStack> readEquipments(@NotNull NetworkBuffer reader) {
