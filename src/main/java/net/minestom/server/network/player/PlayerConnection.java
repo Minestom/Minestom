@@ -211,6 +211,15 @@ public abstract class PlayerConnection {
     }
 
     public CompletableFuture<byte @Nullable []> fetchCookie(@NotNull String key) {
+        if (getConnectionState() == ConnectionState.CONFIGURATION && getPlayer() == null) {
+            // This is a bit of an unfortunate limitation. The player provider blocks the player read virtual
+            // thread waiting for the player provider so a cookie response would never be received and the
+            // process would deadlock.
+            // We cannot create the player provider without blocking the read thread because the client
+            // has already sent the initial settings packet, and we need the Player to process the response.
+            // We could store the settings on the connection, but it does not seem worth to get around this case.
+            throw new IllegalStateException("Cannot fetch cookie in PlayerProvider, use AsyncPlayerPreLoginEvent or AsyncPlayerConfigurationEvent");
+        }
         CompletableFuture<byte[]> future = new CompletableFuture<>();
         pendingCookieRequests.put(NamespaceID.from(key), future);
         sendPacket(new CookieRequestPacket(key));
