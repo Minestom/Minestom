@@ -198,8 +198,13 @@ public final class LoginListener {
             throw new UnsupportedOperationException("Only socket");
         final GameProfile gameProfile = socketConnection.gameProfile();
         assert gameProfile != null;
-        final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
-        executeConfig(player, true);
+        try {
+            final Player player = MinecraftServer.getConnectionManager().createPlayer(connection, gameProfile);
+            executeConfig(player, true);
+        } catch (Throwable t) {
+            MinecraftServer.getExceptionManager().handleException(t);
+            connection.kick(ERROR_DURING_LOGIN);
+        }
     }
 
     public static void configAckListener(@NotNull ClientConfigurationAckPacket packet, @NotNull Player player) {
@@ -236,6 +241,7 @@ public final class LoginListener {
                 MinecraftServer.getConnectionManager().doConfiguration(player, isFirstConfig);
             } catch (Throwable t) {
                 MinecraftServer.getExceptionManager().handleException(t);
+                player.kick(ERROR_DURING_LOGIN);
             }
         });
     }
