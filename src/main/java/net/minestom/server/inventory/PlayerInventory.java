@@ -273,7 +273,8 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         final int convertedSlot = convertPlayerInventorySlot(slot, OFFSET);
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(convertedSlot);
-        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor);
+        final InventoryClickResult clickResult = clickProcessor.doubleClick(this, this, player, convertedSlot, clicked, cursor, getStartSlotForDoubleClick(slot, player));
+         // Microtus - fix shift click for inventory
         if (clickResult.isCancel()) {
             update();
             return false;

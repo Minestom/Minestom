@@ -289,7 +289,7 @@ public final class InventoryClickProcessor {
     }
 
     public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
-                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor, int startSlot) { // Microtus - fix shift click for inventory
         InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
         if (clickResult.isCancel()) return clickResult;
         if (cursor.isAir()) return clickResult.cancelled();
@@ -307,7 +307,7 @@ public final class InventoryClickProcessor {
                     return false;
                 final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
                 return !result.isCancel();
-            });
+            }, startSlot, inventory.getInnerSize(), 1); // Microtus - fix shift click for inventory
             final ItemStack itemResult = pair.left();
             var itemChangesMap = pair.right();
             itemChangesMap.forEach((Integer s, ItemStack itemStack) -> {

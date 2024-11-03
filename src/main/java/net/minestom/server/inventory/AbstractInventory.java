@@ -1,5 +1,6 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.PlayerInventoryItemChangeEvent;
@@ -55,6 +56,33 @@ public abstract sealed class AbstractInventory implements InventoryClickHandler,
                 "Inventory does not have the slot " + slot);
         safeItemInsert(slot, itemStack);
     }
+
+
+    // Microtus - fix shift click for inventory
+    /**
+     * Gets the slot for a shift click operation.
+     * <p>
+     * This is used to determine where the item should be placed when shift clicking.
+     *
+     * @param index the slot index
+     * @return the slot where the item should be placed when shift clicking
+     */
+    int getStartSlotForShiftClick(int index, Player player) {
+        return 0;
+    }
+
+    /**
+     * Gets the slot for a double click operation.
+     * <p>
+     * This is used to determine where the item should be placed when double-clicking.
+     *
+     * @param index the slot index
+     * @return the slot where the item should be placed when double-clicking
+     */
+    int getStartSlotForDoubleClick(int index, Player player) {
+        return 0;
+    }
+    // Microtus - fix shift click for inventory
 
     /**
      * Inserts safely an item into the inventory.

@@ -246,7 +246,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         final InventoryClickResult clickResult = clickProcessor.shiftClick(
                 isInWindow ? this : playerInventory,
                 isInWindow ? playerInventory : this,
-                0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
+                getStartSlotForShiftClick(slot, player), isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1, // Microtus - fix shift click for inventory
                 player, clickSlot, clicked, cursor, button); // Microtus
         if (clickResult.isCancel()) {
             updateAll(player);
@@ -261,6 +261,29 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
         playerInventory.setCursorItem(clickResult.getCursor());
         return true;
     }
+
+    // Microtus - fix shift click for inventory
+    @Override
+    int getStartSlotForShiftClick(int index, Player player) {
+        if (index == 0) {
+            return 9;
+        }
+        if (index >= 1 && index < 5) {
+            return 9;
+        }
+        // TODO: Add armor slot support
+        if (index >= 5 && index < 9) {
+            return 9;
+        }
+        if (index >= 9 && index < 36) {
+            return 36;
+        }
+        if (index >= 36 && index < 45) {
+            return 9;
+        }
+        return 9;
+    }
+    // Microtus - fix shift click for inventory
 
     @Override
     public boolean changeHeld(@NotNull Player player, int slot, int key) {
@@ -352,7 +375,7 @@ public non-sealed class Inventory extends AbstractInventory implements Viewable 
                 ItemStack.AIR;
         final ItemStack cursor = playerInventory.getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.doubleClick(isInWindow ? this : playerInventory,
-                this, player, clickSlot, clicked, cursor);
+                this, player, clickSlot, clicked, cursor, getStartSlotForDoubleClick(slot, player)); // Microtus - fix shift click for inventory
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
