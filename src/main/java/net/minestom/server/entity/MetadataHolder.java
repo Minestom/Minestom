@@ -132,7 +132,7 @@ public final class MetadataHolder {
 
     static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
-    static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
+    public static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
