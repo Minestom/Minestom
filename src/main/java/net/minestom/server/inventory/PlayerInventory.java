@@ -9,7 +9,6 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -131,13 +130,8 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                 player.syncEquipment(equipmentSlot);
             }
 
-            // Slot handling
-            AbstractInventory openInventory = player.getOpenInventory();
-            if (openInventory != null && slot >= OFFSET && slot < OFFSET + INNER_INVENTORY_SIZE) {
-                player.sendPacket(new SetSlotPacket(openInventory.getWindowId(), 0, (short) (slot + openInventory.getSize() - OFFSET), item));
-            } else if (openInventory == null || slot == OFFHAND_SLOT) {
-                player.sendPacket(new SetPlayerInventorySlotPacket(slot, item));
-            }
+            // Update client
+            player.sendPacket(new SetPlayerInventorySlotPacket(slot, item));
         }
     }
 
