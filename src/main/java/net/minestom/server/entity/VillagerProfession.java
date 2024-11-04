@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface VillagerProfession extends StaticProtocolObject, VillagerProfessions permits VillagerProfessionImpl {
 
     NetworkBuffer.Type<VillagerProfession> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(VillagerProfession::fromId, VillagerProfession::id);
-    BinaryTagSerializer<VillagerProfession> NBT_TYPE = BinaryTagSerializer.INT.map(VillagerProfession::fromId, VillagerProfession::id);
+    BinaryTagSerializer<VillagerProfession> NBT_TYPE = BinaryTagSerializer.STRING.map(VillagerProfessionImpl::getSafe, VillagerProfession::name);
 
     @Contract(pure = true)
     @NotNull Registry.VillagerProfessionEntry registry();

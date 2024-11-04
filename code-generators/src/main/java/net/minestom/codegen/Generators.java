@@ -70,12 +70,7 @@ public class Generators {
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
-
-        // TODO: Generate villager professions
-//        new VillagerProfessionGenerator(
-//                new File(inputFolder, targetVersion + "_villager_professions.json"),
-//                outputFolder
-//        ).generate();
+        
         LOGGER.info("Finished generating code");
     }
 
