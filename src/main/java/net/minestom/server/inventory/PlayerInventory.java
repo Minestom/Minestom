@@ -9,7 +9,6 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
