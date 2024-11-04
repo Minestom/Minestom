@@ -185,7 +185,6 @@ public class InventoryIntegrationTest {
     public void testInnerInventorySlotSending(Env env) {
         // Inner inventory changes are sent along with the open inventory
         // Otherwise, they are sent separately
-        assumeFalse(true, "TODO(1.21.2)");
 
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
@@ -195,6 +194,8 @@ public class InventoryIntegrationTest {
         Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
+
+        var overallTracker = connection.trackIncoming();
 
         // Ensure that slots not in the inner inventory are sent separately
         var packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
@@ -208,14 +209,14 @@ public class InventoryIntegrationTest {
         packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(0, MAGIC_STACK); // Test with first inner inventory slot
         packetTracker.assertSingle(slot -> {
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(0) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(0, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 
         packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(35, MAGIC_STACK); // Test with last inner inventory slot
         packetTracker.assertSingle(slot -> {
-            assertEquals(PlayerInventoryUtils.convertToPacketSlot(35) - PlayerInventoryUtils.OFFSET + inventory.getSize(), slot.slot());
+            assertEquals(35, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
     }
