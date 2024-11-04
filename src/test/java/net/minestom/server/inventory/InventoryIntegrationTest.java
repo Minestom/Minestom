@@ -194,8 +194,6 @@ public class InventoryIntegrationTest {
         player.openInventory(inventory);
         assertEquals(inventory, player.getOpenInventory());
 
-        var overallTracker = connection.trackIncoming();
-
         // Ensure that slots not in the inner inventory are sent separately
         var packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
