@@ -1,6 +1,7 @@
 package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
+import net.minestom.codegen.entity.VillagerTypeGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
@@ -36,6 +37,8 @@ public class Generators {
                 resource("consume_effects.json"), outputFolder).packagePrivate().generate();
         new GenericEnumGenerator("net.minestom.server.command", "ArgumentParserType",
                 resource("command_arguments.json"), outputFolder).generate();
+        new VillagerTypeGenerator("net.minestom.server.entity", "VillagerType",
+                resource("villager_types.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
@@ -49,6 +52,8 @@ public class Generators {
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
+        generator.generate(resource("villager_professions.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
+
 
         // Dynamic registries
         generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
@@ -69,11 +74,6 @@ public class Generators {
         // TODO: Generate villager professions
 //        new VillagerProfessionGenerator(
 //                new File(inputFolder, targetVersion + "_villager_professions.json"),
-//                outputFolder
-//        ).generate();
-        // TODO: Generate villager types
-//        new VillagerTypeGenerator(
-//                new File(inputFolder, targetVersion + "_villager_types.json"),
 //                outputFolder
 //        ).generate();
         LOGGER.info("Finished generating code");
