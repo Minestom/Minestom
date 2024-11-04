@@ -112,7 +112,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
      * @param sendPacket whether or not to send packets
      */
     public void setItemStack(int slot, @NotNull ItemStack itemStack, boolean sendPacket) {
-        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize()),
+        Check.argCondition(!MathUtils.isBetween(slot, 0, getSize() - 1), // Subtract 1 because MathUtils is <= max, instead of strictly less than
                 "Inventory does not have the slot " + slot);
 
         ItemStack previous;
