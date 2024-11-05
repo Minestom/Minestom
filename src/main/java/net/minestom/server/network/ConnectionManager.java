@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
@@ -24,6 +25,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.validate.Check;
@@ -44,10 +46,10 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private CachedPacket defaultTags;
 
-    private CachedPacket getDefaultTags() {
+    private CachedPacket getDefaultTags(Registries registries) {
         var defaultTags = this.defaultTags;
         if (defaultTags == null) {
-            final TagsPacket packet = MinecraftServer.getTagManager().packet();
+            final TagsPacket packet = MinecraftServer.getTagManager().packet(registries);
             this.defaultTags = defaultTags = new CachedPacket(packet);
         }
         return defaultTags;
@@ -250,20 +252,20 @@ public final class ConnectionManager {
             }
             boolean excludeVanilla = knownPacks.contains(SelectKnownPacksPacket.MINECRAFT_CORE);
 
-            var serverProcess = MinecraftServer.process();
-            player.sendPacket(serverProcess.chatType().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.dimensionType().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.biome().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.damageType().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.trimMaterial().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.trimPattern().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.bannerPattern().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.wolfVariant().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.enchantment().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.paintingVariant().registryDataPacket(excludeVanilla));
-            player.sendPacket(serverProcess.jukeboxSong().registryDataPacket(excludeVanilla));
+            Registries registries = MinecraftServer.process();
+            player.sendPacket(registries.chatType().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.biome().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.damageType().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.bannerPattern().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.enchantment().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.paintingVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.jukeboxSong().registryDataPacket(registries, excludeVanilla));
 
-            player.sendPacket(getDefaultTags());
+            player.sendPacket(getDefaultTags(registries));
         }
 
         // Wait for pending resource packs if any
