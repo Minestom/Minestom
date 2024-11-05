@@ -384,7 +384,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if this entity is immune to the given type of damage
      */
     public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
-        if (isInvulnerable() && type == DamageType.OUT_OF_WORLD) {
+        if (type.equals(DamageType.OUT_OF_WORLD)) {
             return false;
         }
         return isInvulnerable();
