@@ -30,7 +30,7 @@ public enum GameMode {
         return allowFlying;
     }
 
-    public boolean canTakeDamage() {
+    public boolean invulnerable() {
         return invulnerable;
     }
 
