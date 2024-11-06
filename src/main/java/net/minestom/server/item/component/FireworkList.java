@@ -16,7 +16,8 @@ public record FireworkList(int flightDuration, @NotNull List<FireworkExplosion> 
             FireworkExplosion.NETWORK_TYPE.list(256), FireworkList::explosions,
             FireworkList::new);
     public static final BinaryTagSerializer<FireworkList> NBT_TYPE = BinaryTagTemplate.object(
-            "flight_duration", BinaryTagSerializer.INT, FireworkList::flightDuration,
+            // Mojang uses a byte here but var int for protocol so we map to byte here
+            "flight_duration", BinaryTagSerializer.BYTE.map(Byte::intValue, Integer::byteValue), FireworkList::flightDuration,
             "explosions", FireworkExplosion.NBT_TYPE.list().optional(List.of()), FireworkList::explosions,
             FireworkList::new);
 
