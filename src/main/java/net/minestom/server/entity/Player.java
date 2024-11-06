@@ -1014,14 +1014,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
-        if (!getGameMode().canTakeDamage()) {
-            return !DamageType.OUT_OF_WORLD.equals(type);
-        }
-        return super.isImmune(type);
-    }
-
-    @Override
     public void setHealth(float health) {
         sendPacket(new UpdateHealthPacket(health, food, foodSaturation));
         super.setHealth(health);
@@ -1634,7 +1626,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // The client updates their abilities based on the GameMode as follows
         this.allowFlying = gameMode.allowFlying();
         this.instantBreak = gameMode.instantBreak();
-        this.invulnerable = gameMode.canTakeDamage();
+        this.invulnerable = gameMode.invulnerable();
         // Spectator automatically enables flying
         // If new game mode cannot fly, disable it
         if (gameMode == GameMode.SPECTATOR || !gameMode.allowFlying()) {
@@ -1918,15 +1910,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public boolean hasReducedDebugScreenInformation() {
         return reducedDebugScreenInformation;
-    }
-
-    /**
-     * The invulnerable field appear in the {@link PlayerAbilitiesPacket} packet.
-     *
-     * @return true if the player is invulnerable, false otherwise
-     */
-    public boolean isInvulnerable() {
-        return super.isInvulnerable();
     }
 
     /**
