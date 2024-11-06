@@ -34,6 +34,7 @@ import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -132,7 +133,12 @@ public final class MetadataHolder {
 
     static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
-    static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
+    @ApiStatus.Internal
+    public static EntityMeta createMeta(
+            @NotNull EntityType entityType,
+            @Nullable Entity entity,
+            @NotNull MetadataHolder metadata
+    ) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
