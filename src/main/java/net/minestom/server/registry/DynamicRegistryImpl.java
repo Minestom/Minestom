@@ -48,7 +48,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         }
     }
 
-    private CachedPacket vanillaRegistryDataPacket = null;
+    private Registries registries = null;
+    private CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
     private final List<T> entryById = new CopyOnWriteArrayList<>();
@@ -174,12 +175,13 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla) {
+    public @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
         // We cache the vanilla packet because that is by far the most common case. If some client claims not to have
         // the vanilla datapack we can compute the entire thing.
         if (excludeVanilla) {
-            if (vanillaRegistryDataPacket == null) {
-                vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
+            if (this.registries != registries) {
+                vanillaRegistryDataPacket.invalidate();
+                this.registries = registries;
             }
             return vanillaRegistryDataPacket;
         }
@@ -187,7 +189,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return createRegistryDataPacket(registries, false);
     }
 
-    private @NotNull RegistryDataPacket createRegistryDataPacket(Registries registries, boolean excludeVanilla) {
+    private @NotNull RegistryDataPacket createRegistryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
         Check.notNull(nbtType, "Cannot create registry data packet for server-only registry");
         BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, true);
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());

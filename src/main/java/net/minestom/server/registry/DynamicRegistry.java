@@ -218,6 +218,6 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @return A {@link SendablePacket} containing the registry data
      */
     @ApiStatus.Internal
-    @NotNull SendablePacket registryDataPacket(Registries registries, boolean excludeVanilla);
+    @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla);
 
 }
