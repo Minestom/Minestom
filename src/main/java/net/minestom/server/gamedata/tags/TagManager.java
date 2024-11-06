@@ -1,6 +1,7 @@
 package net.minestom.server.gamedata.tags;
 
 import net.minestom.server.network.packet.server.common.TagsPacket;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,20 +41,20 @@ public final class TagManager {
         return Collections.unmodifiableMap(tagMap);
     }
 
-    public TagsPacket packet() {
-        List<TagsPacket.Registry> registries = new ArrayList<>();
+    public TagsPacket packet(Registries registries) {
+        List<TagsPacket.Registry> registryList = new ArrayList<>();
         for (Map.Entry<Tag.BasicType, List<Tag>> entry : tagMap.entrySet()) {
             final Tag.BasicType type = entry.getKey();
             final String registry = type.getIdentifier();
             List<TagsPacket.Tag> tags = new ArrayList<>();
             for (Tag tag : entry.getValue()) {
                 final String identifier = tag.getName().asString();
-                final int[] values = tag.getValues().stream().mapToInt(value -> type.getFunction().apply(value.asString())).toArray();
+                final int[] values = tag.getValues().stream().mapToInt(value -> type.getFunction().apply(value.asString(), registries)).toArray();
                 tags.add(new TagsPacket.Tag(identifier, values));
             }
-            registries.add(new TagsPacket.Registry(registry, tags));
+            registryList.add(new TagsPacket.Registry(registry, tags));
         }
-        return new TagsPacket(registries);
+        return new TagsPacket(registryList);
     }
 
     private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {
