@@ -32,7 +32,6 @@ import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.*;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
@@ -1761,13 +1760,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         AbstractInventory openInventory = getOpenInventory();
         if (openInventory == null) return;
 
+        if (!fromClient) {
+            didCloseInventory = true;
+        }
+
         this.openInventory = null;
         openInventory.removeViewer(this);
         inventory.update();
 
-        if (!fromClient) {
-            didCloseInventory = true;
-        }
+        didCloseInventory = false;
     }
 
     /**
