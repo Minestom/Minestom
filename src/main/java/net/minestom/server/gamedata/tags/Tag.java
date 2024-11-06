@@ -6,10 +6,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.FluidRegistries;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,6 +16,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 /**
@@ -94,32 +92,32 @@ public final class Tag implements ProtocolObject, Keyed {
 
     public enum BasicType {
         BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
-                name -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
+                (name, registries) -> Objects.requireNonNull(Block.fromNamespaceId(name)).id()),
         ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
-                name -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
+                (name, registries) -> Objects.requireNonNull(Material.fromNamespaceId(name)).id()),
         FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
+                (name, registries) -> FluidRegistries.getFluid(name).ordinal()),
         ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
-                name -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
+                (name, registries) -> Objects.requireNonNull(EntityType.fromNamespaceId(name)).id()),
         GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
-                name -> FluidRegistries.getFluid(name).ordinal()),
+                (name, registries) -> FluidRegistries.getFluid(name).ordinal()),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
         POTION_EFFECTS("minecraft:potion_effect", null, null), // Seems not to be included in server data
 
         //todo this is cursed. it does not update as the registry changes. Fix later.
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
-                name -> MinecraftServer.getEnchantmentRegistry().getId(DynamicRegistry.Key.of(name))),
+                (name, registries) -> registries.enchantment().getId(DynamicRegistry.Key.of(name))),
         BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
-                name -> MinecraftServer.getBiomeRegistry().getId(DynamicRegistry.Key.of(name)));
+                (name, registries) -> registries.biome().getId(DynamicRegistry.Key.of(name)));
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
         private final Registry.Resource resource;
-        private final Function<String, Integer> function;
+        private final BiFunction<String, Registries, Integer> function;
 
         BasicType(@NotNull String identifier,
                   @Nullable Registry.Resource resource,
-                  @Nullable Function<String, Integer> function) {
+                  @Nullable BiFunction<String, Registries, Integer> function) {
             this.identifier = identifier;
             this.resource = resource;
             this.function = function;
@@ -133,7 +131,7 @@ public final class Tag implements ProtocolObject, Keyed {
             return resource;
         }
 
-        public Function<String, Integer> getFunction() {
+        public BiFunction<String, Registries, Integer> getFunction() {
             return function;
         }
 

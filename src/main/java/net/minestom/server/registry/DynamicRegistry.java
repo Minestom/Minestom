@@ -213,10 +213,11 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
      * exclude vanilla entries if one has been overridden (e.g. via {@link #register(NamespaceID, T)}.</p>
      *
+     * @param registries Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */
     @ApiStatus.Internal
-    @NotNull SendablePacket registryDataPacket(boolean excludeVanilla);
+    @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla);
 
 }
