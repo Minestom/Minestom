@@ -82,4 +82,28 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
     public void setAlignRight(boolean value) {
         metadata.set(MetadataDef.TextDisplay.ALIGN_RIGHT, value);
     }
+
+    public Alignment getAlignment() {
+        return Alignment.fromId(metadata.get(MetadataDef.TextDisplay.ALIGNMENT));
+    }
+
+    public void setAlignment(Alignment value) {
+        metadata.set(MetadataDef.TextDisplay.ALIGNMENT, (byte) value.ordinal());
+    }
+
+    public enum Alignment {
+        CENTER,
+        LEFT,
+        RIGHT;
+
+        private final static Alignment[] VALUES = values();
+
+        private static Alignment fromId(int id) {
+            if (id >= 0 && id < VALUES.length) {
+                return VALUES[id];
+            }
+            return CENTER;
+        }
+    }
+
 }

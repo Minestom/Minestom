@@ -75,9 +75,13 @@ public final class MetadataHolder {
         if (value == null) return entry.defaultValue();
         return switch (entry) {
             case MetadataDef.Entry.Index<T> v -> (T) value.value();
-            case MetadataDef.Entry.Mask mask -> {
+            case MetadataDef.Entry.BitMask bitMask -> {
                 final byte maskValue = (byte) value.value();
-                yield (T) ((Boolean) getMaskBit(maskValue, mask.bitMask()));
+                yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
+            }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                final byte maskValue = (byte) value.value();
+                yield (T) ((Byte) getMaskByte(maskValue, byteMask.byteMask(), byteMask.offset()));
             }
         };
     }
@@ -85,18 +89,21 @@ public final class MetadataHolder {
     public <T> void set(MetadataDef.@NotNull Entry<T> entry, T value) {
         final int id = entry.index();
 
-        Metadata.Entry<?> result;
-        switch (entry) {
-            case MetadataDef.Entry.Index<T> v -> {
-                result = v.function().apply(value);
-            }
-            case MetadataDef.Entry.Mask mask -> {
+        Metadata.Entry<?> result = switch (entry) {
+            case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
+            case MetadataDef.Entry.BitMask bitMask -> {
                 Metadata.Entry<?> currentEntry = this.entries.get(id);
                 byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
-                maskValue = setMaskBit(maskValue, mask.bitMask(), (Boolean) value);
-                result = Metadata.Byte(maskValue);
+                maskValue = setMaskBit(maskValue, bitMask.bitMask(), (Boolean) value);
+                yield Metadata.Byte(maskValue);
             }
-        }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
+                maskValue = setMaskByte(maskValue, byteMask.byteMask(), byteMask.offset(), (Byte) value);
+                yield Metadata.Byte(maskValue);
+            }
+        };
 
         this.entries.put(id, result);
         final Entity entity = this.entity;
@@ -117,6 +124,14 @@ public final class MetadataHolder {
 
     private byte setMaskBit(byte mask, byte bit, boolean value) {
         return value ? (byte) (mask | bit) : (byte) (mask & ~bit);
+    }
+
+    private byte getMaskByte(byte data, byte byteMask, int offset) {
+        return (byte) ((data & byteMask) >> offset);
+    }
+
+    private byte setMaskByte(byte data, byte byteMask, int offset, byte newValue) {
+        return (byte) ((data & ~byteMask) | ((newValue << offset) & byteMask));
     }
 
     public void setNotifyAboutChanges(boolean notifyAboutChanges) {

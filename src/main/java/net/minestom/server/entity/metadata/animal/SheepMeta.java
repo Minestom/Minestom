@@ -11,21 +11,11 @@ public class SheepMeta extends AnimalMeta {
     }
 
     public int getColor() {
-        // TODO: make COLOR_ID is 4 bits
-        byte bitMask = ((MetadataDef.Entry.Mask) MetadataDef.Sheep.COLOR_ID).bitMask();
-        return metadata.get(MetadataDef.Sheep.SHEEP_FLAGS) & bitMask;
+        return metadata.get(MetadataDef.Sheep.COLOR_ID);
     }
 
     public void setColor(byte color) {
-        // TODO: make COLOR_ID is 4 bits
-        byte bitMask = ((MetadataDef.Entry.Mask) MetadataDef.Sheep.COLOR_ID).bitMask();
-        byte before = metadata.get(MetadataDef.Sheep.SHEEP_FLAGS);
-        byte mask = before;
-        mask &= ~(bitMask);
-        mask |= (color & bitMask);
-        if (mask != before) {
-            metadata.set(MetadataDef.Sheep.SHEEP_FLAGS, mask);
-        }
+        metadata.set(MetadataDef.Sheep.COLOR_ID, color);
     }
 
     public boolean isSheared() {
