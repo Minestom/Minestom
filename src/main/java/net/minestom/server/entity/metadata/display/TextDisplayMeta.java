@@ -68,18 +68,18 @@ public class TextDisplayMeta extends AbstractDisplayMeta {
     }
 
     public boolean isAlignLeft() {
-        return metadata.get(MetadataDef.TextDisplay.ALIGNMENT_LEFT);
+        return metadata.get(MetadataDef.TextDisplay.ALIGN_LEFT);
     }
 
     public void setAlignLeft(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.ALIGNMENT_LEFT, value);
+        metadata.set(MetadataDef.TextDisplay.ALIGN_LEFT, value);
     }
 
     public boolean isAlignRight() {
-        return metadata.get(MetadataDef.TextDisplay.ALIGNMENT_RIGHT);
+        return metadata.get(MetadataDef.TextDisplay.ALIGN_RIGHT);
     }
 
     public void setAlignRight(boolean value) {
-        metadata.set(MetadataDef.TextDisplay.ALIGNMENT_RIGHT, value);
+        metadata.set(MetadataDef.TextDisplay.ALIGN_RIGHT, value);
     }
 }

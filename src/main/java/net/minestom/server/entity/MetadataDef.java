@@ -91,8 +91,8 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> HAS_SHADOW = mask(4, (byte) 0x01, false);
         public static final Entry<Boolean> IS_SEE_THROUGH = mask(4, (byte) 0x02, false);
         public static final Entry<Boolean> USE_DEFAULT_BACKGROUND_COLOR = mask(4, (byte) 0x04, false);
-        public static final Entry<Boolean> ALIGNMENT_LEFT = mask(4, (byte) 0x08, false);
-        public static final Entry<Boolean> ALIGNMENT_RIGHT = mask(4, (byte) 0x10, false);
+        public static final Entry<Boolean> ALIGN_LEFT = mask(4, (byte) 0x08, false);
+        public static final Entry<Boolean> ALIGN_RIGHT = mask(4, (byte) 0x10, false);
     }
 
     public static final class ThrownItemProjectile extends MetadataDef {
