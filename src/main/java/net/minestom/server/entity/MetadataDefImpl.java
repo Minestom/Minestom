@@ -14,7 +14,7 @@ final class MetadataDefImpl {
         return new MetadataDef.Entry.Index<>(superIndex + index, function, defaultValue);
     }
 
-    static MetadataDef.Entry.Mask mask(int index, int bitMask, boolean defaultValue) {
+    static MetadataDef.Entry.Mask mask(int index, byte bitMask, boolean defaultValue) {
         final String caller = caller();
         storeMaxIndex(caller, index);
         final int superIndex = findSuperIndex(caller);

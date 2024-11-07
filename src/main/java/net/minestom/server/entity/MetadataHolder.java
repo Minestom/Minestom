@@ -77,7 +77,7 @@ public final class MetadataHolder {
             case MetadataDef.Entry.Index<T> v -> (T) value.value();
             case MetadataDef.Entry.Mask mask -> {
                 final byte maskValue = (byte) value.value();
-                yield (T) ((Boolean) getMaskBit(maskValue, (byte) mask.bitMask()));
+                yield (T) ((Boolean) getMaskBit(maskValue, mask.bitMask()));
             }
         };
     }
@@ -93,7 +93,7 @@ public final class MetadataHolder {
             case MetadataDef.Entry.Mask mask -> {
                 Metadata.Entry<?> currentEntry = this.entries.get(id);
                 byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
-                maskValue = setMaskBit(maskValue, (byte) mask.bitMask(), (Boolean) value);
+                maskValue = setMaskBit(maskValue, mask.bitMask(), (Boolean) value);
                 result = Metadata.Byte(maskValue);
             }
         }
