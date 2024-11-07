@@ -68,31 +68,6 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    // TODO remove
-    @SuppressWarnings("unchecked")
-    public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final var entries = this.entries;
-        final Metadata.Entry<?> entry = entries.get(index);
-        return entry != null ? (T) entry.value() : defaultValue;
-    }
-
-    // TODO remove
-    public void setIndex(int index, @NotNull Metadata.Entry<?> entry) {
-        Int2ObjectMap<Metadata.Entry<?>> entries = this.entries;
-        entries.put(index, entry);
-        // Send metadata packet to update viewers and self
-        final Entity entity = this.entity;
-        if (entity != null && entity.isActive()) {
-            if (!this.notifyAboutChanges) {
-                synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
-                }
-            } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
-            }
-        }
-    }
-
     public <T> T get(MetadataDef.@NotNull Entry<T> entry) {
         final int id = entry.index();
 
