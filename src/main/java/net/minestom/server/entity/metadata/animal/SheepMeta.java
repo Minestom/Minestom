@@ -37,10 +37,12 @@ public class SheepMeta extends AnimalMeta {
         metadata.set(MetadataDef.Sheep.IS_SHEARED, value);
     }
 
+    // TODO remove
     private byte getMask(int index) {
         return this.metadata.getIndex(index, (byte) 0);
     }
 
+    // TODO remove
     private void setMask(int index, byte mask) {
         this.metadata.setIndex(index, Metadata.Byte(mask));
     }

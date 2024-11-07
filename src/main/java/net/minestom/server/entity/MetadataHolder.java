@@ -68,6 +68,7 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
+    // TODO remove
     @SuppressWarnings("unchecked")
     public <T> T getIndex(int index, @Nullable T defaultValue) {
         final var entries = this.entries;
@@ -75,6 +76,7 @@ public final class MetadataHolder {
         return entry != null ? (T) entry.value() : defaultValue;
     }
 
+    // TODO remove
     public void setIndex(int index, @NotNull Metadata.Entry<?> entry) {
         Int2ObjectMap<Metadata.Entry<?>> entries = this.entries;
         entries.put(index, entry);
@@ -107,16 +109,30 @@ public final class MetadataHolder {
 
     public <T> void set(MetadataDef.@NotNull Entry<T> entry, T value) {
         final int id = entry.index();
+
+        Metadata.Entry<?> result;
         switch (entry) {
             case MetadataDef.Entry.Index<T> v -> {
-                final Metadata.Entry<?> result = v.function().apply(value);
-                setIndex(id, result);
+                result = v.function().apply(value);
             }
-            case MetadataDef.Entry.Mask mask -> this.entries.compute(id, (integer, currentEntry) -> {
+            case MetadataDef.Entry.Mask mask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
                 byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
                 maskValue = setMaskBit(maskValue, (byte) mask.bitMask(), (Boolean) value);
-                return Metadata.Byte(maskValue);
-            });
+                result = Metadata.Byte(maskValue);
+            }
+        }
+
+        this.entries.put(id, result);
+        final Entity entity = this.entity;
+        if (entity != null && entity.isActive()) {
+            if (!this.notifyAboutChanges) {
+                synchronized (this.notNotifiedChanges) {
+                    this.notNotifiedChanges.put(id, result);
+                }
+            } else {
+                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
+            }
         }
     }
 
