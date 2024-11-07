@@ -32,6 +32,7 @@ import static net.minestom.server.entity.MetadataDefImpl.mask;
  */
 @SuppressWarnings({"unused", "SpellCheckingInspection"})
 public sealed class MetadataDef {
+    public static final Entry<Byte> ENTITY_FLAGS = index(0, Metadata::Byte, (byte) 0);
     public static final Entry<Boolean> IS_ON_FIRE = mask(0, 0x01, false);
     public static final Entry<Boolean> IS_CROUCHING = mask(0, 0x02, false);
     public static final Entry<Boolean> UNUSED_RIDING = mask(0, 0x04, false);
@@ -86,6 +87,7 @@ public sealed class MetadataDef {
         public static final Entry<Integer> LINE_WIDTH = index(1, Metadata::VarInt, 200);
         public static final Entry<Integer> BACKGROUND_COLOR = index(2, Metadata::VarInt, 0x40000000);
         public static final Entry<Byte> TEXT_OPACITY = index(3, Metadata::Byte, (byte) -1);
+        public static final Entry<Byte> TEXT_DISPLAY_FLAGS = index(4, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> HAS_SHADOW = mask(4, 0x01, false);
         public static final Entry<Boolean> IS_SEE_THROUGH = mask(4, 0x02, false);
         public static final Entry<Boolean> USE_DEFAULT_BACKGROUND_COLOR = mask(4, 0x04, false);
@@ -118,6 +120,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class AbstractArrow extends MetadataDef {
+        public static final Entry<Byte> ARROW_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CRITICAL = mask(0, 0x01, false);
         public static final Entry<Boolean> IS_NO_CLIP = mask(0, 0x02, false);
         public static final Entry<Byte> PIERCING_LEVEL = index(1, Metadata::Byte, (byte) 0);
@@ -197,6 +200,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class LivingEntity extends MetadataDef {
+        public static final Entry<Byte> LIVING_ENTITY_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_HAND_ACTIVE = mask(0, 0x01, false);
         public static final Entry<Boolean> ACTIVE_HAND = mask(0, 0x02, false);
         public static final Entry<Boolean> IS_RIPTIDE_SPIN_ATTACK = mask(0, 0x04, false);
@@ -211,7 +215,7 @@ public sealed class MetadataDef {
     public static final class Player extends LivingEntity {
         public static final Entry<Float> ADDITIONAL_HEARTS = index(0, Metadata::Float, 1f);
         public static final Entry<Integer> SCORE = index(1, Metadata::VarInt, 0);
-        public static final Entry<Byte> DISPLAYED_SKIN_PARTS = index(2, Metadata::Byte, (byte) 0);
+        public static final Entry<Byte> DISPLAYED_SKIN_PARTS_FLAGS = index(2, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CAPE_ENABLED = mask(2, 0x01, false);
         public static final Entry<Boolean> IS_JACKET_ENABLED = mask(2, 0x02, false);
         public static final Entry<Boolean> IS_LEFT_SLEEVE_ENABLED = mask(2, 0x04, false);
@@ -225,6 +229,7 @@ public sealed class MetadataDef {
     }
 
     public static final class ArmorStand extends LivingEntity {
+        public static final Entry<Byte> ARMOR_STAND_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SMALL = mask(0, 0x01, false);
         public static final Entry<Boolean> HAS_ARMS = mask(0, 0x04, false);
         public static final Entry<Boolean> HAS_NO_BASE_PLATE = mask(0, 0x08, false);
@@ -238,6 +243,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class Mob extends LivingEntity {
+        public static final Entry<Byte> MOB_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> NO_AI = mask(0, 0x01, false);
         public static final Entry<Boolean> IS_LEFT_HANDED = mask(0, 0x02, false);
         public static final Entry<Boolean> IS_AGGRESSIVE = mask(0, 0x04, false);
@@ -253,6 +259,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Bat extends Mob {
+        public static final Entry<Byte> BAT_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_HANGING = mask(0, 0x01, false);
     }
 
@@ -288,6 +295,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class AbstractHorse extends AgeableMob {
+        public static final Entry<Byte> ABSTRACT_HORSE_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> UNUSED = mask(0, 0x01, false);
         public static final Entry<Boolean> IS_TAME = mask(0, 0x02, false);
         public static final Entry<Boolean> IS_SADDLED = mask(0, 0x04, false);
@@ -323,7 +331,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Bee extends AgeableMob {
-        public static final Entry<Boolean> UNUSED = mask(0, 0x01, false);
+        public static final Entry<Byte> BEE_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_ANGRY = mask(0, 0x02, false);
         public static final Entry<Boolean> HAS_STUNG = mask(0, 0x04, false);
         public static final Entry<Boolean> HAS_NECTAR = mask(0, 0x08, false);
@@ -336,8 +344,8 @@ public sealed class MetadataDef {
 
     public static final class Fox extends AgeableMob {
         public static final Entry<Integer> TYPE = index(0, Metadata::VarInt, 0);
+        public static final Entry<Byte> FOX_FLAGS = index(1, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SITTING = mask(1, 0x01, false);
-        public static final Entry<Boolean> UNUSED = mask(1, 0x02, false);
         public static final Entry<Boolean> IS_CROUCHING = mask(1, 0x04, false);
         public static final Entry<Boolean> IS_INTERESTED = mask(1, 0x08, false);
         public static final Entry<Boolean> IS_POUNCING = mask(1, 0x10, false);
@@ -363,7 +371,7 @@ public sealed class MetadataDef {
         public static final Entry<Integer> EAT_TIMER = index(2, Metadata::VarInt, 0);
         public static final Entry<Byte> MAIN_GENE = index(3, Metadata::Byte, (byte) 0);
         public static final Entry<Byte> HIDDEN_GENE = index(4, Metadata::Byte, (byte) 0);
-        public static final Entry<Boolean> UNUSED = mask(5, 0x01, false);
+        public static final Entry<Byte> PANDA_FLAGS = index(5, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SNEEZING = mask(5, 0x02, false);
         public static final Entry<Boolean> IS_ROLLING = mask(5, 0x04, false);
         public static final Entry<Boolean> IS_SITTING = mask(5, 0x08, false);
@@ -401,8 +409,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Sheep extends AgeableMob {
-        // TODO: remove MASK and make COLOR_ID is 4 bits
-        public static final Entry<Byte> MASK = index(0, Metadata::Byte, (byte) 0);
+        // TODO: make COLOR_ID is 4 bits
+        public static final Entry<Byte> SHEEP_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> COLOR_ID = mask(0, 0x0F, false);
         public static final Entry<Boolean> IS_SHEARED = mask(0, 0x10, false);
     }
@@ -420,6 +428,7 @@ public sealed class MetadataDef {
     }
 
     public static sealed class TameableAnimal extends AgeableMob {
+        public static final Entry<Byte> TAMEABLE_ANIMAL_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SITTING = mask(0, 0x01, false);
         public static final Entry<Boolean> UNUSED = mask(0, 0x02, false);
         public static final Entry<Boolean> IS_TAMED = mask(0, 0x04, false);
@@ -453,10 +462,12 @@ public sealed class MetadataDef {
     }
 
     public static final class IronGolem extends Mob {
+        public static final Entry<Byte> IRON_GOLEM_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_PLAYER_CREATED = mask(0, 0x01, false);
     }
 
     public static final class SnowGolem extends Mob {
+        public static final Entry<Byte> SNOW_GOLEM_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> PUMPKIN_HAT = mask(0, 0x10, true);
     }
 
@@ -477,6 +488,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Blaze extends Mob {
+        public static final Entry<Byte> BLAZE_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_ON_FIRE = mask(0, 0x01, false);
     }
 
@@ -517,10 +529,12 @@ public sealed class MetadataDef {
     }
 
     public static final class Spider extends Mob {
+        public static final Entry<Byte> SPIDER_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CLIMBING = mask(0, 0x01, false);
     }
 
     public static final class Vex extends Mob {
+        public static final Entry<Byte> VEX_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_ATTACKING = mask(0, 0x01, false);
     }
 

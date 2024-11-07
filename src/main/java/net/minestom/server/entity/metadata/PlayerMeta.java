@@ -86,11 +86,11 @@ public class PlayerMeta extends LivingEntityMeta {
     }
 
     public byte getDisplayedSkinParts() {
-        return metadata.get(MetadataDef.Player.DISPLAYED_SKIN_PARTS);
+        return metadata.get(MetadataDef.Player.DISPLAYED_SKIN_PARTS_FLAGS);
     }
 
     public void setDisplayedSkinParts(byte skinDisplayByte) {
-        metadata.set(MetadataDef.Player.DISPLAYED_SKIN_PARTS, skinDisplayByte);
+        metadata.set(MetadataDef.Player.DISPLAYED_SKIN_PARTS_FLAGS, skinDisplayByte);
     }
 
     public boolean isRightMainHand() {

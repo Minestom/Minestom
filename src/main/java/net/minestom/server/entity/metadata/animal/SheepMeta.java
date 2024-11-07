@@ -11,20 +11,20 @@ public class SheepMeta extends AnimalMeta {
     }
 
     public int getColor() {
-        // TODO: remove MetadataDef.Sheep.MASK and replace with MetadataDef.Sheep.COLOR_ID
+        // TODO: make COLOR_ID is 4 bits
         byte bitMask = (byte) ((MetadataDef.Entry.Mask) MetadataDef.Sheep.COLOR_ID).bitMask();
-        return metadata.get(MetadataDef.Sheep.MASK) & bitMask;
+        return metadata.get(MetadataDef.Sheep.SHEEP_FLAGS) & bitMask;
     }
 
     public void setColor(byte color) {
-        // TODO: remove MetadataDef.Sheep.MASK and replace with MetadataDef.Sheep.COLOR_ID
+        // TODO: make COLOR_ID is 4 bits
         byte bitMask = (byte) ((MetadataDef.Entry.Mask) MetadataDef.Sheep.COLOR_ID).bitMask();
-        byte before = metadata.get(MetadataDef.Sheep.MASK);
+        byte before = metadata.get(MetadataDef.Sheep.SHEEP_FLAGS);
         byte mask = before;
         mask &= ~(bitMask);
         mask |= (color & bitMask);
         if (mask != before) {
-            metadata.set(MetadataDef.Sheep.MASK, mask);
+            metadata.set(MetadataDef.Sheep.SHEEP_FLAGS, mask);
         }
     }
 
