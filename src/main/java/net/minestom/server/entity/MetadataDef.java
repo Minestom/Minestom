@@ -400,7 +400,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Sheep extends AgeableMob {
-        // TODO: color is 4 bits
+        // TODO: remove MASK and make COLOR_ID is 4 bits
+        public static final Entry<Byte> MASK = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> COLOR_ID = mask(0, 0x0F, false);
         public static final Entry<Boolean> IS_SHEARED = mask(0, 0x10, false);
     }
