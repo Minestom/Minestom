@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
@@ -51,15 +50,11 @@ public class WolfMeta extends TameableAnimalMeta {
     }
 
     public @NotNull DynamicRegistry.Key<Variant> getVariant() {
-        // TODO replace with Entry
-        var index = MetadataDef.Wolf.ANGER_TIME.index() + 1;
-        return metadata.getIndex(index, Variant.PALE);
+        return metadata.get(MetadataDef.Wolf.VARIANT);
     }
 
     public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
-        // TODO replace with Entry
-        var index = MetadataDef.Wolf.ANGER_TIME.index() + 1;
-        metadata.setIndex(index, Metadata.WolfVariant(value));
+        metadata.set(MetadataDef.Wolf.VARIANT, value);
     }
 
     public sealed interface Variant extends ProtocolObject, WolfVariants permits VariantImpl {

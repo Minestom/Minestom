@@ -9,6 +9,7 @@ import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
@@ -436,7 +437,7 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_BEGGING = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(1, Metadata::VarInt, 14);
         public static final Entry<Integer> ANGER_TIME = index(2, Metadata::VarInt, 0);
-        // TODO variant
+        public static final Entry<DynamicRegistry.Key<WolfMeta.Variant>> VARIANT = index(3, Metadata::WolfVariant, WolfMeta.Variant.PALE);
     }
 
     public static final class Parrot extends TameableAnimal {
