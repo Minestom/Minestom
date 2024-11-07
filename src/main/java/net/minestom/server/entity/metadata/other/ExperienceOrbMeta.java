@@ -6,9 +6,6 @@ import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ExperienceOrbMeta extends EntityMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     private int count = 1;
 
     public ExperienceOrbMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {

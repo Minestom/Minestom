@@ -1,6 +1,7 @@
 package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,15 +10,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SalmonMeta extends AbstractFishMeta {
-    public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     public SalmonMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @NotNull Variant getVariant() {
-        return Variant.BY_ID.getOrDefault(super.metadata.getIndex(OFFSET, ""), Variant.MEDIUM);
+        return Variant.BY_ID.getOrDefault(metadata.get(MetadataDef.Salmon.VARIANT), Variant.MEDIUM);
+    }
+
+    public void setVariant(@NotNull Variant variant) {
+        metadata.set(MetadataDef.Salmon.VARIANT, variant.id());
     }
 
     public enum Variant {

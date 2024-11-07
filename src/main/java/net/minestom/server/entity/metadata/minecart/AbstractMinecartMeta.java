@@ -1,44 +1,40 @@
 package net.minestom.server.entity.metadata.minecart;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.AbstractVehicleMeta;
-import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class AbstractMinecartMeta extends AbstractVehicleMeta implements ObjectDataProvider {
-    public static final byte OFFSET = AbstractVehicleMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
     protected AbstractMinecartMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getCustomBlockIdAndDamage() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return metadata.get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_ID_AND_DAMAGE);
     }
 
     public void setCustomBlockIdAndDamage(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_ID_AND_DAMAGE, value);
     }
 
     // in 16th of a block
     public int getCustomBlockYPosition() {
-        return super.metadata.getIndex(OFFSET + 1, 6);
+        return metadata.get(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION);
     }
 
     public void setCustomBlockYPosition(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.AbstractMinecart.CUSTOM_BLOCK_Y_POSITION, value);
     }
 
     public boolean getShowCustomBlock() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+        return metadata.get(MetadataDef.AbstractMinecart.SHOW_CUSTOM_BLOCK);
     }
 
     public void setShowCustomBlock(boolean show) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(show));
+        metadata.set(MetadataDef.AbstractMinecart.SHOW_CUSTOM_BLOCK, show);
     }
 
     @Override

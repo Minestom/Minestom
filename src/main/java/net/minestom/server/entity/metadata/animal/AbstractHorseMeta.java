@@ -1,70 +1,61 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractHorseMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte TAMED_BIT = 0x02;
-    private final static byte SADDLED_BIT = 0x04;
-    private final static byte HAS_BRED_BIT = 0x08;
-    private final static byte EATING_BIT = 0x10;
-    private final static byte REARING_BIT = 0x20;
-    private final static byte MOUTH_OPEN_BIT = 0x40;
-
     protected AbstractHorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isTamed() {
-        return getMaskBit(OFFSET, TAMED_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.IS_TAME);
     }
 
     public void setTamed(boolean value) {
-        setMaskBit(OFFSET, TAMED_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.IS_TAME, value);
     }
 
     public boolean isSaddled() {
-        return getMaskBit(OFFSET, SADDLED_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.IS_SADDLED);
     }
 
     public void setSaddled(boolean value) {
-        setMaskBit(OFFSET, SADDLED_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.IS_SADDLED, value);
     }
 
     public boolean isHasBred() {
-        return getMaskBit(OFFSET, HAS_BRED_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.HAS_BRED);
     }
 
     public void setHasBred(boolean value) {
-        setMaskBit(OFFSET, HAS_BRED_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.HAS_BRED, value);
     }
 
     public boolean isEating() {
-        return getMaskBit(OFFSET, EATING_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.IS_EATING);
     }
 
     public void setEating(boolean value) {
-        setMaskBit(OFFSET, EATING_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.IS_EATING, value);
     }
 
     public boolean isRearing() {
-        return getMaskBit(OFFSET, REARING_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.IS_REARING);
     }
 
     public void setRearing(boolean value) {
-        setMaskBit(OFFSET, REARING_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.IS_REARING, value);
     }
 
     public boolean isMouthOpen() {
-        return getMaskBit(OFFSET, MOUTH_OPEN_BIT);
+        return metadata.get(MetadataDef.AbstractHorse.IS_MOUTH_OPEN);
     }
 
     public void setMouthOpen(boolean value) {
-        setMaskBit(OFFSET, MOUTH_OPEN_BIT, value);
+        metadata.set(MetadataDef.AbstractHorse.IS_MOUTH_OPEN, value);
     }
 
 }

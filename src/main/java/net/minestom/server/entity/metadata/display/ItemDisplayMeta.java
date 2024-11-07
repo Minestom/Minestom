@@ -1,33 +1,30 @@
 package net.minestom.server.entity.metadata.display;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemDisplayMeta extends AbstractDisplayMeta {
-    public static final byte OFFSET = AbstractDisplayMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
     public ItemDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @NotNull ItemStack getItemStack() {
-        return super.metadata.getIndex(OFFSET, ItemStack.AIR);
+        return metadata.get(MetadataDef.ItemDisplay.DISPLAYED_ITEM);
     }
 
     public void setItemStack(@NotNull ItemStack value) {
-        super.metadata.setIndex(OFFSET, Metadata.ItemStack(value));
+        metadata.set(MetadataDef.ItemDisplay.DISPLAYED_ITEM, value);
     }
 
     public @NotNull DisplayContext getDisplayContext() {
-        return DisplayContext.VALUES[super.metadata.getIndex(OFFSET + 1, (byte) 0)];
+        return DisplayContext.VALUES[metadata.get(MetadataDef.ItemDisplay.DISPLAY_TYPE)];
     }
 
     public void setDisplayContext(@NotNull DisplayContext value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Byte((byte) value.ordinal()));
+        metadata.set(MetadataDef.ItemDisplay.DISPLAY_TYPE, (byte) value.ordinal());
     }
 
     public enum DisplayContext {
