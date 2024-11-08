@@ -22,6 +22,7 @@ import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
@@ -72,6 +73,7 @@ public final class MinecraftServer implements MinecraftConstants {
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
+    private static ClientHandshakePacket.ConnectionRule connectionRule = ClientHandshakePacket.ConnectionRule.ALL;
 
     public static MinecraftServer init() {
         updateProcess();
@@ -316,6 +318,14 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static Server getServer() {
         return serverProcess.server();
+    }
+
+    public static ClientHandshakePacket.ConnectionRule getConnectionRule() {
+        return connectionRule;
+    }
+
+    public static void setConnectionRule(ClientHandshakePacket.ConnectionRule connectionRule) {
+        MinecraftServer.connectionRule = connectionRule;
     }
 
     /**
