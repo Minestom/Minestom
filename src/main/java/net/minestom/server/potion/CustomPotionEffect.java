@@ -31,7 +31,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                     .build()
     ));
 
-    public CustomPotionEffect(@NotNull PotionEffect id, byte amplifier, int duration, boolean isAmbient, boolean showParticles, boolean showIcon) {
+    public CustomPotionEffect(@NotNull PotionEffect id, int amplifier, int duration, boolean isAmbient, boolean showParticles, boolean showIcon) {
         this(id, new Settings(amplifier, duration, isAmbient, showParticles, showIcon, null));
     }
 

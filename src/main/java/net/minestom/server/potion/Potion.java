@@ -18,7 +18,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
-public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration, byte flags) {
+public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, byte flags) {
     /**
      * A flag indicating that this Potion is ambient (it came from a beacon).
      *
@@ -57,18 +57,18 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration,
     public static final int INFINITE_DURATION = -1;
 
     /**
-     * @see #Potion(PotionEffect, byte, int, byte)
+     * @see #Potion(PotionEffect, int, int, byte)
      */
-    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration, int flags) {
+    public Potion(@NotNull PotionEffect effect, int amplifier, int duration, int flags) {
         this(effect, amplifier, duration, (byte) flags);
     }
 
     /**
      * Creates a new Potion with no flags.
      *
-     * @see #Potion(PotionEffect, byte, int, byte)
+     * @see #Potion(PotionEffect, int, int, byte)
      */
-    public Potion(@NotNull PotionEffect effect, byte amplifier, int duration) {
+    public Potion(@NotNull PotionEffect effect, int amplifier, int duration) {
         this(effect, amplifier, duration, (byte) 0);
     }
 
@@ -139,7 +139,7 @@ public record Potion(@NotNull PotionEffect effect, byte amplifier, int duration,
 
     public static final NetworkBuffer.Type<Potion> NETWORK_TYPE = NetworkBufferTemplate.template(
             PotionEffect.NETWORK_TYPE, Potion::effect,
-            BYTE, Potion::amplifier,
+            VAR_INT, Potion::amplifier,
             VAR_INT, Potion::duration,
             BYTE, Potion::flags,
             Potion::new
