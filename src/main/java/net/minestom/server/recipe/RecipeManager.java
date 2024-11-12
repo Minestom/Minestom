@@ -1,22 +1,25 @@
 package net.minestom.server.recipe;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.entity.Player;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.DeclareRecipesPacket;
+import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public final class RecipeManager {
     private final CachedPacket declareRecipesPacket = new CachedPacket(this::createDeclareRecipesPacket);
     private final Map<Recipe, Predicate<Player>> recipes = new ConcurrentHashMap<>();
+
+    private final Int2ObjectMap<RecipeDisplay> displayIdMap = new Int2ObjectArrayMap<>();
 
     public void addRecipe(@NotNull Recipe recipe, @NotNull Predicate<Player> predicate) {
         var previous = recipes.put(recipe, predicate);
@@ -51,9 +54,19 @@ public final class RecipeManager {
     }
 
     private @NotNull DeclareRecipesPacket createDeclareRecipesPacket() {
-        //TODO(1.21.2): Recipe property lists & stonecutter recipes
-        return new DeclareRecipesPacket(Map.of(), List.of(new DeclareRecipesPacket.StonecutterRecipe(
-                new Recipe.Ingredient(Material.DIAMOND),
-                SlotDisplay.AnyFuel.INSTANCE)));
+        // Collect the special recipe entries requested by the client.
+        final Map<RecipeProperty, List<Material>> itemProperties = new HashMap<>();
+        final List<DeclareRecipesPacket.StonecutterRecipe> stonecutterRecipes = new ArrayList<>();
+        for (var recipeDisplay : displayIdMap.values()) {
+            if (recipeDisplay instanceof RecipeDisplay.Stonecutter stonecutterDisplay) {
+
+
+                stonecutterRecipes.add(new DeclareRecipesPacket.StonecutterRecipe(
+// Ingredient, display
+                ))
+            }
+        }
+
+        return new DeclareRecipesPacket(itemProperties, stonecutterRecipes);
     }
 }

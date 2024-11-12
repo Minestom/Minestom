@@ -4,9 +4,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeProperty;
-import net.minestom.server.recipe.RecipeSerializers;
 import net.minestom.server.recipe.display.SlotDisplay;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,11 +30,11 @@ public record DeclareRecipesPacket(
     }
 
     public record StonecutterRecipe(
-            @NotNull Recipe.Ingredient ingredient,
+            @NotNull Ingredient ingredient,
             @NotNull SlotDisplay optionDisplay
     ) {
         public static final NetworkBuffer.Type<StonecutterRecipe> NETWORK_TYPE = NetworkBufferTemplate.template(
-                RecipeSerializers.INGREDIENT, StonecutterRecipe::ingredient,
+                Ingredient.NETWORK_TYPE, StonecutterRecipe::ingredient,
                 SlotDisplay.NETWORK_TYPE, StonecutterRecipe::optionDisplay,
                 StonecutterRecipe::new);
     }
