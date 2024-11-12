@@ -1,21 +1,18 @@
 package net.minestom.server.entity.metadata.villager;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class VillagerMeta extends AbstractVillagerMeta {
-    public static final byte OFFSET = AbstractVillagerMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public VillagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     @NotNull
     public VillagerData getVillagerData() {
-        int[] data = super.metadata.getIndex(OFFSET, null);
+        int[] data = metadata.get(MetadataDef.Villager.VARIANT);
         if (data == null) {
             return new VillagerData(Type.PLAINS, Profession.NONE, Level.NOVICE);
         }
@@ -23,11 +20,8 @@ public class VillagerMeta extends AbstractVillagerMeta {
     }
 
     public void setVillagerData(@NotNull VillagerData data) {
-        super.metadata.setIndex(OFFSET, Metadata.VillagerData(
-                data.type.ordinal(),
-                data.profession.ordinal(),
-                data.level.ordinal() + 1
-        ));
+        int[] value = new int[]{data.type.ordinal(), data.profession.ordinal(), data.level.ordinal() + 1};
+        metadata.set(MetadataDef.Villager.VARIANT, value);
     }
 
     public static class VillagerData {

@@ -2,7 +2,7 @@ package net.minestom.server.entity.metadata.other;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
@@ -21,9 +21,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 
 public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     private Orientation orientation = null;
 
     public PaintingMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -31,11 +28,11 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public @NotNull DynamicRegistry.Key<Variant> getVariant() {
-        return super.metadata.getIndex(OFFSET, Variant.KEBAB);
+        return metadata.get(MetadataDef.Painting.VARIANT);
     }
 
     public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
-        super.metadata.setIndex(OFFSET, Metadata.PaintingVariant(value));
+        metadata.set(MetadataDef.Painting.VARIANT, value);
     }
 
     @NotNull

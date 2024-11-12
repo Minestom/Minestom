@@ -1,29 +1,26 @@
 package net.minestom.server.entity.metadata.monster.zombie;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ZombieVillagerMeta extends ZombieMeta {
-    public static final byte OFFSET = ZombieMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
     public ZombieVillagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isConverting() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.ZombieVillager.IS_CONVERTING);
     }
 
     public void setConverting(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.ZombieVillager.IS_CONVERTING, value);
     }
 
     public VillagerMeta.VillagerData getVillagerData() {
-        int[] data = super.metadata.getIndex(OFFSET + 1, null);
+        int[] data = metadata.get(MetadataDef.ZombieVillager.VILLAGER_DATA);
         if (data == null) {
             return new VillagerMeta.VillagerData(VillagerMeta.Type.PLAINS, VillagerMeta.Profession.NONE, VillagerMeta.Level.NOVICE);
         }
@@ -31,11 +28,8 @@ public class ZombieVillagerMeta extends ZombieMeta {
     }
 
     public void setVillagerData(VillagerMeta.VillagerData data) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VillagerData(
-                data.getType().ordinal(),
-                data.getProfession().ordinal(),
-                data.getLevel().ordinal() + 1
-        ));
+        int[] value = new int[]{data.getType().ordinal(), data.getProfession().ordinal(), data.getLevel().ordinal() + 1};
+        metadata.set(MetadataDef.ZombieVillager.VILLAGER_DATA, value);
     }
 
 }

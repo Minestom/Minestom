@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
@@ -21,43 +21,40 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public class WolfMeta extends TameableAnimalMeta {
-    public static final byte OFFSET = TameableAnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 4;
-
     public WolfMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isBegging() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Wolf.IS_BEGGING);
     }
 
     public void setBegging(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Wolf.IS_BEGGING, value);
     }
 
     public int getCollarColor() {
-        return super.metadata.getIndex(OFFSET + 1, 14);
+        return metadata.get(MetadataDef.Wolf.COLLAR_COLOR);
     }
 
     public void setCollarColor(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Wolf.COLLAR_COLOR, value);
     }
 
     public int getAngerTime() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
+        return metadata.get(MetadataDef.Wolf.ANGER_TIME);
     }
 
     public void setAngerTime(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Wolf.ANGER_TIME, value);
     }
 
     public @NotNull DynamicRegistry.Key<Variant> getVariant() {
-        return super.metadata.getIndex(OFFSET + 3, Variant.PALE);
+        return metadata.get(MetadataDef.Wolf.VARIANT);
     }
 
     public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.WolfVariant(value));
+        metadata.set(MetadataDef.Wolf.VARIANT, value);
     }
 
     public sealed interface Variant extends ProtocolObject, WolfVariants permits VariantImpl {

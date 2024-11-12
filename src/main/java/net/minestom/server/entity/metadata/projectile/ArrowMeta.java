@@ -1,16 +1,13 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = AbstractArrowMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     private Entity shooter;
 
     public ArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -18,11 +15,11 @@ public class ArrowMeta extends AbstractArrowMeta implements ObjectDataProvider, 
     }
 
     public int getColor() {
-        return super.metadata.getIndex(OFFSET, -1);
+        return metadata.get(MetadataDef.Arrow.COLOR);
     }
 
     public void setColor(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Arrow.COLOR, value);
     }
 
     @Override

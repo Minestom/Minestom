@@ -14,11 +14,18 @@ final class MetadataDefImpl {
         return new MetadataDef.Entry.Index<>(superIndex + index, function, defaultValue);
     }
 
-    static MetadataDef.Entry.Mask mask(int index, int bitMask, boolean defaultValue) {
+    static MetadataDef.Entry.BitMask bitMask(int index, byte bitMask, boolean defaultValue) {
         final String caller = caller();
         storeMaxIndex(caller, index);
         final int superIndex = findSuperIndex(caller);
-        return new MetadataDef.Entry.Mask(superIndex + index, bitMask, defaultValue);
+        return new MetadataDef.Entry.BitMask(superIndex + index, bitMask, defaultValue);
+    }
+
+    static MetadataDef.Entry.ByteMask byteMask(int index, byte byteMask, int offset, byte defaultValue) {
+        final String caller = caller();
+        storeMaxIndex(caller, index);
+        final int superIndex = findSuperIndex(caller);
+        return new MetadataDef.Entry.ByteMask(superIndex + index, byteMask, offset, defaultValue);
     }
 
     static <T extends MetadataDef> int count(Class<T> clazz) {
