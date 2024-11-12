@@ -1,25 +1,22 @@
 package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PufferfishMeta extends AbstractFishMeta {
-    public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public PufferfishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
         updateBoundingBox(State.UNPUFFED);
     }
 
     public State getState() {
-        return State.VALUES[super.metadata.getIndex(OFFSET, 0)];
+        return State.VALUES[metadata.get(MetadataDef.PufferFish.PUFF_STATE)];
     }
 
     public void setState(State state) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(state.ordinal()));
+        metadata.set(MetadataDef.PufferFish.PUFF_STATE, state.ordinal());
         updateBoundingBox(state);
     }
 

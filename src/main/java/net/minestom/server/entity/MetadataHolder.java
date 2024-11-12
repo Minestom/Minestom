@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -40,7 +42,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -57,8 +58,7 @@ public final class MetadataHolder {
     }
 
     private final Entity entity;
-    private volatile Metadata.Entry<?>[] entries = new Metadata.Entry<?>[0];
-    private volatile Map<Integer, Metadata.Entry<?>> entryMap = null;
+    private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
@@ -68,34 +68,70 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Metadata.Entry<?>[] entries = this.entries;
-        if (index < 0 || index >= entries.length) return defaultValue;
-        final Metadata.Entry<?> entry = entries[index];
-        return entry != null ? (T) entry.value() : defaultValue;
+    public <T> T get(MetadataDef.@NotNull Entry<T> entry) {
+        final int id = entry.index();
+
+        final Metadata.Entry<?> value = this.entries.get(id);
+        if (value == null) return entry.defaultValue();
+        return switch (entry) {
+            case MetadataDef.Entry.Index<T> v -> (T) value.value();
+            case MetadataDef.Entry.BitMask bitMask -> {
+                final byte maskValue = (byte) value.value();
+                yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
+            }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                final byte maskValue = (byte) value.value();
+                yield (T) ((Byte) getMaskByte(maskValue, byteMask.byteMask(), byteMask.offset()));
+            }
+        };
     }
 
-    public void setIndex(int index, @NotNull Metadata.Entry<?> entry) {
-        Metadata.Entry<?>[] entries = this.entries;
-        // Resize array if necessary
-        if (index >= entries.length) {
-            final int newLength = Math.max(entries.length * 2, index + 1);
-            this.entries = entries = Arrays.copyOf(entries, newLength);
-        }
-        entries[index] = entry;
-        this.entryMap = null;
-        // Send metadata packet to update viewers and self
+    public <T> void set(MetadataDef.@NotNull Entry<T> entry, T value) {
+        final int id = entry.index();
+
+        Metadata.Entry<?> result = switch (entry) {
+            case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
+            case MetadataDef.Entry.BitMask bitMask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
+                maskValue = setMaskBit(maskValue, bitMask.bitMask(), (Boolean) value);
+                yield Metadata.Byte(maskValue);
+            }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
+                maskValue = setMaskByte(maskValue, byteMask.byteMask(), byteMask.offset(), (Byte) value);
+                yield Metadata.Byte(maskValue);
+            }
+        };
+
+        this.entries.put(id, result);
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
             if (!this.notifyAboutChanges) {
                 synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
+                    this.notNotifiedChanges.put(id, result);
                 }
             } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
+                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
             }
         }
+    }
+
+    private boolean getMaskBit(byte maskValue, byte bit) {
+        return (maskValue & bit) == bit;
+    }
+
+    private byte setMaskBit(byte mask, byte bit, boolean value) {
+        return value ? (byte) (mask | bit) : (byte) (mask & ~bit);
+    }
+
+    private byte getMaskByte(byte data, byte byteMask, int offset) {
+        return (byte) ((data & byteMask) >> offset);
+    }
+
+    private byte setMaskByte(byte data, byte byteMask, int offset, byte newValue) {
+        return (byte) ((data & ~byteMask) | ((newValue << offset) & byteMask));
     }
 
     public void setNotifyAboutChanges(boolean notifyAboutChanges) {
@@ -118,17 +154,7 @@ public final class MetadataHolder {
     }
 
     public @NotNull Map<Integer, Metadata.Entry<?>> getEntries() {
-        Map<Integer, Metadata.Entry<?>> map = entryMap;
-        if (map == null) {
-            map = new HashMap<>();
-            final Metadata.Entry<?>[] entries = this.entries;
-            for (int i = 0; i < entries.length; i++) {
-                final Metadata.Entry<?> entry = entries[i];
-                if (entry != null) map.put(i, entry);
-            }
-            this.entryMap = Map.copyOf(map);
-        }
-        return map;
+        return Map.copyOf(this.entries);
     }
 
     static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();

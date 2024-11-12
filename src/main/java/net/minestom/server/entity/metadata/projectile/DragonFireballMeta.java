@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class DragonFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     private Entity shooter;
 
     public DragonFireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {

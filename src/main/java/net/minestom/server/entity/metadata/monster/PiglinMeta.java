@@ -2,20 +2,17 @@ package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PiglinMeta extends BasePiglinMeta {
-    public static final byte OFFSET = BasePiglinMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
     public PiglinMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isBaby() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Piglin.IS_BABY);
     }
 
     public void setBaby(boolean value) {
@@ -32,23 +29,23 @@ public class PiglinMeta extends BasePiglinMeta {
                 entity.setBoundingBox(width, bb.height() * 2, width);
             }
         });
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Piglin.IS_BABY, value);
     }
 
     public boolean isChargingCrossbow() {
-        return super.metadata.getIndex(OFFSET + 1, false);
+        return metadata.get(MetadataDef.Piglin.IS_CHARGING_CROSSBOW);
     }
 
     public void setChargingCrossbow(boolean value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Piglin.IS_CHARGING_CROSSBOW, value);
     }
 
     public boolean isDancing() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+        return metadata.get(MetadataDef.Piglin.IS_DANCING);
     }
 
     public void setDancing(boolean value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Piglin.IS_DANCING, value);
     }
 
 }

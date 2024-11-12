@@ -1,7 +1,7 @@
 package net.minestom.server.entity.metadata.projectile;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
@@ -9,9 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     private Entity shooter;
 
     public WitherSkullMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -19,11 +16,11 @@ public class WitherSkullMeta extends EntityMeta implements ObjectDataProvider, P
     }
 
     public boolean isInvulnerable() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.WitherSkull.IS_INVULNERABLE);
     }
 
     public void setInvulnerable(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.WitherSkull.IS_INVULNERABLE, value);
     }
 
     @Override
