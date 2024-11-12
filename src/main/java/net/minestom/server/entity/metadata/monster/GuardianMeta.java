@@ -1,15 +1,13 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GuardianMeta extends MonsterMeta {
-    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
     private Entity target;
 
     public GuardianMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -17,11 +15,20 @@ public class GuardianMeta extends MonsterMeta {
     }
 
     public boolean isRetractingSpikes() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Guardian.IS_RETRACTING_SPIKES);
     }
 
-    public void setRetractingSpikes(boolean retractingSpikes) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(retractingSpikes));
+    public void setRetractingSpikes(boolean value) {
+        metadata.set(MetadataDef.Guardian.IS_RETRACTING_SPIKES, value);
+    }
+
+    public int getTargetEntityId() {
+        return metadata.get(MetadataDef.Guardian.TARGET_EID);
+    }
+
+    @ApiStatus.Internal
+    public void setTargetEntityId(int value) {
+        metadata.set(MetadataDef.Guardian.TARGET_EID, value);
     }
 
     public Entity getTarget() {
@@ -30,7 +37,7 @@ public class GuardianMeta extends MonsterMeta {
 
     public void setTarget(@Nullable Entity target) {
         this.target = target;
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(target == null ? 0 : target.getEntityId()));
+        setTargetEntityId(target == null ? 0 : target.getEntityId());
     }
 
 }

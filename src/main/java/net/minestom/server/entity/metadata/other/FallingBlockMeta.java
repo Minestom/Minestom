@@ -1,9 +1,8 @@
 package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
@@ -11,9 +10,6 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     private Block block = Block.STONE;
 
     public FallingBlockMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -21,11 +17,11 @@ public class FallingBlockMeta extends EntityMeta implements ObjectDataProvider {
     }
 
     public Point getSpawnPosition() {
-        return super.metadata.getIndex(OFFSET, Vec.ZERO);
+        return metadata.get(MetadataDef.FallingBlock.SPAWN_POSITION);
     }
 
     public void setSpawnPosition(Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
+        metadata.set(MetadataDef.FallingBlock.SPAWN_POSITION, value);
     }
 
     @NotNull

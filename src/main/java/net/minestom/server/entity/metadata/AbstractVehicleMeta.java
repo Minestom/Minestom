@@ -1,40 +1,36 @@
 package net.minestom.server.entity.metadata;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class AbstractVehicleMeta extends EntityMeta {
-
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
     public AbstractVehicleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getShakingTicks() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return metadata.get(MetadataDef.AbstractVehicle.SHAKING_POWER);
     }
 
     public void setShakingTicks(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.AbstractVehicle.SHAKING_POWER, value);
     }
 
     public int getShakingDirection() {
-        return super.metadata.getIndex(OFFSET + 1, 1);
+        return metadata.get(MetadataDef.AbstractVehicle.SHAKING_DIRECTION);
     }
 
     public void setShakingDirection(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.AbstractVehicle.SHAKING_DIRECTION, value);
     }
 
     public float getShakingMultiplier() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
+        return metadata.get(MetadataDef.AbstractVehicle.SHAKING_MULTIPLIER);
     }
 
     public void setShakingMultiplier(float value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Float(value));
+        metadata.set(MetadataDef.AbstractVehicle.SHAKING_MULTIPLIER, value);
     }
 }

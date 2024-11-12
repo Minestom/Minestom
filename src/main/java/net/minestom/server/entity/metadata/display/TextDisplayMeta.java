@@ -2,93 +2,108 @@ package net.minestom.server.entity.metadata.display;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class TextDisplayMeta extends AbstractDisplayMeta {
-    public static final byte OFFSET = AbstractDisplayMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 5;
-
-    private static final byte SHADOW = 1;
-    private static final byte SEE_THROUGH = 2;
-    private static final byte USE_DEFAULT_BACKGROUND = 4;
-    private static final byte ALIGN_LEFT = 8;
-    private static final byte ALIGN_RIGHT = 16;
-
     public TextDisplayMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @NotNull Component getText() {
-        return super.metadata.getIndex(OFFSET, Component.empty());
+        return metadata.get(MetadataDef.TextDisplay.TEXT);
     }
 
     public void setText(@NotNull Component value) {
-        super.metadata.setIndex(OFFSET, Metadata.Chat(value));
+        metadata.set(MetadataDef.TextDisplay.TEXT, value);
     }
 
     public int getLineWidth() {
-        return super.metadata.getIndex(OFFSET + 1, 200);
+        return metadata.get(MetadataDef.TextDisplay.LINE_WIDTH);
     }
 
     public void setLineWidth(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.TextDisplay.LINE_WIDTH, value);
     }
 
     public int getBackgroundColor() {
-        return super.metadata.getIndex(OFFSET + 2, 1073741824);
+        return metadata.get(MetadataDef.TextDisplay.BACKGROUND_COLOR);
     }
 
     public void setBackgroundColor(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+        metadata.set(MetadataDef.TextDisplay.BACKGROUND_COLOR, value);
     }
 
     public byte getTextOpacity() {
-        return super.metadata.getIndex(OFFSET + 3, (byte) -1);
+        return metadata.get(MetadataDef.TextDisplay.TEXT_OPACITY);
     }
 
     public void setTextOpacity(byte value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.Byte(value));
+        metadata.set(MetadataDef.TextDisplay.TEXT_OPACITY, value);
     }
 
     public boolean isShadow() {
-        return getMaskBit(OFFSET + 4, SHADOW);
+        return metadata.get(MetadataDef.TextDisplay.HAS_SHADOW);
     }
 
     public void setShadow(boolean value) {
-        setMaskBit(OFFSET + 4, SHADOW, value);
+        metadata.set(MetadataDef.TextDisplay.HAS_SHADOW, value);
     }
 
     public boolean isSeeThrough() {
-        return getMaskBit(OFFSET + 4, SEE_THROUGH);
+        return metadata.get(MetadataDef.TextDisplay.IS_SEE_THROUGH);
     }
 
     public void setSeeThrough(boolean value) {
-        setMaskBit(OFFSET + 4, SEE_THROUGH, value);
+        metadata.set(MetadataDef.TextDisplay.IS_SEE_THROUGH, value);
     }
 
     public boolean isUseDefaultBackground() {
-        return getMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND);
+        return metadata.get(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR);
     }
 
     public void setUseDefaultBackground(boolean value) {
-        setMaskBit(OFFSET + 4, USE_DEFAULT_BACKGROUND, value);
+        metadata.set(MetadataDef.TextDisplay.USE_DEFAULT_BACKGROUND_COLOR, value);
     }
 
     public boolean isAlignLeft() {
-        return getMaskBit(OFFSET + 4, ALIGN_LEFT);
+        return metadata.get(MetadataDef.TextDisplay.ALIGN_LEFT);
     }
 
     public void setAlignLeft(boolean value) {
-        setMaskBit(OFFSET + 4, ALIGN_LEFT, value);
+        metadata.set(MetadataDef.TextDisplay.ALIGN_LEFT, value);
     }
 
     public boolean isAlignRight() {
-        return getMaskBit(OFFSET + 4, ALIGN_RIGHT);
+        return metadata.get(MetadataDef.TextDisplay.ALIGN_RIGHT);
     }
 
     public void setAlignRight(boolean value) {
-        setMaskBit(OFFSET + 4, ALIGN_RIGHT, value);
+        metadata.set(MetadataDef.TextDisplay.ALIGN_RIGHT, value);
     }
+
+    public Alignment getAlignment() {
+        return Alignment.fromId(metadata.get(MetadataDef.TextDisplay.ALIGNMENT));
+    }
+
+    public void setAlignment(Alignment value) {
+        metadata.set(MetadataDef.TextDisplay.ALIGNMENT, (byte) value.ordinal());
+    }
+
+    public enum Alignment {
+        CENTER,
+        LEFT,
+        RIGHT;
+
+        private final static Alignment[] VALUES = values();
+
+        private static Alignment fromId(int id) {
+            if (id >= 0 && id < VALUES.length) {
+                return VALUES[id];
+            }
+            return CENTER;
+        }
+    }
+
 }

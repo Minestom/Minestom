@@ -1,31 +1,28 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class CamelMeta extends AbstractHorseMeta {
-    public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public CamelMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isDashing() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Camel.DASHING);
     }
 
     public void setDashing(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Camel.DASHING, value);
     }
 
     public long getLastPoseChangeTick() {
-        return super.metadata.getIndex(OFFSET + 1, 0L);
+        return metadata.get(MetadataDef.Camel.LAST_POSE_CHANGE_TICK);
     }
 
     public void setLastPoseChangeTick(long value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarLong(value));
+        metadata.set(MetadataDef.Camel.LAST_POSE_CHANGE_TICK, value);
     }
 }
