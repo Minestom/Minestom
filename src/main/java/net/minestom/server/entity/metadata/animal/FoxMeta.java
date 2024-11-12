@@ -31,11 +31,11 @@ public class FoxMeta extends AnimalMeta {
     }
 
     public boolean isFoxSneaking() {
-        return metadata.get(MetadataDef.Fox.IS_SITTING);
+        return metadata.get(MetadataDef.Fox.IS_CROUCHING);
     }
 
     public void setFoxSneaking(boolean value) {
-        metadata.set(MetadataDef.Fox.IS_SITTING, value);
+        metadata.set(MetadataDef.Fox.IS_CROUCHING, value);
     }
 
     public boolean isInterested() {
