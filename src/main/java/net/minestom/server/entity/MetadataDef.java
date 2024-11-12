@@ -34,7 +34,6 @@ public sealed class MetadataDef {
     public static final Entry<Byte> ENTITY_FLAGS = index(0, Metadata::Byte, (byte) 0);
     public static final Entry<Boolean> IS_ON_FIRE = bitMask(0, (byte) 0x01, false);
     public static final Entry<Boolean> IS_CROUCHING = bitMask(0, (byte) 0x02, false);
-    public static final Entry<Boolean> UNUSED_RIDING = bitMask(0, (byte) 0x04, false);
     public static final Entry<Boolean> IS_SPRINTING = bitMask(0, (byte) 0x08, false);
     public static final Entry<Boolean> IS_SWIMMING = bitMask(0, (byte) 0x10, false);
     public static final Entry<Boolean> IS_INVISIBLE = bitMask(0, (byte) 0x20, false);
@@ -296,7 +295,6 @@ public sealed class MetadataDef {
 
     public static sealed class AbstractHorse extends AgeableMob {
         public static final Entry<Byte> ABSTRACT_HORSE_FLAGS = index(0, Metadata::Byte, (byte) 0);
-        public static final Entry<Boolean> UNUSED = bitMask(0, (byte) 0x01, false);
         public static final Entry<Boolean> IS_TAME = bitMask(0, (byte) 0x02, false);
         public static final Entry<Boolean> IS_SADDLED = bitMask(0, (byte) 0x04, false);
         public static final Entry<Boolean> HAS_BRED = bitMask(0, (byte) 0x08, false);
@@ -429,7 +427,6 @@ public sealed class MetadataDef {
     public static sealed class TameableAnimal extends AgeableMob {
         public static final Entry<Byte> TAMEABLE_ANIMAL_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SITTING = bitMask(0, (byte) 0x01, false);
-        public static final Entry<Boolean> UNUSED = bitMask(0, (byte) 0x02, false);
         public static final Entry<Boolean> IS_TAMED = bitMask(0, (byte) 0x04, false);
         public static final Entry<@Nullable UUID> OWNER = index(1, Metadata::OptUUID, null);
     }
@@ -554,7 +551,6 @@ public sealed class MetadataDef {
 
     public static final class Zombie extends Mob {
         public static final Entry<Boolean> IS_BABY = index(0, Metadata::Boolean, false);
-        public static final Entry<Integer> UNUSED = index(1, Metadata::VarInt, 0);
         public static final Entry<Boolean> IS_BECOMING_DROWNED = index(2, Metadata::Boolean, false);
     }
 
