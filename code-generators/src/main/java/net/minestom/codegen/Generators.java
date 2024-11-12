@@ -1,7 +1,6 @@
 package net.minestom.codegen;
 
 import net.minestom.codegen.color.DyeColorGenerator;
-import net.minestom.codegen.entity.VillagerTypeGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
@@ -37,7 +36,7 @@ public class Generators {
                 resource("consume_effects.json"), outputFolder).packagePrivate().generate();
         new GenericEnumGenerator("net.minestom.server.command", "ArgumentParserType",
                 resource("command_arguments.json"), outputFolder).generate();
-        new VillagerTypeGenerator("net.minestom.server.entity", "VillagerType",
+        new GenericEnumGenerator("net.minestom.server.entity", "VillagerType",
                 resource("villager_types.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
