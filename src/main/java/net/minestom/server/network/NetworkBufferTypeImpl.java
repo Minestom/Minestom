@@ -269,7 +269,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int limit = buffer.nioBuffer.limit();
             final int length = limit - buffer.readIndex();
-            assert length > 0 : "Invalid remaining: " + length;
+            assert length >= 0 : "Invalid remaining: " + length;
             final byte[] bytes = new byte[length];
             buffer.nioBuffer.get(buffer.readIndex(), bytes);
             buffer.readIndex += length;

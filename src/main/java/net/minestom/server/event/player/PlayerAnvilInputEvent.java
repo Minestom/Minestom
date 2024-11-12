@@ -1,7 +1,9 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.inventory.Inventory;
 import net.minestom.server.network.packet.client.play.ClientNameItemPacket;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,13 +12,15 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ClientNameItemPacket
  */
-public class PlayerAnvilInputEvent implements PlayerInstanceEvent {
+public class PlayerAnvilInputEvent implements PlayerInstanceEvent, InventoryEvent {
 
     private final Player player;
+    private final Inventory inventory;
     private final String input;
 
-    public PlayerAnvilInputEvent(@NotNull Player player, @NotNull String input) {
+    public PlayerAnvilInputEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull String input) {
         this.player = player;
+        this.inventory = inventory;
         this.input = input;
     }
 
@@ -28,4 +32,10 @@ public class PlayerAnvilInputEvent implements PlayerInstanceEvent {
     public @NotNull String getInput() {
         return input;
     }
+
+    @Override
+    public @NotNull Inventory getInventory() {
+        return inventory;
+    }
+
 }
