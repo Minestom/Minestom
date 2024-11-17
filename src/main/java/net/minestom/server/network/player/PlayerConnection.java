@@ -7,6 +7,7 @@ import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.OutgoingTransferEvent;
 import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.monitoring.EventsJFR;
 import net.minestom.server.network.ConnectionState;
@@ -14,6 +15,7 @@ import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
 import net.minestom.server.network.packet.server.common.CookieStorePacket;
+import net.minestom.server.network.packet.server.common.TransferPacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
@@ -40,6 +42,7 @@ public abstract class PlayerConnection {
     private volatile ConnectionState connectionState;
     private PlayerPublicKey playerPublicKey;
     volatile boolean online;
+    private Boolean wasTransferred;
 
     private LoginPluginMessageProcessor loginPluginMessageProcessor = new LoginPluginMessageProcessor(this);
 
@@ -259,6 +262,33 @@ public abstract class PlayerConnection {
             future.complete(clientPacks);
             knownPacksFuture = null;
         }
+    }
+
+    /**
+     * Redirects the player to another server.
+     * @param host The host of the server to transfer the player to.
+     * @param port The port of the server to transfer the player to.
+     */
+    public void transfer(@NotNull String host, int port) {
+        EventDispatcher.callCancellable(new OutgoingTransferEvent(this.player, host, port), () ->
+                this.sendPacket(new TransferPacket(host, port)));
+    }
+
+    /**
+     * Returns whether the player was redirected from another server.
+     * @return Whether the player was redirected from another server.
+     */
+    public boolean wasTransferred() {
+        if (this.wasTransferred == null) {
+            throw new IllegalStateException("The player has not completed the handshake process yet!");
+        }
+
+        return this.wasTransferred;
+    }
+
+    @ApiStatus.Internal
+    public void markAsTransferred() {
+        this.wasTransferred = true;
     }
 
     @Override
