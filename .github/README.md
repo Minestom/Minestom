@@ -13,7 +13,7 @@ Minestom is an open-source library that enables developers to create their own M
 
 Minestom does not include any vanilla features by default, however we have an extensive API which allows you to code any feature with ease.
 
-This is a library for developers, thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implementing their APIs.
+This is a library for developers, thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
 
 # Table of Contents
 - [Minestom](#minestom)
@@ -86,7 +86,7 @@ To get started writing your first server, check out our official [wiki](https://
 # Why Minestom?
 Minecraft has evolved a lot since its release, and most of the servers today do not take advantage of vanilla features, which leads to performance struggles.
 
-Our target audience are developers who wish to make a server that benefits very little from vanilla features, such as a minigame or KitPVP server.
+Our target audience are developers who wish to make a server that benefits very little from vanilla features, such as a mini game or KitPVP server.
 
 The goal is to offer more performance for those who need it. In other words, it makes sense to use Minestom when it will take less time implementing every missing feature you want, rather than removing every vanilla feature that will slow you down.
 
@@ -94,7 +94,7 @@ The goal is to offer more performance for those who need it. In other words, it 
 Minestom isn't perfect, and while our choices make it better for some cases, it's not suitable for others.
 
 ## Advantages
-* High performance — Designed for effiency, offering high performance with minimal overhead.
+* High performance — Designed for efficiency, offering high performance with minimal overhead.
 * Lightweight — Comes with little to no functionality, allowing the server to be easily extended.
 * Modern API — Written in Java 21, using best practices and standards.
 * Open source — Anyone can contribute new features and improvements.
@@ -133,7 +133,7 @@ However, all blocks are visually there, they just won't have interaction by defa
 In modern Minecraft, inventories are used as a GUI interface with clickable items, and we support these interactions natively without needing to program your own solution.
 
 ## Commands
-Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.com/Mojang/brigadier)", and we have developed an API designed to reach the full potential of the new argument types.
+Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.com/Mojang/brigadier)", and we have developed an API designed to use the new argument types to their full potential.
 
 # Credits
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project.
