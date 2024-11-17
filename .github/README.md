@@ -11,14 +11,14 @@
 
 Minestom is an open-source library that enables developers to create their own Minecraft server software, without any code from Mojang.
 
-Minestom does not include any vanilla features by default, however we have an extensive API which allows you to make any feature you want with ease.
+Minestom does not include any vanilla features by default, however we have an extensive API which allows you to code any feature with ease.
 
-This is a library for developers, which means it's not meant to be used by the average server owner. Replacing Bukkit/Forge/Sponge with this **will not work**, due to us not implementing their APIs.
+This is a library for developers, thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implementing their APIs.
 
 # Table of Contents
 - [Minestom](#minestom)
 - [Table of Contents](#table-of-contents)
-- [Install](#install)
+- [Installation](#installation)
 - [Usage](#usage)
 - [Why Minestom?](#why-minestom)
 - [Advantages and Disadvantages](#advantages-and-disadvantages)
@@ -34,7 +34,7 @@ This is a library for developers, which means it's not meant to be used by the a
 - [Contributing](#contributing)
 - [License](#license)
 
-# Install
+# Installation
 Because Minestom is a library, it does not ship a JAR file for you to double click and run. You will need to add it as a dependency, add your code, and compile your server yourself.
 
 Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom-snapshots). You can add the following code to your build script to install it.
@@ -78,39 +78,39 @@ implementation 'net.minestom:minestom-snapshots:XXXXXXXXXX'
     <version>XXXXXXXXXX</version>
 </dependency>
 ```
+</details>
 
 # Usage
 To get started writing your first server, check out our official [wiki](https://minestom.net/docs/introduction). For an API reference, consult the [Javadocs](https://minestom.github.io/Minestom/).
 
 # Why Minestom?
-Minecraft has evolved a lot since its release, and most of the servers today do not take advantage of most vanilla features, which can even cause performance struggles.
+Minecraft has evolved a lot since its release, and most of the servers today do not take advantage of vanilla features, which leads to performance struggles.
 
-Our target audience are developers who want to make a server that benefits very little from vanilla features, such as minigame or KitPVP servers.
+Our target audience are developers who wish to make a server that benefits very little from vanilla features, such as a minigame or KitPVP server.
 
-The goal is to offer more performance for those who need it.
-
-In other words, it makes sense to use Minestom when it takes less time to implement every missing feature you want, rather than removing every vanilla feature that will slow you down.
+The goal is to offer more performance for those who need it. In other words, it makes sense to use Minestom when it will take less time implementing every missing feature you want, rather than removing every vanilla feature that will slow you down.
 
 # Advantages and Disadvantages
-Minestom isn't perfect, and while our choices make it better for some cases, it can make it worse for others.
+Minestom isn't perfect, and while our choices make it better for some cases, it's not suitable for others.
 
 ## Advantages
-* Removes the overhead of vanilla features
-* Multi-threaded
-* Instance system (Collections of blocks and entities) which is much more scalable than worlds
-* Open-source
-* Modern API
-* Avoid legacy NMS
+* High performance — Designed for effiency, offering high performance with minimal overhead.
+* Lightweight — Comes with little to no functionality, allowing the server to be easily extended.
+* Modern API — Written in Java 21, using best practices and standards.
+* Open source — Anyone can contribute new features and improvements.
+* Multi-threaded — Uses a thread pool to manage chunks independently from instances.
+* Active community — We have lots of developers who contribute to our development and are happy to provide assistance.
+* Avoid legacy NMS code — Obfuscation is a thing of the past, and the protocol is fully implemented and exposed to developers.
 
 ## Disadvantages
-* Does not work with traditional plugins or mods
-* Does not work with older clients (using a proxy like Velocity with [ViaBackwards](https://modrinth.com/plugin/viabackwards) is possible)
-* Bad for those who want a vanilla experience
-* Takes longer to develop something playable
-* Multi-threaded environments need extra consideration
+* Doesn't work with traditional plugins or mods.
+* Doesn't support older versions. (Using a proxy like Velocity with [ViaBackwards](https://modrinth.com/plugin/viabackwards) is possible)
+* Unsuitable for those who want a server with vanilla mechanics.
+* Takes a bigger time investment to develop something playable.
+* Less users and smaller plugin/library ecosystem than Spigot.
 
 # API
-Even if we do not include anything by default in the game, we can simplify the way you add new features. Here is a preview:
+Even if we do not include any vanilla mechanics by default, we simplify the way new features are added. Here are a few examples:
 
 ## Instances
 One of our major concepts, worlds are great for survival with friends, but when it scales up it can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunk in memory only, copying and sending it to another player in no time, with custom serialization and much more...
