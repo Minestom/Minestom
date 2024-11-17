@@ -23,6 +23,6 @@ public class TransferCommand extends Command {
                         "You must be a player to use this command!",
                         NamedTextColor.RED));
             }
-        });
+        }, hostArgument, portArgument);
     }
 }

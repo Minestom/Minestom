@@ -87,6 +87,7 @@ public class Main {
         commandManager.register(new PotionCommand());
         commandManager.register(new CookieCommand());
         commandManager.register(new WorldBorderCommand());
+        commandManager.register(new TransferCommand());
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
