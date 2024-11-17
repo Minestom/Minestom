@@ -16,8 +16,6 @@ Minestom does not include any vanilla features by default, however we have an ex
 This is a library for developers, thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
 
 # Table of Contents
-- [Minestom](#minestom)
-- [Table of Contents](#table-of-contents)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Why Minestom?](#why-minestom)
