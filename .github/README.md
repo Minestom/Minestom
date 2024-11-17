@@ -107,17 +107,17 @@ Minestom isn't perfect, and while our choices make it better for some cases, it'
 * Doesn't support older versions. (Using a proxy like Velocity with [ViaBackwards](https://modrinth.com/plugin/viabackwards) is possible)
 * Unsuitable for those who want a server with vanilla mechanics.
 * Takes a bigger time investment to develop something playable.
-* Less users and smaller plugin/library ecosystem than Spigot.
+* Less users and a smaller plugin/library ecosystem than Spigot.
 
 # API
 Even if we do not include any vanilla mechanics by default, we simplify the way new features are added. Here are a few examples:
 
 ## Instances
-One of our major concepts, worlds are great for survival with friends, but when it scales up it can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to say the overhead caused by unnecessary data contained in them. Instances are a lightweight solution to it, being able to have every chunk in memory only, copying and sending it to another player in no time, with custom serialization and much more...
+This is one of our major concepts. While worlds are great for playing survival with friends, they do not scale and can become unmanageable. The best examples can be found in Skyblock or minigames, not being able to separate each part properly and being forced to save everything in files, not to mention the overhead caused by unnecessary data contained in them. Instances are a lightweight alternative, being able to have every chunk in memory, copying and sending it to another player in no time, while allowing custom serialization and more.
 
-Being able to create instances directly on the go is a must-have, we believe it can push many more projects forward.
+Being able to create instances directly on the go is a must-have, and we believe it can push many more projects forward.
 
-Instances also come with performance benefits, unlike some others which will be fully single-threaded or maybe using one thread per world we are using a set number of threads (pool) to manage all chunks independently from instances, meaning using more CPU power.
+Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, meaning more CPU power.
 
 ## Blocks
 Minestom does not know what a chest is by default, you will have to define that it should open an inventory.
