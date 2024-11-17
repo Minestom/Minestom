@@ -35,9 +35,8 @@ This is a library for developers, thus it is not meant to be used by the average
 # Installation
 Because Minestom is a library, it does not ship a JAR file for you to double click and run. You will need to add it as a dependency, add your code, and compile your server yourself.
 
-Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom-snapshots). You can add the following code to your build script to install it.
-
-<details>
+Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom-snapshots). You can add the code below to your build script to install it. To determine the latest version, look at [the wiki page](https://minestom.net/docs/setup/dependencies#dependencies-1), which automatically updates.
+<details open>
 <summary>Gradle (Kotlin)</summary>
 <br>
 
