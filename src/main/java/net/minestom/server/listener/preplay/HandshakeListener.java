@@ -46,13 +46,13 @@ public final class HandshakeListener {
             }
         }
 
-        if (connection instanceof PlayerSocketConnection) {
-            // Give to the connection the server info that the client used
-            ((PlayerSocketConnection) connection).refreshServerInformation(
-                    packet.serverAddress(),
-                    packet.serverPort(),
-                    packet.protocolVersion());
-        }
+        if (!(connection instanceof PlayerSocketConnection connection)) return;
+        // Give to the connection the server info that the client used
+        connection.refreshServerInformation(
+                packet.serverAddress(),
+                packet.serverPort(),
+                packet.protocolVersion()
+        );
     }
 
     private static void handlePlayerLogin(@NotNull ClientHandshakePacket packet, @NotNull PlayerConnection connection) {
