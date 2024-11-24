@@ -46,7 +46,7 @@ public final class HandshakeListener {
             }
         }
 
-        if (!(connection instanceof PlayerSocketConnection connection)) {
+        if (!(connection instanceof PlayerSocketConnection socketConnection)) {
             return;
         }
 
