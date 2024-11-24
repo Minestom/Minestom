@@ -46,8 +46,11 @@ public final class HandshakeListener {
             }
         }
 
-        if (!(connection instanceof PlayerSocketConnection connection)) return;
-        // Give to the connection the server info that the client used
+        if (!(connection instanceof PlayerSocketConnection connection)) {
+            return;
+        }
+
+        // Supply the client's server info to the connection
         connection.refreshServerInformation(
                 packet.serverAddress(),
                 packet.serverPort(),
