@@ -21,11 +21,11 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this(Vec.fromPoint(offset), new Vec(width, height, depth).add(offset));
+        this(new Vec(-width / 2.0, 0.0, -depth / 2.0).add(offset), new Vec(width / 2.0, height, depth / 2.0).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
-        this(width, height, depth, new Vec(-width / 2, 0, -depth / 2));
+        this(width, height, depth, Vec.ZERO);
     }
 
     @Override
