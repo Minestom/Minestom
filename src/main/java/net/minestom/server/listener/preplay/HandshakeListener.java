@@ -50,7 +50,7 @@ public final class HandshakeListener {
         }
 
         // Supply the client's server info to the connection
-        connection.refreshServerInformation(
+        socketConnection.refreshServerInformation(
                 packet.serverAddress(),
                 packet.serverPort(),
                 packet.protocolVersion()
