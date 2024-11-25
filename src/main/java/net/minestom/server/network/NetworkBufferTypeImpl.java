@@ -631,6 +631,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
             final DynamicRegistry<T> registry = selector.apply(buffer.registries);
+            // For whatever reason, the client indexes painting variants starting at 1, so we add 1 in that case.
             final int id = registry.id().equals("minecraft:painting_variant")?registry.getId(value)+1:registry.getId(value);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
