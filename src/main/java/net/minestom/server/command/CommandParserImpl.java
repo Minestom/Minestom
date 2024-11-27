@@ -247,7 +247,7 @@ final class CommandParserImpl implements CommandParser {
             final SuggestionCallback callback = suggestionCallback();
             if (callback == null) return null;
             final int lastSpace = input().lastIndexOf(" ");
-            final Suggestion suggestion = new Suggestion(input(), lastSpace + 2, input().length() - lastSpace - 1);
+            final Suggestion suggestion = new Suggestion(input(), lastSpace + 1, input().length() - lastSpace - 1);
             final CommandContext context = createCommandContext(input(), arguments());
             callback.apply(sender, context, suggestion);
             return suggestion;
