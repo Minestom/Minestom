@@ -517,7 +517,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public void updateNewViewer(@NotNull Player player) {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
-        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+
+        final EntitySpawnType spawnType = this.entityType.registry().spawnType();
+
+        // sending attributes for a non-living entity disconnects clients
+        if (spawnType == EntitySpawnType.PLAYER || spawnType == EntitySpawnType.LIVING)
+            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
     }
 
     @Override
