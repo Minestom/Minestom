@@ -30,7 +30,7 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.*;
-import net.minestom.server.effects.Effects;
+import net.minestom.server.effects.WorldEvent;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -951,8 +951,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param data                  data for the effect
      * @param disableRelativeVolume disable volume scaling based on distance
      */
-    public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
-        sendPacket(new EffectPacket(effect.getId(), new Vec(x, y, z), data, disableRelativeVolume));
+    public void playEffect(@NotNull WorldEvent effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
+        sendPacket(new WorldEventPacket(effect.getId(), new Vec(x, y, z), data, disableRelativeVolume));
     }
 
     @Override
