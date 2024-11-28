@@ -87,6 +87,26 @@ public class AbstractDisplayMeta extends EntityMeta {
         metadata.set(MetadataDef.Display.BRIGHTNESS_OVERRIDE, value);
     }
 
+    public void setBrightness(int blockLight, int skyLight) {
+        setBrightnessOverride((blockLight & 0xF) << 4 | (skyLight & 0xF) << 20);
+    }
+
+    public int getBlockLight() {
+        return getLight(4);
+    }
+
+    public int getSkyLight() {
+        return getLight(20);
+    }
+
+    private int getLight(int shift) {
+        int brightnessOverride = getBrightnessOverride();
+        if (brightnessOverride <= 0)
+            return 0;
+        else
+            return (brightnessOverride >> shift) & 0xF;
+    }
+
     public float getViewRange() {
         return metadata.get(MetadataDef.Display.VIEW_RANGE);
     }
