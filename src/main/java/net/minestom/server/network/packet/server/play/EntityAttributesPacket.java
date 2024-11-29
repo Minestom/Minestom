@@ -5,6 +5,7 @@ import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.ServerPacketIdentifier;
+import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -36,7 +37,7 @@ public record EntityAttributesPacket(int entityId, List<Property> properties) im
     }
 
 
-    public record Property(Attribute attribute, double value, Collection<AttributeModifier> modifiers) {
+    public record Property(DynamicRegistry.Key<Attribute> attribute, double value, Collection<AttributeModifier> modifiers) {
         public static final NetworkBuffer.Type<Property> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Property value) {

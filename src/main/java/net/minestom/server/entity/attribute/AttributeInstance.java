@@ -1,8 +1,11 @@
 package net.minestom.server.entity.attribute;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -20,7 +23,7 @@ public final class AttributeInstance {
     public static final NetworkBuffer.Type<AttributeInstance> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, AttributeInstance value) {
-            buffer.write(Attribute.NETWORK_TYPE, value.attribute());
+            buffer.write(Attribute.NETWORK_TYPE, value.attributeKey());
             buffer.write(NetworkBuffer.DOUBLE, value.getBaseValue());
             buffer.writeCollection(AttributeModifier.NETWORK_TYPE, value.modifiers());
         }
@@ -32,7 +35,9 @@ public final class AttributeInstance {
         }
     };
 
+    private final DynamicRegistry.Key<Attribute> attributeKey;
     private final Attribute attribute;
+
     private final Map<NamespaceID, AttributeModifier> modifiers;
     private final Collection<AttributeModifier> unmodifiableModifiers;
     private final AtomicLong baseValueBits;
@@ -40,12 +45,24 @@ public final class AttributeInstance {
     private final Consumer<AttributeInstance> propertyChangeListener;
     private volatile double cachedValue = 0.0D;
 
-    public AttributeInstance(@NotNull Attribute attribute, @Nullable Consumer<AttributeInstance> listener) {
-        this(attribute, attribute.defaultValue(), new ArrayList<>(), listener);
+    public AttributeInstance(@NotNull DynamicRegistry.Key<Attribute> attributeKey, @Nullable Consumer<AttributeInstance> listener) {
+        this.attributeKey = attributeKey;
+        this.attribute = lookup(attributeKey);
+
+        double baseValue = attribute.defaultValue();
+        this.modifiers = new ConcurrentHashMap<>();
+        this.unmodifiableModifiers = Collections.unmodifiableCollection(this.modifiers.values());
+        this.baseValueBits = new AtomicLong(Double.doubleToLongBits(baseValue));
+
+        this.propertyChangeListener = listener;
+        refreshCachedValue(baseValue);
     }
 
-    public AttributeInstance(@NotNull Attribute attribute, double baseValue, @NotNull Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
-        this.attribute = attribute;
+    public AttributeInstance(@NotNull DynamicRegistry.Key<Attribute> attributeKey, double baseValue,
+                             @NotNull Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
+        this.attributeKey = attributeKey;
+        this.attribute = lookup(attributeKey);
+
         this.modifiers = new ConcurrentHashMap<>();
         for (var modifier : modifiers) this.modifiers.put(modifier.id(), modifier);
         this.unmodifiableModifiers = Collections.unmodifiableCollection(this.modifiers.values());
@@ -55,13 +72,28 @@ public final class AttributeInstance {
         refreshCachedValue(baseValue);
     }
 
+    private static Attribute lookup(DynamicRegistry.Key<Attribute> attributeKey) {
+        final Attribute attribute = MinecraftServer.process().attribute().get(attributeKey);
+        Check.notNull(attribute, "could not find attribute {0}", attributeKey.name());
+
+        return attribute;
+    }
+
     /**
-     * Gets the attribute associated to this instance.
-     *
-     * @return the associated attribute
+     * Gets the actual {@link Attribute} instance used by this instance.
+     * @return the actual attribute that was looked up in the registry
      */
     public @NotNull Attribute attribute() {
         return attribute;
+    }
+
+    /**
+     * Gets the key for attribute associated to this instance.
+     *
+     * @return the associated attribute
+     */
+    public @NotNull DynamicRegistry.Key<Attribute> attributeKey() {
+        return attributeKey;
     }
 
     /**
@@ -181,7 +213,7 @@ public final class AttributeInstance {
             result *= (1.0f + modifier.amount());
         }
 
-        return Math.clamp(result, getAttribute().minValue(), getAttribute().maxValue());
+        return Math.clamp(result, attribute.minValue(), attribute.maxValue());
     }
 
     /**
@@ -203,7 +235,7 @@ public final class AttributeInstance {
     }
 
     @Deprecated
-    public @NotNull Attribute getAttribute() {
-        return attribute;
+    public @NotNull DynamicRegistry.Key<Attribute> getAttribute() {
+        return attributeKey;
     }
 }

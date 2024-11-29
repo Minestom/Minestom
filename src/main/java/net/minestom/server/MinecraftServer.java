@@ -4,6 +4,7 @@ import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
@@ -312,6 +313,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
         return process().enchantmentLocationEffects();
+    }
+
+    public static @NotNull DynamicRegistry<Attribute> attribute() {
+        return process().attribute();
     }
 
     public static Server getServer() {

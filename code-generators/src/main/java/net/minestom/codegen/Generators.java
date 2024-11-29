@@ -36,7 +36,6 @@ public class Generators {
         generator.generate(resource("potions.json"), "net.minestom.server.potion", "PotionType", "PotionTypeImpl", "PotionTypes");
         generator.generate(resource("sounds.json"), "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents");
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
-        generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
 
         // Dynamic registries
@@ -51,6 +50,7 @@ public class Generators {
         generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "Enchantments");
         generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingMeta.Variant", "PaintingVariants");
         generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
+        generator.generateKeys(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "Attributes");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

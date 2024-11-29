@@ -5,6 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
@@ -74,6 +75,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<Enchantment> enchantment;
     private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
+    private final DynamicRegistry<Attribute> attribute;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -107,6 +109,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
         this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
+        this.attribute = Attribute.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dimensionType = DimensionType.createDefaultRegistry();
@@ -204,6 +207,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Attribute> attribute() {
+        return attribute;
     }
 
     @Override

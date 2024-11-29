@@ -572,6 +572,20 @@ public interface BinaryTagSerializer<T> {
         };
     }
 
+    default <S> BinaryTagSerializer<S> map(@NotNull BiFunction<Context, T, S> to, @NotNull BiFunction<Context, S, T> from) {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull S value) {
+                return BinaryTagSerializer.this.write(context, from.apply(context, value));
+            }
+
+            @Override
+            public @NotNull S read(@NotNull Context context, @NotNull BinaryTag tag) {
+                return to.apply(context, BinaryTagSerializer.this.read(context, tag));
+            }
+        };
+    }
+
     default BinaryTagSerializer<List<T>> list() {
         return new BinaryTagSerializer<>() {
             @Override

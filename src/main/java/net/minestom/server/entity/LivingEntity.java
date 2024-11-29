@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.sound.Sound.Source;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -36,6 +37,7 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -424,7 +426,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(DynamicRegistry.Key)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
      */
     public void heal() {
         setHealth((float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
@@ -436,7 +438,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attribute the attribute instance to get
      * @return the attribute instance
      */
-    public @NotNull AttributeInstance getAttribute(@NotNull Attribute attribute) {
+    public @NotNull AttributeInstance getAttribute(@NotNull DynamicRegistry.Key<Attribute> attribute) {
         return attributeModifiers.computeIfAbsent(attribute.name(),
                 s -> new AttributeInstance(attribute, this::onAttributeChanged));
     }
@@ -456,6 +458,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributeInstance the modified attribute instance
      */
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+        if (!attributeInstance.attribute().isSynced()) return;
+
         boolean self = false;
         if (this instanceof Player player) {
             PlayerConnection playerConnection = player.playerConnection;
@@ -464,9 +468,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
         EntityAttributesPacket propertiesPacket = new EntityAttributesPacket(getEntityId(), List.of(
                 new EntityAttributesPacket.Property(
-                        attributeInstance.attribute(),
+                        attributeInstance.attributeKey(),
                         attributeInstance.getBaseValue(),
-                        attributeInstance.getModifiers())
+                        attributeInstance.modifiers())
         ));
         if (self) {
             sendPacketToViewersAndSelf(propertiesPacket);
@@ -478,11 +482,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Retrieves the attribute value.
      *
-     * @param attribute the attribute value to get
+     * @param attributeKey the attribute value to get
      * @return the attribute value
      */
-    public double getAttributeValue(@NotNull Attribute attribute) {
-        AttributeInstance instance = attributeModifiers.get(attribute.name());
+    public double getAttributeValue(@NotNull DynamicRegistry.Key<Attribute> attributeKey) {
+        final AttributeInstance instance = attributeModifiers.get(attributeKey.name());
+        final Attribute attribute = MinecraftServer.attribute().get(attributeKey);
+        Check.notNull(attribute, "unrecogized attribute {0}", attributeKey.name());
+
         return (instance != null) ? instance.getValue() : attribute.defaultValue();
     }
 
@@ -612,7 +619,9 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     protected @NotNull EntityAttributesPacket getPropertiesPacket() {
         List<EntityAttributesPacket.Property> properties = new ArrayList<>();
         for (AttributeInstance instance : attributeModifiers.values()) {
-            properties.add(new EntityAttributesPacket.Property(instance.attribute(), instance.getBaseValue(), instance.getModifiers()));
+            if (!instance.attribute().isSynced()) continue;
+
+            properties.add(new EntityAttributesPacket.Property(instance.attributeKey(), instance.getBaseValue(), instance.modifiers()));
         }
         return new EntityAttributesPacket(getEntityId(), properties);
     }

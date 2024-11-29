@@ -1,32 +1,30 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+record AttributeImpl(
+        double defaultValue,
+        boolean isSynced,
+        double maxValue,
+        double minValue,
+        @Nullable Registry.AttributeEntry registry) implements Attribute {
+    static final BinaryTagSerializer<Attribute> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+            tag -> {
+                throw new UnsupportedOperationException("Attribute is read-only");
+            },
+            attribute -> CompoundBinaryTag.builder()
+                    .putDouble("defaultValue", attribute.defaultValue())
+                    .putBoolean("clientSync", attribute.isSynced())
+                    .putDouble("maxValue", attribute.maxValue())
+                    .putDouble("minValue", attribute.minValue())
+                    .build()
+    );
 
-record AttributeImpl(@NotNull Registry.AttributeEntry registry) implements Attribute {
-    private static final Registry.Container<Attribute> CONTAINER = Registry.createStaticContainer(Registry.Resource.ATTRIBUTES,
-            (namespace, properties) -> new AttributeImpl(Registry.attribute(namespace, properties)));
-
-    static Attribute get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Attribute getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Attribute getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<Attribute> values() {
-        return CONTAINER.values();
-    }
-
-    @Override
-    public String toString() {
-        return name();
+    AttributeImpl(@NotNull Registry.AttributeEntry registry) {
+        this(registry.defaultValue(), registry.clientSync(), registry.maxValue(), registry.minValue(), registry);
     }
 }

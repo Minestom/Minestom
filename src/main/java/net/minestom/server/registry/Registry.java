@@ -794,14 +794,13 @@ public final class Registry {
         }
     }
 
-    public record AttributeEntry(NamespaceID namespace, int id,
+    public record AttributeEntry(NamespaceID namespace,
                                  String translationKey, double defaultValue,
                                  boolean clientSync,
                                  double maxValue, double minValue,
                                  Properties custom) implements Entry {
         public AttributeEntry(String namespace, Properties main, Properties custom) {
             this(NamespaceID.from(namespace),
-                    main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("defaultValue"),
                     main.getBoolean("clientSync"),
