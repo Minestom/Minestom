@@ -261,7 +261,7 @@ public interface PacketRegistry<T> {
                     entry(InitializeWorldBorderPacket.class, InitializeWorldBorderPacket.SERIALIZER),
                     entry(KeepAlivePacket.class, KeepAlivePacket.SERIALIZER),
                     entry(ChunkDataPacket.class, ChunkDataPacket.SERIALIZER),
-                    entry(EffectPacket.class, EffectPacket.SERIALIZER),
+                    entry(WorldEventPacket.class, WorldEventPacket.SERIALIZER),
                     entry(ParticlePacket.class, ParticlePacket.SERIALIZER),
                     entry(UpdateLightPacket.class, UpdateLightPacket.SERIALIZER),
                     entry(JoinGamePacket.class, JoinGamePacket.SERIALIZER),
