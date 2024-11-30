@@ -840,7 +840,6 @@ public final class Registry {
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
-                                    float itemModelIndex,
                                     @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
@@ -849,7 +848,6 @@ public final class Registry {
                     NamespaceID.from(namespace),
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
-                    (float) main.getDouble("item_model_index"),
                     Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
