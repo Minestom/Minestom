@@ -134,4 +134,6 @@ interface Biomes {
     DynamicRegistry.Key<Biome> SAVANNA = DynamicRegistry.Key.of("minecraft:savanna");
 
     DynamicRegistry.Key<Biome> PLAINS = DynamicRegistry.Key.of("minecraft:plains");
+
+    DynamicRegistry.Key<Biome> PALE_GARDEN = DynamicRegistry.Key.of("minecraft:pale_garden");
 }

@@ -65,8 +65,6 @@ interface EntityTypes {
 
     EntityType CREAKING = EntityTypeImpl.get("minecraft:creaking");
 
-    EntityType CREAKING_TRANSIENT = EntityTypeImpl.get("minecraft:creaking_transient");
-
     EntityType CREEPER = EntityTypeImpl.get("minecraft:creeper");
 
     EntityType DARK_OAK_BOAT = EntityTypeImpl.get("minecraft:dark_oak_boat");

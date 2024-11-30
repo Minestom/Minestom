@@ -72,6 +72,8 @@ interface Particles {
 
     Particle CHERRY_LEAVES = ParticleImpl.get("minecraft:cherry_leaves");
 
+    Particle PALE_OAK_LEAVES = ParticleImpl.get("minecraft:pale_oak_leaves");
+
     Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
 
     Particle.SculkCharge SCULK_CHARGE = (Particle.SculkCharge) ParticleImpl.get("minecraft:sculk_charge");

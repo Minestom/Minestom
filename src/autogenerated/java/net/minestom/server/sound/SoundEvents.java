@@ -773,6 +773,8 @@ interface SoundEvents {
 
     SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get("minecraft:entity.creaking.sway");
 
+    SoundEvent ENTITY_CREAKING_TWITCH = BuiltinSoundEvent.get("minecraft:entity.creaking.twitch");
+
     SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get("minecraft:block.creaking_heart.break");
 
     SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get("minecraft:block.creaking_heart.fall");
@@ -1048,6 +1050,16 @@ interface SoundEvents {
     SoundEvent ENTITY_EXPERIENCE_BOTTLE_THROW = BuiltinSoundEvent.get("minecraft:entity.experience_bottle.throw");
 
     SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP = BuiltinSoundEvent.get("minecraft:entity.experience_orb.pickup");
+
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN_LONG = BuiltinSoundEvent.get("minecraft:block.eyeblossom.open_long");
+
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN = BuiltinSoundEvent.get("minecraft:block.eyeblossom.open");
+
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE_LONG = BuiltinSoundEvent.get("minecraft:block.eyeblossom.close_long");
+
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE = BuiltinSoundEvent.get("minecraft:block.eyeblossom.close");
+
+    SoundEvent BLOCK_EYEBLOSSOM_IDLE = BuiltinSoundEvent.get("minecraft:block.eyeblossom.idle");
 
     SoundEvent BLOCK_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("minecraft:block.fence_gate.close");
 
@@ -2648,6 +2660,24 @@ interface SoundEvents {
     SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get("minecraft:block.spawner.place");
 
     SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get("minecraft:block.spawner.step");
+
+    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get("minecraft:block.resin.break");
+
+    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get("minecraft:block.resin.fall");
+
+    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get("minecraft:block.resin.place");
+
+    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get("minecraft:block.resin.step");
+
+    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.resin_bricks.break");
+
+    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.resin_bricks.fall");
+
+    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.resin_bricks.hit");
+
+    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.resin_bricks.place");
+
+    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.resin_bricks.step");
 
     SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get("minecraft:block.spore_blossom.break");
 

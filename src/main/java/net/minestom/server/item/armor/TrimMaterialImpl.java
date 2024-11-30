@@ -14,7 +14,6 @@ import java.util.Map;
 record TrimMaterialImpl(
         @NotNull String assetName,
         @NotNull Material ingredient,
-        float itemModelIndex,
         @NotNull Map<String, String> overrideArmorMaterials,
         @NotNull Component description,
         @Nullable Registry.TrimMaterialEntry registry
@@ -33,7 +32,6 @@ record TrimMaterialImpl(
                 return CompoundBinaryTag.builder()
                         .putString("asset_name", trimMaterial.assetName())
                         .put("ingredient", Material.NBT_TYPE.write(trimMaterial.ingredient()))
-                        .putFloat("item_model_index", trimMaterial.itemModelIndex())
                         .put("override_armor_materials", overrideArmorMaterials.build())
                         .put("description", BinaryTagSerializer.NBT_COMPONENT.write(trimMaterial.description()))
                         .build();
@@ -51,7 +49,7 @@ record TrimMaterialImpl(
 
     TrimMaterialImpl(@NotNull Registry.TrimMaterialEntry registry) {
         this(registry.assetName(), registry.ingredient(),
-                registry.itemModelIndex(), registry.overrideArmorMaterials(),
+                registry.overrideArmorMaterials(),
                 registry.description(), registry);
     }
 

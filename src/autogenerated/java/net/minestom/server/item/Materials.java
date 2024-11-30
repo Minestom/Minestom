@@ -457,6 +457,10 @@ interface Materials {
 
     Material DANDELION = MaterialImpl.get("minecraft:dandelion");
 
+    Material OPEN_EYEBLOSSOM = MaterialImpl.get("minecraft:open_eyeblossom");
+
+    Material CLOSED_EYEBLOSSOM = MaterialImpl.get("minecraft:closed_eyeblossom");
+
     Material POPPY = MaterialImpl.get("minecraft:poppy");
 
     Material BLUE_ORCHID = MaterialImpl.get("minecraft:blue_orchid");
@@ -752,6 +756,20 @@ interface Materials {
     Material VINE = MaterialImpl.get("minecraft:vine");
 
     Material GLOW_LICHEN = MaterialImpl.get("minecraft:glow_lichen");
+
+    Material RESIN_CLUMP = MaterialImpl.get("minecraft:resin_clump");
+
+    Material RESIN_BLOCK = MaterialImpl.get("minecraft:resin_block");
+
+    Material RESIN_BRICKS = MaterialImpl.get("minecraft:resin_bricks");
+
+    Material RESIN_BRICK_STAIRS = MaterialImpl.get("minecraft:resin_brick_stairs");
+
+    Material RESIN_BRICK_SLAB = MaterialImpl.get("minecraft:resin_brick_slab");
+
+    Material RESIN_BRICK_WALL = MaterialImpl.get("minecraft:resin_brick_wall");
+
+    Material CHISELED_RESIN_BRICKS = MaterialImpl.get("minecraft:chiseled_resin_bricks");
 
     Material BRICK_STAIRS = MaterialImpl.get("minecraft:brick_stairs");
 
@@ -2320,6 +2338,8 @@ interface Materials {
     Material ENCHANTED_BOOK = MaterialImpl.get("minecraft:enchanted_book");
 
     Material NETHER_BRICK = MaterialImpl.get("minecraft:nether_brick");
+
+    Material RESIN_BRICK = MaterialImpl.get("minecraft:resin_brick");
 
     Material PRISMARINE_SHARD = MaterialImpl.get("minecraft:prismarine_shard");
 

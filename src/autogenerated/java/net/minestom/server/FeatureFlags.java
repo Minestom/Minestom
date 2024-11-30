@@ -9,8 +9,6 @@ interface FeatureFlags {
 
     FeatureFlag VANILLA = FeatureFlagImpl.get("minecraft:vanilla");
 
-    FeatureFlag WINTER_DROP = FeatureFlagImpl.get("minecraft:winter_drop");
-
     FeatureFlag TRADE_REBALANCE = FeatureFlagImpl.get("minecraft:trade_rebalance");
 
     FeatureFlag MINECART_IMPROVEMENTS = FeatureFlagImpl.get("minecraft:minecart_improvements");

@@ -21,6 +21,8 @@ interface TrimMaterials {
 
     DynamicRegistry.Key<TrimMaterial> EMERALD = DynamicRegistry.Key.of("minecraft:emerald");
 
+    DynamicRegistry.Key<TrimMaterial> RESIN = DynamicRegistry.Key.of("minecraft:resin");
+
     DynamicRegistry.Key<TrimMaterial> REDSTONE = DynamicRegistry.Key.of("minecraft:redstone");
 
     DynamicRegistry.Key<TrimMaterial> GOLD = DynamicRegistry.Key.of("minecraft:gold");
