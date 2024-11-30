@@ -492,8 +492,10 @@ public sealed class MetadataDef {
     }
 
     public static final class Creaking extends Mob {
-        public static final Entry<Boolean> CAN_MOVE = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> CAN_MOVE = index(0, Metadata::Boolean, true);
         public static final Entry<Boolean> IS_ACTIVE = index(1, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_TEARING_DOWN = index(2, Metadata::Boolean, false);
+        public static final Entry<@Nullable Point> HOME_POS = index(3, Metadata::OptBlockPosition, null);
     }
 
     public static final class Creeper extends Mob {
