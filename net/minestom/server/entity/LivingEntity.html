@@ -351,52 +351,57 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the <a href="../scoreboard/Team.html" title="class in net.minestom.server.scoreboard"><code>Team</code></a> for the entity.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingMainHand()" class="member-name-link">swingMainHand</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shouldSendAttributes()" class="member-name-link">shouldSendAttributes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the main hand
- (can be used for attack animation).</div>
+<div class="block">Check if this entity should send an <a href="../network/packet/server/play/EntityAttributesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAttributesPacket</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingMainHand(boolean)" class="member-name-link">swingMainHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingMainHand()" class="member-name-link">swingMainHand</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the main hand
  (can be used for attack animation).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand()" class="member-name-link">swingOffHand</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingMainHand(boolean)" class="member-name-link">swingMainHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the main hand
  (can be used for attack animation).</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand(boolean)" class="member-name-link">swingOffHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand()" class="member-name-link">swingOffHand</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
  (can be used for attack animation).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeKnockback(float,double,double)" class="member-name-link">takeKnockback</a><wbr>(float&nbsp;strength,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#swingOffHand(boolean)" class="member-name-link">swingOffHand</a><wbr>(boolean&nbsp;fromClient)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sends a <a href="../network/packet/server/play/EntityAnimationPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAnimationPacket</code></a> to swing the off hand
+ (can be used for attack animation).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#takeKnockback(float,double,double)" class="member-name-link">takeKnockback</a><wbr>(float&nbsp;strength,
  double&nbsp;x,
  double&nbsp;z)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Applies knockback</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(long)" class="member-name-link">update</a><wbr>(long&nbsp;time)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called each tick.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateEquipmentAttributes(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.entity.EquipmentSlot)" class="member-name-link">updateEquipmentAttributes</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;oldItemStack,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateEquipmentAttributes(net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,net.minestom.server.entity.EquipmentSlot)" class="member-name-link">updateEquipmentAttributes</a><wbr>(@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;oldItemStack,
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;newItemStack,
  @NotNull <a href="EquipmentSlot.html" title="enum class in net.minestom.server.entity">EquipmentSlot</a>&nbsp;slot)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Updates the current attributes of the living entity based on</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNewViewer(net.minestom.server.entity.Player)" class="member-name-link">updateNewViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#updateNewViewer(net.minestom.server.entity.Player)" class="member-name-link">updateNewViewer</a><wbr>(@NotNull <a href="Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a new viewer must be shown.</div>
 </div>
 </div>
@@ -829,6 +834,18 @@ implements <a href="../inventory/EquipmentHandler.html" title="interface in net.
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>canPickupItem</code> - can the entity pickup item</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="shouldSendAttributes()">
+<h3>shouldSendAttributes</h3>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">shouldSendAttributes</span>()</div>
+<div class="block">Check if this entity should send an <a href="../network/packet/server/play/EntityAttributesPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>EntityAttributesPacket</code></a>. This is true for players and entities whose
+ spawn type is <code>LIVING</code>, but false for others.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if this entity needs to send attributes, false otherwise</dd>
 </dl>
 </section>
 </li>
