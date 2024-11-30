@@ -198,7 +198,6 @@ public final class MetadataHolder {
                 Map.entry("minecraft:cod", CodMeta::new),
                 Map.entry("minecraft:cow", CowMeta::new),
                 Map.entry("minecraft:creaking", CreakingMeta::new),
-                Map.entry("minecraft:creaking_transient", CreakingMeta::new),
                 Map.entry("minecraft:creeper", CreeperMeta::new),
                 Map.entry("minecraft:dark_oak_boat", BoatMeta::new),
                 Map.entry("minecraft:dark_oak_chest_boat", BoatMeta::new),

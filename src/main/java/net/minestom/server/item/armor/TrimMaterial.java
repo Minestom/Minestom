@@ -23,12 +23,11 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     static @NotNull TrimMaterial create(
             @NotNull String assetName,
             @NotNull Material ingredient,
-            float itemModelIndex,
             @NotNull Map<String, String> overrideArmorMaterials,
             @NotNull Component description
     ) {
         return new TrimMaterialImpl(
-                assetName, ingredient, itemModelIndex,
+                assetName, ingredient,
                 overrideArmorMaterials, description, null
         );
     }
@@ -54,8 +53,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
 
     @NotNull Material ingredient();
 
-    float itemModelIndex();
-
     @NotNull Map<String, String> overrideArmorMaterials();
 
     @NotNull Component description();
@@ -69,7 +66,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     final class Builder {
         private String assetName;
         private Material ingredient;
-        private float itemModelIndex;
         private final Map<String, String> overrideArmorMaterials = new HashMap<>();
         private Component description;
 
@@ -85,12 +81,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
         @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder ingredient(@NotNull Material ingredient) {
             this.ingredient = ingredient;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder itemModelIndex(float itemModelIndex) {
-            this.itemModelIndex = itemModelIndex;
             return this;
         }
 
@@ -115,8 +105,9 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
         @Contract(pure = true)
         public @NotNull TrimMaterial build() {
             return new TrimMaterialImpl(
-                    assetName, ingredient, itemModelIndex,
-                    overrideArmorMaterials, description, null
+                    assetName, ingredient,
+                    overrideArmorMaterials,
+                    description, null
             );
         }
     }
