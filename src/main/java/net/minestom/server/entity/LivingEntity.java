@@ -456,6 +456,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param attributeInstance the modified attribute instance
      */
     protected void onAttributeChanged(@NotNull AttributeInstance attributeInstance) {
+        if (!shouldSendAttributes()) return;
+
         boolean self = false;
         if (this instanceof Player player) {
             PlayerConnection playerConnection = player.playerConnection;
@@ -513,11 +515,26 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         this.canPickupItem = canPickupItem;
     }
 
+    /**
+     * Check if this entity should send an {@link EntityAttributesPacket}. This is true for players and entities whose
+     * spawn type is {@code LIVING}, but false for others.
+     *
+     * @return true if this entity needs to send attributes, false otherwise
+     */
+    protected boolean shouldSendAttributes() {
+        final EntitySpawnType spawnType = this.entityType.registry().spawnType();
+
+        // sending attributes for a non-living entity disconnects clients
+        return spawnType == EntitySpawnType.PLAYER || spawnType == EntitySpawnType.LIVING;
+    }
+
     @Override
     public void updateNewViewer(@NotNull Player player) {
         super.updateNewViewer(player);
         player.sendPacket(new LazyPacket(this::getEquipmentsPacket));
-        player.sendPacket(new LazyPacket(this::getPropertiesPacket));
+
+        if (shouldSendAttributes())
+            player.sendPacket(new LazyPacket(this::getPropertiesPacket));
     }
 
     @Override
