@@ -378,6 +378,66 @@ public final class BinaryTagTemplate {
         };
     }
 
+    public static <R, P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13> BinaryTagSerializer<R> object(
+            String name1, BinaryTagSerializer<P1> type1, Function<R, P1> getter1,
+            String name2, BinaryTagSerializer<P2> type2, Function<R, P2> getter2,
+            String name3, BinaryTagSerializer<P3> type3, Function<R, P3> getter3,
+            String name4, BinaryTagSerializer<P4> type4, Function<R, P4> getter4,
+            String name5, BinaryTagSerializer<P5> type5, Function<R, P5> getter5,
+            String name6, BinaryTagSerializer<P6> type6, Function<R, P6> getter6,
+            String name7, BinaryTagSerializer<P7> type7, Function<R, P7> getter7,
+            String name8, BinaryTagSerializer<P8> type8, Function<R, P8> getter8,
+            String name9, BinaryTagSerializer<P9> type9, Function<R, P9> getter9,
+            String name10, BinaryTagSerializer<P10> type10, Function<R, P10> getter10,
+            String name11, BinaryTagSerializer<P11> type11, Function<R, P11> getter11,
+            String name12, BinaryTagSerializer<P12> type12, Function<R, P12> getter12,
+            String name13, BinaryTagSerializer<P13> type13, Function<R, P13> getter13,
+            F13<P1, P2, P3, P4, P5, P6, P7, P8, P9, P10, P11, P12, P13, R> ctor
+    ) {
+        return new ObjectBase<>(){
+            @Override
+            protected @NotNull R readObject(@NotNull Context context, @NotNull CompoundBinaryTag tag) {
+                return ctor.apply(
+                        type1.read(context, tag.get(name1)),
+                        type2.read(context, tag.get(name2)),
+                        type3.read(context, tag.get(name3)),
+                        type4.read(context, tag.get(name4)),
+                        type5.read(context, tag.get(name5)),
+                        type6.read(context, tag.get(name6)),
+                        type7.read(context, tag.get(name7)),
+                        type8.read(context, tag.get(name8)),
+                        type9.read(context, tag.get(name9)),
+                        type10.read(context, tag.get(name10)),
+                        type11.read(context, tag.get(name11)),
+                        type12.read(context, tag.get(name12)),
+                        type13.read(context, tag.get(name13))
+                );
+            }
+
+            @Override
+            protected @NotNull CompoundBinaryTag writeObject(@NotNull Context context, @NotNull R value) {
+                BinaryTag tag;
+                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+                if ((tag = type1.write(context, getter1.apply(value))) != null) builder.put(name1, tag);
+                if ((tag = type2.write(context, getter2.apply(value))) != null) builder.put(name2, tag);
+                if ((tag = type3.write(context, getter3.apply(value))) != null) builder.put(name3, tag);
+                if ((tag = type4.write(context, getter4.apply(value))) != null) builder.put(name4, tag);
+                if ((tag = type5.write(context, getter5.apply(value))) != null) builder.put(name5, tag);
+                if ((tag = type6.write(context, getter6.apply(value))) != null) builder.put(name6, tag);
+                if ((tag = type7.write(context, getter7.apply(value))) != null) builder.put(name7, tag);
+                if ((tag = type8.write(context, getter8.apply(value))) != null) builder.put(name8, tag);
+                if ((tag = type9.write(context, getter9.apply(value))) != null) builder.put(name9, tag);
+                if ((tag = type10.write(context, getter10.apply(value))) != null) builder.put(name10, tag);
+                if ((tag = type11.write(context, getter11.apply(value))) != null) builder.put(name11, tag);
+                if ((tag = type12.write(context, getter12.apply(value))) != null) builder.put(name12, tag);
+                if ((tag = type13.write(context, getter13.apply(value))) != null) builder.put(name13, tag);
+                return builder.build();
+            }
+        };
+    }
+
+
+
 
     // IMPLEMENTATION
 
