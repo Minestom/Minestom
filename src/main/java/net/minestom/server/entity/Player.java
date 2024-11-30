@@ -30,7 +30,6 @@ import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.coordinate.*;
-import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -94,6 +93,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import net.minestom.server.worldevent.WorldEvent;
 import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -942,17 +942,17 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Plays a given effect at the given position for this player.
+     * Plays a given worldEvent at the given position for this player.
      *
-     * @param effect                the effect to play
-     * @param x                     x position of the effect
-     * @param y                     y position of the effect
-     * @param z                     z position of the effect
-     * @param data                  data for the effect
+     * @param worldEvent                the worldEvent to play
+     * @param x                     x position of the worldEvent
+     * @param y                     y position of the worldEvent
+     * @param z                     z position of the worldEvent
+     * @param data                  data for the worldEvent
      * @param disableRelativeVolume disable volume scaling based on distance
      */
-    public void playEffect(@NotNull Effects effect, int x, int y, int z, int data, boolean disableRelativeVolume) {
-        sendPacket(new EffectPacket(effect.getId(), new Vec(x, y, z), data, disableRelativeVolume));
+    public void playEffect(@NotNull WorldEvent worldEvent, int x, int y, int z, int data, boolean disableRelativeVolume) {
+        sendPacket(new WorldEventPacket(worldEvent.id(), new Vec(x, y, z), data, disableRelativeVolume));
     }
 
     @Override

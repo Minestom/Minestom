@@ -5,6 +5,7 @@ import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
 import net.minestom.codegen.util.GenericEnumGenerator;
+import net.minestom.codegen.worldevent.WorldEventGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +39,8 @@ public class Generators {
                 resource("command_arguments.json"), outputFolder).generate();
         new GenericEnumGenerator("net.minestom.server.entity", "VillagerType",
                 resource("villager_types.json"), outputFolder).generate();
+        new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
+                resource("world_events.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
