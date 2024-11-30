@@ -1,9 +1,11 @@
 package net.minestom.server.entity.metadata.monster;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CreakingMeta extends MonsterMeta {
     public CreakingMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -24,5 +26,21 @@ public class CreakingMeta extends MonsterMeta {
 
     public void setActive(boolean value) {
         metadata.set(MetadataDef.Creaking.IS_ACTIVE, value);
+    }
+
+    public boolean isTearingDown() {
+        return metadata.get(MetadataDef.Creaking.IS_TEARING_DOWN);
+    }
+
+    public void setTearingDown(boolean value) {
+        metadata.set(MetadataDef.Creaking.IS_TEARING_DOWN, value);
+    }
+
+    public @Nullable Point getHomePos() {
+        return metadata.get(MetadataDef.Creaking.HOME_POS);
+    }
+
+    public void setHomePos(@Nullable Point value) {
+        metadata.set(MetadataDef.Creaking.HOME_POS, value);
     }
 }

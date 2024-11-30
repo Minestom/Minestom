@@ -1,9 +1,11 @@
 package net.minestom.server.world.biome;
 
+import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,6 +47,8 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     enum TemperatureModifier {
         NONE, FROZEN;
+
+        public static final BinaryTagSerializer<TemperatureModifier> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(TemperatureModifier.class);
     }
 
     interface Setter {
@@ -65,10 +69,10 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     final class Builder {
         private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
-                .fogColor(0xC0D8FF)
-                .skyColor(0x78A7FF)
-                .waterColor(0x3F76E4)
-                .waterFogColor(0x50533)
+                .fogColor(new Color(0xC0D8FF))
+                .skyColor(new Color(0x78A7FF))
+                .waterColor(new Color(0x3F76E4))
+                .waterFogColor(new Color(0x50533))
                 .build();
 
         private float temperature = 0.25f;

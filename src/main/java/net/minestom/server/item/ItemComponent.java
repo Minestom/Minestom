@@ -45,7 +45,7 @@ public final class ItemComponent {
     public static final DataComponent<BlockPredicates> CAN_PLACE_ON = register("can_place_on", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     public static final DataComponent<BlockPredicates> CAN_BREAK = register("can_break", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     public static final DataComponent<AttributeList> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", AttributeList.NETWORK_TYPE, AttributeList.NBT_TYPE);
-    public static final DataComponent<Integer> CUSTOM_MODEL_DATA = register("custom_model_data", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
+    public static final DataComponent<CustomModelData> CUSTOM_MODEL_DATA = register("custom_model_data", CustomModelData.NETWORK_TYPE, CustomModelData.NBT_TYPE);
     public static final DataComponent<Unit> HIDE_ADDITIONAL_TOOLTIP = register("hide_additional_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Unit> HIDE_TOOLTIP = register("hide_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Integer> REPAIR_COST = register("repair_cost", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
