@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 public record Equippable(
         @NotNull EquipmentSlot slot,
         @NotNull SoundEvent equipSound,
-        @Nullable String model,
+        @Nullable String assetId,
         @Nullable String cameraOverlay,
         @Nullable ObjectSet<EntityType> allowedEntities,
         boolean dispensable,
@@ -25,7 +25,7 @@ public record Equippable(
     public static final NetworkBuffer.Type<Equippable> NETWORK_TYPE = NetworkBufferTemplate.template(
             EquipmentSlot.NETWORK_TYPE, Equippable::slot,
             SoundEvent.NETWORK_TYPE, Equippable::equipSound,
-            NetworkBuffer.STRING.optional(), Equippable::model,
+            NetworkBuffer.STRING.optional(), Equippable::assetId,
             NetworkBuffer.STRING.optional(), Equippable::cameraOverlay,
             ObjectSet.<EntityType>networkType(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
             NetworkBuffer.BOOLEAN, Equippable::dispensable,
@@ -35,7 +35,7 @@ public record Equippable(
     public static final BinaryTagSerializer<Equippable> NBT_TYPE = BinaryTagTemplate.object(
             "slot", EquipmentSlot.NBT_TYPE, Equippable::slot,
             "equip_sound", SoundEvent.NBT_TYPE.optional(SoundEvent.ITEM_ARMOR_EQUIP_GENERIC), Equippable::equipSound,
-            "model", BinaryTagSerializer.STRING.optional(), Equippable::model,
+            "asset_id", BinaryTagSerializer.STRING.optional(), Equippable::assetId,
             "camera_overlay", BinaryTagSerializer.STRING.optional(), Equippable::cameraOverlay,
             "allowed_entities", ObjectSet.<EntityType>nbtType(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
             "dispensable", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::dispensable,
@@ -44,34 +44,34 @@ public record Equippable(
             Equippable::new);
 
     public @NotNull Equippable withSlot(@NotNull EquipmentSlot slot) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withEquipSound(@NotNull SoundEvent equipSound) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
-    public @NotNull Equippable withModel(@Nullable String model) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+    public @NotNull Equippable withAssetId(@Nullable String assetId) {
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withCameraOverlay(@Nullable String cameraOverlay) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withAllowedEntities(@Nullable ObjectSet<EntityType> allowedEntities) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withDispensable(boolean dispensable) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withSwappable(boolean swappable) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 
     public @NotNull Equippable withDamageOnHurt(boolean damageOnHurt) {
-        return new Equippable(slot, equipSound, model, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
+        return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt);
     }
 }

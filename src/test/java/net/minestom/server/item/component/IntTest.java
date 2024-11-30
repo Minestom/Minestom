@@ -16,7 +16,6 @@ public class IntTest extends AbstractItemComponentTest<Integer> {
            ItemComponent.MAX_STACK_SIZE,
            ItemComponent.MAX_DAMAGE,
            ItemComponent.DAMAGE,
-           ItemComponent.CUSTOM_MODEL_DATA,
            ItemComponent.REPAIR_COST,
            ItemComponent.MAP_ID,
            ItemComponent.OMINOUS_BOTTLE_AMPLIFIER
