@@ -5,11 +5,13 @@ import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
+import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.CustomModelData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -191,9 +193,14 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         return with(ItemComponent.LORE, lore);
     }
 
-    @Contract(value = "_ -> new", pure = true)
-    default @NotNull ItemStack withCustomModelData(int customModelData) {
-        return with(ItemComponent.CUSTOM_MODEL_DATA, customModelData);
+    @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withItemModel(@NotNull String model) {
+        return with(ItemComponent.ITEM_MODEL, model);
+    }
+
+    @Contract(value = "_, _, _, _ -> new", pure = true)
+    default @NotNull ItemStack withCustomModelData(@NotNull List<Float> floats, @NotNull List<Boolean> flags, @NotNull List<String> strings, @NotNull List<RGBLike> colors) {
+        return with(ItemComponent.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
     }
 
     @Contract(value = "_ -> new", pure = true)
@@ -316,8 +323,12 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             return set(ItemComponent.LORE, lore);
         }
 
-        default @NotNull Builder customModelData(int customModelData) {
-            return set(ItemComponent.CUSTOM_MODEL_DATA, customModelData);
+        default @NotNull Builder itemModel(@NotNull String model) {
+            return set(ItemComponent.ITEM_MODEL, model);
+        }
+
+        default @NotNull Builder customModelData(@NotNull List<Float> floats, @NotNull List<Boolean> flags, @NotNull List<String> strings, @NotNull List<RGBLike> colors) {
+            return set(ItemComponent.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
         }
 
         default @NotNull Builder glowing() {

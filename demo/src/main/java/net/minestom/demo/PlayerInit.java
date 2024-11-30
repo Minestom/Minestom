@@ -95,7 +95,6 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.WINTER_DROP);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
