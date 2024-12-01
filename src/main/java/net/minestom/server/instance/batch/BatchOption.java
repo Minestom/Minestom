@@ -5,14 +5,14 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents options for {@link Batch}s.
+ * Represents options for {@link Batch}es.
  */
 public class BatchOption {
 
     private boolean fullChunk = false;
     private boolean calculateInverse = false;
-    private boolean unsafeApply = false;
     private boolean sendUpdate = true;
+    private boolean sendLight = true;
 
     public BatchOption() {
     }
@@ -20,7 +20,7 @@ public class BatchOption {
     /**
      * Gets if the batch is responsible for composing the whole chunk.
      * <p>
-     * Having it to true means that the batch will clear the chunk data before placing the blocks.
+     * Setting it to true means that the batch will clear the chunk data before placing the blocks.
      * <p>
      * Defaults to false.
      *
@@ -33,42 +33,52 @@ public class BatchOption {
     /**
      * Gets if the batch will calculate the inverse of the batch when it is applied for an 'undo' behavior.
      * <p>
-     * This flag will determine the return value of {@link Batch#apply(Instance, Object)} (and other variants).
-     * If true, a {@link Batch} will be returned. Otherwise null will be returned.
+     * This flag will determine the return value of {@link Batch#apply(Instance)} (and other variants).
+     * If true, a {@link Batch} will be returned.
+     * Otherwise, null will be returned.
+     * <p>
+     * WARNING:
+     * The inverse returned by {@link Batch#apply(Instance)} will revert to the cleared chunk(s)
+     * if {@link #isFullChunk()} is true.
+     * This may change in the future.
      * <p>
      * Defaults to false.
      *
      * @return true if the batch will calculate its inverse on application
-     * @see #isUnsafeApply()
      */
     public boolean shouldCalculateInverse() {
         return calculateInverse;
     }
 
     /**
-     * Gets if the batch will wait ignore whether it is ready or not when applying it.
+     * Gets if the batch will send the chunk to viewers on application.
      * <p>
-     * If set, the batch may not be ready, or it may be partially ready which will cause an undefined result.
-     * {@link Batch#isReady()} and {@link Batch#awaitReady()} may be used to check if it is ready and block
-     * until it is ready.
+     * Setting it to false means that viewers will not see the updated blocks.
      * <p>
-     * The default implementations of {@link ChunkBatch}, {@link AbsoluteBlockBatch}, and {@link RelativeBlockBatch}
-     * are always ready unless they are an inverse batch. This is not a safe assumption, and may change in the future.
-     * <p>
-     * Defaults to false.
+     * Defaults to true.
      *
-     * @return true if the batch will immediately
+     * @return true if the batch will send block updates to viewers
      */
-    public boolean isUnsafeApply() {
-        return this.unsafeApply;
-    }
-
     public boolean shouldSendUpdate() {
         return sendUpdate;
     }
 
     /**
-     * @param fullChunk true to make this batch composes the whole chunk
+     * Gets if the batch will send light updates to viewers upon application
+     * <p>
+     * Setting to false means that viewers will not see light updates,
+     * if {@link #shouldSendUpdate()} is false, viewers will not get light updates anyway.
+     * <p>
+     * Defaults to true.
+     *
+     * @return true if the batch will send light updates to viewers
+     */
+    public boolean shouldSendLight() {
+        return sendLight;
+    }
+
+    /**
+     * @param fullChunk true to make this batch compose the whole chunk
      * @return 'this' for chaining
      * @see #isFullChunk()
      */
@@ -92,21 +102,25 @@ public class BatchOption {
     }
 
     /**
-     * @param unsafeApply true to make this batch apply without checking if it is ready to apply.
+     * @param sendUpdate true to make this batch send the block updates to viewers on application
      * @return 'this' for chaining
-     * @see #isUnsafeApply()
-     * @see Batch#isReady()
+     * @see #shouldSendUpdate()
      */
     @NotNull
     @Contract("_ -> this")
-    public BatchOption setUnsafeApply(boolean unsafeApply) {
-        this.unsafeApply = unsafeApply;
-        return this;
-    }
-
-    @Contract("_ -> this")
     public BatchOption setSendUpdate(boolean sendUpdate) {
         this.sendUpdate = sendUpdate;
+        return this;
+    }
+    /**
+     * @param sendLight true to make this batch send the light updates to viewers on application
+     * @return 'this' for chaining
+     * @see #shouldSendLight()
+     */
+    @NotNull
+    @Contract("_ -> this")
+    public BatchOption setSendLight(boolean sendLight) {
+        this.sendLight = sendLight;
         return this;
     }
 }

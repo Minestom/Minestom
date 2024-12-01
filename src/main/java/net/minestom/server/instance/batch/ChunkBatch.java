@@ -1,28 +1,25 @@
 package net.minestom.server.instance.batch;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.ints.IntArraySet;
-import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.ints.*;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.callback.OptionalCallback;
-import net.minestom.server.utils.chunk.ChunkCallback;
 import net.minestom.server.utils.chunk.ChunkUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.CompletableFuture;
 
 /**
- * A Batch used when all of the block changed are contained inside a single chunk.
+ * A Batch used when all the blocks changed are contained inside a single chunk.
  * If more than one chunk is needed, use an {@link AbsoluteBlockBatch} instead.
  * <p>
- * The batch can be placed in any chunk in any instance, however it will always remain
+ * The batch can be placed in any chunk in any instance; however, it will always remain
  * aligned to a chunk border. If completely translatable block changes are needed, use a
  * {@link RelativeBlockBatch} instead.
  * <p>
@@ -30,26 +27,25 @@ import java.util.concurrent.CountDownLatch;
  *
  * @see Batch
  */
-public class ChunkBatch implements Batch<ChunkCallback> {
-
+public class ChunkBatch implements Batch {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkBatch.class);
 
     private final Int2ObjectMap<Block> blocks = new Int2ObjectOpenHashMap<>();
-    // Available for other implementations to handle.
-    protected final CountDownLatch readyLatch;
+
     private final BatchOption options;
+    private final BatchOption inverseOption;
 
     public ChunkBatch() {
         this(new BatchOption());
     }
 
-    public ChunkBatch(BatchOption options) {
-        this(options, true);
+    public ChunkBatch(@NotNull BatchOption options) {
+        this(options, new BatchOption());
     }
 
-    private ChunkBatch(BatchOption options, boolean ready) {
-        this.readyLatch = new CountDownLatch(ready ? 0 : 1);
+    public ChunkBatch(@NotNull BatchOption options, @NotNull BatchOption inverseOption) {
         this.options = options;
+        this.inverseOption = inverseOption;
     }
 
     @Override
@@ -61,36 +57,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
     }
 
     @Override
-    public void clear() {
-        synchronized (blocks) {
-            this.blocks.clear();
-        }
-    }
-
-    @Override
-    public boolean isReady() {
-        return this.readyLatch.getCount() == 0;
-    }
-
-    @Override
-    public void awaitReady() {
-        try {
-            this.readyLatch.await();
-        } catch (InterruptedException e) {
-            throw new RuntimeException("#awaitReady interrupted!", e);
-        }
-    }
-
-    /**
-     * Apply this batch to chunk (0, 0).
-     *
-     * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    @Override
-    public ChunkBatch apply(@NotNull Instance instance, @Nullable ChunkCallback callback) {
-        return apply(instance, 0, 0, callback);
+    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance) {
+        return apply(instance, 0, 0);
     }
 
     /**
@@ -99,42 +67,32 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param instance The instance in which the batch should be applied
      * @param chunkX   The x chunk coordinate of the target chunk
      * @param chunkZ   The z chunk coordinate of the target chunk
-     * @param callback The callback to be executed when the batch is applied.
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public ChunkBatch apply(@NotNull Instance instance, int chunkX, int chunkZ, @Nullable ChunkCallback callback) {
-        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
-                    chunkX, chunkZ, instance.getUniqueId());
-            return null;
-        }
-        return apply(instance, chunk, callback);
+    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, int chunkX, int chunkZ) {
+        return apply(instance, chunkX, chunkZ, false);
     }
 
     /**
      * Apply this batch to the given chunk.
      *
      * @param instance The instance in which the batch should be applied
-     * @param chunk    The target chunk
-     * @param callback The callback to be executed when the batch is applied
+     * @param chunkX   The x chunk coordinate of the target chunk
+     * @param chunkZ   The z chunk coordinate of the target chunk
+     * @param subBatch Whether this batch is part of a bigger batch, used to optimize lighting updates.
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public ChunkBatch apply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
-        return apply(instance, chunk, callback, true);
-    }
-
-    /**
-     * Apply this batch to the given chunk, and execute the callback
-     * immediately when the blocks have been applied, in an unknown thread.
-     *
-     * @param instance The instance in which the batch should be applied
-     * @param chunk    The target chunk
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    public ChunkBatch unsafeApply(@NotNull Instance instance, @NotNull Chunk chunk, @Nullable ChunkCallback callback) {
-        return apply(instance, chunk, callback, false);
+    @ApiStatus.Internal
+    public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, int chunkX, int chunkZ, boolean subBatch) {
+        final Chunk chunk = instance.getChunk(chunkX, chunkZ);
+        if (chunk == null) {
+            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
+                    chunkX, chunkZ, instance.getUniqueId());
+            return CompletableFuture.completedFuture(null);
+        }
+        return apply(instance, chunk, subBatch);
     }
 
     /**
@@ -142,26 +100,23 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      *
      * @param instance     The instance in which the batch should be applied
      * @param chunk        The target chunk
-     * @param callback     The callback to be executed when the batch is applied
-     * @param safeCallback If true, the callback will be executed in the next instance update.
-     *                     Otherwise it will be executed immediately upon completion
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
+     * @return A completable future to the inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected ChunkBatch apply(@NotNull Instance instance,
-                               @NotNull Chunk chunk, @Nullable ChunkCallback callback,
-                               boolean safeCallback) {
-        if (!this.options.isUnsafeApply()) this.awaitReady();
-
-        final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(options, false) : null;
-        BLOCK_BATCH_POOL.execute(() -> singleThreadFlush(instance, chunk, inverse, callback, safeCallback));
-        return inverse;
+    protected @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
+            @NotNull Instance instance, @NotNull Chunk chunk, boolean subBatch) {
+        return CompletableFuture.supplyAsync(() -> {
+            final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(inverseOption) : null;
+            synchronized (chunk) {
+                singleThreadFlush(instance, chunk, inverse, subBatch);
+            }
+            return inverse;
+        });
     }
 
     /**
-     * Applies this batch in the current thread, executing the callback upon completion.
+     * Applies this batch in the current thread.
      */
-    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse,
-                                   @Nullable ChunkCallback callback, boolean safeCallback) {
+    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse, boolean subBatch) {
         try {
             if (!chunk.isLoaded()) {
                 LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
@@ -171,29 +126,26 @@ public class ChunkBatch implements Batch<ChunkCallback> {
 
             if (this.options.isFullChunk()) {
                 // Clear the chunk
+                // FIXME: take inverse batch from before this
                 chunk.reset();
             }
 
             if (blocks.isEmpty()) {
                 // Nothing to flush
-                OptionalCallback.execute(callback, chunk);
                 return;
             }
 
-            final IntSet sections = new IntArraySet();
             synchronized (blocks) {
-                for (var entry : blocks.int2ObjectEntrySet()) {
+                for (var entry : Int2ObjectMaps.fastIterable(blocks)) {
                     final int position = entry.getIntKey();
                     final Block block = entry.getValue();
-                    final int section = apply(chunk, position, block, inverse);
-                    sections.add(section);
+                    applyBlock(chunk, position, block, inverse);
                 }
             }
 
-            if (inverse != null) inverse.readyLatch.countDown();
-            updateChunk(instance, chunk, sections, callback, safeCallback);
+            updateChunk(instance, chunk, subBatch);
         } catch (Exception e) {
-            e.printStackTrace();
+            MinecraftServer.getExceptionManager().handleException(e);
         }
     }
 
@@ -203,9 +155,8 @@ public class ChunkBatch implements Batch<ChunkCallback> {
      * @param chunk The chunk to apply the change
      * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
      * @param block the block to place
-     * @return The chunk section which the block was placed
      */
-    private int apply(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
+    private void applyBlock(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
         final int x = ChunkUtils.blockIndexToChunkPositionX(index);
         final int y = ChunkUtils.blockIndexToChunkPositionY(index);
         final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
@@ -214,30 +165,26 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             inverse.setBlock(x, y, z, prevBlock);
         }
         chunk.setBlock(x, y, z, block);
-        return ChunkUtils.getChunkCoordinate(y);
     }
 
-    /**
-     * Updates the given chunk for all of its viewers, and executes the callback.
-     */
-    private void updateChunk(@NotNull Instance instance, Chunk chunk, IntSet updatedSections, @Nullable ChunkCallback callback, boolean safeCallback) {
-        // Refresh chunk for viewers
+    private void updateChunk(@NotNull Instance instance, @NotNull Chunk chunk, boolean subBatch) {
         if (options.shouldSendUpdate()) {
-            // TODO update all sections from `updatedSections`
+            // update viewers
             chunk.sendChunk();
-        }
 
-        if (instance instanceof InstanceContainer) {
-            // FIXME: put method in Instance instead
-            ((InstanceContainer) instance).refreshLastBlockChangeTime();
-        }
-
-        if (callback != null) {
-            if (safeCallback) {
-                instance.scheduleNextTick(inst -> callback.accept(chunk));
-            } else {
-                callback.accept(chunk);
+            // send light
+            if (!subBatch && options.shouldSendLight()) {
+                int chunkX = chunk.getChunkX();
+                int chunkZ = chunk.getChunkZ();
+                for (int x = chunkX - 1; x <= chunkX + 1; x++) {
+                    for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
+                        if (instance.getChunk(x, z) instanceof LightingChunk lightingChunk) {
+                            lightingChunk.sendLighting();
+                        }
+                    }
+                }
             }
         }
+        instance.refreshLastBlockChangeTime();
     }
 }
