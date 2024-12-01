@@ -98,7 +98,7 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
         SERVER_PACKETS.add(new DisplayScoreboardPacket((byte) 5, "scoreboard"));
-        SERVER_PACKETS.add(new EffectPacket(5, VEC, 5, false));
+        SERVER_PACKETS.add(new WorldEventPacket(5, VEC, 5, false));
         SERVER_PACKETS.add(new EndCombatEventPacket(5));
         SERVER_PACKETS.add(new EnterCombatEventPacket());
         SERVER_PACKETS.add(new EntityAnimationPacket(5, EntityAnimationPacket.Animation.TAKE_DAMAGE));
