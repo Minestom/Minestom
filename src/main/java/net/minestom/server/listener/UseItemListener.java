@@ -24,7 +24,7 @@ public class UseItemListener {
         final Material material = itemStack.material();
 
         boolean usingMainHand = player.getItemUseHand() == Player.Hand.MAIN && hand == Player.Hand.OFF;
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, player.getItemUseHand() == Player.Hand.MAIN && hand == Player.Hand.OFF ? 0 : defaultUseItemTime(itemStack));
+        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack, usingMainHand ? 0 : defaultUseItemTime(itemStack));
         EventDispatcher.call(useItemEvent);
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
