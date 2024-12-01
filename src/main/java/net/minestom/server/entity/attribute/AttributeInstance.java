@@ -5,7 +5,6 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -47,21 +46,20 @@ public final class AttributeInstance {
 
     public AttributeInstance(@NotNull DynamicRegistry.Key<Attribute> attributeKey, @Nullable Consumer<AttributeInstance> listener) {
         this.attributeKey = attributeKey;
-        this.attribute = lookup(attributeKey);
+        this.attribute = Attribute.lookup(attributeKey, MinecraftServer.process());
 
-        double baseValue = attribute.defaultValue();
         this.modifiers = new ConcurrentHashMap<>();
         this.unmodifiableModifiers = Collections.unmodifiableCollection(this.modifiers.values());
-        this.baseValueBits = new AtomicLong(Double.doubleToLongBits(baseValue));
+        this.baseValueBits = new AtomicLong(Double.doubleToLongBits(attribute.defaultValue()));
 
         this.propertyChangeListener = listener;
-        refreshCachedValue(baseValue);
+        refreshCachedValue(attribute.defaultValue());
     }
 
     public AttributeInstance(@NotNull DynamicRegistry.Key<Attribute> attributeKey, double baseValue,
                              @NotNull Collection<AttributeModifier> modifiers, @Nullable Consumer<AttributeInstance> listener) {
         this.attributeKey = attributeKey;
-        this.attribute = lookup(attributeKey);
+        this.attribute = Attribute.lookup(attributeKey, MinecraftServer.process());
 
         this.modifiers = new ConcurrentHashMap<>();
         for (var modifier : modifiers) this.modifiers.put(modifier.id(), modifier);
@@ -70,13 +68,6 @@ public final class AttributeInstance {
 
         this.propertyChangeListener = listener;
         refreshCachedValue(baseValue);
-    }
-
-    private static Attribute lookup(DynamicRegistry.Key<Attribute> attributeKey) {
-        final Attribute attribute = MinecraftServer.process().attribute().get(attributeKey);
-        Check.notNull(attribute, "could not find attribute {0}", attributeKey.name());
-
-        return attribute;
     }
 
     /**

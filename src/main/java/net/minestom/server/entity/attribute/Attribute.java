@@ -1,5 +1,6 @@
 package net.minestom.server.entity.attribute;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -16,6 +17,33 @@ public sealed interface Attribute extends ProtocolObject, Attributes permits Att
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Attribute>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::attribute);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<Attribute>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::attribute);
 
+    /**
+     * Fetches an existing attribute from a registry.
+     * <p>
+     * The attribute must be found, or an exception will be thrown.
+     *
+     * @param key the attribute key
+     * @param registries the registry in which to look up attributes, ex. {@link MinecraftServer#process()}
+     * @return the attribute instance
+     * @throws IllegalArgumentException if no attribute is found in the provided registry
+     */
+    static @NotNull Attribute lookup(@NotNull DynamicRegistry.Key<Attribute> key, @NotNull Registries registries) {
+        final Attribute attribute = registries.attribute().get(key);
+        Check.argCondition(attribute == null, "unknown attribute {0}", key.name());
+        return attribute;
+    }
+
+    /**
+     * Convenience overload of {@link Attribute#create(double, boolean, double, double)} to create a "server-side"
+     * attribute that is not sent to the client.
+     *
+     * @param baseValue the base (default) value of the attribute
+     * @param maxValue the maximum value of the attribute
+     * @param minValue the minimum value of the attribute
+     * @return a new attribute
+     * @throws IllegalArgumentException if {@code minValue > maxValue}, or {@code baseValue} is not in range
+     * {@code [minValue, maxValue]}
+     */
     static @NotNull Attribute create(double baseValue, double maxValue, double minValue) {
         return create(baseValue, false, maxValue, minValue);
     }
@@ -52,7 +80,7 @@ public sealed interface Attribute extends ProtocolObject, Attributes permits Att
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Attribute> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:attribute_modifiers", AttributeImpl.REGISTRY_NBT_TYPE,
+        return DynamicRegistry.create("minecraft:attributes", AttributeImpl.REGISTRY_NBT_TYPE,
                 Registry.Resource.ATTRIBUTES, (namespace, props) ->
                         new AttributeImpl(Registry.attribute(namespace, props)));
     }

@@ -37,7 +37,6 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -487,10 +486,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public double getAttributeValue(@NotNull DynamicRegistry.Key<Attribute> attributeKey) {
         final AttributeInstance instance = attributeModifiers.get(attributeKey.name());
-        final Attribute attribute = MinecraftServer.attribute().get(attributeKey);
-        Check.notNull(attribute, "unrecogized attribute {0}", attributeKey.name());
+        if (instance == null)
+            return Attribute.lookup(attributeKey, MinecraftServer.process()).defaultValue();
 
-        return (instance != null) ? instance.getValue() : attribute.defaultValue();
+        return instance.getValue();
     }
 
     /**
@@ -627,7 +626,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets an {@link EntityAttributesPacket} for this entity with all of its attributes values.
+     * Gets an {@link EntityAttributesPacket} for this entity with all of its attribute modifiers that require
+     * synchronization with clients.
      *
      * @return an {@link EntityAttributesPacket} linked to this entity
      */
