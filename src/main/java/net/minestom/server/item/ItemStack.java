@@ -260,14 +260,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @NotNull CompoundBinaryTag toItemNBT();
 
     @Override
-    default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        try {
-            BinaryTagHolder tagHolder = BinaryTagHolder.encode((CompoundBinaryTag) NBT_TYPE.write(this), MinestomAdventure.NBT_CODEC);
-            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
-        } catch (IOException e) {
-            throw new RuntimeException("failed to encode itemstack nbt", e);
-        }
-    }
+    @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op);
 
     // These functions are mirrors of ComponentHolder, but we can't actually implement that interface
     // because it conflicts with DataComponent.Holder.
