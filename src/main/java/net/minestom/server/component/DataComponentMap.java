@@ -8,6 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -115,6 +116,12 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     default @NotNull DataComponentMap set(@NotNull DataComponent<Unit> component) {
         return set(component, Unit.INSTANCE);
     }
+
+    // todo javadoc
+    void forEach(@NotNull BiConsumer<DataComponent<?>, Object> consumer);
+
+    // todo javadoc
+    void patchForEach(@NotNull BiConsumer<DataComponent<?>, @Nullable Object> consumer);
 
     /**
      * Removes the component from the map (or patch).
