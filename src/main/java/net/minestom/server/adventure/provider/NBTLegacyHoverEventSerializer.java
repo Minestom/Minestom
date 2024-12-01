@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+@Deprecated
 final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
     static final NBTLegacyHoverEventSerializer INSTANCE = new NBTLegacyHoverEventSerializer();
 
