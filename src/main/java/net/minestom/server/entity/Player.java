@@ -104,6 +104,10 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
@@ -269,6 +273,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
         // When in configuration state no metadata updates can be sent.
         metadata.setNotifyAboutChanges(false);
+    }
+
+    public void transfer(@NotNull InetSocketAddress address) {
+        this.transfer(address.getAddress().getHostAddress(), address.getPort());
+    }
+
+    public void transfer(@NotNull String host, int port) {
+        TransferPacket packet = new TransferPacket(host, port);
+        EventDispatcher.call(new PrePlayerTransferEvent(this, host, port));
+        sendPacket(packet);
+        playerConnection.disconnect();
+        EventDispatcher.call(new PostPlayerTransferEvent(this, host, port));
     }
 
     @ApiStatus.Internal

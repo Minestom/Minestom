@@ -5,6 +5,9 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+import java.util.List;
+
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientHandshakePacket(int protocolVersion, @NotNull String serverAddress,
@@ -44,6 +47,24 @@ public record ClientHandshakePacket(int protocolVersion, @NotNull String serverA
     private static int getMaxHandshakeLength() {
         // BungeeGuard limits handshake length to 2500 characters, while vanilla limits it to 255
         return BungeeCordProxy.isEnabled() ? (BungeeCordProxy.isBungeeGuardEnabled() ? 2500 : Short.MAX_VALUE) : 255;
+    }
+
+    public enum ConnectionRule {
+        ALL(List.of(Intent.LOGIN, Intent.TRANSFER)),
+        ONLY_DIRECT(List.of(Intent.LOGIN)),
+        ONLY_TRANSFERS(List.of(Intent.TRANSFER)),
+        NONE(Collections.emptyList());
+
+        private final List<Intent> allowedIntents;
+
+
+        ConnectionRule(List<Intent> allowedIntents) {
+            this.allowedIntents = allowedIntents;
+        }
+
+        public boolean isAllowed(Intent intent) {
+            return allowedIntents.contains(intent);
+        }
     }
 
     public enum Intent {
