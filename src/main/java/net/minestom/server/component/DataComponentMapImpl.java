@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.item.ItemComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -11,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -66,6 +68,26 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), null);
         return new DataComponentMapImpl(newComponents);
+    }
+
+    @Override
+    public void forEach(@NotNull BiConsumer<DataComponent<?>, Object> consumer) {
+        // TODO: This only works for itemComponent, fix
+        components.forEach((integer, object) -> {
+            DataComponent<?> component = ItemComponent.fromId(integer);
+            if (component != null) {
+                consumer.accept(component, object);
+            }
+        });
+    }
+
+    @Override
+    public void patchForEach(@NotNull BiConsumer<DataComponent<?>, @Nullable Object> consumer) {
+        // TODO: This only works for itemComponent, fix
+        components.forEach((integer, object) -> {
+            DataComponent<?> component = ItemComponent.fromId(integer);
+            consumer.accept(component, object);
+        });
     }
 
     @Override

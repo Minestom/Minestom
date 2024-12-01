@@ -29,7 +29,7 @@ public class BinaryTagWriter {
         type.write(tag, output);
     }
 
-    public void readNamed(@NotNull String name, @NotNull BinaryTag tag) throws IOException {
+    public void writeNamed(@NotNull String name, @NotNull BinaryTag tag) throws IOException {
         //noinspection unchecked
         BinaryTagType<BinaryTag> type = (BinaryTagType<BinaryTag>) tag.type();
         output.writeByte(type.id());
