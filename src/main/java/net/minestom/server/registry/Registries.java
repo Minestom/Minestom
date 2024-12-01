@@ -1,5 +1,9 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.condition.BlockPredicate;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
@@ -53,5 +57,13 @@ public interface Registries {
     @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects();
 
     @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends IntProvider>> intProviders();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends FloatProvider>> floatProviders();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends BlockStateProvider>> blockStateProviders();
+
+    @NotNull DynamicRegistry<BinaryTagSerializer<? extends BlockPredicate>> blockPredicates();
 
 }

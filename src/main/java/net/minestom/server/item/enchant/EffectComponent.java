@@ -48,7 +48,7 @@ public class EffectComponent {
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> REPAIR_WITH_XP = register("repair_with_xp", ConditionalEffect.nbtType(ValueEffect.NBT_TYPE).list());
     public static final DataComponent<ValueEffect> CROSSBOW_CHARGE_TIME = register("crossbow_charge_time", ValueEffect.NBT_TYPE);
     public static final DataComponent<List<CrossbowChargingSounds>> CROSSBOW_CHARGING_SOUNDS = register("crossbow_charging_sounds", CrossbowChargingSounds.NBT_TYPE.list());
-    public static final DataComponent<List<ObjectSet<SoundEvent>>> TRIDENT_SOUND = register("trident_sound", ObjectSet.<SoundEvent>nbtType(Tag.BasicType.SOUND_EVENTS).list());
+    public static final DataComponent<List<ObjectSet>> TRIDENT_SOUND = register("trident_sound", ObjectSet.nbtType(Tag.BasicType.SOUND_EVENTS).list());
     public static final DataComponent<Unit> PREVENT_EQUIPMENT_DROP = register("prevent_equipment_drop", BinaryTagSerializer.UNIT);
     public static final DataComponent<Unit> PREVENT_ARMOR_CHANGE = register("prevent_armor_change", BinaryTagSerializer.UNIT);
     public static final DataComponent<ValueEffect> TRIDENT_SPIN_ATTACK_STRENGTH = register("trident_spin_attack_strength", ValueEffect.NBT_TYPE);

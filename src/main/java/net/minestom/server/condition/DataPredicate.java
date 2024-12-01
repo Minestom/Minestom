@@ -9,7 +9,7 @@ public interface DataPredicate {
 
     }
 
-    public static final BinaryTagSerializer<DataPredicate> NBT_TYPE = new BinaryTagSerializer<DataPredicate>() {
+    BinaryTagSerializer<DataPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull DataPredicate value) {
             return ((Noop) value).content;
