@@ -69,6 +69,8 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
@@ -808,7 +810,19 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
 
                 PlayerChunkLoadEvent chunkLoadEvent = new PlayerChunkLoadEvent(this, chunkX, chunkZ);
                 EventDispatcher.call(chunkLoadEvent);
-                sendPacket(Objects.requireNonNullElse(chunkLoadEvent.chunk(), chunk).getFullDataPacket());
+
+                final ChunkData eventChunkData = chunkLoadEvent.chunkData();
+                final LightData eventLightData = chunkLoadEvent.lightData();
+
+                // event didn't override chunk or light data, send packet as normal
+                if (eventChunkData == null && eventLightData == null) sendPacket(chunk.getFullDataPacket());
+                else {
+                    // use chunk and/or light data from event
+                    final ChunkData chunkData = Objects.requireNonNullElseGet(eventChunkData, chunk::getChunkData);
+                    final LightData lightData = Objects.requireNonNullElseGet(eventLightData, chunk::getLightData);
+
+                    sendPacket(new ChunkDataPacket(chunkX, chunkZ, chunkData, lightData));
+                }
 
                 pendingChunkCount -= 1f;
                 batchSize += 1;

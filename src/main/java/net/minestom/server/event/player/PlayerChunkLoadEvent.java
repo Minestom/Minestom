@@ -3,6 +3,8 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,24 +15,14 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final int chunkX, chunkZ;
-    private Chunk chunk;
 
-    private PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ, @Nullable Chunk chunk) {
-        validateChunk(chunk, chunkX, chunkZ);
+    private ChunkData chunkData;
+    private LightData lightData;
+
+    public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) {
         this.player = player;
         this.chunkX = chunkX;
         this.chunkZ = chunkZ;
-        this.chunk = chunk;
-    }
-
-    public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) {
-        this(player, chunkX, chunkZ, null);
-    }
-
-    private static void validateChunk(Chunk chunk, int chunkX, int chunkZ) {
-        if (chunk == null) return;
-        if (chunk.getChunkX() != chunkX || chunk.getChunkZ() != chunkZ)
-            throw new IllegalArgumentException("Cannot send a chunk with differing chunk coordinates");
     }
 
     /**
@@ -52,25 +44,43 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * The chunk that will be sent to the player.
+     * Sets the chunk data for this event, replacing what would be sent to the client otherwise. Should often be used
+     * alongside {@link PlayerChunkLoadEvent#setLightData(LightData)} to prevent lighting glitches on the client.
      *
-     * @return the chunk that will be sent to the player, null to use the instance's chunk
+     * @param chunkData the overriding chunk data
+     * @see Chunk#getChunkData()
      */
-    public @Nullable Chunk chunk() {
-        return chunk;
+    public void setChunkData(@Nullable ChunkData chunkData) {
+        this.chunkData = chunkData;
     }
 
     /**
-     * Sets the chunk that will be sent to the player. Note that if non-null, this chunk must have the same chunk
-     * coordinates as specified by {@link PlayerChunkLoadEvent#getChunkX()} and {@link PlayerChunkLoadEvent#getChunkZ()}.
-     * Otherwise, if null, the chunk sent will be the one retrieved from the instance.
+     * Sets the light data for this event, replacing what would be sent to the client otherwise. Should often be used
+     * alongside {@link PlayerChunkLoadEvent#setChunkData(ChunkData)} to prevent lighting glitches on the client.
      *
-     * @param chunk the chunk that will be sent to the player
-     * @throws IllegalArgumentException if the chunk coordinates of {@code chunk} differ from this event's coordinates
+     * @param lightData the overriding chunk data
+     * @see Chunk#getLightData()
      */
-    public void setChunk(@Nullable Chunk chunk) {
-        validateChunk(chunk, chunkX, chunkZ);
-        this.chunk = chunk;
+    public void setLightData(@Nullable LightData lightData) {
+        this.lightData = lightData;
+    }
+
+    /**
+     * The overriding {@link ChunkData}. {@code null} indicates the instance chunk's data will be used instead.
+     *
+     * @return the overriding chunk data
+     */
+    public ChunkData chunkData() {
+        return chunkData;
+    }
+
+    /**
+     * The overriding {@link LightData}. {@code null} indicates the instance chunk's data will be used instead.
+     *
+     * @return the overriding chunk data
+     */
+    public LightData lightData() {
+        return lightData;
     }
 
     @Override

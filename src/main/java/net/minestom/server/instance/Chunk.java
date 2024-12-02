@@ -12,6 +12,8 @@ import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.snapshot.Snapshotable;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -148,6 +150,10 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
     @ApiStatus.Internal
     public abstract @NotNull SendablePacket getFullDataPacket();
+
+    public abstract @NotNull ChunkData getChunkData();
+
+    public abstract @NotNull LightData getLightData();
 
     /**
      * Creates a copy of this chunk, including blocks state id, custom block id, biomes, update data.

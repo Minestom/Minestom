@@ -58,6 +58,8 @@ public class DynamicChunk extends Chunk {
 
     private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
+    private volatile ChunkData chunkDataCache;
+    private volatile LightData lightDataCache;
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
@@ -81,6 +83,8 @@ public class DynamicChunk extends Chunk {
 
         this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
+        this.chunkDataCache = null;
+        this.lightDataCache = null;
 
         Section section = getSectionAt(y);
 
@@ -136,6 +140,8 @@ public class DynamicChunk extends Chunk {
     public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
+        this.chunkDataCache = null;
+        this.lightDataCache = null;
         Section section = getSectionAt(y);
 
         var id = BIOME_REGISTRY.getId(biome.namespace());
@@ -235,6 +241,26 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
+    public @NotNull ChunkData getChunkData() {
+        final ChunkData cached = this.chunkDataCache;
+        if (cached != null) return cached;
+
+        final ChunkData newData = createChunkData();
+        this.chunkDataCache = newData;
+        return newData;
+    }
+
+    @Override
+    public @NotNull LightData getLightData() {
+        final LightData cached = this.lightDataCache;
+        if (cached != null) return cached;
+
+        final LightData newData = createLightData(true);
+        this.lightDataCache = newData;
+        return newData;
+    }
+
+    @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
         DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
         dynamicChunk.sections = sections.stream().map(Section::clone).toList();
@@ -251,9 +277,22 @@ public class DynamicChunk extends Chunk {
     @Override
     public void invalidate() {
         this.chunkCache.invalidate();
+        this.chunkDataCache = null;
+        this.lightDataCache = null;
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
+        return new ChunkDataPacket(chunkX, chunkZ,
+                getChunkData(),
+                getLightData()
+        );
+    }
+
+    @NotNull UpdateLightPacket createLightPacket() {
+        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
+    }
+
+    protected ChunkData createChunkData() {
         final byte[] data;
         final CompoundBinaryTag heightmapsNBT;
         synchronized (this) {
@@ -264,14 +303,7 @@ public class DynamicChunk extends Chunk {
             });
         }
 
-        return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, data, entries),
-                createLightData(true)
-        );
-    }
-
-    @NotNull UpdateLightPacket createLightPacket() {
-        return new UpdateLightPacket(chunkX, chunkZ, createLightData(false));
+        return new ChunkData(heightmapsNBT, data, entries);
     }
 
     protected LightData createLightData(boolean requiredFullChunk) {
