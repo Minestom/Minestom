@@ -25,7 +25,7 @@ public final class CreativeInventoryActionListener {
             return;
         }
         // Set item
-        slot = (short) PlayerInventoryUtils.convertPlayerInventorySlot(slot, PlayerInventoryUtils.OFFSET);
+        slot = (short) PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(slot);
         PlayerInventory inventory = player.getInventory();
         if (Objects.equals(inventory.getItemStack(slot), item)) {
             // Item is already present, ignore

@@ -4,10 +4,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
-import net.minestom.server.network.packet.server.play.SetPlayerInventorySlotPacket;
-import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.network.packet.server.play.*;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -68,7 +65,8 @@ public class PlayerInventoryIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var setSlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        var setPlayerInventorySlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        var setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
         var setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
 
         player.getInventory().setItemStack(1, MAGIC_STACK);
@@ -77,10 +75,12 @@ public class PlayerInventoryIntegrationTest {
         player.getInventory().setItemStack(40, MAGIC_STACK);
         player.getInventory().setCursorItem(MAGIC_STACK);
 
-        setSlotTracker.assertCount(4);
+        setPlayerInventorySlotTracker.assertCount(3); // 1, 3, 19 are in player inventory
+        setSlotTracker.assertCount(1); // 40 is in crafting grid so window 0
         setCursorTracker.assertCount(1);
 
-        setSlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        setPlayerInventorySlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
+        setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
         setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
         var updateWindowTracker = connection.trackIncoming(WindowItemsPacket.class);
         var equipmentTracker = connection.trackIncoming(EntityEquipmentPacket.class);
@@ -90,6 +90,7 @@ public class PlayerInventoryIntegrationTest {
 
         // Make sure no individual set slot / set cursor item packets get sent
         setSlotTracker.assertEmpty();
+        setPlayerInventorySlotTracker.assertEmpty();
         setCursorTracker.assertEmpty();
 
         // Make sure WindowItemsPacket is empty

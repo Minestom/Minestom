@@ -198,7 +198,7 @@ public class InventoryIntegrationTest {
         var packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(PlayerInventoryUtils.OFFHAND_SLOT, MAGIC_STACK);
         packetTracker.assertSingle(slot -> {
-            assertEquals(PlayerInventoryUtils.OFFHAND_SLOT, slot.slot());
+            assertEquals(40, slot.slot()); // Off hand is slot 40 in player inventory
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
 

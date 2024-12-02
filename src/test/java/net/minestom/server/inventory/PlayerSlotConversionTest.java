@@ -14,7 +14,7 @@ public class PlayerSlotConversionTest {
     public void hotbar() {
         // Convert 36-44 into 0-8
         for (int i = 0; i < 9; i++) {
-            assertEquals(i, convertPlayerInventorySlot(i + 36, OFFSET));
+            assertEquals(i, convertWindow0SlotToMinestomSlot(i + 36));
         }
     }
 
@@ -22,7 +22,7 @@ public class PlayerSlotConversionTest {
     public void mainInventory() {
         // No conversion, slots should stay 9-35
         for (int i = 9; i < 9 * 4; i++) {
-            assertEquals(i, convertPlayerInventorySlot(i, OFFSET));
+            assertEquals(i, convertWindow0SlotToMinestomSlot(i));
         }
     }
 
@@ -35,11 +35,11 @@ public class PlayerSlotConversionTest {
         assertEquals(OFFHAND_SLOT, 45);
 
         // Convert 5-8 & 45 into 41-45
-        assertEquals(HELMET_SLOT, convertPlayerInventorySlot(5, OFFSET));
-        assertEquals(CHESTPLATE_SLOT, convertPlayerInventorySlot(6, OFFSET));
-        assertEquals(LEGGINGS_SLOT, convertPlayerInventorySlot(7, OFFSET));
-        assertEquals(BOOTS_SLOT, convertPlayerInventorySlot(8, OFFSET));
-        assertEquals(OFFHAND_SLOT, convertPlayerInventorySlot(45, OFFSET));
+        assertEquals(HELMET_SLOT, convertWindow0SlotToMinestomSlot(5));
+        assertEquals(CHESTPLATE_SLOT, convertWindow0SlotToMinestomSlot(6));
+        assertEquals(LEGGINGS_SLOT, convertWindow0SlotToMinestomSlot(7));
+        assertEquals(BOOTS_SLOT, convertWindow0SlotToMinestomSlot(8));
+        assertEquals(OFFHAND_SLOT, convertWindow0SlotToMinestomSlot(45));
     }
 
     @Test
@@ -51,10 +51,10 @@ public class PlayerSlotConversionTest {
         assertEquals(CRAFT_SLOT_4, 40);
 
         // Convert 0-4 into 36-40
-        assertEquals(CRAFT_RESULT, convertPlayerInventorySlot(0, OFFSET));
-        assertEquals(CRAFT_SLOT_1, convertPlayerInventorySlot(1, OFFSET));
-        assertEquals(CRAFT_SLOT_2, convertPlayerInventorySlot(2, OFFSET));
-        assertEquals(CRAFT_SLOT_3, convertPlayerInventorySlot(3, OFFSET));
-        assertEquals(CRAFT_SLOT_4, convertPlayerInventorySlot(4, OFFSET));
+        assertEquals(CRAFT_RESULT, convertWindow0SlotToMinestomSlot(0));
+        assertEquals(CRAFT_SLOT_1, convertWindow0SlotToMinestomSlot(1));
+        assertEquals(CRAFT_SLOT_2, convertWindow0SlotToMinestomSlot(2));
+        assertEquals(CRAFT_SLOT_3, convertWindow0SlotToMinestomSlot(3));
+        assertEquals(CRAFT_SLOT_4, convertWindow0SlotToMinestomSlot(4));
     }
 }
