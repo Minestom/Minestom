@@ -23,7 +23,7 @@ import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.GameProfile;
-import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
 import net.minestom.server.recipe.display.RecipeDisplay;
@@ -97,11 +97,11 @@ public class PacketWriteReadTest {
                 RecipeProperty.BLAST_FURNACE_INPUT, List.of(Material.IRON_HOE, Material.DANDELION),
                 RecipeProperty.SMOKER_INPUT, List.of(Material.STONE),
                 RecipeProperty.CAMPFIRE_INPUT, List.of(Material.STONE)),
-                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Recipe.Ingredient(Material.DIAMOND),
+                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Ingredient(Material.DIAMOND),
                         new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
         ));
         SERVER_PACKETS.add(new RecipeBookAddPacket(List.of(new RecipeBookAddPacket.Entry(1, recipeDisplay, null,
-                RecipeBookCategory.CRAFTING_MISC, List.of(new Recipe.Ingredient(Material.STONE)), true, true)), false));
+                RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(Material.STONE)), true, true)), false));
         SERVER_PACKETS.add(new RecipeBookRemovePacket(List.of(1)));
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));

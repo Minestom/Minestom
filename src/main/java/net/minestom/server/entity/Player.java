@@ -72,7 +72,6 @@ import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.recipe.Recipe;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.BelowNameTag;
@@ -340,27 +339,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Commands
         refreshCommands();
 
-        // Recipes start
-        {
-            RecipeManager recipeManager = MinecraftServer.getRecipeManager();
-            sendPacket(recipeManager.getDeclareRecipesPacket());
-
-            List<String> recipesIdentifier = new ArrayList<>();
-            for (Recipe recipe : recipeManager.consumeRecipes(this)) {
-                recipesIdentifier.add(recipe.id());
-            }
-            if (!recipesIdentifier.isEmpty()) {
-                // TODO(1.21.2): Recipes
-//                UnlockRecipesPacket unlockRecipesPacket = new UnlockRecipesPacket(0,
-//                        false, false,
-//                        false, false,
-//                        false, false,
-//                        false, false,
-//                        recipesIdentifier, recipesIdentifier);
-//                sendPacket(unlockRecipesPacket);
-            }
-        }
-        // Recipes end
+        // Recipes
+        refreshRecipes();
 
         // Some client updates
         sendPacket(getPropertiesPacket()); // Send default properties
@@ -559,6 +539,17 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public void refreshCommands() {
         sendPacket(MinecraftServer.getCommandManager().createDeclareCommandsPacket(this));
+    }
+
+    /**
+     * Refreshes the recipes and recipe book for this player, testing recipe predicates again.
+     */
+    public void refreshRecipes() {
+        RecipeManager recipeManager = MinecraftServer.getRecipeManager();
+        sendPackets(
+                recipeManager.getDeclareRecipesPacket(),
+                recipeManager.createRecipeBookResetPacket(this)
+        );
     }
 
     @Override

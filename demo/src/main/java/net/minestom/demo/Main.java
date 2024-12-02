@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.block.TestBlockHandler;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
+import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.server.ServerListPingEvent;
@@ -19,8 +20,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
-import net.minestom.server.recipe.Recipe;
-import net.minestom.server.recipe.RecipeCategory;
+import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -120,28 +120,13 @@ public class Main {
             //responseData.setPlayersHidden(true);
         });
 
-        var ironBlockRecipe = new Recipe(
-                "minestom:test",
-                new Recipe.Shaped("", RecipeCategory.Crafting.MISC, 2, 2,
-                        List.of(
-                                new Recipe.Ingredient(Material.IRON_INGOT),
-                                new Recipe.Ingredient(Material.IRON_INGOT),
-                                new Recipe.Ingredient(Material.IRON_INGOT),
-                                new Recipe.Ingredient(Material.IRON_INGOT)
-                        ), ItemStack.of(Material.IRON_BLOCK), true));
-        MinecraftServer.getRecipeManager().addRecipe(ironBlockRecipe);
-        var recipe = new Recipe(
-                "minestom:test2",
-                new Recipe.Shapeless("abc",
-                        RecipeCategory.Crafting.MISC,
-                        List.of(
-                                new Recipe.Ingredient(Material.DIRT)
-                        ),
-                        ItemStack.builder(Material.GOLD_BLOCK)
-                                .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
-                                .build())
-        );
-        MinecraftServer.getRecipeManager().addRecipe(recipe);
+        MinecraftServer.getRecipeManager().addRecipe(new ShapelessRecipe(
+                RecipeBookCategory.CRAFTING_MISC,
+                List.of(Material.DIRT),
+                ItemStack.builder(Material.GOLD_BLOCK)
+                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .build()
+        ));
 
         new PlayerInit().init();
 

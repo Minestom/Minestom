@@ -11,11 +11,11 @@ public class IngredientTest {
 
     @Test
     public void cannotCreateAirIngredient() {
-        assertThrows(IllegalArgumentException.class, () -> new Recipe.Ingredient(Material.AIR));
+        assertThrows(IllegalArgumentException.class, () -> new Ingredient(Material.AIR));
     }
 
     @Test
     public void cannotCreateEmptyIngredient() {
-        assertThrows(IllegalArgumentException.class, () -> new Recipe.Ingredient(List.of()));
+        assertThrows(IllegalArgumentException.class, () -> new Ingredient(List.of()));
     }
 }
