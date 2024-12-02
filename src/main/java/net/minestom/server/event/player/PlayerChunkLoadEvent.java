@@ -44,6 +44,17 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
     }
 
     /**
+     * Sets both the block and light data from the provided {@link Chunk}, replacing what would be sent to the client
+     * otherwise.
+     *
+     * @param chunk the chunk from which to extract block and light data
+     */
+    public void setData(@NotNull Chunk chunk) {
+        this.chunkData = chunk.getChunkData();
+        this.lightData = chunk.getLightData();
+    }
+
+    /**
      * Sets the chunk data for this event, replacing what would be sent to the client otherwise. Should often be used
      * alongside {@link PlayerChunkLoadEvent#setLightData(LightData)} to prevent lighting glitches on the client.
      *
