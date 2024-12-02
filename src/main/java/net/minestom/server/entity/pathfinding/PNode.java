@@ -1,13 +1,12 @@
 package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PNode {
-    public enum NodeType {
+    public enum Type {
         WALK,
         JUMP,
         FALL,
@@ -25,19 +24,13 @@ public class PNode {
     private double pointZ;
     private int hashCode;
 
-    private int cantor(int a, int b) {
-        int ca = a >= 0 ? 2 * a : -2 * a - 1;
-        int cb = b >= 0 ? 2 * b : -2 * b - 1;
-        return (ca + cb + 1) * (ca + cb) / 2 + cb;
-    }
-
-    private NodeType type;
+    private Type type;
 
     public PNode(double px, double py, double pz, double g, double h, @Nullable PNode parent) {
-        this(px, py, pz, g, h, NodeType.WALK, parent);
+        this(px, py, pz, g, h, Type.WALK, parent);
     }
 
-    public PNode(double px, double py, double pz, double g, double h, @NotNull NodeType type, @Nullable PNode parent) {
+    public PNode(double px, double py, double pz, double g, double h, @NotNull PNode.Type type, @Nullable PNode parent) {
         this.g = g;
         this.h = h;
         this.parent = parent;
@@ -48,7 +41,7 @@ public class PNode {
         this.hashCode = cantor((int) Math.floor(px), cantor((int) Math.floor(py), (int) Math.floor(pz)));
     }
 
-    public PNode(Point point, double g, double h, NodeType walk, @Nullable PNode parent) {
+    public PNode(Point point, double g, double h, Type walk, @Nullable PNode parent) {
         this(point.x(), point.y(), point.z(), g, h, walk, parent);
     }
 
@@ -102,7 +95,7 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    @NotNull NodeType getType() {
+    @NotNull Type getType() {
         return type;
     }
 
@@ -127,7 +120,7 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    public void setType(@NotNull NodeType newType) {
+    public void setType(@NotNull PNode.Type newType) {
         this.type = newType;
     }
 
@@ -147,5 +140,11 @@ public class PNode {
     @ApiStatus.Internal
     public void setParent(@Nullable PNode current) {
         this.parent = current;
+    }
+
+    private static int cantor(int a, int b) {
+        int ca = a >= 0 ? 2 * a : -2 * a - 1;
+        int cb = b >= 0 ? 2 * b : -2 * b - 1;
+        return (ca + cb + 1) * (ca + cb) / 2 + cb;
     }
 }

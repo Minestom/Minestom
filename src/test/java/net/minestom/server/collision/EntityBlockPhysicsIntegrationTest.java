@@ -428,7 +428,7 @@ public class EntityBlockPhysicsIntegrationTest {
 
         BoundingBox bb = new Entity(EntityType.ZOMBIE).getBoundingBox();
 
-        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, 0, 0, 0);
+        SweepResult sweepResultFinal = new SweepResult(1, 0, 0, 0, null, 0, 0, 0, 0, 0, 0);
 
         bb.intersectBoxSwept(z1, movement, z2, bb, sweepResultFinal);
         bb.intersectBoxSwept(z1, movement, z3, bb, sweepResultFinal);

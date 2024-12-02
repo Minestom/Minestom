@@ -14,10 +14,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.Function;
 
 @ApiStatus.Internal
-@ApiStatus.Experimental
 public final class CollisionUtils {
 
     /**
@@ -26,10 +26,10 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
-     * @param singleCollision if the entity should only collide with one block
+     * @param singleCollision   if the entity should only collide with one block
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
@@ -43,28 +43,30 @@ public final class CollisionUtils {
     }
 
     /**
+     * Checks for entity collisions
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
-     * @return the closest entity we collide with
-     */
-    public static PhysicsResult checkEntityCollisions(@NotNull Entity entity, @NotNull Vec entityVelocity) {
-        final Instance instance = entity.getInstance();
-        assert instance != null;
-        return checkEntityCollisions(instance, entity.getBoundingBox(), entity.getPosition(), entityVelocity, 3, e -> true, null);
-    }
-
-    /**
-     *
-     * @param velocity the velocity of the entity
+     * @param velocity     the velocity of the entity
      * @param extendRadius the largest entity bounding box we can collide with
      *                     Measured from bottom center to top corner
      *                     This is used to extend the search radius for entities we collide with
      *                     For players this is (0.3^2 + 0.3^2 + 1.8^2) ^ (1/3) ~= 1.51
-     * @return the closest entity we collide with
      */
-    public static PhysicsResult checkEntityCollisions(@NotNull Instance instance, BoundingBox boundingBox, Point pos, @NotNull Vec velocity, double extendRadius, Function<Entity, Boolean> entityFilter, PhysicsResult blockResult) {
-        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, blockResult);
+    public static @NotNull Collection<EntityCollisionResult> checkEntityCollisions(@NotNull Instance instance, @NotNull BoundingBox boundingBox, @NotNull Point pos, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(instance, boundingBox, pos, velocity, extendRadius, entityFilter, physicsResult);
+    }
+
+    /**
+     * Checks for entity collisions
+     *
+     * @param entity        the entity to check collisions for
+     * @param velocity      the velocity of the entity
+     * @param extendRadius  the largest entity bounding box we can collide with
+     * @param entityFilter  the entity filter
+     * @param physicsResult optional physics result
+     * @return the entity collision results
+     */
+    public static @NotNull Collection<EntityCollisionResult> checkEntityCollisions(@NotNull Entity entity, @NotNull Vec velocity, double extendRadius, @NotNull Function<Entity, Boolean> entityFilter, @Nullable PhysicsResult physicsResult) {
+        return EntityCollision.checkCollision(entity.getInstance(), entity.getBoundingBox(), entity.getPosition(), velocity, extendRadius, entityFilter, physicsResult);
     }
 
     /**
@@ -73,8 +75,8 @@ public final class CollisionUtils {
      * Works by getting all the full blocks that an entity could interact with.
      * All bounding boxes inside the full blocks are checked for collisions with the entity.
      *
-     * @param entity the entity to move
-     * @param entityVelocity the velocity of the entity
+     * @param entity            the entity to move
+     * @param entityVelocity    the velocity of the entity
      * @param lastPhysicsResult the last physics result, can be null
      * @return the result of physics simulation
      */
@@ -168,7 +170,7 @@ public final class CollisionUtils {
         // from moving forward by supplying their previous position's value
         boolean xCollision = newPosition.x() > worldBorder.centerX() + radius || newPosition.x() < worldBorder.centerX() - radius;
         boolean zCollision = newPosition.z() > worldBorder.centerZ() + radius || newPosition.z() < worldBorder.centerZ() - radius;
-        if (xCollision || zCollision)  {
+        if (xCollision || zCollision) {
             return newPosition.withCoord(xCollision ? currentPosition.x() : newPosition.x(), newPosition.y(),
                     zCollision ? currentPosition.z() : newPosition.z());
         }
@@ -176,9 +178,9 @@ public final class CollisionUtils {
     }
 
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry);
+        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
     }
-    
+
     /**
      * Simulate the entity's collision physics as if the world had no blocks
      *
@@ -189,6 +191,6 @@ public final class CollisionUtils {
     public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
         return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
                 false, false, false, entityVelocity, new Point[3],
-                new Shape[3], false, SweepResult.NO_COLLISION);
+                new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
     }
 }

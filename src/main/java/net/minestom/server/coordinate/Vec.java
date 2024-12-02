@@ -15,6 +15,7 @@ import java.util.function.DoubleUnaryOperator;
 public record Vec(double x, double y, double z) implements Point {
     public static final Vec ZERO = new Vec(0);
     public static final Vec ONE = new Vec(1);
+    public static final Vec SECTION = new Vec(16);
 
     public static final double EPSILON = 0.000001;
 
@@ -177,6 +178,11 @@ public record Vec(double x, double y, double z) implements Point {
     }
 
     @Contract(pure = true)
+    public @NotNull Vec min(double x, double y, double z) {
+        return new Vec(Math.min(this.x, x), Math.min(this.y, y), Math.min(this.z, z));
+    }
+
+    @Contract(pure = true)
     public @NotNull Vec min(double value) {
         return new Vec(Math.min(x, value), Math.min(y, value), Math.min(z, value));
     }
@@ -184,6 +190,11 @@ public record Vec(double x, double y, double z) implements Point {
     @Contract(pure = true)
     public @NotNull Vec max(@NotNull Point point) {
         return new Vec(Math.max(x, point.x()), Math.max(y, point.y()), Math.max(z, point.z()));
+    }
+
+    @Contract(pure = true)
+    public @NotNull Vec max(double x, double y, double z) {
+        return new Vec(Math.max(this.x, x), Math.max(this.y, y), Math.max(this.z, z));
     }
 
     @Contract(pure = true)
@@ -319,11 +330,11 @@ public record Vec(double x, double y, double z) implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec rotateAroundY(double angle) {
-        double angleCos = Math.cos(angle);
-        double angleSin = Math.sin(angle);
+        final double angleCos = Math.cos(angle);
+        final double angleSin = Math.sin(angle);
 
-        double newX = angleCos * x + angleSin * z;
-        double newZ = -angleSin * x + angleCos * z;
+        final double newX = angleCos * x + angleSin * z;
+        final double newZ = -angleSin * x + angleCos * z;
         return new Vec(newX, y, newZ);
     }
 
@@ -341,11 +352,11 @@ public record Vec(double x, double y, double z) implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec rotateAroundZ(double angle) {
-        double angleCos = Math.cos(angle);
-        double angleSin = Math.sin(angle);
+        final double angleCos = Math.cos(angle);
+        final double angleSin = Math.sin(angle);
 
-        double newX = angleCos * x - angleSin * y;
-        double newY = angleSin * x + angleCos * y;
+        final double newX = angleCos * x - angleSin * y;
+        final double newY = angleSin * x + angleCos * y;
         return new Vec(newX, newY, z);
     }
 
@@ -356,11 +367,11 @@ public record Vec(double x, double y, double z) implements Point {
 
     @Contract(pure = true)
     public @NotNull Vec rotateFromView(float yawDegrees, float pitchDegrees) {
-        double yaw = Math.toRadians(-1 * (yawDegrees + 90));
-        double pitch = Math.toRadians(-pitchDegrees);
+        final double yaw = Math.toRadians(-1 * (yawDegrees + 90));
+        final double pitch = Math.toRadians(-pitchDegrees);
 
-        double cosYaw = Math.cos(yaw);
-        double cosPitch = Math.cos(pitch);
+        final double cosYaw = Math.cos(yaw);
+        final double cosPitch = Math.cos(pitch);
         double sinYaw = Math.sin(yaw);
         double sinPitch = Math.sin(pitch);
 
@@ -431,19 +442,19 @@ public record Vec(double x, double y, double z) implements Point {
      */
     @Contract(pure = true)
     public @NotNull Vec rotateAroundNonUnitAxis(@NotNull Vec axis, double angle) throws IllegalArgumentException {
-        double x = x(), y = y(), z = z();
-        double x2 = axis.x(), y2 = axis.y(), z2 = axis.z();
+        final double x = x(), y = y(), z = z();
+        final double x2 = axis.x(), y2 = axis.y(), z2 = axis.z();
         double cosTheta = Math.cos(angle);
         double sinTheta = Math.sin(angle);
         double dotProduct = this.dot(axis);
 
-        double newX = x2 * dotProduct * (1d - cosTheta)
+        final double newX = x2 * dotProduct * (1d - cosTheta)
                 + x * cosTheta
                 + (-z2 * y + y2 * z) * sinTheta;
-        double newY = y2 * dotProduct * (1d - cosTheta)
+        final double newY = y2 * dotProduct * (1d - cosTheta)
                 + y * cosTheta
                 + (z2 * x - x2 * z) * sinTheta;
-        double newZ = z2 * dotProduct * (1d - cosTheta)
+        final double newZ = z2 * dotProduct * (1d - cosTheta)
                 + z * cosTheta
                 + (-y2 * x + x2 * y) * sinTheta;
 
@@ -472,26 +483,16 @@ public record Vec(double x, double y, double z) implements Point {
 
     @FunctionalInterface
     public interface Operator {
-        /**
-         * Checks each axis' value, if it's below {@code Vec#EPSILON} then it gets replaced with {@code 0}
-         */
-        Operator EPSILON = (x, y, z) -> new Vec(
-                Math.abs(x) < Vec.EPSILON ? 0 : x,
-                Math.abs(y) < Vec.EPSILON ? 0 : y,
-                Math.abs(z) < Vec.EPSILON ? 0 : z
-        );
+        Operator EPSILON = operator(v -> Math.abs(v) < Vec.EPSILON ? 0 : v);
+        Operator FLOOR = operator(Math::floor);
+        Operator SIGNUM = operator(Math::signum);
+        Operator ABS = operator(Math::abs);
+        Operator NEG = operator(v -> -v);
+        Operator CEIL = operator(Math::ceil);
 
-        Operator FLOOR = (x, y, z) -> new Vec(
-                Math.floor(x),
-                Math.floor(y),
-                Math.floor(z)
-        );
-
-        Operator SIGNUM = (x, y, z) -> new Vec(
-                Math.signum(x),
-                Math.signum(y),
-                Math.signum(z)
-        );
+        static Operator operator(@NotNull DoubleUnaryOperator operator) {
+            return (x, y, z) -> new Vec(operator.applyAsDouble(x), operator.applyAsDouble(y), operator.applyAsDouble(z));
+        }
 
         @NotNull Vec apply(double x, double y, double z);
     }

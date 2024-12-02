@@ -3,17 +3,17 @@ metadata.format.version = "1.1"
 [versions]
 
 # Important dependencies
-data = "1.21-rv2"
+data = "1.21-rv3"
 adventure = "4.17.0"
-jetbrainsAnnotations = "23.0.0"
+jetbrainsAnnotations = "24.1.0"
 slf4j = "2.0.7"
 
 # Performance / Data Structures
-caffeine = "3.1.6"
-fastutil = "8.5.12"
+caffeine = "3.1.8"
+fastutil = "8.5.14"
 flare = "2.0.1"
-gson = "2.10.1"
-jcTools = "4.0.1"
+gson = "2.11.0"
+jcTools = "4.0.5"
 
 # Quality
 junit-jupiter = "5.9.3"

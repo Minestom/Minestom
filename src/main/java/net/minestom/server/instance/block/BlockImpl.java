@@ -1,13 +1,11 @@
 package net.minestom.server.instance.block;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
+import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.MergedMap;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -16,20 +14,31 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.time.Duration;
-import java.util.*;
-import java.util.function.Function;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
-                 byte @NotNull [] propertiesArray,
+                 long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
+    /**
+     * Number of bits used to store the index of a property value.
+     * <p>
+     * Block states are all stored within a single number.
+     */
+    private static final int BITS_PER_INDEX = 5;
+
+    private static final int MAX_STATES = Long.SIZE / BITS_PER_INDEX;
+    private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
+
     // Block state -> block object
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
     // Block id -> valid property keys (order is important for lookup)
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
-    // Block id -> Map<PropertiesValues, Block>
-    private static final ObjectArray<Map<PropertiesHolder, BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
+    // Block id -> Map<Properties, Block>
+    private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
     private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
@@ -41,11 +50,15 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                     Registry.Properties stateProperties = properties.section("properties");
                     if (stateProperties != null) {
                         final int stateCount = stateProperties.size();
+                        if (stateCount > MAX_STATES) {
+                            throw new IllegalStateException("Too many properties for block " + namespace);
+                        }
                         propertyTypes = new PropertyType[stateCount];
                         int i = 0;
                         for (var entry : stateProperties) {
                             final var k = entry.getKey();
                             final var v = (List<String>) entry.getValue();
+                            assert v.size() < MAX_VALUES;
                             propertyTypes[i++] = new PropertyType(k, v);
                         }
                     } else {
@@ -57,7 +70,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                 // Retrieve block states
                 {
                     final int propertiesCount = stateObject.size();
-                    PropertiesHolder[] propertiesKeys = new PropertiesHolder[propertiesCount];
+                    long[] propertiesKeys = new long[propertiesCount];
                     BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
                     int propertiesOffset = 0;
                     for (var stateEntry : stateObject) {
@@ -65,30 +78,26 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         final var stateOverride = (Map<String, Object>) stateEntry.getValue();
                         final var propertyMap = BlockUtils.parseProperties(query);
                         assert propertyTypes.length == propertyMap.size();
-                        byte[] propertiesArray = new byte[propertyTypes.length];
-                        for (var entry : propertyMap.entrySet()) {
+                        long propertiesValue = 0;
+                        for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
                             final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
                             final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
-                            propertiesArray[keyIndex] = valueIndex;
+                            propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
                         }
 
                         var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
                         final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
-                                propertiesArray, null, null);
+                                propertiesValue, null, null);
                         BLOCK_STATE_MAP.set(block.stateId(), block);
-                        propertiesKeys[propertiesOffset] = new PropertiesHolder(propertiesArray);
+                        propertiesKeys[propertiesOffset] = propertiesValue;
                         blocksValues[propertiesOffset++] = block;
                     }
-                    POSSIBLE_STATES.set(blockId, ArrayUtils.toMap(propertiesKeys, blocksValues, propertiesOffset));
+                    POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
                 }
                 // Register default state
                 final int defaultState = properties.getInt("defaultStateId");
                 return getState(defaultState);
             });
-    private static final Cache<CompoundBinaryTag, CompoundBinaryTag> NBT_CACHE = Caffeine.newBuilder()
-            .expireAfterWrite(Duration.ofMinutes(5))
-            .weakValues()
-            .build();
 
     static {
         PROPERTIES_TYPE.trim();
@@ -122,9 +131,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         assert propertyTypes != null;
         final byte keyIndex = findKeyIndex(propertyTypes, property, this);
         final byte valueIndex = findValueIndex(propertyTypes[keyIndex], value, this);
-        var properties = this.propertiesArray.clone();
-        properties[keyIndex] = valueIndex;
-        return compute(properties);
+        final long updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
+        return compute(updatedProperties);
     }
 
     @Override
@@ -132,13 +140,13 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         if (properties.isEmpty()) return this;
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
-        byte[] result = this.propertiesArray.clone();
-        for (var entry : properties.entrySet()) {
+        long updatedProperties = this.propertiesArray;
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
             final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), this);
             final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), this);
-            result[keyIndex] = valueIndex;
+            updatedProperties = updateIndex(updatedProperties, keyIndex, valueIndex);
         }
-        return compute(result);
+        return compute(updatedProperties);
     }
 
     @Override
@@ -146,8 +154,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         var builder = CompoundBinaryTag.builder();
         if (nbt != null) builder.put(nbt);
         tag.write(builder, value);
-        var temporaryNbt = builder.build();
-        final var finalNbt = temporaryNbt.size() > 0 ? NBT_CACHE.get(temporaryNbt, Function.identity()) : null;
+        final CompoundBinaryTag temporaryNbt = builder.build();
+        final CompoundBinaryTag finalNbt = temporaryNbt.size() > 0 ? temporaryNbt : null;
         return new BlockImpl(registry, propertiesArray, finalNbt, handler);
     }
 
@@ -170,9 +178,10 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         String[] keys = new String[length];
         String[] values = new String[length];
         for (int i = 0; i < length; i++) {
-            var property = propertyTypes[i];
+            PropertyType property = propertyTypes[i];
             keys[i] = property.key();
-            values[i] = property.values().get(propertiesArray[i]);
+            final long index = extractIndex(propertiesArray, i);
+            values[i] = property.values().get((int) index);
         }
         return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
     }
@@ -192,7 +201,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return tag.read(Objects.requireNonNullElse(nbt, CompoundBinaryTag.empty()));
     }
 
-    private Map<PropertiesHolder, BlockImpl> possibleProperties() {
+    private Long2ObjectArrayMap<BlockImpl> possibleProperties() {
         return POSSIBLE_STATES.get(id());
     }
 
@@ -213,11 +222,14 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         return Objects.hash(stateId(), nbt, handler);
     }
 
-    private Block compute(byte[] properties) {
-        if (Arrays.equals(propertiesArray, properties)) return this;
-        final BlockImpl block = possibleProperties().get(new PropertiesHolder(properties));
+    private Block compute(long updatedProperties) {
+        if (updatedProperties == this.propertiesArray) return this;
+        final BlockImpl block = possibleProperties().get(updatedProperties);
         assert block != null;
-        return nbt == null && handler == null ? block : new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
+        // Reuse the same block instance if possible
+        if (nbt == null && handler == null) return block;
+        // Otherwise copy with the nbt and handler
+        return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
     }
 
     private static byte findKeyIndex(PropertyType[] properties, String key, BlockImpl block) {
@@ -245,25 +257,17 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private record PropertyType(String key, List<String> values) {
     }
 
-    private static final class PropertiesHolder {
-        private final byte[] properties;
-        private final int hashCode;
+    static long updateIndex(long value, int index, byte newValue) {
+        final int position = index * BITS_PER_INDEX;
+        final int mask = (1 << BITS_PER_INDEX) - 1;
+        value &= ~((long) mask << position); // Clear the bits at the specified position
+        value |= (long) (newValue & mask) << position; // Set the new bits
+        return value;
+    }
 
-        public PropertiesHolder(byte[] properties) {
-            this.properties = properties;
-            this.hashCode = Arrays.hashCode(properties);
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof PropertiesHolder that)) return false;
-            return Arrays.equals(properties, that.properties);
-        }
-
-        @Override
-        public int hashCode() {
-            return hashCode;
-        }
+    static long extractIndex(long value, int index) {
+        final int position = index * BITS_PER_INDEX;
+        final int mask = (1 << BITS_PER_INDEX) - 1;
+        return ((value >> position) & mask);
     }
 }

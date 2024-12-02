@@ -92,6 +92,15 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @Contract(pure = true)
     @Nullable CompoundBinaryTag nbt();
 
+    /**
+     * Returns an unmodifiable view of the block nbt or an empty compound.
+     *
+     * @return the block nbt or an empty compound if not present
+     */
+    default @NotNull CompoundBinaryTag nbtOrEmpty() {
+        return Objects.requireNonNullElse(nbt(), CompoundBinaryTag.empty());
+    }
+
     @Contract(pure = true)
     default boolean hasNbt() {
         return nbt() != null;
@@ -135,7 +144,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     @Contract(pure = true)
-    @ApiStatus.Experimental
     @NotNull Collection<@NotNull Block> possibleStates();
 
     /**
@@ -243,7 +251,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
          * Represents a hint to retrieve blocks more efficiently.
          * Implementing interfaces do not have to honor this.
          */
-        @ApiStatus.Experimental
         enum Condition {
             /**
              * Returns a block no matter what.

@@ -9,7 +9,6 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.utils.chunk.ChunkUtils;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -180,12 +179,10 @@ public class AbsoluteBlockBatch implements Batch<Runnable> {
         return inverse;
     }
 
-    @ApiStatus.Experimental
     public @NotNull BatchOption getInverseOption() {
         return inverseOption;
     }
 
-    @ApiStatus.Experimental
     public void setInverseOption(@NotNull BatchOption inverseOption) {
         this.inverseOption = inverseOption;
     }

@@ -18,6 +18,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import java.util.Comparator;
 
 public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     public static final byte OFFSET = EntityMeta.MAX_OFFSET;
@@ -104,7 +105,8 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         static @NotNull DynamicRegistry<Variant> createDefaultRegistry() {
             return DynamicRegistry.create(
                     "minecraft:painting_variant", VariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
-                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props))
+                    (namespace, props) -> new VariantImpl(Registry.paintingVariant(namespace, props)),
+                    Comparator.naturalOrder()
             );
         }
 

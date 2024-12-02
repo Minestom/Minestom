@@ -110,7 +110,6 @@ public class Tag<T> {
                 path, null, listScope);
     }
 
-    @ApiStatus.Experimental
     @Contract(value = "-> new", pure = true)
     public Tag<List<T>> list() {
         var entry = this.entry;
@@ -145,7 +144,6 @@ public class Tag<T> {
                 null, path, co, listScope + 1);
     }
 
-    @ApiStatus.Experimental
     @Contract(value = "_ -> new", pure = true)
     public Tag<T> path(@NotNull String @Nullable ... path) {
         if (path == null || path.length == 0) {
@@ -316,7 +314,17 @@ public class Tag<T> {
     public static <T extends Record> @NotNull Tag<T> View(@NotNull Class<T> type) {
         return View(TagRecord.serializer(type));
     }
-
+    
+    /**
+    * Creates a transient tag with the specified key. This tag does not get serialized
+    * to NBT (Named Binary Tag) format and is not sent to the client. Unlike other tags,
+    * which are serialized, transient tags are used for temporary data
+    * that only needs to exist on the server side.
+    *
+    * @param <T> The type of the tag's value.
+    * @param key The key.
+    * @return A transient tag with the key.
+    */    
     public static <T> @NotNull Tag<T> Transient(@NotNull String key) {
         //noinspection unchecked
         return (Tag<T>) tag(key, Serializers.EMPTY);

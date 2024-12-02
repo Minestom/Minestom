@@ -7,8 +7,8 @@ import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.command.builder.suggestion.SuggestionCallback;
-import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -91,7 +91,6 @@ public abstract class Argument<T> {
      * @return the parsed result
      * @throws ArgumentSyntaxException if the argument cannot be parsed due to a fault input (argument id)
      */
-    @ApiStatus.Experimental
     public static <T> @NotNull T parse(@NotNull CommandSender sender, @NotNull Argument<T> argument) throws ArgumentSyntaxException {
         return argument.parse(sender, argument.getId());
     }
@@ -267,12 +266,10 @@ public abstract class Argument<T> {
      * @param <O>    The type of output expected.
      * @return A new ArgumentMap that can get this complex object type.
      */
-    @ApiStatus.Experimental
     public <O> @NotNull Argument<O> map(@NotNull Function<T, O> mapper) {
         return new ArgumentMap<>(this, (p, i) -> mapper.apply(i));
     }
 
-    @ApiStatus.Experimental
     public <O> @NotNull Argument<O> map(@NotNull BiFunction<CommandSender, T, O> mapper) {
         return new ArgumentMap<>(this, mapper);
     }

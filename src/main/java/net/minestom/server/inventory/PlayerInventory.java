@@ -10,6 +10,7 @@ import net.minestom.server.inventory.click.InventoryClickResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -44,64 +45,26 @@ public non-sealed class PlayerInventory extends AbstractInventory implements Equ
         return INNER_INVENTORY_SIZE;
     }
 
-    @Override
-    public @NotNull ItemStack getItemInMainHand() {
-        return getItemStack(player.getHeldSlot());
+    private int getSlotId(@NotNull EquipmentSlot slot) {
+        return switch (slot) {
+            case MAIN_HAND -> player.getHeldSlot();
+            case OFF_HAND -> OFFHAND_SLOT;
+            default -> slot.armorSlot();
+        };
     }
 
     @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        safeItemInsert(player.getHeldSlot(), itemStack);
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+        if (slot == EquipmentSlot.BODY) return ItemStack.AIR;
+        return getItemStack(getSlotId(slot));
     }
 
     @Override
-    public @NotNull ItemStack getItemInOffHand() {
-        return getItemStack(OFFHAND_SLOT);
-    }
+    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+        if (slot == EquipmentSlot.BODY)
+            Check.fail("PlayerInventory does not support body equipment");
 
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        safeItemInsert(OFFHAND_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getHelmet() {
-        return getItemStack(HELMET_SLOT);
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        safeItemInsert(HELMET_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getChestplate() {
-        return getItemStack(CHESTPLATE_SLOT);
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        safeItemInsert(CHESTPLATE_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getLeggings() {
-        return getItemStack(LEGGINGS_SLOT);
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        safeItemInsert(LEGGINGS_SLOT, itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getBoots() {
-        return getItemStack(BOOTS_SLOT);
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        safeItemInsert(BOOTS_SLOT, itemStack);
+        safeItemInsert(getSlotId(slot), itemStack);
     }
 
     /**

@@ -4,6 +4,8 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.common.CookieRequestPacket;
@@ -119,8 +121,12 @@ public abstract class PlayerConnection {
         this.online = false;
         MinecraftServer.getConnectionManager().removePlayer(this);
         final Player player = getPlayer();
-        if (player != null && !player.isRemoved()) {
-            player.scheduleNextTick(Entity::remove);
+        if (player != null) {
+            if (connectionState == ConnectionState.PLAY && !player.isRemoved())
+                player.scheduleNextTick(Entity::remove);
+            else {
+                EventDispatcher.call(new PlayerDisconnectEvent(player));
+            }
         }
     }
 

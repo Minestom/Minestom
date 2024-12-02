@@ -1,71 +1,83 @@
-package net.minestom.server.instance;
+package net.minestom.server.instance.generator;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.generator.GenerationUnit;
-import net.minestom.server.instance.generator.UnitModifier;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 
 import static net.minestom.server.utils.chunk.ChunkUtils.*;
 
-final class GeneratorImpl {
-    private static final Vec SECTION_SIZE = new Vec(16);
-    private static final DynamicRegistry<Biome> BIOME_MANAGER = MinecraftServer.getBiomeRegistry();
+@ApiStatus.Internal
+public final class GeneratorImpl {
+    public record GenSection(Palette blocks, Palette biomes, Int2ObjectMap<Block> specials) {
+        public GenSection(Palette blocks, Palette biomes) {
+            this(blocks, biomes, new Int2ObjectOpenHashMap<>(0));
+        }
 
-    static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ,
+        public GenSection() {
+            this(Palette.blocks(), Palette.biomes());
+        }
+    }
+
+    static GenerationUnit section(DynamicRegistry<Biome> biomeRegistry, GenSection section,
+                                  int sectionX, int sectionY, int sectionZ,
                                   boolean fork) {
-        final Vec start = SECTION_SIZE.mul(sectionX, sectionY, sectionZ);
-        final Vec end = start.add(SECTION_SIZE);
-        final UnitModifier modifier = new SectionModifierImpl(SECTION_SIZE, start, end,
-                section.blockPalette(), section.biomePalette(), new Int2ObjectOpenHashMap<>(0), fork);
-        return unit(modifier, start, end, null);
+        final Vec start = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
+        final Vec end = start.add(Vec.SECTION);
+        final UnitModifier modifier = new SectionModifierImpl(biomeRegistry, Vec.SECTION,
+                start, end, section, fork);
+        return unit(biomeRegistry, modifier, start, end, null);
     }
 
-    static GenerationUnit section(Section section, int sectionX, int sectionY, int sectionZ) {
-        return section(section, sectionX, sectionY, sectionZ, false);
+    public static GenerationUnit section(DynamicRegistry<Biome> biomeRegistry, GenSection section, int sectionX, int sectionY, int sectionZ) {
+        return section(biomeRegistry, section, sectionX, sectionY, sectionZ, false);
     }
 
-    static UnitImpl chunk(Chunk chunk, int minSection, int maxSection,
-                          List<Section> chunkSections, int chunkX, int chunkZ) {
-        final int minY = minSection * 16;
-        AtomicInteger sectionCounterY = new AtomicInteger(minSection);
-        List<GenerationUnit> sections = chunkSections.stream()
-                .map(section -> section(section, chunkX, sectionCounterY.getAndIncrement(), chunkZ))
-                .toList();
-
-        final Vec size = new Vec(16, (maxSection - minSection) * 16, 16);
-        final Vec start = new Vec(chunkX * 16, minY, chunkZ * 16);
-        final Vec end = new Vec(chunkX * 16 + 16, size.y() + minY, chunkZ * 16 + 16);
-        final UnitModifier modifier = new AreaModifierImpl(chunk,
-                size, start, end, 1, sections.size(), 1, sections);
-        return unit(modifier, start, end, sections);
+    public static UnitImpl chunk(DynamicRegistry<Biome> biomeRegistry, GenSection[] chunkSections, int chunkX, int minSection, int chunkZ) {
+        final Vec start = Vec.SECTION.mul(chunkX, minSection, chunkZ);
+        return area(biomeRegistry, start, 1, chunkSections.length, 1, chunkSections);
     }
 
-    static UnitImpl chunk(int minSection, int maxSection,
-                          List<Section> chunkSections, int chunkX, int chunkZ) {
-        return chunk(null, minSection, maxSection, chunkSections, chunkX, chunkZ);
+    public static UnitImpl area(DynamicRegistry<Biome> biomeRegistry, Point start, int width, int height, int depth, GenSection[] areaSections) {
+        if (width == 0 || height == 0 || depth == 0) {
+            throw new IllegalArgumentException("Width, height and depth must be greater than 0, got " + width + ", " + height + ", " + depth);
+        }
+        if (areaSections.length != width * height * depth) {
+            throw new IllegalArgumentException("Invalid section count, expected " + width * height * depth + " but got " + areaSections.length);
+        }
+
+        List<GenerationUnit> sections = new ArrayList<>();
+        for (int i = 0; i < areaSections.length; i++) {
+            GenSection section = areaSections[i];
+            final Point point = to3D(i, width, height, depth);
+            final int sectionX = (int) point.x() + start.chunkX();
+            final int sectionY = (int) point.y() + start.section();
+            final int sectionZ = (int) point.z() + start.chunkZ();
+            sections.add(section(biomeRegistry, section, sectionX, sectionY, sectionZ));
+        }
+        sections = List.copyOf(sections);
+
+        final Point size = Vec.SECTION.mul(width, height, depth);
+        final Point end = start.add(size);
+        final UnitModifier modifier = new AreaModifierImpl(size, start, end, width, height, depth, sections);
+        return unit(biomeRegistry, modifier, start, end, sections);
     }
 
-    static UnitImpl chunk(Chunk chunk) {
-        return chunk(chunk, chunk.minSection, chunk.maxSection, chunk.getSections(), chunk.getChunkX(), chunk.getChunkZ());
-    }
-
-    static UnitImpl unit(UnitModifier modifier, Point start, Point end,
-                         List<GenerationUnit> divided) {
+    public static UnitImpl unit(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier, Point start, Point end,
+                                List<GenerationUnit> divided) {
         if (start.x() > end.x() || start.y() > end.y() || start.z() > end.z()) {
             throw new IllegalArgumentException("absoluteStart must be before absoluteEnd");
         }
@@ -76,13 +88,18 @@ final class GeneratorImpl {
             throw new IllegalArgumentException("absoluteEnd must be a multiple of 16");
         }
         final Point size = end.sub(start);
-        return new UnitImpl(modifier, size, start, end, divided, new CopyOnWriteArrayList<>());
+        return new UnitImpl(biomeRegistry, modifier, size, start, end, divided, new CopyOnWriteArrayList<>());
     }
 
     static final class DynamicFork implements Block.Setter {
+        final DynamicRegistry<Biome> biomeRegistry;
         Vec minSection;
         int width, height, depth;
         List<GenerationUnit> sections;
+
+        DynamicFork(DynamicRegistry<Biome> biomeRegistry) {
+            this.biomeRegistry = biomeRegistry;
+        }
 
         @Override
         public void setBlock(int x, int y, int z, @NotNull Block block) {
@@ -100,11 +117,11 @@ final class GeneratorImpl {
             final int sectionY = getChunkCoordinate(y);
             final int sectionZ = getChunkCoordinate(z);
             if (sections == null) {
-                this.minSection = new Vec(sectionX * 16, sectionY * 16, sectionZ * 16);
+                this.minSection = Vec.SECTION.mul(sectionX, sectionY, sectionZ);
                 this.width = 1;
                 this.height = 1;
                 this.depth = 1;
-                this.sections = List.of(section(new Section(), sectionX, sectionY, sectionZ, true));
+                this.sections = List.of(section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true));
             } else if (x < minSection.x() || y < minSection.y() || z < minSection.z() ||
                     x >= minSection.x() + width * 16 || y >= minSection.y() + height * 16 || z >= minSection.z() + depth * 16) {
                 // Resize necessary
@@ -138,7 +155,7 @@ final class GeneratorImpl {
                         final int newX = coordinates.blockX() + startX;
                         final int newY = coordinates.blockY() + startY;
                         final int newZ = coordinates.blockZ() + startZ;
-                        final GenerationUnit unit = section(new Section(), newX, newY, newZ, true);
+                        final GenerationUnit unit = section(biomeRegistry, new GenSection(), newX, newY, newZ, true);
                         newSections[i] = unit;
                     }
                 }
@@ -151,10 +168,10 @@ final class GeneratorImpl {
         }
     }
 
-    record UnitImpl(UnitModifier modifier, Point size,
-                    Point absoluteStart, Point absoluteEnd,
-                    List<GenerationUnit> divided,
-                    List<UnitImpl> forks) implements GenerationUnit {
+    public record UnitImpl(DynamicRegistry<Biome> biomeRegistry, UnitModifier modifier, Point size,
+                           Point absoluteStart, Point absoluteEnd,
+                           List<GenerationUnit> divided,
+                           List<UnitImpl> forks) implements GenerationUnit {
         @Override
         public @NotNull GenerationUnit fork(@NotNull Point start, @NotNull Point end) {
             final int minSectionX = floorSection(start.blockX()) / 16;
@@ -171,22 +188,23 @@ final class GeneratorImpl {
 
             GenerationUnit[] units = new GenerationUnit[width * height * depth];
             int index = 0;
-            for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
+            // Z -> Y -> X order is important for indexing
+            for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
                 for (int sectionY = minSectionY; sectionY < maxSectionY; sectionY++) {
-                    for (int sectionZ = minSectionZ; sectionZ < maxSectionZ; sectionZ++) {
-                        final GenerationUnit unit = section(new Section(), sectionX, sectionY, sectionZ, true);
+                    for (int sectionX = minSectionX; sectionX < maxSectionX; sectionX++) {
+                        final GenerationUnit unit = section(biomeRegistry, new GenSection(), sectionX, sectionY, sectionZ, true);
                         units[index++] = unit;
                     }
                 }
             }
             final List<GenerationUnit> sections = List.of(units);
-            final Point startSection = new Vec(minSectionX * 16, minSectionY * 16, minSectionZ * 16);
+            final Point startSection = Vec.SECTION.mul(minSectionX, minSectionY, minSectionZ);
             return registerFork(startSection, sections, width, height, depth);
         }
 
         @Override
         public void fork(@NotNull Consumer<Block.@NotNull Setter> consumer) {
-            DynamicFork dynamicFork = new DynamicFork();
+            DynamicFork dynamicFork = new DynamicFork(biomeRegistry);
             consumer.accept(dynamicFork);
             final Point startSection = dynamicFork.minSection;
             if (startSection == null)
@@ -207,25 +225,22 @@ final class GeneratorImpl {
                                             int width, int height, int depth) {
             final Point end = start.add(width * 16, height * 16, depth * 16);
             final Point size = end.sub(start);
-            final AreaModifierImpl modifier = new AreaModifierImpl(null,
-                    size, start, end, width, height, depth, sections);
-            final UnitImpl fork = new UnitImpl(modifier, size, start, end, sections, forks);
+            final AreaModifierImpl modifier = new AreaModifierImpl(size, start, end, width, height, depth, sections);
+            final UnitImpl fork = new UnitImpl(biomeRegistry, modifier, size, start, end, sections, forks);
             forks.add(fork);
             return fork;
         }
     }
 
-    record SectionModifierImpl(Point size, Point start, Point end,
-                               Palette blockPalette, Palette biomePalette,
-                               Int2ObjectMap<Block> cache, boolean fork) implements GenericModifier {
+    public record SectionModifierImpl(DynamicRegistry<Biome> biomeRegistry, Point size, Point start, Point end,
+                                      GenSection genSection, boolean fork) implements GenericModifier {
 
         @Override
         public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
-            var id = BIOME_MANAGER.getId(biome);
+            final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
-
-            this.biomePalette.set(
+            this.genSection.biomes.set(
                     toSectionRelativeCoordinate(x) / 4,
                     toSectionRelativeCoordinate(y) / 4,
                     toSectionRelativeCoordinate(z) / 4, id);
@@ -237,18 +252,18 @@ final class GeneratorImpl {
             final int localY = toSectionRelativeCoordinate(y);
             final int localZ = toSectionRelativeCoordinate(z);
             handleCache(localX, localY, localZ, block);
-            this.blockPalette.set(localX, localY, localZ, retrieveBlockId(block));
+            this.genSection.blocks.set(localX, localY, localZ, retrieveBlockId(block));
         }
 
         @Override
         public void setRelative(int x, int y, int z, @NotNull Block block) {
             handleCache(x, y, z, block);
-            this.blockPalette.set(x, y, z, retrieveBlockId(block));
+            this.genSection.blocks.set(x, y, z, retrieveBlockId(block));
         }
 
         @Override
         public void setAllRelative(@NotNull Supplier supplier) {
-            this.blockPalette.setAll((x, y, z) -> {
+            this.genSection.blocks.setAll((x, y, z) -> {
                 final Block block = supplier.get(x, y, z);
                 handleCache(x, y, z, block);
                 return retrieveBlockId(block);
@@ -261,31 +276,32 @@ final class GeneratorImpl {
                 for (int x = 0; x < 16; x++) {
                     for (int y = 0; y < 16; y++) {
                         for (int z = 0; z < 16; z++) {
-                            this.cache.put(getBlockIndex(x, y, z), block);
+                            this.genSection.specials.put(getBlockIndex(x, y, z), block);
                         }
                     }
                 }
             }
-            this.blockPalette.fill(retrieveBlockId(block));
+            this.genSection.blocks.fill(retrieveBlockId(block));
         }
 
         @Override
         public void fillBiome(@NotNull DynamicRegistry.Key<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
-            var id = BIOME_MANAGER.getId(biome);
+            final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
-            this.biomePalette.fill(id);
+            this.genSection.biomes.fill(id);
         }
 
         private int retrieveBlockId(Block block) {
-            return fork ? block.stateId() + 1 : block.stateId();
+            final int stateId = block.stateId();
+            return fork ? stateId + 1 : stateId;
         }
 
         private void handleCache(int x, int y, int z, Block block) {
             if (requireCache(block)) {
-                this.cache.put(getBlockIndex(x, y, z), block);
-            } else if (!cache.isEmpty()) {
-                this.cache.remove(getBlockIndex(x, y, z));
+                this.genSection.specials.put(getBlockIndex(x, y, z), block);
+            } else if (!genSection.specials.isEmpty()) {
+                this.genSection.specials.remove(getBlockIndex(x, y, z));
             }
         }
 
@@ -294,10 +310,9 @@ final class GeneratorImpl {
         }
     }
 
-    record AreaModifierImpl(Chunk chunk,
-                            Point size, Point start, Point end,
-                            int width, int height, int depth,
-                            List<GenerationUnit> sections) implements GenericModifier {
+    public record AreaModifierImpl(Point size, Point start, Point end,
+                                   int width, int height, int depth,
+                                   List<GenerationUnit> sections) implements GenericModifier {
         @Override
         public void setBlock(int x, int y, int z, @NotNull Block block) {
             checkBorder(x, y, z);
@@ -329,7 +344,7 @@ final class GeneratorImpl {
         @Override
         public void setAll(@NotNull Supplier supplier) {
             for (GenerationUnit section : sections) {
-                final var start = section.absoluteStart();
+                final Point start = section.absoluteStart();
                 final int startX = start.blockX();
                 final int startY = start.blockY();
                 final int startZ = start.blockZ();
@@ -414,11 +429,7 @@ final class GeneratorImpl {
         }
 
         private GenerationUnit findRelativeSection(int x, int y, int z) {
-            final int sectionX = getChunkCoordinate(x);
-            final int sectionY = getChunkCoordinate(y);
-            final int sectionZ = getChunkCoordinate(z);
-            final int index = sectionZ + sectionY * depth + sectionX * depth * height;
-            return sections.get(index);
+            return findAbsolute(sections, Vec.ZERO, width, height, depth, x, y, z);
         }
 
         private void checkBorder(int x, int y, int z) {
@@ -517,6 +528,7 @@ final class GeneratorImpl {
 
     private static int findIndex(int width, int height, int depth,
                                  int x, int y, int z) {
+        assert width > 0 && height > 0 && depth > 0;
         return (z * width * height) + (y * width) + x;
     }
 

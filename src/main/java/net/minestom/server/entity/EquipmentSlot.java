@@ -12,7 +12,8 @@ public enum EquipmentSlot {
     BOOTS(true, BOOTS_SLOT),
     LEGGINGS(true, LEGGINGS_SLOT),
     CHESTPLATE(true, CHESTPLATE_SLOT),
-    HELMET(true, HELMET_SLOT);
+    HELMET(true, HELMET_SLOT),
+    BODY(false, -1);
 
     private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
 
@@ -25,7 +26,7 @@ public enum EquipmentSlot {
     }
 
     public boolean isHand() {
-        return !armor;
+        return this == MAIN_HAND || this == OFF_HAND;
     }
 
     public boolean isArmor() {

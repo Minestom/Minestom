@@ -3,7 +3,6 @@ package net.minestom.server.network;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
@@ -270,7 +269,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public byte[] read(@NotNull NetworkBuffer buffer) {
             final int limit = buffer.nioBuffer.limit();
             final int length = limit - buffer.readIndex();
-            assert length > 0 : "Invalid remaining: " + length;
+            assert length >= 0 : "Invalid remaining: " + length;
             final byte[] bytes = new byte[length];
             buffer.nioBuffer.get(buffer.readIndex(), bytes);
             buffer.readIndex += length;
@@ -362,20 +361,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final int y = (int) (value << 52 >> 52);
             final int z = (int) (value << 26 >> 38);
             return new Vec(x, y, z);
-        }
-    }
-
-    record ComponentType() implements NetworkBufferTypeImpl<Component> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final BinaryTag nbt = NbtComponentSerializer.nbt().serialize(value);
-            buffer.write(NBT, nbt);
-        }
-
-        @Override
-        public Component read(@NotNull NetworkBuffer buffer) {
-            final BinaryTag nbt = buffer.read(NBT);
-            return NbtComponentSerializer.nbt().deserialize(nbt);
         }
     }
 
@@ -646,7 +631,9 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             Check.stateCondition(buffer.registries == null, "Buffer does not have registries");
             final DynamicRegistry<T> registry = selector.apply(buffer.registries);
-            final int id = registry.getId(value);
+            // Painting variants may be sent in their entirety rather than a registry reference so the ID is offset by 1 to indicate this.
+            // FIXME: Support sending the entire registry object instead of an ID reference.
+            final int id = registry.id().equals("minecraft:painting_variant")?registry.getId(value)+1:registry.getId(value);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
         }

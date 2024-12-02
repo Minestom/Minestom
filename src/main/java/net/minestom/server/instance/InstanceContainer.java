@@ -18,6 +18,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -343,7 +344,13 @@ public class InstanceContainer extends Instance {
             CompletableFuture<Chunk> resultFuture = new CompletableFuture<>();
             // TODO: virtual thread once Loom is available
             ForkJoinPool.commonPool().submit(() -> {
-                var chunkUnit = GeneratorImpl.chunk(chunk);
+                GeneratorImpl.GenSection[] genSections = new GeneratorImpl.GenSection[chunk.getSections().size()];
+                Arrays.setAll(genSections, i -> {
+                    Section section = chunk.getSections().get(i);
+                    return new GeneratorImpl.GenSection(section.blockPalette(), section.biomePalette());
+                });
+                var chunkUnit = GeneratorImpl.chunk(MinecraftServer.getBiomeRegistry(), genSections,
+                        chunk.getChunkX(), chunk.minSection, chunk.getChunkZ());
                 try {
                     // Generate block/biome palette
                     generator.generate(chunkUnit);
@@ -360,7 +367,7 @@ public class InstanceContainer extends Instance {
                         var sections = ((GeneratorImpl.AreaModifierImpl) fork.modifier()).sections();
                         for (var section : sections) {
                             if (section.modifier() instanceof GeneratorImpl.SectionModifierImpl sectionModifier) {
-                                if (sectionModifier.blockPalette().count() == 0)
+                                if (sectionModifier.genSection().blocks().count() == 0)
                                     continue;
                                 final Point start = section.absoluteStart();
                                 final Chunk forkChunk = start.chunkX() == chunkX && start.chunkZ() == chunkZ ? chunk : getChunkAt(start);
@@ -370,7 +377,7 @@ public class InstanceContainer extends Instance {
                                     forkChunk.invalidate();
                                     forkChunk.sendChunk();
                                 } else {
-                                    final long index = ChunkUtils.getChunkIndex(start);
+                                    final long index = getChunkIndex(start);
                                     this.generationForks.compute(index, (i, sectionModifiers) -> {
                                         if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
                                         sectionModifiers.add(sectionModifier);
@@ -414,13 +421,13 @@ public class InstanceContainer extends Instance {
             Section section = chunk.getSectionAt(sectionModifier.start().blockY());
             Palette currentBlocks = section.blockPalette();
             // -1 is necessary because forked units handle explicit changes by changing AIR 0 to 1
-            sectionModifier.blockPalette().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
+            sectionModifier.genSection().blocks().getAllPresent((x, y, z, value) -> currentBlocks.set(x, y, z, value - 1));
             applyGenerationData(chunk, sectionModifier);
         }
     }
 
     private void applyGenerationData(Chunk chunk, GeneratorImpl.SectionModifierImpl section) {
-        var cache = section.cache();
+        var cache = section.genSection().specials();
         if (cache.isEmpty()) return;
         final int height = section.start().blockY();
         synchronized (chunk) {

@@ -97,8 +97,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jctools.queues.MessagePassingQueue;
-import org.jctools.queues.MpscUnboundedXaddArrayQueue;
+import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -175,7 +174,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
 
-    private final MessagePassingQueue<ClientPacket> packets = new MpscUnboundedXaddArrayQueue<>(32);
+    private final MpscArrayQueue<ClientPacket> packets = new MpscArrayQueue<>(ServerFlag.PLAYER_PACKET_QUEUE_SIZE);
     private final boolean levelFlat;
     private final PlayerSettings settings;
     private float exp;
@@ -611,15 +610,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
         if (permanent && playerConnection.isOnline()) kick(REMOVE_MESSAGE);
-    }
-
-    @Override
-    public void updateOldViewer(@NotNull Player player) {
-        super.updateOldViewer(player);
-        // Team
-        if (this.getTeam() != null && this.getTeam().getMembers().size() == 1) {// If team only contains "this" player
-            player.sendPacket(this.getTeam().createTeamDestructionPacket());
-        }
     }
 
     @Override
@@ -1652,6 +1642,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Make sure that the player is in the PLAY state and synchronize their flight speed.
         if (isActive()) {
             refreshAbilities();
+            updateCollisions();
         }
 
         return true;
@@ -2128,16 +2119,14 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
      * @param packet the packet to add in the queue
      */
     public void addPacketToQueue(@NotNull ClientPacket packet) {
-        this.packets.offer(packet);
+        final boolean success = packets.offer(packet);
+        if (!success) {
+            kick(Component.text("Too Many Packets", NamedTextColor.RED));
+        }
     }
 
     @ApiStatus.Internal
-    @ApiStatus.Experimental
     public void interpretPacketQueue() {
-        if (this.packets.size() >= ServerFlag.PLAYER_PACKET_QUEUE_SIZE) {
-            kick(Component.text("Too Many Packets", NamedTextColor.RED));
-            return;
-        }
         final PacketListenerManager manager = MinecraftServer.getPacketListenerManager();
         // This method is NOT thread-safe
         this.packets.drain(packet -> manager.processClientPacket(packet, playerConnection), ServerFlag.PLAYER_PACKET_PER_TICK);
@@ -2293,63 +2282,13 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     }
 
     @Override
-    public @NotNull ItemStack getItemInMainHand() {
-        return inventory.getItemInMainHand();
+    public @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
+        return inventory.getEquipment(slot);
     }
 
     @Override
-    public void setItemInMainHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInMainHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getItemInOffHand() {
-        return inventory.getItemInOffHand();
-    }
-
-    @Override
-    public void setItemInOffHand(@NotNull ItemStack itemStack) {
-        inventory.setItemInOffHand(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getHelmet() {
-        return inventory.getHelmet();
-    }
-
-    @Override
-    public void setHelmet(@NotNull ItemStack itemStack) {
-        inventory.setHelmet(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getChestplate() {
-        return inventory.getChestplate();
-    }
-
-    @Override
-    public void setChestplate(@NotNull ItemStack itemStack) {
-        inventory.setChestplate(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getLeggings() {
-        return inventory.getLeggings();
-    }
-
-    @Override
-    public void setLeggings(@NotNull ItemStack itemStack) {
-        inventory.setLeggings(itemStack);
-    }
-
-    @Override
-    public @NotNull ItemStack getBoots() {
-        return inventory.getBoots();
-    }
-
-    @Override
-    public void setBoots(@NotNull ItemStack itemStack) {
-        inventory.setBoots(itemStack);
+    public void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
+        inventory.setEquipment(slot, itemStack);
     }
 
     @Override
@@ -2394,6 +2333,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
     @Override
     public Player asPlayer() {
         return this;
+    }
+
+    @Override
+    protected void updateCollisions() {
+        preventBlockPlacement = gameMode != GameMode.SPECTATOR;
+        collidesWithEntities = gameMode != GameMode.SPECTATOR;
     }
 
     protected void sendChunkUpdates(Chunk newChunk) {
@@ -2532,6 +2477,7 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                             byte displayedSkinParts, MainHand mainHand, boolean enableTextFiltering, boolean allowServerListings) {
             this.locale = locale;
             // Clamp viewDistance to valid bounds
+            byte previousViewDistance = this.viewDistance;
             this.viewDistance = (byte) MathUtils.clamp(viewDistance, 2, 32);
             this.chatMessageType = chatMessageType;
             this.chatColors = chatColors;
@@ -2539,6 +2485,27 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
             this.mainHand = mainHand;
             this.enableTextFiltering = enableTextFiltering;
             this.allowServerListings = allowServerListings;
+
+            // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
+            if (instance != null) {
+                // Load/unload chunks if necessary due to view distance changes
+                if (previousViewDistance < this.viewDistance) {
+                    // View distance expanded, send chunks
+                    ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), this.viewDistance, (chunkX, chunkZ) -> {
+                        if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
+                            chunkAdder.accept(chunkX, chunkZ);
+                        }
+                    });
+                } else if (previousViewDistance > this.viewDistance) {
+                    // View distance shrunk, unload chunks
+                    ChunkUtils.forChunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
+                        if (Math.abs(chunkX - position.chunkX()) > this.viewDistance || Math.abs(chunkZ - position.chunkZ()) > this.viewDistance) {
+                            chunkRemover.accept(chunkX, chunkZ);
+                        }
+                    });
+                }
+                // Else previous and current are equal, do nothing
+            }
 
             boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
             PlayerMeta playerMeta = getPlayerMeta();

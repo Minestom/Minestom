@@ -149,7 +149,7 @@ final class RegionFile implements AutoCloseable {
 
         //todo: addPadding()
 
-        final long totalSectors = file.length() / SECTOR_SIZE;
+        final long totalSectors = ((file.length() - 1) / SECTOR_SIZE) + 1; // Round up, last sector does not need to be full size
         for (int i = 0; i < totalSectors; i++) freeSectors.add(true);
         freeSectors.set(0, false); // First sector is locations
         freeSectors.set(1, false); // Second sector is timestamps

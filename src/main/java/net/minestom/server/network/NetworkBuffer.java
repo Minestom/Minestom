@@ -13,7 +13,6 @@ import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-@ApiStatus.Experimental
 public final class NetworkBuffer {
     public static final Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     public static final Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
@@ -42,7 +40,7 @@ public final class NetworkBuffer {
     public static final Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     public static final Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     public static final Type<Point> BLOCK_POSITION = new NetworkBufferTypeImpl.BlockPositionType();
-    public static final Type<Component> COMPONENT = new NetworkBufferTypeImpl.ComponentType();
+    public static final Type<Component> COMPONENT = new ComponentNetworkBufferTypeImpl();
     public static final Type<Component> JSON_COMPONENT = new NetworkBufferTypeImpl.JsonComponentType();
     public static final Type<UUID> UUID = new NetworkBufferTypeImpl.UUIDType();
 

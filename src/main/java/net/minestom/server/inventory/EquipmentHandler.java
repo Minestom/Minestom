@@ -16,32 +16,50 @@ import java.util.Map;
 public interface EquipmentHandler {
 
     /**
+     * Gets the equipment in a specific slot.
+     *
+     * @param slot the equipment to get the item from
+     * @return the equipment {@link ItemStack}
+     */
+    @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot);
+
+    void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack);
+
+    /**
      * Gets the {@link ItemStack} in main hand.
      *
      * @return the {@link ItemStack} in main hand
      */
-    @NotNull ItemStack getItemInMainHand();
+    default @NotNull ItemStack getItemInMainHand() {
+        return getEquipment(EquipmentSlot.MAIN_HAND);
+    }
 
     /**
      * Changes the main hand {@link ItemStack}.
      *
      * @param itemStack the main hand {@link ItemStack}
      */
-    void setItemInMainHand(@NotNull ItemStack itemStack);
+    default void setItemInMainHand(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.MAIN_HAND, itemStack);
+    }
 
     /**
      * Gets the {@link ItemStack} in off hand.
      *
      * @return the item in off hand
      */
-    @NotNull ItemStack getItemInOffHand();
+    default @NotNull ItemStack getItemInOffHand() {
+        return getEquipment(EquipmentSlot.OFF_HAND);
+    }
 
     /**
      * Changes the off hand {@link ItemStack}.
      *
      * @param itemStack the off hand {@link ItemStack}
      */
-    void setItemInOffHand(@NotNull ItemStack itemStack);
+    default void setItemInOffHand(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.OFF_HAND, itemStack);
+    }
 
     /**
      * Gets the {@link ItemStack} in the specific hand.
@@ -74,83 +92,89 @@ public interface EquipmentHandler {
      *
      * @return the helmet
      */
-    @NotNull ItemStack getHelmet();
+    default @NotNull ItemStack getHelmet() {
+        return getEquipment(EquipmentSlot.HELMET);
+    }
 
     /**
      * Changes the helmet.
      *
      * @param itemStack the helmet
      */
-    void setHelmet(@NotNull ItemStack itemStack);
+    default void setHelmet(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.HELMET, itemStack);
+    }
 
     /**
      * Gets the chestplate.
      *
      * @return the chestplate
      */
-    @NotNull ItemStack getChestplate();
+    default @NotNull ItemStack getChestplate() {
+        return getEquipment(EquipmentSlot.CHESTPLATE);
+    }
 
     /**
      * Changes the chestplate.
      *
      * @param itemStack the chestplate
      */
-    void setChestplate(@NotNull ItemStack itemStack);
+    default void setChestplate(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.CHESTPLATE, itemStack);
+    }
 
     /**
      * Gets the leggings.
      *
      * @return the leggings
      */
-    @NotNull ItemStack getLeggings();
+    default @NotNull ItemStack getLeggings() {
+        return getEquipment(EquipmentSlot.LEGGINGS);
+    }
 
     /**
      * Changes the leggings.
      *
      * @param itemStack the leggings
      */
-    void setLeggings(@NotNull ItemStack itemStack);
+    default void setLeggings(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.LEGGINGS, itemStack);
+    }
 
     /**
      * Gets the boots.
      *
      * @return the boots
      */
-    @NotNull ItemStack getBoots();
+    default @NotNull ItemStack getBoots() {
+        return getEquipment(EquipmentSlot.BOOTS);
+    }
 
     /**
      * Changes the boots.
      *
      * @param itemStack the boots
      */
-    void setBoots(@NotNull ItemStack itemStack);
-
-    /**
-     * Gets the equipment in a specific slot.
-     *
-     * @param slot the equipment to get the item from
-     * @return the equipment {@link ItemStack}
-     */
-    default @NotNull ItemStack getEquipment(@NotNull EquipmentSlot slot) {
-        return switch (slot) {
-            case MAIN_HAND -> getItemInMainHand();
-            case OFF_HAND -> getItemInOffHand();
-            case HELMET -> getHelmet();
-            case CHESTPLATE -> getChestplate();
-            case LEGGINGS -> getLeggings();
-            case BOOTS -> getBoots();
-        };
+    default void setBoots(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.BOOTS, itemStack);
     }
 
-    default void setEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack itemStack) {
-        switch (slot) {
-            case MAIN_HAND -> setItemInMainHand(itemStack);
-            case OFF_HAND -> setItemInOffHand(itemStack);
-            case HELMET -> setHelmet(itemStack);
-            case CHESTPLATE -> setChestplate(itemStack);
-            case LEGGINGS -> setLeggings(itemStack);
-            case BOOTS -> setBoots(itemStack);
-        }
+    /**
+     * Gets the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @return the body equipment
+     */
+    default @NotNull ItemStack getBodyEquipment() {
+        return getEquipment(EquipmentSlot.BODY);
+    }
+
+    /**
+     * Changes the body equipment. Used by horses, wolves, and llama's.
+     *
+     * @param itemStack the body equipment
+     */
+    default void setBodyEquipment(@NotNull ItemStack itemStack) {
+        setEquipment(EquipmentSlot.BODY, itemStack);
     }
 
     default boolean hasEquipment(@NotNull EquipmentSlot slot) {
@@ -184,7 +208,9 @@ public interface EquipmentHandler {
                 EquipmentSlot.BOOTS, getBoots(),
                 EquipmentSlot.LEGGINGS, getLeggings(),
                 EquipmentSlot.CHESTPLATE, getChestplate(),
-                EquipmentSlot.HELMET, getHelmet()));
+                EquipmentSlot.HELMET, getHelmet(),
+                EquipmentSlot.BODY, getBodyEquipment()));
+        // Some entities do not allow body equipment, in which case the client will ignore this
     }
 
 }

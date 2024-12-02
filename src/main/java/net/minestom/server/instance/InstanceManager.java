@@ -9,7 +9,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,7 +51,6 @@ public final class InstanceManager {
      * @param loader        the chunk loader
      * @return the created {@link InstanceContainer}
      */
-    @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         final InstanceContainer instanceContainer = new InstanceContainer(registries.dimensionType(), UUID.randomUUID(), dimensionType, loader, dimensionType.namespace());
         registerInstance(instanceContainer);
@@ -63,7 +61,6 @@ public final class InstanceManager {
         return createInstanceContainer(dimensionType, null);
     }
 
-    @ApiStatus.Experimental
     public @NotNull InstanceContainer createInstanceContainer(@Nullable IChunkLoader loader) {
         return createInstanceContainer(DimensionType.OVERWORLD, loader);
     }
