@@ -17,6 +17,7 @@ public class RelativeFlags {
 
     public static final int COORD = X | Y | Z;
     public static final int VIEW = YAW | PITCH;
-    public static final int DELTA = DELTA_X | DELTA_Y | DELTA_Z | ROTATE_DELTA;
+    public static final int DELTA_COORD = DELTA_X | DELTA_Y | DELTA_Z;
+    public static final int DELTA = DELTA_COORD | ROTATE_DELTA;
     public static final int ALL = COORD | VIEW | DELTA;
 }

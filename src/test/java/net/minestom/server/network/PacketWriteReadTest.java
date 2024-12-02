@@ -24,7 +24,9 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.recipe.RecipeProperty;
+import net.minestom.server.recipe.display.RecipeDisplay;
 import net.minestom.server.recipe.display.SlotDisplay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -80,7 +82,12 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new ClearTitlesPacket(false));
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
-//        SERVER_PACKETS.add(new PlaceGhostRecipePacket((byte) 2, "recipe")); // TODO(1.21.2)
+        var recipeDisplay = new RecipeDisplay.CraftingShapeless(
+                List.of(new SlotDisplay.Item(Material.STONE)),
+                new SlotDisplay.Item(Material.STONE_BRICKS),
+                new SlotDisplay.Item(Material.CRAFTING_TABLE)
+        );
+        SERVER_PACKETS.add(new PlaceGhostRecipePacket(0, recipeDisplay));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
         SERVER_PACKETS.add(new DeclareRecipesPacket(Map.of(
                 RecipeProperty.SMITHING_BASE, List.of(Material.STONE),
@@ -93,7 +100,9 @@ public class PacketWriteReadTest {
                 List.of(new DeclareRecipesPacket.StonecutterRecipe(new Recipe.Ingredient(Material.DIAMOND),
                         new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
         ));
-        // TODO(1.21.2) recipe book add/remove
+        SERVER_PACKETS.add(new RecipeBookAddPacket(List.of(new RecipeBookAddPacket.Entry(1, recipeDisplay, null,
+                RecipeBookCategory.CRAFTING_MISC, List.of(new Recipe.Ingredient(Material.STONE)), true, true)), false));
+        SERVER_PACKETS.add(new RecipeBookRemovePacket(List.of(1)));
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
