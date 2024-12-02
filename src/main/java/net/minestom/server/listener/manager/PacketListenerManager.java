@@ -84,6 +84,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
+        setPlayListener(ClientSetRecipeBookStatePacket.class, (packet, player) -> {/* empty */});
         setPlayListener(ClientPlaceRecipePacket.class, RecipeListener::listener);
         setPlayListener(ClientTabCompletePacket.class, TabCompleteListener::listener);
         setPlayListener(ClientPluginMessagePacket.class, PluginMessageListener::listener);

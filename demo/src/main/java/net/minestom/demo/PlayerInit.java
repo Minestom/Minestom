@@ -195,16 +195,17 @@ public class PlayerInit {
                 event.getInstance().setBlock(event.getPosition(), block);
 
             })
-            .addListener(PlayerBlockPlaceEvent.class, event -> {
-//                event.setDoBlockUpdates(false);
-            })
             .addListener(PlayerBlockInteractEvent.class, event -> {
                 var block = event.getBlock();
                 var rawOpenProp = block.getProperty("open");
-                if (rawOpenProp == null) return;
+                if (rawOpenProp != null) {
+                    block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
+                    event.getInstance().setBlock(event.getBlockPosition(), block);
+                }
 
-                block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
-                event.getInstance().setBlock(event.getBlockPosition(), block);
+                if (block.id() == Block.CRAFTING_TABLE.id()) {
+                    event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                }
             });
 
     {
@@ -221,22 +222,6 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
-
-//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
-//        instanceManager.registerInstance(i2);
-//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
-//        i2.setChunkSupplier(LightingChunk::new);
-
-        // System.out.println("start");
-        // var chunks = new ArrayList<CompletableFuture<Chunk>>();
-        // ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
-
-        // CompletableFuture.runAsync(() -> {
-        //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        //     System.out.println("load end");
-        //     LightingChunk.relight(instanceContainer, instanceContainer.getChunks());
-        //     System.out.println("light end");
-        // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
