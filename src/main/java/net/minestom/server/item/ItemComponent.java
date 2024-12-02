@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
@@ -95,8 +96,8 @@ public final class ItemComponent {
     public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.NBT_TYPE);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.NBT_TYPE.list());
-    // TODO(1.21.2) Updated NBT format > https://minecraft.wiki/w/Java_Edition_1.21.2#Data_components_3
-    public static final DataComponent<String> LOCK = register("lock", null, BinaryTagSerializer.STRING);
+    // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
+    public static final DataComponent<CompoundBinaryTag> LOCK = register("lock", null, BinaryTagSerializer.COMPOUND);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);

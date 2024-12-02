@@ -94,6 +94,7 @@ import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -733,7 +734,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
-        synchronizePositionAfterTeleport(spawnPosition, 0, true); // So the player doesn't get stuck
+        synchronizePositionAfterTeleport(spawnPosition, Vec.ZERO, RelativeFlags.NONE, true); // So the player doesn't get stuck
 
         if (dimensionChange) {
             sendPacket(new SpawnPositionPacket(spawnPosition, 0));
@@ -811,7 +812,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             // In the vanilla server they have an anticheat which teleports the client back if they enter the floor,
             // but since Minestom does not have an anticheat this provides a similar effect.
             if (needsChunkPositionSync) {
-                synchronizePositionAfterTeleport(getPosition(), RelativeFlags.NONE, true);
+                synchronizePositionAfterTeleport(getPosition(), Vec.ZERO, RelativeFlags.NONE, true);
                 needsChunkPositionSync = false;
             }
         } finally {
@@ -1818,10 +1819,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param shouldConfirm if false, the teleportation will be done without confirmation
      */
     @ApiStatus.Internal
-    void synchronizePositionAfterTeleport(@NotNull Pos position, int relativeFlags, boolean shouldConfirm) {
+    void synchronizePositionAfterTeleport(@NotNull Pos position, @NotNull Point velocity,
+                                          @MagicConstant(flagsFromClass = RelativeFlags.class) int relativeFlags,
+                                          boolean shouldConfirm) {
         int teleportId = shouldConfirm ? getNextTeleportId() : -1;
-        // TODO(1.21.2): should delta be zero?
-        sendPacket(new PlayerPositionAndLookPacket(teleportId, position, Vec.ZERO, position.yaw(), position.pitch(), (byte) relativeFlags));
+        sendPacket(new PlayerPositionAndLookPacket(teleportId, position, velocity, position.yaw(), position.pitch(), relativeFlags));
         super.synchronizePosition();
     }
 

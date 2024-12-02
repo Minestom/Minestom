@@ -248,7 +248,8 @@ public class PlayerIntegrationTest {
 
         assertEquals(startingPlayerPos.withView(30, 20), player.getPosition());
         tracker.assertSingle(PlayerPositionAndLookPacket.class, packet -> {
-            assertEquals(RelativeFlags.COORD, packet.flags());
+            // Should be relative coord and velocity because we are only trying to change the view.
+            assertEquals(RelativeFlags.COORD | RelativeFlags.DELTA_COORD, packet.flags());
             assertEquals(new Pos(0, 0, 0, 30, 20), packet.position());
         });
     }
