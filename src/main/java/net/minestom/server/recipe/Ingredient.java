@@ -4,8 +4,10 @@ package net.minestom.server.recipe;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.recipe.display.SlotDisplay;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,5 +53,16 @@ public record Ingredient(@NotNull List<@NotNull Material> items) {
 
     public Ingredient(@NotNull Material @NotNull ... items) {
         this(List.of(items));
+    }
+
+    public static @Nullable Ingredient fromSlotDisplay(@NotNull SlotDisplay slotDisplay) {
+        return switch (slotDisplay) {
+            case SlotDisplay.Item item -> new Ingredient(item.material());
+            case SlotDisplay.Tag ignored -> {
+                // TODO: Support tags in ingredients (ObjectSet for non static registries)
+                yield null;
+            }
+            default -> null;
+        };
     }
 }

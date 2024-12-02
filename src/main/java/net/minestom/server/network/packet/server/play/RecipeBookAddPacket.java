@@ -4,9 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.recipe.Recipe;
+import net.minestom.server.recipe.Ingredient;
 import net.minestom.server.recipe.RecipeBookCategory;
-import net.minestom.server.recipe.RecipeSerializers;
 import net.minestom.server.recipe.display.RecipeDisplay;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,7 +29,7 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
     public record Entry(
             int displayId, @NotNull RecipeDisplay display,
             @Nullable Integer group, @NotNull RecipeBookCategory category,
-            @Nullable List<Recipe.Ingredient> craftingRequirements,
+            @Nullable List<Ingredient> craftingRequirements,
             byte flags
     ) {
         public static final NetworkBuffer.Type<Entry> SERIALIZER = NetworkBufferTemplate.template(
@@ -38,13 +37,13 @@ public record RecipeBookAddPacket(@NotNull List<Entry> entries, boolean replace)
                 RecipeDisplay.NETWORK_TYPE, Entry::display,
                 NetworkBuffer.OPTIONAL_VAR_INT, Entry::group,
                 RecipeBookCategory.NETWORK_TYPE, Entry::category,
-                RecipeSerializers.INGREDIENT.list().optional(), Entry::craftingRequirements,
+                Ingredient.NETWORK_TYPE.list().optional(), Entry::craftingRequirements,
                 NetworkBuffer.BYTE, Entry::flags,
                 Entry::new);
 
         public Entry(int displayId, @NotNull RecipeDisplay display,
                      @Nullable Integer group, @NotNull RecipeBookCategory category,
-                     @Nullable List<Recipe.Ingredient> craftingRequirements,
+                     @Nullable List<Ingredient> craftingRequirements,
                      boolean notification, boolean highlight) {
             this(displayId, display, group, category, craftingRequirements,
                     (byte) ((notification ? FLAG_NOTIFICATION : 0) | (highlight ? FLAG_HIGHLIGHT : 0)));
