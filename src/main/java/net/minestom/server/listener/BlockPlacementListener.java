@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
@@ -36,8 +37,7 @@ public class BlockPlacementListener {
     private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
-        final PlayerInventory playerInventory = player.getInventory();
-        final Player.Hand hand = packet.hand();
+        final PlayerHand hand = packet.hand();
         final BlockFace blockFace = packet.blockFace();
         Point blockPosition = packet.blockPosition();
 
@@ -178,10 +178,10 @@ public class BlockPlacementListener {
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.consume(1);
-            playerInventory.setItemInHand(hand, newUsedItem);
+            player.setItemInHand(hand, newUsedItem);
         } else {
             // Prevent invisible item on client
-            playerInventory.update();   
+            player.getInventory().update();
         }
     }
 

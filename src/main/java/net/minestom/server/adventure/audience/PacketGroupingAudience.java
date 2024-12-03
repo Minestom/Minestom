@@ -10,6 +10,7 @@ import net.kyori.adventure.sound.SoundStop;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.title.TitlePart;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
@@ -19,7 +20,7 @@ import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.ActionBarPacket;
 import net.minestom.server.network.packet.server.play.ClearTitlesPacket;
 import net.minestom.server.network.packet.server.play.PlayerListHeaderAndFooterPacket;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -28,7 +29,6 @@ import java.util.Collection;
  * An audience implementation that sends grouped packets if possible.
  */
 public interface PacketGroupingAudience extends ForwardingAudience {
-
     /**
      * Creates a packet grouping audience that copies an iterable of players. The
      * underlying collection is not copied, so changes to the collection will be
@@ -54,7 +54,7 @@ public interface PacketGroupingAudience extends ForwardingAudience {
      * @param packet the packet to broadcast
      */
     default void sendGroupedPacket(@NotNull ServerPacket packet) {
-        PacketUtils.sendGroupedPacket(getPlayers(), packet);
+        PacketSendingUtils.sendGroupedPacket(getPlayers(), packet);
     }
 
     @Deprecated
@@ -127,6 +127,15 @@ public interface PacketGroupingAudience extends ForwardingAudience {
     @Override
     default void stopSound(@NotNull SoundStop stop) {
         sendGroupedPacket(AdventurePacketConvertor.createSoundStopPacket(stop));
+    }
+
+    /**
+     * Send a {@link Notification} to the audience.
+     * @param notification the {@link Notification} to send
+     */
+    default void sendNotification(@NotNull Notification notification) {
+        sendGroupedPacket(notification.buildAddPacket());
+        sendGroupedPacket(notification.buildRemovePacket());
     }
 
     @Override

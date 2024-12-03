@@ -20,7 +20,7 @@ public class UseEntityListener {
             return;
 
         if (ServerFlag.ENFORCE_INTERACTION_LIMIT) {
-            double range = Math.pow(player.getAttributeValue(Attribute.PLAYER_ENTITY_INTERACTION_RANGE) + 1, 2); // Add 1 additional block for people with less than stellar ping
+            double range = Math.pow(player.getAttributeValue(Attribute.ENTITY_INTERACTION_RANGE) + 1, 2); // Add 1 additional block for people with less than stellar ping
             if (player.getDistanceSquared(entity) > range) {
                 return;
             }

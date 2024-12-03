@@ -3,6 +3,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import com.google.gson.JsonParseException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -27,8 +28,8 @@ public class ArgumentComponent extends Argument<Component> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:component";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.COMPONENT;
     }
 
     @Override

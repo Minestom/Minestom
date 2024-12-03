@@ -26,19 +26,22 @@ public record ClientUpdateSignPacket(
         }
     }
 
-    public ClientUpdateSignPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BLOCK_POSITION), reader.read(BOOLEAN), readLines(reader));
-    }
+    public static final NetworkBuffer.Type<ClientUpdateSignPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, @NotNull ClientUpdateSignPacket value) {
+            buffer.write(BLOCK_POSITION, value.blockPosition);
+            buffer.write(BOOLEAN, value.isFrontText);
+            buffer.write(STRING, value.lines.get(0));
+            buffer.write(STRING, value.lines.get(1));
+            buffer.write(STRING, value.lines.get(2));
+            buffer.write(STRING, value.lines.get(3));
+        }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BLOCK_POSITION, blockPosition);
-        writer.write(BOOLEAN, isFrontText);
-        writer.write(STRING, lines.get(0));
-        writer.write(STRING, lines.get(1));
-        writer.write(STRING, lines.get(2));
-        writer.write(STRING, lines.get(3));
-    }
+        @Override
+        public @NotNull ClientUpdateSignPacket read(@NotNull NetworkBuffer buffer) {
+            return new ClientUpdateSignPacket(buffer.read(BLOCK_POSITION), buffer.read(BOOLEAN), readLines(buffer));
+        }
+    };
 
     private static List<String> readLines(@NotNull NetworkBuffer reader) {
         return List.of(reader.read(STRING), reader.read(STRING),

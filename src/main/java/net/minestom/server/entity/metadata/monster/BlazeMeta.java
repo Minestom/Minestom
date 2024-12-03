@@ -1,25 +1,21 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class BlazeMeta extends MonsterMeta {
-    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte ON_FIRE_BIT = 0x01;
-
     public BlazeMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isOnFire() {
-        return getMaskBit(OFFSET, ON_FIRE_BIT);
+        return metadata.get(MetadataDef.Blaze.IS_ON_FIRE);
     }
 
     public void setOnFire(boolean value) {
-        setMaskBit(OFFSET, ON_FIRE_BIT, value);
+        metadata.set(MetadataDef.Blaze.IS_ON_FIRE, value);
     }
 
 }

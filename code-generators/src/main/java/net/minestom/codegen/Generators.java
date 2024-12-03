@@ -4,6 +4,7 @@ import net.minestom.codegen.color.DyeColorGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
+import net.minestom.codegen.util.GenericEnumGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,9 +23,21 @@ public class Generators {
 
         // Special generators
         new DyeColorGenerator(resource("dye_colors.json"), outputFolder).generate();
-        new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
         new ParticleGenerator(resource("particles.json"), outputFolder).generate();
         new ConstantsGenerator(resource("constants.json"), outputFolder).generate();
+        new RecipeTypeGenerator(resource("recipe_types.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.recipe.display", "RecipeDisplayType",
+                resource("recipe_display_types.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.recipe.display", "SlotDisplayType",
+                resource("slot_display_types.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.recipe", "RecipeBookCategory",
+                resource("recipe_book_categories.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.item.component", "ConsumeEffectType",
+                resource("consume_effects.json"), outputFolder).packagePrivate().generate();
+        new GenericEnumGenerator("net.minestom.server.command", "ArgumentParserType",
+                resource("command_arguments.json"), outputFolder).generate();
+        new GenericEnumGenerator("net.minestom.server.entity", "VillagerType",
+                resource("villager_types.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
@@ -38,6 +51,8 @@ public class Generators {
         generator.generate(resource("custom_statistics.json"), "net.minestom.server.statistic", "StatisticType", "StatisticTypeImpl", "StatisticTypes");
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
+        generator.generate(resource("villager_professions.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
+
 
         // Dynamic registries
         generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
@@ -54,17 +69,7 @@ public class Generators {
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
-
-        // TODO: Generate villager professions
-//        new VillagerProfessionGenerator(
-//                new File(inputFolder, targetVersion + "_villager_professions.json"),
-//                outputFolder
-//        ).generate();
-        // TODO: Generate villager types
-//        new VillagerTypeGenerator(
-//                new File(inputFolder, targetVersion + "_villager_types.json"),
-//                outputFolder
-//        ).generate();
+        
         LOGGER.info("Finished generating code");
     }
 

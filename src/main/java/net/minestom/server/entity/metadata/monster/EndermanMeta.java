@@ -1,41 +1,38 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class EndermanMeta extends MonsterMeta {
-    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
     public EndermanMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Integer getCarriedBlockID() {
-        return super.metadata.getIndex(OFFSET, null);
+        return metadata.get(MetadataDef.Enderman.CARRIED_BLOCK);
     }
 
     public void setCarriedBlockID(@Nullable Integer value) {
-        super.metadata.setIndex(OFFSET, Metadata.OptBlockState(value));
+        metadata.set(MetadataDef.Enderman.CARRIED_BLOCK, value);
     }
 
     public boolean isScreaming() {
-        return super.metadata.getIndex(OFFSET + 1, false);
+        return metadata.get(MetadataDef.Enderman.IS_SCREAMING);
     }
 
     public void setScreaming(boolean value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Enderman.IS_SCREAMING, value);
     }
 
     public boolean isStaring() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+        return metadata.get(MetadataDef.Enderman.IS_STARING);
     }
 
     public void setStaring(boolean value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Enderman.IS_STARING, value);
     }
 
 }

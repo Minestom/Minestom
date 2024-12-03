@@ -13,7 +13,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.math.IntRange;
+import net.minestom.server.utils.Range;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +37,7 @@ public class EntityFinder {
     // Position
     private Point startPosition;
     private Float dx, dy, dz;
-    private IntRange distance;
+    private Range.Int distance;
 
     // By traits
     private Integer limit;
@@ -50,7 +50,7 @@ public class EntityFinder {
 
     // Players specific
     private final ToggleableMap<GameMode> gameModes = new ToggleableMap<>();
-    private IntRange level;
+    private Range.Int level;
 
     public EntityFinder setTargetSelector(@NotNull TargetSelector targetSelector) {
         this.targetSelector = targetSelector;
@@ -67,7 +67,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setDistance(@NotNull IntRange distance) {
+    public EntityFinder setDistance(@NotNull Range.Int distance) {
         this.distance = distance;
         return this;
     }
@@ -77,7 +77,7 @@ public class EntityFinder {
         return this;
     }
 
-    public EntityFinder setLevel(@NotNull IntRange level) {
+    public EntityFinder setLevel(@NotNull Range.Int level) {
         this.level = level;
         return this;
     }
@@ -148,8 +148,8 @@ public class EntityFinder {
 
         // Distance argument
         if (distance != null) {
-            final int minDistance = distance.getMinimum();
-            final int maxDistance = distance.getMaximum();
+            final int minDistance = distance.min();
+            final int maxDistance = distance.max();
             result = result.stream()
                     .filter(entity -> MathUtils.isBetween(entity.getPosition().distanceSquared(pos), minDistance * minDistance, maxDistance * maxDistance))
                     .toList();
@@ -195,8 +195,8 @@ public class EntityFinder {
 
         // Level
         if (level != null) {
-            final int minLevel = level.getMinimum();
-            final int maxLevel = level.getMaximum();
+            final int minLevel = level.min();
+            final int maxLevel = level.max();
             result = result.stream()
                     .filter(Player.class::isInstance)
                     .filter(entity -> MathUtils.isBetween(((Player) entity).getLevel(), minLevel, maxLevel))
