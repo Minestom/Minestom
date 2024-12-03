@@ -12,6 +12,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
+import java.nio.channels.AsynchronousCloseException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
@@ -72,6 +73,8 @@ public final class Server {
                     PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress());
                     Thread.startVirtualThread(() -> playerReadLoop(connection));
                     Thread.startVirtualThread(() -> playerWriteLoop(connection));
+                } catch (AsynchronousCloseException ignored) {
+                    // We are exiting, bye bye!
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

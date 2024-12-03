@@ -4,7 +4,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.ServerProcess;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
@@ -44,6 +43,8 @@ import java.util.function.Function;
  */
 public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
+    private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
+
     private CachedPacket defaultTags;
 
     private CachedPacket getDefaultTags(Registries registries) {
@@ -303,8 +304,13 @@ public final class ConnectionManager {
      * Shutdowns the connection manager by kicking all the currently connected players.
      */
     public synchronized void shutdown() {
+        for (final PlayerConnection configPlayer : connectionPlayerMap.keySet())
+            configPlayer.kick(SHUTDOWN_TEXT);
         this.configurationPlayers.clear();
+        for (final Player playPlayer : playPlayers)
+            playPlayer.kick(SHUTDOWN_TEXT);
         this.playPlayers.clear();
+        
         this.keepAlivePlayers.clear();
         this.connectionPlayerMap.clear();
     }
