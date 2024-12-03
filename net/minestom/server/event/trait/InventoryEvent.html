@@ -92,12 +92,12 @@ loadScripts(document, 'script');</script>
 </dl>
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="../inventory/InventoryClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryClickEvent</a></code>, <code><a href="../inventory/InventoryCloseEvent.html" title="class in net.minestom.server.event.inventory">InventoryCloseEvent</a></code>, <code><a href="../inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></code>, <code><a href="../inventory/InventoryOpenEvent.html" title="class in net.minestom.server.event.inventory">InventoryOpenEvent</a></code>, <code><a href="../inventory/InventoryPreClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryPreClickEvent</a></code>, <code><a href="../player/PlayerAnvilInputEvent.html" title="class in net.minestom.server.event.player">PlayerAnvilInputEvent</a></code>, <code><a href="../inventory/PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">PlayerInventoryItemChangeEvent</a></code></dd>
+<dd><code><a href="../inventory/InventoryClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryClickEvent</a></code>, <code><a href="../inventory/InventoryCloseEvent.html" title="class in net.minestom.server.event.inventory">InventoryCloseEvent</a></code>, <code><a href="../inventory/InventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">InventoryItemChangeEvent</a></code>, <code><a href="../inventory/InventoryOpenEvent.html" title="class in net.minestom.server.event.inventory">InventoryOpenEvent</a></code>, <code><a href="../inventory/InventoryPreClickEvent.html" title="class in net.minestom.server.event.inventory">InventoryPreClickEvent</a></code>, <code><a href="../player/PlayerAnvilInputEvent.html" title="class in net.minestom.server.event.player">PlayerAnvilInputEvent</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">InventoryEvent</span><span class="extends-implements">
 extends <a href="../Event.html" title="interface in net.minestom.server.event">Event</a></span></div>
-<div class="block">Represents any event inside an <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a>.</div>
+<div class="block">Represents any event inside an <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory"><code>AbstractInventory</code></a>.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -112,10 +112,10 @@ extends <a href="../Event.html" title="interface in net.minestom.server.event">E
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the inventory.</div>
+<div class="block">Gets the inventory that was clicked.</div>
 </div>
 </div>
 </div>
@@ -134,13 +134,9 @@ extends <a href="../Event.html" title="interface in net.minestom.server.event">E
 <li>
 <section class="detail" id="getInventory()">
 <h3>getInventory</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="return-type">@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
-<div class="block">Gets the inventory.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the inventory, null if this is a player's inventory</dd>
-</dl>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
+<div class="block">Gets the inventory that was clicked.</div>
 </section>
 </li>
 </ul>

@@ -83,7 +83,7 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.extras.query.event</a></div>
-<h1 title="Class QueryEvent" class="title">Class QueryEvent&lt;T extends <a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&gt;</h1>
+<h1 title="Class QueryEvent" class="title">Class QueryEvent&lt;T&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance">net.minestom.server.extras.query.event.QueryEvent&lt;T&gt;</div>
@@ -102,7 +102,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="BasicQueryEvent.html" title="class in net.minestom.server.extras.query.event">BasicQueryEvent</a></code>, <code><a href="FullQueryEvent.html" title="class in net.minestom.server.extras.query.event">FullQueryEvent</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">QueryEvent&lt;T extends <a href="../../../utils/binary/Writeable.html" title="interface in net.minestom.server.utils.binary">Writeable</a>&gt;</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">QueryEvent&lt;T&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../../../event/trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
 <div class="block">An event called when a query is received and ready to be responded to.</div>
@@ -186,7 +186,7 @@ implements <a href="../../../event/trait/CancellableEvent.html" title="interface
 <ul class="member-list">
 <li>
 <section class="detail" id="&lt;init&gt;(java.net.SocketAddress,int,T)">
-<h3 id="&lt;init&gt;(java.net.SocketAddress,int,net.minestom.server.utils.binary.Writeable)">QueryEvent</h3>
+<h3 id="&lt;init&gt;(java.net.SocketAddress,int,java.lang.Object)">QueryEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">QueryEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/SocketAddress.html" title="class or interface in java.net" class="external-link">SocketAddress</a>&nbsp;sender,
  int&nbsp;sessionID,
@@ -223,7 +223,7 @@ implements <a href="../../../event/trait/CancellableEvent.html" title="interface
 </li>
 <li>
 <section class="detail" id="setQueryResponse(T)">
-<h3 id="setQueryResponse(net.minestom.server.utils.binary.Writeable)">setQueryResponse</h3>
+<h3 id="setQueryResponse(java.lang.Object)">setQueryResponse</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setQueryResponse</span><wbr><span class="parameters">(@NotNull
  <a href="QueryEvent.html" title="type parameter in QueryEvent">T</a>&nbsp;response)</span></div>
 <div class="block">Sets the query response that will be sent back to the sender.</div>

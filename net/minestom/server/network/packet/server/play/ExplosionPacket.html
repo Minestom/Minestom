@@ -93,10 +93,10 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
+<dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ExplosionPacket</span>(double&nbsp;x, double&nbsp;y, double&nbsp;z, float&nbsp;radius, byte @NotNull []&nbsp;records, float&nbsp;playerMotionX, float&nbsp;playerMotionY, float&nbsp;playerMotionZ, @NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a>&nbsp;blockInteraction, int&nbsp;smallParticleId, byte @NotNull []&nbsp;smallParticleData, int&nbsp;largeParticleId, byte @NotNull []&nbsp;largeParticleData, @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ExplosionPacket</span>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;center, @Nullable <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;playerKnockback, @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle, @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -106,15 +106,6 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <li>
 <section class="nested-class-summary" id="nested-class-summary">
 <h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="ExplosionPacket.BlockInteraction.html" class="type-name-link" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
 <div class="inherited-list">
 <h2 id="nested-classes-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Nested classes/interfaces inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h2>
 <code><a href="../ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a>, <a href="../ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a>, <a href="../ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a>, <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a>, <a href="../ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></code></div>
@@ -129,8 +120,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
-<div class="col-second even-row-color"><code><a href="#DEFAULT_SOUND" class="member-name-link">DEFAULT_SOUND</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="ExplosionPacket.html" title="class in net.minestom.server.network.packet.server.play">ExplosionPacket</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#SERIALIZER" class="member-name-link">SERIALIZER</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -143,34 +134,13 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(double,double,double,float,byte%5B%5D,float,float,float)" class="member-name-link">ExplosionPacket</a><wbr>(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z,
- float&nbsp;radius,
- byte @NotNull []&nbsp;records,
- float&nbsp;playerMotionX,
- float&nbsp;playerMotionY,
- float&nbsp;playerMotionZ)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(double,double,double,float,byte%5B%5D,float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte%5B%5D,int,byte%5B%5D,net.minestom.server.sound.SoundEvent)" class="member-name-link">ExplosionPacket</a><wbr>(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z,
- float&nbsp;radius,
- byte @NotNull []&nbsp;records,
- float&nbsp;playerMotionX,
- float&nbsp;playerMotionY,
- float&nbsp;playerMotionZ,
- @NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a>&nbsp;blockInteraction,
- int&nbsp;smallParticleId,
- byte @NotNull []&nbsp;smallParticleData,
- int&nbsp;largeParticleId,
- byte @NotNull []&nbsp;largeParticleData,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.particle.Particle,net.minestom.server.sound.SoundEvent)" class="member-name-link">ExplosionPacket</a><wbr>(@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;center,
+ @Nullable <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;playerKnockback,
+ @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
  @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)</code></div>
-<div class="col-last odd-row-color">
+<div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ExplosionPacket</code> record class.</div>
 </div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ExplosionPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -185,10 +155,10 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blockInteraction()" class="member-name-link">blockInteraction</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#center()" class="member-name-link">center</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>blockInteraction</code> record component.</div>
+<div class="block">Returns the value of the <code>center</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
@@ -200,53 +170,15 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleData()" class="member-name-link">largeParticleData</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#particle()" class="member-name-link">particle</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>largeParticleData</code> record component.</div>
+<div class="block">Returns the value of the <code>particle</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#largeParticleId()" class="member-name-link">largeParticleId</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerKnockback()" class="member-name-link">playerKnockback</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>largeParticleId</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionX()" class="member-name-link">playerMotionX</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>playerMotionX</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionY()" class="member-name-link">playerMotionY</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>playerMotionY</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playerMotionZ()" class="member-name-link">playerMotionZ</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>playerMotionZ</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#radius()" class="member-name-link">radius</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>radius</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#records()" class="member-name-link">records</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>records</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleData()" class="member-name-link">smallParticleData</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>smallParticleData</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smallParticleId()" class="member-name-link">smallParticleId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>smallParticleId</code> record component.</div>
+<div class="block">Returns the value of the <code>playerKnockback</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sound()" class="member-name-link">sound</a>()</code></div>
@@ -258,33 +190,12 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#x()" class="member-name-link">x</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>x</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#y()" class="member-name-link">y</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>y</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#z()" class="member-name-link">z</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>z</code> record component.</div>
-</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Methods inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h3>
-<code><a href="../ServerPacket.html#getId(net.minestom.server.network.ConnectionState)">getId</a></code></div>
 </section>
 </li>
 </ul>
@@ -297,9 +208,9 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="DEFAULT_SOUND">
-<h3>DEFAULT_SOUND</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">DEFAULT_SOUND</span></div>
+<section class="detail" id="SERIALIZER">
+<h3>SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="ExplosionPacket.html" title="class in net.minestom.server.network.packet.server.play">ExplosionPacket</a>&gt;</span>&nbsp;<span class="element-name">SERIALIZER</span></div>
 </section>
 </li>
 </ul>
@@ -311,60 +222,22 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.particle.Particle,net.minestom.server.sound.SoundEvent)">
 <h3>ExplosionPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ExplosionPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(double,double,double,float,byte[],float,float,float)">
-<h3>ExplosionPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ExplosionPacket</span><wbr><span class="parameters">(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z,
- float&nbsp;radius,
- byte @NotNull []&nbsp;records,
- float&nbsp;playerMotionX,
- float&nbsp;playerMotionY,
- float&nbsp;playerMotionZ)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(double,double,double,float,byte[],float,float,float,net.minestom.server.network.packet.server.play.ExplosionPacket.BlockInteraction,int,byte[],int,byte[],net.minestom.server.sound.SoundEvent)">
-<h3>ExplosionPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ExplosionPacket</span><wbr><span class="parameters">(double&nbsp;x,
- double&nbsp;y,
- double&nbsp;z,
- float&nbsp;radius,
- byte @NotNull []&nbsp;records,
- float&nbsp;playerMotionX,
- float&nbsp;playerMotionY,
- float&nbsp;playerMotionZ,
+ @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;center,
+ @Nullable
+ @Nullable <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;playerKnockback,
  @NotNull
- @NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a>&nbsp;blockInteraction,
- int&nbsp;smallParticleId,
- byte @NotNull []&nbsp;smallParticleData,
- int&nbsp;largeParticleId,
- byte @NotNull []&nbsp;largeParticleData,
+ @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
  @NotNull
  @NotNull <a href="../../../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;sound)</span></div>
 <div class="block">Creates an instance of a <code>ExplosionPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>x</code> - the value for the <code>x</code> record component</dd>
-<dd><code>y</code> - the value for the <code>y</code> record component</dd>
-<dd><code>z</code> - the value for the <code>z</code> record component</dd>
-<dd><code>radius</code> - the value for the <code>radius</code> record component</dd>
-<dd><code>records</code> - the value for the <code>records</code> record component</dd>
-<dd><code>playerMotionX</code> - the value for the <code>playerMotionX</code> record component</dd>
-<dd><code>playerMotionY</code> - the value for the <code>playerMotionY</code> record component</dd>
-<dd><code>playerMotionZ</code> - the value for the <code>playerMotionZ</code> record component</dd>
-<dd><code>blockInteraction</code> - the value for the <code>blockInteraction</code> record component</dd>
-<dd><code>smallParticleId</code> - the value for the <code>smallParticleId</code> record component</dd>
-<dd><code>smallParticleData</code> - the value for the <code>smallParticleData</code> record component</dd>
-<dd><code>largeParticleId</code> - the value for the <code>largeParticleId</code> record component</dd>
-<dd><code>largeParticleData</code> - the value for the <code>largeParticleData</code> record component</dd>
+<dd><code>center</code> - the value for the <code>center</code> record component</dd>
+<dd><code>playerKnockback</code> - the value for the <code>playerKnockback</code> record component</dd>
+<dd><code>particle</code> - the value for the <code>particle</code> record component</dd>
 <dd><code>sound</code> - the value for the <code>sound</code> record component</dd>
 </dl>
 </section>
@@ -377,27 +250,6 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="playId()">
-<h3>playId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">playId</span>()</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../ServerPacket.Play.html#playId()">playId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
-</dl>
-</section>
-</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
@@ -428,7 +280,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -440,146 +292,38 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="x()">
-<h3>x</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">x</span>()</div>
-<div class="block">Returns the value of the <code>x</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>x</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="y()">
-<h3>y</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">y</span>()</div>
-<div class="block">Returns the value of the <code>y</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>y</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="z()">
-<h3>z</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">z</span>()</div>
-<div class="block">Returns the value of the <code>z</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>z</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="radius()">
-<h3>radius</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">radius</span>()</div>
-<div class="block">Returns the value of the <code>radius</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>radius</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="records()">
-<h3>records</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @NotNull []</span>&nbsp;<span class="element-name">records</span>()</div>
-<div class="block">Returns the value of the <code>records</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>records</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="playerMotionX()">
-<h3>playerMotionX</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">playerMotionX</span>()</div>
-<div class="block">Returns the value of the <code>playerMotionX</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>playerMotionX</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="playerMotionY()">
-<h3>playerMotionY</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">playerMotionY</span>()</div>
-<div class="block">Returns the value of the <code>playerMotionY</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>playerMotionY</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="playerMotionZ()">
-<h3>playerMotionZ</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">playerMotionZ</span>()</div>
-<div class="block">Returns the value of the <code>playerMotionZ</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>playerMotionZ</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="blockInteraction()">
-<h3>blockInteraction</h3>
+<section class="detail" id="center()">
+<h3>center</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="ExplosionPacket.BlockInteraction.html" title="enum class in net.minestom.server.network.packet.server.play">ExplosionPacket.BlockInteraction</a></span>&nbsp;<span class="element-name">blockInteraction</span>()</div>
-<div class="block">Returns the value of the <code>blockInteraction</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">center</span>()</div>
+<div class="block">Returns the value of the <code>center</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>blockInteraction</code> record component</dd>
+<dd>the value of the <code>center</code> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="smallParticleId()">
-<h3>smallParticleId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">smallParticleId</span>()</div>
-<div class="block">Returns the value of the <code>smallParticleId</code> record component.</div>
+<section class="detail" id="playerKnockback()">
+<h3>playerKnockback</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">playerKnockback</span>()</div>
+<div class="block">Returns the value of the <code>playerKnockback</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>smallParticleId</code> record component</dd>
+<dd>the value of the <code>playerKnockback</code> record component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="smallParticleData()">
-<h3>smallParticleData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @NotNull []</span>&nbsp;<span class="element-name">smallParticleData</span>()</div>
-<div class="block">Returns the value of the <code>smallParticleData</code> record component.</div>
+<section class="detail" id="particle()">
+<h3>particle</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></span>&nbsp;<span class="element-name">particle</span>()</div>
+<div class="block">Returns the value of the <code>particle</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>smallParticleData</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="largeParticleId()">
-<h3>largeParticleId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">largeParticleId</span>()</div>
-<div class="block">Returns the value of the <code>largeParticleId</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>largeParticleId</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="largeParticleData()">
-<h3>largeParticleData</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @NotNull []</span>&nbsp;<span class="element-name">largeParticleData</span>()</div>
-<div class="block">Returns the value of the <code>largeParticleData</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>largeParticleData</code> record component</dd>
+<dd>the value of the <code>particle</code> record component</dd>
 </dl>
 </section>
 </li>

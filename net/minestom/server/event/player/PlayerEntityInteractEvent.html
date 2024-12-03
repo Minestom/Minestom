@@ -109,9 +109,9 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand,net.minestom.server.coordinate.Point)" class="member-name-link">PlayerEntityInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.PlayerHand,net.minestom.server.coordinate.Point)" class="member-name-link">PlayerEntityInteractEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
- <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+ @NotNull <a href="../../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand,
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;interactPosition)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -128,7 +128,7 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getHand()" class="member-name-link">getHand</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets with which hand the player interacted with the entity.</div>
@@ -172,14 +172,14 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.Player.Hand,net.minestom.server.coordinate.Point)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,net.minestom.server.entity.Entity,net.minestom.server.entity.PlayerHand,net.minestom.server.coordinate.Point)">
 <h3>PlayerEntityInteractEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerEntityInteractEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
  @NotNull <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entityTarget,
  @NotNull
- <a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+ @NotNull <a href="../../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand,
  @NotNull
  @NotNull <a href="../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;interactPosition)</span></div>
 </section>
@@ -223,7 +223,7 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <section class="detail" id="getHand()">
 <h3>getHand</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a></span>&nbsp;<span class="element-name">getHand</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a></span>&nbsp;<span class="element-name">getHand</span>()</div>
 <div class="block">Gets with which hand the player interacted with the entity.</div>
 <dl class="notes">
 <dt>Returns:</dt>

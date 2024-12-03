@@ -91,7 +91,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identified.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identified</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
+<dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identified.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identified</a></code>, <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></code>, <code><a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></code>, <code><a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></code>, <code><a href="../tag/TagReadable.html" title="interface in net.minestom.server.tag">TagReadable</a></code>, <code><a href="../tag/TagWritable.html" title="interface in net.minestom.server.tag">TagWritable</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ConsoleSender</span>
@@ -130,35 +130,30 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Casts this object to a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getAllPermissions()" class="member-name-link">getAllPermissions</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns all permissions associated to this handler.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#identity()" class="member-name-link">identity</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isConsole()" class="member-name-link">isConsole</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#identity()" class="member-name-link">identity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isConsole()" class="member-name-link">isConsole</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the sender is a <a href="ConsoleSender.html" title="class in net.minestom.server.command"><code>ConsoleSender</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointers.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointers</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pointers()" class="member-name-link">pointers</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendMessage(java.lang.String)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointers.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointers</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#pointers()" class="member-name-link">pointers</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendMessage(java.lang.String)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a raw string message.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a>&nbsp;source,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" class="member-name-link">sendMessage</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/identity/Identity.html" title="class or interface in net.kyori.adventure.identity" class="external-link">Identity</a>&nbsp;source,
  @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;message,
  @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/audience/MessageType.html" title="class or interface in net.kyori.adventure.audience" class="external-link">MessageType</a>&nbsp;type)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../tag/TagHandler.html" title="interface in net.minestom.server.tag">TagHandler</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#tagHandler()" class="member-name-link">tagHandler</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -171,9 +166,6 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.command.CommandSender">Methods inherited from interface&nbsp;net.minestom.server.command.<a href="CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a></h3>
 <code><a href="CommandSender.html#asPlayer()">asPlayer</a>, <a href="CommandSender.html#isPlayer()">isPlayer</a>, <a href="CommandSender.html#sendMessage(java.lang.String%5B%5D)">sendMessage</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.permission.PermissionHandler">Methods inherited from interface&nbsp;net.minestom.server.permission.<a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></h3>
-<code><a href="../permission/PermissionHandler.html#addPermission(net.minestom.server.permission.Permission)">addPermission</a>, <a href="../permission/PermissionHandler.html#getPermission(java.lang.String)">getPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(java.lang.String)">hasPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(java.lang.String,net.minestom.server.permission.PermissionVerifier)">hasPermission</a>, <a href="../permission/PermissionHandler.html#hasPermission(net.minestom.server.permission.Permission)">hasPermission</a>, <a href="../permission/PermissionHandler.html#removePermission(java.lang.String)">removePermission</a>, <a href="../permission/PermissionHandler.html#removePermission(net.minestom.server.permission.Permission)">removePermission</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.kyori.adventure.pointer.Pointered">Methods inherited from interface&nbsp;net.kyori.adventure.pointer.<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html" title="class or interface in net.kyori.adventure.pointer" class="external-link">Pointered</a></h3>
 <code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html#get(net.kyori.adventure.pointer.Pointer)" title="class or interface in net.kyori.adventure.pointer" class="external-link">get</a>, <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html#getOrDefault(net.kyori.adventure.pointer.Pointer,T)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefault</a>, <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/pointer/Pointered.html#getOrDefaultFrom(net.kyori.adventure.pointer.Pointer,java.util.function.Supplier)" title="class or interface in net.kyori.adventure.pointer" class="external-link">getOrDefaultFrom</a></code></div>
@@ -232,22 +224,6 @@ implements <a href="CommandSender.html" title="interface in net.minestom.server.
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/audience/Audience.html#sendMessage(net.kyori.adventure.identity.Identity,net.kyori.adventure.text.Component,net.kyori.adventure.audience.MessageType)" title="class or interface in net.kyori.adventure.audience" class="external-link">sendMessage</a></code>&nbsp;in interface&nbsp;<code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/audience/Audience.html" title="class or interface in net.kyori.adventure.audience" class="external-link">Audience</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getAllPermissions()">
-<h3>getAllPermissions</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../permission/Permission.html" title="class in net.minestom.server.permission">Permission</a>&gt;</span>&nbsp;<span class="element-name">getAllPermissions</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../permission/PermissionHandler.html#getAllPermissions()">PermissionHandler</a></code></span></div>
-<div class="block">Returns all permissions associated to this handler.
- The returned collection should be modified only by subclasses.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../permission/PermissionHandler.html#getAllPermissions()">getAllPermissions</a></code>&nbsp;in interface&nbsp;<code><a href="../permission/PermissionHandler.html" title="interface in net.minestom.server.permission">PermissionHandler</a></code></dd>
-<dt>Returns:</dt>
-<dd>the permissions of this handler.</dd>
 </dl>
 </section>
 </li>

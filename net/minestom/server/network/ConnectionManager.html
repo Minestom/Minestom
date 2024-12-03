@@ -121,13 +121,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createPlayer(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)" class="member-name-link">createPlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Creates a player object and begins the transition from the login state to the config state.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createPlayer(net.minestom.server.network.player.PlayerConnection,net.minestom.server.network.player.GameProfile)" class="member-name-link">createPlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+ @NotNull <a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a>&nbsp;gameProfile)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doConfiguration(net.minestom.server.entity.Player,boolean)" class="member-name-link">doConfiguration</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  boolean&nbsp;isFirstConfig)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -168,26 +165,15 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> linked to a <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayerConnectionUuid(net.minestom.server.network.player.PlayerConnection,java.lang.String)" class="member-name-link">getPlayerConnectionUuid</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">removePlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Computes the UUID of the specified connection.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removePlayer(net.minestom.server.network.player.PlayerConnection)" class="member-name-link">removePlayer</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> from the players list.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)" class="member-name-link">setPlayerProvider</a><wbr>(@Nullable <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setUuidProvider(net.minestom.server.network.UuidProvider)" class="member-name-link">setUuidProvider</a><wbr>(@Nullable <a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setPlayerProvider(net.minestom.server.network.PlayerProvider)" class="member-name-link">setPlayerProvider</a><wbr>(@Nullable <a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a>&nbsp;playerProvider)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes how <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> are attributed to players.</div>
+<div class="block">Changes the <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> provider, to change which object to link to him.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
@@ -200,8 +186,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transitionConfigToPlay(net.minestom.server.entity.Player)" class="member-name-link">transitionConfigToPlay</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transitionLoginToConfig(net.minestom.server.entity.Player)" class="member-name-link">transitionLoginToConfig</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transitionLoginToConfig(net.minestom.server.network.player.PlayerConnection,net.minestom.server.network.player.GameProfile)" class="member-name-link">transitionLoginToConfig</a><wbr>(@NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+ @NotNull <a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a>&nbsp;gameProfile)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transitionPlayToConfig(net.minestom.server.entity.Player)" class="member-name-link">transitionPlayToConfig</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
@@ -334,50 +321,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setUuidProvider(net.minestom.server.network.UuidProvider)">
-<h3>setUuidProvider</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setUuidProvider</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a>&nbsp;uuidProvider)</span></div>
-<div class="block">Changes how <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> are attributed to players.
- <p>
- Shouldn't be override if already defined.
- <p>
- Be aware that it is possible for an UUID provider to be ignored, for example in the case of a proxy (eg: velocity).</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>uuidProvider</code> - the new player connection uuid provider,
-                     setting it to null would apply a random UUID for each player connection</dd>
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list-long">
-<li><a href="#getPlayerConnectionUuid(net.minestom.server.network.player.PlayerConnection,java.lang.String)"><code>getPlayerConnectionUuid(PlayerConnection, String)</code></a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getPlayerConnectionUuid(net.minestom.server.network.player.PlayerConnection,java.lang.String)">
-<h3>getPlayerConnectionUuid</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a></span>&nbsp;<span class="element-name">getPlayerConnectionUuid</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;playerConnection,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Computes the UUID of the specified connection.
- Used in <a href="packet/client/login/ClientLoginStartPacket.html" title="class in net.minestom.server.network.packet.client.login"><code>ClientLoginStartPacket</code></a> in order
- to give the player the right <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a>.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>playerConnection</code> - the player connection</dd>
-<dd><code>username</code> - the username given by the connection</dd>
-<dt>Returns:</dt>
-<dd>the uuid based on <code>playerConnection</code>
- return a random UUID if no UUID provider is defined see <a href="#setUuidProvider(net.minestom.server.network.UuidProvider)"><code>setUuidProvider(UuidProvider)</code></a></dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="setPlayerProvider(net.minestom.server.network.PlayerProvider)">
 <h3>setPlayerProvider</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setPlayerProvider</span><wbr><span class="parameters">(@Nullable
@@ -390,26 +333,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="createPlayer(net.minestom.server.network.player.PlayerConnection,java.util.UUID,java.lang.String)">
+<section class="detail" id="createPlayer(net.minestom.server.network.player.PlayerConnection,net.minestom.server.network.player.GameProfile)">
 <h3>createPlayer</h3>
 <div class="member-signature"><span class="annotations">@Internal
 @NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></span>&nbsp;<span class="element-name">createPlayer</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Creates a player object and begins the transition from the login state to the config state.</div>
+ @NotNull <a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a>&nbsp;gameProfile)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="transitionLoginToConfig(net.minestom.server.entity.Player)">
+<section class="detail" id="transitionLoginToConfig(net.minestom.server.network.player.PlayerConnection,net.minestom.server.network.player.GameProfile)">
 <h3>transitionLoginToConfig</h3>
-<div class="member-signature"><span class="annotations">@Internal
-@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">transitionLoginToConfig</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a></span>&nbsp;<span class="element-name">transitionLoginToConfig</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a>&nbsp;connection,
+ @NotNull
+ @NotNull <a href="player/GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a>&nbsp;gameProfile)</span></div>
 </section>
 </li>
 <li>
@@ -424,7 +364,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="doConfiguration(net.minestom.server.entity.Player,boolean)">
 <h3>doConfiguration</h3>
 <div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">doConfiguration</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">doConfiguration</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  boolean&nbsp;isFirstConfig)</span></div>
 <div class="block">Return value exposed for testing</div>

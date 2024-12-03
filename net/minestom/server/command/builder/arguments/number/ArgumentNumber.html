@@ -125,17 +125,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected <a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a></code></div>
 <div class="col-second even-row-color"><code><a href="#min" class="member-name-link">min</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#NOT_NUMBER_ERROR" class="member-name-link">NOT_NUMBER_ERROR</a></code></div>
+<div class="col-first odd-row-color"><code>protected final <a href="../../../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#networkType" class="member-name-link">networkType</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#parser" class="member-name-link">parser</a></code></div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#NOT_NUMBER_ERROR" class="member-name-link">NOT_NUMBER_ERROR</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#parserName" class="member-name-link">parserName</a></code></div>
+<div class="col-first odd-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#parser" class="member-name-link">parser</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a><wbr>&lt;<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>,<wbr><a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#propertiesWriter" class="member-name-link">propertiesWriter</a></code></div>
+<div class="col-first even-row-color"><code>protected final <a href="../../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></code></div>
+<div class="col-second even-row-color"><code><a href="#parserName" class="member-name-link">parserName</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiFunction.html" title="class or interface in java.util.function" class="external-link">BiFunction</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a>&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#radixParser" class="member-name-link">radixParser</a></code></div>
@@ -149,7 +149,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.command.builder.arguments.Argument">Fields inherited from class&nbsp;net.minestom.server.command.builder.arguments.<a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a></h3>
-<code><a href="../Argument.html#allowSpace">allowSpace</a>, <a href="../Argument.html#CONTAINER">CONTAINER</a>, <a href="../Argument.html#suggestionType">suggestionType</a>, <a href="../Argument.html#useRemaining">useRemaining</a></code></div>
+<code><a href="../Argument.html#allowSpace">allowSpace</a>, <a href="../Argument.html#suggestionType">suggestionType</a>, <a href="../Argument.html#useRemaining">useRemaining</a></code></div>
 </section>
 </li>
 <!-- ========== METHOD SUMMARY =========== -->
@@ -211,7 +211,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Parses the given input, and throw an <a href="../../exception/ArgumentSyntaxException.html" title="class in net.minestom.server.command.builder.exception"><code>ArgumentSyntaxException</code></a>
  if the input cannot be converted to <code>T</code></div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#parser()" class="member-name-link">parser</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
@@ -309,7 +309,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parserName">
 <h3>parserName</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parserName</span></div>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></span>&nbsp;<span class="element-name">parserName</span></div>
 </section>
 </li>
 <li>
@@ -325,9 +325,9 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="propertiesWriter">
-<h3>propertiesWriter</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;<a href="../../../../utils/binary/BinaryWriter.html" title="class in net.minestom.server.utils.binary">BinaryWriter</a>,<wbr><a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a> extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="element-name">propertiesWriter</span></div>
+<section class="detail" id="networkType">
+<h3>networkType</h3>
+<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="../../../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a> extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</span>&nbsp;<span class="element-name">networkType</span></div>
 </section>
 </li>
 <li>
@@ -371,7 +371,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parser()">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parser</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></span>&nbsp;<span class="element-name">parser</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Argument.html#parser()">parser</a></code>&nbsp;in class&nbsp;<code><a href="../Argument.html" title="class in net.minestom.server.command.builder.arguments">Argument</a>&lt;<a href="ArgumentNumber.html" title="type parameter in ArgumentNumber">T</a> extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Number.html" title="class or interface in java.lang" class="external-link">Number</a>&gt;</code></dd>

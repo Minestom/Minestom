@@ -180,10 +180,10 @@ extends <a href="registry/Registries.html" title="interface in net.minestom.serv
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handles incoming packets.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="network/PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#packetProcessor()" class="member-name-link">packetProcessor</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="network/packet/PacketParser.html" title="interface in net.minestom.server.network.packet">PacketParser</a><wbr>&lt;<a href="network/packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#packetParser()" class="member-name-link">packetParser</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the object handling the client packets processing.</div>
+<div class="block">Gets the object handling the client packets parsing.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="recipe/RecipeManager.html" title="class in net.minestom.server.recipe">RecipeManager</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#recipe()" class="member-name-link">recipe</a>()</code></div>
@@ -356,11 +356,11 @@ extends <a href="registry/Registries.html" title="interface in net.minestom.serv
 </section>
 </li>
 <li>
-<section class="detail" id="packetProcessor()">
-<h3>packetProcessor</h3>
+<section class="detail" id="packetParser()">
+<h3>packetParser</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="network/PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a></span>&nbsp;<span class="element-name">packetProcessor</span>()</div>
-<div class="block">Gets the object handling the client packets processing.
+</span><span class="return-type">@NotNull <a href="network/packet/PacketParser.html" title="interface in net.minestom.server.network.packet">PacketParser</a>&lt;<a href="network/packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;</span>&nbsp;<span class="element-name">packetParser</span>()</div>
+<div class="block">Gets the object handling the client packets parsing.
  <p>
  Can be used if you want to convert a buffer to a client packet object.</div>
 </section>

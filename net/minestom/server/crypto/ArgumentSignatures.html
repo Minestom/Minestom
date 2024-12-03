@@ -91,14 +91,9 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ArgumentSignatures</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull <a href="ArgumentSignatures.Entry.html" title="class in net.minestom.server.crypto">ArgumentSignatures.Entry</a>&gt;&nbsp;entries)
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
-implements <a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -129,6 +124,9 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-first even-row-color"><code>static final int</code></div>
 <div class="col-second even-row-color"><code><a href="#MAX_ENTRIES" class="member-name-link">MAX_ENTRIES</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#SERIALIZER" class="member-name-link">SERIALIZER</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -144,8 +142,6 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ArgumentSignatures</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ArgumentSignatures</a><wbr>(@NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -180,9 +176,6 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -214,6 +207,12 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 </dl>
 </section>
 </li>
+<li>
+<section class="detail" id="SERIALIZER">
+<h3>SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="ArgumentSignatures.html" title="class in net.minestom.server.crypto">ArgumentSignatures</a>&gt;</span>&nbsp;<span class="element-name">SERIALIZER</span></div>
+</section>
+</li>
 </ul>
 </section>
 </li>
@@ -234,13 +233,6 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 </dl>
 </section>
 </li>
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
-<h3>ArgumentSignatures</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ArgumentSignatures</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
-</section>
-</li>
 </ul>
 </section>
 </li>
@@ -249,17 +241,6 @@ implements <a href="../network/NetworkBuffer.Writer.html" title="interface in ne
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../network/NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../network/NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
-</section>
-</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>

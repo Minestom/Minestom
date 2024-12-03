@@ -120,15 +120,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>protected final boolean</code></div>
 <div class="col-second even-row-color"><code><a href="#allowSpace" class="member-name-link">allowSpace</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="../../../registry/Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a><wbr>&lt;net.minestom.server.command.builder.arguments.Argument.ArgumentImpl&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#CONTAINER" class="member-name-link">CONTAINER</a></code></div>
+<div class="col-first odd-row-color"><code>protected <a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#suggestionType" class="member-name-link">suggestionType</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="minecraft/SuggestionType.html" title="enum class in net.minestom.server.command.builder.arguments.minecraft">SuggestionType</a></code></div>
-<div class="col-second even-row-color"><code><a href="#suggestionType" class="member-name-link">suggestionType</a></code></div>
+<div class="col-first even-row-color"><code>protected final boolean</code></div>
+<div class="col-second even-row-color"><code><a href="#useRemaining" class="member-name-link">useRemaining</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final boolean</code></div>
-<div class="col-second odd-row-color"><code><a href="#useRemaining" class="member-name-link">useRemaining</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -243,7 +240,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Parses an argument, using <a href="#getId()"><code>getId()</code></a> as the input</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#parser()" class="member-name-link">parser</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
@@ -294,13 +291,6 @@ loadScripts(document, 'script');</script>
 <section class="field-details" id="field-detail">
 <h2>Field Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="CONTAINER">
-<h3>CONTAINER</h3>
-<div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../registry/Registry.Container.html" title="class in net.minestom.server.registry">Registry.Container</a>&lt;net.minestom.server.command.builder.arguments.Argument.ArgumentImpl&gt;</span>&nbsp;<span class="element-name">CONTAINER</span></div>
-</section>
-</li>
 <li>
 <section class="detail" id="allowSpace">
 <h3>allowSpace</h3>
@@ -423,7 +413,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="parser()">
 <h3>parser</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">parser</span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="../../ArgumentParserType.html" title="enum class in net.minestom.server.command">ArgumentParserType</a></span>&nbsp;<span class="element-name">parser</span>()</div>
 </section>
 </li>
 <li>

@@ -5,7 +5,7 @@
 <title>NetworkBuffer (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.network, class: NetworkBuffer">
+<meta name="description" content="declaration: package: net.minestom.server.network, interface: NetworkBuffer">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -40,7 +40,7 @@ loadScripts(document, 'script');</script>
 <ul>
 <li><a href="#nested-class-summary">Nested</a></li>
 <li><a href="#field-summary">Field</a></li>
-<li><a href="#constructor-summary">Constr</a></li>
+<li>Constr</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 </li>
@@ -48,7 +48,7 @@ loadScripts(document, 'script');</script>
 <p>Detail:</p>
 <ul>
 <li><a href="#field-detail">Field</a></li>
-<li><a href="#constructor-detail">Constr</a></li>
+<li>Constr</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </li>
@@ -60,13 +60,13 @@ loadScripts(document, 'script');</script>
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
 <li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
@@ -83,15 +83,11 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.network</a></div>
-<h1 title="Class NetworkBuffer" class="title">Class NetworkBuffer</h1>
-</div>
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">net.minestom.server.network.NetworkBuffer</div>
+<h1 title="Interface NetworkBuffer" class="title">Interface NetworkBuffer</h1>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">NetworkBuffer</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">NetworkBuffer</span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -102,16 +98,16 @@ loadScripts(document, 'script');</script>
 <div class="caption"><span>Nested Classes</span></div>
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
+<div class="table-header col-second">Interface</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="NetworkBuffer.Reader.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Reader</a>&lt;<a href="NetworkBuffer.Reader.html" title="type parameter in NetworkBuffer.Reader">T</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="NetworkBuffer.AutoResize.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.AutoResize</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="NetworkBuffer.Type.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="NetworkBuffer.Builder.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Builder</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="NetworkBuffer.Writer.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></div>
+<div class="col-second even-row-color"><code><a href="NetworkBuffer.Type.html" class="type-name-link" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="NetworkBuffer.Type.html" title="type parameter in NetworkBuffer.Type">T</a>&gt;</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -125,29 +121,35 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#BLOCK_POSITION" class="member-name-link">BLOCK_POSITION</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#BITSET" class="member-name-link">BITSET</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#BOOLEAN" class="member-name-link">BOOLEAN</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#BLOCK_POSITION" class="member-name-link">BLOCK_POSITION</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#BYTE" class="member-name-link">BYTE</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#BOOLEAN" class="member-name-link">BOOLEAN</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;byte[]&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#BYTE_ARRAY" class="member-name-link">BYTE_ARRAY</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#BYTE" class="member-name-link">BYTE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#COMPONENT" class="member-name-link">COMPONENT</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;byte[]&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#BYTE_ARRAY" class="member-name-link">BYTE_ARRAY</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#DIRECTION" class="member-name-link">DIRECTION</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#COMPONENT" class="member-name-link">COMPONENT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#DOUBLE" class="member-name-link">DOUBLE</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#DIRECTION" class="member-name-link">DIRECTION</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#FLOAT" class="member-name-link">FLOAT</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#DOUBLE" class="member-name-link">DOUBLE</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#FLOAT" class="member-name-link">FLOAT</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#INSTANT_MS" class="member-name-link">INSTANT_MS</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#INT" class="member-name-link">INT</a></code></div>
@@ -164,17 +166,29 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;net.kyori.adventure.nbt.BinaryTag&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#NBT" class="member-name-link">NBT</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#OPT_BLOCK_POSITION" class="member-name-link">OPT_BLOCK_POSITION</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#NBT_COMPOUND" class="member-name-link">NBT_COMPOUND</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#OPT_CHAT" class="member-name-link">OPT_CHAT</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#OPT_BLOCK_POSITION" class="member-name-link">OPT_BLOCK_POSITION</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#OPT_UUID" class="member-name-link">OPT_UUID</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#OPT_CHAT" class="member-name-link">OPT_CHAT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../entity/Entity.Pose.html" title="enum class in net.minestom.server.entity">Entity.Pose</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#POSE" class="member-name-link">POSE</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#OPT_UUID" class="member-name-link">OPT_UUID</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#OPTIONAL_VAR_INT" class="member-name-link">OPTIONAL_VAR_INT</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#POS" class="member-name-link">POS</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../entity/EntityPose.html" title="enum class in net.minestom.server.entity">EntityPose</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#POSE" class="member-name-link">POSE</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/security/PublicKey.html" title="class or interface in java.security" class="external-link">PublicKey</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#PUBLIC_KEY" class="member-name-link">PUBLIC_KEY</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;float[]&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#QUATERNION" class="member-name-link">QUATERNION</a></code></div>
@@ -188,17 +202,23 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#STRING" class="member-name-link">STRING</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#UNIT" class="member-name-link">UNIT</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#STRING_TERMINATED" class="member-name-link">STRING_TERMINATED</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#UNSIGNED_SHORT" class="member-name-link">UNSIGNED_SHORT</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#UNIT" class="member-name-link">UNIT</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#UUID" class="member-name-link">UUID</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#UNSIGNED_SHORT" class="member-name-link">UNSIGNED_SHORT</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#UUID" class="member-name-link">UUID</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#VAR_INT" class="member-name-link">VAR_INT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#VAR_INT" class="member-name-link">VAR_INT</a></code></div>
+<div class="col-second even-row-color"><code><a href="#VAR_INT_3" class="member-name-link">VAR_INT_3</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;int[]&gt;</code></div>
 <div class="col-second odd-row-color"><code><a href="#VAR_INT_ARRAY" class="member-name-link">VAR_INT_ARRAY</a></code></div>
@@ -213,30 +233,13 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color"><code><a href="#VECTOR3" class="member-name-link">VECTOR3</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#VECTOR3D" class="member-name-link">VECTOR3D</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#VECTOR3B" class="member-name-link">VECTOR3B</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;int[]&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#VILLAGER_DATA" class="member-name-link">VILLAGER_DATA</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#VECTOR3D" class="member-name-link">VECTOR3D</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<li>
-<section class="constructor-summary" id="constructor-summary">
-<h2>Constructor Summary</h2>
-<div class="caption"><span>Constructors</span></div>
-<div class="summary-table two-column-summary">
-<div class="table-header col-first">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">NetworkBuffer</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(int)" class="member-name-link">NetworkBuffer</a><wbr>(int&nbsp;initialCapacity)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.nio.ByteBuffer)" class="member-name-link">NetworkBuffer</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.nio.ByteBuffer,boolean)" class="member-name-link">NetworkBuffer</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
- boolean&nbsp;resizable)</code></div>
+<div class="col-first odd-row-color"><code>static final <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;int[]&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#VILLAGER_DATA" class="member-name-link">VILLAGER_DATA</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
@@ -246,145 +249,202 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#copyTo(int,byte%5B%5D,int,int)" class="member-name-link">copyTo</a><wbr>(int&nbsp;srcOffset,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#advanceRead(long)" class="member-name-link">advanceRead</a><wbr>(long&nbsp;length)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#advanceWrite(long)" class="member-name-link">advanceWrite</a><wbr>(long&nbsp;length)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.Builder.html" title="interface in net.minestom.server.network">NetworkBuffer.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder(long)" class="member-name-link">builder</a><wbr>(long&nbsp;size)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#capacity()" class="member-name-link">capacity</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#cipher(javax.crypto.Cipher,long,long)" class="member-name-link">cipher</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/javax/crypto/Cipher.html" title="class or interface in javax.crypto" class="external-link">Cipher</a>&nbsp;cipher,
+ long&nbsp;start,
+ long&nbsp;length)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#clear()" class="member-name-link">clear</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#compact()" class="member-name-link">compact</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#compress(long,long,net.minestom.server.network.NetworkBuffer)" class="member-name-link">compress</a><wbr>(long&nbsp;start,
+ long&nbsp;length,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;output)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#copy(long,long)" class="member-name-link">copy</a><wbr>(long&nbsp;index,
+ long&nbsp;length)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copy(long,long,long,long)" class="member-name-link">copy</a><wbr>(long&nbsp;index,
+ long&nbsp;length,
+ long&nbsp;readIndex,
+ long&nbsp;writeIndex)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#copy(net.minestom.server.network.NetworkBuffer,long,net.minestom.server.network.NetworkBuffer,long,long)" class="member-name-link">copy</a><wbr>(<a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;srcBuffer,
+ long&nbsp;srcOffset,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;dstBuffer,
+ long&nbsp;dstOffset,
+ long&nbsp;length)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copyTo(long,byte%5B%5D,long,long)" class="member-name-link">copyTo</a><wbr>(long&nbsp;srcOffset,
  byte @NotNull []&nbsp;dest,
- int&nbsp;destOffset,
- int&nbsp;length)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;E&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Enum(java.lang.Class)" class="member-name-link">Enum</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte @NotNull []</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#extractBytes(java.util.function.Consumer)" class="member-name-link">extractBytes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;extractor)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Lazy(java.util.function.Supplier)" class="member-name-link">Lazy</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&gt;&nbsp;supplier)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#makeArray(java.util.function.Consumer)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T&gt;&nbsp;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;@Nullable T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#Optional(net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">Optional</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">read</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readableBytes()" class="member-name-link">readableBytes</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readBytes(int)" class="member-name-link">readBytes</a><wbr>(int&nbsp;length)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(java.util.function.Function,int)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function,
- int&nbsp;maxSize)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull T&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readCollection(net.minestom.server.network.NetworkBuffer.Type,int)" class="member-name-link">readCollection</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- int&nbsp;maxSize)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;<br>E</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readEnum(java.lang.Class)" class="member-name-link">readEnum</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;@NotNull E&gt;&nbsp;enumClass)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;<br>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a><wbr>&lt;E&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readEnumSet(java.lang.Class)" class="member-name-link">readEnumSet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumType)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readFixedBitSet(int)" class="member-name-link">readFixedBitSet</a><wbr>(int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readIndex()" class="member-name-link">readIndex</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readIndex(int)" class="member-name-link">readIndex</a><wbr>(int&nbsp;readIndex)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;K,<wbr>
-V&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readMap(net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.network.NetworkBuffer.Type,int)" class="member-name-link">readMap</a><wbr>(<a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;K&gt;&nbsp;keyType,
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;V&gt;&nbsp;valueType,
- int&nbsp;maxSize)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readOptional(java.util.function.Function)" class="member-name-link">readOptional</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readOptional(net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">readOptional</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#RegistryKey(java.util.function.Function)" class="member-name-link">RegistryKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skipWrite(int)" class="member-name-link">skipWrite</a><wbr>(int&nbsp;length)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer.Type,T)" class="member-name-link">write</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ long&nbsp;destOffset,
+ long&nbsp;length)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#decompress(long,long,net.minestom.server.network.NetworkBuffer)" class="member-name-link">decompress</a><wbr>(long&nbsp;start,
+ long&nbsp;length,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;output)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#ensureWritable(long)" class="member-name-link">ensureWritable</a><wbr>(long&nbsp;length)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;E&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#Enum(java.lang.Class)" class="member-name-link">Enum</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;E&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#EnumSet(java.lang.Class)" class="member-name-link">EnumSet</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#equals(net.minestom.server.network.NetworkBuffer,net.minestom.server.network.NetworkBuffer)" class="member-name-link">equals</a><wbr>(<a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer1,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer2)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>byte @NotNull []</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#extractBytes(java.util.function.Consumer)" class="member-name-link">extractBytes</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;extractor)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#FixedBitSet(int)" class="member-name-link">FixedBitSet</a><wbr>(int&nbsp;length)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;byte[]&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#FixedRawBytes(int)" class="member-name-link">FixedRawBytes</a><wbr>(int&nbsp;length)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#index(long,long)" class="member-name-link">index</a><wbr>(long&nbsp;readIndex,
+ long&nbsp;writeIndex)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#isReadOnly()" class="member-name-link">isReadOnly</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;T&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#Lazy(java.util.function.Supplier)" class="member-name-link">Lazy</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&gt;&nbsp;supplier)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static byte[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#makeArray(java.util.function.Consumer)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static byte[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#makeArray(java.util.function.Consumer,net.minestom.server.registry.Registries)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing,
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;byte[]</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#makeArray(net.minestom.server.network.NetworkBuffer.Type,T)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
  T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer.Writer)" class="member-name-link">write</a><wbr>(@NotNull <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T extends <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&gt;<br>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeCollection(java.util.Collection)" class="member-name-link">writeCollection</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeCollection(java.util.Collection,java.util.function.BiConsumer)" class="member-name-link">writeCollection</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;consumer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeCollection(net.minestom.server.network.NetworkBuffer.Type,java.util.Collection)" class="member-name-link">writeCollection</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final &lt;T&gt;&nbsp;void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeCollection(net.minestom.server.network.NetworkBuffer.Type,T...)" class="member-name-link">writeCollection</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- T @Nullable ...&nbsp;values)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;<br>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeEnum(java.lang.Class,E)" class="member-name-link">writeEnum</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass,
- E&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;<br>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeEnumSet(java.util.EnumSet,java.lang.Class)" class="member-name-link">writeEnumSet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;E&gt;&nbsp;enumSet,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumType)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeFixedBitSet(java.util.BitSet,int)" class="member-name-link">writeFixedBitSet</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&nbsp;set,
- int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeIndex()" class="member-name-link">writeIndex</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeIndex(int)" class="member-name-link">writeIndex</a><wbr>(int&nbsp;writeIndex)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;K,<wbr>
-V&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;K,<wbr>V&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeMap(net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.network.NetworkBuffer.Type,java.util.Map)" class="member-name-link">writeMap</a><wbr>(<a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;K&gt;&nbsp;keyType,
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;V&gt;&nbsp;valueType,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;map)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeOptional(net.minestom.server.network.NetworkBuffer.Type,T)" class="member-name-link">writeOptional</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- T&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#writeOptional(net.minestom.server.network.NetworkBuffer.Writer)" class="member-name-link">writeOptional</a><wbr>(@Nullable <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;byte[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#makeArray(net.minestom.server.network.NetworkBuffer.Type,T,net.minestom.server.registry.Registries)" class="member-name-link">makeArray</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ T&nbsp;value,
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#read(net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">read</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readableBytes()" class="member-name-link">readableBytes</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;@UnknownNullability T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readAt(long,net.minestom.server.network.NetworkBuffer.Type)" class="member-name-link">readAt</a><wbr>(long&nbsp;index,
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readChannel(java.nio.channels.ReadableByteChannel)" class="member-name-link">readChannel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>&nbsp;channel)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readIndex()" class="member-name-link">readIndex</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readIndex(long)" class="member-name-link">readIndex</a><wbr>(long&nbsp;readIndex)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#readOnly()" class="member-name-link">readOnly</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registries()" class="member-name-link">registries</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;T&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#RegistryKey(java.util.function.Function)" class="member-name-link">RegistryKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#resizableBuffer()" class="member-name-link">resizableBuffer</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#resizableBuffer(int)" class="member-name-link">resizableBuffer</a><wbr>(int&nbsp;initialSize)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#resizableBuffer(long,net.minestom.server.registry.Registries)" class="member-name-link">resizableBuffer</a><wbr>(long&nbsp;initialSize,
+ <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#resizableBuffer(net.minestom.server.registry.Registries)" class="member-name-link">resizableBuffer</a><wbr>(<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#resize(long)" class="member-name-link">resize</a><wbr>(long&nbsp;newSize)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#staticBuffer(long)" class="member-name-link">staticBuffer</a><wbr>(long&nbsp;size)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#staticBuffer(long,net.minestom.server.registry.Registries)" class="member-name-link">staticBuffer</a><wbr>(long&nbsp;size,
+ <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#wrap(byte%5B%5D,int,int)" class="member-name-link">wrap</a><wbr>(byte @NotNull []&nbsp;bytes,
+ int&nbsp;readIndex,
+ int&nbsp;writeIndex)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#wrap(byte%5B%5D,int,int,net.minestom.server.registry.Registries)" class="member-name-link">wrap</a><wbr>(byte @NotNull []&nbsp;bytes,
+ int&nbsp;readIndex,
+ int&nbsp;writeIndex,
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writableBytes()" class="member-name-link">writableBytes</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#write(net.minestom.server.network.NetworkBuffer.Type,T)" class="member-name-link">write</a><wbr>(@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ @UnknownNullability T&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeAt(long,net.minestom.server.network.NetworkBuffer.Type,T)" class="member-name-link">writeAt</a><wbr>(long&nbsp;index,
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ @UnknownNullability T&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeChannel(java.nio.channels.SocketChannel)" class="member-name-link">writeChannel</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/SocketChannel.html" title="class or interface in java.nio.channels" class="external-link">SocketChannel</a>&nbsp;channel)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeIndex()" class="member-name-link">writeIndex</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#writeIndex(long)" class="member-name-link">writeIndex</a><wbr>(long&nbsp;writeIndex)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -399,222 +459,241 @@ V&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <li>
 <section class="detail" id="UNIT">
 <h3>UNIT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;</span>&nbsp;<span class="element-name">UNIT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../utils/Unit.html" title="class in net.minestom.server.utils">Unit</a>&gt;</span>&nbsp;<span class="element-name">UNIT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="BOOLEAN">
 <h3>BOOLEAN</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name">BOOLEAN</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Boolean.html" title="class or interface in java.lang" class="external-link">Boolean</a>&gt;</span>&nbsp;<span class="element-name">BOOLEAN</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="BYTE">
 <h3>BYTE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>&gt;</span>&nbsp;<span class="element-name">BYTE</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Byte.html" title="class or interface in java.lang" class="external-link">Byte</a>&gt;</span>&nbsp;<span class="element-name">BYTE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="SHORT">
 <h3>SHORT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>&gt;</span>&nbsp;<span class="element-name">SHORT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Short.html" title="class or interface in java.lang" class="external-link">Short</a>&gt;</span>&nbsp;<span class="element-name">SHORT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="UNSIGNED_SHORT">
 <h3>UNSIGNED_SHORT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">UNSIGNED_SHORT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">UNSIGNED_SHORT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="INT">
 <h3>INT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">INT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">INT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="LONG">
 <h3>LONG</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">LONG</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">LONG</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="FLOAT">
 <h3>FLOAT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&gt;</span>&nbsp;<span class="element-name">FLOAT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&gt;</span>&nbsp;<span class="element-name">FLOAT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DOUBLE">
 <h3>DOUBLE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="element-name">DOUBLE</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Double.html" title="class or interface in java.lang" class="external-link">Double</a>&gt;</span>&nbsp;<span class="element-name">DOUBLE</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VAR_INT">
 <h3>VAR_INT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">VAR_INT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">VAR_INT</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="OPTIONAL_VAR_INT">
+<h3>OPTIONAL_VAR_INT</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">OPTIONAL_VAR_INT</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="VAR_INT_3">
+<h3>VAR_INT_3</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&gt;</span>&nbsp;<span class="element-name">VAR_INT_3</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VAR_LONG">
 <h3>VAR_LONG</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">VAR_LONG</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">VAR_LONG</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="RAW_BYTES">
 <h3>RAW_BYTES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;byte[]&gt;</span>&nbsp;<span class="element-name">RAW_BYTES</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;byte[]&gt;</span>&nbsp;<span class="element-name">RAW_BYTES</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="STRING">
 <h3>STRING</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">STRING</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">STRING</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="STRING_TERMINATED">
+<h3>STRING_TERMINATED</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">STRING_TERMINATED</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="NBT">
 <h3>NBT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;net.kyori.adventure.nbt.BinaryTag&gt;</span>&nbsp;<span class="element-name">NBT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;net.kyori.adventure.nbt.BinaryTag&gt;</span>&nbsp;<span class="element-name">NBT</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="NBT_COMPOUND">
+<h3>NBT_COMPOUND</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;net.kyori.adventure.nbt.CompoundBinaryTag&gt;</span>&nbsp;<span class="element-name">NBT_COMPOUND</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="BLOCK_POSITION">
 <h3>BLOCK_POSITION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">BLOCK_POSITION</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">BLOCK_POSITION</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="COMPONENT">
 <h3>COMPONENT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">COMPONENT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">COMPONENT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="JSON_COMPONENT">
 <h3>JSON_COMPONENT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">JSON_COMPONENT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">JSON_COMPONENT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="UUID">
 <h3>UUID</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</span>&nbsp;<span class="element-name">UUID</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</span>&nbsp;<span class="element-name">UUID</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="POS">
+<h3>POS</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&gt;</span>&nbsp;<span class="element-name">POS</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="BYTE_ARRAY">
 <h3>BYTE_ARRAY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;byte[]&gt;</span>&nbsp;<span class="element-name">BYTE_ARRAY</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;byte[]&gt;</span>&nbsp;<span class="element-name">BYTE_ARRAY</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="LONG_ARRAY">
 <h3>LONG_ARRAY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;long[]&gt;</span>&nbsp;<span class="element-name">LONG_ARRAY</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;long[]&gt;</span>&nbsp;<span class="element-name">LONG_ARRAY</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VAR_INT_ARRAY">
 <h3>VAR_INT_ARRAY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;int[]&gt;</span>&nbsp;<span class="element-name">VAR_INT_ARRAY</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;int[]&gt;</span>&nbsp;<span class="element-name">VAR_INT_ARRAY</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VAR_LONG_ARRAY">
 <h3>VAR_LONG_ARRAY</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;long[]&gt;</span>&nbsp;<span class="element-name">VAR_LONG_ARRAY</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;long[]&gt;</span>&nbsp;<span class="element-name">VAR_LONG_ARRAY</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="BITSET">
+<h3>BITSET</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&gt;</span>&nbsp;<span class="element-name">BITSET</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="INSTANT_MS">
+<h3>INSTANT_MS</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&gt;</span>&nbsp;<span class="element-name">INSTANT_MS</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="PUBLIC_KEY">
+<h3>PUBLIC_KEY</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/security/PublicKey.html" title="class or interface in java.security" class="external-link">PublicKey</a>&gt;</span>&nbsp;<span class="element-name">PUBLIC_KEY</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VILLAGER_DATA">
 <h3>VILLAGER_DATA</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;int[]&gt;</span>&nbsp;<span class="element-name">VILLAGER_DATA</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;int[]&gt;</span>&nbsp;<span class="element-name">VILLAGER_DATA</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VECTOR3">
 <h3>VECTOR3</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">VECTOR3</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">VECTOR3</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="VECTOR3D">
 <h3>VECTOR3D</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">VECTOR3D</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">VECTOR3D</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="VECTOR3B">
+<h3>VECTOR3B</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">VECTOR3B</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="QUATERNION">
 <h3>QUATERNION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;float[]&gt;</span>&nbsp;<span class="element-name">QUATERNION</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;float[]&gt;</span>&nbsp;<span class="element-name">QUATERNION</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="OPT_CHAT">
 <h3>OPT_CHAT</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">OPT_CHAT</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">OPT_CHAT</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="OPT_BLOCK_POSITION">
 <h3>OPT_BLOCK_POSITION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">OPT_BLOCK_POSITION</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&gt;</span>&nbsp;<span class="element-name">OPT_BLOCK_POSITION</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="OPT_UUID">
 <h3>OPT_UUID</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</span>&nbsp;<span class="element-name">OPT_UUID</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&gt;</span>&nbsp;<span class="element-name">OPT_UUID</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="DIRECTION">
 <h3>DIRECTION</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&gt;</span>&nbsp;<span class="element-name">DIRECTION</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../utils/Direction.html" title="enum class in net.minestom.server.utils">Direction</a>&gt;</span>&nbsp;<span class="element-name">DIRECTION</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="POSE">
 <h3>POSE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../entity/Entity.Pose.html" title="enum class in net.minestom.server.entity">Entity.Pose</a>&gt;</span>&nbsp;<span class="element-name">POSE</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<li>
-<section class="constructor-details" id="constructor-detail">
-<h2>Constructor Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="&lt;init&gt;(java.nio.ByteBuffer,boolean)">
-<h3>NetworkBuffer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NetworkBuffer</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
- boolean&nbsp;resizable)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(java.nio.ByteBuffer)">
-<h3>NetworkBuffer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NetworkBuffer</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(int)">
-<h3>NetworkBuffer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NetworkBuffer</span><wbr><span class="parameters">(int&nbsp;initialCapacity)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;()">
-<h3>NetworkBuffer</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">NetworkBuffer</span>()</div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../entity/EntityPose.html" title="enum class in net.minestom.server.entity">EntityPose</a>&gt;</span>&nbsp;<span class="element-name">POSE</span></div>
 </section>
 </li>
 </ul>
@@ -629,285 +708,416 @@ V&gt;&nbsp;@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/
 <section class="detail" id="RegistryKey(java.util.function.Function)">
 <h3>RegistryKey</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
 <span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">RegistryKey</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="Optional(net.minestom.server.network.NetworkBuffer.Type)">
-<h3>Optional</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>
-<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;@Nullable T&gt;</span>&nbsp;<span class="element-name">Optional</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="Enum(java.lang.Class)">
 <h3>Enum</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>
 <span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;E&gt;</span>&nbsp;<span class="element-name">Enum</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="EnumSet(java.lang.Class)">
+<h3>EnumSet</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>
+<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;E&gt;&gt;</span>&nbsp;<span class="element-name">EnumSet</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="FixedBitSet(int)">
+<h3>FixedBitSet</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&gt;</span>&nbsp;<span class="element-name">FixedBitSet</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="FixedRawBytes(int)">
+<h3>FixedRawBytes</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;byte[]&gt;</span>&nbsp;<span class="element-name">FixedRawBytes</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="Lazy(java.util.function.Supplier)">
 <h3>Lazy</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;</span>&nbsp;<span class="element-name">Lazy</span><wbr><span class="parameters">(@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;</span>&nbsp;<span class="element-name">Lazy</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Supplier.html" title="class or interface in java.util.function" class="external-link">Supplier</a>&lt;@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&gt;&nbsp;supplier)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="write(net.minestom.server.network.NetworkBuffer.Type,T)">
 <h3 id="write(net.minestom.server.network.NetworkBuffer.Type,java.lang.Object)">write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- @NotNull
- T&nbsp;value)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer.Writer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&nbsp;writer)</span></div>
+ @UnknownNullability T&nbsp;value)</span>
+        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="read(net.minestom.server.network.NetworkBuffer.Type)">
 <h3>read</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">read</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span></div>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">read</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span>
+                        throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="writeOptional(net.minestom.server.network.NetworkBuffer.Type,T)">
-<h3 id="writeOptional(net.minestom.server.network.NetworkBuffer.Type,java.lang.Object)">writeOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeOptional</span><wbr><span class="parameters">(@NotNull
+<section class="detail" id="writeAt(long,net.minestom.server.network.NetworkBuffer.Type,T)">
+<h3 id="writeAt(long,net.minestom.server.network.NetworkBuffer.Type,java.lang.Object)">writeAt</h3>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeAt</span><wbr><span class="parameters">(long&nbsp;index,
+ @NotNull
  @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- @Nullable
- T&nbsp;value)</span></div>
+ @UnknownNullability T&nbsp;value)</span>
+          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="writeOptional(net.minestom.server.network.NetworkBuffer.Writer)">
-<h3>writeOptional</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeOptional</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&nbsp;writer)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readOptional(net.minestom.server.network.NetworkBuffer.Type)">
-<h3>readOptional</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">readOptional</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readOptional(java.util.function.Function)">
-<h3>readOptional</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">readOptional</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeCollection(net.minestom.server.network.NetworkBuffer.Type,java.util.Collection)">
-<h3>writeCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- @Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeCollection(net.minestom.server.network.NetworkBuffer.Type,T...)">
-<h3 id="writeCollection(net.minestom.server.network.NetworkBuffer.Type,java.lang.Object[])">writeCollection</h3>
-<div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/SafeVarargs.html" title="class or interface in java.lang" class="external-link">@SafeVarargs</a>
-</span><span class="modifiers">public final</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+<section class="detail" id="readAt(long,net.minestom.server.network.NetworkBuffer.Type)">
+<h3>readAt</h3>
+<div class="member-signature"><span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@UnknownNullability T</span>&nbsp;<span class="element-name">readAt</span><wbr><span class="parameters">(long&nbsp;index,
  @NotNull
- T @Nullable ...&nbsp;values)</span></div>
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type)</span>
+                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IndexOutOfBoundsException.html" title="class or interface in java.lang" class="external-link">IndexOutOfBoundsException</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="writeCollection(java.util.Collection)">
-<h3>writeCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeCollection</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeCollection(java.util.Collection,java.util.function.BiConsumer)">
-<h3>writeCollection</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeCollection</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;@NotNull T&gt;&nbsp;values,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;consumer)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readCollection(net.minestom.server.network.NetworkBuffer.Type,int)">
-<h3>readCollection</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</span>&nbsp;<span class="element-name">readCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
- int&nbsp;maxSize)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readCollection(java.util.function.Function,int)">
-<h3>readCollection</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;@NotNull T&gt;</span>&nbsp;<span class="element-name">readCollection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>,<wbr>@NotNull T&gt;&nbsp;function,
- int&nbsp;maxSize)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeMap(net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.network.NetworkBuffer.Type,java.util.Map)">
-<h3>writeMap</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name">writeMap</span><wbr><span class="parameters">(@NotNull
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;K&gt;&nbsp;keyType,
- @NotNull
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;V&gt;&nbsp;valueType,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;&nbsp;map)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readMap(net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.network.NetworkBuffer.Type,int)">
-<h3>readMap</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;K,<wbr>
-V&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;K,<wbr>V&gt;</span>&nbsp;<span class="element-name">readMap</span><wbr><span class="parameters">(@NotNull
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;K&gt;&nbsp;keyType,
- @NotNull
- <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;V&gt;&nbsp;valueType,
- int&nbsp;maxSize)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeEnum(java.lang.Class,E)">
-<h3 id="writeEnum(java.lang.Class,java.lang.Enum)">writeEnum</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeEnum</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumClass,
- @NotNull
- E&nbsp;value)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readEnum(java.lang.Class)">
-<h3>readEnum</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;?&gt;&gt;</span>&nbsp;<span class="return-type">E</span>&nbsp;<span class="element-name">readEnum</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;@NotNull E&gt;&nbsp;enumClass)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeEnumSet(java.util.EnumSet,java.lang.Class)">
-<h3>writeEnumSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeEnumSet</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;E&gt;&nbsp;enumSet,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumType)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readEnumSet(java.lang.Class)">
-<h3>readEnumSet</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;E extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;E&gt;&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;E&gt;</span>&nbsp;<span class="element-name">readEnumSet</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;E&gt;&nbsp;enumType)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="writeFixedBitSet(java.util.BitSet,int)">
-<h3>writeFixedBitSet</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeFixedBitSet</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a>&nbsp;set,
- int&nbsp;length)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readFixedBitSet(int)">
-<h3>readFixedBitSet</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/BitSet.html" title="class or interface in java.util" class="external-link">BitSet</a></span>&nbsp;<span class="element-name">readFixedBitSet</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="readBytes(int)">
-<h3>readBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">readBytes</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="copyTo(int,byte[],int,int)">
+<section class="detail" id="copyTo(long,byte[],long,long)">
 <h3>copyTo</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copyTo</span><wbr><span class="parameters">(int&nbsp;srcOffset,
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">copyTo</span><wbr><span class="parameters">(long&nbsp;srcOffset,
  byte @NotNull []&nbsp;dest,
- int&nbsp;destOffset,
- int&nbsp;length)</span></div>
+ long&nbsp;destOffset,
+ long&nbsp;length)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="extractBytes(java.util.function.Consumer)">
 <h3>extractBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte @NotNull []</span>&nbsp;<span class="element-name">extractBytes</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;extractor)</span></div>
+<div class="member-signature"><span class="return-type">byte @NotNull []</span>&nbsp;<span class="element-name">extractBytes</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;extractor)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="clear()">
 <h3>clear</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">clear</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">clear</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="writeIndex()">
 <h3>writeIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">writeIndex</span>()</div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">writeIndex</span>()</div>
 </section>
 </li>
 <li>
 <section class="detail" id="readIndex()">
 <h3>readIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">readIndex</span>()</div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">readIndex</span>()</div>
 </section>
 </li>
 <li>
-<section class="detail" id="writeIndex(int)">
+<section class="detail" id="writeIndex(long)">
 <h3>writeIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">writeIndex</span><wbr><span class="parameters">(int&nbsp;writeIndex)</span></div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">writeIndex</span><wbr><span class="parameters">(long&nbsp;writeIndex)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="readIndex(int)">
+<section class="detail" id="readIndex(long)">
 <h3>readIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">readIndex</span><wbr><span class="parameters">(int&nbsp;readIndex)</span></div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">readIndex</span><wbr><span class="parameters">(long&nbsp;readIndex)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="skipWrite(int)">
-<h3>skipWrite</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">skipWrite</span><wbr><span class="parameters">(int&nbsp;length)</span></div>
+<section class="detail" id="index(long,long)">
+<h3>index</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">index</span><wbr><span class="parameters">(long&nbsp;readIndex,
+ long&nbsp;writeIndex)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="advanceWrite(long)">
+<h3>advanceWrite</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">advanceWrite</span><wbr><span class="parameters">(long&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="advanceRead(long)">
+<h3>advanceRead</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">advanceRead</span><wbr><span class="parameters">(long&nbsp;length)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="readableBytes()">
 <h3>readableBytes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">readableBytes</span>()</div>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">readableBytes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="writableBytes()">
+<h3>writableBytes</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">writableBytes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="capacity()">
+<h3>capacity</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">capacity</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="readOnly()">
+<h3>readOnly</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">readOnly</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="isReadOnly()">
+<h3>isReadOnly</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">isReadOnly</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="resize(long)">
+<h3>resize</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">resize</span><wbr><span class="parameters">(long&nbsp;newSize)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="ensureWritable(long)">
+<h3>ensureWritable</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">ensureWritable</span><wbr><span class="parameters">(long&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="compact()">
+<h3>compact</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">compact</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="copy(long,long,long,long)">
+<h3>copy</h3>
+<div class="member-signature"><span class="return-type"><a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">copy</span><wbr><span class="parameters">(long&nbsp;index,
+ long&nbsp;length,
+ long&nbsp;readIndex,
+ long&nbsp;writeIndex)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="copy(long,long)">
+<h3>copy</h3>
+<div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type"><a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">copy</span><wbr><span class="parameters">(long&nbsp;index,
+ long&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="readChannel(java.nio.channels.ReadableByteChannel)">
+<h3>readChannel</h3>
+<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">readChannel</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/ReadableByteChannel.html" title="class or interface in java.nio.channels" class="external-link">ReadableByteChannel</a>&nbsp;channel)</span>
+         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="writeChannel(java.nio.channels.SocketChannel)">
+<h3>writeChannel</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">writeChannel</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/SocketChannel.html" title="class or interface in java.nio.channels" class="external-link">SocketChannel</a>&nbsp;channel)</span>
+              throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="cipher(javax.crypto.Cipher,long,long)">
+<h3>cipher</h3>
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">cipher</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/javax/crypto/Cipher.html" title="class or interface in javax.crypto" class="external-link">Cipher</a>&nbsp;cipher,
+ long&nbsp;start,
+ long&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="compress(long,long,net.minestom.server.network.NetworkBuffer)">
+<h3>compress</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">compress</span><wbr><span class="parameters">(long&nbsp;start,
+ long&nbsp;length,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;output)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="decompress(long,long,net.minestom.server.network.NetworkBuffer)">
+<h3>decompress</h3>
+<div class="member-signature"><span class="return-type">long</span>&nbsp;<span class="element-name">decompress</span><wbr><span class="parameters">(long&nbsp;start,
+ long&nbsp;length,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;output)</span>
+         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/zip/DataFormatException.html" title="class or interface in java.util.zip" class="external-link">DataFormatException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/zip/DataFormatException.html" title="class or interface in java.util.zip" class="external-link">DataFormatException</a></code></dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="registries()">
+<h3>registries</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="return-type">@Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a></span>&nbsp;<span class="element-name">registries</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="builder(long)">
+<h3>builder</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.Builder.html" title="interface in net.minestom.server.network">NetworkBuffer.Builder</a></span>&nbsp;<span class="element-name">builder</span><wbr><span class="parameters">(long&nbsp;size)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="staticBuffer(long,net.minestom.server.registry.Registries)">
+<h3>staticBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">staticBuffer</span><wbr><span class="parameters">(long&nbsp;size,
+ <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="staticBuffer(long)">
+<h3>staticBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">staticBuffer</span><wbr><span class="parameters">(long&nbsp;size)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="resizableBuffer(long,net.minestom.server.registry.Registries)">
+<h3>resizableBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">resizableBuffer</span><wbr><span class="parameters">(long&nbsp;initialSize,
+ <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="resizableBuffer(int)">
+<h3>resizableBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">resizableBuffer</span><wbr><span class="parameters">(int&nbsp;initialSize)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="resizableBuffer(net.minestom.server.registry.Registries)">
+<h3>resizableBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">resizableBuffer</span><wbr><span class="parameters">(<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="resizableBuffer()">
+<h3>resizableBuffer</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">resizableBuffer</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="wrap(byte[],int,int,net.minestom.server.registry.Registries)">
+<h3>wrap</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">wrap</span><wbr><span class="parameters">(byte @NotNull []&nbsp;bytes,
+ int&nbsp;readIndex,
+ int&nbsp;writeIndex,
+ @Nullable
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="wrap(byte[],int,int)">
+<h3>wrap</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">wrap</span><wbr><span class="parameters">(byte @NotNull []&nbsp;bytes,
+ int&nbsp;readIndex,
+ int&nbsp;writeIndex)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="makeArray(java.util.function.Consumer,net.minestom.server.registry.Registries)">
+<h3>makeArray</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">makeArray</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing,
+ @Nullable
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="makeArray(java.util.function.Consumer)">
 <h3>makeArray</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">makeArray</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing)</span></div>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">makeArray</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Consumer.html" title="class or interface in java.util.function" class="external-link">Consumer</a>&lt;@NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&gt;&nbsp;writing)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="makeArray(net.minestom.server.network.NetworkBuffer.Type,T,net.minestom.server.registry.Registries)">
+<h3 id="makeArray(net.minestom.server.network.NetworkBuffer.Type,java.lang.Object,net.minestom.server.registry.Registries)">makeArray</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">makeArray</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ @NotNull
+ T&nbsp;value,
+ @Nullable
+ @Nullable <a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="makeArray(net.minestom.server.network.NetworkBuffer.Type,T)">
+<h3 id="makeArray(net.minestom.server.network.NetworkBuffer.Type,java.lang.Object)">makeArray</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">makeArray</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;type,
+ @NotNull
+ T&nbsp;value)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="copy(net.minestom.server.network.NetworkBuffer,long,net.minestom.server.network.NetworkBuffer,long,long)">
+<h3>copy</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">copy</span><wbr><span class="parameters">(<a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;srcBuffer,
+ long&nbsp;srcOffset,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;dstBuffer,
+ long&nbsp;dstOffset,
+ long&nbsp;length)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="equals(net.minestom.server.network.NetworkBuffer,net.minestom.server.network.NetworkBuffer)">
+<h3>equals</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer1,
+ <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;buffer2)</span></div>
 </section>
 </li>
 </ul>

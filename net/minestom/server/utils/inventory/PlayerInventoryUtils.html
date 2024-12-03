@@ -135,7 +135,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><code><a href="#OFFHAND_SLOT" class="member-name-link">OFFHAND_SLOT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#OFFSET" class="member-name-link">OFFSET</a></code></div>
+<div class="col-second even-row-color"><code><a href="#WINDOW_0_OFFSET" class="member-name-link">WINDOW_0_OFFSET</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -152,24 +152,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertClientInventorySlot(int)" class="member-name-link">convertClientInventorySlot</a><wbr>(int&nbsp;slot)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertMinestomSlotToPlayerInventorySlot(int)" class="member-name-link">convertMinestomSlotToPlayerInventorySlot</a><wbr>(int&nbsp;minestomSlot)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Used to convert the clients inventory slot to a Minestom slot.</div>
+<div class="block">Used to convert a Minestom slot to a player inventory slot.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertPlayerInventorySlot(int,int)" class="member-name-link">convertPlayerInventorySlot</a><wbr>(int&nbsp;slot,
- int&nbsp;offset)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Converts a packet slot to an internal one.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertSlot(int,int)" class="member-name-link">convertSlot</a><wbr>(int&nbsp;slot,
- int&nbsp;offset)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertToPacketSlot(int)" class="member-name-link">convertToPacketSlot</a><wbr>(int&nbsp;slot)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertMinestomSlotToWindowSlot(int)" class="member-name-link">convertMinestomSlotToWindowSlot</a><wbr>(int&nbsp;slot)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Used to convert internal slot to one used in packets</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertPlayerInventorySlotToMinestomSlot(int)" class="member-name-link">convertPlayerInventorySlotToMinestomSlot</a><wbr>(int&nbsp;slot)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Used to convert a player inventory slot from a client to a Minestom slot.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertWindow0SlotToMinestomSlot(int)" class="member-name-link">convertWindow0SlotToMinestomSlot</a><wbr>(int&nbsp;slot)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Converts a window packet slot to a Minestom one.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#convertWindowSlotToMinestomSlot(int,int)" class="member-name-link">convertWindowSlotToMinestomSlot</a><wbr>(int&nbsp;slot,
+ int&nbsp;offset)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isHotbarOrOffHandSlot(int)" class="member-name-link">isHotbarOrOffHandSlot</a><wbr>(int&nbsp;minestomSlot)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns true if the given minestom slot is on the hotbar or offhand, false otherwise.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#isPlayerInventorySlot(int)" class="member-name-link">isPlayerInventorySlot</a><wbr>(int&nbsp;minestomSlot)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Returns true if the given Minestom slot is valid as a Player inventory slot (ie is it not a crafting grid slot)</div>
 </div>
 </div>
 </div>
@@ -189,14 +203,14 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="OFFSET">
-<h3>OFFSET</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">OFFSET</span></div>
+<section class="detail" id="WINDOW_0_OFFSET">
+<h3>WINDOW_0_OFFSET</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">WINDOW_0_OFFSET</span></div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
 <ul class="tag-list">
-<li><a href="../../../../../constant-values.html#net.minestom.server.utils.inventory.PlayerInventoryUtils.OFFSET">Constant Field Values</a></li>
+<li><a href="../../../../../constant-values.html#net.minestom.server.utils.inventory.PlayerInventoryUtils.WINDOW_0_OFFSET">Constant Field Values</a></li>
 </ul>
 </dd>
 </dl>
@@ -351,32 +365,51 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="convertPlayerInventorySlot(int,int)">
-<h3>convertPlayerInventorySlot</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertPlayerInventorySlot</span><wbr><span class="parameters">(int&nbsp;slot,
- int&nbsp;offset)</span></div>
-<div class="block">Converts a packet slot to an internal one.</div>
+<section class="detail" id="isHotbarOrOffHandSlot(int)">
+<h3>isHotbarOrOffHandSlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isHotbarOrOffHandSlot</span><wbr><span class="parameters">(int&nbsp;minestomSlot)</span></div>
+<div class="block">Returns true if the given minestom slot is on the hotbar or offhand, false otherwise.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="convertWindow0SlotToMinestomSlot(int)">
+<h3>convertWindow0SlotToMinestomSlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertWindow0SlotToMinestomSlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
+<div class="block">Converts a window packet slot to a Minestom one.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>slot</code> - the packet slot</dd>
-<dd><code>offset</code> - the slot count separating the up part of the inventory to the bottom part (armor/craft in PlayerInventory, inventory slots in others)
-               the offset for the player inventory is <a href="#OFFSET"><code>OFFSET</code></a></dd>
 <dt>Returns:</dt>
-<dd>a packet which can be use internally with Minestom</dd>
+<dd>a slot which can be use internally with Minestom</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="convertSlot(int,int)">
-<h3>convertSlot</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertSlot</span><wbr><span class="parameters">(int&nbsp;slot,
+<section class="detail" id="convertWindowSlotToMinestomSlot(int,int)">
+<h3>convertWindowSlotToMinestomSlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertWindowSlotToMinestomSlot</span><wbr><span class="parameters">(int&nbsp;slot,
  int&nbsp;offset)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="convertToPacketSlot(int)">
-<h3>convertToPacketSlot</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertToPacketSlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
+<section class="detail" id="isPlayerInventorySlot(int)">
+<h3>isPlayerInventorySlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isPlayerInventorySlot</span><wbr><span class="parameters">(int&nbsp;minestomSlot)</span></div>
+<div class="block">Returns true if the given Minestom slot is valid as a Player inventory slot (ie is it not a crafting grid slot)</div>
+</section>
+</li>
+<li>
+<section class="detail" id="convertMinestomSlotToPlayerInventorySlot(int)">
+<h3>convertMinestomSlotToPlayerInventorySlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertMinestomSlotToPlayerInventorySlot</span><wbr><span class="parameters">(int&nbsp;minestomSlot)</span></div>
+<div class="block">Used to convert a Minestom slot to a player inventory slot. Only valid for some slots, should be tested
+ with <a href="#isPlayerInventorySlot(int)"><code>isPlayerInventorySlot(int)</code></a> first.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="convertMinestomSlotToWindowSlot(int)">
+<h3>convertMinestomSlotToWindowSlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertMinestomSlotToWindowSlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
 <div class="block">Used to convert internal slot to one used in packets</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -387,11 +420,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="convertClientInventorySlot(int)">
-<h3>convertClientInventorySlot</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertClientInventorySlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
-<div class="block">Used to convert the clients inventory slot to a Minestom slot.
- The client's inventory does not count the crafting slots.</div>
+<section class="detail" id="convertPlayerInventorySlotToMinestomSlot(int)">
+<h3>convertPlayerInventorySlotToMinestomSlot</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">convertPlayerInventorySlotToMinestomSlot</span><wbr><span class="parameters">(int&nbsp;slot)</span></div>
+<div class="block">Used to convert a player inventory slot from a client to a Minestom slot.
+ See above for description</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>slot</code> - the client slot</dd>

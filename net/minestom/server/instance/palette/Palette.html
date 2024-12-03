@@ -39,7 +39,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li><a href="#nested-class-summary">Nested</a></li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li>Constr</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li>Constr</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -59,13 +59,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -86,13 +86,8 @@ loadScripts(document, 'script');</script>
 <h1 title="Interface Palette" class="title">Interface Palette</h1>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Superinterfaces:</dt>
-<dd><code><a href="../../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Palette</span><span class="extends-implements">
-extends <a href="../../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Palette</span></div>
 <div class="block">Represents a palette used to store blocks and biomes.
  <p>
  0 is the default value.</div>
@@ -117,6 +112,24 @@ extends <a href="../../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="Palette.EntrySupplier.html" class="type-name-link" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#BIOME_SERIALIZER" class="member-name-link">BIOME_SERIALIZER</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#BLOCK_SERIALIZER" class="member-name-link">BLOCK_SERIALIZER</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -189,27 +202,49 @@ extends <a href="../../network/NetworkBuffer.Writer.html" title="interface in ne
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replaceAll(net.minestom.server.instance.palette.Palette.EntryFunction)" class="member-name-link">replaceAll</a><wbr>(@NotNull <a href="Palette.EntryFunction.html" title="interface in net.minestom.server.instance.palette">Palette.EntryFunction</a>&nbsp;function)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#set(int,int,int,int)" class="member-name-link">set</a><wbr>(int&nbsp;x,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#serializer(int,int,int)" class="member-name-link">serializer</a><wbr>(int&nbsp;dimension,
+ int&nbsp;minIndirect,
+ int&nbsp;maxIndirect)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#set(int,int,int,int)" class="member-name-link">set</a><wbr>(int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z,
  int&nbsp;value)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)" class="member-name-link">setAll</a><wbr>(@NotNull <a href="Palette.EntrySupplier.html" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a>&nbsp;supplier)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)" class="member-name-link">setAll</a><wbr>(@NotNull <a href="Palette.EntrySupplier.html" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a>&nbsp;supplier)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.network.NetworkBuffer.Writer">Methods inherited from interface&nbsp;net.minestom.server.network.<a href="../../network/NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></h3>
-<code><a href="../../network/NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="BLOCK_SERIALIZER">
+<h3>BLOCK_SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">BLOCK_SERIALIZER</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="BIOME_SERIALIZER">
+<h3>BIOME_SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">BIOME_SERIALIZER</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
@@ -334,6 +369,14 @@ extends <a href="../../network/NetworkBuffer.Writer.html" title="interface in ne
 <h3>clone</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="return-type">@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">clone</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="serializer(int,int,int)">
+<h3>serializer</h3>
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">serializer</span><wbr><span class="parameters">(int&nbsp;dimension,
+ int&nbsp;minIndirect,
+ int&nbsp;maxIndirect)</span></div>
 </section>
 </li>
 </ul>

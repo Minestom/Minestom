@@ -91,14 +91,9 @@ loadScripts(document, 'script');</script>
 </div>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">WorldPos</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimension, @NotNull <a href="../../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
-implements <a href="../../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -133,8 +128,6 @@ implements <a href="../../../../NetworkBuffer.Writer.html" title="interface in n
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>WorldPos</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">WorldPos</a><wbr>(@NotNull <a href="../../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -180,9 +173,6 @@ implements <a href="../../../../NetworkBuffer.Writer.html" title="interface in n
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#withDimension(java.lang.String)" class="member-name-link">withDimension</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;dimension)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -221,13 +211,6 @@ implements <a href="../../../../NetworkBuffer.Writer.html" title="interface in n
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
-<h3>WorldPos</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">WorldPos</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="&lt;init&gt;(java.lang.String,net.minestom.server.coordinate.Point)">
 <h3>WorldPos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">WorldPos</span><wbr><span class="parameters">(@NotNull
@@ -264,17 +247,6 @@ implements <a href="../../../../NetworkBuffer.Writer.html" title="interface in n
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="WorldPos.html" title="class in net.minestom.server.network.packet.server.play.data">WorldPos</a></span>&nbsp;<span class="element-name">withBlockPosition</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;blockPosition)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
 </section>
 </li>
 <li>

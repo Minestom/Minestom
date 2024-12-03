@@ -5,7 +5,7 @@
 <title>Recipe (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.recipe, class: Recipe">
+<meta name="description" content="declaration: package: net.minestom.server.recipe, interface: Recipe">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -39,16 +39,16 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li>Nested</li>
-<li><a href="#field-summary">Field</a></li>
-<li><a href="#constructor-summary">Constr</a></li>
+<li>Field</li>
+<li>Constr</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 </li>
 <li>
 <p>Detail:</p>
 <ul>
-<li><a href="#field-detail">Field</a></li>
-<li><a href="#constructor-detail">Constr</a></li>
+<li>Field</li>
+<li>Constr</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </li>
@@ -59,14 +59,14 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
-<li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
+<li>Constr&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
 </div>
@@ -83,149 +83,112 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.recipe</a></div>
-<h1 title="Class Recipe" class="title">Class Recipe</h1>
-</div>
-<div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">net.minestom.server.recipe.Recipe</div>
+<h1 title="Interface Recipe" class="title">Interface Recipe</h1>
 </div>
 <section class="class-description" id="class-description">
-<dl class="notes">
-<dt>Direct Known Subclasses:</dt>
-<dd><code><a href="BlastingRecipe.html" title="class in net.minestom.server.recipe">BlastingRecipe</a></code>, <code><a href="CampfireCookingRecipe.html" title="class in net.minestom.server.recipe">CampfireCookingRecipe</a></code>, <code><a href="ShapedRecipe.html" title="class in net.minestom.server.recipe">ShapedRecipe</a></code>, <code><a href="ShapelessRecipe.html" title="class in net.minestom.server.recipe">ShapelessRecipe</a></code>, <code><a href="SmeltingRecipe.html" title="class in net.minestom.server.recipe">SmeltingRecipe</a></code>, <code><a href="SmithingTransformRecipe.html" title="class in net.minestom.server.recipe">SmithingTransformRecipe</a></code>, <code><a href="SmithingTrimRecipe.html" title="class in net.minestom.server.recipe">SmithingTrimRecipe</a></code>, <code><a href="SmokingRecipe.html" title="class in net.minestom.server.recipe">SmokingRecipe</a></code>, <code><a href="StonecutterRecipe.html" title="class in net.minestom.server.recipe">StonecutterRecipe</a></code></dd>
-</dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">Recipe</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Recipe</span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- =========== FIELD SUMMARY =========== -->
-<li>
-<section class="field-summary" id="field-summary">
-<h2>Field Summary</h2>
-<div class="caption"><span>Fields</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Field</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color"><code><a href="#id" class="member-name-link">id</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>protected final <a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#type" class="member-name-link">type</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
-<!-- ======== CONSTRUCTOR SUMMARY ======== -->
-<li>
-<section class="constructor-summary" id="constructor-summary">
-<h2>Constructor Summary</h2>
-<div class="caption"><span>Constructors</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier</div>
-<div class="table-header col-second">Constructor</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected </code></div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.recipe.RecipeType,java.lang.String)" class="member-name-link">Recipe</a><wbr>(@NotNull <a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a>&nbsp;type,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- ========== METHOD SUMMARY =========== -->
 <li>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab3" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab3', 3)" class="table-tab">Abstract Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab5" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab5', 3)" class="table-tab">Default Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#shouldShow(net.minestom.server.entity.Player)" class="member-name-link">shouldShow</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Ingredient.html" title="class in net.minestom.server.recipe">Ingredient</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#craftingRequirements()" class="member-name-link">craftingRequirements</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="display/RecipeDisplay.html" title="interface in net.minestom.server.recipe.display">RecipeDisplay</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#createRecipeDisplays()" class="member-name-link">createRecipeDisplays</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Creates recipe displays for use in the recipe book.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#itemProperties()" class="member-name-link">itemProperties</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="block">Returns the item properties associated with this recipe.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @Nullable <a href="RecipeBookCategory.html" title="enum class in net.minestom.server.recipe">RecipeBookCategory</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#recipeBookCategory()" class="member-name-link">recipeBookCategory</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#recipeBookGroup()" class="member-name-link">recipeBookGroup</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 </div>
 </div>
 </div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
 </section>
 <section class="details">
 <ul class="details-list">
-<!-- ============ FIELD DETAIL =========== -->
-<li>
-<section class="field-details" id="field-detail">
-<h2>Field Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="type">
-<h3>type</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></span>&nbsp;<span class="element-name">type</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="id">
-<h3>id</h3>
-<div class="member-signature"><span class="modifiers">protected final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">id</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
-<!-- ========= CONSTRUCTOR DETAIL ======== -->
-<li>
-<section class="constructor-details" id="constructor-detail">
-<h2>Constructor Details</h2>
-<ul class="member-list">
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.recipe.RecipeType,java.lang.String)">
-<h3>Recipe</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="element-name">Recipe</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a>&nbsp;type,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
-</section>
-</li>
-</ul>
-</section>
-</li>
 <!-- ============ METHOD DETAIL ========== -->
 <li>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="shouldShow(net.minestom.server.entity.Player)">
-<h3>shouldShow</h3>
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">shouldShow</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+<section class="detail" id="createRecipeDisplays()">
+<h3>createRecipeDisplays</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="display/RecipeDisplay.html" title="interface in net.minestom.server.recipe.display">RecipeDisplay</a>&gt;</span>&nbsp;<span class="element-name">createRecipeDisplays</span>()</div>
+<div class="block">Creates recipe displays for use in the recipe book.
+
+ <p>Displays should be consistent across calls and not specific to a player, they may be cached in <a href="RecipeManager.html" title="class in net.minestom.server.recipe"><code>RecipeManager</code></a>.</p>
+
+ <p>Note that stonecutter recipes are always sent to the client and not present in the recipe book.
+ Stonecutter ingredients must be <a href="display/SlotDisplay.Item.html" title="class in net.minestom.server.recipe.display"><code>SlotDisplay.Item</code></a> or <a href="display/SlotDisplay.Tag.html" title="class in net.minestom.server.recipe.display"><code>SlotDisplay.Tag</code></a> to be shown
+ on the client.</p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>a list of recipe displays, or none if the recipe should not be displayed in the recipe book</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="type()">
-<h3>type</h3>
+<section class="detail" id="itemProperties()">
+<h3>itemProperties</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="RecipeType.html" title="enum class in net.minestom.server.recipe">RecipeType</a></span>&nbsp;<span class="element-name">type</span>()</div>
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;</span>&nbsp;<span class="element-name">itemProperties</span>()</div>
+<div class="block">Returns the item properties associated with this recipe. These are sent to the client to indicate
+ client side special slot prediction. For example, if a recipe includes <code>Materials.STONE</code> in
+ <a href="RecipeProperty.html#FURNACE_INPUT"><code>RecipeProperty.FURNACE_INPUT</code></a>, the client will predict that item being placed into a furnace
+ input (note that final placement is still decided by the server).
+
+ <p>Item properties should be consistent across calls and not specific to a player, they may be cached in <a href="RecipeManager.html" title="class in net.minestom.server.recipe"><code>RecipeManager</code></a>.</p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>A map of item properties associated with this recipe.</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="id()">
-<h3>id</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">id</span>()</div>
+<section class="detail" id="recipeBookGroup()">
+<h3>recipeBookGroup</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">recipeBookGroup</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="recipeBookCategory()">
+<h3>recipeBookCategory</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@Nullable <a href="RecipeBookCategory.html" title="enum class in net.minestom.server.recipe">RecipeBookCategory</a></span>&nbsp;<span class="element-name">recipeBookCategory</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="craftingRequirements()">
+<h3>craftingRequirements</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">default</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Ingredient.html" title="class in net.minestom.server.recipe">Ingredient</a>&gt;</span>&nbsp;<span class="element-name">craftingRequirements</span>()</div>
 </section>
 </li>
 </ul>

@@ -166,9 +166,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="Registry.TrimPatternEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.TrimPatternEntry</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Registry.WolfVariantEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.WolfVariantEntry</a></code></div>
+<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Registry.VillagerProfessionEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.VillagerProfessionEntry</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="Registry.WolfVariantEntry.html" class="type-name-link" title="class in net.minestom.server.registry">Registry.WolfVariantEntry</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -267,10 +270,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#trimPattern(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">trimPattern</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
  @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.WolfVariantEntry.html" title="class in net.minestom.server.registry">Registry.WolfVariantEntry</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wolfVariant(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">wolfVariant</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.VillagerProfessionEntry.html" title="class in net.minestom.server.registry">Registry.VillagerProfessionEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#villagerProfession(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">villagerProfession</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
  @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="Registry.WolfVariantEntry.html" title="class in net.minestom.server.registry">Registry.WolfVariantEntry</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#wolfVariant(java.lang.String,net.minestom.server.registry.Registry.Properties)" class="member-name-link">wolfVariant</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -342,6 +349,15 @@ loadScripts(document, 'script');</script>
 <h3>entity</h3>
 <div class="member-signature"><span class="annotations">@Internal
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Registry.EntityEntry.html" title="class in net.minestom.server.registry">Registry.EntityEntry</a></span>&nbsp;<span class="element-name">entity</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ @NotNull
+ @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="villagerProfession(java.lang.String,net.minestom.server.registry.Registry.Properties)">
+<h3>villagerProfession</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Registry.VillagerProfessionEntry.html" title="class in net.minestom.server.registry">Registry.VillagerProfessionEntry</a></span>&nbsp;<span class="element-name">villagerProfession</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
  @NotNull
  @NotNull <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main)</span></div>
 </section>

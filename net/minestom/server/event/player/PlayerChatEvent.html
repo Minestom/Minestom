@@ -97,8 +97,8 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">PlayerChatEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
-<div class="block">Called every time a <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> write and send something in the chat.
- The event can be cancelled to do not send anything, and the format can be changed.</div>
+<div class="block">Called every time a <a href="../../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> writes and sends something in the chat.
+ The event can be cancelled to not send anything, and the final message can be changed.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,10 +110,9 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.util.Collection,java.util.function.Function,java.lang.String)" class="member-name-link">PlayerChatEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.entity.Player,java.util.Collection,java.lang.String)" class="member-name-link">PlayerChatEvent</a><wbr>(@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;defaultChatFormat,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rawMessage)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -129,25 +128,25 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a><wbr>&lt;@NotNull <a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getChatFormatFunction()" class="member-name-link">getChatFormatFunction</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getFormattedMessage()" class="member-name-link">getFormattedMessage</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to retrieve the chat format for this message.</div>
+<div class="block">Gets the final message component that will be sent.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMessage()" class="member-name-link">getMessage</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the message sent.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRawMessage()" class="member-name-link">getRawMessage</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets the original message content sent by the player.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecipients()" class="member-name-link">getRecipients</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Those are the players who will receive the message.</div>
+<div class="block">Returns the players who will receive the message.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isCancelled()" class="member-name-link">isCancelled</a>()</code></div>
@@ -160,14 +159,9 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setChatFormat(java.util.function.Function)" class="member-name-link">setChatFormat</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;chatFormat)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setFormattedMessage(net.kyori.adventure.text.Component)" class="member-name-link">setFormattedMessage</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;message)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Changes the chat format.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMessage(java.lang.String)" class="member-name-link">setMessage</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Used to change the message.</div>
+<div class="block">Used to change the final message component.</div>
 </div>
 </div>
 </div>
@@ -193,16 +187,14 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,java.util.Collection,java.util.function.Function,java.lang.String)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.entity.Player,java.util.Collection,java.lang.String)">
 <h3>PlayerChatEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerChatEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;recipients,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;defaultChatFormat,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rawMessage)</span></div>
 </section>
 </li>
 </ul>
@@ -214,37 +206,25 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="setChatFormat(java.util.function.Function)">
-<h3>setChatFormat</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setChatFormat</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;&nbsp;chatFormat)</span></div>
-<div class="block">Changes the chat format.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>chatFormat</code> - the custom chat format</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="getRecipients()">
 <h3>getRecipients</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</span>&nbsp;<span class="element-name">getRecipients</span>()</div>
-<div class="block">Those are the players who will receive the message.
+<div class="block">Returns the players who will receive the message.
  <p>
- It can be modified to add or remove recipient.</div>
+ It can be modified to add and remove recipients.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>a modifiable list of message targets</dd>
+<dd>a modifiable list of the message's targets</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getMessage()">
-<h3>getMessage</h3>
+<section class="detail" id="getRawMessage()">
+<h3>getRawMessage</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getMessage</span>()</div>
-<div class="block">Gets the message sent.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">getRawMessage</span>()</div>
+<div class="block">Gets the original message content sent by the player.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the sender's message</dd>
@@ -252,27 +232,25 @@ implements <a href="../trait/PlayerInstanceEvent.html" title="interface in net.m
 </section>
 </li>
 <li>
-<section class="detail" id="setMessage(java.lang.String)">
-<h3>setMessage</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMessage</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;message)</span></div>
-<div class="block">Used to change the message.</div>
+<section class="detail" id="getFormattedMessage()">
+<h3>getFormattedMessage</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">getFormattedMessage</span>()</div>
+<div class="block">Gets the final message component that will be sent.</div>
 <dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>message</code> - the new message</dd>
+<dt>Returns:</dt>
+<dd>the chat message component</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="getChatFormatFunction()">
-<h3>getChatFormatFunction</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;@NotNull <a href="PlayerChatEvent.html" title="class in net.minestom.server.event.player">PlayerChatEvent</a>,<wbr>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&gt;</span>&nbsp;<span class="element-name">getChatFormatFunction</span>()</div>
-<div class="block">Used to retrieve the chat format for this message.
- <p></div>
+<section class="detail" id="setFormattedMessage(net.kyori.adventure.text.Component)">
+<h3>setFormattedMessage</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setFormattedMessage</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;message)</span></div>
+<div class="block">Used to change the final message component.</div>
 <dl class="notes">
-<dt>Returns:</dt>
-<dd>the chat format which will be used</dd>
+<dt>Parameters:</dt>
+<dd><code>message</code> - the new message component</dd>
 </dl>
 </section>
 </li>

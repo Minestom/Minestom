@@ -5,7 +5,7 @@
 <title>PlayerInfoUpdatePacket.Entry (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.network.packet.server.play, class: PlayerInfoUpdatePacket, record: Entry">
+<meta name="description" content="declaration: package: net.minestom.server.network.packet.server.play, record: PlayerInfoUpdatePacket, record: Entry">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="PlayerInfoUpdatePacket.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">PlayerInfoUpdatePacket.Entry</span>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoUpdatePacket.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Property</a>&gt;&nbsp;properties, boolean&nbsp;listed, int&nbsp;latency, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, @Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName, @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">PlayerInfoUpdatePacket.Entry</span>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoUpdatePacket.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Property</a>&gt;&nbsp;properties, boolean&nbsp;listed, int&nbsp;latency, <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode, @Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName, @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession, int&nbsp;listOrder)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -109,14 +109,15 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,java.util.List,boolean,int,net.minestom.server.entity.GameMode,net.kyori.adventure.text.Component,net.minestom.server.crypto.ChatSession)" class="member-name-link">Entry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.UUID,java.lang.String,java.util.List,boolean,int,net.minestom.server.entity.GameMode,net.kyori.adventure.text.Component,net.minestom.server.crypto.ChatSession,int)" class="member-name-link">Entry</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="PlayerInfoUpdatePacket.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Property</a>&gt;&nbsp;properties,
  boolean&nbsp;listed,
  int&nbsp;latency,
  <a href="../../../../entity/GameMode.html" title="enum class in net.minestom.server.entity">GameMode</a>&nbsp;gameMode,
  @Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
- @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession)</code></div>
+ @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession,
+ int&nbsp;listOrder)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>Entry</code> record class.</div>
 </div>
@@ -128,7 +129,7 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
@@ -169,11 +170,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>listed</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="PlayerInfoUpdatePacket.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Property</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listOrder()" class="member-name-link">listOrder</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>listOrder</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="PlayerInfoUpdatePacket.Property.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Property</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#properties()" class="member-name-link">properties</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>properties</code> record component.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="PlayerInfoUpdatePacket.Entry.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Entry</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#serializer(java.util.EnumSet)" class="member-name-link">serializer</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;<a href="PlayerInfoUpdatePacket.Action.html" title="enum class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Action</a>&gt;&nbsp;actions)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -207,7 +216,7 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,java.util.List,boolean,int,net.minestom.server.entity.GameMode,net.kyori.adventure.text.Component,net.minestom.server.crypto.ChatSession)">
+<section class="detail" id="&lt;init&gt;(java.util.UUID,java.lang.String,java.util.List,boolean,int,net.minestom.server.entity.GameMode,net.kyori.adventure.text.Component,net.minestom.server.crypto.ChatSession,int)">
 <h3>Entry</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Entry</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link">UUID</a>&nbsp;uuid,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
@@ -218,7 +227,8 @@ loadScripts(document, 'script');</script>
  @Nullable
  @Nullable <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;displayName,
  @Nullable
- @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession)</span></div>
+ @Nullable <a href="../../../../crypto/ChatSession.html" title="class in net.minestom.server.crypto">ChatSession</a>&nbsp;chatSession,
+ int&nbsp;listOrder)</span></div>
 <div class="block">Creates an instance of a <code>Entry</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -230,6 +240,7 @@ loadScripts(document, 'script');</script>
 <dd><code>gameMode</code> - the value for the <code>gameMode</code> record component</dd>
 <dd><code>displayName</code> - the value for the <code>displayName</code> record component</dd>
 <dd><code>chatSession</code> - the value for the <code>chatSession</code> record component</dd>
+<dd><code>listOrder</code> - the value for the <code>listOrder</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -241,6 +252,12 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="serializer(java.util.EnumSet)">
+<h3>serializer</h3>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="PlayerInfoUpdatePacket.Entry.html" title="class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Entry</a>&gt;</span>&nbsp;<span class="element-name">serializer</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/EnumSet.html" title="class or interface in java.util" class="external-link">EnumSet</a>&lt;<a href="PlayerInfoUpdatePacket.Action.html" title="enum class in net.minestom.server.network.packet.server.play">PlayerInfoUpdatePacket.Action</a>&gt;&nbsp;actions)</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
@@ -369,6 +386,17 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>chatSession</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="listOrder()">
+<h3>listOrder</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">listOrder</span>()</div>
+<div class="block">Returns the value of the <code>listOrder</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>listOrder</code> record component</dd>
 </dl>
 </section>
 </li>

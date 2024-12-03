@@ -109,8 +109,7 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.socket.Worker,java.nio.channels.SocketChannel,java.net.SocketAddress)" class="member-name-link">PlayerSocketConnection</a><wbr>(@NotNull <a href="../socket/Worker.html" title="class in net.minestom.server.network.socket">Worker</a>&nbsp;worker,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/SocketChannel.html" title="class or interface in java.nio.channels" class="external-link">SocketChannel</a>&nbsp;channel,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.nio.channels.SocketChannel,java.net.SocketAddress)" class="member-name-link">PlayerSocketConnection</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/SocketChannel.html" title="class or interface in java.nio.channels" class="external-link">SocketChannel</a>&nbsp;channel,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/SocketAddress.html" title="class or interface in java.net" class="external-link">SocketAddress</a>&nbsp;remoteAddress)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -127,14 +126,6 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#consumeCache(net.minestom.server.utils.binary.BinaryBuffer)" class="member-name-link">consumeCache</a><wbr>(<a href="../../utils/binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disconnect()" class="member-name-link">disconnect</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Forcing the player to disconnect.</div>
-</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#flushSync()" class="member-name-link">flushSync</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
@@ -173,8 +164,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the server port that the client used to connect.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#processPackets(net.minestom.server.utils.binary.BinaryBuffer,net.minestom.server.network.PacketProcessor)" class="member-name-link">processPackets</a><wbr>(<a href="../../utils/binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;readBuffer,
- <a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#read(net.minestom.server.network.packet.PacketParser)" class="member-name-link">read</a><wbr>(<a href="../packet/PacketParser.html" title="interface in net.minestom.server.network.packet">PacketParser</a>&lt;<a href="../packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetParser)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshServerInformation(java.lang.String,int,int)" class="member-name-link">refreshServerInformation</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;serverAddress,
@@ -217,20 +207,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_setProfile(net.minestom.server.network.player.GameProfile)" class="member-name-link">UNSAFE_setProfile</a><wbr>(@NotNull <a href="GameProfile.html" title="class in net.minestom.server.network.player">GameProfile</a>&nbsp;gameProfile)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(java.nio.ByteBuffer,int,int)" class="member-name-link">write</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
- int&nbsp;index,
- int&nbsp;length)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.network.player.PlayerConnection">Methods inherited from class&nbsp;net.minestom.server.network.player.<a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></h3>
-<code><a href="PlayerConnection.html#fetchCookie(java.lang.String)">fetchCookie</a>, <a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#loginPluginMessageProcessor()">loginPluginMessageProcessor</a>, <a href="PlayerConnection.html#playerPublicKey()">playerPublicKey</a>, <a href="PlayerConnection.html#receiveCookieResponse(java.lang.String,byte%5B%5D)">receiveCookieResponse</a>, <a href="PlayerConnection.html#receiveKnownPacksResponse(java.util.List)">receiveKnownPacksResponse</a>, <a href="PlayerConnection.html#requestKnownPacks(java.util.List)">requestKnownPacks</a>, <a href="PlayerConnection.html#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">sendPackets</a>, <a href="PlayerConnection.html#setConnectionState(net.minestom.server.network.ConnectionState)">setConnectionState</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#setPlayerPublicKey(net.minestom.server.crypto.PlayerPublicKey)">setPlayerPublicKey</a>, <a href="PlayerConnection.html#storeCookie(java.lang.String,byte%5B%5D)">storeCookie</a>, <a href="PlayerConnection.html#toString()">toString</a></code></div>
+<code><a href="PlayerConnection.html#disconnect()">disconnect</a>, <a href="PlayerConnection.html#fetchCookie(java.lang.String)">fetchCookie</a>, <a href="PlayerConnection.html#getConnectionState()">getConnectionState</a>, <a href="PlayerConnection.html#getIdentifier()">getIdentifier</a>, <a href="PlayerConnection.html#getPlayer()">getPlayer</a>, <a href="PlayerConnection.html#isOnline()">isOnline</a>, <a href="PlayerConnection.html#kick(net.kyori.adventure.text.Component)">kick</a>, <a href="PlayerConnection.html#loginPluginMessageProcessor()">loginPluginMessageProcessor</a>, <a href="PlayerConnection.html#playerPublicKey()">playerPublicKey</a>, <a href="PlayerConnection.html#receiveCookieResponse(java.lang.String,byte%5B%5D)">receiveCookieResponse</a>, <a href="PlayerConnection.html#receiveKnownPacksResponse(java.util.List)">receiveKnownPacksResponse</a>, <a href="PlayerConnection.html#requestKnownPacks(java.util.List)">requestKnownPacks</a>, <a href="PlayerConnection.html#sendPackets(net.minestom.server.network.packet.server.SendablePacket...)">sendPackets</a>, <a href="PlayerConnection.html#setConnectionState(net.minestom.server.network.ConnectionState)">setConnectionState</a>, <a href="PlayerConnection.html#setPlayer(net.minestom.server.entity.Player)">setPlayer</a>, <a href="PlayerConnection.html#setPlayerPublicKey(net.minestom.server.crypto.PlayerPublicKey)">setPlayerPublicKey</a>, <a href="PlayerConnection.html#storeCookie(java.lang.String,byte%5B%5D)">storeCookie</a>, <a href="PlayerConnection.html#toString()">toString</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
@@ -246,11 +228,9 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.socket.Worker,java.nio.channels.SocketChannel,java.net.SocketAddress)">
+<section class="detail" id="&lt;init&gt;(java.nio.channels.SocketChannel,java.net.SocketAddress)">
 <h3>PlayerSocketConnection</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PlayerSocketConnection</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../socket/Worker.html" title="class in net.minestom.server.network.socket">Worker</a>&nbsp;worker,
- @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/channels/SocketChannel.html" title="class or interface in java.nio.channels" class="external-link">SocketChannel</a>&nbsp;channel,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/SocketAddress.html" title="class or interface in java.net" class="external-link">SocketAddress</a>&nbsp;remoteAddress)</span></div>
 </section>
@@ -264,16 +244,14 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="processPackets(net.minestom.server.utils.binary.BinaryBuffer,net.minestom.server.network.PacketProcessor)">
-<h3>processPackets</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">processPackets</span><wbr><span class="parameters">(<a href="../../utils/binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;readBuffer,
- <a href="../PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a>&nbsp;packetProcessor)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="consumeCache(net.minestom.server.utils.binary.BinaryBuffer)">
-<h3>consumeCache</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">consumeCache</span><wbr><span class="parameters">(<a href="../../utils/binary/BinaryBuffer.html" title="class in net.minestom.server.utils.binary">BinaryBuffer</a>&nbsp;buffer)</span></div>
+<section class="detail" id="read(net.minestom.server.network.packet.PacketParser)">
+<h3>read</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">read</span><wbr><span class="parameters">(<a href="../packet/PacketParser.html" title="interface in net.minestom.server.network.packet">PacketParser</a>&lt;<a href="../packet/client/ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a>&gt;&nbsp;packetParser)</span>
+          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<dl class="notes">
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+</dl>
 </section>
 </li>
 <li>
@@ -328,24 +306,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="write(java.nio.ByteBuffer,int,int)">
-<h3>write</h3>
-<div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer,
- int&nbsp;index,
- int&nbsp;length)</span></div>
-</section>
-</li>
-<li>
-<section class="detail" id="write(java.nio.ByteBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;buffer)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="getRemoteAddress()">
 <h3>getRemoteAddress</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -372,18 +332,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>remoteAddress</code> - the new connection remote address</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="disconnect()">
-<h3>disconnect</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">disconnect</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="PlayerConnection.html#disconnect()">PlayerConnection</a></code></span></div>
-<div class="block">Forcing the player to disconnect.</div>
-<dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="PlayerConnection.html#disconnect()">disconnect</a></code>&nbsp;in class&nbsp;<code><a href="PlayerConnection.html" title="class in net.minestom.server.network.player">PlayerConnection</a></code></dd>
 </dl>
 </section>
 </li>

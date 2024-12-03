@@ -113,26 +113,30 @@ loadScripts(document, 'script');</script>
 <section class="method-summary" id="method-summary">
 <h2>Method Summary</h2>
 <div id="method-summary-table">
-<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
+<div class="table-tabs" role="tablist" aria-orientation="horizontal"><button id="method-summary-table-tab0" role="tab" aria-selected="true" aria-controls="method-summary-table.tabpanel" tabindex="0" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table', 3)" class="active-table-tab">All Methods</button><button id="method-summary-table-tab1" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab1', 3)" class="table-tab">Static Methods</button><button id="method-summary-table-tab2" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab2', 3)" class="table-tab">Instance Methods</button><button id="method-summary-table-tab4" role="tab" aria-selected="false" aria-controls="method-summary-table.tabpanel" tabindex="-1" onkeydown="switchTab(event)" onclick="show('method-summary-table', 'method-summary-table-tab4', 3)" class="table-tab">Concrete Methods</button></div>
 <div id="method-summary-table.tabpanel" role="tabpanel" aria-labelledby="method-summary-table-tab0">
 <div class="summary-table three-column-summary">
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#createMeta(net.minestom.server.entity.EntityType,net.minestom.server.entity.Entity,net.minestom.server.entity.MetadataHolder)" class="member-name-link">createMeta</a><wbr>(@NotNull <a href="EntityType.html" title="interface in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+ @Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull <a href="MetadataHolder.html" title="class in net.minestom.server.entity">MetadataHolder</a>&nbsp;metadata)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#get(net.minestom.server.entity.MetadataDef.Entry)" class="member-name-link">get</a><wbr>(@NotNull <a href="MetadataDef.Entry.html" title="interface in net.minestom.server.entity">MetadataDef.Entry</a>&lt;T&gt;&nbsp;entry)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getEntries()" class="member-name-link">getEntries</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;T</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getIndex(int,T)" class="member-name-link">getIndex</a><wbr>(int&nbsp;index,
- T&nbsp;defaultValue)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;T&gt;&nbsp;void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#set(net.minestom.server.entity.MetadataDef.Entry,T)" class="member-name-link">set</a><wbr>(@NotNull <a href="MetadataDef.Entry.html" title="interface in net.minestom.server.entity">MetadataDef.Entry</a>&lt;T&gt;&nbsp;entry,
+ T&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setIndex(int,net.minestom.server.entity.Metadata.Entry)" class="member-name-link">setIndex</a><wbr>(int&nbsp;index,
- <a href="Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&nbsp;entry)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNotifyAboutChanges(boolean)" class="member-name-link">setNotifyAboutChanges</a><wbr>(boolean&nbsp;notifyAboutChanges)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNotifyAboutChanges(boolean)" class="member-name-link">setNotifyAboutChanges</a><wbr>(boolean&nbsp;notifyAboutChanges)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -166,19 +170,16 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="getIndex(int,T)">
-<h3 id="getIndex(int,java.lang.Object)">getIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">getIndex</span><wbr><span class="parameters">(int&nbsp;index,
- @Nullable
- T&nbsp;defaultValue)</span></div>
+<section class="detail" id="get(net.minestom.server.entity.MetadataDef.Entry)">
+<h3>get</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">T</span>&nbsp;<span class="element-name">get</span><wbr><span class="parameters">(@NotNull <a href="MetadataDef.Entry.html" title="interface in net.minestom.server.entity">MetadataDef.Entry</a>&lt;T&gt;&nbsp;entry)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="setIndex(int,net.minestom.server.entity.Metadata.Entry)">
-<h3>setIndex</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setIndex</span><wbr><span class="parameters">(int&nbsp;index,
- @NotNull
- <a href="Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&nbsp;entry)</span></div>
+<section class="detail" id="set(net.minestom.server.entity.MetadataDef.Entry,T)">
+<h3 id="set(net.minestom.server.entity.MetadataDef.Entry,java.lang.Object)">set</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">set</span><wbr><span class="parameters">(@NotNull <a href="MetadataDef.Entry.html" title="interface in net.minestom.server.entity">MetadataDef.Entry</a>&lt;T&gt;&nbsp;entry,
+ T&nbsp;value)</span></div>
 </section>
 </li>
 <li>
@@ -192,6 +193,18 @@ loadScripts(document, 'script');</script>
 <h3>getEntries</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>,<wbr><a href="Metadata.Entry.html" title="interface in net.minestom.server.entity">Metadata.Entry</a>&lt;?&gt;&gt;</span>&nbsp;<span class="element-name">getEntries</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="createMeta(net.minestom.server.entity.EntityType,net.minestom.server.entity.Entity,net.minestom.server.entity.MetadataHolder)">
+<h3>createMeta</h3>
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="metadata/EntityMeta.html" title="class in net.minestom.server.entity.metadata">EntityMeta</a></span>&nbsp;<span class="element-name">createMeta</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="EntityType.html" title="interface in net.minestom.server.entity">EntityType</a>&nbsp;entityType,
+ @Nullable
+ @Nullable <a href="Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity,
+ @NotNull
+ @NotNull <a href="MetadataHolder.html" title="class in net.minestom.server.entity">MetadataHolder</a>&nbsp;metadata)</span></div>
 </section>
 </li>
 </ul>

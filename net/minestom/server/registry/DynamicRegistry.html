@@ -229,7 +229,8 @@ loadScripts(document, 'script');</script>
  @Nullable <a href="../gamedata/DataPack.html" title="interface in net.minestom.server.gamedata">DataPack</a>&nbsp;pack)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registryDataPacket(boolean)" class="member-name-link">registryDataPacket</a><wbr>(boolean&nbsp;excludeVanilla)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registryDataPacket(net.minestom.server.registry.Registries,boolean)" class="member-name-link">registryDataPacket</a><wbr>(@NotNull <a href="Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries,
+ boolean&nbsp;excludeVanilla)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns a <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server"><code>SendablePacket</code></a> potentially excluding vanilla entries if possible.</div>
 </div>
@@ -565,15 +566,18 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="registryDataPacket(boolean)">
+<section class="detail" id="registryDataPacket(net.minestom.server.registry.Registries,boolean)">
 <h3>registryDataPacket</h3>
 <div class="member-signature"><span class="annotations">@Internal
 @NotNull
-</span><span class="return-type">@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span>&nbsp;<span class="element-name">registryDataPacket</span><wbr><span class="parameters">(boolean&nbsp;excludeVanilla)</span></div>
+</span><span class="return-type">@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span>&nbsp;<span class="element-name">registryDataPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Registries.html" title="interface in net.minestom.server.registry">Registries</a>&nbsp;registries,
+ boolean&nbsp;excludeVanilla)</span></div>
 <div class="block"><p>Returns a <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server"><code>SendablePacket</code></a> potentially excluding vanilla entries if possible. It is never possible to
  exclude vanilla entries if one has been overridden (e.g. via <a href="#register(net.minestom.server.utils.NamespaceID,T)"><code>register(NamespaceID, T)</code></a>.</p></div>
 <dl class="notes">
 <dt>Parameters:</dt>
+<dd><code>registries</code> - Registries provider</dd>
 <dd><code>excludeVanilla</code> - Whether to exclude vanilla entries</dd>
 <dt>Returns:</dt>
 <dd>A <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server"><code>SendablePacket</code></a> containing the registry data</dd>

@@ -93,10 +93,10 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
+<dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">DeclareRecipesPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a>&gt;&nbsp;recipes)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">DeclareRecipesPacket</span>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../../recipe/RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;&nbsp;itemProperties, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.StonecutterRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a>&gt;&nbsp;stonecutterRecipes)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -112,37 +112,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-second">Class</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.DeclaredBlastingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredBlastingRecipe</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="DeclareRecipesPacket.DeclaredCampfireCookingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredCampfireCookingRecipe</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.DeclaredRecipe.html" class="type-name-link" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="DeclareRecipesPacket.DeclaredShapedCraftingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredShapedCraftingRecipe</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.DeclaredShapelessCraftingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredShapelessCraftingRecipe</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="DeclareRecipesPacket.DeclaredSmeltingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredSmeltingRecipe</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.DeclaredSmithingTransformRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredSmithingTransformRecipe</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="DeclareRecipesPacket.DeclaredSmithingTrimRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredSmithingTrimRecipe</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.DeclaredSmokingRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredSmokingRecipe</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="DeclareRecipesPacket.DeclaredStonecutterRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredStonecutterRecipe</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.Ingredient.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.Ingredient</a></code></div>
+<div class="col-second even-row-color"><code><a href="DeclareRecipesPacket.StonecutterRecipe.html" class="type-name-link" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
@@ -159,12 +129,9 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final int</code></div>
-<div class="col-second even-row-color"><code><a href="#MAX_INGREDIENTS" class="member-name-link">MAX_INGREDIENTS</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="DeclareRecipesPacket.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#SERIALIZER" class="member-name-link">SERIALIZER</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final int</code></div>
-<div class="col-second odd-row-color"><code><a href="#MAX_RECIPES" class="member-name-link">MAX_RECIPES</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -176,12 +143,11 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.List)" class="member-name-link">DeclareRecipesPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a>&gt;&nbsp;recipes)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.Map,java.util.List)" class="member-name-link">DeclareRecipesPacket</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../../recipe/RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;&nbsp;itemProperties,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.StonecutterRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a>&gt;&nbsp;stonecutterRecipes)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>DeclareRecipesPacket</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">DeclareRecipesPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -206,31 +172,27 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#playId()" class="member-name-link">playId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recipes()" class="member-name-link">recipes</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="../../../../recipe/RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#itemProperties()" class="member-name-link">itemProperties</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>itemProperties</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="DeclareRecipesPacket.StonecutterRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#stonecutterRecipes()" class="member-name-link">stonecutterRecipes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>recipes</code> record component.</div>
+<div class="block">Returns the value of the <code>stonecutterRecipes</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.network.packet.server.ServerPacket">Methods inherited from interface&nbsp;net.minestom.server.network.packet.server.<a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></h3>
-<code><a href="../ServerPacket.html#getId(net.minestom.server.network.ConnectionState)">getId</a></code></div>
 </section>
 </li>
 </ul>
@@ -243,31 +205,9 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="MAX_RECIPES">
-<h3>MAX_RECIPES</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">MAX_RECIPES</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.DeclareRecipesPacket.MAX_RECIPES">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="MAX_INGREDIENTS">
-<h3>MAX_INGREDIENTS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">MAX_INGREDIENTS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../../../constant-values.html#net.minestom.server.network.packet.server.play.DeclareRecipesPacket.MAX_INGREDIENTS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
+<section class="detail" id="SERIALIZER">
+<h3>SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="DeclareRecipesPacket.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket</a>&gt;</span>&nbsp;<span class="element-name">SERIALIZER</span></div>
 </section>
 </li>
 </ul>
@@ -279,22 +219,18 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.List)">
+<section class="detail" id="&lt;init&gt;(java.util.Map,java.util.List)">
 <h3>DeclareRecipesPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeclareRecipesPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a>&gt;&nbsp;recipes)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../../recipe/RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;&nbsp;itemProperties,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.StonecutterRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a>&gt;&nbsp;stonecutterRecipes)</span></div>
 <div class="block">Creates an instance of a <code>DeclareRecipesPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>recipes</code> - the value for the <code>recipes</code> record component</dd>
+<dd><code>itemProperties</code> - the value for the <code>itemProperties</code> record component</dd>
+<dd><code>stonecutterRecipes</code> - the value for the <code>stonecutterRecipes</code> record component</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
-<h3>DeclareRecipesPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">DeclareRecipesPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
 </section>
 </li>
 </ul>
@@ -305,27 +241,6 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="playId()">
-<h3>playId</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">playId</span>()</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../ServerPacket.Play.html#playId()">playId</a></code>&nbsp;in interface&nbsp;<code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
-</dl>
-</section>
-</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
@@ -368,14 +283,26 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="recipes()">
-<h3>recipes</h3>
+<section class="detail" id="itemProperties()">
+<h3>itemProperties</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.DeclaredRecipe.html" title="interface in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.DeclaredRecipe</a>&gt;</span>&nbsp;<span class="element-name">recipes</span>()</div>
-<div class="block">Returns the value of the <code>recipes</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="../../../../recipe/RecipeProperty.html" title="enum class in net.minestom.server.recipe">RecipeProperty</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../../../item/Material.html" title="interface in net.minestom.server.item">Material</a>&gt;&gt;</span>&nbsp;<span class="element-name">itemProperties</span>()</div>
+<div class="block">Returns the value of the <code>itemProperties</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>recipes</code> record component</dd>
+<dd>the value of the <code>itemProperties</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="stonecutterRecipes()">
+<h3>stonecutterRecipes</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="DeclareRecipesPacket.StonecutterRecipe.html" title="class in net.minestom.server.network.packet.server.play">DeclareRecipesPacket.StonecutterRecipe</a>&gt;</span>&nbsp;<span class="element-name">stonecutterRecipes</span>()</div>
+<div class="block">Returns the value of the <code>stonecutterRecipes</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>stonecutterRecipes</code> record component</dd>
 </dl>
 </section>
 </li>

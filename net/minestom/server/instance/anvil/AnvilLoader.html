@@ -126,7 +126,7 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;@Nullable <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loadChunk(net.minestom.server.instance.Instance,int,int)" class="member-name-link">loadChunk</a><wbr>(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</code></div>
@@ -138,23 +138,23 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Loads instance data from the loader.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saveChunk(net.minestom.server.instance.Chunk)" class="member-name-link">saveChunk</a><wbr>(@NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Saves a <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saveInstance(net.minestom.server.instance.Instance)" class="member-name-link">saveInstance</a><wbr>(@NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supportsParallelLoading()" class="member-name-link">supportsParallelLoading</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Does this <a href="../IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded loading of <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
+<div class="block">Supports for instance/chunk loading in virtual threads.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#supportsParallelSaving()" class="member-name-link">supportsParallelSaving</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Does this <a href="../IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded saving of <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
+<div class="block">Supports for instance/chunk saving in virtual threads.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unloadChunk(net.minestom.server.instance.Chunk)" class="member-name-link">unloadChunk</a><wbr>(<a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</code></div>
@@ -221,8 +221,8 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <li>
 <section class="detail" id="loadChunk(net.minestom.server.instance.Instance,int,int)">
 <h3>loadChunk</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;@Nullable <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&gt;</span>&nbsp;<span class="element-name">loadChunk</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a></span>&nbsp;<span class="element-name">loadChunk</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</span></div>
@@ -236,15 +236,14 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <dd><code>chunkX</code> - the chunk X</dd>
 <dd><code>chunkZ</code> - the chunk Z</dd>
 <dt>Returns:</dt>
-<dd>a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> containing the chunk, or null if not present</dd>
+<dd>the chunk, or null if not present</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="saveInstance(net.minestom.server.instance.Instance)">
 <h3>saveInstance</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">saveInstance</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">saveInstance</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../Instance.html" title="class in net.minestom.server.instance">Instance</a>&nbsp;instance)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
@@ -255,8 +254,7 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <li>
 <section class="detail" id="saveChunk(net.minestom.server.instance.Chunk)">
 <h3>saveChunk</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link">CompletableFuture</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Void.html" title="class or interface in java.lang" class="external-link">Void</a>&gt;</span>&nbsp;<span class="element-name">saveChunk</span><wbr><span class="parameters">(@NotNull
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">saveChunk</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../Chunk.html" title="class in net.minestom.server.instance">Chunk</a>&nbsp;chunk)</span></div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../IChunkLoader.html#saveChunk(net.minestom.server.instance.Chunk)">IChunkLoader</a></code></span></div>
 <div class="block">Saves a <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> with an optional callback for when it is done.</div>
@@ -265,9 +263,6 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <dd><code><a href="../IChunkLoader.html#saveChunk(net.minestom.server.instance.Chunk)">saveChunk</a></code>&nbsp;in interface&nbsp;<code><a href="../IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>chunk</code> - the <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> to save</dd>
-<dt>Returns:</dt>
-<dd>a <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/CompletableFuture.html" title="class or interface in java.util.concurrent" class="external-link"><code>CompletableFuture</code></a> executed when the <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a> is done saving,
- should be called even if the saving failed (you can throw an exception).</dd>
 </dl>
 </section>
 </li>
@@ -289,7 +284,7 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <h3>supportsParallelLoading</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">supportsParallelLoading</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../IChunkLoader.html#supportsParallelLoading()">IChunkLoader</a></code></span></div>
-<div class="block">Does this <a href="../IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded loading of <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
+<div class="block">Supports for instance/chunk loading in virtual threads.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../IChunkLoader.html#supportsParallelLoading()">supportsParallelLoading</a></code>&nbsp;in interface&nbsp;<code><a href="../IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></code></dd>
@@ -303,7 +298,7 @@ implements <a href="../IChunkLoader.html" title="interface in net.minestom.serve
 <h3>supportsParallelSaving</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">supportsParallelSaving</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../IChunkLoader.html#supportsParallelSaving()">IChunkLoader</a></code></span></div>
-<div class="block">Does this <a href="../IChunkLoader.html" title="interface in net.minestom.server.instance"><code>IChunkLoader</code></a> allow for multi-threaded saving of <a href="../Chunk.html" title="class in net.minestom.server.instance"><code>Chunk</code></a>?</div>
+<div class="block">Supports for instance/chunk saving in virtual threads.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../IChunkLoader.html#supportsParallelSaving()">supportsParallelSaving</a></code>&nbsp;in interface&nbsp;<code><a href="../IChunkLoader.html" title="interface in net.minestom.server.instance">IChunkLoader</a></code></dd>

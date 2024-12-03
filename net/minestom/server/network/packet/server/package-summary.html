@@ -77,16 +77,18 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Package</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><a href="common/package-summary.html">net.minestom.server.network.packet.server.common</a></div>
+<div class="col-first even-row-color"><a href="../package-summary.html">net.minestom.server.network.packet</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="configuration/package-summary.html">net.minestom.server.network.packet.server.configuration</a></div>
+<div class="col-first odd-row-color"><a href="common/package-summary.html">net.minestom.server.network.packet.server.common</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="login/package-summary.html">net.minestom.server.network.packet.server.login</a></div>
+<div class="col-first even-row-color"><a href="configuration/package-summary.html">net.minestom.server.network.packet.server.configuration</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="play/package-summary.html">net.minestom.server.network.packet.server.play</a></div>
+<div class="col-first odd-row-color"><a href="login/package-summary.html">net.minestom.server.network.packet.server.login</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="status/package-summary.html">net.minestom.server.network.packet.server.status</a></div>
+<div class="col-first even-row-color"><a href="play/package-summary.html">net.minestom.server.network.packet.server.play</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><a href="status/package-summary.html">net.minestom.server.network.packet.server.status</a></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -97,38 +99,40 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="CachedPacket.html" title="class in net.minestom.server.network.packet.server">CachedPacket</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="BufferedPacket.html" title="class in net.minestom.server.network.packet.server">BufferedPacket</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">
+<div class="block">Represents a buffer to directly write to the network.</div>
+</div>
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="CachedPacket.html" title="class in net.minestom.server.network.packet.server">CachedPacket</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents a packet that is only computed when required (either due to memory demand or invalidated data)</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab4"><a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab4">
+<div class="col-first even-row-color class-summary class-summary-tab4"><a href="FramedPacket.html" title="class in net.minestom.server.network.packet.server">FramedPacket</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab4">
 <div class="block">Represents a packet which is already framed.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="LazyPacket.html" title="class in net.minestom.server.network.packet.server">LazyPacket</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
+<div class="col-first odd-row-color class-summary class-summary-tab2"><a href="LazyPacket.html" title="class in net.minestom.server.network.packet.server">LazyPacket</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab2">
 <div class="block">Represents a packet that is lazily allocated.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">
 <div class="block">Represents a packet that can be sent to a <a href="../../player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Represents a packet which can be sent to a player using <a href="../../player/PlayerConnection.html#sendPacket(net.minestom.server.network.packet.server.SendablePacket)"><code>PlayerConnection.sendPacket(SendablePacket)</code></a>.</div>
 </div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a></div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.ComponentHolding.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.ComponentHolding</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.Configuration.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Configuration</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.Login.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Login</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="ServerPacketIdentifier.html" title="class in net.minestom.server.network.packet.server">ServerPacketIdentifier</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="ServerPacket.Status.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Status</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
 </div>
 </div>
 </div>

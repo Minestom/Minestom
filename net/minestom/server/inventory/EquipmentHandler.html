@@ -88,7 +88,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Known Implementing Classes:</dt>
-<dd><code><a href="../entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code>, <code><a href="PlayerInventory.html" title="class in net.minestom.server.inventory">PlayerInventory</a></code></dd>
+<dd><code><a href="../entity/EntityCreature.html" title="class in net.minestom.server.entity">EntityCreature</a></code>, <code><a href="../entity/LivingEntity.html" title="class in net.minestom.server.entity">LivingEntity</a></code>, <code><a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">EquipmentHandler</span></div>
@@ -138,7 +138,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Gets the helmet.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getItemInHand(net.minestom.server.entity.Player.Hand)" class="member-name-link">getItemInHand</a><wbr>(<a href="../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#getItemInHand(net.minestom.server.entity.PlayerHand)" class="member-name-link">getItemInHand</a><wbr>(@NotNull <a href="../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Gets the <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> in the specific hand.</div>
 </div>
@@ -185,7 +185,7 @@ loadScripts(document, 'script');</script>
 <div class="block">Changes the helmet.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setItemInHand(net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)" class="member-name-link">setItemInHand</a><wbr>(<a href="../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#setItemInHand(net.minestom.server.entity.PlayerHand,net.minestom.server.item.ItemStack)" class="member-name-link">setItemInHand</a><wbr>(@NotNull <a href="../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand,
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;stack)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Changes the <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> in the specific hand.</div>
@@ -297,11 +297,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getItemInHand(net.minestom.server.entity.Player.Hand)">
+<section class="detail" id="getItemInHand(net.minestom.server.entity.PlayerHand)">
 <h3>getItemInHand</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">default</span>&nbsp;<span class="return-type">@NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">getItemInHand</span><wbr><span class="parameters">(@NotNull
- <a href="../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand)</span></div>
+ @NotNull <a href="../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand)</span></div>
 <div class="block">Gets the <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> in the specific hand.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -312,10 +312,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="setItemInHand(net.minestom.server.entity.Player.Hand,net.minestom.server.item.ItemStack)">
+<section class="detail" id="setItemInHand(net.minestom.server.entity.PlayerHand,net.minestom.server.item.ItemStack)">
 <h3>setItemInHand</h3>
 <div class="member-signature"><span class="modifiers">default</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setItemInHand</span><wbr><span class="parameters">(@NotNull
- <a href="../entity/Player.Hand.html" title="enum class in net.minestom.server.entity">Player.Hand</a>&nbsp;hand,
+ @NotNull <a href="../entity/PlayerHand.html" title="enum class in net.minestom.server.entity">PlayerHand</a>&nbsp;hand,
  @NotNull
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;stack)</span></div>
 <div class="block">Changes the <a href="../item/ItemStack.html" title="interface in net.minestom.server.item"><code>ItemStack</code></a> in the specific hand.</div>

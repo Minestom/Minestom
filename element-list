@@ -1,7 +1,6 @@
 net.kyori.adventure.nbt
 net.minestom.server
 net.minestom.server.advancements
-net.minestom.server.advancements.notifications
 net.minestom.server.adventure
 net.minestom.server.adventure.audience
 net.minestom.server.adventure.bossbar
@@ -106,6 +105,7 @@ net.minestom.server.map.framebuffers
 net.minestom.server.message
 net.minestom.server.monitoring
 net.minestom.server.network
+net.minestom.server.network.packet
 net.minestom.server.network.packet.client
 net.minestom.server.network.packet.client.common
 net.minestom.server.network.packet.client.configuration
@@ -124,10 +124,10 @@ net.minestom.server.network.player
 net.minestom.server.network.plugin
 net.minestom.server.network.socket
 net.minestom.server.particle
-net.minestom.server.permission
 net.minestom.server.ping
 net.minestom.server.potion
 net.minestom.server.recipe
+net.minestom.server.recipe.display
 net.minestom.server.registry
 net.minestom.server.scoreboard
 net.minestom.server.snapshot
@@ -138,18 +138,15 @@ net.minestom.server.thread
 net.minestom.server.timer
 net.minestom.server.utils
 net.minestom.server.utils.async
-net.minestom.server.utils.binary
 net.minestom.server.utils.block
 net.minestom.server.utils.callback
 net.minestom.server.utils.chunk
 net.minestom.server.utils.collection
 net.minestom.server.utils.crypto
 net.minestom.server.utils.entity
-net.minestom.server.utils.function
 net.minestom.server.utils.identity
 net.minestom.server.utils.inventory
 net.minestom.server.utils.location
-net.minestom.server.utils.math
 net.minestom.server.utils.mojang
 net.minestom.server.utils.nbt
 net.minestom.server.utils.position

@@ -97,13 +97,11 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="annotations">@Internal
-</span><span class="modifiers">public record </span><span class="element-name type-name-label">FramedPacket</span>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)
+</span><span class="modifiers">public record </span><span class="element-name type-name-label">FramedPacket</span>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet, @NotNull <a href="../../NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;body)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span></div>
 <div class="block">Represents a packet which is already framed. (packet id+payload) + optional compression
- Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.
- <p>
- The <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link"><code>ByteBuffer</code></a> will ultimately become a MemorySegment once out of incubation.</div>
+ Can be used if you want to send the exact same buffer to multiple clients without processing it more than once.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -115,8 +113,8 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.ServerPacket,java.nio.ByteBuffer)" class="member-name-link">FramedPacket</a><wbr>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.network.NetworkBuffer)" class="member-name-link">FramedPacket</a><wbr>(@NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
+ @NotNull <a href="../../NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;body)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>FramedPacket</code> record class.</div>
 </div>
@@ -134,7 +132,7 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#body()" class="member-name-link">body</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>body</code> record component.</div>
@@ -177,12 +175,12 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.packet.server.ServerPacket,java.nio.ByteBuffer)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.network.packet.server.ServerPacket,net.minestom.server.network.NetworkBuffer)">
 <h3>FramedPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">FramedPacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a>&nbsp;packet,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a>&nbsp;body)</span></div>
+ @NotNull <a href="../../NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;body)</span></div>
 <div class="block">Creates an instance of a <code>FramedPacket</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -256,7 +254,7 @@ implements <a href="SendablePacket.html" title="interface in net.minestom.server
 <section class="detail" id="body()">
 <h3>body</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/ByteBuffer.html" title="class or interface in java.nio" class="external-link">ByteBuffer</a></span>&nbsp;<span class="element-name">body</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></span>&nbsp;<span class="element-name">body</span>()</div>
 <div class="block">Returns the value of the <code>body</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

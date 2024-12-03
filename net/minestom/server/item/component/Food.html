@@ -38,7 +38,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Summary:</p>
 <ul>
-<li><a href="#nested-class-summary">Nested</a></li>
+<li>Nested</li>
 <li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
@@ -58,7 +58,7 @@ loadScripts(document, 'script');</script>
 <div id="navbar-sub-list">
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
@@ -92,26 +92,11 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">Food</span>(int&nbsp;nutrition, float&nbsp;saturationModifier, boolean&nbsp;canAlwaysEat, float&nbsp;eatSeconds, @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo, @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">Food</span>(int&nbsp;nutrition, float&nbsp;saturationModifier, boolean&nbsp;canAlwaysEat)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<li>
-<section class="nested-class-summary" id="nested-class-summary">
-<h2>Nested Class Summary</h2>
-<div class="caption"><span>Nested Classes</span></div>
-<div class="summary-table three-column-summary">
-<div class="table-header col-first">Modifier and Type</div>
-<div class="table-header col-second">Class</div>
-<div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Food.EffectChance.html" class="type-name-link" title="class in net.minestom.server.item.component">Food.EffectChance</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-</div>
-</section>
-</li>
 <!-- =========== FIELD SUMMARY =========== -->
 <li>
 <section class="field-summary" id="field-summary">
@@ -121,15 +106,12 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final float</code></div>
-<div class="col-second even-row-color"><code><a href="#DEFAULT_EAT_SECONDS" class="member-name-link">DEFAULT_EAT_SECONDS</a></code></div>
+<div class="col-first even-row-color"><code>static final <a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="Food.html" title="class in net.minestom.server.item.component">Food</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#NBT_TYPE" class="member-name-link">NBT_TYPE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="Food.html" title="class in net.minestom.server.item.component">Food</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#NBT_TYPE" class="member-name-link">NBT_TYPE</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Food.html" title="class in net.minestom.server.item.component">Food</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#NETWORK_TYPE" class="member-name-link">NETWORK_TYPE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Food.html" title="class in net.minestom.server.item.component">Food</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#NETWORK_TYPE" class="member-name-link">NETWORK_TYPE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -141,12 +123,9 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,float,boolean,float,net.minestom.server.item.ItemStack,java.util.List)" class="member-name-link">Food</a><wbr>(int&nbsp;nutrition,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,float,boolean)" class="member-name-link">Food</a><wbr>(int&nbsp;nutrition,
  float&nbsp;saturationModifier,
- boolean&nbsp;canAlwaysEat,
- float&nbsp;eatSeconds,
- @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)</code></div>
+ boolean&nbsp;canAlwaysEat)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>Food</code> record class.</div>
 </div>
@@ -169,48 +148,30 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>canAlwaysEat</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eatDurationTicks()" class="member-name-link">eatDurationTicks</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eatSeconds()" class="member-name-link">eatSeconds</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>eatSeconds</code> record component.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#effects()" class="member-name-link">effects</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>effects</code> record component.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nutrition()" class="member-name-link">nutrition</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#nutrition()" class="member-name-link">nutrition</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>nutrition</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saturationModifier()" class="member-name-link">saturationModifier</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#saturationModifier()" class="member-name-link">saturationModifier</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>saturationModifier</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns a string representation of this record class.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#usingConvertsTo()" class="member-name-link">usingConvertsTo</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>usingConvertsTo</code> record component.</div>
+<div class="block">Returns a string representation of this record class.</div>
 </div>
 </div>
 </div>
@@ -229,20 +190,6 @@ loadScripts(document, 'script');</script>
 <section class="field-details" id="field-detail">
 <h2>Field Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="DEFAULT_EAT_SECONDS">
-<h3>DEFAULT_EAT_SECONDS</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">DEFAULT_EAT_SECONDS</span></div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="../../../../../constant-values.html#net.minestom.server.item.component.Food.DEFAULT_EAT_SECONDS">Constant Field Values</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</li>
 <li>
 <section class="detail" id="NETWORK_TYPE">
 <h3>NETWORK_TYPE</h3>
@@ -264,25 +211,17 @@ loadScripts(document, 'script');</script>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,float,boolean,float,net.minestom.server.item.ItemStack,java.util.List)">
+<section class="detail" id="&lt;init&gt;(int,float,boolean)">
 <h3>Food</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Food</span><wbr><span class="parameters">(int&nbsp;nutrition,
  float&nbsp;saturationModifier,
- boolean&nbsp;canAlwaysEat,
- float&nbsp;eatSeconds,
- @NotNull
- @NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;usingConvertsTo,
- @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;&nbsp;effects)</span></div>
+ boolean&nbsp;canAlwaysEat)</span></div>
 <div class="block">Creates an instance of a <code>Food</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>nutrition</code> - the value for the <code>nutrition</code> record component</dd>
 <dd><code>saturationModifier</code> - the value for the <code>saturationModifier</code> record component</dd>
 <dd><code>canAlwaysEat</code> - the value for the <code>canAlwaysEat</code> record component</dd>
-<dd><code>eatSeconds</code> - the value for the <code>eatSeconds</code> record component</dd>
-<dd><code>usingConvertsTo</code> - the value for the <code>usingConvertsTo</code> record component</dd>
-<dd><code>effects</code> - the value for the <code>effects</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -294,12 +233,6 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="eatDurationTicks()">
-<h3>eatDurationTicks</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">eatDurationTicks</span>()</div>
-</section>
-</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>
@@ -330,7 +263,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with '=='.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -371,41 +304,6 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>canAlwaysEat</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="eatSeconds()">
-<h3>eatSeconds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">float</span>&nbsp;<span class="element-name">eatSeconds</span>()</div>
-<div class="block">Returns the value of the <code>eatSeconds</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>eatSeconds</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="usingConvertsTo()">
-<h3>usingConvertsTo</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></span>&nbsp;<span class="element-name">usingConvertsTo</span>()</div>
-<div class="block">Returns the value of the <code>usingConvertsTo</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>usingConvertsTo</code> record component</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="effects()">
-<h3>effects</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Food.EffectChance.html" title="class in net.minestom.server.item.component">Food.EffectChance</a>&gt;</span>&nbsp;<span class="element-name">effects</span>()</div>
-<div class="block">Returns the value of the <code>effects</code> record component.</div>
-<dl class="notes">
-<dt>Returns:</dt>
-<dd>the value of the <code>effects</code> record component</dd>
 </dl>
 </section>
 </li>

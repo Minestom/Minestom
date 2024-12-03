@@ -101,8 +101,7 @@ loadScripts(document, 'script');</script>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public non-sealed class </span><span class="element-name type-name-label">Inventory</span>
-<span class="extends-implements">extends <a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>
-implements <a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></span></div>
+<span class="extends-implements">extends <a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></span></div>
 <div class="block">Represents an inventory which can be viewed by a collection of <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a>.
  <p>
  You can create one with <a href="#%3Cinit%3E(net.minestom.server.inventory.InventoryType,java.lang.String)"><code>Inventory(InventoryType, String)</code></a> or by making your own subclass.
@@ -116,7 +115,7 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <h2>Field Summary</h2>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.inventory.AbstractInventory">Fields inherited from class&nbsp;net.minestom.server.inventory.<a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></h3>
-<code><a href="AbstractInventory.html#clickProcessor">clickProcessor</a>, <a href="AbstractInventory.html#inventoryConditions">inventoryConditions</a>, <a href="AbstractInventory.html#itemStacks">itemStacks</a></code></div>
+<code><a href="AbstractInventory.html#clickProcessor">clickProcessor</a>, <a href="AbstractInventory.html#inventoryConditions">inventoryConditions</a>, <a href="AbstractInventory.html#itemStacks">itemStacks</a>, <a href="AbstractInventory.html#unmodifiableViewers">unmodifiableViewers</a>, <a href="AbstractInventory.html#viewers">viewers</a></code></div>
 </section>
 </li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -195,89 +194,69 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the inventory title.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getViewers()" class="member-name-link">getViewers</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWindowId()" class="member-name-link">getWindowId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets all the viewers of this viewable element.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getWindowId()" class="member-name-link">getWindowId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets this window id.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftClick(net.minestom.server.entity.Player,int)" class="member-name-link">leftClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
- int&nbsp;slot)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> left click in the inventory.</div>
-</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#middleClick(net.minestom.server.entity.Player,int)" class="member-name-link">middleClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
- int&nbsp;slot)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeViewer(net.minestom.server.entity.Player)" class="member-name-link">removeViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">This will not close the inventory for <code>player</code>, use <a href="../entity/Player.html#closeInventory()"><code>Player.closeInventory()</code></a>.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightClick(net.minestom.server.entity.Player,int)" class="member-name-link">rightClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#leftClick(net.minestom.server.entity.Player,int)" class="member-name-link">leftClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  int&nbsp;slot)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> left click in the inventory.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#middleClick(net.minestom.server.entity.Player,int)" class="member-name-link">middleClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ int&nbsp;slot)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeViewer(net.minestom.server.entity.Player)" class="member-name-link">removeViewer</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">This will not close the inventory for <code>player</code>, use <a href="../entity/Player.html#closeInventory()"><code>Player.closeInventory()</code></a>.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#rightClick(net.minestom.server.entity.Player,int)" class="member-name-link">rightClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ int&nbsp;slot)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> right click in the inventory.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendProperty(net.minestom.server.inventory.InventoryProperty,short)" class="member-name-link">sendProperty</a><wbr>(@NotNull <a href="InventoryProperty.html" title="enum class in net.minestom.server.inventory">InventoryProperty</a>&nbsp;property,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sendProperty(net.minestom.server.inventory.InventoryProperty,short)" class="member-name-link">sendProperty</a><wbr>(@NotNull <a href="InventoryProperty.html" title="enum class in net.minestom.server.inventory">InventoryProperty</a>&nbsp;property,
  short&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Sends a window property to all viewers.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#setCursorItem(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)" class="member-name-link">setCursorItem</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#setCursorItem(net.minestom.server.entity.Player,net.minestom.server.item.ItemStack)" class="member-name-link">setCursorItem</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;cursorItem)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
 <div class="block"><span class="deprecated-label">Deprecated.</span>
 <div class="deprecation-comment">normal inventories no longer store cursor items</div>
 </div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTitle(net.kyori.adventure.text.Component)" class="member-name-link">setTitle</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;title)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setTitle(net.kyori.adventure.text.Component)" class="member-name-link">setTitle</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;title)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the inventory title.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shiftClick(net.minestom.server.entity.Player,int)" class="member-name-link">shiftClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shiftClick(net.minestom.server.entity.Player,int)" class="member-name-link">shiftClick</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  int&nbsp;slot)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> shift click in the inventory</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,boolean)" class="member-name-link">UNSAFE_itemInsert</a><wbr>(int&nbsp;slot,
- @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
- boolean&nbsp;sendPacket)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update()" class="member-name-link">update</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Refreshes the inventory for all viewers.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#update(net.minestom.server.entity.Player)" class="member-name-link">update</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Refreshes the inventory for a specific viewer.</div>
+<div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> shift click in the inventory</div>
 </div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.inventory.AbstractInventory">Methods inherited from class&nbsp;net.minestom.server.inventory.<a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></h3>
-<code><a href="AbstractInventory.html#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a>, <a href="AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a>, <a href="AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">addItemStack</a>, <a href="AbstractInventory.html#addItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">addItemStacks</a>, <a href="AbstractInventory.html#clear()">clear</a>, <a href="AbstractInventory.html#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a>, <a href="AbstractInventory.html#getInnerSize()">getInnerSize</a>, <a href="AbstractInventory.html#getInventoryConditions()">getInventoryConditions</a>, <a href="AbstractInventory.html#getItemStack(int)">getItemStack</a>, <a href="AbstractInventory.html#getItemStacks()">getItemStacks</a>, <a href="AbstractInventory.html#getSize()">getSize</a>, <a href="AbstractInventory.html#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStack</a>, <a href="AbstractInventory.html#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStacks</a>, <a href="AbstractInventory.html#replaceItemStack(int,java.util.function.UnaryOperator)">replaceItemStack</a>, <a href="AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)">safeItemInsert</a>, <a href="AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack,boolean)">safeItemInsert</a>, <a href="AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a>, <a href="AbstractInventory.html#tagHandler()">tagHandler</a>, <a href="AbstractInventory.html#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">takeItemStack</a>, <a href="AbstractInventory.html#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">takeItemStacks</a></code></div>
+<code><a href="AbstractInventory.html#addInventoryCondition(net.minestom.server.inventory.condition.InventoryCondition)">addInventoryCondition</a>, <a href="AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack)">addItemStack</a>, <a href="AbstractInventory.html#addItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">addItemStack</a>, <a href="AbstractInventory.html#addItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">addItemStacks</a>, <a href="AbstractInventory.html#clear()">clear</a>, <a href="AbstractInventory.html#copyContents(net.minestom.server.item.ItemStack%5B%5D)">copyContents</a>, <a href="AbstractInventory.html#getInnerSize()">getInnerSize</a>, <a href="AbstractInventory.html#getInventoryConditions()">getInventoryConditions</a>, <a href="AbstractInventory.html#getItemStack(int)">getItemStack</a>, <a href="AbstractInventory.html#getItemStacks()">getItemStacks</a>, <a href="AbstractInventory.html#getSize()">getSize</a>, <a href="AbstractInventory.html#getViewers()">getViewers</a>, <a href="AbstractInventory.html#processItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStack</a>, <a href="AbstractInventory.html#processItemStacks(java.util.List,net.minestom.server.inventory.TransactionType,net.minestom.server.inventory.TransactionOption)">processItemStacks</a>, <a href="AbstractInventory.html#replaceItemStack(int,java.util.function.UnaryOperator)">replaceItemStack</a>, <a href="AbstractInventory.html#sendSlotRefresh(int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">sendSlotRefresh</a>, <a href="AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack)">setItemStack</a>, <a href="AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack,boolean)">setItemStack</a>, <a href="AbstractInventory.html#tagHandler()">tagHandler</a>, <a href="AbstractInventory.html#takeItemStack(net.minestom.server.item.ItemStack,net.minestom.server.inventory.TransactionOption)">takeItemStack</a>, <a href="AbstractInventory.html#takeItemStacks(java.util.List,net.minestom.server.inventory.TransactionOption)">takeItemStacks</a>, <a href="AbstractInventory.html#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack,boolean)">UNSAFE_itemInsert</a>, <a href="AbstractInventory.html#update()">update</a>, <a href="AbstractInventory.html#update(net.minestom.server.entity.Player)">update</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.inventory.InventoryClickHandler">Methods inherited from interface&nbsp;net.minestom.server.inventory.<a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></h3>
-<code><a href="InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.Inventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent</a></code></div>
+<code><a href="InventoryClickHandler.html#callClickEvent(net.minestom.server.entity.Player,net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.inventory.click.ClickType,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">callClickEvent</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.tag.Taggable">Methods inherited from interface&nbsp;net.minestom.server.tag.<a href="../tag/Taggable.html" title="interface in net.minestom.server.tag">Taggable</a></h3>
 <code><a href="../tag/Taggable.html#getAndSetTag(net.minestom.server.tag.Tag,T)">getAndSetTag</a>, <a href="../tag/Taggable.html#getAndUpdateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">getAndUpdateTag</a>, <a href="../tag/Taggable.html#getTag(net.minestom.server.tag.Tag)">getTag</a>, <a href="../tag/Taggable.html#hasTag(net.minestom.server.tag.Tag)">hasTag</a>, <a href="../tag/Taggable.html#removeTag(net.minestom.server.tag.Tag)">removeTag</a>, <a href="../tag/Taggable.html#setTag(net.minestom.server.tag.Tag,T)">setTag</a>, <a href="../tag/Taggable.html#updateAndGetTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">updateAndGetTag</a>, <a href="../tag/Taggable.html#updateTag(net.minestom.server.tag.Tag,java.util.function.UnaryOperator)">updateTag</a></code></div>
@@ -361,52 +340,15 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <section class="detail" id="getWindowId()">
 <h3>getWindowId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte</span>&nbsp;<span class="element-name">getWindowId</span>()</div>
+<div class="block"><span class="description-from-type-label">Description copied from class:&nbsp;<code><a href="AbstractInventory.html#getWindowId()">AbstractInventory</a></code></span></div>
 <div class="block">Gets this window id.
  <p>
  This is the id that the client will send to identify the affected inventory, mostly used by packets.</div>
 <dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="AbstractInventory.html#getWindowId()">getWindowId</a></code>&nbsp;in class&nbsp;<code><a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></dd>
 <dt>Returns:</dt>
 <dd>the window id</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="update()">
-<h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">update</span>()</div>
-<div class="block">Refreshes the inventory for all viewers.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="AbstractInventory.html#update()">update</a></code>&nbsp;in class&nbsp;<code><a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="update(net.minestom.server.entity.Player)">
-<h3>update</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">update</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
-<div class="block">Refreshes the inventory for a specific viewer.
- <p>
- The player needs to be a viewer, otherwise nothing is sent.</div>
-<dl class="notes">
-<dt>Parameters:</dt>
-<dd><code>player</code> - the player to update the inventory</dd>
-</dl>
-</section>
-</li>
-<li>
-<section class="detail" id="getViewers()">
-<h3>getViewers</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;</span>&nbsp;<span class="element-name">getViewers</span>()</div>
-<div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../Viewable.html#getViewers()">Viewable</a></code></span></div>
-<div class="block">Gets all the viewers of this viewable element.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../Viewable.html#getViewers()">getViewers</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
-<dt>Returns:</dt>
-<dd>A Set containing all the element's viewers</dd>
 </dl>
 </section>
 </li>
@@ -419,6 +361,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#addViewer(net.minestom.server.entity.Player)">addViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="AbstractInventory.html#addViewer(net.minestom.server.entity.Player)">addViewer</a></code>&nbsp;in class&nbsp;<code><a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the viewer to add</dd>
 <dt>Returns:</dt>
@@ -435,6 +379,8 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../Viewable.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></code>&nbsp;in interface&nbsp;<code><a href="../Viewable.html" title="interface in net.minestom.server">Viewable</a></code></dd>
+<dt>Overrides:</dt>
+<dd><code><a href="AbstractInventory.html#removeViewer(net.minestom.server.entity.Player)">removeViewer</a></code>&nbsp;in class&nbsp;<code><a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the viewer to remove</dd>
 <dt>Returns:</dt>
@@ -486,19 +432,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 </section>
 </li>
 <li>
-<section class="detail" id="UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,boolean)">
-<h3>UNSAFE_itemInsert</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">UNSAFE_itemInsert</span><wbr><span class="parameters">(int&nbsp;slot,
- @NotNull
- @NotNull <a href="../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;itemStack,
- boolean&nbsp;sendPacket)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="AbstractInventory.html#UNSAFE_itemInsert(int,net.minestom.server.item.ItemStack,boolean)">UNSAFE_itemInsert</a></code>&nbsp;in class&nbsp;<code><a href="AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="sendProperty(net.minestom.server.inventory.InventoryProperty,short)">
 <h3>sendProperty</h3>
 <div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">sendProperty</span><wbr><span class="parameters">(@NotNull
@@ -527,8 +460,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#leftClick(net.minestom.server.entity.Player,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> left click in the inventory. Can also be to drop the cursor item</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#leftClick(net.minestom.server.entity.Player,int)">leftClick</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>slot</code> - the slot number</dd>
@@ -546,8 +477,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#rightClick(net.minestom.server.entity.Player,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> right click in the inventory. Can also be to drop the cursor item</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#rightClick(net.minestom.server.entity.Player,int)">rightClick</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>slot</code> - the slot number</dd>
@@ -565,8 +494,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#shiftClick(net.minestom.server.entity.Player,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> shift click in the inventory</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#shiftClick(net.minestom.server.entity.Player,int)">shiftClick</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>slot</code> - the slot number</dd>
@@ -585,8 +512,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#changeHeld(net.minestom.server.entity.Player,int,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> held click in the inventory</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#changeHeld(net.minestom.server.entity.Player,int,int)">changeHeld</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>slot</code> - the slot number</dd>
@@ -602,10 +527,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">middleClick</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  int&nbsp;slot)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#middleClick(net.minestom.server.entity.Player,int)">middleClick</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
-</dl>
 </section>
 </li>
 <li>
@@ -619,8 +540,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#drop(net.minestom.server.entity.Player,boolean,int,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> press the drop button</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#drop(net.minestom.server.entity.Player,boolean,int,int)">drop</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>all</code> - </dd>
@@ -638,10 +557,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
  @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
  int&nbsp;slot,
  int&nbsp;button)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#dragging(net.minestom.server.entity.Player,int,int)">dragging</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
-</dl>
 </section>
 </li>
 <li>
@@ -653,8 +568,6 @@ implements <a href="../Viewable.html" title="interface in net.minestom.server">V
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="InventoryClickHandler.html#doubleClick(net.minestom.server.entity.Player,int)">InventoryClickHandler</a></code></span></div>
 <div class="block">Called when a <a href="../entity/Player.html" title="class in net.minestom.server.entity"><code>Player</code></a> double click in the inventory</div>
 <dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="InventoryClickHandler.html#doubleClick(net.minestom.server.entity.Player,int)">doubleClick</a></code>&nbsp;in interface&nbsp;<code><a href="InventoryClickHandler.html" title="interface in net.minestom.server.inventory">InventoryClickHandler</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>player</code> - the player who clicked</dd>
 <dd><code>slot</code> - the slot number</dd>

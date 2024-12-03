@@ -90,7 +90,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">RecipeManager</span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RecipeManager</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 </section>
 <section class="summary">
@@ -120,19 +120,32 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRecipe(net.minestom.server.recipe.Recipe)" class="member-name-link">addRecipe</a><wbr>(@NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRecipe(net.minestom.server.recipe.Recipe)" class="member-name-link">addRecipe</a><wbr>(@NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRecipes(net.minestom.server.recipe.Recipe...)" class="member-name-link">addRecipes</a><wbr>(@NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>...&nbsp;recipe)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#addRecipe(net.minestom.server.recipe.Recipe,java.util.function.Predicate)" class="member-name-link">addRecipe</a><wbr>(@NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDeclareRecipesPacket()" class="member-name-link">getDeclareRecipesPacket</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/play/RecipeBookAddPacket.html" title="class in net.minestom.server.network.packet.server.play">RecipeBookAddPacket</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#createRecipeBookResetPacket(net.minestom.server.entity.Player)" class="member-name-link">createRecipeBookResetPacket</a><wbr>(@NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a <a href="../network/packet/server/play/RecipeBookAddPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>RecipeBookAddPacket</code></a> which replaces the recipe book with the currently unlocked
+ recipes for this player.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getDeclareRecipesPacket()" class="member-name-link">getDeclareRecipesPacket</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="display/RecipeDisplay.html" title="interface in net.minestom.server.recipe.display">RecipeDisplay</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecipeDisplay(int,net.minestom.server.entity.Player)" class="member-name-link">getRecipeDisplay</a><wbr>(int&nbsp;displayId,
+ @Nullable <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Get the recipe display for the specified display id, optionally testing visibility against the given player.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRecipes()" class="member-name-link">getRecipes</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeRecipe(net.minestom.server.recipe.Recipe)" class="member-name-link">removeRecipe</a><wbr>(@NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeRecipe(net.minestom.server.recipe.Recipe)" class="member-name-link">removeRecipe</a><wbr>(@NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -166,31 +179,50 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="addRecipes(net.minestom.server.recipe.Recipe...)">
-<h3>addRecipes</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addRecipes</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>...&nbsp;recipe)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="addRecipe(net.minestom.server.recipe.Recipe)">
 <h3>addRecipe</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addRecipe</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</span></div>
+ @NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="addRecipe(net.minestom.server.recipe.Recipe,java.util.function.Predicate)">
+<h3>addRecipe</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">addRecipe</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe,
+ @NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Predicate.html" title="class or interface in java.util.function" class="external-link">Predicate</a>&lt;<a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&gt;&nbsp;predicate)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="removeRecipe(net.minestom.server.recipe.Recipe)">
 <h3>removeRecipe</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">removeRecipe</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</span></div>
+ @NotNull <a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&nbsp;recipe)</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="getRecipes()">
 <h3>getRecipes</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Recipe.html" title="class in net.minestom.server.recipe">Recipe</a>&gt;</span>&nbsp;<span class="element-name">getRecipes</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="Recipe.html" title="interface in net.minestom.server.recipe">Recipe</a>&gt;</span>&nbsp;<span class="element-name">getRecipes</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getRecipeDisplay(int,net.minestom.server.entity.Player)">
+<h3>getRecipeDisplay</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="display/RecipeDisplay.html" title="interface in net.minestom.server.recipe.display">RecipeDisplay</a></span>&nbsp;<span class="element-name">getRecipeDisplay</span><wbr><span class="parameters">(int&nbsp;displayId,
+ @Nullable
+ @Nullable <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+<div class="block">Get the recipe display for the specified display id, optionally testing visibility against the given player.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>displayId</code> - the display id</dd>
+<dd><code>player</code> - the player to test visibility against, or null to ignore visibility</dd>
+<dt>Returns:</dt>
+<dd>the recipe display, or null if not found or not visible</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -198,6 +230,22 @@ loadScripts(document, 'script');</script>
 <h3>getDeclareRecipesPacket</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></span>&nbsp;<span class="element-name">getDeclareRecipesPacket</span>()</div>
+</section>
+</li>
+<li>
+<section class="detail" id="createRecipeBookResetPacket(net.minestom.server.entity.Player)">
+<h3>createRecipeBookResetPacket</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../network/packet/server/play/RecipeBookAddPacket.html" title="class in net.minestom.server.network.packet.server.play">RecipeBookAddPacket</a></span>&nbsp;<span class="element-name">createRecipeBookResetPacket</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+<div class="block">Creates a <a href="../network/packet/server/play/RecipeBookAddPacket.html" title="class in net.minestom.server.network.packet.server.play"><code>RecipeBookAddPacket</code></a> which replaces the recipe book with the currently unlocked
+ recipes for this player.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>player</code> - the player to create the packet for</dd>
+<dt>Returns:</dt>
+<dd>the recipe book add packet with replace set to true</dd>
+</dl>
 </section>
 </li>
 </ul>

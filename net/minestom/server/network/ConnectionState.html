@@ -98,7 +98,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public enum </span><span class="element-name type-name-label">ConnectionState</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a>&gt;</span></div>
-<div class="block">Represents the current connection state of a <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
+<div class="block">Represents the connection state of a client.</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -120,15 +120,25 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="#CONFIGURATION" class="member-name-link">CONFIGURATION</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Client acknowledged login and is now configuring the game.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#HANDSHAKE" class="member-name-link">HANDSHAKE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Default state before any packet is received.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="#LOGIN" class="member-name-link">LOGIN</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Client declares `Login` intent during handshake.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#PLAY" class="member-name-link">PLAY</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Client (re-)finished configuration.</div>
+</div>
 <div class="col-first even-row-color"><code><a href="#STATUS" class="member-name-link">STATUS</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Client declares `Status` intent during handshake.</div>
+</div>
 </div>
 </section>
 </li>
@@ -178,30 +188,36 @@ the order they are declared.</div>
 <section class="detail" id="HANDSHAKE">
 <h3>HANDSHAKE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></span>&nbsp;<span class="element-name">HANDSHAKE</span></div>
+<div class="block">Default state before any packet is received.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="STATUS">
 <h3>STATUS</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></span>&nbsp;<span class="element-name">STATUS</span></div>
+<div class="block">Client declares `Status` intent during handshake.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="LOGIN">
 <h3>LOGIN</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></span>&nbsp;<span class="element-name">LOGIN</span></div>
+<div class="block">Client declares `Login` intent during handshake.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="CONFIGURATION">
 <h3>CONFIGURATION</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></span>&nbsp;<span class="element-name">CONFIGURATION</span></div>
+<div class="block">Client acknowledged login and is now configuring the game.
+ Can also go back to configuration from play.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="PLAY">
 <h3>PLAY</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></span>&nbsp;<span class="element-name">PLAY</span></div>
+<div class="block">Client (re-)finished configuration.</div>
 </section>
 </li>
 </ul>

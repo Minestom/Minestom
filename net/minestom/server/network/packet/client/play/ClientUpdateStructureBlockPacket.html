@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code>, <code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></dd>
+<dd><code><a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ClientUpdateStructureBlockPacket</span>(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;location, <a href="ClientUpdateStructureBlockPacket.Action.html" title="enum class in net.minestom.server.network.packet.client.play">ClientUpdateStructureBlockPacket.Action</a>&nbsp;action, <a href="ClientUpdateStructureBlockPacket.Mode.html" title="enum class in net.minestom.server.network.packet.client.play">ClientUpdateStructureBlockPacket.Mode</a>&nbsp;mode, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name, <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset, <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;size, <a href="ClientUpdateStructureBlockPacket.Mirror.html" title="enum class in net.minestom.server.network.packet.client.play">ClientUpdateStructureBlockPacket.Mirror</a>&nbsp;mirror, <a href="../../../../utils/Rotation.html" title="enum class in net.minestom.server.utils">Rotation</a>&nbsp;rotation, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;metadata, float&nbsp;integrity, long&nbsp;seed, byte&nbsp;flags)
@@ -137,12 +137,15 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-first even-row-color"><code>static final byte</code></div>
 <div class="col-second even-row-color"><code><a href="#IGNORE_ENTITIES" class="member-name-link">IGNORE_ENTITIES</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final byte</code></div>
-<div class="col-second odd-row-color"><code><a href="#SHOW_AIR" class="member-name-link">SHOW_AIR</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="ClientUpdateStructureBlockPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientUpdateStructureBlockPacket</a>&gt;</code></div>
+<div class="col-second odd-row-color"><code><a href="#SERIALIZER" class="member-name-link">SERIALIZER</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final byte</code></div>
-<div class="col-second even-row-color"><code><a href="#SHOW_BOUNDING_BOX" class="member-name-link">SHOW_BOUNDING_BOX</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-second even-row-color"><code><a href="#SHOW_AIR" class="member-name-link">SHOW_AIR</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final byte</code></div>
+<div class="col-second odd-row-color"><code><a href="#SHOW_BOUNDING_BOX" class="member-name-link">SHOW_BOUNDING_BOX</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Requires the player to be in creative and have a permission level higher than 2.</div>
 </div>
 </div>
@@ -171,8 +174,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ClientUpdateStructureBlockPacket</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.network.NetworkBuffer)" class="member-name-link">ClientUpdateStructureBlockPacket</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -262,18 +263,12 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#write(net.minestom.server.network.NetworkBuffer)" class="member-name-link">write</a><wbr>(@NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
 <code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
-<div class="inherited-list">
-<h3 id="methods-inherited-from-class-net.minestom.server.network.packet.client.ClientPacket">Methods inherited from interface&nbsp;net.minestom.server.network.packet.client.<a href="../ClientPacket.html" title="interface in net.minestom.server.network.packet.client">ClientPacket</a></h3>
-<code><a href="../ClientPacket.html#processImmediately()">processImmediately</a></code></div>
 </section>
 </li>
 </ul>
@@ -285,6 +280,12 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="field-details" id="field-detail">
 <h2>Field Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="SERIALIZER">
+<h3>SERIALIZER</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../../NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="ClientUpdateStructureBlockPacket.html" title="class in net.minestom.server.network.packet.client.play">ClientUpdateStructureBlockPacket</a>&gt;</span>&nbsp;<span class="element-name">SERIALIZER</span></div>
+</section>
+</li>
 <li>
 <section class="detail" id="IGNORE_ENTITIES">
 <h3>IGNORE_ENTITIES</h3>
@@ -337,13 +338,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.network.NetworkBuffer)">
-<h3>ClientUpdateStructureBlockPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientUpdateStructureBlockPacket</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="&lt;init&gt;(net.minestom.server.coordinate.Point,net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket.Action,net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket.Mode,java.lang.String,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,net.minestom.server.network.packet.client.play.ClientUpdateStructureBlockPacket.Mirror,net.minestom.server.utils.Rotation,java.lang.String,float,long,byte)">
 <h3>ClientUpdateStructureBlockPacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ClientUpdateStructureBlockPacket</span><wbr><span class="parameters">(<a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;location,
@@ -384,17 +378,6 @@ implements <a href="../ClientPacket.html" title="interface in net.minestom.serve
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="write(net.minestom.server.network.NetworkBuffer)">
-<h3>write</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">write</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../../NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a>&nbsp;writer)</span></div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../../../NetworkBuffer.Writer.html#write(net.minestom.server.network.NetworkBuffer)">write</a></code>&nbsp;in interface&nbsp;<code><a href="../../../NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></code></dd>
-</dl>
-</section>
-</li>
 <li>
 <section class="detail" id="toString()">
 <h3>toString</h3>

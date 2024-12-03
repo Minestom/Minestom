@@ -79,12 +79,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><a href="../package-summary.html">net.minestom.server</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="player/package-summary.html">net.minestom.server.network.player</a></div>
+<div class="col-first odd-row-color"><a href="packet/package-summary.html">net.minestom.server.network.packet</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><a href="plugin/package-summary.html">net.minestom.server.network.plugin</a></div>
+<div class="col-first even-row-color"><a href="player/package-summary.html">net.minestom.server.network.player</a></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><a href="socket/package-summary.html">net.minestom.server.network.socket</a></div>
+<div class="col-first odd-row-color"><a href="plugin/package-summary.html">net.minestom.server.network.plugin</a></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><a href="socket/package-summary.html">net.minestom.server.network.socket</a></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </div>
 </li>
@@ -101,27 +103,61 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color class-summary class-summary-tab3"><a href="ConnectionState.html" title="enum class in net.minestom.server.network">ConnectionState</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab3">
-<div class="block">Represents the current connection state of a <a href="player/PlayerConnection.html" title="class in net.minestom.server.network.player"><code>PlayerConnection</code></a>.</div>
+<div class="block">Represents the connection state of a client.</div>
 </div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NetworkBuffer.html" title="class in net.minestom.server.network">NetworkBuffer</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.Reader.html" title="interface in net.minestom.server.network">NetworkBuffer.Reader</a>&lt;T&gt;</div>
-<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></div>
 <div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.Writer.html" title="interface in net.minestom.server.network">NetworkBuffer.Writer</a></div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.AutoResize.html" title="interface in net.minestom.server.network">NetworkBuffer.AutoResize</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
-<div class="col-first even-row-color class-summary class-summary-tab2"><a href="PacketProcessor.html" title="class in net.minestom.server.network">PacketProcessor</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab2">
-<div class="block">Responsible for processing client packets.</div>
-</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.Builder.html" title="interface in net.minestom.server.network">NetworkBuffer.Builder</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab2"><a href="NetworkBufferTemplate.html" title="class in net.minestom.server.network">NetworkBufferTemplate</a></div>
+<div class="col-last even-row-color class-summary class-summary-tab2">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F1.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F1</a>&lt;P1,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F10.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F10</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F11.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F11</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F12.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F12</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F13.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F13</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F14.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F14</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F15.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F15</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F16.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F16</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>P16,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F17.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F17</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>P16,<wbr>P17,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F18.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F18</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>P16,<wbr>P17,<wbr>P18,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F19.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F19</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>P16,<wbr>P17,<wbr>P18,<wbr>P19,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F2.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F2</a>&lt;P1,<wbr>P2,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F20.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F20</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>P10,<wbr>P11,<wbr>P12,<wbr>P13,<wbr>P14,<wbr>P15,<wbr>P16,<wbr>P17,<wbr>P18,<wbr>P19,<wbr>P20,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F3.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F3</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F4.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F4</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F5.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F5</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F6.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F6</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F7.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F7</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first odd-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F8.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F8</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>R&gt;</div>
+<div class="col-last odd-row-color class-summary class-summary-tab1">&nbsp;</div>
+<div class="col-first even-row-color class-summary class-summary-tab1"><a href="NetworkBufferTemplate.F9.html" title="interface in net.minestom.server.network">NetworkBufferTemplate.F9</a>&lt;P1,<wbr>P2,<wbr>P3,<wbr>P4,<wbr>P5,<wbr>P6,<wbr>P7,<wbr>P8,<wbr>P9,<wbr>R&gt;</div>
+<div class="col-last even-row-color class-summary class-summary-tab1">&nbsp;</div>
 <div class="col-first odd-row-color class-summary class-summary-tab1"><a href="PlayerProvider.html" title="interface in net.minestom.server.network">PlayerProvider</a></div>
 <div class="col-last odd-row-color class-summary class-summary-tab1">
 <div class="block">Used when you want to provide your own player object instead of using the default one.</div>
-</div>
-<div class="col-first even-row-color class-summary class-summary-tab1"><a href="UuidProvider.html" title="interface in net.minestom.server.network">UuidProvider</a></div>
-<div class="col-last even-row-color class-summary class-summary-tab1">
-<div class="block">Used when you want to provide your own <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/UUID.html" title="class or interface in java.util" class="external-link"><code>UUID</code></a> object for players instead of using the default one.</div>
 </div>
 </div>
 </div>

@@ -93,24 +93,12 @@ loadScripts(document, 'script');</script>
 <dt>All Implemented Interfaces:</dt>
 <dd><code><a href="../Event.html" title="interface in net.minestom.server.event">Event</a></code>, <code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code>, <code><a href="../trait/RecursiveEvent.html" title="interface in net.minestom.server.event.trait">RecursiveEvent</a></code></dd>
 </dl>
-<dl class="notes">
-<dt>Direct Known Subclasses:</dt>
-<dd><code><a href="PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory">PlayerInventoryItemChangeEvent</a></code></dd>
-</dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InventoryItemChangeEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a>, <a href="../trait/RecursiveEvent.html" title="interface in net.minestom.server.event.trait">RecursiveEvent</a></span></div>
-<div class="block">Called when <a href="../../inventory/AbstractInventory.html#safeItemInsert(int,net.minestom.server.item.ItemStack)"><code>AbstractInventory.safeItemInsert(int, ItemStack)</code></a> is being invoked.
+<div class="block">Called when <a href="../../inventory/AbstractInventory.html#setItemStack(int,net.minestom.server.item.ItemStack)"><code>AbstractInventory.setItemStack(int, ItemStack)</code></a> is being invoked.
  This event cannot be cancelled and items related to the change are already moved.</div>
-<dl class="notes">
-<dt>See Also:</dt>
-<dd>
-<ul class="tag-list">
-<li><a href="PlayerInventoryItemChangeEvent.html" title="class in net.minestom.server.event.inventory"><code>PlayerInventoryItemChangeEvent</code></a></li>
-</ul>
-</dd>
-</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -122,7 +110,7 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)" class="member-name-link">InventoryItemChangeEvent</a><wbr>(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)" class="member-name-link">InventoryItemChangeEvent</a><wbr>(@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
  int&nbsp;slot,
  @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;previousItem,
  @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;newItem)</code></div>
@@ -141,10 +129,10 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the inventory.</div>
+<div class="block">Gets the inventory that was clicked.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getNewItem()" class="member-name-link">getNewItem</a>()</code></div>
@@ -179,10 +167,10 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.Inventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.AbstractInventory,int,net.minestom.server.item.ItemStack,net.minestom.server.item.ItemStack)">
 <h3>InventoryItemChangeEvent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InventoryItemChangeEvent</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InventoryItemChangeEvent</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
  int&nbsp;slot,
  @NotNull
  @NotNull <a href="../../item/ItemStack.html" title="interface in net.minestom.server.item">ItemStack</a>&nbsp;previousItem,
@@ -236,15 +224,13 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <li>
 <section class="detail" id="getInventory()">
 <h3>getInventory</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
 <div class="block"><span class="description-from-type-label">Description copied from interface:&nbsp;<code><a href="../trait/InventoryEvent.html#getInventory()">InventoryEvent</a></code></span></div>
-<div class="block">Gets the inventory.</div>
+<div class="block">Gets the inventory that was clicked.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../trait/InventoryEvent.html#getInventory()">getInventory</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code></dd>
-<dt>Returns:</dt>
-<dd>the inventory, null if this is a player's inventory</dd>
 </dl>
 </section>
 </li>

@@ -97,7 +97,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InventoryOpenEvent</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
 implements <a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a>, <a href="../trait/PlayerInstanceEvent.html" title="interface in net.minestom.server.event.trait">PlayerInstanceEvent</a>, <a href="../trait/CancellableEvent.html" title="interface in net.minestom.server.event.trait">CancellableEvent</a></span></div>
-<div class="block">Called when a player open an <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory"><code>Inventory</code></a>.
+<div class="block">Called when a player open an <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory"><code>AbstractInventory</code></a>.
  <p>
  Executed by <a href="../../entity/Player.html#openInventory(net.minestom.server.inventory.Inventory)"><code>Player.openInventory(Inventory)</code></a>.</div>
 </section>
@@ -111,7 +111,7 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)" class="member-name-link">InventoryOpenEvent</a><wbr>(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player)" class="member-name-link">InventoryOpenEvent</a><wbr>(@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
@@ -128,10 +128,10 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getInventory()" class="member-name-link">getInventory</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the inventory to open, this could have been change by the <a href="#setInventory(net.minestom.server.inventory.Inventory)"><code>setInventory(Inventory)</code></a>.</div>
+<div class="block">Gets the inventory to open, this could have been change by the <a href="#setInventory(net.minestom.server.inventory.AbstractInventory)"><code>setInventory(AbstractInventory)</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getPlayer()" class="member-name-link">getPlayer</a>()</code></div>
@@ -149,7 +149,7 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="block">Marks the <a href="../Event.html" title="interface in net.minestom.server.event"><code>Event</code></a> as cancelled or not.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInventory(net.minestom.server.inventory.Inventory)" class="member-name-link">setInventory</a><wbr>(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setInventory(net.minestom.server.inventory.AbstractInventory)" class="member-name-link">setInventory</a><wbr>(@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Changes the inventory to open.</div>
 </div>
@@ -177,10 +177,10 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.Inventory,net.minestom.server.entity.Player)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player)">
 <h3>InventoryOpenEvent</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InventoryOpenEvent</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InventoryOpenEvent</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
  @NotNull
  @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
 </section>
@@ -210,9 +210,9 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <li>
 <section class="detail" id="getInventory()">
 <h3>getInventory</h3>
-<div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
-<div class="block">Gets the inventory to open, this could have been change by the <a href="#setInventory(net.minestom.server.inventory.Inventory)"><code>setInventory(Inventory)</code></a>.</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a></span>&nbsp;<span class="element-name">getInventory</span>()</div>
+<div class="block">Gets the inventory to open, this could have been change by the <a href="#setInventory(net.minestom.server.inventory.AbstractInventory)"><code>setInventory(AbstractInventory)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="../trait/InventoryEvent.html#getInventory()">getInventory</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/InventoryEvent.html" title="interface in net.minestom.server.event.trait">InventoryEvent</a></code></dd>
@@ -222,10 +222,10 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 </section>
 </li>
 <li>
-<section class="detail" id="setInventory(net.minestom.server.inventory.Inventory)">
+<section class="detail" id="setInventory(net.minestom.server.inventory.AbstractInventory)">
 <h3>setInventory</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setInventory</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;inventory)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setInventory</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory)</span></div>
 <div class="block">Changes the inventory to open.
  <p>
  To do not open any inventory see <a href="#setCancelled(boolean)"><code>setCancelled(boolean)</code></a>.</div>
