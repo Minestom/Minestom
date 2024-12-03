@@ -97,6 +97,8 @@ public final class Server {
             try {
                 // Read & process packets
                 connection.read(packetParser);
+            } catch (AsynchronousCloseException ignored) {
+                // We closed the socket during read, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
                 break;
@@ -113,6 +115,8 @@ public final class Server {
         while (!stop) {
             try {
                 connection.flushSync();
+            } catch (AsynchronousCloseException ignored) {
+                // We closed the socket during write, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
                 break;
