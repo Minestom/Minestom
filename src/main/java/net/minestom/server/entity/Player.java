@@ -403,8 +403,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         // Eating animation
         if (isUsingItem()) {
+            final PlayerHand itemUseHand = this.itemUseHand;
             if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
-                PlayerFinishItemUseEvent finishUseEvent = new PlayerFinishItemUseEvent(this, itemUseHand, getItemInHand(itemUseHand), itemUseTime);
+                final ItemStack itemStack = getItemInHand(itemUseHand);
+                PlayerFinishItemUseEvent finishUseEvent = new PlayerFinishItemUseEvent(this, itemUseHand, itemStack, itemUseTime);
                 EventDispatcher.call(finishUseEvent);
 
                 // Reset client state
@@ -415,11 +417,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 refreshActiveHand(false, isOffHand, false);
                 clearItemUse();
 
-                // Update item from event, sending a slot refresh no matter what
-                final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
-                final ItemStack itemStack = finishUseEvent.getItemStack();
-                inventory.setItemStack(slot, itemStack, false);
-                inventory.sendSlotRefresh(slot, itemStack, itemStack);
+                // The client has predicted that the itemstack will have its count reduced, if the server
+                // has not changed the item (the default behavior) we need to refresh the slot.
+                if (itemStack.equals(getItemInHand(itemUseHand))) {
+                    final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
+                    inventory.sendSlotRefresh(slot, itemStack, itemStack);
+                }
             }
         }
 

@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerBeginItemUseEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
     private final Player player;
     private final PlayerHand hand;
-    private ItemStack itemStack;
-    private ItemAnimation animation;
+    private final ItemStack itemStack;
+    private final ItemAnimation animation;
     private long itemUseDuration;
 
     private boolean cancelled = false;
@@ -46,10 +46,6 @@ public class PlayerBeginItemUseEvent implements PlayerInstanceEvent, ItemEvent, 
     @Override
     public @NotNull ItemStack getItemStack() {
         return itemStack;
-    }
-
-    public void setItemStack(@NotNull ItemStack itemStack) {
-        this.itemStack = itemStack;
     }
 
     public @NotNull ItemAnimation getAnimation() {

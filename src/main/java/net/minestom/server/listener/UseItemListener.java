@@ -77,7 +77,6 @@ public class UseItemListener {
         if (useItemTime != 0) {
             final PlayerBeginItemUseEvent beginUseEvent = new PlayerBeginItemUseEvent(player, hand, itemStack, useAnimation, useItemTime);
             EventDispatcher.callCancellable(beginUseEvent, () -> {
-                player.setItemInHand(hand, beginUseEvent.getItemStack());
                 if (beginUseEvent.getItemUseDuration() <= 0) return;
 
                 player.refreshItemUse(hand, beginUseEvent.getItemUseDuration());

@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerFinishItemUseEvent implements PlayerInstanceEvent, ItemEvent {
     private final Player player;
     private final PlayerHand hand;
-    private ItemStack itemStack;
+    private final ItemStack itemStack;
     private final long useDuration;
 
     public PlayerFinishItemUseEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long useDuration) {
@@ -37,10 +37,6 @@ public class PlayerFinishItemUseEvent implements PlayerInstanceEvent, ItemEvent 
     @Override
     public @NotNull ItemStack getItemStack() {
         return itemStack;
-    }
-
-    public void setItemStack(@NotNull ItemStack itemStack) {
-        this.itemStack = itemStack;
     }
 
     public long getUseDuration() {

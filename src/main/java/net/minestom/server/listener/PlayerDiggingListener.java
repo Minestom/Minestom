@@ -159,7 +159,6 @@ public final class PlayerDiggingListener {
 
         PlayerCancelItemUseEvent cancelUseEvent = new PlayerCancelItemUseEvent(player, hand, player.getItemInHand(hand), player.getCurrentItemUseTime());
         EventDispatcher.call(cancelUseEvent);
-        player.setItemInHand(hand, cancelUseEvent.getItemStack());
 
         // Reset client state
         player.triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);

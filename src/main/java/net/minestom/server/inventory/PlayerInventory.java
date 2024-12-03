@@ -116,6 +116,9 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, item, equipmentSlot);
             EventDispatcher.call(entityEquipEvent);
             item = entityEquipEvent.getEquippedItem();
+
+            player.updateEquipmentAttributes(previous, item, equipmentSlot);
+            player.syncEquipment(equipmentSlot);
         }
 
         super.UNSAFE_itemInsert(slot, item, previous, sendPacket);
@@ -131,21 +134,9 @@ public non-sealed class PlayerInventory extends AbstractInventory {
                 ? convertMinestomSlotToPlayerInventorySlot(slot)
                 : convertMinestomSlotToWindowSlot(slot);
 
-        for (Player player : getViewers()) {
-            // Equipment handling
-            final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
-            if (equipmentSlot != null) {
-                player.updateEquipmentAttributes(previous, item, equipmentSlot);
-                player.syncEquipment(equipmentSlot);
-            }
-
-            // Update client
-            if (isPlayerInventorySlot) {
-                player.sendPacket(new SetPlayerInventorySlotPacket(packetSlot, item));
-            } else {
-                player.sendPacket(new SetSlotPacket(0, 0, (short) packetSlot, item));
-            }
-        }
+        sendPacketToViewers(isPlayerInventorySlot
+                ? new SetPlayerInventorySlotPacket(packetSlot, item)
+                : new SetSlotPacket(0, 0, (short) packetSlot, item));
     }
 
     /**

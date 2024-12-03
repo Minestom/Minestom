@@ -175,11 +175,12 @@ public class PlayerInit {
 
             })
             .addListener(PlayerBeginItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
                 final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
                 if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
                     // "shoot" the arrow
-                    event.setItemStack(itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    player.setItemInHand(event.getHand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
                     return;
@@ -191,9 +192,10 @@ public class PlayerInit {
                 }
             })
             .addListener(PlayerCancelItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
-                    event.setItemStack(itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    player.setItemInHand(event.getHand(), itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
                     return;
                 }
             })
