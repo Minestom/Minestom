@@ -1,40 +1,37 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class LlamaMeta extends ChestedHorseMeta {
-    public static final byte OFFSET = ChestedHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 3;
-
     public LlamaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getStrength() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return metadata.get(MetadataDef.Llama.STRENGTH);
     }
 
     public void setStrength(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Llama.STRENGTH, value);
     }
 
     public int getCarpetColor() {
-        return super.metadata.getIndex(OFFSET + 1, -1);
+        return metadata.get(MetadataDef.Llama.CARPET_COLOR);
     }
 
     public void setCarpetColor(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Llama.CARPET_COLOR, value);
     }
 
     public Variant getVariant() {
-        return Variant.VALUES[super.metadata.getIndex(OFFSET + 2, 0)];
+        return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
     }
 
     public void setVariant(Variant value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value.ordinal()));
+        metadata.set(MetadataDef.Llama.VARIANT, value.ordinal());
     }
 
     public enum Variant {

@@ -1,6 +1,7 @@
 package net.minestom.server.utils.position;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.RelativeFlags;
 import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
@@ -34,5 +35,12 @@ public final class PositionUtils {
         float yaw = (flags & RelativeFlags.YAW) == 0 ? modifier.yaw() : start.yaw() + modifier.yaw();
         float pitch = (flags & RelativeFlags.PITCH) == 0 ? modifier.pitch() : start.pitch() + modifier.pitch();
         return new Pos(x, y, z, yaw, pitch);
+    }
+
+    public static @NotNull Vec getVelocityWithRelativeFlags(@NotNull Vec start, @NotNull Vec modifier, @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
+        double x = (flags & RelativeFlags.DELTA_X) == 0 ? modifier.x() : start.x() + modifier.x();
+        double y = (flags & RelativeFlags.DELTA_Y) == 0 ? modifier.y() : start.y() + modifier.y();
+        double z = (flags & RelativeFlags.DELTA_Z) == 0 ? modifier.z() : start.z() + modifier.z();
+        return new Vec(x, y, z);
     }
 }

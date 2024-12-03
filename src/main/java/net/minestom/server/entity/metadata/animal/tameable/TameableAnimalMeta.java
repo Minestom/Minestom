@@ -1,47 +1,42 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.animal.AnimalMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
 
 public class TameableAnimalMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
-    private final static byte SITTING_BIT = 0x01;
-    private final static byte TAMED_BIT = 0x04;
-
     protected TameableAnimalMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isSitting() {
-        return getMaskBit(OFFSET, SITTING_BIT);
+        return metadata.get(MetadataDef.TameableAnimal.IS_SITTING);
     }
 
     public void setSitting(boolean value) {
-        setMaskBit(OFFSET, SITTING_BIT, value);
+        metadata.set(MetadataDef.TameableAnimal.IS_SITTING, value);
     }
 
     public boolean isTamed() {
-        return getMaskBit(OFFSET, TAMED_BIT);
+        return metadata.get(MetadataDef.TameableAnimal.IS_TAMED);
     }
 
     public void setTamed(boolean value) {
-        setMaskBit(OFFSET, TAMED_BIT, value);
+        metadata.set(MetadataDef.TameableAnimal.IS_TAMED, value);
     }
 
-    @NotNull
+    @Nullable
     public UUID getOwner() {
-        return super.metadata.getIndex(OFFSET + 1, null);
+        return metadata.get(MetadataDef.TameableAnimal.OWNER);
     }
 
-    public void setOwner(@NotNull UUID value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.OptUUID(value));
+    public void setOwner(@Nullable UUID value) {
+        metadata.set(MetadataDef.TameableAnimal.OWNER, value);
     }
 
 }

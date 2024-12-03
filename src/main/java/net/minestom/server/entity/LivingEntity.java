@@ -112,7 +112,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // We must set the sprinting attribute serverside because when we resend modifiers it overwrites what
         // the client has, meaning if they are sprinting and we send no modifiers, they will no longer be
         // getting the speed boost of sprinting.
-        final AttributeInstance speed = getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        final AttributeInstance speed = getAttribute(Attribute.MOVEMENT_SPEED);
         if (sprinting) speed.addModifier(SPRINTING_SPEED_MODIFIER);
         else speed.removeModifier(SPRINTING_SPEED_MODIFIER);
     }
@@ -261,8 +261,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     public void kill() {
         refreshIsDead(true); // So the entity isn't killed over and over again
-        triggerStatus((byte) 3); // Start death animation status
-        setPose(Pose.DYING);
+        triggerStatus((byte) EntityStatuses.LivingEntity.PLAY_DEATH_SOUND); // Start death animation status
+        setPose(EntityPose.DYING);
         setHealth(0);
 
         // Reset velocity
@@ -327,7 +327,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     public boolean damage(@NotNull Damage damage) {
         if (isDead())
             return false;
-        if (isInvulnerable() || isImmune(damage.getType())) {
+        if (isImmune(damage.getType())) {
             return false;
         }
 
@@ -386,7 +386,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if this entity is immune to the given type of damage
      */
     public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
-        return false;
+        if (type.equals(DamageType.OUT_OF_WORLD)) {
+            return false;
+        }
+        return isInvulnerable();
     }
 
     /**
@@ -404,7 +407,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param health the new entity health
      */
     public void setHealth(float health) {
-        this.health = Math.min(health, (float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
+        this.health = Math.min(health, (float) getAttributeValue(Attribute.MAX_HEALTH));
         if (this.health <= 0 && !isDead) {
             kill();
         }
@@ -426,10 +429,10 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(Attribute)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
-        setHealth((float) getAttributeValue(Attribute.GENERIC_MAX_HEALTH));
+        setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
     }
 
     /**
@@ -597,11 +600,12 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (meta != null) {
             meta.setNotifyAboutChanges(false);
             meta.setHandActive(isHandActive);
-            meta.setActiveHand(offHand ? Player.Hand.OFF : Player.Hand.MAIN);
+            meta.setActiveHand(offHand ? PlayerHand.OFF : PlayerHand.MAIN);
             meta.setInRiptideSpinAttack(riptideSpinAttack);
-            meta.setNotifyAboutChanges(true);
 
             updatePose(); // Riptide spin attack has a pose
+
+            meta.setNotifyAboutChanges(true);
         }
     }
 
@@ -700,7 +704,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+        strength *= (float) (1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
     }
 

@@ -22,13 +22,13 @@ public final class AttributeInstance {
         public void write(@NotNull NetworkBuffer buffer, AttributeInstance value) {
             buffer.write(Attribute.NETWORK_TYPE, value.attribute());
             buffer.write(NetworkBuffer.DOUBLE, value.getBaseValue());
-            buffer.writeCollection(AttributeModifier.NETWORK_TYPE, value.modifiers());
+            buffer.write(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE), List.copyOf(value.modifiers()));
         }
 
         @Override
         public AttributeInstance read(@NotNull NetworkBuffer buffer) {
             return new AttributeInstance(buffer.read(Attribute.NETWORK_TYPE), buffer.read(NetworkBuffer.DOUBLE),
-                    buffer.readCollection(AttributeModifier.NETWORK_TYPE, Short.MAX_VALUE), null);
+                    buffer.read(AttributeModifier.NETWORK_TYPE.list(Short.MAX_VALUE)), null);
         }
     };
 

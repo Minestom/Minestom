@@ -1,12 +1,14 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.ByteBinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.FloatBinaryTag;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -17,68 +19,25 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
     public static final float DEFAULT_MINING_SPEED = 1.0f;
     public static final int DEFAULT_DAMAGE_PER_BLOCK = 1;
 
-    public static final NetworkBuffer.Type<Tool> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        private static final NetworkBuffer.Type<List<Rule>> RULE_LIST_TYPE = Rule.NETWORK_TYPE.list(Short.MAX_VALUE);
-
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Tool value) {
-            RULE_LIST_TYPE.write(buffer, value.rules());
-            buffer.write(NetworkBuffer.FLOAT, value.defaultMiningSpeed());
-            buffer.write(NetworkBuffer.VAR_INT, value.damagePerBlock());
-        }
-
-        @Override
-        public Tool read(@NotNull NetworkBuffer buffer) {
-            return new Tool(
-                    RULE_LIST_TYPE.read(buffer),
-                    buffer.read(NetworkBuffer.FLOAT),
-                    buffer.read(NetworkBuffer.VAR_INT)
-            );
-        }
-    };
-    public static final BinaryTagSerializer<Tool> NBT_TYPE = new BinaryTagSerializer<>() {
-        private static final BinaryTagSerializer<List<Rule>> RULE_LIST_TYPE = Rule.NBT_TYPE.list();
-
-        @Override
-        public @NotNull BinaryTag write(@NotNull Tool value) {
-            return CompoundBinaryTag.builder()
-                    .put("rules", RULE_LIST_TYPE.write(value.rules()))
-                    .putFloat("default_mining_speed", value.defaultMiningSpeed())
-                    .putInt("damage_per_block", value.damagePerBlock())
-                    .build();
-        }
-
-        @Override
-        public @NotNull Tool read(@NotNull BinaryTag tag) {
-            if (!(tag instanceof CompoundBinaryTag compound))
-                throw new IllegalArgumentException("Expected a compound tag, got " + tag.type());
-            return new Tool(
-                    RULE_LIST_TYPE.read(Objects.requireNonNull(compound.get("rules"))),
-                    compound.getFloat("default_mining_speed", DEFAULT_MINING_SPEED),
-                    compound.getInt("damage_per_block", DEFAULT_DAMAGE_PER_BLOCK)
-            );
-        }
-    };
+    public static final NetworkBuffer.Type<Tool> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Rule.NETWORK_TYPE.list(Short.MAX_VALUE), Tool::rules,
+            NetworkBuffer.FLOAT, Tool::defaultMiningSpeed,
+            NetworkBuffer.VAR_INT, Tool::damagePerBlock,
+            Tool::new);
+    public static final BinaryTagSerializer<Tool> NBT_TYPE = BinaryTagTemplate.object(
+            "rules", Rule.NBT_TYPE.list(), Tool::rules,
+            "default_mining_speed", BinaryTagSerializer.FLOAT.optional(DEFAULT_MINING_SPEED), Tool::defaultMiningSpeed,
+            "damage_per_block", BinaryTagSerializer.INT.optional(DEFAULT_DAMAGE_PER_BLOCK), Tool::damagePerBlock,
+            Tool::new);
 
     public record Rule(@NotNull BlockTypeFilter blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
-        public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-            @Override
-            public void write(@NotNull NetworkBuffer buffer, Rule value) {
-                buffer.write(BlockTypeFilter.NETWORK_TYPE, value.blocks());
-                buffer.writeOptional(NetworkBuffer.FLOAT, value.speed());
-                buffer.writeOptional(NetworkBuffer.BOOLEAN, value.correctForDrops());
-            }
-
-            @Override
-            public Rule read(@NotNull NetworkBuffer buffer) {
-                return new Rule(
-                        buffer.read(BlockTypeFilter.NETWORK_TYPE),
-                        buffer.readOptional(NetworkBuffer.FLOAT),
-                        buffer.readOptional(NetworkBuffer.BOOLEAN)
-                );
-            }
-        };
+        public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
+                BlockTypeFilter.NETWORK_TYPE, Rule::blocks,
+                NetworkBuffer.FLOAT.optional(), Rule::speed,
+                NetworkBuffer.BOOLEAN.optional(), Rule::correctForDrops,
+                Rule::new
+        );
         public static final BinaryTagSerializer<Rule> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
                 tag -> new Rule(
                         BlockTypeFilter.NBT_TYPE.read(Objects.requireNonNull(tag.get("blocks"))),
@@ -93,5 +52,25 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
                     return builder.build();
                 }
         );
+    }
+
+    public boolean isCorrectForDrops(@NotNull Block block) {
+        for (Rule rule : rules) {
+            if (rule.correctForDrops != null && rule.blocks.test(block)) {
+                // First matching rule is picked, other rules are ignored
+                return rule.correctForDrops;
+            }
+        }
+        return false;
+    }
+
+    public float getSpeed(@NotNull Block block) {
+        for (Rule rule : rules) {
+            if (rule.speed != null && rule.blocks.test(block)) {
+                // First matching rule is picked, other rules are ignored
+                return rule.speed;
+            }
+        }
+        return defaultMiningSpeed;
     }
 }

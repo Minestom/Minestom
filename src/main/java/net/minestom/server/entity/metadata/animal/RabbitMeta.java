@@ -1,21 +1,18 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class RabbitMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public RabbitMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     @NotNull
     public Type getType() {
-        int id = super.metadata.getIndex(OFFSET, 0);
+        int id = metadata.get(MetadataDef.Rabbit.TYPE);
         if (id == 99) {
             return Type.KILLER_BUNNY;
         }
@@ -24,7 +21,7 @@ public class RabbitMeta extends AnimalMeta {
 
     public void setType(@NotNull Type value) {
         int id = value == Type.KILLER_BUNNY ? 99 : value.ordinal();
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(id));
+        metadata.set(MetadataDef.Rabbit.TYPE, id);
     }
 
     public enum Type {

@@ -18,7 +18,7 @@ public class PlayerHeldIntegrationTest {
     public void playerHeld(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
 
         player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
@@ -35,7 +35,7 @@ public class PlayerHeldIntegrationTest {
     public void playerHeldEvent(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
 
         player.getInventory().setItemStack(1, ItemStack.of(Material.STONE));
         assertEquals(ItemStack.AIR, player.getItemInMainHand());
