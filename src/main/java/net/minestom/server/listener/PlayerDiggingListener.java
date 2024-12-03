@@ -10,7 +10,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
+import net.minestom.server.event.item.PlayerCancelItemUseEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
@@ -155,16 +155,19 @@ public final class PlayerDiggingListener {
     private static void updateItemState(Player player) {
         LivingEntityMeta meta = player.getLivingEntityMeta();
         if (meta == null || !meta.isHandActive()) return;
-        PlayerHand hand = meta.getActiveHand();
+        final PlayerHand hand = meta.getActiveHand();
 
-        ItemUpdateStateEvent itemUpdateStateEvent = player.callItemUpdateStateEvent(hand);
+        PlayerCancelItemUseEvent cancelUseEvent = new PlayerCancelItemUseEvent(player, hand, player.getItemInHand(hand), player.getCurrentItemUseTime());
+        EventDispatcher.call(cancelUseEvent);
+        player.setItemInHand(hand, cancelUseEvent.getItemStack());
 
-        player.clearItemUse();
+        // Reset client state
         player.triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
 
-        final boolean isOffHand = itemUpdateStateEvent.getHand() == PlayerHand.OFF;
-        player.refreshActiveHand(itemUpdateStateEvent.hasHandAnimation(),
-                isOffHand, itemUpdateStateEvent.isRiptideSpinAttack());
+        // Reset server state
+        final boolean isOffHand = hand == PlayerHand.OFF;
+        player.refreshActiveHand(false, isOffHand, false);
+        player.clearItemUse();
     }
 
     private static void swapItemHand(Player player) {

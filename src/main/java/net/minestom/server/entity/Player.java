@@ -38,9 +38,8 @@ import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
-import net.minestom.server.event.item.ItemUsageCompleteEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
+import net.minestom.server.event.item.PlayerFinishItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.EntityTracker;
@@ -405,24 +404,22 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Eating animation
         if (isUsingItem()) {
             if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
+                PlayerFinishItemUseEvent finishUseEvent = new PlayerFinishItemUseEvent(this, itemUseHand, getItemInHand(itemUseHand), itemUseTime);
+                EventDispatcher.call(finishUseEvent);
+
+                // Reset client state
                 triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
-                ItemUpdateStateEvent itemUpdateStateEvent = callItemUpdateStateEvent(itemUseHand);
 
-                // Refresh hand
-                final boolean isOffHand = itemUpdateStateEvent.getHand() == PlayerHand.OFF;
+                // Reset server state
+                final boolean isOffHand = itemUseHand == PlayerHand.OFF;
                 refreshActiveHand(false, isOffHand, false);
-
-                final ItemStack item = itemUpdateStateEvent.getItemStack();
-                final boolean isFood = item.has(ItemComponent.FOOD);
-                if (isFood || item.material() == Material.POTION) {
-                    PlayerEatEvent playerEatEvent = new PlayerEatEvent(this, item, itemUseHand);
-                    EventDispatcher.call(playerEatEvent);
-                }
-
-                var itemUsageCompleteEvent = new ItemUsageCompleteEvent(this, itemUseHand, item);
-                EventDispatcher.call(itemUsageCompleteEvent);
-
                 clearItemUse();
+
+                // Update item from event, sending a slot refresh no matter what
+                final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
+                final ItemStack itemStack = finishUseEvent.getItemStack();
+                inventory.setItemStack(slot, itemStack, false);
+                inventory.sendSlotRefresh(slot, itemStack, itemStack);
             }
         }
 
@@ -2155,19 +2152,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public void clearItemUse() {
         refreshItemUse(null, 0);
-    }
-
-    /**
-     * Used to call {@link ItemUpdateStateEvent} with the proper item
-     * It does check which hand to get the item to update.
-     *
-     * @return the called {@link ItemUpdateStateEvent},
-     */
-    public @NotNull ItemUpdateStateEvent callItemUpdateStateEvent(@NotNull PlayerHand hand) {
-        ItemUpdateStateEvent itemUpdateStateEvent = new ItemUpdateStateEvent(this, hand, getItemInHand(hand));
-        EventDispatcher.call(itemUpdateStateEvent);
-
-        return itemUpdateStateEvent;
     }
 
     public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {

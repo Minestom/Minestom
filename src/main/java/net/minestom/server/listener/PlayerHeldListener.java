@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
@@ -37,7 +38,7 @@ public class PlayerHeldListener {
         }
 
         // Player is not using offhand, reset item use
-        if (player.getItemUseHand() != Player.Hand.OFF) {
+        if (player.getItemUseHand() != PlayerHand.OFF) {
             player.refreshActiveHand(false, false, false);
             player.clearItemUse();
         }
