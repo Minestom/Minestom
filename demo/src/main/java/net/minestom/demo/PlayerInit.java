@@ -15,8 +15,7 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
@@ -28,25 +27,23 @@ import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
-import net.minestom.server.item.component.EnchantmentList;
-import net.minestom.server.item.component.LodestoneTracker;
-import net.minestom.server.item.component.PotionContents;
-import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.potion.CustomPotionEffect;
-import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -138,29 +135,11 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
-                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
-                                Enchantment.SHARPNESS, 10
-                        )))
-                        .build());
-//
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
-                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
-                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
-                                        45 * 20, false, true, true, null))
-                        )))
-                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
-                        .build());
+                player.setGameMode(GameMode.SURVIVAL);
+                PlayerInventory inventory = event.getPlayer().getInventory();
+                inventory.addItemStack(getFoodItem(20));
+                inventory.addItemStack(getFoodItem(10000));
+                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
 
                 if (event.isFirstSpawn()) {
@@ -194,6 +173,29 @@ public class PlayerInit {
 
                 event.getInstance().setBlock(event.getPosition(), block);
 
+            })
+            .addListener(PlayerBeginItemUseEvent.class, event -> {
+                final ItemStack itemStack = event.getItemStack();
+                final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
+                if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
+                    // "shoot" the arrow
+                    event.setItemStack(itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    event.getPlayer().sendMessage("pew pew!");
+                    event.setItemUseDuration(0); // Do not start using the item
+                    return;
+                }
+            })
+            .addListener(PlayerFinishItemUseEvent.class, event -> {
+                if (event.getItemStack().material() == Material.APPLE) {
+                    event.getPlayer().sendMessage("yummy yummy apple");
+                }
+            })
+            .addListener(PlayerCancelItemUseEvent.class, event -> {
+                final ItemStack itemStack = event.getItemStack();
+                if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
+                    event.setItemStack(itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    return;
+                }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
                 var block = event.getBlock();
@@ -255,5 +257,17 @@ public class PlayerInit {
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+    }
+
+    public static ItemStack getFoodItem(int consumeTicks) {
+        return ItemStack.builder(Material.IRON_NUGGET)
+                .amount(64)
+                .set(ItemComponent.CONSUMABLE, new Consumable(
+                        (float) consumeTicks / 20,
+                        ItemAnimation.EAT,
+                        SoundEvent.BLOCK_CHAIN_STEP,
+                        true,
+                        new ArrayList<>()))
+                .build();
     }
 }

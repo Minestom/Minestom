@@ -2,7 +2,6 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
-import net.minestom.server.event.item.ItemUpdateStateEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -49,7 +48,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
 
     /**
      * Gets the item usage duration. After this amount of milliseconds,
-     * the animation will stop automatically and {@link ItemUpdateStateEvent} is called.
+     * the animation will stop automatically and {@link net.minestom.server.event.item.PlayerFinishItemUseEvent} is called.
      *
      * @return the item use time
      */
