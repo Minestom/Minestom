@@ -80,7 +80,7 @@ public sealed interface Attribute extends ProtocolObject, Attributes permits Att
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Attribute> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:attributes", AttributeImpl.REGISTRY_NBT_TYPE,
+        return DynamicRegistry.create("minecraft:attribute_modifiers", AttributeImpl.REGISTRY_NBT_TYPE,
                 Registry.Resource.ATTRIBUTES, (namespace, props) ->
                         new AttributeImpl(Registry.attribute(namespace, props)));
     }

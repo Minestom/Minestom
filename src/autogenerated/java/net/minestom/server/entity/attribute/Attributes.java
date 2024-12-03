@@ -7,65 +7,67 @@ import net.minestom.server.registry.DynamicRegistry;
  */
 @SuppressWarnings("unused")
 interface Attributes {
-    DynamicRegistry.Key<Attribute> GENERIC_ARMOR = DynamicRegistry.Key.of("minecraft:generic.armor");
+    DynamicRegistry.Key<Attribute> ARMOR = DynamicRegistry.Key.of("minecraft:armor");
 
-    DynamicRegistry.Key<Attribute> GENERIC_ARMOR_TOUGHNESS = DynamicRegistry.Key.of("minecraft:generic.armor_toughness");
+    DynamicRegistry.Key<Attribute> ARMOR_TOUGHNESS = DynamicRegistry.Key.of("minecraft:armor_toughness");
 
-    DynamicRegistry.Key<Attribute> GENERIC_ATTACK_DAMAGE = DynamicRegistry.Key.of("minecraft:generic.attack_damage");
+    DynamicRegistry.Key<Attribute> ATTACK_DAMAGE = DynamicRegistry.Key.of("minecraft:attack_damage");
 
-    DynamicRegistry.Key<Attribute> GENERIC_ATTACK_KNOCKBACK = DynamicRegistry.Key.of("minecraft:generic.attack_knockback");
+    DynamicRegistry.Key<Attribute> ATTACK_KNOCKBACK = DynamicRegistry.Key.of("minecraft:attack_knockback");
 
-    DynamicRegistry.Key<Attribute> GENERIC_ATTACK_SPEED = DynamicRegistry.Key.of("minecraft:generic.attack_speed");
+    DynamicRegistry.Key<Attribute> ATTACK_SPEED = DynamicRegistry.Key.of("minecraft:attack_speed");
 
-    DynamicRegistry.Key<Attribute> PLAYER_BLOCK_BREAK_SPEED = DynamicRegistry.Key.of("minecraft:player.block_break_speed");
+    DynamicRegistry.Key<Attribute> BLOCK_BREAK_SPEED = DynamicRegistry.Key.of("minecraft:block_break_speed");
 
-    DynamicRegistry.Key<Attribute> PLAYER_BLOCK_INTERACTION_RANGE = DynamicRegistry.Key.of("minecraft:player.block_interaction_range");
+    DynamicRegistry.Key<Attribute> BLOCK_INTERACTION_RANGE = DynamicRegistry.Key.of("minecraft:block_interaction_range");
 
-    DynamicRegistry.Key<Attribute> GENERIC_BURNING_TIME = DynamicRegistry.Key.of("minecraft:generic.burning_time");
+    DynamicRegistry.Key<Attribute> BURNING_TIME = DynamicRegistry.Key.of("minecraft:burning_time");
 
-    DynamicRegistry.Key<Attribute> GENERIC_EXPLOSION_KNOCKBACK_RESISTANCE = DynamicRegistry.Key.of("minecraft:generic.explosion_knockback_resistance");
+    DynamicRegistry.Key<Attribute> EXPLOSION_KNOCKBACK_RESISTANCE = DynamicRegistry.Key.of("minecraft:explosion_knockback_resistance");
 
-    DynamicRegistry.Key<Attribute> PLAYER_ENTITY_INTERACTION_RANGE = DynamicRegistry.Key.of("minecraft:player.entity_interaction_range");
+    DynamicRegistry.Key<Attribute> ENTITY_INTERACTION_RANGE = DynamicRegistry.Key.of("minecraft:entity_interaction_range");
 
-    DynamicRegistry.Key<Attribute> GENERIC_FALL_DAMAGE_MULTIPLIER = DynamicRegistry.Key.of("minecraft:generic.fall_damage_multiplier");
+    DynamicRegistry.Key<Attribute> FALL_DAMAGE_MULTIPLIER = DynamicRegistry.Key.of("minecraft:fall_damage_multiplier");
 
-    DynamicRegistry.Key<Attribute> GENERIC_FLYING_SPEED = DynamicRegistry.Key.of("minecraft:generic.flying_speed");
+    DynamicRegistry.Key<Attribute> FLYING_SPEED = DynamicRegistry.Key.of("minecraft:flying_speed");
 
-    DynamicRegistry.Key<Attribute> GENERIC_FOLLOW_RANGE = DynamicRegistry.Key.of("minecraft:generic.follow_range");
+    DynamicRegistry.Key<Attribute> FOLLOW_RANGE = DynamicRegistry.Key.of("minecraft:follow_range");
 
-    DynamicRegistry.Key<Attribute> GENERIC_GRAVITY = DynamicRegistry.Key.of("minecraft:generic.gravity");
+    DynamicRegistry.Key<Attribute> GRAVITY = DynamicRegistry.Key.of("minecraft:gravity");
 
-    DynamicRegistry.Key<Attribute> GENERIC_JUMP_STRENGTH = DynamicRegistry.Key.of("minecraft:generic.jump_strength");
+    DynamicRegistry.Key<Attribute> JUMP_STRENGTH = DynamicRegistry.Key.of("minecraft:jump_strength");
 
-    DynamicRegistry.Key<Attribute> GENERIC_KNOCKBACK_RESISTANCE = DynamicRegistry.Key.of("minecraft:generic.knockback_resistance");
+    DynamicRegistry.Key<Attribute> KNOCKBACK_RESISTANCE = DynamicRegistry.Key.of("minecraft:knockback_resistance");
 
-    DynamicRegistry.Key<Attribute> GENERIC_LUCK = DynamicRegistry.Key.of("minecraft:generic.luck");
+    DynamicRegistry.Key<Attribute> LUCK = DynamicRegistry.Key.of("minecraft:luck");
 
-    DynamicRegistry.Key<Attribute> GENERIC_MAX_ABSORPTION = DynamicRegistry.Key.of("minecraft:generic.max_absorption");
+    DynamicRegistry.Key<Attribute> MAX_ABSORPTION = DynamicRegistry.Key.of("minecraft:max_absorption");
 
-    DynamicRegistry.Key<Attribute> GENERIC_MAX_HEALTH = DynamicRegistry.Key.of("minecraft:generic.max_health");
+    DynamicRegistry.Key<Attribute> MAX_HEALTH = DynamicRegistry.Key.of("minecraft:max_health");
 
-    DynamicRegistry.Key<Attribute> PLAYER_MINING_EFFICIENCY = DynamicRegistry.Key.of("minecraft:player.mining_efficiency");
+    DynamicRegistry.Key<Attribute> MINING_EFFICIENCY = DynamicRegistry.Key.of("minecraft:mining_efficiency");
 
-    DynamicRegistry.Key<Attribute> GENERIC_MOVEMENT_EFFICIENCY = DynamicRegistry.Key.of("minecraft:generic.movement_efficiency");
+    DynamicRegistry.Key<Attribute> MOVEMENT_EFFICIENCY = DynamicRegistry.Key.of("minecraft:movement_efficiency");
 
-    DynamicRegistry.Key<Attribute> GENERIC_MOVEMENT_SPEED = DynamicRegistry.Key.of("minecraft:generic.movement_speed");
+    DynamicRegistry.Key<Attribute> MOVEMENT_SPEED = DynamicRegistry.Key.of("minecraft:movement_speed");
 
-    DynamicRegistry.Key<Attribute> GENERIC_OXYGEN_BONUS = DynamicRegistry.Key.of("minecraft:generic.oxygen_bonus");
+    DynamicRegistry.Key<Attribute> OXYGEN_BONUS = DynamicRegistry.Key.of("minecraft:oxygen_bonus");
 
-    DynamicRegistry.Key<Attribute> GENERIC_SAFE_FALL_DISTANCE = DynamicRegistry.Key.of("minecraft:generic.safe_fall_distance");
+    DynamicRegistry.Key<Attribute> SAFE_FALL_DISTANCE = DynamicRegistry.Key.of("minecraft:safe_fall_distance");
 
-    DynamicRegistry.Key<Attribute> GENERIC_SCALE = DynamicRegistry.Key.of("minecraft:generic.scale");
+    DynamicRegistry.Key<Attribute> SCALE = DynamicRegistry.Key.of("minecraft:scale");
 
-    DynamicRegistry.Key<Attribute> PLAYER_SNEAKING_SPEED = DynamicRegistry.Key.of("minecraft:player.sneaking_speed");
+    DynamicRegistry.Key<Attribute> SNEAKING_SPEED = DynamicRegistry.Key.of("minecraft:sneaking_speed");
 
-    DynamicRegistry.Key<Attribute> ZOMBIE_SPAWN_REINFORCEMENTS = DynamicRegistry.Key.of("minecraft:zombie.spawn_reinforcements");
+    DynamicRegistry.Key<Attribute> SPAWN_REINFORCEMENTS = DynamicRegistry.Key.of("minecraft:spawn_reinforcements");
 
-    DynamicRegistry.Key<Attribute> GENERIC_STEP_HEIGHT = DynamicRegistry.Key.of("minecraft:generic.step_height");
+    DynamicRegistry.Key<Attribute> STEP_HEIGHT = DynamicRegistry.Key.of("minecraft:step_height");
 
-    DynamicRegistry.Key<Attribute> PLAYER_SUBMERGED_MINING_SPEED = DynamicRegistry.Key.of("minecraft:player.submerged_mining_speed");
+    DynamicRegistry.Key<Attribute> SUBMERGED_MINING_SPEED = DynamicRegistry.Key.of("minecraft:submerged_mining_speed");
 
-    DynamicRegistry.Key<Attribute> PLAYER_SWEEPING_DAMAGE_RATIO = DynamicRegistry.Key.of("minecraft:player.sweeping_damage_ratio");
+    DynamicRegistry.Key<Attribute> SWEEPING_DAMAGE_RATIO = DynamicRegistry.Key.of("minecraft:sweeping_damage_ratio");
 
-    DynamicRegistry.Key<Attribute> GENERIC_WATER_MOVEMENT_EFFICIENCY = DynamicRegistry.Key.of("minecraft:generic.water_movement_efficiency");
+    DynamicRegistry.Key<Attribute> TEMPT_RANGE = DynamicRegistry.Key.of("minecraft:tempt_range");
+
+    DynamicRegistry.Key<Attribute> WATER_MOVEMENT_EFFICIENCY = DynamicRegistry.Key.of("minecraft:water_movement_efficiency");
 }

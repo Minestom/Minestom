@@ -5,9 +5,7 @@ import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.registry.DynamicRegistry;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.List;

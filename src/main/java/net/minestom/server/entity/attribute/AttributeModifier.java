@@ -25,9 +25,9 @@ public record AttributeModifier(@NotNull NamespaceID id, double amount, @NotNull
         }
     };
     public static final BinaryTagSerializer<AttributeModifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new AttributeModifier(NamespaceID.from(tag.getString("id")), tag.getDouble("amount"),
+            (context, tag) -> new AttributeModifier(NamespaceID.from(tag.getString("id")), tag.getDouble("amount"),
                     AttributeOperation.NBT_TYPE.read(tag.get("operation"))),
-            value -> CompoundBinaryTag.builder()
+            (context, value) -> CompoundBinaryTag.builder()
                     .putString("id", value.id.asString())
                     .putDouble("amount", value.amount)
                     .put("operation", AttributeOperation.NBT_TYPE.write(value.operation))

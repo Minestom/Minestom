@@ -112,7 +112,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // We must set the sprinting attribute serverside because when we resend modifiers it overwrites what
         // the client has, meaning if they are sprinting and we send no modifiers, they will no longer be
         // getting the speed boost of sprinting.
-        final AttributeInstance speed = getAttribute(Attribute.GENERIC_MOVEMENT_SPEED);
+        final AttributeInstance speed = getAttribute(Attribute.MOVEMENT_SPEED);
         if (sprinting) speed.addModifier(SPRINTING_SPEED_MODIFIER);
         else speed.removeModifier(SPRINTING_SPEED_MODIFIER);
     }
@@ -428,7 +428,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     /**
      * Sets the heal of the entity as its max health.
      * <p>
-     * Retrieved from {@link #getAttributeValue(DynamicRegistry.Key)} with the attribute {@link Attribute#GENERIC_MAX_HEALTH}.
+     * Retrieved from {@link #getAttributeValue(DynamicRegistry.Key)} with the attribute {@link Attribute#MAX_HEALTH}.
      */
     public void heal() {
         setHealth((float) getAttributeValue(Attribute.MAX_HEALTH));
@@ -709,7 +709,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @Override
     public void takeKnockback(float strength, final double x, final double z) {
-        strength *= (float) (1 - getAttributeValue(Attribute.GENERIC_KNOCKBACK_RESISTANCE));
+        strength *= (float) (1 - getAttributeValue(Attribute.KNOCKBACK_RESISTANCE));
         super.takeKnockback(strength, x, z);
     }
 
