@@ -143,7 +143,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             if (isPlayerInventorySlot) {
                 player.sendPacket(new SetPlayerInventorySlotPacket(packetSlot, item));
             } else {
-                sendPacketToViewers(new SetSlotPacket(0, 0, (short) packetSlot, item));
+                player.sendPacket(new SetSlotPacket(0, 0, (short) packetSlot, item));
             }
         }
     }
