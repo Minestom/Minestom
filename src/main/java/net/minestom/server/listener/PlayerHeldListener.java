@@ -35,6 +35,12 @@ public class PlayerHeldListener {
             // Event has been canceled, send the last held slot to refresh the client
             player.setHeldItemSlot(player.getHeldSlot());
         }
+
+        // Player is not using offhand, reset item use
+        if (player.getItemUseHand() != Player.Hand.OFF) {
+            player.refreshActiveHand(false, false, false);
+            player.clearItemUse();
+        }
     }
 
 }
