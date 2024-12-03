@@ -35,6 +35,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.effects.Effects;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerVehicleInformation;
@@ -2510,14 +2511,18 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
                 // Else previous and current are equal, do nothing
             }
 
-            boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
-            PlayerMeta playerMeta = getPlayerMeta();
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
-            playerMeta.setDisplayedSkinParts(displayedSkinParts);
-            playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
-            if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
-        }
+            EntityMeta entityMeta = getEntityMeta();
 
+            // in case setEntityType was used
+            if (entityMeta instanceof PlayerMeta playerMeta) {
+                boolean isInPlayState = getPlayerConnection().getConnectionState() == ConnectionState.PLAY;
+
+                if (isInPlayState) playerMeta.setNotifyAboutChanges(false);
+                playerMeta.setDisplayedSkinParts(displayedSkinParts);
+                playerMeta.setRightMainHand(this.mainHand == MainHand.RIGHT);
+                if (isInPlayState) playerMeta.setNotifyAboutChanges(true);
+            }
+        }
     }
 
     private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
