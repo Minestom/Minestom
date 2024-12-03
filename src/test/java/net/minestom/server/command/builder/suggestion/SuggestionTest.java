@@ -34,4 +34,23 @@ class SuggestionTest {
         String value = "test";
         assertEquals(Character.toString(value.charAt(index)), new Suggestion(value, index, 1).getCurrent());
     }
+
+    @Test
+    void setLengthOverflow() {
+        Suggestion suggestion = new Suggestion("test", 0, 0);
+        suggestion.setLength(4);
+        assertEquals("test", suggestion.getCurrent());
+        assertThrows(IllegalArgumentException.class, () -> suggestion.setLength(5));
+    }
+
+    @Test
+    void setIndexOverflow() {
+        Suggestion suggestion = new Suggestion("test", 0, 0);
+        suggestion.setStart(4);
+        assertThrows(IllegalArgumentException.class, () -> suggestion.setLength(1));
+        assertEquals("", suggestion.getCurrent());
+        suggestion.setStart(3);
+        suggestion.setLength(1);
+        assertEquals("t", suggestion.getCurrent());
+    }
 }
