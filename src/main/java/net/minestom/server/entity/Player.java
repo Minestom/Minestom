@@ -1443,7 +1443,12 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
         sendPacketToViewersAndSelf(getMetadataPacket());
-        sendPacketToViewersAndSelf(getPropertiesPacket());
+
+        // send attributes to everyone if our entity type is valid for it
+        // otherwise, just send to the player
+        if (shouldSendAttributes()) sendPacketToViewersAndSelf(getPropertiesPacket());
+        else sendPacket(getPropertiesPacket());
+
         sendPacketToViewersAndSelf(getEquipmentsPacket());
 
         getInventory().update();
