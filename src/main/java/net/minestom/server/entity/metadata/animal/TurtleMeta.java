@@ -1,66 +1,62 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class TurtleMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 6;
-
     public TurtleMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public @NotNull Point getHomePosition() {
-        return super.metadata.getIndex(OFFSET, Vec.ZERO);
+        return metadata.get(MetadataDef.Turtle.HOME_POS);
     }
 
     public void setBlockPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET, Metadata.BlockPosition(value));
+        metadata.set(MetadataDef.Turtle.HOME_POS, value);
     }
 
     public boolean isHasEgg() {
-        return super.metadata.getIndex(OFFSET + 1, false);
+        return metadata.get(MetadataDef.Turtle.HAS_EGG);
     }
 
     public void setHasEgg(boolean value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Turtle.HAS_EGG, value);
     }
 
     public boolean isLayingEgg() {
-        return super.metadata.getIndex(OFFSET + 2, false);
+        return metadata.get(MetadataDef.Turtle.IS_LAYING_EGG);
     }
 
     public void setLayingEgg(boolean value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Turtle.IS_LAYING_EGG, value);
     }
 
     public @NotNull Point getTravelPosition() {
-        return super.metadata.getIndex(OFFSET + 3, Vec.ZERO);
+        return metadata.get(MetadataDef.Turtle.TRAVEL_POS);
     }
 
     public void setTravelPosition(@NotNull Point value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.BlockPosition(value));
+        metadata.set(MetadataDef.Turtle.TRAVEL_POS, value);
     }
 
     public boolean isGoingHome() {
-        return super.metadata.getIndex(OFFSET + 4, false);
+        return metadata.get(MetadataDef.Turtle.IS_GOING_HOME);
     }
 
     public void setGoingHome(boolean value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Turtle.IS_GOING_HOME, value);
     }
 
     public boolean isTravelling() {
-        return super.metadata.getIndex(OFFSET + 5, false);
+        return metadata.get(MetadataDef.Turtle.IS_TRAVELING);
     }
 
     public void setTravelling(boolean value) {
-        super.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Turtle.IS_TRAVELING, value);
     }
 
 }

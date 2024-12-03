@@ -472,38 +472,31 @@ public class Sidebar implements Scoreboard {
     }
 
 
-    public static class NumberFormat implements NetworkBuffer.Writer {
-        private final FormatType formatType;
-        private final Component content;
-
+    public record NumberFormat(FormatType formatType, Component content) {
         private NumberFormat() {
-            this.content = null;
-            this.formatType = FormatType.BLANK;
+            this(FormatType.BLANK, null);
         }
 
-        private NumberFormat(@NotNull Component content, @NotNull FormatType formatType) {
-            this.content = content;
-            this.formatType = formatType;
-        }
-
-        public NumberFormat(NetworkBuffer reader) {
-            this.formatType = FormatType.values()[reader.read(NetworkBuffer.VAR_INT)];
-            if (formatType != FormatType.BLANK) this.content = reader.read(NetworkBuffer.COMPONENT);
-            else this.content = null;
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, formatType.ordinal());
-            if (formatType == FormatType.STYLED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+        public static final NetworkBuffer.Type<NumberFormat> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, NumberFormat value) {
+                buffer.write(NetworkBuffer.Enum(FormatType.class), value.formatType);
+                if (value.formatType == FormatType.STYLED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                } else if (value.formatType == FormatType.FIXED) {
+                    assert value.content != null;
+                    buffer.write(NetworkBuffer.COMPONENT, value.content);
+                }
             }
-            else if (formatType == FormatType.FIXED) {
-                assert content != null;
-                writer.write(NetworkBuffer.COMPONENT, content);
+
+            @Override
+            public NumberFormat read(@NotNull NetworkBuffer buffer) {
+                final FormatType formatType = buffer.read(NetworkBuffer.Enum(FormatType.class));
+                final Component content = formatType != FormatType.BLANK ? buffer.read(NetworkBuffer.COMPONENT) : null;
+                return new NumberFormat(formatType, content);
             }
-        }
+        };
 
         /**
          * A number format which has no sidebar score displayed
@@ -520,7 +513,7 @@ public class Sidebar implements Scoreboard {
          * @param style a styled component
          */
         public static @NotNull NumberFormat styled(@NotNull Component style) {
-            return new NumberFormat(style, FormatType.STYLED);
+            return new NumberFormat(FormatType.STYLED, style);
         }
 
         /**
@@ -529,7 +522,7 @@ public class Sidebar implements Scoreboard {
          * @param content the fixed component
          */
         public static @NotNull NumberFormat fixed(@NotNull Component content) {
-            return new NumberFormat(content, FormatType.FIXED);
+            return new NumberFormat(FormatType.FIXED, content);
         }
 
         private enum FormatType {

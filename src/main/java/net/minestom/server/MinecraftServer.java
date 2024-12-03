@@ -22,7 +22,8 @@ import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
-import net.minestom.server.network.PacketProcessor;
+import net.minestom.server.network.packet.PacketParser;
+import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
@@ -31,7 +32,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
-import net.minestom.server.utils.PacketUtils;
+import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
@@ -41,7 +42,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 
@@ -81,13 +81,8 @@ public final class MinecraftServer implements MinecraftConstants {
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        ServerProcess process;
-        try {
-            process = new ServerProcessImpl();
-            serverProcess = process;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        ServerProcess process = new ServerProcessImpl();
+        serverProcess = process;
         return process;
     }
 
@@ -109,7 +104,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketUtils.broadcastPlayPacket(PluginMessagePacket.getBrandPacket());
+        PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
     /**
@@ -129,7 +124,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        PacketUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
+        PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     public static @UnknownNullability ServerProcess process() {
@@ -189,8 +184,8 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.bossBar();
     }
 
-    public static @NotNull PacketProcessor getPacketProcessor() {
-        return serverProcess.packetProcessor();
+    public static @NotNull PacketParser<ClientPacket> getPacketParser() {
+        return serverProcess.packetParser();
     }
 
     public static boolean isStarted() {

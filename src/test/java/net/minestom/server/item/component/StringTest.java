@@ -14,8 +14,7 @@ public class StringTest extends AbstractItemComponentTest<String> {
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<String>> SHARED_COMPONENTS = List.of(
            ItemComponent.INSTRUMENT,
-           ItemComponent.NOTE_BLOCK_SOUND,
-           ItemComponent.LOCK
+           ItemComponent.NOTE_BLOCK_SOUND
     );
 
     @Override

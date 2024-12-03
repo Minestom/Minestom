@@ -1,25 +1,21 @@
 package net.minestom.server.entity.metadata.monster;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class SpiderMeta extends MonsterMeta {
-    public static final byte OFFSET = MonsterMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
-    private final static byte CLIMBING_BIT = 0x01;
-
     public SpiderMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isClimbing() {
-        return getMaskBit(OFFSET, CLIMBING_BIT);
+        return metadata.get(MetadataDef.Spider.IS_CLIMBING);
     }
 
     public void setClimbing(boolean value) {
-        setMaskBit(OFFSET, CLIMBING_BIT, value);
+        metadata.set(MetadataDef.Spider.IS_CLIMBING, value);
     }
 
 }

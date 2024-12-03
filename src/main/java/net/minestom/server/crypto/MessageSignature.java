@@ -1,14 +1,13 @@
 package net.minestom.server.crypto;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
-import static net.minestom.server.network.NetworkBuffer.RAW_BYTES;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record MessageSignature(byte @NotNull [] signature) implements NetworkBuffer.Writer {
-
+public record MessageSignature(byte @NotNull [] signature) {
     static final int SIGNATURE_BYTE_LENGTH = 256;
 
     public MessageSignature {
@@ -17,33 +16,28 @@ public record MessageSignature(byte @NotNull [] signature) implements NetworkBuf
         }
     }
 
-    public MessageSignature(@NotNull NetworkBuffer reader) {
-        this(reader.readBytes(SIGNATURE_BYTE_LENGTH));
-    }
+    public static final NetworkBuffer.Type<MessageSignature> SERIALIZER = NetworkBufferTemplate.template(
+            NetworkBuffer.RAW_BYTES, MessageSignature::signature,
+            MessageSignature::new
+    );
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(RAW_BYTES, signature);
-    }
-
-    public record Packed(int id, @UnknownNullability MessageSignature fullSignature) implements NetworkBuffer.Writer {
-        public Packed(@NotNull NetworkBuffer reader) {
-            this(read(reader));
-        }
-
+    public record Packed(int id, @UnknownNullability MessageSignature fullSignature) {
         private Packed(@NotNull Packed packed) {
             this(packed.id, packed.fullSignature);
         }
 
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(VAR_INT, id + 1);
-            if (id == 0) writer.write(fullSignature);
-        }
+        public static final NetworkBuffer.Type<Packed> SERIALIZER = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, Packed value) {
+                buffer.write(VAR_INT, value.id + 1);
+                if (value.id == 0) buffer.write(MessageSignature.SERIALIZER, value.fullSignature);
+            }
 
-        private static Packed read(NetworkBuffer reader) {
-            final int id = reader.read(VAR_INT) - 1;
-            return new Packed(id, id == -1 ? new MessageSignature(reader) : null);
-        }
+            @Override
+            public Packed read(@NotNull NetworkBuffer buffer) {
+                final int id = buffer.read(VAR_INT) - 1;
+                return new Packed(id, id == -1 ? buffer.read(MessageSignature.SERIALIZER) : null);
+            }
+        };
     }
 }

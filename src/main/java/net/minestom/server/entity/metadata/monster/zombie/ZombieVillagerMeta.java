@@ -1,41 +1,36 @@
 package net.minestom.server.entity.metadata.monster.zombie;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ZombieVillagerMeta extends ZombieMeta {
-    public static final byte OFFSET = ZombieMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
     public ZombieVillagerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isConverting() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.ZombieVillager.IS_CONVERTING);
     }
 
     public void setConverting(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.ZombieVillager.IS_CONVERTING, value);
     }
 
     public VillagerMeta.VillagerData getVillagerData() {
-        int[] data = super.metadata.getIndex(OFFSET + 1, null);
+        int[] data = metadata.get(MetadataDef.ZombieVillager.VILLAGER_DATA);
         if (data == null) {
-            return new VillagerMeta.VillagerData(VillagerMeta.Type.PLAINS, VillagerMeta.Profession.NONE, VillagerMeta.Level.NOVICE);
+            return new VillagerMeta.VillagerData(VillagerType.PLAINS, VillagerProfession.NONE, VillagerMeta.Level.NOVICE);
         }
-        return new VillagerMeta.VillagerData(VillagerMeta.Type.VALUES[data[0]], VillagerMeta.Profession.VALUES[data[1]], VillagerMeta.Level.VALUES[data[2] - 1]);
+        return new VillagerMeta.VillagerData(VillagerType.values()[data[0]], VillagerProfession.fromId(data[1]), VillagerMeta.Level.VALUES[data[2] - 1]);
     }
 
-    public void setVillagerData(VillagerMeta.VillagerData data) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VillagerData(
-                data.getType().ordinal(),
-                data.getProfession().ordinal(),
-                data.getLevel().ordinal() + 1
-        ));
+    public void setVillagerData(@NotNull VillagerMeta.VillagerData data) {
+        int[] value = new int[]{data.villagerType().ordinal(), data.villagerProfession().id(), data.level().ordinal() + 1};
+        metadata.set(MetadataDef.Villager.VARIANT, value);
     }
 
 }

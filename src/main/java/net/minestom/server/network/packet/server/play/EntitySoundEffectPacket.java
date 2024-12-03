@@ -4,7 +4,6 @@ import net.kyori.adventure.sound.Sound;
 import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,28 +17,25 @@ public record EntitySoundEffectPacket(
         float pitch,
         long seed
 ) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<EntitySoundEffectPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, EntitySoundEffectPacket value) {
+            buffer.write(SoundEvent.NETWORK_TYPE, value.soundEvent);
+            buffer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(value.source));
+            buffer.write(VAR_INT, value.entityId);
+            buffer.write(FLOAT, value.volume);
+            buffer.write(FLOAT, value.pitch);
+            buffer.write(LONG, value.seed);
+        }
 
-    public EntitySoundEffectPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(SoundEvent.NETWORK_TYPE),
-                reader.readEnum(Sound.Source.class),
-                reader.read(VAR_INT),
-                reader.read(FLOAT),
-                reader.read(FLOAT),
-                reader.read(LONG));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(SoundEvent.NETWORK_TYPE, soundEvent);
-        writer.write(VAR_INT, AdventurePacketConvertor.getSoundSourceValue(source));
-        writer.write(VAR_INT, entityId);
-        writer.write(FLOAT, volume);
-        writer.write(FLOAT, pitch);
-        writer.write(LONG, seed);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.ENTITY_SOUND_EFFECT;
-    }
+        @Override
+        public EntitySoundEffectPacket read(@NotNull NetworkBuffer buffer) {
+            return new EntitySoundEffectPacket(buffer.read(SoundEvent.NETWORK_TYPE),
+                    buffer.read(NetworkBuffer.Enum(Sound.Source.class)),
+                    buffer.read(VAR_INT),
+                    buffer.read(FLOAT),
+                    buffer.read(FLOAT),
+                    buffer.read(LONG));
+        }
+    };
 }

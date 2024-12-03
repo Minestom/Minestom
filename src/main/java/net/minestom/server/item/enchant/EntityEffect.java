@@ -25,8 +25,8 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("apply_mob_effect", ApplyPotionEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("change_item_damage", ChangeItemDamage.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("damage_entity", DamageEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("damage_item", DamageItem.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("explode", Explode.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("ignite", Ignite.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("play_sound", PlaySound.NBT_TYPE, DataPack.MINECRAFT_CORE);
@@ -97,14 +97,14 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record DamageItem(@NotNull LevelBasedValue amount) implements EntityEffect, LocationEffect {
-        public static final BinaryTagSerializer<DamageItem> NBT_TYPE = BinaryTagSerializer.object(
-                "amount", LevelBasedValue.NBT_TYPE, DamageItem::amount,
-                DamageItem::new
+    record ChangeItemDamage(@NotNull LevelBasedValue amount) implements EntityEffect, LocationEffect {
+        public static final BinaryTagSerializer<ChangeItemDamage> NBT_TYPE = BinaryTagSerializer.object(
+                "amount", LevelBasedValue.NBT_TYPE, ChangeItemDamage::amount,
+                ChangeItemDamage::new
         );
 
         @Override
-        public @NotNull BinaryTagSerializer<DamageItem> nbtType() {
+        public @NotNull BinaryTagSerializer<ChangeItemDamage> nbtType() {
             return NBT_TYPE;
         }
     }

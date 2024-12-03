@@ -8,6 +8,7 @@ import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -15,22 +16,16 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
+
 public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInTooltip) {
     public static final AttributeList EMPTY = new AttributeList(List.of(), true);
 
-    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, AttributeList value) {
-            buffer.writeCollection(Modifier.NETWORK_TYPE, value.modifiers);
-            buffer.write(NetworkBuffer.BOOLEAN, value.showInTooltip);
-        }
-
-        @Override
-        public AttributeList read(@NotNull NetworkBuffer buffer) {
-            return new AttributeList(buffer.readCollection(Modifier.NETWORK_TYPE, Short.MAX_VALUE),
-                    buffer.read(NetworkBuffer.BOOLEAN));
-        }
-    };
+    public static final NetworkBuffer.Type<AttributeList> NETWORK_TYPE = NetworkBufferTemplate.template(
+            Modifier.NETWORK_TYPE.list(Short.MAX_VALUE), AttributeList::modifiers,
+            BOOLEAN, AttributeList::showInTooltip,
+            AttributeList::new
+    );
 
     public static final BinaryTagSerializer<AttributeList> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
@@ -39,10 +34,11 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
             for (Modifier modifier : value.modifiers) {
                 modifiers.add(Modifier.NBT_TYPE.write(context, modifier));
             }
-            return CompoundBinaryTag.builder()
-                    .put("modifiers", modifiers.build())
-                    .putBoolean("show_in_tooltip", value.showInTooltip)
-                    .build();
+
+            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
+                    .put("modifiers", modifiers.build());
+            if (!value.showInTooltip) builder.putBoolean("show_in_tooltip", false);
+            return builder.build();
         }
 
         @Override
@@ -60,8 +56,7 @@ public record AttributeList(@NotNull List<Modifier> modifiers, boolean showInToo
         }
     };
 
-    public record Modifier(@NotNull DynamicRegistry.Key<Attribute> attribute, @NotNull AttributeModifier modifier,
-                           @NotNull EquipmentSlotGroup slot) {
+    public record Modifier(@NotNull DynamicRegistry.Key<Attribute> attribute, @NotNull AttributeModifier modifier, @NotNull EquipmentSlotGroup slot) {
         public static final NetworkBuffer.Type<Modifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, Modifier value) {

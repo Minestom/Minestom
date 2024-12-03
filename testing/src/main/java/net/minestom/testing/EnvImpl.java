@@ -19,6 +19,10 @@ final class EnvImpl implements Env {
 
     public EnvImpl(ServerProcess process) {
         this.process = process;
+
+        // Use player provider to disable queued chunk sending.
+        // Set here to allow an individual test to override if they want.
+        process.connection().setPlayerProvider(TestConnectionImpl.TestPlayerImpl::new);
     }
 
     @Override
