@@ -90,6 +90,11 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
         public @NotNull BinaryTag write(@NotNull BlockTypeFilter value) {
             return switch (value) {
                 case Blocks blocks -> {
+                    if (blocks.blocks.size() == 1) {
+                        // Special case to match mojang serialization
+                        yield StringBinaryTag.stringBinaryTag(blocks.blocks.get(0).name());
+                    }
+
                     ListBinaryTag.Builder<StringBinaryTag> builder = ListBinaryTag.builder(BinaryTagTypes.STRING);
                     for (Block block : blocks.blocks) {
                         builder.add(StringBinaryTag.stringBinaryTag(block.name()));

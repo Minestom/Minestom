@@ -1,13 +1,12 @@
 package net.minestom.server.entity.player;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientStatusPacket;
 import net.minestom.server.network.packet.server.play.ChunkDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,7 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testChunkUnloadsOnRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
         player.teleport(new Pos(32, 40, 32)).join();
 
         var unloadChunkTracker = connection.trackIncoming(UnloadChunkPacket.class);
@@ -41,13 +40,13 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testChunkReloadCount(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
         player.respawn();
         // Player should have all their chunks reloaded
-        int chunkLoads = ChunkUtils.getChunkCount(Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().getViewDistance()));
+        int chunkLoads = ChunkRange.chunksCount(Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().viewDistance()));
         loadChunkTracker.assertCount(chunkLoads);
     }
 
@@ -55,7 +54,7 @@ public class PlayerRespawnChunkIntegrationTest {
     public void testPlayerTryRespawn(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        Player player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        Player player = connection.connect(instance, new Pos(0, 40, 0));
 
         var loadChunkTracker = connection.trackIncoming(ChunkDataPacket.class);
         player.setHealth(0);
@@ -63,8 +62,8 @@ public class PlayerRespawnChunkIntegrationTest {
         player.interpretPacketQueue();
         List<ChunkDataPacket> dataPacketList = loadChunkTracker.collect();
         Set<ChunkDataPacket> duplicateCheck = new HashSet<>();
-        int actualViewDistance = Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().getViewDistance());
-        int chunkLoads = ChunkUtils.getChunkCount(actualViewDistance);
+        int actualViewDistance = Math.min(ServerFlag.CHUNK_VIEW_DISTANCE, player.getSettings().viewDistance());
+        int chunkLoads = ChunkRange.chunksCount(actualViewDistance);
         loadChunkTracker.assertCount(chunkLoads);
         for (ChunkDataPacket packet : dataPacketList) {
             assertFalse(duplicateCheck.contains(packet));

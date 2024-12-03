@@ -3,18 +3,17 @@ package net.minestom.server.instance.anvil;
 import it.unimi.dsi.fastutil.ints.*;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.ArrayUtils;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.async.AsyncUtils;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -30,7 +29,6 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.nio.file.StandardOpenOption;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -82,26 +80,24 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
+    public @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         if (!Files.exists(path)) {
             // No world folder
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
         try {
             return loadMCA(instance, chunkX, chunkZ);
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
-            return CompletableFuture.completedFuture(null);
+            return null;
         }
     }
 
-    private @NotNull CompletableFuture<@Nullable Chunk> loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException {
+    private @Nullable Chunk loadMCA(Instance instance, int chunkX, int chunkZ) throws IOException {
         final RegionFile mcaFile = getMCAFile(chunkX, chunkZ);
-        if (mcaFile == null)
-            return CompletableFuture.completedFuture(null);
+        if (mcaFile == null) return null;
         final CompoundBinaryTag chunkData = mcaFile.readChunkData(chunkX, chunkZ);
-        if (chunkData == null)
-            return CompletableFuture.completedFuture(null);
+        if (chunkData == null) return null;
 
         // Load the chunk data (assuming it is fully generated)
         final Chunk chunk = instance.getChunkSupplier().createChunk(instance, chunkX, chunkZ);
@@ -113,7 +109,6 @@ public class AnvilLoader implements IChunkLoader {
                 // TODO: Parallelize block, block entities and biome loading
                 // Blocks + Biomes
                 loadSections(chunk, chunkData);
-
                 // Block entities
                 loadBlockEntities(chunk, chunkData);
 
@@ -126,19 +121,19 @@ public class AnvilLoader implements IChunkLoader {
         // Cache the index of the loaded chunk
         perRegionLoadedChunksLock.lock();
         try {
-            int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-            int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+            int regionX = CoordConversion.chunkToRegion(chunkX);
+            int regionZ = CoordConversion.chunkToRegion(chunkZ);
             var chunks = perRegionLoadedChunks.computeIfAbsent(new IntIntImmutablePair(regionX, regionZ), r -> new HashSet<>()); // region cache may have been removed on another thread due to unloadChunk
             chunks.add(new IntIntImmutablePair(chunkX, chunkZ));
         } finally {
             perRegionLoadedChunksLock.unlock();
         }
-        return CompletableFuture.completedFuture(chunk);
+        return chunk;
     }
 
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
-        final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-        final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+        final int regionX = CoordConversion.chunkToRegion(chunkX);
+        final int regionZ = CoordConversion.chunkToRegion(chunkZ);
         return alreadyLoaded.computeIfAbsent(RegionFile.getFileName(regionX, regionZ), n -> {
             final Path regionPath = this.regionPath.resolve(n);
             if (!Files.exists(regionPath)) {
@@ -196,7 +191,7 @@ public class AnvilLoader implements IChunkLoader {
 
                     int bitsPerEntry = packedIndices.length * 64 / biomeIndices.length;
                     if (bitsPerEntry > 3) bitsPerEntry = MathUtils.bitsToRepresent(convertedBiomePalette.length);
-                    ArrayUtils.unpack(biomeIndices, packedIndices, bitsPerEntry);
+                    Palettes.unpack(biomeIndices, packedIndices, bitsPerEntry);
 
                     section.biomePalette().setAll((x, y, z) -> {
                         final int index = x + z * 4 + y * 16;
@@ -216,7 +211,7 @@ public class AnvilLoader implements IChunkLoader {
                     final long[] packedStates = blockStatesTag.getLongArray("data");
                     Check.stateCondition(packedStates.length == 0, "Missing packed states data");
                     int[] blockStateIndices = new int[Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE * Chunk.CHUNK_SECTION_SIZE];
-                    ArrayUtils.unpack(blockStateIndices, packedStates, packedStates.length * 64 / blockStateIndices.length);
+                    Palettes.unpack(blockStateIndices, packedStates, packedStates.length * 64 / blockStateIndices.length);
 
                     for (int y = 0; y < Chunk.CHUNK_SECTION_SIZE; y++) {
                         for (int z = 0; z < Chunk.CHUNK_SECTION_SIZE; z++) {
@@ -309,22 +304,21 @@ public class AnvilLoader implements IChunkLoader {
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
+    public void saveInstance(@NotNull Instance instance) {
         final CompoundBinaryTag nbt = instance.tagHandler().asCompound();
         if (nbt.size() == 0) {
             // Instance has no data
-            return AsyncUtils.VOID_FUTURE;
+            return;
         }
         try (OutputStream os = Files.newOutputStream(levelPath, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING)) {
             BinaryTagIO.writer().writeNamed(Map.entry("", nbt), os, BinaryTagIO.Compression.GZIP);
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        return AsyncUtils.VOID_FUTURE;
     }
 
     @Override
-    public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
+    public void saveChunk(@NotNull Chunk chunk) {
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();
 
@@ -334,8 +328,8 @@ public class AnvilLoader implements IChunkLoader {
         try {
             mcaFile = getMCAFile(chunkX, chunkZ);
             if (mcaFile == null) {
-                final int regionX = ChunkUtils.toRegionCoordinate(chunkX);
-                final int regionZ = ChunkUtils.toRegionCoordinate(chunkZ);
+                final int regionX = CoordConversion.chunkToRegion(chunkX);
+                final int regionZ = CoordConversion.chunkToRegion(chunkZ);
                 final String regionFileName = RegionFile.getFileName(regionX, regionZ);
                 try {
                     Path regionFile = regionPath.resolve(regionFileName);
@@ -349,7 +343,7 @@ public class AnvilLoader implements IChunkLoader {
                 } catch (IOException e) {
                     LOGGER.error("Failed to create region file for " + chunkX + ", " + chunkZ, e);
                     MinecraftServer.getExceptionManager().handleException(e);
-                    return AsyncUtils.VOID_FUTURE;
+                    return;
                 }
             }
         } finally {
@@ -373,7 +367,6 @@ public class AnvilLoader implements IChunkLoader {
             LOGGER.error("Failed to save chunk " + chunkX + ", " + chunkZ, e);
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        return AsyncUtils.VOID_FUTURE;
     }
 
     private void saveSectionData(@NotNull Chunk chunk, @NotNull CompoundBinaryTag.Builder chunkData) {
@@ -465,7 +458,7 @@ public class AnvilLoader implements IChunkLoader {
                 if (blockPaletteEntries.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
                     var bitsPerEntry = (int) Math.max(4, Math.ceil(Math.log(blockPaletteEntries.size()) / Math.log(2)));
-                    blockStates.putLongArray("data", ArrayUtils.pack(blockIndices, bitsPerEntry));
+                    blockStates.putLongArray("data", Palettes.pack(blockIndices, bitsPerEntry));
                 }
                 sectionData.put("block_states", blockStates.build());
 
@@ -474,7 +467,7 @@ public class AnvilLoader implements IChunkLoader {
                 if (biomePalette.size() > 1) {
                     // If there is only one entry we do not need to write the packed indices
                     var bitsPerEntry = (int) Math.max(1, Math.ceil(Math.log(biomePalette.size()) / Math.log(2)));
-                    biomes.putLongArray("data", ArrayUtils.pack(biomeIndices, bitsPerEntry));
+                    biomes.putLongArray("data", Palettes.pack(biomeIndices, bitsPerEntry));
                 }
                 sectionData.put("biomes", biomes.build());
 
@@ -521,8 +514,8 @@ public class AnvilLoader implements IChunkLoader {
      */
     @Override
     public void unloadChunk(Chunk chunk) {
-        final int regionX = ChunkUtils.toRegionCoordinate(chunk.getChunkX());
-        final int regionZ = ChunkUtils.toRegionCoordinate(chunk.getChunkZ());
+        final int regionX = CoordConversion.chunkToRegion(chunk.getChunkX());
+        final int regionZ = CoordConversion.chunkToRegion(chunk.getChunkZ());
         final IntIntImmutablePair regionKey = new IntIntImmutablePair(regionX, regionZ);
 
         perRegionLoadedChunksLock.lock();

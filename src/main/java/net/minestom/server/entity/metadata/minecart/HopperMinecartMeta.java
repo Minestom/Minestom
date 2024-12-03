@@ -5,9 +5,6 @@ import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class HopperMinecartMeta extends AbstractMinecartContainerMeta {
-    public static final byte OFFSET = AbstractMinecartContainerMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     public HopperMinecartMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }

@@ -18,7 +18,7 @@ public class InventoryCloseStateTest {
     public void doNotReceiveClosePacketFromServerWhenSendingClientCloseWindowPacket(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
         var packetTracker = connection.trackIncoming(CloseWindowPacket.class);

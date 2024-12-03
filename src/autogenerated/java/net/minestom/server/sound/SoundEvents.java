@@ -425,6 +425,8 @@ interface SoundEvents {
 
     SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = BuiltinSoundEvent.get("minecraft:block.bubble_column.whirlpool_inside");
 
+    SoundEvent UI_HUD_BUBBLE_POP = BuiltinSoundEvent.get("minecraft:ui.hud.bubble_pop");
+
     SoundEvent ITEM_BUCKET_EMPTY = BuiltinSoundEvent.get("minecraft:item.bucket.empty");
 
     SoundEvent ITEM_BUCKET_EMPTY_AXOLOTL = BuiltinSoundEvent.get("minecraft:item.bucket.empty_axolotl");
@@ -452,6 +454,8 @@ interface SoundEvents {
     SoundEvent ITEM_BUNDLE_DROP_CONTENTS = BuiltinSoundEvent.get("minecraft:item.bundle.drop_contents");
 
     SoundEvent ITEM_BUNDLE_INSERT = BuiltinSoundEvent.get("minecraft:item.bundle.insert");
+
+    SoundEvent ITEM_BUNDLE_INSERT_FAIL = BuiltinSoundEvent.get("minecraft:item.bundle.insert_fail");
 
     SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get("minecraft:item.bundle.remove_one");
 
@@ -748,6 +752,42 @@ interface SoundEvents {
     SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get("minecraft:block.crafter.craft");
 
     SoundEvent BLOCK_CRAFTER_FAIL = BuiltinSoundEvent.get("minecraft:block.crafter.fail");
+
+    SoundEvent ENTITY_CREAKING_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.creaking.ambient");
+
+    SoundEvent ENTITY_CREAKING_ACTIVATE = BuiltinSoundEvent.get("minecraft:entity.creaking.activate");
+
+    SoundEvent ENTITY_CREAKING_DEACTIVATE = BuiltinSoundEvent.get("minecraft:entity.creaking.deactivate");
+
+    SoundEvent ENTITY_CREAKING_ATTACK = BuiltinSoundEvent.get("minecraft:entity.creaking.attack");
+
+    SoundEvent ENTITY_CREAKING_DEATH = BuiltinSoundEvent.get("minecraft:entity.creaking.death");
+
+    SoundEvent ENTITY_CREAKING_STEP = BuiltinSoundEvent.get("minecraft:entity.creaking.step");
+
+    SoundEvent ENTITY_CREAKING_FREEZE = BuiltinSoundEvent.get("minecraft:entity.creaking.freeze");
+
+    SoundEvent ENTITY_CREAKING_UNFREEZE = BuiltinSoundEvent.get("minecraft:entity.creaking.unfreeze");
+
+    SoundEvent ENTITY_CREAKING_SPAWN = BuiltinSoundEvent.get("minecraft:entity.creaking.spawn");
+
+    SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get("minecraft:entity.creaking.sway");
+
+    SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get("minecraft:block.creaking_heart.break");
+
+    SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get("minecraft:block.creaking_heart.fall");
+
+    SoundEvent BLOCK_CREAKING_HEART_HIT = BuiltinSoundEvent.get("minecraft:block.creaking_heart.hit");
+
+    SoundEvent BLOCK_CREAKING_HEART_HURT = BuiltinSoundEvent.get("minecraft:block.creaking_heart.hurt");
+
+    SoundEvent BLOCK_CREAKING_HEART_PLACE = BuiltinSoundEvent.get("minecraft:block.creaking_heart.place");
+
+    SoundEvent BLOCK_CREAKING_HEART_STEP = BuiltinSoundEvent.get("minecraft:block.creaking_heart.step");
+
+    SoundEvent BLOCK_CREAKING_HEART_IDLE = BuiltinSoundEvent.get("minecraft:block.creaking_heart.idle");
+
+    SoundEvent BLOCK_CREAKING_HEART_SPAWN = BuiltinSoundEvent.get("minecraft:block.creaking_heart.spawn");
 
     SoundEvent ENTITY_CREEPER_DEATH = BuiltinSoundEvent.get("minecraft:entity.creeper.death");
 
@@ -1239,8 +1279,6 @@ interface SoundEvents {
 
     SoundEvent ENTITY_GOAT_HORN_BREAK = BuiltinSoundEvent.get("minecraft:entity.goat.horn_break");
 
-    SoundEvent ITEM_GOAT_HORN_PLAY = BuiltinSoundEvent.get("minecraft:item.goat_horn.play");
-
     SoundEvent ENTITY_GOAT_SCREAMING_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.ambient");
 
     SoundEvent ENTITY_GOAT_SCREAMING_DEATH = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.death");
@@ -1256,8 +1294,6 @@ interface SoundEvents {
     SoundEvent ENTITY_GOAT_SCREAMING_PREPARE_RAM = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.prepare_ram");
 
     SoundEvent ENTITY_GOAT_SCREAMING_RAM_IMPACT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.ram_impact");
-
-    SoundEvent ENTITY_GOAT_SCREAMING_HORN_BREAK = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.horn_break");
 
     SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get("minecraft:entity.goat.step");
 
@@ -2033,6 +2069,8 @@ interface SoundEvents {
 
     SoundEvent ENTITY_PAINTING_PLACE = BuiltinSoundEvent.get("minecraft:entity.painting.place");
 
+    SoundEvent BLOCK_PALE_HANGING_MOSS_IDLE = BuiltinSoundEvent.get("minecraft:block.pale_hanging_moss.idle");
+
     SoundEvent ENTITY_PANDA_PRE_SNEEZE = BuiltinSoundEvent.get("minecraft:entity.panda.pre_sneeze");
 
     SoundEvent ENTITY_PANDA_SNEEZE = BuiltinSoundEvent.get("minecraft:entity.panda.sneeze");
@@ -2070,6 +2108,8 @@ interface SoundEvents {
     SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.bogged");
 
     SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.breeze");
+
+    SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.creaking");
 
     SoundEvent ENTITY_PARROT_IMITATE_CREEPER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.creeper");
 
@@ -2598,6 +2638,16 @@ interface SoundEvents {
     SoundEvent BLOCK_SOUL_SOIL_FALL = BuiltinSoundEvent.get("minecraft:block.soul_soil.fall");
 
     SoundEvent PARTICLE_SOUL_ESCAPE = BuiltinSoundEvent.get("minecraft:particle.soul_escape");
+
+    SoundEvent BLOCK_SPAWNER_BREAK = BuiltinSoundEvent.get("minecraft:block.spawner.break");
+
+    SoundEvent BLOCK_SPAWNER_FALL = BuiltinSoundEvent.get("minecraft:block.spawner.fall");
+
+    SoundEvent BLOCK_SPAWNER_HIT = BuiltinSoundEvent.get("minecraft:block.spawner.hit");
+
+    SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get("minecraft:block.spawner.place");
+
+    SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get("minecraft:block.spawner.step");
 
     SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get("minecraft:block.spore_blossom.break");
 

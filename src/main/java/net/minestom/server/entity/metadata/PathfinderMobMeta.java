@@ -5,9 +5,6 @@ import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PathfinderMobMeta extends MobMeta {
-    public static final byte OFFSET = MobMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     protected PathfinderMobMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
