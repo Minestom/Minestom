@@ -2185,7 +2185,6 @@ public class Player extends LivingEntity implements CommandSender, Localizable, 
         this.heldSlot = slot;
         syncEquipment(EquipmentSlot.MAIN_HAND);
         updateEquipmentAttributes(inventory.getItemStack(oldHeldSlot), inventory.getItemStack(this.heldSlot), EquipmentSlot.MAIN_HAND);
-        clearItemUse();
     }
 
     public void refreshItemUse(@Nullable Hand itemUseHand, long itemUseTimeTicks) {
