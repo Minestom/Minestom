@@ -84,7 +84,7 @@ public final class TickThread extends MinestomThread {
     }
 
     void startTick(CountDownLatch latch, long tickTime) {
-        if (entries.isEmpty()) {
+        if (stop || entries.isEmpty()) {
             // Nothing to tick
             latch.countDown();
             return;
