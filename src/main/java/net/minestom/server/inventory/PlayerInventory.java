@@ -109,6 +109,8 @@ public non-sealed class PlayerInventory extends AbstractInventory {
 
     @Override
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
+        super.UNSAFE_itemInsert(slot, item, previous, sendPacket);
+
         for (Player player : getViewers()) {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot == null) continue;
@@ -120,8 +122,6 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             player.updateEquipmentAttributes(previous, item, equipmentSlot);
             player.syncEquipment(equipmentSlot);
         }
-
-        super.UNSAFE_itemInsert(slot, item, previous, sendPacket);
     }
 
     @Override
