@@ -28,7 +28,7 @@ public record EntityEquipmentPacket(int entityId,
             int index = 0;
             for (var entry : value.equipments.entrySet()) {
                 final boolean last = index++ == value.equipments.size() - 1;
-                byte slotEnum = (byte) entry.getKey().ordinal();
+                byte slotEnum = (byte) entry.getKey().equipmentSlot();
                 if (!last) slotEnum |= 0x80;
                 buffer.write(BYTE, slotEnum);
                 buffer.write(ItemStack.NETWORK_TYPE, entry.getValue());
@@ -62,7 +62,7 @@ public record EntityEquipmentPacket(int entityId,
         byte slot;
         do {
             slot = reader.read(BYTE);
-            equipments.put(EquipmentSlot.values()[slot & 0x7F], reader.read(ItemStack.NETWORK_TYPE));
+            equipments.put(EquipmentSlot.fromEquipmentSlot(slot & 0x7F), reader.read(ItemStack.NETWORK_TYPE));
         } while ((slot & 0x80) == 0x80);
         return equipments;
     }
