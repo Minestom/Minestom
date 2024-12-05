@@ -184,6 +184,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     }
 
     @Contract(value = "_, -> new", pure = true)
+    default @NotNull ItemStack withItemName(@NotNull Component itemName) {
+        return with(ItemComponent.ITEM_NAME, itemName);
+    }
+
+    @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withLore(@NotNull Component... lore) {
         return with(ItemComponent.LORE, List.of(lore));
     }
@@ -313,6 +318,10 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
         default @NotNull Builder customName(@NotNull Component customName) {
             return set(ItemComponent.CUSTOM_NAME, customName);
+        }
+
+        default @NotNull Builder itemName(@NotNull Component itemName) {
+            return set(ItemComponent.ITEM_NAME, itemName);
         }
 
         default @NotNull Builder lore(@NotNull Component... lore) {
