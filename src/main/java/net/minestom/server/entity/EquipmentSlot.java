@@ -57,6 +57,7 @@ public enum EquipmentSlot {
      *
      * @return the equipment slot
      */
+    @ApiStatus.Internal
     public int equipmentSlot() {
         return equipmentSlot;
     }
