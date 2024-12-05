@@ -35,6 +35,7 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
@@ -1760,6 +1761,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         AbstractInventory openInventory = getOpenInventory();
         if (openInventory == null) return;
 
+        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
+        EventDispatcher.call(inventoryCloseEvent);
+
         if (!fromClient) {
             didCloseInventory = true;
         }
@@ -1769,6 +1773,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         inventory.update();
 
         didCloseInventory = false;
+
+        Inventory newInventory = inventoryCloseEvent.getNewInventory();
+        if (newInventory != null)
+            openInventory(newInventory);
     }
 
     /**
