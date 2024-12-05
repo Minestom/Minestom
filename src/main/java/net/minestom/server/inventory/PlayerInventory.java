@@ -118,7 +118,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             item = entityEquipEvent.getEquippedItem();
 
             player.updateEquipmentAttributes(previous, item, equipmentSlot);
-            player.syncEquipment(equipmentSlot);
+            player.syncEquipment(equipmentSlot, item);
         }
 
         super.UNSAFE_itemInsert(slot, item, previous, sendPacket);
