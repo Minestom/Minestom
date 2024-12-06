@@ -13,11 +13,11 @@ import static net.minestom.server.utils.inventory.PlayerInventoryUtils.*;
 
 public enum EquipmentSlot {
     MAIN_HAND(0, 0, "mainhand", false, -1),
+    OFF_HAND(1, 5, "offhand", false, -1),
     BOOTS(2, 1, "feet", true, BOOTS_SLOT),
     LEGGINGS(3, 2, "legs", true, LEGGINGS_SLOT),
     CHESTPLATE(4, 3, "chest", true, CHESTPLATE_SLOT),
     HELMET(5, 4, "head", true, HELMET_SLOT),
-    OFF_HAND(1, 5, "offhand", false, -1),
     BODY(6, 6, "body", false, -1);
 
     private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
