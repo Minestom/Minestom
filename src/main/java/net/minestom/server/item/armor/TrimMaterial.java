@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimMaterial);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimMaterial, true);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimMaterial>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimMaterial);
 
     static @NotNull TrimMaterial create(
