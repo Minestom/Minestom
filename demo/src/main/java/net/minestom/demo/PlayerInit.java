@@ -134,7 +134,6 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.setGameMode(GameMode.SURVIVAL);
                 PlayerInventory inventory = event.getPlayer().getInventory();
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
