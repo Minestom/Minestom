@@ -156,6 +156,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static InstrumentEntry instrument(String namespace, @NotNull Properties main) {
+        return new InstrumentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = loadRegistryFile(resource)) {
@@ -262,7 +267,9 @@ public final class Registry {
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
-        VILLAGER_PROFESSIONS("villager_professions.json");
+        VILLAGER_PROFESSIONS("villager_professions.json"),
+        INSTRUMENTS("instruments.json"),
+        INSTRUMENT_TAGS("tags/biome.json");
 
         private final String name;
 
@@ -1013,6 +1020,18 @@ public final class Registry {
                     GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     (float) main.getDouble("length_in_seconds"),
                     main.getInt("comparator_output"),
+                    custom);
+        }
+    }
+
+    public record InstrumentEntry(NamespaceID namespace, SoundEvent soundEvent, float useDuration, float range,
+                                  Component description, Properties custom) implements Entry {
+        public InstrumentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    (float) main.getDouble("use_duration"),
+                    (float) main.getDouble("range"),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     custom);
         }
     }
