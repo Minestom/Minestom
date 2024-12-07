@@ -8,6 +8,7 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
@@ -29,6 +30,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<Enchantment> enchantment = null;
     public DynamicRegistry<PaintingMeta.Variant> paintingVariant = null;
     public DynamicRegistry<JukeboxSong> jukeboxSong = null;
+    public DynamicRegistry<Instrument> instrument = null;
     public DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -95,6 +97,11 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
         return Objects.requireNonNull(jukeboxSong);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Instrument> instrument() {
+        return instrument;
     }
 
     @Override
