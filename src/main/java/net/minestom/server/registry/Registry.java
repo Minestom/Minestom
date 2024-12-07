@@ -269,7 +269,7 @@ public final class Registry {
         JUKEBOX_SONGS("jukebox_songs.json"),
         VILLAGER_PROFESSIONS("villager_professions.json"),
         INSTRUMENTS("instruments.json"),
-        INSTRUMENT_TAGS("tags/biome.json");
+        INSTRUMENT_TAGS("tags/instrument.json");
 
         private final String name;
 
