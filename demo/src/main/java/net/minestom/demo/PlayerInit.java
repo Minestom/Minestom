@@ -34,6 +34,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
@@ -134,12 +135,12 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.setGameMode(GameMode.SURVIVAL);
                 PlayerInventory inventory = event.getPlayer().getInventory();
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
+                inventory.addItemStack(ItemStack.of(Material.GOAT_HORN).with(ItemComponent.INSTRUMENT, Instrument.ADMIRE_GOAT_HORN));
 
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(

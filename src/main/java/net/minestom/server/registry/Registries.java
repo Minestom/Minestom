@@ -8,6 +8,7 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
@@ -43,6 +44,8 @@ public interface Registries {
     @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant();
 
     @NotNull DynamicRegistry<JukeboxSong> jukeboxSong();
+
+    @NotNull DynamicRegistry<Instrument> instrument();
 
     // The following are _not_ sent to the client.
 
