@@ -70,6 +70,7 @@ public class Generators {
         generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "Enchantments");
         generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingMeta.Variant", "PaintingVariants");
         generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
+        generator.generateKeys(resource("instruments.json"), "net.minestom.server.item.instrument", "Instrument", "Instruments");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();
