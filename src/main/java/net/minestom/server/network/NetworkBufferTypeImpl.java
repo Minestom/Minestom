@@ -794,15 +794,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record RegistryTypeType<T extends ProtocolObject>(
-            @NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+            @NotNull Function<Registries, DynamicRegistry<T>> selector,
+            boolean holder
+    ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final DynamicRegistry<T> registry = selector.apply(registries);
-            // Painting variants may be sent in their entirety rather than a registry reference so the ID is offset by 1 to indicate this.
+            // "Holder" references can either be a registry entry or the entire object itself. The id is zero if the
+            // entire object follows, but we only support registry objects currently so always offset by 1.
             // FIXME: Support sending the entire registry object instead of an ID reference.
-            final int id = registry.id().equals("minecraft:painting_variant") ? registry.getId(value) + 1 : registry.getId(value);
+            final int id = holder ? registry.getId(value) + 1 : registry.getId(value);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
         }

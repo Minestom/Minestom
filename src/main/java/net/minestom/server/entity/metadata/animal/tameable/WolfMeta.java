@@ -58,7 +58,7 @@ public class WolfMeta extends TameableAnimalMeta {
     }
 
     public sealed interface Variant extends ProtocolObject, WolfVariants permits VariantImpl {
-        @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Variant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant);
+        @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Variant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, true);
         @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
 
         static @NotNull Variant create(
