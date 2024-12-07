@@ -815,7 +815,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             DynamicRegistry<T> registry = selector.apply(registries);
-            final int id = buffer.read(VAR_INT);
+            int id = buffer.read(VAR_INT);
+            if (holder) id--; // See comment above about holder types
             final DynamicRegistry.Key<T> key = registry.getKey(id);
             Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
             return key;
