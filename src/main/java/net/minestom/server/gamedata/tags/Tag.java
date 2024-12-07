@@ -2,7 +2,6 @@ package net.minestom.server.gamedata.tags;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
@@ -17,7 +16,6 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 /**
  * Represents a group of items, blocks, fluids, entity types or function.
@@ -108,7 +106,9 @@ public final class Tag implements ProtocolObject, Keyed {
         ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
                 (name, registries) -> registries.enchantment().getId(DynamicRegistry.Key.of(name))),
         BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
-                (name, registries) -> registries.biome().getId(DynamicRegistry.Key.of(name)));
+                (name, registries) -> registries.biome().getId(DynamicRegistry.Key.of(name))),
+        INSTRUMENTS("minecraft:instrument", Registry.Resource.INSTRUMENT_TAGS,
+                (name, registries) -> registries.instrument().getId(DynamicRegistry.Key.of(name)));
 
         private final static BasicType[] VALUES = values();
         private final String identifier;
