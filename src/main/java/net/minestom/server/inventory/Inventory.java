@@ -137,7 +137,7 @@ public non-sealed class Inventory extends AbstractInventory {
      *
      * @param property the property to send
      * @param value    the value of the property
-     * @see <a href="https://wiki.vg/Protocol#Window_Property">https://wiki.vg/Protocol#Window_Property</a>
+     * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Set_Container_Property">the Minecraft wiki</a>
      */
     protected void sendProperty(@NotNull InventoryProperty property, short value) {
         sendPacketToViewers(new WindowPropertyPacket(getWindowId(), property.getProperty(), value));
