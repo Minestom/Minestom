@@ -711,7 +711,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param blockPosition the block position
      * @param actionId      the action id, depends on the block
      * @param actionParam   the action parameter, depends on the block
-     * @see <a href="https://wiki.vg/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
+     * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Block_Action">BlockActionPacket</a> for the action id &amp; param
      */
     public void sendBlockAction(@NotNull Point blockPosition, byte actionId, byte actionParam) {
         final Block block = getBlock(blockPosition);

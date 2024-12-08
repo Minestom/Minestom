@@ -1029,7 +1029,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Entity statuses can be found <a href="https://wiki.vg/Entity_statuses">here</a>.
+     * Entity statuses can be found <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Entity_statuses">here</a>.
      *
      * @param status the status to trigger
      */

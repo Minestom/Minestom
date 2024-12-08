@@ -67,7 +67,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     }
 
     /**
-     * Add a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+     * Add a feature flag, see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Feature_Flags">Minecraft Wiki's Feature Flags</a> for a list of applicable features
      * Note: the flag "minecraft:vanilla" is already included by default.
      *
      * @param feature A minecraft feature flag
@@ -80,7 +80,7 @@ public class AsyncPlayerConfigurationEvent implements PlayerEvent {
     }
 
     /**
-     * Remove a feature flag, see <a href="https://wiki.vg/Protocol#Feature_Flags">Wiki.vg Feature Flags</a> for a list of applicable features
+     * Remove a feature flag, see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Feature_Flags">Minecraft Wiki's Feature Flags</a> for a list of applicable features
      * Note: removing the flag "minecraft:vanilla" may result in weird behavior
      *
      * @param feature A minecraft feature flag
