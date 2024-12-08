@@ -10,7 +10,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
 /**
- * See <a href="https://wiki.vg/Protocol#Damage_Event">https://wiki.vg/Protocol#Damage_Event</a> for more info.
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Damage_Event">the Minecraft wiki</a> for more info.
  *
  * @param targetEntityId ID of the entity being damaged
  * @param damageTypeId   ID of damage type
