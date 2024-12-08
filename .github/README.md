@@ -134,8 +134,7 @@ Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.
 
 # Credits
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project.
-* [The Minecraft Coalition](https://wiki.vg/) and [`#mcdevs`](https://github.com/mcdevs) for their research of the Minecraft protocol and file formats.
-* [The Minecraft Wiki](https://minecraft.wiki) for all of their useful info.
+* [The Minecraft Wiki](https://minecraft.wiki) for their research of the [Minecraft protocol](https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge) and various file formats.
 * [JProfiler](https://www.ej-technologies.com/products/jprofiler/overview.html) for their amazing Java profiler.
 
 # Contributing
