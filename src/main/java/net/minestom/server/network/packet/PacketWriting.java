@@ -77,7 +77,7 @@ public final class PacketWriting {
     private static <T> void writeUncompressedFormat(NetworkBuffer buffer,
                                                     NetworkBuffer.Type<T> type,
                                                     int id, T packet) throws IndexOutOfBoundsException {
-        // Uncompressed format https://wiki.vg/Protocol#Without_compression
+        // Uncompressed format https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Without_compression
         final long lengthIndex = buffer.advanceWrite(3);
         buffer.write(NetworkBuffer.VAR_INT, id);
         buffer.write(type, packet);
@@ -89,7 +89,7 @@ public final class PacketWriting {
                                                   NetworkBuffer.Type<T> type,
                                                   int id, T packet,
                                                   int compressionThreshold) throws IndexOutOfBoundsException {
-        // Compressed format https://wiki.vg/Protocol#With_compression
+        // Compressed format https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#With_compression
         final long compressedIndex = buffer.advanceWrite(3);
         final long uncompressedIndex = buffer.advanceWrite(3);
         final long contentStart = buffer.writeIndex();
