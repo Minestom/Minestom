@@ -73,9 +73,8 @@ public final class MinecraftServer implements MinecraftConstants {
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
-    public static MinecraftServer init() {
+    public static void init() {
         updateProcess();
-        return new MinecraftServer();
     }
 
     @ApiStatus.Internal
@@ -321,15 +320,19 @@ public final class MinecraftServer implements MinecraftConstants {
      * @param address the server address
      * @throws IllegalStateException if called before {@link #init()} or if the server is already running
      */
-    public void start(@NotNull SocketAddress address) {
+    public static void start(@NotNull SocketAddress address) {
         serverProcess.start(address);
         new TickSchedulerThread(serverProcess).start();
     }
 
-    public void start(@NotNull String address, int port) {
+    public static void start(@NotNull String address, int port) {
         start(new InetSocketAddress(address, port));
     }
-
+    
+    public static void start() {
+        start(new InetSocketAddress(25565));
+    }
+    
     /**
      * Stops this server properly (saves if needed, kicking players, etc.)
      */
