@@ -211,7 +211,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Player extends LivingEntity {
-        public static final Entry<Float> ADDITIONAL_HEARTS = index(0, Metadata::Float, 1f);
+        public static final Entry<Float> ADDITIONAL_HEARTS = index(0, Metadata::Float, 0f);
         public static final Entry<Integer> SCORE = index(1, Metadata::VarInt, 0);
         public static final Entry<Byte> DISPLAYED_SKIN_PARTS_FLAGS = index(2, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CAPE_ENABLED = bitMask(2, (byte) 0x01, false);
