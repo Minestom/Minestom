@@ -461,29 +461,34 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record Trail(@NotNull NamespaceID namespace, int id, @NotNull Point target, @NotNull RGBLike color) implements Particle {
+    record Trail(@NotNull NamespaceID namespace, int id, @NotNull Point target, @NotNull RGBLike color, int duration) implements Particle {
 
-        public @NotNull Trail withProperties(@NotNull Point target, @NotNull RGBLike color) {
-            return new Trail(namespace(), id(), target, color);
+        public @NotNull Trail withProperties(@NotNull Point target, @NotNull RGBLike color, int duration) {
+            return new Trail(namespace(), id(), target, color, duration);
         }
 
         public @NotNull Trail withTarget(@NotNull Point target) {
-            return new Trail(namespace(), id(), target, color);
+            return new Trail(namespace(), id(), target, color, duration);
         }
 
         public @NotNull Trail withColor(@NotNull RGBLike color) {
-            return new Trail(namespace(), id(), target, color);
+            return new Trail(namespace(), id(), target, color, duration);
+        }
+
+        public @NotNull Trail withDuration(int duration) {
+            return new Trail(namespace(), id(), target, color, duration);
         }
 
         @Override
         public @NotNull Trail readData(@NotNull NetworkBuffer reader) {
-            return this.withProperties(reader.read(VECTOR3D), reader.read(Color.NETWORK_TYPE));
+            return this.withProperties(reader.read(VECTOR3D), reader.read(Color.NETWORK_TYPE), reader.read(VAR_INT));
         }
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(VECTOR3D, target);
             writer.write(Color.NETWORK_TYPE, color);
+            writer.write(VAR_INT, duration);
         }
 
         @Override

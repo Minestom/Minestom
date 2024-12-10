@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimPattern);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimPattern, true);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
 
     static @NotNull TrimPattern create(

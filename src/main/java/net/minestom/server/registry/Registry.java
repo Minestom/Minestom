@@ -136,6 +136,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static InstrumentEntry instrument(String namespace, @NotNull Properties main) {
+        return new InstrumentEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
         try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
@@ -242,7 +247,9 @@ public final class Registry {
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
-        VILLAGER_PROFESSIONS("villager_professions.json");
+        VILLAGER_PROFESSIONS("villager_professions.json"),
+        INSTRUMENTS("instruments.json"),
+        INSTRUMENT_TAGS("tags/instrument.json");
 
         private final String name;
 
@@ -814,7 +821,6 @@ public final class Registry {
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
-                                    float itemModelIndex,
                                     @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
@@ -823,7 +829,6 @@ public final class Registry {
                     NamespaceID.from(namespace),
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
-                    (float) main.getDouble("item_model_index"),
                     Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
@@ -989,6 +994,18 @@ public final class Registry {
                     GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     (float) main.getDouble("length_in_seconds"),
                     main.getInt("comparator_output"),
+                    custom);
+        }
+    }
+
+    public record InstrumentEntry(NamespaceID namespace, SoundEvent soundEvent, float useDuration, float range,
+                                  Component description, Properties custom) implements Entry {
+        public InstrumentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    (float) main.getDouble("use_duration"),
+                    (float) main.getDouble("range"),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     custom);
         }
     }
