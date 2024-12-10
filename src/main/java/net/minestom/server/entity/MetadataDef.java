@@ -141,10 +141,9 @@ public sealed class MetadataDef {
     }
 
     public static final class Boat extends AbstractVehicle {
-        public static final Entry<Integer> TYPE = index(0, Metadata::VarInt, 0);
-        public static final Entry<Boolean> IS_LEFT_PADDLE_TURNING = index(1, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_RIGHT_PADDLE_TURNING = index(2, Metadata::Boolean, false);
-        public static final Entry<Integer> SPLASH_TIMER = index(3, Metadata::VarInt, 0);
+        public static final Entry<Boolean> IS_LEFT_PADDLE_TURNING = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_RIGHT_PADDLE_TURNING = index(1, Metadata::Boolean, false);
+        public static final Entry<Integer> SPLASH_TIMER = index(2, Metadata::VarInt, 0);
     }
 
     public static sealed class AbstractMinecart extends AbstractVehicle {
