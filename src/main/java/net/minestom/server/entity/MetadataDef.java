@@ -187,7 +187,7 @@ public sealed class MetadataDef {
 
     public static final class ItemFrame extends MetadataDef {
         public static final Entry<ItemStack> ITEM = index(0, Metadata::ItemStack, ItemStack.AIR);
-        public static final Entry<Integer> ROTATION = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> ROTATION = index(1, Metadata::VarInt, 0);
     }
 
     public static final class Painting extends MetadataDef {
