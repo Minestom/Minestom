@@ -2,11 +2,11 @@ package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.ints.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -50,7 +50,7 @@ public class ChunkBatch implements Batch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int index = ChunkUtils.getBlockIndex(x, y, z);
+        final int index = CoordConversion.chunkBlockIndex(x, y, z);
         synchronized (blocks) {
             this.blocks.put(index, block);
         }
@@ -160,13 +160,13 @@ public class ChunkBatch implements Batch {
      * Applies a single block change given a chunk and a value in the described format.
      *
      * @param chunk The chunk to apply the change
-     * @param index the block position computed using {@link ChunkUtils#getBlockIndex(int, int, int)}
+     * @param index the block position computed using {@link CoordConversion#chunkBlockIndex(int, int, int)}
      * @param block the block to place
      */
     private void applyBlock(@NotNull Chunk chunk, int index, Block block, @Nullable ChunkBatch inverse) {
-        final int x = ChunkUtils.blockIndexToChunkPositionX(index);
-        final int y = ChunkUtils.blockIndexToChunkPositionY(index);
-        final int z = ChunkUtils.blockIndexToChunkPositionZ(index);
+        final int x = CoordConversion.chunkBlockIndexGetX(index);
+        final int y = CoordConversion.chunkBlockIndexGetY(index);
+        final int z = CoordConversion.chunkBlockIndexGetZ(index);
         if (inverse != null) {
             Block prevBlock = chunk.getBlock(x, y, z);
             inverse.setBlock(x, y, z, prevBlock);

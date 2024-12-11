@@ -1,10 +1,10 @@
 package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.*;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -47,9 +47,9 @@ public class AbsoluteBlockBatch implements Batch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final int chunkX = ChunkUtils.getChunkCoordinate(x);
-        final int chunkZ = ChunkUtils.getChunkCoordinate(z);
-        final long chunkIndex = ChunkUtils.getChunkIndex(chunkX, chunkZ);
+        final int chunkX = CoordConversion.globalToChunk(x);
+        final int chunkZ = CoordConversion.globalToChunk(z);
+        final long chunkIndex = CoordConversion.chunkIndex(chunkX, chunkZ);
 
         final ChunkBatch chunkBatch;
         synchronized (chunkBatchesMap) {
@@ -79,8 +79,8 @@ public class AbsoluteBlockBatch implements Batch {
         synchronized (chunkBatchesMap) {
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
                 final long chunkIndex = entry.getLongKey();
-                final int chunkX = ChunkUtils.getChunkCoordX(chunkIndex);
-                final int chunkZ = ChunkUtils.getChunkCoordZ(chunkIndex);
+                final int chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
+                final int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
 
                 chunkBatchFutures.add(batch.apply(instance, chunkX, chunkZ, true));
@@ -115,8 +115,8 @@ public class AbsoluteBlockBatch implements Batch {
             // expand to include surrounding chunks
             final Set<LightingChunk> expanded = new HashSet<>();
             for (long index : chunkIndexes) {
-                int chunkX = ChunkUtils.getChunkCoordX(index);
-                int chunkZ = ChunkUtils.getChunkCoordZ(index);
+                int chunkX = CoordConversion.chunkIndexGetX(index);
+                int chunkZ = CoordConversion.chunkIndexGetZ(index);
                 for (int x = chunkX - 1; x <= chunkX + 1; x++) {
                     for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
                         if (instance.getChunk(x, z) instanceof LightingChunk lightingChunk) {
