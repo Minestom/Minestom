@@ -1,27 +1,16 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
-import org.jetbrains.annotations.NotNull;
 
-import static net.minestom.server.network.NetworkBuffer.BYTE;
 import static net.minestom.server.network.NetworkBuffer.SHORT;
+import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
-public record WindowPropertyPacket(byte windowId, short property, short value) implements ServerPacket.Play {
-    public WindowPropertyPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BYTE), reader.read(SHORT), reader.read(SHORT));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BYTE, windowId);
-        writer.write(SHORT, property);
-        writer.write(SHORT, value);
-    }
-
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.WINDOW_PROPERTY;
-    }
+public record WindowPropertyPacket(int windowId, short property, short value) implements ServerPacket.Play {
+    public static final NetworkBuffer.Type<WindowPropertyPacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, WindowPropertyPacket::windowId,
+            SHORT, WindowPropertyPacket::property,
+            SHORT, WindowPropertyPacket::value,
+            WindowPropertyPacket::new);
 }

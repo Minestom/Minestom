@@ -88,13 +88,13 @@ public final class PathGenerator {
 
         PNode current = open.isEmpty() ? null : open.dequeue();
 
-        if (current == null || open.isEmpty() || !withinDistance(current, target, closeDistance)) {
+        if (current == null || !withinDistance(current, target, closeDistance)) {
             if (closestFoundNodes.isEmpty()) {
                 path.setState(PPath.State.INVALID);
                 return;
             }
 
-            current = closestFoundNodes.get(0);
+            current = closestFoundNodes.getFirst();
 
             if (!open.isEmpty()) {
                 current = buildRepathNode(current);
@@ -114,7 +114,12 @@ public final class PathGenerator {
             return;
         }
 
-        var lastNode = path.getNodes().get(path.getNodes().size() - 1);
+        if (path.getNodes().isEmpty()) {
+            path.setState(PPath.State.INVALID);
+            return;
+        }
+
+        var lastNode = path.getNodes().getLast();
         if (getDistanceSquared(lastNode.x(), lastNode.y(), lastNode.z(), target) > (closeDistance * closeDistance)) {
             path.setState(PPath.State.BEST_EFFORT);
             return;

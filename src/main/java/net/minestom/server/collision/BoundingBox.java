@@ -3,7 +3,7 @@ package net.minestom.server.collision;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityPose;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,11 +21,11 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     final static BoundingBox ZERO = new BoundingBox(Vec.ZERO, Vec.ZERO);
 
     public BoundingBox(double width, double height, double depth, Point offset) {
-        this(Vec.fromPoint(offset), new Vec(width, height, depth).add(offset));
+        this(new Vec(-width / 2.0, 0.0, -depth / 2.0).add(offset), new Vec(width / 2.0, height, depth / 2.0).add(offset));
     }
 
     public BoundingBox(double width, double height, double depth) {
-        this(width, height, depth, new Vec(-width / 2, 0, -depth / 2));
+        this(width, height, depth, Vec.ZERO);
     }
 
     @Override
@@ -253,7 +253,7 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
         }
     }
 
-    public static @Nullable BoundingBox fromPose(@NotNull Entity.Pose pose) {
+    public static @Nullable BoundingBox fromPose(@NotNull EntityPose pose) {
         return switch (pose) {
             case FALL_FLYING, SWIMMING, SPIN_ATTACK -> SMALL;
             case SLEEPING, DYING -> SLEEPING;

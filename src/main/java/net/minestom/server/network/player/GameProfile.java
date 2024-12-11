@@ -1,6 +1,7 @@
 package net.minestom.server.network.player;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,7 +11,7 @@ import java.util.UUID;
 import static net.minestom.server.network.NetworkBuffer.STRING;
 
 public record GameProfile(@NotNull UUID uuid, @NotNull String name,
-                          @NotNull List<@NotNull Property> properties) implements NetworkBuffer.Writer {
+                          @NotNull List<@NotNull Property> properties) {
     public static final int MAX_PROPERTIES = 1024;
 
     public GameProfile {
@@ -21,33 +22,27 @@ public record GameProfile(@NotNull UUID uuid, @NotNull String name,
         properties = List.copyOf(properties);
     }
 
-    public GameProfile(@NotNull NetworkBuffer reader) {
-        this(reader.read(NetworkBuffer.UUID), reader.read(STRING), reader.readCollection(Property::new, MAX_PROPERTIES));
+    public GameProfile(@NotNull UUID uuid, @NotNull String name) {
+        this(uuid, name, List.of());
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(NetworkBuffer.UUID, uuid);
-        writer.write(STRING, name);
-        writer.writeCollection(properties);
-    }
+    public static final NetworkBuffer.Type<GameProfile> SERIALIZER = NetworkBufferTemplate.template(
+            NetworkBuffer.UUID, GameProfile::uuid,
+            STRING, GameProfile::name,
+            Property.SERIALIZER.list(MAX_PROPERTIES), GameProfile::properties,
+            GameProfile::new
+    );
 
-    public record Property(@NotNull String name, @NotNull String value,
-                           @Nullable String signature) implements NetworkBuffer.Writer {
+    public record Property(@NotNull String name, @NotNull String value, @Nullable String signature) {
         public Property(@NotNull String name, @NotNull String value) {
             this(name, value, null);
         }
 
-        public Property(@NotNull NetworkBuffer reader) {
-            this(reader.read(STRING), reader.read(STRING),
-                    reader.readOptional(STRING));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(STRING, name);
-            writer.write(STRING, value);
-            writer.writeOptional(STRING, signature);
-        }
+        public static final NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
+                STRING, Property::name,
+                STRING, Property::value,
+                STRING.optional(), Property::signature,
+                Property::new
+        );
     }
 }

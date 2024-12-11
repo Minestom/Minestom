@@ -1,5 +1,7 @@
 package net.minestom.server.entity;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.metadata.ambient.BatMeta;
@@ -34,12 +36,12 @@ import net.minestom.server.entity.metadata.water.GlowSquidMeta;
 import net.minestom.server.entity.metadata.water.SquidMeta;
 import net.minestom.server.entity.metadata.water.fish.*;
 import net.minestom.server.network.packet.server.play.EntityMetaDataPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -56,8 +58,7 @@ public final class MetadataHolder {
     }
 
     private final Entity entity;
-    private volatile Metadata.Entry<?>[] entries = new Metadata.Entry<?>[0];
-    private volatile Map<Integer, Metadata.Entry<?>> entryMap = null;
+    private final Int2ObjectMap<Metadata.Entry<?>> entries = new Int2ObjectOpenHashMap<>();
 
     @SuppressWarnings("FieldMayBeFinal")
     private volatile boolean notifyAboutChanges = true;
@@ -67,34 +68,70 @@ public final class MetadataHolder {
         this.entity = entity;
     }
 
-    @SuppressWarnings("unchecked")
-    public <T> T getIndex(int index, @Nullable T defaultValue) {
-        final Metadata.Entry<?>[] entries = this.entries;
-        if (index < 0 || index >= entries.length) return defaultValue;
-        final Metadata.Entry<?> entry = entries[index];
-        return entry != null ? (T) entry.value() : defaultValue;
+    public <T> T get(MetadataDef.@NotNull Entry<T> entry) {
+        final int id = entry.index();
+
+        final Metadata.Entry<?> value = this.entries.get(id);
+        if (value == null) return entry.defaultValue();
+        return switch (entry) {
+            case MetadataDef.Entry.Index<T> v -> (T) value.value();
+            case MetadataDef.Entry.BitMask bitMask -> {
+                final byte maskValue = (byte) value.value();
+                yield (T) ((Boolean) getMaskBit(maskValue, bitMask.bitMask()));
+            }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                final byte maskValue = (byte) value.value();
+                yield (T) ((Byte) getMaskByte(maskValue, byteMask.byteMask(), byteMask.offset()));
+            }
+        };
     }
 
-    public void setIndex(int index, @NotNull Metadata.Entry<?> entry) {
-        Metadata.Entry<?>[] entries = this.entries;
-        // Resize array if necessary
-        if (index >= entries.length) {
-            final int newLength = Math.max(entries.length * 2, index + 1);
-            this.entries = entries = Arrays.copyOf(entries, newLength);
-        }
-        entries[index] = entry;
-        this.entryMap = null;
-        // Send metadata packet to update viewers and self
+    public <T> void set(MetadataDef.@NotNull Entry<T> entry, T value) {
+        final int id = entry.index();
+
+        Metadata.Entry<?> result = switch (entry) {
+            case MetadataDef.Entry.Index<T> v -> v.function().apply(value);
+            case MetadataDef.Entry.BitMask bitMask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
+                maskValue = setMaskBit(maskValue, bitMask.bitMask(), (Boolean) value);
+                yield Metadata.Byte(maskValue);
+            }
+            case MetadataDef.Entry.ByteMask byteMask -> {
+                Metadata.Entry<?> currentEntry = this.entries.get(id);
+                byte maskValue = currentEntry != null ? (byte) currentEntry.value() : 0;
+                maskValue = setMaskByte(maskValue, byteMask.byteMask(), byteMask.offset(), (Byte) value);
+                yield Metadata.Byte(maskValue);
+            }
+        };
+
+        this.entries.put(id, result);
         final Entity entity = this.entity;
         if (entity != null && entity.isActive()) {
             if (!this.notifyAboutChanges) {
                 synchronized (this.notNotifiedChanges) {
-                    this.notNotifiedChanges.put(index, entry);
+                    this.notNotifiedChanges.put(id, result);
                 }
             } else {
-                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(index, entry)));
+                entity.sendPacketToViewersAndSelf(new EntityMetaDataPacket(entity.getEntityId(), Map.of(id, result)));
             }
         }
+    }
+
+    private boolean getMaskBit(byte maskValue, byte bit) {
+        return (maskValue & bit) == bit;
+    }
+
+    private byte setMaskBit(byte mask, byte bit, boolean value) {
+        return value ? (byte) (mask | bit) : (byte) (mask & ~bit);
+    }
+
+    private byte getMaskByte(byte data, byte byteMask, int offset) {
+        return (byte) ((data & byteMask) >> offset);
+    }
+
+    private byte setMaskByte(byte data, byte byteMask, int offset, byte newValue) {
+        return (byte) ((data & ~byteMask) | ((newValue << offset) & byteMask));
     }
 
     public void setNotifyAboutChanges(boolean notifyAboutChanges) {
@@ -117,49 +154,54 @@ public final class MetadataHolder {
     }
 
     public @NotNull Map<Integer, Metadata.Entry<?>> getEntries() {
-        Map<Integer, Metadata.Entry<?>> map = entryMap;
-        if (map == null) {
-            map = new HashMap<>();
-            final Metadata.Entry<?>[] entries = this.entries;
-            for (int i = 0; i < entries.length; i++) {
-                final Metadata.Entry<?> entry = entries[i];
-                if (entry != null) map.put(i, entry);
-            }
-            this.entryMap = Map.copyOf(map);
-        }
-        return map;
+        return Map.copyOf(this.entries);
     }
 
     static final Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> ENTITY_META_SUPPLIER = createMetaMap();
 
-    static EntityMeta createMeta(EntityType entityType, Entity entity, MetadataHolder metadata) {
+    @ApiStatus.Internal
+    public static EntityMeta createMeta(
+            @NotNull EntityType entityType,
+            @Nullable Entity entity,
+            @NotNull MetadataHolder metadata
+    ) {
         return ENTITY_META_SUPPLIER.get(entityType.name()).apply(entity, metadata);
     }
 
     private static Map<String, BiFunction<Entity, MetadataHolder, EntityMeta>> createMetaMap() {
         return Map.<String, BiFunction<Entity, MetadataHolder, EntityMeta>>ofEntries(
+                Map.entry("minecraft:acacia_boat", BoatMeta::new),
+                Map.entry("minecraft:acacia_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:allay", AllayMeta::new),
                 Map.entry("minecraft:area_effect_cloud", AreaEffectCloudMeta::new),
                 Map.entry("minecraft:armadillo", ArmadilloMeta::new),
                 Map.entry("minecraft:armor_stand", ArmorStandMeta::new),
                 Map.entry("minecraft:arrow", ArrowMeta::new),
                 Map.entry("minecraft:axolotl", AxolotlMeta::new),
+                Map.entry("minecraft:bamboo_raft", BoatMeta::new),
+                Map.entry("minecraft:bamboo_chest_raft", BoatMeta::new),
                 Map.entry("minecraft:bat", BatMeta::new),
                 Map.entry("minecraft:bee", BeeMeta::new),
+                Map.entry("minecraft:birch_boat", BoatMeta::new),
+                Map.entry("minecraft:birch_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:blaze", BlazeMeta::new),
                 Map.entry("minecraft:block_display", BlockDisplayMeta::new),
-                Map.entry("minecraft:boat", BoatMeta::new),
                 Map.entry("minecraft:bogged", BoggedMeta::new),
                 Map.entry("minecraft:breeze", BreezeMeta::new),
                 Map.entry("minecraft:breeze_wind_charge", BreezeWindChargeMeta::new),
-                Map.entry("minecraft:chest_boat", BoatMeta::new),
                 Map.entry("minecraft:camel", CamelMeta::new),
                 Map.entry("minecraft:cat", CatMeta::new),
                 Map.entry("minecraft:cave_spider", CaveSpiderMeta::new),
+                Map.entry("minecraft:cherry_boat", BoatMeta::new),
+                Map.entry("minecraft:cherry_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:chicken", ChickenMeta::new),
                 Map.entry("minecraft:cod", CodMeta::new),
                 Map.entry("minecraft:cow", CowMeta::new),
+                Map.entry("minecraft:creaking", CreakingMeta::new),
+                Map.entry("minecraft:creaking_transient", CreakingMeta::new),
                 Map.entry("minecraft:creeper", CreeperMeta::new),
+                Map.entry("minecraft:dark_oak_boat", BoatMeta::new),
+                Map.entry("minecraft:dark_oak_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:dolphin", DolphinMeta::new),
                 Map.entry("minecraft:donkey", DonkeyMeta::new),
                 Map.entry("minecraft:dragon_fireball", DragonFireballMeta::new),
@@ -192,12 +234,16 @@ public final class MetadataHolder {
                 Map.entry("minecraft:item", ItemEntityMeta::new),
                 Map.entry("minecraft:item_display", ItemDisplayMeta::new),
                 Map.entry("minecraft:item_frame", ItemFrameMeta::new),
+                Map.entry("minecraft:jungle_boat", BoatMeta::new),
+                Map.entry("minecraft:jungle_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:fireball", FireballMeta::new),
                 Map.entry("minecraft:leash_knot", LeashKnotMeta::new),
                 Map.entry("minecraft:lightning_bolt", LightningBoltMeta::new),
                 Map.entry("minecraft:llama", LlamaMeta::new),
                 Map.entry("minecraft:llama_spit", LlamaSpitMeta::new),
                 Map.entry("minecraft:magma_cube", MagmaCubeMeta::new),
+                Map.entry("minecraft:mangrove_boat", BoatMeta::new),
+                Map.entry("minecraft:mangrove_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:marker", MarkerMeta::new),
                 Map.entry("minecraft:minecart", MinecartMeta::new),
                 Map.entry("minecraft:chest_minecart", ChestMinecartMeta::new),
@@ -207,11 +253,15 @@ public final class MetadataHolder {
                 Map.entry("minecraft:spawner_minecart", SpawnerMinecartMeta::new),
                 Map.entry("minecraft:text_display", TextDisplayMeta::new),
                 Map.entry("minecraft:tnt_minecart", TntMinecartMeta::new),
-                Map.entry("minecraft:mule", MuleMeta::new),
                 Map.entry("minecraft:mooshroom", MooshroomMeta::new),
+                Map.entry("minecraft:mule", MuleMeta::new),
+                Map.entry("minecraft:oak_boat", BoatMeta::new),
+                Map.entry("minecraft:oak_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:ocelot", OcelotMeta::new),
                 Map.entry("minecraft:ominous_item_spawner", OminousItemSpawnerMeta::new),
                 Map.entry("minecraft:painting", PaintingMeta::new),
+                Map.entry("minecraft:pale_oak_boat", BoatMeta::new),
+                Map.entry("minecraft:pale_oak_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:panda", PandaMeta::new),
                 Map.entry("minecraft:parrot", ParrotMeta::new),
                 Map.entry("minecraft:phantom", PhantomMeta::new),
@@ -238,6 +288,8 @@ public final class MetadataHolder {
                 Map.entry("minecraft:snowball", SnowballMeta::new),
                 Map.entry("minecraft:spectral_arrow", SpectralArrowMeta::new),
                 Map.entry("minecraft:spider", SpiderMeta::new),
+                Map.entry("minecraft:spruce_boat", BoatMeta::new),
+                Map.entry("minecraft:spruce_chest_boat", BoatMeta::new),
                 Map.entry("minecraft:squid", SquidMeta::new),
                 Map.entry("minecraft:stray", StrayMeta::new),
                 Map.entry("minecraft:strider", StriderMeta::new),

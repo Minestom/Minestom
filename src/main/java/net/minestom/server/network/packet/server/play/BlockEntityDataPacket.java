@@ -4,7 +4,6 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.ServerPacketIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,24 +11,22 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record BlockEntityDataPacket(@NotNull Point blockPosition, int action,
                                     @Nullable CompoundBinaryTag data) implements ServerPacket.Play {
-    public BlockEntityDataPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(BLOCK_POSITION), reader.read(VAR_INT), (CompoundBinaryTag) reader.read(NBT));
-    }
-
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(BLOCK_POSITION, blockPosition);
-        writer.write(VAR_INT, action);
-        if (data != null) {
-            writer.write(NBT, data);
-        } else {
-            // TAG_End
-            writer.write(BYTE, (byte) 0x00);
+    public static final NetworkBuffer.Type<BlockEntityDataPacket> SERIALIZER = new Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, BlockEntityDataPacket value) {
+            buffer.write(BLOCK_POSITION, value.blockPosition);
+            buffer.write(VAR_INT, value.action);
+            if (value.data != null) {
+                buffer.write(NBT_COMPOUND, value.data);
+            } else {
+                // TAG_End
+                buffer.write(BYTE, (byte) 0x00);
+            }
         }
-    }
 
-    @Override
-    public int playId() {
-        return ServerPacketIdentifier.BLOCK_ENTITY_DATA;
-    }
+        @Override
+        public BlockEntityDataPacket read(@NotNull NetworkBuffer buffer) {
+            return new BlockEntityDataPacket(buffer.read(BLOCK_POSITION), buffer.read(VAR_INT), buffer.read(NBT_COMPOUND));
+        }
+    };
 }

@@ -5,9 +5,6 @@ import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class ZombieHorseMeta extends AbstractHorseMeta {
-    public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
     public ZombieHorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }

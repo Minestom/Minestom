@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -40,8 +41,8 @@ public class ArgumentColor extends Argument<Style> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:color";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.COLOR;
     }
 
     @Override

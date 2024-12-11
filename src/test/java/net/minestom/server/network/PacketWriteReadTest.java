@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
@@ -20,21 +21,22 @@ import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.packet.server.login.LoginSuccessPacket;
 import net.minestom.server.network.packet.server.login.SetCompressionPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.network.packet.server.play.DeclareRecipesPacket.Ingredient;
 import net.minestom.server.network.packet.server.status.ResponsePacket;
-import net.minestom.server.recipe.RecipeCategory;
+import net.minestom.server.network.player.GameProfile;
+import net.minestom.server.recipe.Ingredient;
+import net.minestom.server.recipe.RecipeBookCategory;
+import net.minestom.server.recipe.RecipeProperty;
+import net.minestom.server.recipe.display.RecipeDisplay;
+import net.minestom.server.recipe.display.SlotDisplay;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * Ensures that packet can be written and read correctly.
@@ -48,6 +50,8 @@ public class PacketWriteReadTest {
 
     @BeforeAll
     public static void setupServer() {
+        MinecraftServer.init(); // Need some tags in here, pretty gross.
+
         // Handshake
         SERVER_PACKETS.add(new ResponsePacket(new JsonObject().toString()));
         // Status
@@ -56,7 +60,7 @@ public class PacketWriteReadTest {
         //SERVER_PACKETS.add(new EncryptionRequestPacket("server", generateByteArray(16), generateByteArray(16)));
         SERVER_PACKETS.add(new LoginDisconnectPacket(COMPONENT));
         //SERVER_PACKETS.add(new LoginPluginRequestPacket(5, "id", generateByteArray(16)));
-        SERVER_PACKETS.add(new LoginSuccessPacket(UUID.randomUUID(), "TheMode911", 0, false));
+        SERVER_PACKETS.add(new LoginSuccessPacket(new GameProfile(UUID.randomUUID(), "TheMode911")));
         SERVER_PACKETS.add(new SetCompressionPacket(256));
         // Play
         SERVER_PACKETS.add(new AcknowledgeBlockChangePacket(0));
@@ -78,50 +82,27 @@ public class PacketWriteReadTest {
         SERVER_PACKETS.add(new ClearTitlesPacket(false));
         SERVER_PACKETS.add(new CloseWindowPacket((byte) 2));
         SERVER_PACKETS.add(new CollectItemPacket(5, 5, 5));
-        SERVER_PACKETS.add(new CraftRecipeResponse((byte) 2, "recipe"));
+        var recipeDisplay = new RecipeDisplay.CraftingShapeless(
+                List.of(new SlotDisplay.Item(Material.STONE)),
+                new SlotDisplay.Item(Material.STONE_BRICKS),
+                new SlotDisplay.Item(Material.CRAFTING_TABLE)
+        );
+        SERVER_PACKETS.add(new PlaceGhostRecipePacket(0, recipeDisplay));
         SERVER_PACKETS.add(new DeathCombatEventPacket(5, COMPONENT));
-        SERVER_PACKETS.add(new DeclareRecipesPacket(
-                List.of(new DeclareRecipesPacket.DeclaredShapelessCraftingRecipe(
-                                "minecraft:sticks",
-                                "sticks",
-                                RecipeCategory.Crafting.MISC,
-                                List.of(new Ingredient(List.of(ItemStack.of(Material.OAK_PLANKS)))),
-                                ItemStack.of(Material.STICK)
-                        ),
-                        new DeclareRecipesPacket.DeclaredShapedCraftingRecipe(
-                                "minecraft:torch",
-                                "",
-                                RecipeCategory.Crafting.MISC,
-                                1,
-                                2,
-                                List.of(new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                        new Ingredient(List.of(ItemStack.of(Material.STICK)))),
-                                ItemStack.of(Material.TORCH),
-                                true
-                        ),
-                        new DeclareRecipesPacket.DeclaredBlastingRecipe(
-                                "minecraft:coal",
-                                "forging",
-                                RecipeCategory.Cooking.MISC,
-                                new Ingredient(List.of(ItemStack.of(Material.COAL))),
-                                ItemStack.of(Material.IRON_INGOT),
-                                5,
-                                5
-                        ),
-                        new DeclareRecipesPacket.DeclaredSmithingTransformRecipe(
-                                "minecraft:iron_to_diamond",
-                                new Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                new Ingredient(List.of(ItemStack.of(Material.DIAMOND))),
-                                new Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                ItemStack.of(Material.DIAMOND)
-                        ),
-                        new DeclareRecipesPacket.DeclaredSmithingTrimRecipe(
-                                "minecraft:iron_to_coast",
-                                new Ingredient(List.of(ItemStack.of(Material.IRON_INGOT))),
-                                new Ingredient(List.of(ItemStack.of(Material.COAST_ARMOR_TRIM_SMITHING_TEMPLATE))),
-                                new Ingredient(List.of(ItemStack.of(Material.COAL)))
-                        )
-                )));
+        SERVER_PACKETS.add(new DeclareRecipesPacket(Map.of(
+                RecipeProperty.SMITHING_BASE, List.of(Material.STONE),
+                RecipeProperty.SMITHING_TEMPLATE, List.of(Material.STONE),
+                RecipeProperty.SMITHING_ADDITION, List.of(Material.STONE),
+                RecipeProperty.FURNACE_INPUT, List.of(Material.STONE),
+                RecipeProperty.BLAST_FURNACE_INPUT, List.of(Material.IRON_HOE, Material.DANDELION),
+                RecipeProperty.SMOKER_INPUT, List.of(Material.STONE),
+                RecipeProperty.CAMPFIRE_INPUT, List.of(Material.STONE)),
+                List.of(new DeclareRecipesPacket.StonecutterRecipe(new Ingredient(Material.DIAMOND),
+                        new SlotDisplay.ItemStack(ItemStack.of(Material.GOLD_BLOCK))))
+        ));
+        SERVER_PACKETS.add(new RecipeBookAddPacket(List.of(new RecipeBookAddPacket.Entry(1, recipeDisplay, null,
+                RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(Material.STONE)), true, true)), false));
+        SERVER_PACKETS.add(new RecipeBookRemovePacket(List.of(1)));
 
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
@@ -143,15 +124,17 @@ public class PacketWriteReadTest {
         List<PlayerInfoUpdatePacket.Property> prop = List.of(new PlayerInfoUpdatePacket.Property("textures", skin.textures(), skin.signature()));
 
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.ADD_PLAYER,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop, false, 0, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "TheMode911", prop, false, 0, GameMode.SURVIVAL, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_DISPLAY_NAME,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, Component.text("NotTheMode911"), null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, Component.text("NotTheMode911"), null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_GAME_MODE,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.CREATIVE, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LATENCY,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 20, GameMode.SURVIVAL, null, null, 0)));
         SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LISTED,
-                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null)));
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), true, 0, GameMode.SURVIVAL, null, null, 0)));
+        SERVER_PACKETS.add(new PlayerInfoUpdatePacket(PlayerInfoUpdatePacket.Action.UPDATE_LIST_ORDER,
+                new PlayerInfoUpdatePacket.Entry(UUID.randomUUID(), "", List.of(), false, 0, GameMode.SURVIVAL, null, null, 42)));
         SERVER_PACKETS.add(new PlayerInfoRemovePacket(UUID.randomUUID()));
     }
 
@@ -160,33 +143,31 @@ public class PacketWriteReadTest {
         CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN));
     }
 
+    @SuppressWarnings("unchecked")
     @Test
-    public void serverTest() {
-        SERVER_PACKETS.forEach(PacketWriteReadTest::testPacket);
-    }
-
-    @Test
-    public void clientTest() {
-        CLIENT_PACKETS.forEach(PacketWriteReadTest::testPacket);
-    }
-
-    private static void testPacket(NetworkBuffer.Writer writeable) {
-        try {
-            byte[] bytes = NetworkBuffer.makeArray(buffer -> buffer.write(writeable));
-            var readerConstructor = writeable.getClass().getConstructor(NetworkBuffer.class);
-            NetworkBuffer reader = new NetworkBuffer();
-            reader.write(NetworkBuffer.RAW_BYTES, bytes);
-            var createdPacket = readerConstructor.newInstance(reader);
-            assertEquals(writeable, createdPacket);
-        } catch (NoSuchMethodException | InvocationTargetException | InstantiationException
-                 | IllegalAccessException e) {
-            fail(writeable.toString(), e);
+    public void serverTest() throws NoSuchFieldException, IllegalAccessException {
+        for (var packet : SERVER_PACKETS) {
+            var packetClass = packet.getClass();
+            NetworkBuffer.Type<ServerPacket> serializer = (NetworkBuffer.Type<ServerPacket>) packetClass.getField("SERIALIZER").get(packetClass);
+            testPacket(serializer, packet);
         }
     }
 
-    private static byte[] generateByteArray(int size) {
-        byte[] array = new byte[size];
-        ThreadLocalRandom.current().nextBytes(array);
-        return array;
+    @SuppressWarnings("unchecked")
+    @Test
+    public void clientTest() throws NoSuchFieldException, IllegalAccessException {
+        for (var packet : CLIENT_PACKETS) {
+            var packetClass = packet.getClass();
+            NetworkBuffer.Type<ClientPacket> serializer = (NetworkBuffer.Type<ClientPacket>) packetClass.getField("SERIALIZER").get(packetClass);
+            testPacket(serializer, packet);
+        }
+    }
+
+    private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
+        byte[] bytes = NetworkBuffer.makeArray(networkType, packet);
+        NetworkBuffer reader = NetworkBuffer.resizableBuffer();
+        reader.write(NetworkBuffer.RAW_BYTES, bytes);
+        var createdPacket = networkType.read(reader);
+        assertEquals(packet, createdPacket);
     }
 }
