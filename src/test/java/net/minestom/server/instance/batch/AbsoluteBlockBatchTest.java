@@ -45,7 +45,11 @@ public class AbsoluteBlockBatchTest {
     @Test
     public void multipleChunks(Env env) {
         final var instance = env.createFlatInstance();
-        ChunkUtils.forChunksInRange(0, 0, 2, (x, z) -> instance.loadChunk(x, z).join());
+        for (int x = -2; x < 2; x++) {
+            for (int z = -2; z < 2; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
 
         // generate list of points
         final int[] horizontalLocations = new int[] {0, 25, -5, -25};

@@ -20,7 +20,11 @@ public class RelativeBlockBatchTest {
     @Test
     public void basic(Env env) {
         final var instance = env.createFlatInstance();
-        ChunkUtils.forChunksInRange(0, 0, 4, (x, z) -> instance.loadChunk(x, z).join());
+        for (int x = -4; x < 4; x++) {
+            for (int z = -4; z < 4; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
 
         final var points = getPoints();
         test(instance, new BlockVec(0, 0, 0), points);
@@ -29,7 +33,11 @@ public class RelativeBlockBatchTest {
     @Test
     public void offset(Env env) {
         final var instance = env.createFlatInstance();
-        ChunkUtils.forChunksInRange(0, 0, 4, (x, z) -> instance.loadChunk(x, z).join());
+        for (int x = -4; x < 4; x++) {
+            for (int z = -4; z < 4; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
 
         final var points = getPoints();
         test(instance, new BlockVec(7, 20, 7), points);
