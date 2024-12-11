@@ -59,6 +59,13 @@ public class AbsoluteBlockBatch implements Batch {
         chunkBatch.setBlock(x, y, z, block);
     }
 
+    @Override
+    public void clear() {
+        synchronized (chunkBatchesMap) {
+            chunkBatchesMap.clear();
+        }
+    }
+
     /**
      * Applies this batch to the given instance.
      *

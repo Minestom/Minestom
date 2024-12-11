@@ -57,6 +57,13 @@ public class ChunkBatch implements Batch {
     }
 
     @Override
+    public void clear() {
+        synchronized (blocks) {
+            this.blocks.clear();
+        }
+    }
+
+    @Override
     public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(@NotNull Instance instance) {
         return apply(instance, 0, 0);
     }

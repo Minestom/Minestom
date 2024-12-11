@@ -61,6 +61,13 @@ public class RelativeBlockBatch implements Batch {
         }
     }
 
+    @Override
+    public void clear() {
+        synchronized (blocks) {
+            this.blocks.clear();
+        }
+    }
+
     /**
      * Applies this batch to the given instance at the origin (0, 0, 0) of the instance.
      *
