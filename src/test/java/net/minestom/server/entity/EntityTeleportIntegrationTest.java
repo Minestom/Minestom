@@ -1,15 +1,12 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
+import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,12 +41,12 @@ public class EntityTeleportIntegrationTest {
     public void playerChunkTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
         assertEquals(instance, player.getInstance());
         assertEquals(new Pos(0, 40, 0), player.getPosition());
 
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(0, 40, 0)).join();
+        viewerConnection.connect(instance, new Pos(0, 40, 0));
 
         var tracker = connection.trackIncoming(ServerPacket.class);
         var viewerTracker = viewerConnection.trackIncoming(ServerPacket.class);
@@ -62,27 +59,24 @@ public class EntityTeleportIntegrationTest {
                 packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
 
-        viewerTracker.assertCount(2);
-        List<ServerPacket> packets = viewerTracker.collect();
-        var teleportPacket = (EntityTeleportPacket) packets.get(0);
-        assertEquals(player.getEntityId(), teleportPacket.entityId());
-        assertEquals(teleportPosition, teleportPacket.position());
-
-        var headLookPacket = (EntityHeadLookPacket) packets.get(1);
-        assertEquals(player.getEntityId(), headLookPacket.entityId());
-        assertEquals(teleportPosition.yaw(), headLookPacket.yaw());
+        viewerTracker.assertCount(1);
+        viewerTracker.assertSingle(EntityPositionSyncPacket.class, packet -> {
+            assertEquals(player.getEntityId(), packet.entityId());
+            assertEquals(teleportPosition, packet.position());
+            assertEquals(teleportPosition.yaw(), packet.yaw());
+        });
     }
 
     @Test
     public void playerTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
         assertEquals(instance, player.getInstance());
         assertEquals(new Pos(0, 40, 0), player.getPosition());
 
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(0, 40, 0)).join();
+        viewerConnection.connect(instance, new Pos(0, 40, 0));
 
         var teleportPosition = new Pos(4999, 42, 4999);
         player.teleport(teleportPosition).join();
@@ -93,7 +87,7 @@ public class EntityTeleportIntegrationTest {
     public void playerTeleportWithFlagsTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 0, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 0, 0));
 
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
         assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));

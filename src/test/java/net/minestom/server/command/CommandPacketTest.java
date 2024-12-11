@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
@@ -10,6 +11,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class CommandPacketTest {
+    static {
+        MinecraftServer.init();
+    }
+
     @Test
     public void singleCommandWithOneSyntax() {
         final Command foo = new Command("foo");
@@ -49,12 +54,12 @@ public class CommandPacketTest {
                 execute facing at as in run=%
                 overworld the_nether the_end=§
                 0->execute
-                atEnt asEnt=targets minecraft:entity 0
+                atEnt asEnt=targets ENTITY 0
                 execute->facing at as in run
                 at->atEnt
                 as->asEnt
                 in->overworld the_nether the_end
-                pos=! minecraft:vec3
+                pos=! VEC3
                 facing->pos
                 pos atEnt asEnt overworld the_nether the_end+>execute
                 run+>0
@@ -95,7 +100,7 @@ public class CommandPacketTest {
                 .build();
         assertPacketGraph("""
                 foo=%
-                bar=! brigadier:string 0
+                bar=! STRING 0
                 0->foo
                 foo->bar
                 """, graph);
@@ -128,7 +133,7 @@ public class CommandPacketTest {
                 foo bar=%
                 0->foo bar
                 a b c d e f=§
-                int1 int2 int3 int4=! brigadier:integer 0
+                int1 int2 int3 int4=! INTEGER 0
                 foo->int1
                 bar->int3
                 int1->a b c
@@ -146,7 +151,7 @@ public class CommandPacketTest {
                 .build();
         assertPacketGraph("""
                 foo=%
-                int1 int2 int3 int4=! brigadier:integer 0
+                int1 int2 int3 int4=! INTEGER 0
                 0->foo
                 foo->int1
                 int1->int2
@@ -205,7 +210,7 @@ public class CommandPacketTest {
                 bar->cmd
                 cmd+>foo
                 foo->msg
-                msg=! brigadier:string 1
+                msg=! STRING 1
                 """, foo, bar);
     }
 
@@ -223,7 +228,7 @@ public class CommandPacketTest {
                 bar->cmd
                 cmd+>foo
                 foo->msg
-                msg=! brigadier:string 1
+                msg=! STRING 1
                 """, foo, bar);
     }
 

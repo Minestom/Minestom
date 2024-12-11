@@ -1,10 +1,10 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.play.SetPassengersPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
-import net.minestom.server.coordinate.Pos;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,7 +65,7 @@ public class PassengerIntegrationTest {
         var spawnTracker = connection.trackIncoming(SpawnEntityPacket.class);
         var passengerTracker = connection.trackIncoming(SetPassengersPacket.class);
 
-        connection.connect(instance, new Pos(0, 40, 0)).join();
+        connection.connect(instance, new Pos(0, 40, 0));
 
         int startingId = passenger3.getEntityId();
         passengerTracker.assertCount(3);

@@ -71,6 +71,11 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
+    public static VillagerProfessionEntry villagerProfession(String namespace, @NotNull Properties main) {
+        return new VillagerProfessionEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static FeatureFlagEntry featureFlag(String namespace, @NotNull Properties main) {
         return new FeatureFlagEntry(namespace, main, null);
     }
@@ -214,7 +219,6 @@ public final class Registry {
         ENTITIES("entities.json"),
         FEATURE_FLAGS("feature_flags.json"),
         SOUNDS("sounds.json"),
-        COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
@@ -228,6 +232,7 @@ public final class Registry {
         GAMEPLAY_TAGS("tags/game_event.json"),
         ITEM_TAGS("tags/item.json"),
         ENCHANTMENT_TAGS("tags/enchantment.json"),
+        BIOME_TAGS("tags/biome.json"),
         DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
@@ -236,7 +241,8 @@ public final class Registry {
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
-        JUKEBOX_SONGS("jukebox_songs.json");
+        JUKEBOX_SONGS("jukebox_songs.json"),
+        VILLAGER_PROFESSIONS("villager_professions.json");
 
         private final String name;
 
@@ -263,6 +269,7 @@ public final class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final boolean occludes;
+        private final boolean requiresTool;
         private final int lightEmission;
         private final boolean replaceable;
         private final String blockEntity;
@@ -288,6 +295,7 @@ public final class Registry {
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
             this.occludes = main.getBoolean("occludes", true);
+            this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
             {
@@ -363,6 +371,10 @@ public final class Registry {
 
         public boolean occludes() {
             return occludes;
+        }
+
+        public boolean requiresTool() {
+            return requiresTool;
         }
 
         public int lightEmission() {
@@ -642,6 +654,9 @@ public final class Registry {
         private final double width;
         private final double height;
         private final double eyeHeight;
+        private final int clientTrackingRange;
+        private final boolean fireImmune;
+        private final Map<String, List<Double>> entityOffsets;
         private final BoundingBox boundingBox;
         private final Properties custom;
 
@@ -652,6 +667,8 @@ public final class Registry {
             this.drag = main.getDouble("drag", 0.02);
             this.acceleration = main.getDouble("acceleration", 0.08);
             this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+            this.fireImmune = main.getBoolean("fireImmune", false);
+            this.clientTrackingRange = main.getInt("clientTrackingRange");
 
             // Dimensions
             this.width = main.getDouble("width");
@@ -660,9 +677,14 @@ public final class Registry {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
+            this.entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
-                //todo
+                var allAttachments = attachments.asMap().keySet();
+                for (String key : allAttachments) {
+                    var offset = attachments.getNestedDoubleArray(key);
+                    this.entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                }
             }
 
             this.custom = custom;
@@ -704,8 +726,57 @@ public final class Registry {
             return eyeHeight;
         }
 
+        public boolean fireImmune() { return fireImmune; }
+
+        public int clientTrackingRange() { return clientTrackingRange; }
+
+        /**
+         *
+         * Gets the entity attachment by name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         * @param attachmentName The attachment to retrieve
+         * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         */
+        public @Nullable List<Double> entityAttachment(@NotNull String attachmentName) {
+            return entityOffsets.get(attachmentName);
+        }
+
         public @NotNull BoundingBox boundingBox() {
             return boundingBox;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+    }
+
+    public static final class VillagerProfessionEntry implements Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final SoundEvent workSound;
+        private final Properties custom;
+
+        public VillagerProfessionEntry(String namespace, Properties main, Properties custom) {
+            this.namespace = NamespaceID.from(namespace);
+            this.id = main.getInt("id");
+            if (main.containsKey("workSound")) {
+                this.workSound = SoundEvent.fromNamespaceId(main.getString("workSound"));
+            } else {
+                this.workSound = null;
+            }
+            this.custom = custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public @Nullable SoundEvent workSound() {
+            return workSound;
         }
 
         @Override
@@ -1002,6 +1073,12 @@ public final class Registry {
         }
 
         @Override
+        public List<List<Double>> getNestedDoubleArray(String name) {
+            var element = element(name);
+            return element != null ? (List<List<Double>>) element : List.of();
+        }
+
+        @Override
         public boolean getBoolean(String name) {
             return element(name);
         }
@@ -1061,6 +1138,8 @@ public final class Registry {
         boolean getBoolean(String name, boolean defaultValue);
 
         boolean getBoolean(String name);
+
+        List<List<Double>> getNestedDoubleArray(String name);
 
         Properties section(String name);
 

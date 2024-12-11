@@ -2,108 +2,100 @@ package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ArmorStandMeta extends LivingEntityMeta {
-    public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 7;
-
-    private final static byte IS_SMALL_BIT = 0x01;
-    private final static byte HAS_ARMS_BIT = 0x04;
-    private final static byte HAS_NO_BASE_PLATE_BIT = 0x08;
-    private final static byte IS_MARKER_BIT = 0x10;
-
     public ArmorStandMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isSmall() {
-        return getMaskBit(OFFSET, IS_SMALL_BIT);
+        return metadata.get(MetadataDef.ArmorStand.IS_SMALL);
     }
 
     public void setSmall(boolean value) {
-        setMaskBit(OFFSET, IS_SMALL_BIT, value);
+        metadata.set(MetadataDef.ArmorStand.IS_SMALL, value);
     }
 
     public boolean isHasArms() {
-        return getMaskBit(OFFSET, HAS_ARMS_BIT);
+        return metadata.get(MetadataDef.ArmorStand.HAS_ARMS);
     }
 
     public void setHasArms(boolean value) {
-        setMaskBit(OFFSET, HAS_ARMS_BIT, value);
+        metadata.set(MetadataDef.ArmorStand.HAS_ARMS, value);
     }
 
     public boolean isHasNoBasePlate() {
-        return getMaskBit(OFFSET, HAS_NO_BASE_PLATE_BIT);
+        return metadata.get(MetadataDef.ArmorStand.HAS_NO_BASE_PLATE);
     }
 
     public void setHasNoBasePlate(boolean value) {
-        setMaskBit(OFFSET, HAS_NO_BASE_PLATE_BIT, value);
+        metadata.set(MetadataDef.ArmorStand.HAS_NO_BASE_PLATE, value);
     }
 
     public boolean isMarker() {
-        return getMaskBit(OFFSET, IS_MARKER_BIT);
+        return metadata.get(MetadataDef.ArmorStand.IS_MARKER);
     }
 
     public void setMarker(boolean value) {
-        setMaskBit(OFFSET, IS_MARKER_BIT, value);
+        metadata.set(MetadataDef.ArmorStand.IS_MARKER, value);
     }
 
     @NotNull
     public Vec getHeadRotation() {
-        return super.metadata.getIndex(OFFSET + 1, Vec.ZERO);
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.HEAD_ROTATION));
     }
 
     public void setHeadRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.HEAD_ROTATION, value);
     }
 
     @NotNull
     public Vec getBodyRotation() {
-        return super.metadata.getIndex(OFFSET + 2, Vec.ZERO);
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.BODY_ROTATION));
     }
 
     public void setBodyRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.BODY_ROTATION, value);
     }
 
     @NotNull
     public Vec getLeftArmRotation() {
-        return super.metadata.getIndex(OFFSET + 3, new Vec(-10D, 0D, -10D));
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.LEFT_ARM_ROTATION));
     }
 
     public void setLeftArmRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.LEFT_ARM_ROTATION, value);
     }
 
     @NotNull
     public Vec getRightArmRotation() {
-        return super.metadata.getIndex(OFFSET + 4, new Vec(-15D, 0D, 10D));
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.RIGHT_ARM_ROTATION));
     }
 
     public void setRightArmRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.RIGHT_ARM_ROTATION, value);
     }
 
     @NotNull
     public Vec getLeftLegRotation() {
-        return super.metadata.getIndex(OFFSET + 5, new Vec(-1D, 0D, -1D));
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.LEFT_LEG_ROTATION));
     }
 
     public void setLeftLegRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 5, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.LEFT_LEG_ROTATION, value);
     }
 
     @NotNull
     public Vec getRightLegRotation() {
-        return super.metadata.getIndex(OFFSET + 6, new Vec(1D, 0D, 1D));
+        return Vec.fromPoint(metadata.get(MetadataDef.ArmorStand.RIGHT_LEG_ROTATION));
     }
 
     public void setRightLegRotation(@NotNull Vec value) {
-        super.metadata.setIndex(OFFSET + 6, Metadata.Rotation(value));
+        metadata.set(MetadataDef.ArmorStand.RIGHT_LEG_ROTATION, value);
     }
 
 }

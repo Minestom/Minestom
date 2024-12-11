@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -39,7 +40,7 @@ public class ArgumentGroup extends Argument<CommandContext> {
     }
 
     @Override
-    public String parser() {
+    public ArgumentParserType parser() {
         return null;
     }
 

@@ -139,7 +139,7 @@ public class LightParityIntegrationTest {
         // Read from anvil
         for (int x = 1; x < REGION_SIZE - 1; x++) {
             for (int z = 1; z < REGION_SIZE - 1; z++) {
-                var chunk = anvilLoader.loadChunk(instance, x, z).join();
+                var chunk = anvilLoader.loadChunk(instance, x, z);
                 if (chunk == null) continue;
 
                 for (int sectionY = chunk.getMinSection(); sectionY < chunk.getMaxSection(); sectionY++) {

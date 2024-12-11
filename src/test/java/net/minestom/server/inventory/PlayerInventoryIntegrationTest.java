@@ -1,19 +1,17 @@
 package net.minestom.server.inventory;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
-import net.minestom.server.network.packet.server.play.SetSlotPacket;
-import net.minestom.server.network.packet.server.play.WindowItemsPacket;
+import net.minestom.server.network.packet.server.play.*;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
 public class PlayerInventoryIntegrationTest {
@@ -24,18 +22,18 @@ public class PlayerInventoryIntegrationTest {
     public void setSlotDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        var packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         player.getInventory().setItemStack(3, ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
@@ -44,18 +42,18 @@ public class PlayerInventoryIntegrationTest {
     public void setCursorItemDuplicateTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
-        var packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        var packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertSingle(slot -> assertEquals(MAGIC_STACK, slot.itemStack())); // Setting a slot should send a packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(MAGIC_STACK);
         packetTracker.assertEmpty(); // Setting the same slot to the same ItemStack should not send another packet
 
-        packetTracker = connection.trackIncoming(SetSlotPacket.class);
+        packetTracker = connection.trackIncoming(SetCursorItemPacket.class);
         player.getInventory().setCursorItem(ItemStack.AIR);
         packetTracker.assertSingle(slot -> assertEquals(ItemStack.AIR, slot.itemStack())); // Setting a slot should send a packet
     }
@@ -64,10 +62,12 @@ public class PlayerInventoryIntegrationTest {
     public void clearInventoryTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 42, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
         assertEquals(instance, player.getInstance());
 
+        var setPlayerInventorySlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         var setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
+        var setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
 
         player.getInventory().setItemStack(1, MAGIC_STACK);
         player.getInventory().setItemStack(3, MAGIC_STACK);
@@ -75,17 +75,23 @@ public class PlayerInventoryIntegrationTest {
         player.getInventory().setItemStack(40, MAGIC_STACK);
         player.getInventory().setCursorItem(MAGIC_STACK);
 
-        setSlotTracker.assertCount(5);
+        setPlayerInventorySlotTracker.assertCount(3); // 1, 3, 19 are in player inventory
+        setSlotTracker.assertCount(1); // 40 is in crafting grid so window 0
+        setCursorTracker.assertCount(1);
 
+        setPlayerInventorySlotTracker = connection.trackIncoming(SetPlayerInventorySlotPacket.class);
         setSlotTracker = connection.trackIncoming(SetSlotPacket.class);
+        setCursorTracker = connection.trackIncoming(SetCursorItemPacket.class);
         var updateWindowTracker = connection.trackIncoming(WindowItemsPacket.class);
         var equipmentTracker = connection.trackIncoming(EntityEquipmentPacket.class);
 
         // Perform the clear operation we are testing
         player.getInventory().clear();
 
-        // Make sure not individual SetSlotPackets get sent
+        // Make sure no individual set slot / set cursor item packets get sent
         setSlotTracker.assertEmpty();
+        setPlayerInventorySlotTracker.assertEmpty();
+        setCursorTracker.assertEmpty();
 
         // Make sure WindowItemsPacket is empty
         updateWindowTracker.assertSingle(windowItemsPacket -> {
@@ -108,9 +114,9 @@ public class PlayerInventoryIntegrationTest {
     public void equipmentViewTest(Env env) {
         var instance = env.createFlatInstance();
         var connectionArmored = env.createConnection();
-        var playerArmored = connectionArmored.connect(instance, new Pos(0, 42, 0)).join();
+        var playerArmored = connectionArmored.connect(instance, new Pos(0, 42, 0));
         var connectionViewer = env.createConnection();
-        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0)).join();
+        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0));
 
         assertEquals(instance, playerArmored.getInstance());
         assertEquals(instance, playerViewer.getInstance());
@@ -118,19 +124,19 @@ public class PlayerInventoryIntegrationTest {
         var equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
 
         // Setting to an item should send EntityEquipmentPacket to viewer
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
             assertEquals(MAGIC_STACK, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
         });
 
         // Setting to the same item shouldn't send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, MAGIC_STACK);
         equipmentTracker.assertEmpty();
 
         // Setting to air should send packet
         equipmentTracker = connectionViewer.trackIncoming(EntityEquipmentPacket.class);
-        playerArmored.getInventory().setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
+        playerArmored.setEquipment(EquipmentSlot.HELMET, ItemStack.AIR);
         equipmentTracker.assertSingle(entityEquipmentPacket -> {
             assertEquals(ItemStack.AIR, entityEquipmentPacket.equipments().get(EquipmentSlot.HELMET));
         });
@@ -140,9 +146,9 @@ public class PlayerInventoryIntegrationTest {
     public void heldItemViewTest(Env env) {
         var instance = env.createFlatInstance();
         var connectionHolder = env.createConnection();
-        var playerHolder = connectionHolder.connect(instance, new Pos(0, 42, 0)).join();
+        var playerHolder = connectionHolder.connect(instance, new Pos(0, 42, 0));
         var connectionViewer = env.createConnection();
-        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0)).join();
+        var playerViewer = connectionViewer.connect(instance, new Pos(0, 42, 0));
 
         assertEquals(instance, playerHolder.getInstance());
         assertEquals(instance, playerViewer.getInstance());

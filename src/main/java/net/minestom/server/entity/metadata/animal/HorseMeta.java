@@ -1,24 +1,21 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class HorseMeta extends AbstractHorseMeta {
-    public static final byte OFFSET = AbstractHorseMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public HorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Variant getVariant() {
-        return getVariantFromID(super.metadata.getIndex(OFFSET, 0));
+        return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
     }
 
     public void setVariant(Variant variant) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(getVariantID(variant.marking, variant.color)));
+        metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
     }
 
     public static int getVariantID(@NotNull Marking marking, @NotNull Color color) {
