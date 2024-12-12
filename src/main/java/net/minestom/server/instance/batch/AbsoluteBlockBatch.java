@@ -9,9 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -113,21 +111,23 @@ public class AbsoluteBlockBatch implements Batch {
     protected void sendLighting(@NotNull Instance instance, @NotNull LongList chunkIndexes) {
         if (options.shouldSendUpdate() && options.shouldSendLight()) {
             // expand to include surrounding chunks
-            final Set<LightingChunk> expanded = new HashSet<>();
+            final LongSet expandedIndexes = new LongOpenHashSet();
             for (long index : chunkIndexes) {
                 int chunkX = CoordConversion.chunkIndexGetX(index);
                 int chunkZ = CoordConversion.chunkIndexGetZ(index);
                 for (int x = chunkX - 1; x <= chunkX + 1; x++) {
                     for (int z = chunkZ - 1; z <= chunkZ + 1; z++) {
-                        if (instance.getChunk(x, z) instanceof LightingChunk lightingChunk) {
-                            expanded.add(lightingChunk);
-                        }
+                        expandedIndexes.add(CoordConversion.chunkIndex(x, z));
                     }
                 }
             }
 
-            for (LightingChunk lightingChunk : expanded) {
-                lightingChunk.sendLighting();
+            for (long chunkIndex : expandedIndexes) {
+                int chunkX = CoordConversion.chunkIndexGetX(chunkIndex);
+                int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
+                if (instance.getChunk(chunkX, chunkZ) instanceof LightingChunk lightingChunk) {
+                    lightingChunk.sendLighting();
+                }
             }
         }
     }
