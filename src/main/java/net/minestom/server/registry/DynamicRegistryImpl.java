@@ -137,12 +137,16 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         lock.lock();
         try {
             int id = idByName.indexOf(namespaceId);
-            if (id == -1) id = entryById.size();
-
-            entryById.add(id, object);
             entryByName.put(namespaceId, object);
-            idByName.add(namespaceId);
-            packById.add(id, pack);
+            if (id == -1) {
+                idByName.add(namespaceId);
+                entryById.add(object);
+                packById.add(pack);
+            } else {
+                idByName.set(id, namespaceId);
+                entryById.set(id, object);
+                packById.set(id, pack);
+            }
             if (vanillaRegistryDataPacket != null) {
                 vanillaRegistryDataPacket.invalidate();
             }
