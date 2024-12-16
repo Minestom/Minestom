@@ -87,9 +87,10 @@ public class LightingChunk extends DynamicChunk {
             Block.LAVA.namespace()
     );
 
+    @Override
     public void invalidate() {
+        super.invalidate();
         this.partialLightCache.invalidate();
-        this.chunkCache.invalidate();
         this.partialLightData = null;
         this.fullLightData = null;
     }
