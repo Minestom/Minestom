@@ -1,5 +1,6 @@
 package net.minestom.server.utils.block;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
@@ -85,7 +86,7 @@ public class BlockBreakCalculationTest {
     }
 
     private void assertBreakSpeed(double instantBreakSpeed) {
-        if (instantBreakSpeed > Attribute.BLOCK_BREAK_SPEED.maxValue()) return;
+        if (instantBreakSpeed > Attribute.lookup(Attribute.BLOCK_BREAK_SPEED, MinecraftServer.process()).maxValue()) return;
         resetBreakEfficiency();
         updateBreakSpeed(instantBreakSpeed);
         assertInstabreak.run();
@@ -116,11 +117,13 @@ public class BlockBreakCalculationTest {
     }
 
     private void resetBreakSpeed() {
-        player.getAttribute(Attribute.BLOCK_BREAK_SPEED).setBaseValue(Attribute.BLOCK_BREAK_SPEED.defaultValue());
+        player.getAttribute(Attribute.BLOCK_BREAK_SPEED)
+                .setBaseValue((Attribute.lookup(Attribute.BLOCK_BREAK_SPEED, MinecraftServer.process())).defaultValue());
     }
 
     private void resetBreakEfficiency() {
-        player.getAttribute(Attribute.MINING_EFFICIENCY).setBaseValue(Attribute.MINING_EFFICIENCY.defaultValue());
+        player.getAttribute(Attribute.MINING_EFFICIENCY)
+                .setBaseValue((Attribute.lookup(Attribute.MINING_EFFICIENCY, MinecraftServer.process())).defaultValue());
     }
 
     private void updateBreakSpeed(double speed) {
