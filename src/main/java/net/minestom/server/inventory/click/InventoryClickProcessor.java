@@ -6,11 +6,8 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
-import net.minestom.server.inventory.condition.InventoryCondition;
-import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.utils.MathUtils;
@@ -416,38 +413,24 @@ public final class InventoryClickProcessor {
         // Reset the didCloseInventory field
         // Wait for inventory conditions + events to possibly close the inventory
         player.UNSAFE_changeDidCloseInventory(false);
-        // InventoryPreClickEvent
-        {
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
-                    clickResult.getClicked(), clickResult.getCursor());
-            EventDispatcher.call(inventoryPreClickEvent);
-            clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
-            clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
-            if (inventoryPreClickEvent.isCancelled()) {
-                clickResult.setCancel(true);
-            }
-        }
-        // Inventory conditions
-        {
-            final List<InventoryCondition> inventoryConditions = inventory.getInventoryConditions();
-            if (!inventoryConditions.isEmpty()) {
-                for (InventoryCondition inventoryCondition : inventoryConditions) {
-                    var result = new InventoryConditionResult(clickResult.getClicked(), clickResult.getCursor());
-                    inventoryCondition.accept(player, slot, clickType, result);
 
-                    clickResult.setCursor(result.getCursorItem());
-                    clickResult.setClicked(result.getClickedItem());
-                    if (result.isCancel()) {
-                        clickResult.setCancel(true);
-                    }
-                }
-                // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
-                if (player.didCloseInventory()) {
-                    clickResult.setCancel(true);
-                    player.UNSAFE_changeDidCloseInventory(false);
-                }
-            }
+        // Call InventoryPreClickEvent
+        InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
+                clickResult.getClicked(), clickResult.getCursor());
+        EventDispatcher.call(inventoryPreClickEvent);
+
+        clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
+        clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
+
+        if (player.didCloseInventory()) {
+            // Cancel the click if the inventory has been closed by Player#closeInventory
+            clickResult.setCancel(true);
+            player.UNSAFE_changeDidCloseInventory(false);
+        } else if (inventoryPreClickEvent.isCancelled()) {
+            // Cancel it if the event is cancelled and we haven't already done that
+            clickResult.setCancel(true);
         }
+
         return clickResult;
     }
 
