@@ -163,7 +163,7 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable InventoryClickResult dragging(@NotNull Player player, @Nullable AbstractInventory inventory,
+    public @Nullable InventoryClickResult dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
                                                    int slot, int button,
                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         InventoryClickResult clickResult = null;
@@ -408,18 +408,17 @@ public final class InventoryClickProcessor {
     }
 
     private @NotNull InventoryClickResult startCondition(@NotNull Player player,
-                                                         @Nullable AbstractInventory inventory,
+                                                         @NotNull AbstractInventory inventory,
                                                          int slot, @NotNull ClickType clickType,
                                                          @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
-        final Inventory eventInventory = inventory instanceof Inventory ? (Inventory) inventory : null;
 
         // Reset the didCloseInventory field
         // Wait for inventory conditions + events to possibly close the inventory
         player.UNSAFE_changeDidCloseInventory(false);
         // InventoryPreClickEvent
         {
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(eventInventory, player, slot, clickType,
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
                     clickResult.getClicked(), clickResult.getCursor());
             EventDispatcher.call(inventoryPreClickEvent);
             clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
@@ -430,24 +429,22 @@ public final class InventoryClickProcessor {
         }
         // Inventory conditions
         {
-            if (inventory != null) {
-                final List<InventoryCondition> inventoryConditions = inventory.getInventoryConditions();
-                if (!inventoryConditions.isEmpty()) {
-                    for (InventoryCondition inventoryCondition : inventoryConditions) {
-                        var result = new InventoryConditionResult(clickResult.getClicked(), clickResult.getCursor());
-                        inventoryCondition.accept(player, slot, clickType, result);
+            final List<InventoryCondition> inventoryConditions = inventory.getInventoryConditions();
+            if (!inventoryConditions.isEmpty()) {
+                for (InventoryCondition inventoryCondition : inventoryConditions) {
+                    var result = new InventoryConditionResult(clickResult.getClicked(), clickResult.getCursor());
+                    inventoryCondition.accept(player, slot, clickType, result);
 
-                        clickResult.setCursor(result.getCursorItem());
-                        clickResult.setClicked(result.getClickedItem());
-                        if (result.isCancel()) {
-                            clickResult.setCancel(true);
-                        }
-                    }
-                    // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
-                    if (player.didCloseInventory()) {
+                    clickResult.setCursor(result.getCursorItem());
+                    clickResult.setClicked(result.getClickedItem());
+                    if (result.isCancel()) {
                         clickResult.setCancel(true);
-                        player.UNSAFE_changeDidCloseInventory(false);
                     }
+                }
+                // Cancel the click if the inventory has been closed by Player#closeInventory within an inventory listener
+                if (player.didCloseInventory()) {
+                    clickResult.setCancel(true);
+                    player.UNSAFE_changeDidCloseInventory(false);
                 }
             }
         }

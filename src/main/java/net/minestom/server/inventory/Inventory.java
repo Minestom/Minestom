@@ -283,7 +283,7 @@ public non-sealed class Inventory extends AbstractInventory {
                 ItemStack.AIR;
         final ItemStack cursor = playerInventory.getCursorItem();
         final InventoryClickResult clickResult = clickProcessor.dragging(player,
-                slot != -999 ? (isInWindow ? this : playerInventory) : null,
+                slot == -999 || isInWindow ? this : playerInventory,
                 clickSlot, button,
                 clicked, cursor);
         if (clickResult == null || clickResult.isCancel()) {

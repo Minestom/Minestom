@@ -10,24 +10,25 @@ import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ParticlePacket(@NotNull Particle particle, boolean longDistance, double x, double y, double z,
+public record ParticlePacket(@NotNull Particle particle, boolean overrideLimiter, boolean longDistance, double x, double y, double z,
                              float offsetX, float offsetY, float offsetZ, float maxSpeed,
                              int particleCount) implements ServerPacket.Play {
     public ParticlePacket(@NotNull Particle particle, double x, double y, double z, float offsetX, float offsetY, float offsetZ, float maxSpeed, int particleCount) {
-        this(particle, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+        this(particle, false, false, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
     }
 
-    public ParticlePacket(@NotNull Particle particle, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
-        this(particle, longDistance, position.x(), position.y(), position.z(), (float) offset.x(), (float) offset.y(), (float) offset.z(), maxSpeed, particleCount);
+    public ParticlePacket(@NotNull Particle particle, boolean overrideLimiter, boolean longDistance, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
+        this(particle, overrideLimiter, longDistance, position.x(), position.y(), position.z(), (float) offset.x(), (float) offset.y(), (float) offset.z(), maxSpeed, particleCount);
     }
 
     public ParticlePacket(@NotNull Particle particle, @NotNull Point position, @NotNull Point offset, float maxSpeed, int particleCount) {
-        this(particle, false, position, offset, maxSpeed, particleCount);
+        this(particle, false, false, position, offset, maxSpeed, particleCount);
     }
 
     public static final NetworkBuffer.Type<ParticlePacket> SERIALIZER = new Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, ParticlePacket value) {
+            buffer.write(BOOLEAN, value.overrideLimiter);
             buffer.write(BOOLEAN, value.longDistance);
             buffer.write(DOUBLE, value.x);
             buffer.write(DOUBLE, value.y);
@@ -43,6 +44,7 @@ public record ParticlePacket(@NotNull Particle particle, boolean longDistance, d
 
         @Override
         public ParticlePacket read(@NotNull NetworkBuffer buffer) {
+            Boolean overrideLimiter = buffer.read(BOOLEAN);
             Boolean longDistance = buffer.read(BOOLEAN);
             Double x = buffer.read(DOUBLE);
             Double y = buffer.read(DOUBLE);
@@ -56,7 +58,7 @@ public record ParticlePacket(@NotNull Particle particle, boolean longDistance, d
             Particle particle = Particle.fromId(buffer.read(VAR_INT));
             Objects.requireNonNull(particle);
 
-            return new ParticlePacket(particle.readData(buffer), longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
+            return new ParticlePacket(particle.readData(buffer), overrideLimiter, longDistance, x, y, z, offsetX, offsetY, offsetZ, maxSpeed, particleCount);
         }
     };
 }

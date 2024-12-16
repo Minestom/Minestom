@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
@@ -12,8 +13,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.item.component.Equippable;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
+import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class UseItemListener {
@@ -96,10 +99,12 @@ public class UseItemListener {
     }
 
     private static int getInstrumentTime(@NotNull ItemStack itemStack) {
-        final String instrumentName = itemStack.get(ItemComponent.INSTRUMENT);
+        final DynamicRegistry.Key<Instrument> instrumentName = itemStack.get(ItemComponent.INSTRUMENT);
         if (instrumentName == null) return 0;
 
-        // TODO(1.21.2): Load instrument registry
-        return 0;
+        final Instrument instrument = MinecraftServer.getInstrumentRegistry().get(instrumentName);
+        if (instrument == null) return 0;
+
+        return instrument.useDurationTicks();
     }
 }
