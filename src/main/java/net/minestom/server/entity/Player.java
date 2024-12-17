@@ -189,7 +189,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private long itemUseTime;
     private PlayerHand itemUseHand;
 
-    // Game state (https://wiki.vg/Protocol#Change_Game_State)
+    // Game state (https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Game_Event)
     private boolean enableRespawnScreen;
     private final ChunkUpdateLimitChecker chunkUpdateLimitChecker = new ChunkUpdateLimitChecker(6);
 
@@ -1995,7 +1995,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * Changes the player ability "Creative Mode".
      *
      * @param instantBreak true to allow instant break
-     * @see <a href="https://wiki.vg/Protocol#Player_Abilities_.28clientbound.29">player abilities</a>
+     * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Player_Abilities_(clientbound)">player abilities</a>
      */
     public void setInstantBreak(boolean instantBreak) {
         this.instantBreak = instantBreak;

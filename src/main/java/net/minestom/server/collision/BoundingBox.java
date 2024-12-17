@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Iterator;
 
 /**
- * See https://wiki.vg/Entity_metadata#Mobs_2
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Entity_metadata#Entities">the entity bounding box list</a>.
  */
 public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
     private static final BoundingBox SLEEPING = new BoundingBox(0.2, 0.2, 0.2);

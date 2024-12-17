@@ -29,7 +29,7 @@ import java.util.Random;
 /**
  * Utility class to manage responses to the GameSpy4 Query Protocol.
  *
- * @see <a href="https://wiki.vg/Query">wiki.vg</a>
+ * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Query">the Minecraft wiki</a>
  */
 public class Query {
     public static final Charset CHARSET = StandardCharsets.ISO_8859_1;

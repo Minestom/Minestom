@@ -15,7 +15,7 @@ import java.util.function.Function;
 /**
  * An enum containing the different types of server list ping responses.
  *
- * @see <a href="https://wiki.vg/Server_List_Ping">https://wiki.vg/Server_List_Ping</a>
+ * @see <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Server_List_Ping">the Minecraft Wiki</a>
  * @see ServerListPingEvent
  */
 public enum ServerListPingType {
