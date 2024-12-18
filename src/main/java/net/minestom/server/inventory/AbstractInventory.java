@@ -4,6 +4,8 @@ import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
@@ -283,6 +285,30 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
             Check.notNull(itemStack, "The item array cannot contain any null element!");
             setItemStack(i, itemStack);
         }
+    }
+
+    @Override
+    public boolean handleClick(@NotNull Player player, Click.@NotNull Info info) {
+        // Reset the didCloseInventory field
+        // Wait for inventory conditions + events to possibly close the inventory
+        player.UNSAFE_changeDidCloseInventory(false);
+
+        // Call InventoryPreClickEvent
+        InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(this, player, info);
+        EventDispatcher.call(inventoryPreClickEvent);
+
+        info = inventoryPreClickEvent.getClick();
+
+        if (player.didCloseInventory()) {
+            // Cancel the click if the inventory has been closed by Player#closeInventory
+            player.UNSAFE_changeDidCloseInventory(false);
+            return false;
+        } else if (inventoryPreClickEvent.isCancelled()) {
+            // Cancel it if the event is cancelled and we haven't already done that
+            return false;
+        }
+
+        return InventoryClickHandler.super.handleClick(player, info);
     }
 
     @Override
