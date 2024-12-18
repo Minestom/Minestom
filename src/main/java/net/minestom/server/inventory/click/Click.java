@@ -15,12 +15,8 @@ public final class Click {
     /**
      * A tagged union representing possible clicks from the client.
      *
-     * For a given inventory, any slot such that {@code slot >= inventory.getSize()} is
-     * a slot within the inventory of the player who opened it. Converting this back
-     * is as simple as subtracting the size of the inventory.
-     *
-     * For example, if a hopper is open, the slot {@code 5} indicates slot 0 in the
-     * player's inventory, i.e. their first hotbar slot.
+     * See {@link PlayerInventoryUtils#remapPlayerInventorySlot(int, Integer)} for information on what the slot IDs
+     * mean.
      */
     public sealed interface Info {
 
@@ -115,7 +111,7 @@ public final class Click {
             };
             if (requireCreative && !isCreative) return null;
 
-            final int slot = mapSlot(packet.slot(), containerSize);
+            final int slot = PlayerInventoryUtils.remapPlayerInventorySlot(packet.slot(), containerSize);
             final int maxSize = containerSize != null ? containerSize + PlayerInventory.INNER_INVENTORY_SIZE : PlayerInventory.INVENTORY_SIZE;
             final boolean valid = slot >= 0 && slot < maxSize;
 
@@ -123,19 +119,6 @@ public final class Click {
                 return process(packet.clickType(), slot, button);
             } else {
                 return slot == -999 ? processInvalidSlot(packet.clickType(), button) : null;
-            }
-        }
-
-        private static int mapSlot(int slot, @Nullable Integer containerSize) {
-            if (containerSize == null) {
-                // No container means it's a player inventory slot, so convert it
-                return PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(slot);
-            } else if (slot >= containerSize) {
-                // If it's a player inventory slot above the container size, convert it to a Minestom player inventory slot.
-                return containerSize + PlayerInventoryUtils.convertWindowSlotToMinestomSlot(slot, containerSize);
-            } else {
-                // Otherwise, no changes,
-                return slot;
             }
         }
 

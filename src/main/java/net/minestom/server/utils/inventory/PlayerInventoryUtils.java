@@ -1,5 +1,7 @@
 package net.minestom.server.utils.inventory;
 
+import org.jetbrains.annotations.Nullable;
+
 public final class PlayerInventoryUtils {
     /*
     There are 3 different slot mappings discussed in this file:
@@ -151,5 +153,36 @@ public final class PlayerInventoryUtils {
         if (slot == 39) return HELMET_SLOT;
         if (slot == 40) return OFFHAND_SLOT;
         return slot;
+    }
+
+    /**
+     * Remaps the slot (if it's a player inventory slot) to use Minestom slot IDs.
+     *
+     * This function will convert it the slot to the following format:
+     * <ul>
+     *     <li>If an inventory is open, any slot such that {@code slot >= containerSize} means that the slot is a player
+     *     inventory slot. To get the slot ID relative to the player inventory, simply subtract containerSize.</li>
+     *     <li>If an inventory is open and the slot is less than the container size, no changes are made.</li>
+     *     <li>If an inventory is not open, the slot is always just a valid player inventory slot.</li>
+     * </ul>
+     *
+     * For example, if a hopper is open, the slot {@code 5} indicates slot 0 in the player's inventory, i.e. their first
+     * hotbar slot.
+     *
+     * @param slot the protocol slot ID to convert; packed protocol slot IDs are described <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Inventory">here</a>.
+     * @param containerSize the size of the open inventory, or null if there is no open inventory
+     * @return the mapped slot ID
+     */
+    public static int remapPlayerInventorySlot(int slot, @Nullable Integer containerSize) {
+        if (containerSize == null) {
+            // No container means it's a player inventory slot, so convert it
+            return PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(slot);
+        } else if (slot >= containerSize) {
+            // If it's a player inventory slot above the container size, convert it to a Minestom player inventory slot.
+            return containerSize + PlayerInventoryUtils.convertWindowSlotToMinestomSlot(slot, containerSize);
+        } else {
+            // Otherwise, no changes,
+            return slot;
+        }
     }
 }
