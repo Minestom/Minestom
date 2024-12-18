@@ -5,10 +5,8 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.click.ClickType;
-import net.minestom.server.item.ItemStack;
+import net.minestom.server.inventory.click.Click;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
@@ -17,23 +15,16 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private final AbstractInventory inventory;
     private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private ItemStack clickedItem;
-    private ItemStack cursorItem;
+    private Click.Info click;
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@Nullable AbstractInventory inventory,
+    public InventoryPreClickEvent(@NotNull AbstractInventory inventory,
                                   @NotNull Player player,
-                                  int slot, @NotNull ClickType clickType,
-                                  @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+                                  @NotNull Click.Info click) {
         this.inventory = inventory;
         this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
+        this.click = click;
     }
 
     /**
@@ -47,60 +38,17 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     /**
-     * Gets the clicked slot number.
-     *
-     * @return the clicked slot number
+     * Gets the information about the player's click.
      */
-    public int getSlot() {
-        return slot;
+    public @NotNull Click.Info getClick() {
+        return click;
     }
 
     /**
-     * Gets the click type.
-     *
-     * @return the click type
+     * Sets the information about the player's click.
      */
-    @NotNull
-    public ClickType getClickType() {
-        return clickType;
-    }
-
-    /**
-     * Gets the item who have been clicked.
-     *
-     * @return the clicked item
-     */
-    @NotNull
-    public ItemStack getClickedItem() {
-        return clickedItem;
-    }
-
-    /**
-     * Changes the clicked item.
-     *
-     * @param clickedItem the clicked item
-     */
-    public void setClickedItem(@NotNull ItemStack clickedItem) {
-        this.clickedItem = clickedItem;
-    }
-
-    /**
-     * Gets the item who was in the player cursor.
-     *
-     * @return the cursor item
-     */
-    @NotNull
-    public ItemStack getCursorItem() {
-        return cursorItem;
-    }
-
-    /**
-     * Changes the cursor item.
-     *
-     * @param cursorItem the cursor item
-     */
-    public void setCursorItem(@NotNull ItemStack cursorItem) {
-        this.cursorItem = cursorItem;
+    public void setClick(@NotNull Click.Info click) {
+        this.click = click;
     }
 
     @Override
@@ -114,7 +62,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     @Override
-    public @Nullable AbstractInventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }

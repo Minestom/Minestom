@@ -4,7 +4,6 @@ import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
-import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
@@ -15,54 +14,41 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 
 @ApiStatus.Internal
 public final class InventoryClickProcessor {
-    // Dragging maps
-    private final Map<Player, List<DragData>> leftDraggingMap = new ConcurrentHashMap<>();
-    private final Map<Player, List<DragData>> rightDraggingMap = new ConcurrentHashMap<>();
 
-    public @NotNull InventoryClickResult leftClick(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                   int slot,
-                                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final var result = startCondition(player, inventory, slot, ClickType.LEFT_CLICK, clicked, cursor);
-        if (result.isCancel()) return result;
-        clicked = result.getClicked();
-        cursor = result.getCursor();
+    public @NotNull InventoryClickResult leftClick(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         if (cursor.isSimilar(clicked)) {
             // Try to stack items
             final int totalAmount = cursor.amount() + clicked.amount();
             final int maxSize = cursor.maxStackSize();
             if (!MathUtils.isBetween(totalAmount, 0, clicked.maxStackSize())) {
                 // Size is too big, stack as much as possible into clicked
-                result.setCursor(cursor.withAmount(totalAmount - maxSize));
-                result.setClicked(clicked.withAmount(maxSize));
+                cursor = cursor.withAmount(totalAmount - maxSize);
+                clicked = clicked.withAmount(maxSize);
             } else {
                 // Merge cursor item clicked
-                result.setCursor(ItemStack.AIR);
-                result.setClicked(clicked.withAmount(totalAmount));
+                cursor = ItemStack.AIR;
+                clicked = clicked.withAmount(totalAmount);
             }
         } else {
             // Items are not compatible, swap them
-            result.setCursor(clicked);
-            result.setClicked(cursor);
+            var temp = clicked;
+
+            clicked = cursor;
+            cursor = temp;
         }
-        return result;
+        return new InventoryClickResult(clicked, cursor);
     }
 
-    public @NotNull InventoryClickResult rightClick(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                    int slot,
-                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final var result = startCondition(player, inventory, slot, ClickType.RIGHT_CLICK, clicked, cursor);
-        if (result.isCancel()) return result;
-        clicked = result.getClicked();
-        cursor = result.getCursor();
+    public @NotNull InventoryClickResult rightClick(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        final var result = new InventoryClickResult(clicked, cursor);
+
         if (clicked.isSimilar(cursor)) {
             // Items can be stacked
             final int amount = clicked.amount() + 1;
@@ -96,27 +82,15 @@ public final class InventoryClickProcessor {
         return result;
     }
 
-    public @NotNull InventoryClickResult changeHeld(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                    int slot, int key,
-                                                    @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        // Verify the clicked item
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.CHANGE_HELD, clicked, cursor);
-        if (clickResult.isCancel()) return clickResult;
-        // Verify the destination (held bar)
-        clickResult = startCondition(player, player.getInventory(), key, ClickType.CHANGE_HELD, clicked, cursor);
-        if (clickResult.isCancel()) return clickResult;
-        // Swap items
-        clickResult.setClicked(cursor);
-        clickResult.setCursor(clicked);
-        return clickResult;
+    public @NotNull InventoryClickResult changeHeld(@NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        return new InventoryClickResult(cursor, clicked); // Swap items
     }
 
     public @NotNull InventoryClickResult shiftClick(@NotNull AbstractInventory inventory, @NotNull AbstractInventory targetInventory,
                                                     int start, int end, int step,
                                                     @NotNull Player player, int slot,
                                                     @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.START_SHIFT_CLICK, clicked, cursor);
-        if (clickResult.isCancel()) return clickResult;
+        final var clickResult = new InventoryClickResult(clicked, cursor);
         if (clicked.isAir()) return clickResult.cancelled();
 
         // Handle armor equip
@@ -127,13 +101,8 @@ public final class InventoryClickProcessor {
                 // Shift-click equip
                 final ItemStack currentArmor = player.getEquipment(equipmentSlot);
                 if (currentArmor.isAir()) {
-                    final int armorSlot = equipmentSlot.armorSlot();
-                    InventoryClickResult result = startCondition(player, targetInventory, armorSlot, ClickType.SHIFT_CLICK, clicked, cursor);
-                    if (result.isCancel()) return clickResult;
-                    result.setClicked(ItemStack.AIR);
-                    result.setCursor(cursor);
                     player.setEquipment(equipmentSlot, clicked);
-                    return result;
+                    return new InventoryClickResult(ItemStack.AIR, cursor);
                 }
             }
         }
@@ -142,10 +111,6 @@ public final class InventoryClickProcessor {
         final var pair = TransactionType.ADD.process(targetInventory, clicked, (index, itemStack) -> {
             if (inventory == targetInventory && index == slot)
                 return false; // Prevent item lose/duplication
-            InventoryClickResult result = startCondition(player, targetInventory, index, ClickType.SHIFT_CLICK, itemStack, cursor);
-            if (result.isCancel()) {
-                return false;
-            }
             clickResult.setCancel(false);
             return true;
         }, start, end, step);
@@ -160,133 +125,85 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @Nullable InventoryClickResult dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                                   int slot, int button,
-                                                   @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = null;
-        if (slot != -999) {
-            // Add slot
-            if (button == 1) {
-                // Add left
-                List<DragData> left = leftDraggingMap.get(player);
-                if (left == null) return null;
-                left.add(new DragData(slot, inventory));
-            } else if (button == 5) {
-                // Add right
-                List<DragData> right = rightDraggingMap.get(player);
-                if (right == null) return null;
-                right.add(new DragData(slot, inventory));
-            } else if (button == 9) {
-                // Add middle
-                // TODO
-            }
-        } else {
-            // Drag instruction
-            if (button == 0) {
-                // Start left
-                clickResult = startCondition(player, inventory, slot, ClickType.START_LEFT_DRAGGING, clicked, cursor);
-                if (!clickResult.isCancel()) this.leftDraggingMap.put(player, new ArrayList<>());
-            } else if (button == 2) {
-                // End left
-                final List<DragData> slots = leftDraggingMap.remove(player);
-                if (slots == null) return null;
-                final int slotCount = slots.size();
-                final int cursorAmount = cursor.amount();
-                if (slotCount > cursorAmount) return null;
-                for (DragData s : slots) {
-                    // Apply each drag element
-                    final ItemStack slotItem = s.inventory.getItemStack(s.slot);
-                    clickResult = startCondition(player, s.inventory, s.slot, ClickType.LEFT_DRAGGING, slotItem, cursor);
-                    if (clickResult.isCancel()) {
-                        return clickResult;
-                    }
-                }
-                clickResult = startCondition(player, inventory, slot, ClickType.END_LEFT_DRAGGING, clicked, cursor);
-                if (clickResult.isCancel()) return clickResult;
-                // Should be size of each defined slot (if not full)
-                final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
-                // Place all waiting drag action
-                int finalCursorAmount = cursorAmount;
-                for (DragData dragData : slots) {
-                    final var inv = dragData.inventory;
-                    final int s = dragData.slot;
-                    ItemStack slotItem = inv.getItemStack(s);
-                    final int amount = slotItem.amount();
-                    if (cursor.isSimilar(slotItem)) {
-                        if (MathUtils.isBetween(amount + slotSize, 0, slotItem.maxStackSize())) {
-                            // Append divided amount to slot
-                            slotItem = slotItem.withAmount(a -> a + slotSize);
-                            finalCursorAmount -= slotSize;
-                        } else {
-                            // Amount too big, fill as much as possible
-                            final int maxSize = cursor.maxStackSize();
-                            final int removedAmount = maxSize - amount;
-                            slotItem = slotItem.withAmount(maxSize);
-                            finalCursorAmount -= removedAmount;
-                        }
-                    } else if (slotItem.isAir()) {
-                        // Slot is empty, add divided amount
-                        slotItem = cursor.withAmount(slotSize);
+    public @Nullable ItemStack dragging(@NotNull Player player, @NotNull AbstractInventory inventory,
+                                                   @NotNull List<Integer> slots, int button, @NotNull ItemStack cursor) {
+        // Drag instruction
+        if (button == 2) {
+            // End left
+            final int slotCount = slots.size();
+            final int cursorAmount = cursor.amount();
+            if (slotCount > cursorAmount) return null;
+
+            // Should be size of each defined slot (if not full)
+            final int slotSize = (int) ((float) cursorAmount / (float) slotCount);
+            // Place all waiting drag action
+            int finalCursorAmount = cursorAmount;
+            for (int slot : slots) {
+                final boolean isInWindow = slot < inventory.getSize();
+                final var inv = isInWindow ? inventory : player.getInventory();
+                final int s = isInWindow ? slot : slot - inventory.getSize();
+
+                ItemStack slotItem = inv.getItemStack(s);
+                final int amount = slotItem.amount();
+                if (cursor.isSimilar(slotItem)) {
+                    if (MathUtils.isBetween(amount + slotSize, 0, slotItem.maxStackSize())) {
+                        // Append divided amount to slot
+                        slotItem = slotItem.withAmount(a -> a + slotSize);
                         finalCursorAmount -= slotSize;
+                    } else {
+                        // Amount too big, fill as much as possible
+                        final int maxSize = cursor.maxStackSize();
+                        final int removedAmount = maxSize - amount;
+                        slotItem = slotItem.withAmount(maxSize);
+                        finalCursorAmount -= removedAmount;
                     }
-                    inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inv, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+                } else if (slotItem.isAir()) {
+                    // Slot is empty, add divided amount
+                    slotItem = cursor.withAmount(slotSize);
+                    finalCursorAmount -= slotSize;
                 }
-                // Update the cursor
-                clickResult.setCursor(cursor.withAmount(finalCursorAmount));
-            } else if (button == 4) {
-                // Start right
-                clickResult = startCondition(player, inventory, slot, ClickType.START_RIGHT_DRAGGING, clicked, cursor);
-                if (!clickResult.isCancel()) this.rightDraggingMap.put(player, new ArrayList<>());
-            } else if (button == 6) {
-                // End right
-                final List<DragData> slots = rightDraggingMap.remove(player);
-                if (slots == null) return null;
-                final int size = slots.size();
-                int cursorAmount = cursor.amount();
-                if (size > cursorAmount) return null;
-                // Verify if each slot can be modified (or cancel the whole drag)
-                for (DragData s : slots) {
-                    final ItemStack slotItem = s.inventory.getItemStack(s.slot);
-                    clickResult = startCondition(player, s.inventory, s.slot, ClickType.RIGHT_DRAGGING, slotItem, cursor);
-                    if (clickResult.isCancel()) {
-                        return clickResult;
-                    }
-                }
-                clickResult = startCondition(player, inventory, slot, ClickType.END_RIGHT_DRAGGING, clicked, cursor);
-                if (clickResult.isCancel()) return clickResult;
-                // Place all waiting drag action
-                int finalCursorAmount = cursorAmount;
-                for (DragData dragData : slots) {
-                    final var inv = dragData.inventory;
-                    final int s = dragData.slot;
-                    ItemStack slotItem = inv.getItemStack(s);
-                    if (cursor.isSimilar(slotItem)) {
-                        // Compatible item in the slot, increment by 1
-                        final int amount = slotItem.amount() + 1;
-                        if (MathUtils.isBetween(amount, 0, slotItem.maxStackSize())) {
-                            slotItem = slotItem.withAmount(amount);
-                            finalCursorAmount -= 1;
-                        }
-                    } else if (slotItem.isAir()) {
-                        // No item at the slot, place one
-                        slotItem = cursor.withAmount(1);
+                inv.setItemStack(s, slotItem);
+                callClickEvent(player, inv, s, ClickType.LEFT_DRAGGING, slotItem, cursor);
+            }
+            // Update the cursor
+            cursor = cursor.withAmount(finalCursorAmount);
+        } else if (button == 6) {
+            // End right
+            int cursorAmount = cursor.amount();
+            if (slots.size() > cursorAmount) return null;
+            // Place all waiting drag action
+            int finalCursorAmount = cursorAmount;
+            for (int slot : slots) {
+                final boolean isInWindow = slot < inventory.getSize();
+                final var inv = isInWindow ? inventory : player.getInventory();
+                final int s = isInWindow ? slot : slot - inventory.getSize();
+
+                ItemStack slotItem = inv.getItemStack(s);
+                if (cursor.isSimilar(slotItem)) {
+                    // Compatible item in the slot, increment by 1
+                    final int amount = slotItem.amount() + 1;
+                    if (MathUtils.isBetween(amount, 0, slotItem.maxStackSize())) {
+                        slotItem = slotItem.withAmount(amount);
                         finalCursorAmount -= 1;
                     }
-                    inv.setItemStack(s, slotItem);
-                    callClickEvent(player, inv, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
+                } else if (slotItem.isAir()) {
+                    // No item at the slot, place one
+                    slotItem = cursor.withAmount(1);
+                    finalCursorAmount -= 1;
                 }
-                // Update the cursor
-                clickResult.setCursor(cursor.withAmount(finalCursorAmount));
+                inv.setItemStack(s, slotItem);
+                callClickEvent(player, inv, s, ClickType.RIGHT_DRAGGING, slotItem, cursor);
             }
+            // Update the cursor
+            cursor = cursor.withAmount(finalCursorAmount);
         }
-        return clickResult;
+
+        return cursor;
     }
 
     public @NotNull InventoryClickResult doubleClick(@NotNull AbstractInventory clickedInventory, @NotNull AbstractInventory inventory, @NotNull Player player, int slot,
                                                      @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        InventoryClickResult clickResult = startCondition(player, clickedInventory, slot, ClickType.START_DOUBLE_CLICK, clicked, cursor);
-        if (clickResult.isCancel()) return clickResult;
+        InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
         if (cursor.isAir()) return clickResult.cancelled();
 
         final int amount = cursor.amount();
@@ -298,10 +215,8 @@ public final class InventoryClickProcessor {
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
-                if (index == slot) // Prevent item lose/duplication
-                    return false;
-                final InventoryClickResult result = startCondition(player, inv, index, ClickType.DOUBLE_CLICK, itemStack, cursor);
-                return !result.isCancel();
+                // Prevent item lose/duplication
+                return index != slot;
             });
             final ItemStack itemResult = pair.left();
             var itemChangesMap = pair.right();
@@ -343,93 +258,58 @@ public final class InventoryClickProcessor {
         return clickResult;
     }
 
-    public @NotNull InventoryClickResult drop(@NotNull Player player, @NotNull AbstractInventory inventory,
-                                              boolean all, int slot, int button,
-                                              @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final InventoryClickResult clickResult = startCondition(player, inventory, slot, ClickType.DROP, clicked, cursor);
-        if (clickResult.isCancel()) return clickResult;
-
-        ItemStack resultClicked = clicked;
-        ItemStack resultCursor = cursor;
+    public @NotNull InventoryClickResult drop(@NotNull Player player,
+                                              boolean all, int slot, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+        final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
 
         if (slot == -999) {
             // Click outside
-            if (button == 0) {
+            if (all) {
                 // Left (drop all)
-                final int amount = resultCursor.amount();
-                final ItemStack dropItem = resultCursor.withAmount(amount);
+                final int amount = cursor.amount();
+                final ItemStack dropItem = cursor.withAmount(amount);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultCursor = ItemStack.AIR;
+                    cursor = ItemStack.AIR;
                 }
-            } else if (button == 1) {
+            } else {
                 // Right (drop 1)
-                final ItemStack dropItem = resultCursor.withAmount(1);
+                final ItemStack dropItem = cursor.withAmount(1);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    final int amount = resultCursor.amount();
+                    final int amount = cursor.amount();
                     final int newAmount = amount - 1;
-                    resultCursor = resultCursor.withAmount(newAmount);
+                    cursor = cursor.withAmount(newAmount);
                 }
             }
 
-        } else if (!all) {
-            if (button == 0) {
-                // Drop key Q (drop 1)
-                final ItemStack dropItem = resultClicked.withAmount(1);
-                final boolean dropResult = player.dropItem(dropItem);
-                clickResult.setCancel(!dropResult);
-                if (dropResult) {
-                    final int amount = resultClicked.amount();
-                    final int newAmount = amount - 1;
-                    resultClicked = resultClicked.withAmount(newAmount);
-                }
-            } else if (button == 1) {
+        } else {
+            if (all) {
                 // Ctrl + Drop key Q (drop all)
-                final int amount = resultClicked.amount();
-                final ItemStack dropItem = resultClicked.withAmount(amount);
+                final int amount = clicked.amount();
+                final ItemStack dropItem = clicked.withAmount(amount);
                 final boolean dropResult = player.dropItem(dropItem);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
-                    resultClicked = ItemStack.AIR;
+                    clicked = ItemStack.AIR;
+                }
+            } else {
+                // Drop key Q (drop 1)
+                final ItemStack dropItem = clicked.withAmount(1);
+                final boolean dropResult = player.dropItem(dropItem);
+                clickResult.setCancel(!dropResult);
+                if (dropResult) {
+                    final int amount = clicked.amount();
+                    final int newAmount = amount - 1;
+                    clicked = clicked.withAmount(newAmount);
                 }
             }
         }
 
-        clickResult.setClicked(resultClicked);
-        clickResult.setCursor(resultCursor);
-
-        return clickResult;
-    }
-
-    private @NotNull InventoryClickResult startCondition(@NotNull Player player,
-                                                         @NotNull AbstractInventory inventory,
-                                                         int slot, @NotNull ClickType clickType,
-                                                         @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        final InventoryClickResult clickResult = new InventoryClickResult(clicked, cursor);
-
-        // Reset the didCloseInventory field
-        // Wait for inventory conditions + events to possibly close the inventory
-        player.UNSAFE_changeDidCloseInventory(false);
-
-        // Call InventoryPreClickEvent
-        InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
-                clickResult.getClicked(), clickResult.getCursor());
-        EventDispatcher.call(inventoryPreClickEvent);
-
-        clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
-        clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
-
-        if (player.didCloseInventory()) {
-            // Cancel the click if the inventory has been closed by Player#closeInventory
-            clickResult.setCancel(true);
-            player.UNSAFE_changeDidCloseInventory(false);
-        } else if (inventoryPreClickEvent.isCancelled()) {
-            // Cancel it if the event is cancelled and we haven't already done that
-            clickResult.setCancel(true);
-        }
+        clickResult.setClicked(clicked);
+        clickResult.setCursor(cursor);
 
         return clickResult;
     }
@@ -437,13 +317,5 @@ public final class InventoryClickProcessor {
     private void callClickEvent(@NotNull Player player, @NotNull AbstractInventory inventory, int slot,
                                 @NotNull ClickType clickType, @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
         EventDispatcher.call(new InventoryClickEvent(inventory, player, slot, clickType, clicked, cursor));
-    }
-
-    public void clearCache(@NotNull Player player) {
-        this.leftDraggingMap.remove(player);
-        this.rightDraggingMap.remove(player);
-    }
-
-    private record DragData(int slot, AbstractInventory inventory) {
     }
 }
