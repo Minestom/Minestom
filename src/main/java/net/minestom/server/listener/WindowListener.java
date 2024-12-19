@@ -3,71 +3,41 @@ package net.minestom.server.listener;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.common.PingPacket;
 import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
+import org.jetbrains.annotations.Nullable;
 
 public class WindowListener {
 
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
-        final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();
-        if (inventory == null) {
-            // Invalid packet
-            return;
-        }
+        final boolean playerInventory = windowId == 0;
+        final AbstractInventory inventory = playerInventory ? player.getInventory() : player.getOpenInventory();
 
-        final short slot = packet.slot();
-        final byte button = packet.button();
-        final ClientClickWindowPacket.ClickType clickType = packet.clickType();
+        // Prevent some invalid packets
+        if (inventory == null || packet.slot() == -1) return;
+
+        // Process the click
+        boolean isCreative = player.getGameMode() == GameMode.CREATIVE;
+        @Nullable Integer size = playerInventory ? null : inventory.getSize();
+
+        Click.Info result = player.getClickPreprocessor().processClick(packet, isCreative, size);
 
         boolean successful = false;
-
-        // prevent click in a non-interactive slot (why does it exist?)
-        if (slot == -1) {
-            return;
-        }
-        if (clickType == ClientClickWindowPacket.ClickType.PICKUP) {
-            if (button == 0) {
-                if (slot != -999) {
-                    successful = inventory.leftClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, true, slot, button);
-                }
-            } else if (button == 1) {
-                if (slot != -999) {
-                    successful = inventory.rightClick(player, slot);
-                } else {
-                    successful = inventory.drop(player, false, slot, button);
-                }
-            }
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_MOVE) {
-            successful = inventory.shiftClick(player, slot);
-        } else if (clickType == ClientClickWindowPacket.ClickType.SWAP) {
-            if (slot < 0 || button < 0) return;
-            successful = inventory.changeHeld(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
-            successful = player.getGameMode() == GameMode.CREATIVE;
-            if (successful) {
-                player.getInventory().setCursorItem(packet.clickedItem());
-            }
-        } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
-            successful = inventory.drop(player, false, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.QUICK_CRAFT) {
-            successful = inventory.dragging(player, slot, button);
-        } else if (clickType == ClientClickWindowPacket.ClickType.PICKUP_ALL) {
-            successful = inventory.doubleClick(player, slot);
+        if (result != null) {
+            successful = inventory.handleClick(player, result);
         }
 
         // Prevent ghost item when the click is cancelled
         if (!successful) {
-            player.getInventory().update();
-            if (inventory instanceof Inventory) {
-                ((Inventory) inventory).update(player);
+            player.getInventory().update(player);
+            if (!playerInventory) {
+                inventory.update(player);
             }
         }
 
