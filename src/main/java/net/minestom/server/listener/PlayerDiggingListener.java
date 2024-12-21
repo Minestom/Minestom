@@ -165,7 +165,7 @@ public final class PlayerDiggingListener {
 
         // Reset server state
         final boolean isOffHand = hand == PlayerHand.OFF;
-        player.refreshActiveHand(false, isOffHand, false);
+        player.refreshActiveHand(false, isOffHand, cancelUseEvent.isRiptideSpinAttack());
         player.clearItemUse();
     }
 

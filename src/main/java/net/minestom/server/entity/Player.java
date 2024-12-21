@@ -414,7 +414,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
                 // Reset server state
                 final boolean isOffHand = itemUseHand == PlayerHand.OFF;
-                refreshActiveHand(false, isOffHand, false);
+                refreshActiveHand(false, isOffHand, finishUseEvent.isRiptideSpinAttack());
                 clearItemUse();
 
                 // The client has predicted that the itemstack will have its count reduced, if the server
