@@ -7,6 +7,7 @@ import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.NotNull;
@@ -122,12 +123,17 @@ public final class InstanceManager {
             EventDispatcher.call(event);
 
             // Unload all chunks
+            var dispatcher = MinecraftServer.process().dispatcher();
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
-                var dispatcher = MinecraftServer.process().dispatcher();
-                instance.getChunks().forEach(dispatcher::deletePartition);
+                if (dispatcher.getPartitionType() == ThreadDispatcher.PartitionType.CHUNK) {
+                    var chunkDispatcher = dispatcher.asChunk();
+                    instance.getChunks().forEach(chunkDispatcher::deletePartition);
+                }
             }
             // Unregister
+            if (dispatcher.getPartitionType() == ThreadDispatcher.PartitionType.INSTANCE)
+                dispatcher.asInstance().deletePartition(instance);
             instance.setRegistered(false);
             this.instances.remove(instance);
         }
@@ -167,7 +173,14 @@ public final class InstanceManager {
         instance.setRegistered(true);
         this.instances.add(instance);
         var dispatcher = MinecraftServer.process().dispatcher();
-        instance.getChunks().forEach(dispatcher::createPartition);
+        switch (dispatcher.getPartitionType()) {
+            case CHUNK -> {
+                var chunkDispatcher = dispatcher.asChunk();
+                instance.getChunks().forEach(chunkDispatcher::createPartition);
+            }
+            case INSTANCE -> dispatcher.asInstance().createPartition(instance);
+            case null -> {}
+        }
         InstanceRegisterEvent event = new InstanceRegisterEvent(instance);
         EventDispatcher.call(event);
     }

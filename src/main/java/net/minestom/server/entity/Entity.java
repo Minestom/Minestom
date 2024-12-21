@@ -42,6 +42,7 @@ import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.thread.AcquirableSource;
+import net.minestom.server.thread.ThreadDispatcher;
 import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
@@ -749,7 +750,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+        var dispatcher = MinecraftServer.process().dispatcher();
+        if (dispatcher.getPartitionType() == ThreadDispatcher.PartitionType.CHUNK)
+            dispatcher.asChunk().updateElement(this, currentChunk);
     }
 
     /**
@@ -792,6 +795,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                var dispatcher = MinecraftServer.process().dispatcher();
+                if (dispatcher.getPartitionType() == ThreadDispatcher.PartitionType.INSTANCE)
+                    dispatcher.asInstance().updateElement(this, instance);
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());
