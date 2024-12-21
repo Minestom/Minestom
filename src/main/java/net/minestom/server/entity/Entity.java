@@ -749,7 +749,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+        MinecraftServer.process().dispatcher().runChunkPartition(dispatcher
+                -> dispatcher.updateElement(this, currentChunk));
     }
 
     /**
@@ -792,6 +793,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
+                MinecraftServer.process().dispatcher().runInstancePartition(dispatcher
+                        -> dispatcher.updateElement(this, instance));
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());

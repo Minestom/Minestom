@@ -124,10 +124,12 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
-                var dispatcher = MinecraftServer.process().dispatcher();
-                instance.getChunks().forEach(dispatcher::deletePartition);
+                MinecraftServer.process().dispatcher().runChunkPartition(dispatcher -> {
+                    instance.getChunks().forEach(dispatcher::deletePartition);
+                });
             }
             // Unregister
+            MinecraftServer.process().dispatcher().runInstancePartition(dispatcher -> dispatcher.deletePartition(instance));
             instance.setRegistered(false);
             this.instances.remove(instance);
         }
@@ -167,7 +169,14 @@ public final class InstanceManager {
         instance.setRegistered(true);
         this.instances.add(instance);
         var dispatcher = MinecraftServer.process().dispatcher();
-        instance.getChunks().forEach(dispatcher::createPartition);
+        switch (dispatcher.getPartitionType()) {
+            case CHUNK -> {
+                var chunkDispatcher = dispatcher.asChunk();
+                instance.getChunks().forEach(chunkDispatcher::createPartition);
+            }
+            case INSTANCE -> dispatcher.asInstance().createPartition(instance);
+            case null -> {}
+        }
         InstanceRegisterEvent event = new InstanceRegisterEvent(instance);
         EventDispatcher.call(event);
     }
