@@ -225,16 +225,6 @@ public final class ThreadDispatcher<P> {
         signalUpdate(new DispatchUpdate.ElementRemove<>(tickable));
     }
 
-    @SuppressWarnings("unchecked")
-    public ThreadDispatcher<Instance> asInstance() {
-        return (ThreadDispatcher<Instance>) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public ThreadDispatcher<Chunk> asChunk() {
-        return (ThreadDispatcher<Chunk>) this;
-    }
-
     /**
      * Shutdowns all the {@link TickThread tick threads}.
      * <p>
@@ -322,6 +312,18 @@ public final class ThreadDispatcher<P> {
 
     public @Nullable PartitionType getPartitionType() {
         return this.partitionType;
+    }
+
+    @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
+    public ThreadDispatcher<Chunk> asChunk() {
+        return (ThreadDispatcher<Chunk>) this;
+    }
+
+    @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
+    public ThreadDispatcher<Instance> asInstance() {
+        return (ThreadDispatcher<Instance>) this;
     }
 
     /**
