@@ -124,9 +124,6 @@ public final class InstanceManager {
             // Unload all chunks
             if (instance instanceof InstanceContainer) {
                 instance.getChunks().forEach(instance::unloadChunk);
-                MinecraftServer.process().dispatcher().runChunkPartition(dispatcher -> {
-                    instance.getChunks().forEach(dispatcher::deletePartition);
-                });
             }
             // Unregister
             MinecraftServer.process().dispatcher().runInstancePartition(dispatcher -> dispatcher.deletePartition(instance));
