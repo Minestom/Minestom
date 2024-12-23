@@ -15,9 +15,7 @@ import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 import java.util.Locale;
 
@@ -260,16 +258,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
             buffer.write(BYTE, TAG_COMPOUND);
             writeUtf(buffer, "components");
-            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter;
-            if (nbtWriter == null) {
-                nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
-                    @Override
-                    public void write(int b) {
-                        buffer.write(BYTE, (byte) b);
-                    }
-                }));
-                impl(buffer).nbtWriter = nbtWriter;
-            }
+            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
             BinaryTagSerializer.Context context = impl(buffer).registries() == null ? BinaryTagSerializer.Context.EMPTY : new BinaryTagSerializer.ContextWithRegistries(impl(buffer).registries(), true);
             for (var entry : value.dataComponents().entrySet()) {
                 if (entry.getValue() instanceof MinestomDataComponentValue minestomDataComponentValue) {
