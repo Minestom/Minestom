@@ -265,6 +265,7 @@ public final class ConnectionManager {
             player.sendPacket(registries.enchantment().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.paintingVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.jukeboxSong().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.instrument().registryDataPacket(registries, excludeVanilla));
 
             player.sendPacket(getDefaultTags(registries));
         }

@@ -72,7 +72,7 @@ public class CodeGenerator {
 
     public void generateKeys(InputStream resourceFile, String packageName, String typeName, String generatedName) {
         if (resourceFile == null) {
-            LOGGER.error("Failed to find resource file for " + typeName);
+            LOGGER.error("Failed to find (keys) resource file for " + typeName);
             return;
         }
 
