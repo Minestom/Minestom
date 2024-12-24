@@ -1,7 +1,11 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.text.event.DataComponentValue;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.*;
@@ -13,8 +17,11 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
 
@@ -96,6 +103,20 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     @Override
     public @NotNull CompoundBinaryTag toItemNBT() {
         return (CompoundBinaryTag) NBT_TYPE.write(this);
+    }
+
+    @Override
+    public @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
+        DataComponentMap componentMap = this.components();
+        Map<Key, DataComponentValue> componentValueMap = new HashMap<>();
+        componentMap.patchForEach((dataComponent, value) -> {
+            if (value == null) {
+                componentValueMap.put(dataComponent.key(), DataComponentValue.removed());
+            } else {
+                componentValueMap.put(dataComponent.key(), new MinestomDataComponentValue(dataComponent, value));
+            }
+        });
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), componentValueMap)));
     }
 
     @Override
