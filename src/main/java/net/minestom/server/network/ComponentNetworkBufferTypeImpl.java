@@ -261,8 +261,14 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
             BinaryTagSerializer.Context context = impl(buffer).registries() == null ? BinaryTagSerializer.Context.EMPTY : new BinaryTagSerializer.ContextWithRegistries(impl(buffer).registries(), true);
             for (var entry : value.dataComponents().entrySet()) {
-                if (entry.getValue() instanceof MinestomDataComponentValue minestomDataComponentValue) {
-                    if (minestomDataComponentValue.component().isSerialized()) {
+                if (entry.getValue() instanceof MinestomDataComponentValue minestomDataComponentValue && minestomDataComponentValue.component().isSerialized()) {
+                    // If it's a removed value
+                    if (minestomDataComponentValue.value().equals(DataComponentValue.removed())) {
+                        buffer.write(BYTE, TAG_COMPOUND);
+                        writeUtf(buffer, "!" + entry.getKey().asString());
+                        buffer.write(BYTE, TAG_END);
+                    } else {
+                        // Otherwise, write the value
                         try {
                             nbtWriter.writeNamed(minestomDataComponentValue.component().key().asString(), ((DataComponent<Object>) minestomDataComponentValue.component())
                                     .write(context, minestomDataComponentValue.value()));
@@ -270,10 +276,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                             throw new RuntimeException(e);
                         }
                     }
-                } else if (entry.getValue().equals(DataComponentValue.removed())) {
-                    buffer.write(BYTE, TAG_COMPOUND);
-                    writeUtf(buffer, "!" + entry.getKey().asString());
-                    buffer.write(BYTE, TAG_END);
                 } else {
                     throw new IllegalArgumentException("Tried to serialize an unknown data component type");
                 }
