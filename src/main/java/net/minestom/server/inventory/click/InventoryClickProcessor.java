@@ -215,8 +215,8 @@ public final class InventoryClickProcessor {
         }
         final BiFunction<AbstractInventory, ItemStack, ItemStack> func = (inv, rest) -> {
             var pair = TransactionType.TAKE.process(inv, rest, (index, itemStack) -> {
-                // Prevent item lose/duplication
-                return index != slot;
+                // Prevent item loss/duplication
+                return index != slot || clickedInventory != inv;
             });
             final ItemStack itemResult = pair.left();
             var itemChangesMap = pair.right();
