@@ -43,15 +43,15 @@ public final class ClickUtils {
         }, new GameProfile(UUID.randomUUID(), "TestPlayer"));
     }
 
-    public static void assertProcessed(@NotNull Click.Preprocessor preprocessor, @NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
+    public static void assertProcessed(@NotNull ClickPreprocessor preprocessor, @NotNull Player player, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
         assertEquals(info, preprocessor.processClick(packet, player.getGameMode() == GameMode.CREATIVE, SIZE));
     }
 
-    public static void assertProcessed(@NotNull Player player, @Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
-        assertProcessed(new Click.Preprocessor(), player, info, packet);
+    public static void assertProcessed(@NotNull Player player, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
+        assertProcessed(new ClickPreprocessor(), player, info, packet);
     }
 
-    public static void assertProcessed(@Nullable Click.Info info, @NotNull ClientClickWindowPacket packet) {
+    public static void assertProcessed(@Nullable Click info, @NotNull ClientClickWindowPacket packet) {
         assertProcessed(createPlayer(), info, packet);
     }
 

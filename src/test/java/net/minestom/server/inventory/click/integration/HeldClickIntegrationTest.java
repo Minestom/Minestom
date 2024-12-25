@@ -37,11 +37,11 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(event.getInventory(), inventory);
-                assertEquals(new Click.Info.HotbarSwap(4, 5), event.getClick());
+                assertEquals(new Click.HotbarSwap(5, 4), event.getClick());
 
-                Click.Info.Right right = assertInstanceOf(Click.Info.Right.class, event.getClick());
+                Click.HotbarSwap swap = assertInstanceOf(Click.HotbarSwap.class, event.getClick());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
-                assertEquals(ItemStack.AIR, inventory.getItemStack(right.slot()));
+                assertEquals(ItemStack.AIR, inventory.getItemStack(swap.slot()));
             });
             heldClick(player, 4, 5);
         }
@@ -49,11 +49,11 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(event.getInventory(), inventory);
-                assertEquals(new Click.Info.HotbarSwap(1, 0), event.getClick());
+                assertEquals(new Click.HotbarSwap(0, 1), event.getClick());
 
-                Click.Info.Right right = assertInstanceOf(Click.Info.Right.class, event.getClick());
+                Click.HotbarSwap swap = assertInstanceOf(Click.HotbarSwap.class, event.getClick());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
-                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(right.slot()));
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(swap.slot()));
             });
             heldClick(player, 1, 0);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -63,7 +63,7 @@ public class HeldClickIntegrationTest {
         // Swap items
         {
             listener.followup(event -> {
-                assertEquals(new Click.Info.HotbarSwap(0, 2), event.getClick());
+                assertEquals(new Click.HotbarSwap(2, 0), event.getClick());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
                 assertEquals(ItemStack.AIR, inventory.getItemStack(1));
             });
@@ -75,9 +75,7 @@ public class HeldClickIntegrationTest {
         }
         // Swap offhand
         {
-            listener.followup(event -> {
-                assertEquals(new Click.Info.HotbarSwap(3, 45), event.getClick()); /* Vanilla offhand slot is 40, Minestom is 45 */
-            });
+            listener.followup(event -> assertEquals(new Click.OffhandSwap(3), event.getClick()));
             heldClick(player, 3, 40);
             assertEquals(ItemStack.AIR, inventory.getItemStack(3));
             assertEquals(ItemStack.of(Material.EGG), player.getItemInOffHand());
@@ -109,7 +107,7 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(inventory, event.getInventory());
-                assertEquals(new Click.Info.HotbarSwap(0, 0), event.getClick());
+                assertEquals(new Click.HotbarSwap(0, 0), event.getClick());
                 assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             });
             heldClickOpenInventory(player, 0, 0);
@@ -120,7 +118,7 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(inventory, event.getInventory());
-                assertEquals(new Click.Info.HotbarSwap(1, 0), event.getClick());
+                assertEquals(new Click.HotbarSwap(0, 1), event.getClick());
                 assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             });
             heldClickOpenInventory(player, 1, 0);
@@ -132,7 +130,7 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(inventory, event.getInventory());
-                assertEquals(new Click.Info.HotbarSwap(2, 0), event.getClick());
+                assertEquals(new Click.HotbarSwap(0, 2), event.getClick());
                 assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             });
             heldClickOpenInventory(player, 2, 0);
@@ -144,7 +142,7 @@ public class HeldClickIntegrationTest {
         {
             listener.followup(event -> {
                 assertEquals(inventory, event.getInventory());
-                assertEquals(new Click.Info.HotbarSwap(3, 45), event.getClick());
+                assertEquals(new Click.OffhandSwap(3), event.getClick());
             });
             heldClickOpenInventory(player, 3, 40);
             assertEquals(ItemStack.AIR, inventory.getItemStack(3));
