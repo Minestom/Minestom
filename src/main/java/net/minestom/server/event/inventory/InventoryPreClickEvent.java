@@ -15,13 +15,13 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private final AbstractInventory inventory;
     private final Player player;
-    private Click.Info click;
+    private Click click;
 
     private boolean cancelled;
 
     public InventoryPreClickEvent(@NotNull AbstractInventory inventory,
                                   @NotNull Player player,
-                                  @NotNull Click.Info click) {
+                                  @NotNull Click click) {
         this.inventory = inventory;
         this.player = player;
         this.click = click;
@@ -38,16 +38,16 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     /**
-     * Gets the information about the player's click.
+     * Gets the player's click.
      */
-    public @NotNull Click.Info getClick() {
+    public @NotNull Click getClick() {
         return click;
     }
 
     /**
-     * Sets the information about the player's click.
+     * Sets the player's click.
      */
-    public void setClick(@NotNull Click.Info click) {
+    public void setClick(@NotNull Click click) {
         this.click = click;
     }
 
