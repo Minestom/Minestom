@@ -1,203 +1,188 @@
 package net.minestom.server.inventory.click;
 
-import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.function.Function;
+import java.util.function.IntFunction;
 
-public final class Click {
+/**
+ * A tagged union representing possible clicks from the client.
+ */
+public sealed interface Click {
 
     /**
-     * A tagged union representing possible clicks from the client.
-     *
-     * See {@link PlayerInventoryUtils#remapPlayerInventorySlot(int, Integer)} for information on what the slot IDs
-     * mean.
+     * Gets the slot of this click. -999 indicates the click either drops the cursor item in some way (implements
+     * {@link DropCursor}) or is a drag click with multiple slots (implements {@link Drag}).
      */
-    public sealed interface Info {
+    default int slot() {
+        return -999;
+    }
 
-        record Left(int slot) implements Info {
-        }
+    /**
+     * Represents
+     */
+    sealed interface DropCursor extends Click {
+    }
 
-        record Right(int slot) implements Info {
-        }
+    /**
+     * Represents a drag click in an inventory.
+     */
+    sealed interface Drag extends Click {
 
-        record Middle(int slot) implements Info {
-            // Creative only
-        }
-
-        record LeftShift(int slot) implements Info {
-        }
-
-        record RightShift(int slot) implements Info {
-        }
-
-        record Double(int slot) implements Info {
-        }
-
-        record LeftDrag(List<Integer> slots) implements Info {
-            public LeftDrag {
-                slots = List.copyOf(slots);
-            }
-        }
-
-        record RightDrag(List<Integer> slots) implements Info {
-            public RightDrag {
-                slots = List.copyOf(slots);
-            }
-        }
-
-        record MiddleDrag(List<Integer> slots) implements Info {
-            // Creative only
-            public MiddleDrag {
-                slots = List.copyOf(slots);
-            }
-        }
-
-        record LeftDropCursor() implements Info {
-        }
-
-        record RightDropCursor() implements Info {
-        }
-
-        record MiddleDropCursor() implements Info {
-        }
-
-        record DropSlot(int slot, boolean all) implements Info {
-        }
-
-        record HotbarSwap(int hotbarSlot, int clickedSlot) implements Info {
-        }
-
-        record OffhandSwap(int slot) implements Info {
-        }
+        /**
+         * Returns the list of slots. When the event inventory is the opened inventory, slots greater than its size
+         * indicate slots in the player inventory; subtract the size of the event inventory to get the player inventory
+         * slot.
+         */
+        @NotNull List<Integer> slots();
 
     }
 
+    record Left(int slot) implements Click {
+    }
 
-    /**
-     * Preprocesses click packets, turning them into {@link Info} instances for further processing.
-     */
-    public static final class Preprocessor {
-        private final Set<Integer> leftDrag = new LinkedHashSet<>();
-        private final Set<Integer> rightDrag = new LinkedHashSet<>();
-        private final Set<Integer> middleDrag = new LinkedHashSet<>();
+    record Right(int slot) implements Click {
+    }
 
-        public void clearCache() {
-            this.leftDrag.clear();
-            this.rightDrag.clear();
-            this.middleDrag.clear();
+    record Middle(int slot) implements Click {
+        // Creative only
+    }
+
+    record LeftShift(int slot) implements Click {
+    }
+
+    record RightShift(int slot) implements Click {
+    }
+
+    record Double(int slot) implements Click {
+    }
+
+    record LeftDrag(List<Integer> slots) implements Drag {
+        public LeftDrag {
+            slots = List.copyOf(slots);
+        }
+    }
+
+    record RightDrag(List<Integer> slots) implements Drag {
+        public RightDrag {
+            slots = List.copyOf(slots);
+        }
+    }
+
+    record MiddleDrag(List<Integer> slots) implements Drag {
+        // Creative only
+        public MiddleDrag {
+            slots = List.copyOf(slots);
+        }
+    }
+
+    record LeftDropCursor() implements DropCursor {
+    }
+
+    record RightDropCursor() implements DropCursor {
+    }
+
+    record MiddleDropCursor() implements DropCursor {
+    }
+
+    record DropSlot(int slot, boolean all) implements Click {
+    }
+
+    record HotbarSwap(int hotbarSlot, int slot) implements Click {
+    }
+
+    record OffhandSwap(int slot) implements Click {
+    }
+
+    static @NotNull Click.Window toWindow(@NotNull Click click, @Nullable Integer containerSize) {
+        return switch (click) {
+            // Everything with one dynamic slot
+            case Left(int slot) -> toWindowSingle(slot, containerSize, Left::new);
+            case Right(int slot) -> toWindowSingle(slot, containerSize, Right::new);
+            case Middle(int slot) -> toWindowSingle(slot, containerSize, Middle::new);
+            case LeftShift(int slot) -> toWindowSingle(slot, containerSize, LeftShift::new);
+            case RightShift(int slot) -> toWindowSingle(slot, containerSize, RightShift::new);
+            case Double(int slot) -> toWindowSingle(slot, containerSize, Double::new);
+            case Click.OffhandSwap(int slot) -> toWindowSingle(slot, containerSize, OffhandSwap::new);
+            case Click.DropSlot(int slot, boolean all) -> toWindowSingle(slot, containerSize, s -> new DropSlot(s, all));
+            case Click.HotbarSwap(int hotbarSlot, int slot) -> toWindowSingle(slot, containerSize, s -> new HotbarSwap(hotbarSlot, s));
+
+            // Everything with zero slots
+            case Click.LeftDropCursor(), RightDropCursor(), MiddleDropCursor() -> new Window(false, click);
+
+            // Everything with multiple slots
+            case Click.LeftDrag(List<Integer> slots) -> toWindowMultiple(slots, containerSize, LeftDrag::new);
+            case Click.RightDrag(List<Integer> slots) -> toWindowMultiple(slots, containerSize, RightDrag::new);
+            case Click.MiddleDrag(List<Integer> slots) -> toWindowMultiple(slots, containerSize, MiddleDrag::new);
+        };
+    }
+
+    private static @NotNull Click.Window toWindowSingle(int slot, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
+        if (containerSize == null) {
+            return new Window(false, constructor.apply(slot));
+        } else if (slot < containerSize) {
+            return new Window(true, constructor.apply(slot));
+        } else {
+            return new Window(false, constructor.apply(slot - containerSize));
+        }
+    }
+
+    private static @NotNull Click.Window toWindowMultiple(@NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
+        if (containerSize == null) {
+            return new Window(false, constructor.apply(slots));
         }
 
-        /**
-         * Processes the provided click packet, turning it into a {@link Info}.
-         * This will do simple verification of the packet before sending it to {@link #process(ClientClickWindowPacket.ClickType, int, byte)}.
-         *
-         * @param packet        the raw click packet
-         * @param isCreative    whether the player is in creative mode (used for ignoring some actions)
-         * @param containerSize the size of the open container, or null if the player inventory is open
-         * @return the information about the click, or nothing if there was no immediately usable information
-         */
-        public @Nullable Click.Info processClick(@NotNull ClientClickWindowPacket packet, boolean isCreative, @Nullable Integer containerSize) {
-            final byte button = packet.button();
-            final boolean requireCreative = switch (packet.clickType()) {
-                case CLONE -> packet.slot() != -999; // Permit middle click dropping
-                case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
-                default -> false;
-            };
-            if (requireCreative && !isCreative) return null;
-
-            final int slot = PlayerInventoryUtils.remapPlayerInventorySlot(packet.slot(), containerSize);
-            final int maxSize = containerSize != null ? containerSize + PlayerInventory.INNER_INVENTORY_SIZE : PlayerInventory.INVENTORY_SIZE;
-            final boolean valid = slot >= 0 && slot < maxSize;
-
-            if (valid) {
-                return process(packet.clickType(), slot, button);
-            } else {
-                return slot == -999 ? processInvalidSlot(packet.clickType(), button) : null;
+        for (int slot : slots) {
+            if (slot < containerSize) {
+                return new Window(true, constructor.apply(slots));
             }
         }
 
-        private @Nullable Click.Info processInvalidSlot(@NotNull ClientClickWindowPacket.ClickType type, byte button) {
-            return switch (type) {
-                case PICKUP -> {
-                    if (button == 0) yield new Info.LeftDropCursor();
-                    if (button == 1) yield new Info.RightDropCursor();
-                    yield null;
-                }
-                case CLONE -> {
-                    if (button == 2) yield new Info.MiddleDropCursor(); // Why Mojang, why?
-                    yield null;
-                }
-                case QUICK_CRAFT -> {
-                    // Trust me, a switch would not make this cleaner
+        return new Window(false, constructor.apply(slots.stream().map(slot -> slot - containerSize).toList()));
+    }
 
-                    if (button == 2) {
-                        var list = List.copyOf(leftDrag);
-                        leftDrag.clear();
-                        yield new Info.LeftDrag(list);
-                    } else if (button == 6) {
-                        var list = List.copyOf(rightDrag);
-                        rightDrag.clear();
-                        yield new Info.RightDrag(list);
-                    } else if (button == 10) {
-                        var list = List.copyOf(middleDrag);
-                        middleDrag.clear();
-                        yield new Info.MiddleDrag(list);
-                    }
+    static @NotNull Click fromWindow(@NotNull Click.Window window, @Nullable Integer containerSize) {
+        return switch (window.click()) {
+            // Everything with one dynamic slot
+            case Left(_) -> fromWindowSingle(window, containerSize, Left::new);
+            case Right(_) -> fromWindowSingle(window, containerSize, Right::new);
+            case Middle(_) -> fromWindowSingle(window, containerSize, Middle::new);
+            case LeftShift(_) -> fromWindowSingle(window, containerSize, LeftShift::new);
+            case RightShift(_) -> fromWindowSingle(window, containerSize, RightShift::new);
+            case Double(_) -> fromWindowSingle(window, containerSize, Double::new);
+            case Click.OffhandSwap(_) -> fromWindowSingle(window, containerSize, OffhandSwap::new);
+            case Click.DropSlot(_, boolean all) -> fromWindowSingle(window, containerSize, s -> new DropSlot(s, all));
+            case Click.HotbarSwap(int hotbarSlot, _) -> fromWindowSingle(window, containerSize, s -> new HotbarSwap(hotbarSlot, s));
 
-                    if (button == 0) leftDrag.clear();
-                    if (button == 4) rightDrag.clear();
-                    if (button == 8) middleDrag.clear();
+            // Everything with zero slots
+            case Click.LeftDropCursor(), RightDropCursor(), MiddleDropCursor() -> window.click();
 
-                    yield null;
-                }
-                default -> null;
-            };
-        }
+            // Everything with multiple slots
+            case Click.LeftDrag(List<Integer> slots) -> fromWindowMultiple(window, slots, containerSize, LeftDrag::new);
+            case Click.RightDrag(List<Integer> slots) -> fromWindowMultiple(window, slots, containerSize, RightDrag::new);
+            case Click.MiddleDrag(List<Integer> slots) -> fromWindowMultiple(window, slots, containerSize, MiddleDrag::new);
+        };
+    }
 
-        /**
-         * Processes a packet into click info.
-         *
-         * @param type          the type of the click
-         * @param slot          the clicked slot
-         * @param button        the sent button
-         * @return the information about the click, or nothing if there was no immediately usable information
-         */
-        private @Nullable Click.Info process(@NotNull ClientClickWindowPacket.ClickType type, int slot, byte button) {
-            return switch (type) {
-                case PICKUP -> switch (button) {
-                    case 0 -> new Info.Left(slot);
-                    case 1 -> new Info.Right(slot);
-                    default -> null;
-                };
-                case QUICK_MOVE -> button == 0 ? new Info.LeftShift(slot) : new Info.RightShift(slot);
-                case SWAP -> {
-                    if (button >= 0 && button < 9) {
-                        yield new Info.HotbarSwap(button, slot);
-                    } else if (button == 40) {
-                        yield new Info.OffhandSwap(slot);
-                    } else {
-                        yield null;
-                    }
-                }
-                case CLONE -> new Info.Middle(slot);
-                case THROW -> new Info.DropSlot(slot, button == 1);
-                case QUICK_CRAFT -> {
-                    switch (button) {
-                        case 1 -> leftDrag.add(slot);
-                        case 5 -> rightDrag.add(slot);
-                        case 9 -> middleDrag.add(slot);
-                    }
-                    yield null;
-                }
-                case PICKUP_ALL -> new Info.Double(slot);
-            };
-        }
+    private static @NotNull Click fromWindowSingle(@NotNull Click.Window window, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
+        return containerSize == null || window.inOpened() ? window.click()
+                : constructor.apply(window.click().slot() + containerSize);
+    }
+
+    private static @NotNull Click fromWindowMultiple(@NotNull Window window, @NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
+        return containerSize == null || window.inOpened() ? window.click()
+                : constructor.apply(slots.stream().map(slot -> slot + containerSize).toList());
+    }
+
+    /**
+     * Represents a click inside a window.
+     *
+     * @param inOpened whether the window is the player inventory (false) or the opened inventory (true).
+     * @param click the (contextualized) click
+     */
+    record Window(boolean inOpened, @NotNull Click click) {
     }
 
 }

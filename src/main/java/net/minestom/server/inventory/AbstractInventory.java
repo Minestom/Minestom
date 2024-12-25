@@ -288,30 +288,6 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     }
 
     @Override
-    public boolean handleClick(@NotNull Player player, Click.@NotNull Info info) {
-        // Reset the didCloseInventory field
-        // Wait for inventory conditions + events to possibly close the inventory
-        player.UNSAFE_changeDidCloseInventory(false);
-
-        // Call InventoryPreClickEvent
-        InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(this, player, info);
-        EventDispatcher.call(inventoryPreClickEvent);
-
-        info = inventoryPreClickEvent.getClick();
-
-        if (player.didCloseInventory()) {
-            // Cancel the click if the inventory has been closed by Player#closeInventory
-            player.UNSAFE_changeDidCloseInventory(false);
-            return false;
-        } else if (inventoryPreClickEvent.isCancelled()) {
-            // Cancel it if the event is cancelled and we haven't already done that
-            return false;
-        }
-
-        return InventoryClickHandler.super.handleClick(player, info);
-    }
-
-    @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
     }

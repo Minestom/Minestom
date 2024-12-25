@@ -2,6 +2,8 @@ package net.minestom.server.listener;
 
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
@@ -26,11 +28,31 @@ public class WindowListener {
         boolean isCreative = player.getGameMode() == GameMode.CREATIVE;
         @Nullable Integer size = playerInventory ? null : inventory.getSize();
 
-        Click.Info result = player.getClickPreprocessor().processClick(packet, isCreative, size);
+        Click click = player.getClickPreprocessor().processClick(packet, isCreative, size);
 
-        boolean successful = false;
-        if (result != null) {
-            successful = inventory.handleClick(player, result);
+        boolean successful = true;
+        if (click != null) {
+            // Reset the didCloseInventory field
+            // Wait for events to possibly close the inventory
+            player.UNSAFE_changeDidCloseInventory(false);
+
+            Click.Window window = Click.toWindow(click, size);
+            // Call InventoryPreClickEvent
+            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(window.inOpened() ? inventory : player.getInventory(), player, window.click());
+            EventDispatcher.call(inventoryPreClickEvent);
+
+            click = Click.fromWindow(new Click.Window(window.inOpened(), inventoryPreClickEvent.getClick()), size);
+
+            if (player.didCloseInventory()) {
+                // Cancel the click if the inventory has been closed by Player#closeInventory
+                player.UNSAFE_changeDidCloseInventory(false);
+                successful = false;
+            } else if (inventoryPreClickEvent.isCancelled()) {
+                // Cancel it if the event is cancelled and we haven't already done that
+                successful = false;
+            } else {
+                successful = inventory.handleClick(player, click);
+            }
         }
 
         // Prevent ghost item when the click is cancelled

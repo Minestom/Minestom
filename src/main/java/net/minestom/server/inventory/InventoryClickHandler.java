@@ -20,37 +20,37 @@ import java.util.List;
 public sealed interface InventoryClickHandler permits AbstractInventory {
 
     /**
-     * Parses click info. This delegates to each individual implementation method.
+     * Parses a click. This delegates to each individual implementation method.
      * @param player the player who clicked
-     * @param info the info about the click
+     * @param click the click that occurred
      * @return whether or not the click was a success
      */
-    default boolean handleClick(@NotNull Player player, @NotNull Click.Info info) {
+    default boolean handleClick(@NotNull Player player, @NotNull Click click) {
         // Maps a click back into the click handler interface.
         // This is so that we can maintain normal
-        return switch (info) {
-            case Click.Info.Left(int slot) -> leftClick(player, slot);
-            case Click.Info.Right(int slot) -> rightClick(player, slot);
-            case Click.Info.Middle(int slot) -> middleClick(player, slot);
+        return switch (click) {
+            case Click.Left(int slot) -> leftClick(player, slot);
+            case Click.Right(int slot) -> rightClick(player, slot);
+            case Click.Middle(int slot) -> middleClick(player, slot);
 
-            case Click.Info.LeftShift(int slot) -> shiftClick(player, slot, 0);
-            case Click.Info.RightShift(int slot) -> shiftClick(player, slot, 1);
+            case Click.LeftShift(int slot) -> shiftClick(player, slot, 0);
+            case Click.RightShift(int slot) -> shiftClick(player, slot, 1);
 
-            case Click.Info.Double(int slot) -> doubleClick(player, slot);
+            case Click.Double(int slot) -> doubleClick(player, slot);
 
-            case Click.Info.LeftDrag(List<Integer> slots) -> dragging(player, slots, 2);
-            case Click.Info.RightDrag(List<Integer> slots) -> dragging(player, slots,  6);
-            case Click.Info.MiddleDrag(List<Integer> slots) -> dragging(player, slots, 10);
+            case Click.LeftDrag(List<Integer> slots) -> dragging(player, slots, 2);
+            case Click.RightDrag(List<Integer> slots) -> dragging(player, slots,  6);
+            case Click.MiddleDrag(List<Integer> slots) -> dragging(player, slots, 10);
 
-            case Click.Info.LeftDropCursor() -> drop(player, true, -999);
-            case Click.Info.RightDropCursor() -> drop(player, false, -999);
-            case Click.Info.MiddleDropCursor() -> false; // Does nothing currently
+            case Click.LeftDropCursor() -> drop(player, true, -999);
+            case Click.RightDropCursor() -> drop(player, false, -999);
+            case Click.MiddleDropCursor() -> false; // Does nothing currently
 
-            case Click.Info.DropSlot(int slot, boolean all) -> drop(player, all, slot);
+            case Click.DropSlot(int slot, boolean all) -> drop(player, all, slot);
 
-            case Click.Info.HotbarSwap(int hotbarSlot, int clickedSlot) -> changeHeld(player, clickedSlot, hotbarSlot);
+            case Click.HotbarSwap(int hotbarSlot, int slot) -> changeHeld(player, slot, hotbarSlot);
 
-            case Click.Info.OffhandSwap(int slot) -> changeHeld(player, slot, PlayerInventoryUtils.OFFHAND_SLOT);
+            case Click.OffhandSwap(int slot) -> changeHeld(player, slot, PlayerInventoryUtils.OFFHAND_SLOT);
         };
     }
 
