@@ -18,6 +18,10 @@ public final class Cooldown {
         return this.duration;
     }
 
+    public long getLastUpdate() {
+        return this.lastUpdate;
+    }
+
     public void refreshLastUpdate(long lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
