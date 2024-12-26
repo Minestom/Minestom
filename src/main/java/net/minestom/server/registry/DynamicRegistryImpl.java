@@ -230,7 +230,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
         Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
+        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
             final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
             if (!(tag instanceof CompoundBinaryTag compound)) {
