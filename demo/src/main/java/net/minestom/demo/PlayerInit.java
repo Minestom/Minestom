@@ -8,6 +8,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
@@ -147,6 +148,8 @@ public class PlayerInit {
                     ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+
+                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
                 }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
