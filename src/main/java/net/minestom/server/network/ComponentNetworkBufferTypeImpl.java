@@ -5,10 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.format.*;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -148,6 +145,13 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             if (color instanceof NamedTextColor namedColor)
                 buffer.write(STRING_IO_UTF8, namedColor.toString());
             else buffer.write(STRING_IO_UTF8, color.asHexString());
+        }
+
+        final ShadowColor shadowColor = style.shadowColor();
+        if (shadowColor != null) {
+            buffer.write(BYTE, TAG_INT);
+            writeUtf(buffer, "shadow_color");
+            buffer.write(INT, shadowColor.value());
         }
 
         final Key font = style.font();
