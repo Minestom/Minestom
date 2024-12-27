@@ -132,8 +132,10 @@ final class CommandParserImpl implements CommandParser {
         int start = reader.cursor();
 
         if (reader.hasRemaining()) {
-            ArgumentResult<?> result = parseArgument(sender, argument, reader);
             SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
+            List<Node> next = node.next();
+            if (!next.isEmpty()) suggestionCallback = next.getFirst().argument().getSuggestionCallback();
+            ArgumentResult<?> result = parseArgument(sender, argument, reader);
             NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
             chain.append(nodeResult);
             if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
