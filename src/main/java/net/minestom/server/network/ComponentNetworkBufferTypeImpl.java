@@ -4,16 +4,23 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
+import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
@@ -251,7 +258,26 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
             buffer.write(BYTE, TAG_COMPOUND);
             writeUtf(buffer, "components");
-            //todo item components
+            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+            BinaryTagSerializer.Context context = impl(buffer).registries() == null ? BinaryTagSerializer.Context.EMPTY : new BinaryTagSerializer.ContextWithRegistries(impl(buffer).registries(), true);
+            for (var entry : value.dataComponents().entrySet()) {
+                // If it's a removed value
+                if (entry.getValue().equals(DataComponentValue.removed())) {
+                    buffer.write(BYTE, TAG_COMPOUND);
+                    writeUtf(buffer, "!" + entry.getKey().asString());
+                    buffer.write(BYTE, TAG_END);
+                } else if (entry.getValue() instanceof MinestomDataComponentValue minestomDataComponentValue && minestomDataComponentValue.component().isSerialized()) {
+                    // Otherwise, write the value
+                    try {
+                        nbtWriter.writeNamed(minestomDataComponentValue.component().key().asString(), ((DataComponent<Object>) minestomDataComponentValue.component())
+                                .write(context, minestomDataComponentValue.value()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                } else {
+                    throw new IllegalArgumentException("Tried to serialize an unknown data component type");
+                }
+            }
             buffer.write(BYTE, TAG_END);
 
             buffer.write(BYTE, TAG_END); // End contents tag

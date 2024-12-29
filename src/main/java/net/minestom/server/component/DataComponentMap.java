@@ -1,6 +1,7 @@
 package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -8,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -115,6 +117,18 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     default @NotNull DataComponentMap set(@NotNull DataComponent<Unit> component) {
         return set(component, Unit.INSTANCE);
     }
+
+    /**
+     * Iterates over all components in this data map, applying the specified consumer to each one.
+     * @param consumer The consumer to apply to each component
+     */
+    void forEach(@NotNull BiConsumer<DataComponent<?>, Object> consumer);
+
+    /**
+     * Iterates over all components in this data map, applying the specified consumer to each one. As this is a patch method, this can iterate over DataComponents that are {@link DataComponentValue#removed()}
+     * @param consumer The consumer to apply to each component
+     */
+    void patchForEach(@NotNull BiConsumer<DataComponent<?>, @Nullable Object> consumer);
 
     /**
      * Removes the component from the map (or patch).
