@@ -155,7 +155,7 @@ final class CommandParserImpl implements CommandParser {
                 // Add the default to the chain, and then carry on dealing with this node
             } else {
                 // Still being asked to parse yet there's nothing left, syntax error.
-                    return new NodeResult(
+                return new NodeResult(
                         node,
                         chain,
                         new ArgumentResult.SyntaxError<>("Not enough arguments","",-1),
