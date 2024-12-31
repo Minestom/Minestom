@@ -96,7 +96,7 @@ public class BlockUtils {
         if (handler != null) {
             // Extract explicitly defined tags and keep the rest server-side
             var builder = CompoundBinaryTag.builder();
-            for (Tag<?> tag : handler.getBlockEntityTags()) {
+            for (Tag<?> tag : handler.blockEntityTags()) {
                 final var value = tag.read(blockNbt);
                 if (value != null) {
                     // Tag is present and valid

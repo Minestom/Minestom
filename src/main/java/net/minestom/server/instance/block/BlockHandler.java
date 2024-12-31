@@ -60,7 +60,14 @@ public interface BlockHandler {
     default void tick(@NotNull Tick tick) {
     }
 
-    default boolean isTickable() {
+    /**
+     * Determines if we should call {@link #tick(Tick)}
+     *
+     * Warning: Changing this without setting the block can lead to undefined ticking behavior.
+     *
+     * @return true to allow {@link #tick(Tick)} to be called
+     */
+    default boolean tickable() {
         return false;
     }
 
@@ -70,11 +77,11 @@ public interface BlockHandler {
      * @return The list of tags from this block's block entity that should be sent to the player
      * @see <a href="https://minecraft.wiki/w/Block_entity">Block entity on the Minecraft wiki</a>
      */
-    default @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    default @NotNull Collection<Tag<?>> blockEntityTags() {
         return List.of();
     }
 
-    default byte getBlockEntityAction() {
+    default byte blockEntityAction() {
         return -1;
     }
 
@@ -85,221 +92,81 @@ public interface BlockHandler {
      *
      * @return the namespace id of this handler
      */
-    @NotNull NamespaceID getNamespaceId();
+    @NotNull NamespaceID namespaceId();
 
     /**
      * Represents an object forwarded to {@link #onPlace(Placement)}.
      */
-    sealed class Placement permits PlayerPlacement {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    sealed interface Placement permits PlacementImpl, PlayerPlacement {
+        @NotNull Block block();
 
-        @ApiStatus.Internal
-        public Placement(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-        }
+        @NotNull Instance instance();
 
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
+        @NotNull Point blockPosition();
     }
 
-    final class PlayerPlacement extends Placement {
-        private final Player player;
-        private final PlayerHand hand;
-        private final BlockFace blockFace;
-        private final float cursorX, cursorY, cursorZ;
+    sealed interface PlayerPlacement extends Placement permits PlayerPlacementImpl {
+        @NotNull Player player();
 
-        @ApiStatus.Internal
-        public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, PlayerHand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
-            super(block, instance, blockPosition);
-            this.player = player;
-            this.hand = hand;
-            this.blockFace = blockFace;
-            this.cursorX = cursorX;
-            this.cursorY = cursorY;
-            this.cursorZ = cursorZ;
-        }
+        @NotNull PlayerHand hand();
 
-        public @NotNull Player getPlayer() {
-            return player;
-        }
+        @NotNull BlockFace blockFace();
 
-        public @NotNull PlayerHand getHand() {
-            return hand;
-        }
+        float cursorX();
 
-        public @NotNull BlockFace getBlockFace() {
-            return blockFace;
-        }
+        float cursorY();
 
-        public float getCursorX() {
-            return cursorX;
-        }
-
-        public float getCursorY() {
-            return cursorY;
-        }
-
-        public float getCursorZ() {
-            return cursorZ;
-        }
+        float cursorZ();
     }
 
-    sealed class Destroy permits PlayerDestroy {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    /**
+     * Represents an object forwarded to {@link #onDestroy(Destroy)}.
+     */
+    sealed interface Destroy permits DestroyImpl, PlayerDestroy {
+        @NotNull Block block();
 
-        @ApiStatus.Internal
-        public Destroy(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-        }
+        @NotNull Instance instance();
 
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
+        @NotNull Point blockPosition();
     }
 
-    final class PlayerDestroy extends Destroy {
-        private final Player player;
-
-        @ApiStatus.Internal
-        public PlayerDestroy(Block block, Instance instance, Point blockPosition, Player player) {
-            super(block, instance, blockPosition);
-            this.player = player;
-        }
-
-        public @NotNull Player getPlayer() {
-            return player;
-        }
+    sealed interface PlayerDestroy extends Destroy permits PlayerDestroyImpl {
+        @NotNull Player player();
     }
 
-    final class Interaction {
-        private final Block block;
-        private final Instance instance;
-        private final BlockFace blockFace;
-        private final Point blockPosition;
-        private final Point cursorPosition;
-        private final Player player;
-        private final PlayerHand hand;
-
-        @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
-            this.block = block;
-            this.instance = instance;
-            this.blockFace = blockFace;
-            this.blockPosition = blockPosition;
-            this.cursorPosition = cursorPosition;
-            this.player = player;
-            this.hand = hand;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull BlockFace getBlockFace() {
-            return blockFace;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Point getCursorPosition() {
-            return cursorPosition;
-        }
-
-        public @NotNull Player getPlayer() {
-            return player;
-        }
-
-        public @NotNull PlayerHand getHand() {
-            return hand;
-        }
+    @ApiStatus.Internal
+    record PlacementImpl(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) implements Placement {
     }
 
-    final class Touch {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-        private final Entity touching;
-
-        @ApiStatus.Internal
-        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-            this.touching = touching;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Entity getTouching() {
-            return touching;
-        }
+    @ApiStatus.Internal
+    record PlayerPlacementImpl(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition, @NotNull Player player, @NotNull PlayerHand hand,
+                               @NotNull BlockFace blockFace,
+                               float cursorX, float cursorY, float cursorZ) implements PlayerPlacement {
     }
 
-    final class Tick {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    @ApiStatus.Internal
+    record DestroyImpl(@NotNull Block block, @NotNull Instance instance,
+                       @NotNull Point blockPosition) implements Destroy {
+    }
 
-        @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-        }
+    @ApiStatus.Internal
+    record PlayerDestroyImpl(@NotNull Block block, @NotNull Instance instance,
+                             @NotNull Point blockPosition, @NotNull Player player) implements PlayerDestroy {
+    }
 
-        public @NotNull Block getBlock() {
-            return block;
-        }
+    @ApiStatus.Internal
+    record Interaction(@NotNull Block block, @NotNull Instance instance, @NotNull BlockFace blockFace,
+                       @NotNull Point blockPosition, @NotNull Point cursorPosition, @NotNull Player player,
+                       @NotNull PlayerHand hand) {
+    }
 
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
+    @ApiStatus.Internal
+    record Touch(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
+                 @NotNull Entity touching) {
+    }
 
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
+    @ApiStatus.Internal
+    record Tick(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) {
     }
 
     /**
@@ -307,22 +174,16 @@ public interface BlockHandler {
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
     @ApiStatus.Internal
-    final class Dummy implements BlockHandler {
+    record Dummy(NamespaceID namespaceId) implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
         public static @NotNull BlockHandler get(@NotNull String namespace) {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespace;
-
         private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+            this(NamespaceID.from(name));
         }
 
-        @Override
-        public @NotNull NamespaceID getNamespaceId() {
-            return namespace;
-        }
     }
 }

@@ -164,14 +164,14 @@ public class InstanceContainer extends Instance {
             // Change id based on neighbors
             final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
             if (placement != null && blockPlacementRule != null && doBlockUpdates) {
-                BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
+                final BlockPlacementRule.PlacementState rulePlacement;
+                if (placement instanceof BlockHandler.PlayerPlacement playerPlacement) {
                     rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
+                            this, block, playerPlacement.blockFace(), blockPosition,
+                            new Vec(playerPlacement.cursorX(), playerPlacement.cursorY(), playerPlacement.cursorZ()),
+                            playerPlacement.player().getPosition(),
+                            playerPlacement.player().getItemInHand(playerPlacement.hand()),
+                            playerPlacement.player().isSneaking()
                     );
                 } else {
                     rulePlacement = new BlockPlacementRule.PlacementState(
@@ -207,11 +207,11 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        final Point blockPosition = placement.getBlockPosition();
+        final Point blockPosition = placement.blockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
         UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null, doBlockUpdates, 0);
+                placement.block(), placement, null, doBlockUpdates, 0);
         return true;
     }
 
@@ -238,7 +238,7 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+                    new BlockHandler.PlayerDestroyImpl(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),

@@ -7,10 +7,7 @@ import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.*;
 import net.minestom.server.collision.*;
-import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
@@ -31,6 +28,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -604,18 +602,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void touchTick() {
         if (!hasPhysics) return;
-
         // TODO do not call every tick (it is pretty expensive)
         final Pos position = this.position;
         final BoundingBox boundingBox = this.boundingBox;
         ChunkCache cache = new ChunkCache(instance, currentChunk);
 
-        final int minX = (int) Math.floor(boundingBox.minX() + position.x());
-        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
-        final int minY = (int) Math.floor(boundingBox.minY() + position.y());
-        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y());
-        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z());
-        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z());
+        // TODO Replace with the already computed physics result, if possible.
+        final int minX = (int) Math.floor(boundingBox.minX() + position.x() - 1);
+        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x() + 1);
+        final int minY = (int) Math.floor(boundingBox.minY() + position.y() - 1);
+        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y() + 1);
+        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z() - 1);
+        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z() + 1);
 
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
@@ -625,10 +623,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     final BlockHandler handler = block.handler();
                     if (handler != null) {
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
-                        Vec blockPos = new Vec(x, y, z);
-                        Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
-                            handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
+                        final Vec blockPos = new Vec(x, y, z);
+                        final Point blockEntityVector = blockPos.sub(position).normalize().mul(0.01);
+                        final Point modifiedPlayerPosition = position.sub(blockPos).add(blockEntityVector);
+                        if (block.registry().collisionShape().intersectBox(modifiedPlayerPosition, boundingBox)) {
+                            handler.onTouch(new BlockHandler.Touch(block, instance, blockPos, this));
                         }
                     }
                 }

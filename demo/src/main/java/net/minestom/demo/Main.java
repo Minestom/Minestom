@@ -38,7 +38,7 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
-        blockManager.registerHandler(TestBlockHandler.INSTANCE.getNamespaceId(), () -> TestBlockHandler.INSTANCE);
+        blockManager.registerHandler(TestBlockHandler.INSTANCE.namespaceId(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
@@ -79,6 +79,7 @@ public class Main {
         commandManager.register(new WorldBorderCommand());
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
+        commandManager.register(new FillCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

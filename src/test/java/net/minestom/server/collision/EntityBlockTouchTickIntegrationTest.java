@@ -1,7 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -10,10 +8,14 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -29,11 +31,11 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
+            public @NotNull NamespaceID namespaceId() {
                 return NamespaceID.from("minestom:test");
             }
         };
@@ -68,11 +70,11 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
+            public @NotNull NamespaceID namespaceId() {
                 return NamespaceID.from("minestom:test");
             }
         };
@@ -108,11 +110,11 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
+            public @NotNull NamespaceID namespaceId() {
                 return NamespaceID.from("minestom:test");
             }
         };
@@ -156,11 +158,11 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
+            public @NotNull NamespaceID namespaceId() {
                 return NamespaceID.from("minestom:test");
             }
         };
@@ -192,6 +194,51 @@ public class EntityBlockTouchTickIntegrationTest {
                 new Vec(-1000, 42, -1001),
                 new Vec(-1000, 42, -1000)
         ), positions);
+
+        assertEquals(instance, entity.getInstance());
+    }
+
+    @Test
+    public void entityPhysicsCheckTouchTickAllSides(Env env) {
+        var instance = env.createFlatInstance();
+
+        ArrayList<Point> positions = new ArrayList<>();
+        var handler = new BlockHandler() {
+            @Override
+            public void onTouch(@NotNull Touch touch) {
+                assertTrue(positions.add(touch.blockPosition()));
+            }
+
+            @Override
+            public @NotNull NamespaceID namespaceId() {
+                return NamespaceID.from("minestom:test");
+            }
+        };
+
+        var blockPos = new Pos(0.5, 42, 0.5);
+        instance.setBlock(blockPos, Block.STONE.withHandler(handler));
+
+        var entity = new Entity(EntityType.ZOMBIE);
+
+        var entityPos = Set.of(
+                blockPos.withX(blockPos.x() - 0.5),
+                blockPos.withX(blockPos.x() + 0.5),
+                blockPos.withY(blockPos.y() - 0.5),
+                blockPos.withY(blockPos.y() + 0.5),
+                blockPos.withZ(blockPos.z() - 0.5),
+                blockPos.withZ(blockPos.z() + 0.5)
+        );
+
+        entity.setInstance(instance, blockPos.add(0, 5, 0)).join();
+
+        entity.tick(0);
+
+        entityPos.forEach(pos -> {
+            entity.teleport(pos).join();
+            entity.tick(0);
+        });
+
+        assertEquals(6, positions.size());
 
         assertEquals(instance, entity.getInstance());
     }

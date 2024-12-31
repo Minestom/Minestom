@@ -19,7 +19,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class CampfireHandler implements BlockHandler {
+/**
+ * Example campfire handler.
+ */
+public record CampfireHandler(NamespaceID namespaceId) implements BlockHandler {
+
+    public CampfireHandler() {
+        this(NamespaceID.from("minestom:test2"));
+    }
+
 
     public static final Tag<List<ItemStack>> ITEMS = Tag.View(new TagSerializer<>() {
         private final Tag<BinaryTag> internal = Tag.NBT("Items");
@@ -60,12 +68,7 @@ public class CampfireHandler implements BlockHandler {
     });
 
     @Override
-    public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    public @NotNull Collection<Tag<?>> blockEntityTags() {
         return List.of(ITEMS);
-    }
-
-    @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minestom:test");
     }
 }

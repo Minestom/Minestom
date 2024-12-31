@@ -70,7 +70,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
+    public void setBlock(int x, int y, int z, @NotNull final Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
@@ -106,7 +106,7 @@ public class DynamicChunk extends Chunk {
             lastCachedBlock = this.entries.remove(index);
         }
         // Block tick
-        if (handler != null && handler.isTickable()) {
+        if (handler != null && handler.tickable()) {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
@@ -117,15 +117,13 @@ public class DynamicChunk extends Chunk {
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.DestroyImpl(lastCachedBlock, instance, blockPosition)));
         }
         if (handler != null) {
             // New placement
-
             var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.PlacementImpl(block, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
