@@ -10,16 +10,15 @@ import net.minestom.server.network.player.GameProfile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.EnumSet;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.UnaryOperator;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record PlayerInfoUpdatePacket(
         @NotNull EnumSet<@NotNull Action> actions,
         @NotNull List<@NotNull Entry> entries
-) implements ServerPacket.Play {
+) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ENTRIES = 1024;
 
     public PlayerInfoUpdatePacket(@NotNull Action action, @NotNull Entry entry) {
@@ -45,6 +44,33 @@ public record PlayerInfoUpdatePacket(
             return new PlayerInfoUpdatePacket(actions, entries);
         }
     };
+
+    @Override
+    public @NotNull Collection<Component> components() {
+        final List<Component> components = new ArrayList<>();
+        for (final Entry entry : entries) {
+            if (entry.displayName() == null) continue;
+            components.add(entry.displayName());
+        }
+        return components;
+    }
+
+    @Override
+    public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
+        final List<Entry> newEntries = new ArrayList<>();
+        for (final Entry entry : entries) {
+            final Component displayName = entry.displayName();
+            if (displayName != null) {
+                newEntries.add(new Entry(entry.uuid, entry.username,
+                        entry.properties, entry.listed, entry.latency,
+                        entry.gameMode, operator.apply(displayName),
+                        entry.chatSession, entry.listOrder));
+            } else {
+                newEntries.add(entry);
+            }
+        }
+        return new PlayerInfoUpdatePacket(actions, newEntries);
+    }
 
     public record Entry(UUID uuid, String username, List<Property> properties,
                         boolean listed, int latency, GameMode gameMode,
