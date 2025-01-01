@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.property.Property;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
@@ -39,6 +40,19 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      */
     @Contract(pure = true)
     @NotNull Block withProperty(@NotNull String property, @NotNull String value);
+
+    /**
+     * Creates a new block with the the property {@code property} sets to {@code value}.
+     *
+     * @param property the property name
+     * @param value    the property value
+     * @return a new block with its property changed
+     * @throws IllegalArgumentException if the property or value are invalid
+     */
+    @Contract(pure = true)
+    default <T> @NotNull Block withProperty(@NotNull Property<T> property, @NotNull T value) {
+        return withProperty(property.id(), property.of(value));
+    }
 
     /**
      * Changes multiple properties at once.
