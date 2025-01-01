@@ -44,7 +44,9 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.
      *
-     * @param property the property name
+     * Useful Helper API
+     *
+     * @param property the property
      * @param value    the property value
      * @return a new block with its property changed
      * @throws IllegalArgumentException if the property or value are invalid
