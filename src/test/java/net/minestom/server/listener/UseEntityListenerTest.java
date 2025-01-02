@@ -71,6 +71,24 @@ public class UseEntityListenerTest {
     }
 
     @Test
+    public void testInteractionConsideringHitboxAndEyePosition() {
+        player.getAttribute(Attribute.ENTITY_INTERACTION_RANGE).setBaseValue(1.5);
+
+        targetEntity.teleport(new Pos(1.6, 0, 0)).join();
+
+        ClientInteractEntityPacket packet = new ClientInteractEntityPacket(
+                targetEntity.getEntityId(),
+                new ClientInteractEntityPacket.InteractAt(0, 0, 0, PlayerHand.MAIN),
+                false
+        );
+
+        eventWasCalled = false;
+        UseEntityListener.useEntityListener(packet, player);
+        assertTrue(eventWasCalled, "Expected PlayerEntityInteractEvent to be called considering hitbox size and eye position");
+    }
+
+
+    @Test
     public void testInteractionConsideringEyeHeight() {
         player.teleport(new Pos(0, 1.6, 0)).join();
         targetEntity.teleport(new Pos(0, 1.6, 2)).join();
