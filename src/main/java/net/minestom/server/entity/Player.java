@@ -67,6 +67,8 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
 import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
 import net.minestom.server.network.packet.server.play.*;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
@@ -788,8 +790,21 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
-                sendPacket(chunk.getFullDataPacket());
-                EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
+                PlayerChunkLoadEvent chunkLoadEvent = new PlayerChunkLoadEvent(this, chunkX, chunkZ);
+                EventDispatcher.call(chunkLoadEvent);
+
+                final ChunkData eventChunkData = chunkLoadEvent.chunkData();
+                final LightData eventLightData = chunkLoadEvent.lightData();
+
+                // event didn't override chunk or light data, send packet as normal
+                if (eventChunkData == null && eventLightData == null) sendPacket(chunk.getFullDataPacket());
+                else {
+                    // use chunk and/or light data from event
+                    final ChunkData chunkData = Objects.requireNonNullElseGet(eventChunkData, chunk::getChunkData);
+                    final LightData lightData = Objects.requireNonNullElseGet(eventLightData, chunk::getLightData);
+
+                    sendPacket(new ChunkDataPacket(chunkX, chunkZ, chunkData, lightData));
+                }
 
                 pendingChunkCount -= 1f;
                 batchSize += 1;
