@@ -26,6 +26,7 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -70,7 +71,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull final Block block,
+    public void setBlock(int x, int y, int z, @NotNull Block block,
                          @Nullable BlockHandler.Placement placement,
                          @Nullable BlockHandler.Destroy destroy) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
@@ -113,15 +114,15 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
+            var absoluteBlockPosition = CoordConversion.chunkBlockToRegion(x, y, z, getChunkX(), getChunkZ());
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.DestroyImpl(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.DestroyImpl(lastCachedBlock, instance, absoluteBlockPosition)));
         }
         if (handler != null) {
             // New placement
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
+            var absoluteBlockPosition = CoordConversion.chunkBlockToRegion(x, y, z, getChunkX(), getChunkZ());
             handler.onPlace(Objects.requireNonNullElseGet(placement,
                     () -> new BlockHandler.PlacementImpl(block, instance, absoluteBlockPosition)));
         }

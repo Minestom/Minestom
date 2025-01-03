@@ -39,6 +39,10 @@ public final class CoordConversion {
         return ((coordinate - 1) | 15) + 1;
     }
 
+    public static @NotNull Point chunkBlockToRegion(int x, int y, int z, int chunkX, int chunkZ) {
+        return new Vec(x + chunkToRegion(chunkX), y, z + chunkToRegion(chunkZ));
+    }
+
     // CHUNK INDEX
 
     public static long chunkIndex(int chunkX, int chunkZ) {
@@ -89,9 +93,9 @@ public final class CoordConversion {
     }
 
     public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
-        final int x = chunkBlockIndexGetX(index) + 16 * chunkX;
+        final int x = chunkBlockIndexGetX(index) + chunkToRegion(chunkX);
         final int y = chunkBlockIndexGetY(index);
-        final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
+        final int z = chunkBlockIndexGetZ(index) + chunkToRegion(chunkZ);;
         return new Vec(x, y, z);
     }
 }
