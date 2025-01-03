@@ -110,7 +110,7 @@ public class TestInstabreakCommand extends Command {
 
         addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
             Player player = (Player) sender;
-            areaBatch.apply(player.getInstance(), player.getPosition(), null);
+            areaBatch.apply(player.getInstance(), player.getPosition());
         }, ArgumentType.Literal("placeArea"));
 
         addConditionalSyntax((sender, commandString) -> sender instanceof Player, (sender, context) -> {
@@ -124,7 +124,7 @@ public class TestInstabreakCommand extends Command {
             player.setGameMode(GameMode.SURVIVAL);
             player.getInventory().clear();
             giveItems(player);
-            areaBatch.apply(player.getInstance(), player.getPosition(), null);
+            areaBatch.apply(player.getInstance(), player.getPosition());
         });
     }
 

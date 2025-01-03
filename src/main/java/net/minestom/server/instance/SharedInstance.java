@@ -47,6 +47,16 @@ public class SharedInstance extends Instance {
     }
 
     @Override
+    public long getLastBlockChangeTime() {
+        return instanceContainer.getLastBlockChangeTime();
+    }
+
+    @Override
+    public void refreshLastBlockChangeTime() {
+        instanceContainer.refreshLastBlockChangeTime();
+    }
+
+    @Override
     public @NotNull CompletableFuture<Chunk> loadOptionalChunk(int chunkX, int chunkZ) {
         return instanceContainer.loadOptionalChunk(chunkX, chunkZ);
     }
