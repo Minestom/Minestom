@@ -1,15 +1,21 @@
 package net.minestom.server.thread;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.Tickable;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Consumer;
 import java.util.function.IntFunction;
+import java.util.stream.IntStream;
 
 /**
  * ThreadDispatcher can be used to dispatch updates (ticks) across a number of "partitions" (such as chunks) that
@@ -27,6 +33,7 @@ import java.util.function.IntFunction;
 public final class ThreadDispatcher<P> {
     private final ThreadProvider<P> provider;
     private final List<TickThread> threads;
+    private final PartitionType partitionType;
 
     // Partition -> dispatching context
     // Defines how computation is dispatched to the threads
@@ -40,12 +47,21 @@ public final class ThreadDispatcher<P> {
     private final MessagePassingQueue<DispatchUpdate<P>> updates = new MpscUnboundedArrayQueue<>(1024);
 
     private ThreadDispatcher(ThreadProvider<P> provider, int threadCount,
-                             @NotNull IntFunction<? extends TickThread> threadGenerator) {
+                             @NotNull IntFunction<? extends TickThread> threadGenerator,
+                             PartitionType partitionType) {
         this.provider = provider;
+        this.partitionType = partitionType;
         TickThread[] threads = new TickThread[threadCount];
         Arrays.setAll(threads, threadGenerator);
         this.threads = List.of(threads);
         this.threads.forEach(Thread::start);
+    }
+
+    public static <P> @NotNull ThreadDispatcher<P> serverProcess() {
+        PartitionType partitionType = ServerFlag.INSTANCE_BASED_DISPATCHER ? PartitionType.INSTANCE
+                : PartitionType.CHUNK;
+        ThreadProvider<P> threadProvider = ServerFlag.INSTANCE_BASED_DISPATCHER ? ThreadProvider.leastOccupiedThread() : ThreadProvider.counter();
+        return new ThreadDispatcher<>(threadProvider, ServerFlag.DISPATCHER_THREADS, TickThread::new, partitionType);
     }
 
     /**
@@ -57,7 +73,7 @@ public final class ThreadDispatcher<P> {
      * @param <P> the dispatcher partition type
      */
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider, int threadCount) {
-        return new ThreadDispatcher<>(provider, threadCount, TickThread::new);
+        return new ThreadDispatcher<>(provider, threadCount, TickThread::new, null);
     }
 
     /**
@@ -72,7 +88,7 @@ public final class ThreadDispatcher<P> {
      */
     public static <P> @NotNull ThreadDispatcher<P> of(@NotNull ThreadProvider<P> provider,
                                                       @NotNull IntFunction<String> nameGenerator, int threadCount) {
-        return new ThreadDispatcher<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)));
+        return new ThreadDispatcher<>(provider, threadCount, index -> new TickThread(nameGenerator.apply(index)), null);
     }
 
     /**
@@ -236,7 +252,9 @@ public final class ThreadDispatcher<P> {
         this.partitions.put(partition, partitionEntry);
         this.partitionUpdateQueue.add(partition);
         if (partition instanceof Tickable tickable) {
-            processUpdatedElement(tickable, partition);
+            if (!(tickable instanceof Instance)) { // Instances are ticked by server process
+                processUpdatedElement(tickable, partition);
+            }
         }
     }
 
@@ -276,6 +294,56 @@ public final class ThreadDispatcher<P> {
                 ((AcquirableImpl<?>) acquirableSource.acquirable()).updateThread(partitionEntry.thread());
             }
         }
+    }
+
+    /**
+     * Finds the thread with the least amount of partitions assigned.
+     * <p>
+     * Useful for thread providers.
+     *
+     * @return null Integer if there are no threads, otherwise Integer of the index of the thread with the least amount of partitions assigned.
+     */
+    public @Nullable Integer getIndexOfLeastOccupiedThread() {
+        return IntStream.range(0, threads.size())
+                .boxed()
+                .min(Comparator.comparingInt(i -> threads.get(i).entries().size()))
+                .orElse(null);
+    }
+
+    public @Nullable PartitionType getPartitionType() {
+        return this.partitionType;
+    }
+
+    @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
+    public ThreadDispatcher<Chunk> asChunk() {
+        return (ThreadDispatcher<Chunk>) this;
+    }
+
+    @ApiStatus.Internal
+    @SuppressWarnings("unchecked")
+    public ThreadDispatcher<Instance> asInstance() {
+        return (ThreadDispatcher<Instance>) this;
+    }
+
+    /**
+     * Accepts the Consumer if chunks are used as partitions.
+     * @param dispatcherConsumer consumer to accept
+     */
+    @ApiStatus.Internal
+    public void runChunkPartition(@NotNull Consumer<ThreadDispatcher<Chunk>> dispatcherConsumer) {
+        if (partitionType == PartitionType.CHUNK)
+            dispatcherConsumer.accept(asChunk());
+    }
+
+    /**
+     * Accepts the Consumer if instances are used as partitions.
+     * @param dispatcherConsumer consumer to accept
+     */
+    @ApiStatus.Internal
+    public void runInstancePartition(@NotNull Consumer<ThreadDispatcher<Instance>> dispatcherConsumer) {
+        if (partitionType == PartitionType.INSTANCE)
+            dispatcherConsumer.accept(asInstance());
     }
 
     /**
@@ -326,5 +394,10 @@ public final class ThreadDispatcher<P> {
 
         record ElementRemove<P>(@NotNull Tickable tickable) implements DispatchUpdate<P> {
         }
+    }
+
+    public enum PartitionType {
+        CHUNK,
+        INSTANCE
     }
 }

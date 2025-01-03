@@ -6,7 +6,6 @@ import net.minestom.server.command.CommandManager;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -114,7 +113,7 @@ public interface ServerProcess extends Registries, Snapshotable {
     /**
      * Dispatcher for tickable game objects.
      */
-    @NotNull ThreadDispatcher<Chunk> dispatcher();
+    @NotNull ThreadDispatcher<? extends Tickable> dispatcher();
 
     /**
      * Handles the server ticks.
