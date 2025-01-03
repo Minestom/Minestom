@@ -22,6 +22,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
     static final Object GLOBAL_CHILD_LOCK = new Object();
 
     private final Map<Class, Handle<T>> handleMap = new ConcurrentHashMap<>();
+    private final Map<Class<?>, CopyOnWriteArraySet<Class<?>>> recursiveSuperclasses = new ConcurrentHashMap<>();
     final Map<Class<? extends T>, ListenerEntry<T>> listenerMap = new ConcurrentHashMap<>();
     final Set<EventNodeImpl<T>> children = new CopyOnWriteArraySet<>();
 
@@ -292,8 +293,24 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                     aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
         });
+        invalidateRecursiveSuperclasses(eventClass);
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
+    }
+
+    private void invalidateRecursiveSuperclasses(@NotNull Class<?> eventClass) {
+        if (RecursiveEvent.class.isAssignableFrom(eventClass)) {
+            var handle = handleMap.get(eventClass);
+            if (handle != null) {
+                handle.invalidate();
+            }
+
+            if (recursiveSuperclasses.containsKey(eventClass)) {
+                for (var cls : recursiveSuperclasses.get(eventClass)) {
+                    invalidateRecursiveSuperclasses(cls);
+                }
+            }
+        }
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
@@ -311,6 +328,18 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             final Class<?> superclass = type.getSuperclass();
             if (superclass != null && RecursiveEvent.class.isAssignableFrom(superclass)) {
                 forTargetEvents(superclass, consumer);
+            }
+        }
+    }
+
+    private void initializeRecursiveSuperClasses(@NotNull Class<?> type, @Nullable Class<?> parent) {
+        if (RecursiveEvent.class.isAssignableFrom(type)) {
+            var superclass = type.getSuperclass();
+            if (superclass != null && RecursiveEvent.class.isAssignableFrom(superclass)) {
+                initializeRecursiveSuperClasses(superclass, type);
+            }
+            if (parent != null) {
+                recursiveSuperclasses.computeIfAbsent(type, t -> new CopyOnWriteArraySet<>()).add(parent);
             }
         }
     }
@@ -366,6 +395,7 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
             var node = (EventNodeImpl<E>) EventNodeImpl.this;
             // Standalone listeners
             List<Consumer<E>> listeners = new ArrayList<>();
+            initializeRecursiveSuperClasses(eventType, null);
             forTargetEvents(eventType, type -> {
                 final ListenerEntry<E> entry = node.listenerMap.get(type);
                 if (entry != null) {
