@@ -17,6 +17,7 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -291,6 +292,10 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static @NotNull DynamicRegistry<JukeboxSong> getJukeboxSongRegistry() {
         return serverProcess.jukeboxSong();
+    }
+
+    public static @NotNull DynamicRegistry<Instrument> getInstrumentRegistry() {
+        return serverProcess.instrument();
     }
 
     public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {

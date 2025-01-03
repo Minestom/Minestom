@@ -14,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 
 public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits JukeboxSongImpl {
 
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<JukeboxSong>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::jukeboxSong);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<JukeboxSong>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::jukeboxSong, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<JukeboxSong>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::jukeboxSong);
 
     static @NotNull JukeboxSong create(
