@@ -50,7 +50,8 @@ public interface BlockHandler {
     }
 
     /**
-     * Defines custom behaviour for entities touching this block.
+     * Defines custom behaviour for entities that touch this block.
+     *
      *
      * @param touch the contact details
      */
