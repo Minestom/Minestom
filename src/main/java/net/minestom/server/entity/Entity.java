@@ -28,7 +28,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
-import net.minestom.server.particle.Particle;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
@@ -106,7 +105,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -586,7 +584,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         boolean entityIsPlayer = this instanceof Player;
         boolean entityFlying = entityIsPlayer && ((Player) this).isFlying();
         final Block.Getter chunkCache = new ChunkCache(instance, currentChunk, Block.STONE);
-        PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
+        final PhysicsResult physicsResult = PhysicsUtils.simulateMovement(position, velocity.div(ServerFlag.SERVER_TICKS_PER_SECOND), boundingBox,
                 instance.getWorldBorder(), chunkCache, aerodynamics, hasNoGravity(), hasPhysics, onGround, entityFlying, previousPhysicsResult);
         this.previousPhysicsResult = physicsResult;
 
@@ -600,38 +598,26 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
     }
 
-    private void touchTick() {
-        if (!hasPhysics) return;
-        // TODO do not call every tick (it is pretty expensive)
-        final Pos position = this.position;
-        final BoundingBox boundingBox = this.boundingBox;
-        ChunkCache cache = new ChunkCache(instance, currentChunk);
+    /**
+     * @return false if {{@link #touchTick()} should be called}
+     */
+    protected boolean shouldSkipTouchTick() {
+        return !hasPhysics || previousPhysicsResult instanceof PhysicsResultCached;
+    }
 
-        // TODO Replace with the already computed physics result, if possible.
-        final int minX = (int) Math.floor(boundingBox.minX() + position.x() - 1);
-        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x() + 1);
-        final int minY = (int) Math.floor(boundingBox.minY() + position.y() - 1);
-        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y() + 1);
-        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z() - 1);
-        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z() + 1);
+    @ApiStatus.Internal
+    protected void touchTick() {
+        if (shouldSkipTouchTick()) return;
 
-        for (int y = minY; y <= maxY; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
-                    if (block == null) continue;
-                    final BlockHandler handler = block.handler();
-                    if (handler != null) {
-                        // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
-                        final Vec blockPos = new Vec(x, y, z);
-                        final Point blockEntityVector = blockPos.sub(position).normalize().mul(0.01);
-                        final Point modifiedPlayerPosition = position.sub(blockPos).add(blockEntityVector);
-                        if (block.registry().collisionShape().intersectBox(modifiedPlayerPosition, boundingBox)) {
-                            handler.onTouch(new BlockHandler.Touch(block, instance, blockPos, this));
-                        }
-                    }
-                }
-            }
+        // We can use the cached physics result to avoid recomputing the collision shape positions for entities.
+        final ChunkCache cache = new ChunkCache(instance, currentChunk);
+        for (@UnknownNullability Point shapePosition : previousPhysicsResult.collisionShapePositions()) {
+            if (shapePosition == null) continue;
+            final Block block = cache.getBlock(shapePosition.blockX(), shapePosition.blockY(), shapePosition.blockZ(), Block.Getter.Condition.CACHED);
+            if (block == null) continue;
+            final BlockHandler handler = block.handler();
+            if (handler == null) continue;
+            handler.onTouch(new BlockHandler.Touch(block, instance, shapePosition, this));
         }
     }
 

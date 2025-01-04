@@ -46,6 +46,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -85,6 +86,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -2344,5 +2346,43 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public @NotNull Acquirable<? extends Player> acquirable() {
         return (Acquirable<? extends Player>) super.acquirable();
+    }
+
+    /*
+     * Override because players dont have a XZ Velocity component which does not allow the physics engine to calculate walls.
+     * So instead we are brute forcing the position, it could be optimized slightly by using the bottom physics and excluding diagonal blocks.
+    */
+    @Override
+    protected void touchTick() {
+        if (shouldSkipTouchTick()) return;
+
+        final Pos position = getPosition();
+        final BoundingBox boundingBox = getBoundingBox();
+        final ChunkCache cache = new ChunkCache(instance, currentChunk);
+
+        final int minX = (int) Math.floor(boundingBox.minX() + position.x() - 1);
+        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x() + 1);
+        final int minY = (int) Math.floor(boundingBox.minY() + position.y() - 1);
+        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y() + 1);
+        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z() - 1);
+        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z() + 1);
+
+        for (int y = minY; y <= maxY; y++) {
+            for (int x = minX; x <= maxX; x++) {
+                for (int z = minZ; z <= maxZ; z++) {
+                    final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
+                    if (block == null) continue;
+                    final BlockHandler handler = block.handler();
+                    if (handler == null) continue;
+                    // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
+                    final Vec blockPos = new Vec(x, y, z);
+                    final Point blockEntityVector = blockPos.sub(position).normalize().mul(0.01);
+                    final Point modifiedPlayerPosition = position.sub(blockPos).add(blockEntityVector);
+                    if (!block.registry().collisionShape().intersectBox(modifiedPlayerPosition, boundingBox)) continue;
+
+                    handler.onTouch(new BlockHandler.Touch(block, instance, blockPos, this));
+                }
+            }
+        }
     }
 }
