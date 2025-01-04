@@ -50,7 +50,9 @@ public interface BlockHandler {
     }
 
     /**
-     * Defines custom behaviour for entities touching this block.
+     * Defines custom behaviour for entities that touch this block.
+     * <p>
+     * This method is not continuously called when the entity is not moving.
      *
      * @param touch the contact details
      */
@@ -60,8 +62,27 @@ public interface BlockHandler {
     default void tick(@NotNull Tick tick) {
     }
 
+    /**
+     * Use {@link #tickable()} instead as the signature is misleading.
+     * <p>
+     * This method is only called when the block is set.
+     *
+     * @return true if this block should be ticked
+     */
+    @Deprecated(forRemoval = true)
     default boolean isTickable() {
         return false;
+    }
+
+    /**
+     * Specifies if this block should be ticked, this is immutable after the block is set.
+     * <p>
+     * This method is only called during the block set and later to check immutability.
+     *
+     * @return true if this block should be ticked
+     */
+    default boolean tickable() {
+        return isTickable();
     }
 
     /**
@@ -102,62 +123,129 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
+        /**
+         * Use {@link #block()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        /**
+         * Use {@link #instance()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        /**
+         * Use {@link #blockPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
-    }
 
+        public @NotNull Block block() {
+            return block;
+        }
+
+        public @NotNull Instance instance() {
+            return instance;
+        }
+
+        public @NotNull Point blockPosition() {
+            return blockPosition;
+        }
+    }
+    /**
+     * Represents an object forwarded to {@link #onPlace(Placement)} called by a player.
+     */
     final class PlayerPlacement extends Placement {
         private final Player player;
         private final PlayerHand hand;
         private final BlockFace blockFace;
-        private final float cursorX, cursorY, cursorZ;
+        private final Point cursorPosition;
 
         @ApiStatus.Internal
         public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, PlayerHand hand, BlockFace blockFace, float cursorX, float cursorY, float cursorZ) {
+                               Player player, PlayerHand hand, BlockFace blockFace, Point cursorPosition) {
             super(block, instance, blockPosition);
             this.player = player;
             this.hand = hand;
             this.blockFace = blockFace;
-            this.cursorX = cursorX;
-            this.cursorY = cursorY;
-            this.cursorZ = cursorZ;
+            this.cursorPosition = cursorPosition;
         }
 
+        /**
+         * Use {@link #player()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Player getPlayer() {
             return player;
         }
 
+        /**
+         * Use {@link #hand()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull PlayerHand getHand() {
             return hand;
         }
 
+        /**
+         * Use {@link #blockFace()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull BlockFace getBlockFace() {
             return blockFace;
         }
 
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public float getCursorX() {
-            return cursorX;
+            return (float) cursorPosition.x();
         }
 
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public float getCursorY() {
-            return cursorY;
+            return (float) cursorPosition.y();
         }
 
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public float getCursorZ() {
-            return cursorZ;
+            return (float) cursorPosition.z();
+        }
+
+        public @NotNull Player player() {
+            return player;
+        }
+
+        public @NotNull PlayerHand hand() {
+            return hand;
+        }
+
+        public @NotNull BlockFace blockFace() {
+            return blockFace;
+        }
+
+        public @NotNull Point cursorPosition() {
+            return cursorPosition;
         }
     }
 
+    /**
+     * Represents an object forwarded to {@link #onDestroy(Destroy)}.
+     */
     sealed class Destroy permits PlayerDestroy {
         private final Block block;
         private final Instance instance;
@@ -170,19 +258,46 @@ public interface BlockHandler {
             this.blockPosition = blockPosition;
         }
 
+        /**
+         * Use {@link #block()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        /**
+         * Use {@link #instance()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        /**
+         * Use {@link #blockPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
+            return blockPosition;
+        }
+
+        public @NotNull Block block() {
+            return block;
+        }
+
+        public @NotNull Instance instance() {
+            return instance;
+        }
+
+        public @NotNull Point blockPosition() {
             return blockPosition;
         }
     }
 
+    /**
+     * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
+     */
     final class PlayerDestroy extends Destroy {
         private final Player player;
 
@@ -192,111 +307,161 @@ public interface BlockHandler {
             this.player = player;
         }
 
+        public @NotNull Player player() {
+            return player;
+        }
+
+        /**
+         * Use {@link #player()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Player getPlayer() {
             return player;
         }
     }
 
-    final class Interaction {
-        private final Block block;
-        private final Instance instance;
-        private final BlockFace blockFace;
-        private final Point blockPosition;
-        private final Point cursorPosition;
-        private final Player player;
-        private final PlayerHand hand;
-
+    /**
+     * Represents an object forwarded to {@link #onInteract(Interaction)}.
+     */
+    record Interaction(@NotNull Block block, @NotNull Instance instance, @NotNull BlockFace blockFace,
+                       @NotNull Point blockPosition, @NotNull Point cursorPosition,
+                       @NotNull Player player, @NotNull PlayerHand hand) {
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
-            this.block = block;
-            this.instance = instance;
-            this.blockFace = blockFace;
-            this.blockPosition = blockPosition;
-            this.cursorPosition = cursorPosition;
-            this.player = player;
-            this.hand = hand;
+        public Interaction {
+
         }
 
+        /**
+         * Use {@link #block()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        /**
+         * Use {@link #instance()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        /**
+         * Use {@link #blockFace()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull BlockFace getBlockFace() {
             return blockFace;
         }
 
+        /**
+         * Use {@link #blockPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getCursorPosition() {
             return cursorPosition;
         }
 
+        /**
+         * Use {@link #player()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Player getPlayer() {
             return player;
         }
 
+        /**
+         * Use {@link #hand()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull PlayerHand getHand() {
             return hand;
         }
     }
 
-    final class Touch {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-        private final Entity touching;
+    /**
+     * Represents an object forwarded to {@link #onTouch(Touch)}.
+     */
+    record Touch(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
+                 @NotNull Entity touching) {
 
         @ApiStatus.Internal
-        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-            this.touching = touching;
+        public Touch {
+
         }
 
+        /**
+         * Use {@link #block()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        /**
+         * Use {@link #instance()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        /**
+         * Use {@link #blockPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
+        /**
+         * Use {@link #touching()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Entity getTouching() {
             return touching;
         }
     }
 
-    final class Tick {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    /**
+     * Represents an object forwarded to {@link #tick(Tick)}.
+     */
+    record Tick(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) {
 
         @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
+        public Tick {
+
         }
 
+        /**
+         * Use {@link #block()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        /**
+         * Use {@link #instance()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        /**
+         * Use {@link #blockPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
@@ -307,17 +472,15 @@ public interface BlockHandler {
      * in order to do not lose the information while saving, and for runtime debugging purpose.
      */
     @ApiStatus.Internal
-    final class Dummy implements BlockHandler {
+    record Dummy(@NotNull NamespaceID namespace) implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
         public static @NotNull BlockHandler get(@NotNull String namespace) {
             return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
-        private final NamespaceID namespace;
-
-        private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+        private Dummy(@NotNull String name) {
+            this(NamespaceID.from(name));
         }
 
         @Override

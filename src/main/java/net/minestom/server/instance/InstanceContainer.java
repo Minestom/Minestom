@@ -168,11 +168,11 @@ public class InstanceContainer extends Instance {
                 BlockPlacementRule.PlacementState rulePlacement;
                 if (placement instanceof BlockHandler.PlayerPlacement pp) {
                     rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
+                            this, block, pp.blockFace(), blockPosition,
+                            pp.cursorPosition(),
+                            pp.player().getPosition(),
+                            pp.player().getItemInHand(pp.hand()),
+                            pp.player().isSneaking()
                     );
                 } else {
                     rulePlacement = new BlockPlacementRule.PlacementState(
@@ -208,11 +208,11 @@ public class InstanceContainer extends Instance {
 
     @Override
     public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        final Point blockPosition = placement.getBlockPosition();
+        final Point blockPosition = placement.blockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
         UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null, doBlockUpdates, 0);
+                placement.block(), placement, null, doBlockUpdates, 0);
         return true;
     }
 
