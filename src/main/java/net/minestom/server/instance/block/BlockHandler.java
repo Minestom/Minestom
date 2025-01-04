@@ -120,7 +120,9 @@ public interface BlockHandler {
             return blockPosition;
         }
     }
-
+    /**
+     * Represents an object forwarded to {@link #onPlace(Placement)} called by a player.
+     */
     final class PlayerPlacement extends Placement {
         private final Player player;
         private final PlayerHand hand;
@@ -164,6 +166,9 @@ public interface BlockHandler {
         }
     }
 
+    /**
+     * Represents an object forwarded to {@link #onDestroy(Destroy)}.
+     */
     sealed class Destroy permits PlayerDestroy {
         private final Block block;
         private final Instance instance;
@@ -189,6 +194,9 @@ public interface BlockHandler {
         }
     }
 
+    /**
+     * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
+     */
     final class PlayerDestroy extends Destroy {
         private final Player player;
 
@@ -203,106 +211,106 @@ public interface BlockHandler {
         }
     }
 
-    final class Interaction {
-        private final Block block;
-        private final Instance instance;
-        private final BlockFace blockFace;
-        private final Point blockPosition;
-        private final Point cursorPosition;
-        private final Player player;
-        private final PlayerHand hand;
-
+    /**
+     * Represents an object forwarded to {@link #onInteract(Interaction)}.
+     */
+    record Interaction(@NotNull Block block, @NotNull Instance instance, @NotNull BlockFace blockFace,
+                       @NotNull Point blockPosition, @NotNull Point cursorPosition,
+                       @NotNull Player player, @NotNull PlayerHand hand) {
         @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
-            this.block = block;
-            this.instance = instance;
-            this.blockFace = blockFace;
-            this.blockPosition = blockPosition;
-            this.cursorPosition = cursorPosition;
-            this.player = player;
-            this.hand = hand;
+        public Interaction {
+
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull BlockFace getBlockFace() {
             return blockFace;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Point getCursorPosition() {
             return cursorPosition;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Player getPlayer() {
             return player;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull PlayerHand getHand() {
             return hand;
         }
     }
 
-    final class Touch {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-        private final Entity touching;
+    /**
+     * Represents an object forwarded to {@link #onTouch(Touch)}.
+     */
+    record Touch(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
+                 @NotNull Entity touching) {
 
         @ApiStatus.Internal
-        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-            this.touching = touching;
+        public Touch {
+
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Entity getTouching() {
             return touching;
         }
     }
 
-    final class Tick {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    /**
+     * Represents an object forwarded to {@link #tick(Tick)}.
+     */
+    record Tick(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) {
 
         @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
+        public Tick {
+
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Block getBlock() {
             return block;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Instance getInstance() {
             return instance;
         }
 
+        @Deprecated(forRemoval = true)
         public @NotNull Point getBlockPosition() {
             return blockPosition;
         }
