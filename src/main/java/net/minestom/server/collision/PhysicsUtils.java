@@ -26,7 +26,7 @@ public final class PhysicsUtils {
      * @param entityOnGround whether the entity is on the ground
      * @param entityFlying whether the entity is flying
      * @param previousPhysicsResult the physics result from the previous simulation or null
-     * @return a {@link PhysicsResult  containing the resulting physics state of this simulation
+     * @return a {@link `PhysicsResult`} containing the resulting physics state of this simulation
      */
     public static @NotNull PhysicsResult simulateMovement(@NotNull Pos entityPosition, @NotNull Vec entityVelocityPerTick, @NotNull BoundingBox entityBoundingBox,
                                                               @NotNull WorldBorder worldBorder, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics, boolean entityNoGravity,
