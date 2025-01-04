@@ -72,7 +72,14 @@ final class BlockCollision {
                     && velocity.x() == 0 && velocity.z() == 0
                     && entityPosition.samePoint(lastPhysicsResult.newPosition())
                     && !lastBlockBoxes.isEmpty()) {
-                return lastPhysicsResult;
+                if (lastPhysicsResult.cached()) {
+                    return lastPhysicsResult;
+                } else {
+                    return new PhysicsResult(lastPhysicsResult.newPosition(), lastPhysicsResult.newVelocity(),
+                            lastPhysicsResult.isOnGround(), lastPhysicsResult.collisionX(), lastPhysicsResult.collisionY(),
+                            lastPhysicsResult.collisionZ(), lastPhysicsResult.originalDelta(), lastPhysicsResult.collisionPoints(),
+                            lastPhysicsResult.collisionShapes(), lastPhysicsResult.collisionShapePositions(), lastPhysicsResult.hasCollision(), lastPhysicsResult.res(), true);
+                }
             }
         }
         return null;
