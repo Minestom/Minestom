@@ -60,7 +60,7 @@ final class BlockCollision {
     private static PhysicsResult cachedPhysics(Vec velocity, Pos entityPosition,
                                                Block.Getter getter, PhysicsResult lastPhysicsResult) {
         if (lastPhysicsResult != null && lastPhysicsResult.collisionShapes()[1] instanceof ShapeImpl shape) {
-            var currentBlock = getter.getBlock(lastPhysicsResult.collisionPoints()[1].sub(0, Vec.EPSILON, 0), Block.Getter.Condition.TYPE);
+            var currentBlock = getter.getBlock(lastPhysicsResult.collisionShapePositions()[1], Block.Getter.Condition.TYPE);
             var lastBlockBoxes = shape.collisionBoundingBoxes();
             var currentBlockBoxes = ((ShapeImpl) currentBlock.registry().collisionShape()).collisionBoundingBoxes();
 
