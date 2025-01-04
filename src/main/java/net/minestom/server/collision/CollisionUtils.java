@@ -33,7 +33,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                                  @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
@@ -81,7 +81,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Entity entity, @NotNull Vec entityVelocity,
-                                              @Nullable PhysicsResult lastPhysicsResult) {
+                                                  @Nullable PhysicsResult lastPhysicsResult) {
         final Instance instance = entity.getInstance();
         assert instance != null;
         return handlePhysics(instance, entity.getChunk(),
@@ -100,9 +100,9 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult handlePhysics(@NotNull Instance instance, @Nullable Chunk chunk,
-                                              @NotNull BoundingBox boundingBox,
-                                              @NotNull Pos position, @NotNull Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                                  @NotNull BoundingBox boundingBox,
+                                                  @NotNull Pos position, @NotNull Vec velocity,
+                                                  @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
         final Block.Getter getter = new ChunkCache(instance, chunk != null ? chunk : instance.getChunkAt(position), Block.STONE);
         return handlePhysics(getter, boundingBox, position, velocity, lastPhysicsResult, singleCollision);
     }
@@ -118,9 +118,9 @@ public final class CollisionUtils {
      */
     @ApiStatus.Internal
     public static PhysicsResult handlePhysics(@NotNull Block.Getter blockGetter,
-                                              @NotNull BoundingBox boundingBox,
-                                              @NotNull Pos position, @NotNull Vec velocity,
-                                              @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
+                                                  @NotNull BoundingBox boundingBox,
+                                                  @NotNull Pos position, @NotNull Vec velocity,
+                                                  @Nullable PhysicsResult lastPhysicsResult, boolean singleCollision) {
         return BlockCollision.handlePhysics(boundingBox,
                 velocity, position,
                 blockGetter, lastPhysicsResult, singleCollision);
@@ -189,7 +189,7 @@ public final class CollisionUtils {
      * @return the result of physics simulation
      */
     public static PhysicsResult blocklessCollision(@NotNull Pos entityPosition, @NotNull Vec entityVelocity) {
-        return new PhysicsResult(entityPosition.add(entityVelocity), entityVelocity, false,
+        return new PhysicsResultImpl(entityPosition.add(entityVelocity), entityVelocity, false,
                 false, false, false, entityVelocity, new Point[3],
                 new Shape[3], new Point[3], false, SweepResult.NO_COLLISION);
     }

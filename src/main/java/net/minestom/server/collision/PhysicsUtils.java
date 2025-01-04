@@ -26,22 +26,26 @@ public final class PhysicsUtils {
      * @param entityOnGround whether the entity is on the ground
      * @param entityFlying whether the entity is flying
      * @param previousPhysicsResult the physics result from the previous simulation or null
-     * @return a {@link PhysicsResult} containing the resulting physics state of this simulation
+     * @return a {@link PhysicsResult  containing the resulting physics state of this simulation
      */
     public static @NotNull PhysicsResult simulateMovement(@NotNull Pos entityPosition, @NotNull Vec entityVelocityPerTick, @NotNull BoundingBox entityBoundingBox,
-                                                          @NotNull WorldBorder worldBorder, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics, boolean entityNoGravity,
-                                                          boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
+                                                              @NotNull WorldBorder worldBorder, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics, boolean entityNoGravity,
+                                                              boolean entityHasPhysics, boolean entityOnGround, boolean entityFlying, @Nullable PhysicsResult previousPhysicsResult) {
         final PhysicsResult physicsResult = entityHasPhysics ?
                 CollisionUtils.handlePhysics(blockGetter, entityBoundingBox, entityPosition, entityVelocityPerTick, previousPhysicsResult, false) :
                 CollisionUtils.blocklessCollision(entityPosition, entityVelocityPerTick);
 
-        Pos newPosition = physicsResult.newPosition();
-        Vec newVelocity = physicsResult.newVelocity();
 
-        Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, newPosition);
-        newVelocity = updateVelocity(entityPosition, newVelocity, blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
-        return new PhysicsResult(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
-                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.res());
+        final Pos positionWithinBorder = CollisionUtils.applyWorldBorder(worldBorder, entityPosition, physicsResult.newPosition());
+        final Vec newVelocity = updateVelocity(entityPosition, physicsResult.newVelocity(), blockGetter, aerodynamics, !positionWithinBorder.samePoint(entityPosition), entityFlying, entityOnGround, entityNoGravity);
+
+        // Don't create another object if its the same, so it stays cached.
+        if (newVelocity.samePoint(physicsResult.newVelocity()) && positionWithinBorder.samePoint(physicsResult.newPosition())) {
+            return physicsResult;
+        }
+
+        return new PhysicsResultImpl(positionWithinBorder, newVelocity, physicsResult.isOnGround(), physicsResult.collisionX(), physicsResult.collisionY(), physicsResult.collisionZ(),
+                physicsResult.originalDelta(), physicsResult.collisionPoints(), physicsResult.collisionShapes(), physicsResult.collisionShapePositions(), physicsResult.hasCollision(), physicsResult.sweepResult());
     }
 
     private static @NotNull Vec updateVelocity(@NotNull Pos entityPosition, @NotNull Vec currentVelocity, @NotNull Block.Getter blockGetter, @NotNull Aerodynamics aerodynamics,

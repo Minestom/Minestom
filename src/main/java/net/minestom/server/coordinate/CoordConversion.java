@@ -31,6 +31,10 @@ public final class CoordConversion {
         return chunkCoordinate & 0x1F;
     }
 
+    public static int chunkToGlobal(int chunkCoordinate) {
+        return chunkCoordinate << 4;
+    }
+
     public static int floorSection(int coordinate) {
         return coordinate - (coordinate & 0xF);
     }
@@ -40,7 +44,7 @@ public final class CoordConversion {
     }
 
     public static @NotNull Point chunkBlockToRegion(int x, int y, int z, int chunkX, int chunkZ) {
-        return new Vec(x + chunkToRegion(chunkX), y, z + chunkToRegion(chunkZ));
+        return new Vec(x + chunkToGlobal(chunkX), y, z + chunkToGlobal(chunkZ));
     }
 
     // CHUNK INDEX
@@ -93,9 +97,9 @@ public final class CoordConversion {
     }
 
     public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {
-        final int x = chunkBlockIndexGetX(index) + chunkToRegion(chunkX);
+        final int x = chunkBlockIndexGetX(index) + chunkToGlobal(chunkX);
         final int y = chunkBlockIndexGetY(index);
-        final int z = chunkBlockIndexGetZ(index) + chunkToRegion(chunkZ);;
+        final int z = chunkBlockIndexGetZ(index) + chunkToGlobal(chunkZ);;
         return new Vec(x, y, z);
     }
 }

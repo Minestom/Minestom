@@ -1,6 +1,5 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
@@ -12,8 +11,6 @@ import net.minestom.server.entity.metadata.other.SlimeMeta;
 import net.minestom.server.instance.block.Block;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
