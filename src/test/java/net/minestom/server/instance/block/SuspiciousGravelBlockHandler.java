@@ -22,12 +22,12 @@ public class SuspiciousGravelBlockHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
+    public @NotNull NamespaceID namespaceId() {
         return NamespaceID.from("minecraft:suspicious_gravel");
     }
 
     @Override
-    public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+    public @NotNull Collection<Tag<?>> blockEntityTags() {
         return hasTags ? List.of(LOOT_TABLE, ITEM) : List.of();
     }
 }

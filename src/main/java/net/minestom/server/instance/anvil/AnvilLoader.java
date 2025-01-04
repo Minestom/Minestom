@@ -440,7 +440,7 @@ public class AnvilLoader implements IChunkLoader {
                                     blockEntityTag.put(originalNBT);
                                 }
                                 if (handler != null) {
-                                    blockEntityTag.putString("id", handler.getNamespaceId().asString());
+                                    blockEntityTag.putString("id", handler.namespaceId().asString());
                                 }
                                 blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
                                 blockEntityTag.putInt("y", y);

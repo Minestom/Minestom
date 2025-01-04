@@ -53,7 +53,7 @@ public class InstanceBlockPacketIntegrationTest {
 
         BlockHandler signHandler = new BlockHandler() {
             @Override
-            public @NotNull Collection<Tag<?>> getBlockEntityTags() {
+            public @NotNull Collection<Tag<?>> blockEntityTags() {
                 return List.of(Tag.Byte("GlowingText"),
                         Tag.String("Color"),
                         Tag.String("Text1"),
@@ -63,7 +63,7 @@ public class InstanceBlockPacketIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
+            public @NotNull NamespaceID namespaceId() {
                 return NamespaceID.from("minecraft:sign");
             }
         };

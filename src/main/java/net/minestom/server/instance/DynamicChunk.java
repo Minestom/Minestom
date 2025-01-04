@@ -26,6 +26,7 @@ import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -106,26 +107,24 @@ public class DynamicChunk extends Chunk {
             lastCachedBlock = this.entries.remove(index);
         }
         // Block tick
-        if (handler != null && handler.isTickable()) {
+        if (handler != null && handler.tickable()) {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
+            var absoluteBlockPosition = CoordConversion.chunkBlockToRegion(x, y, z, getChunkX(), getChunkZ());
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.DestroyImpl(lastCachedBlock, instance, absoluteBlockPosition)));
         }
         if (handler != null) {
             // New placement
-
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
+            var absoluteBlockPosition = CoordConversion.chunkBlockToRegion(x, y, z, getChunkX(), getChunkZ());
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.PlacementImpl(block, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
