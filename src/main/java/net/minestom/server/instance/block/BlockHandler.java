@@ -61,6 +61,11 @@ public interface BlockHandler {
     default void tick(@NotNull Tick tick) {
     }
 
+    /**
+     * Warning: Do not change tickable during runtime.
+     *
+     * @return true if this block should be ticked
+     */
     default boolean isTickable() {
         return false;
     }
