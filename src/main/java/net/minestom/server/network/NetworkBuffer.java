@@ -45,6 +45,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
+    Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     @SuppressWarnings({"unchecked", "rawtypes"})
     Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
