@@ -4,10 +4,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.InstanceContainer;
+import net.minestom.server.instance.SuperSharedInstance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -254,9 +257,23 @@ final class EntityView {
                     final int id = it.nextInt();
                     final Player player = (Player) instance.getEntityById(id);
                     if (player != null) players.add(player);
+                    // viewer might be part of a SuperSharedInstance
+                    else if (instance instanceof InstanceContainer container) {
+                        attemptToLocateAndAddPlayer(container.getSuperSharedInstances(), players, id);
+                    }
                 }
             }
             return players.iterator();
+        }
+
+        private void attemptToLocateAndAddPlayer(List<SuperSharedInstance> superSharedInstances, List<Player> players, int id) {
+            for (SuperSharedInstance superSharedInstance : superSharedInstances) {
+                final Player p = (Player) superSharedInstance.getEntityById(id);
+                if (p != null) {
+                    players.add(p);
+                    return;
+                }
+            }
         }
 
         @Override

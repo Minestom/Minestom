@@ -827,10 +827,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void forEverySuperSharedInstance(Instance instance, Consumer<SuperSharedInstance> toRun) {
         if (instance instanceof InstanceContainer container) {
-            for (SharedInstance sharedInstance : container.getSharedInstances()) {
-                if (sharedInstance instanceof SuperSharedInstance superSharedInstance) {
-                    toRun.accept(superSharedInstance);
-                }
+            for (SuperSharedInstance superSharedInstance : container.getSuperSharedInstances()) {
+                toRun.accept(superSharedInstance);
             }
         }
     }
