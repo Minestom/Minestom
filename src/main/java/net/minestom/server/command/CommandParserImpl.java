@@ -216,7 +216,7 @@ final class CommandParserImpl implements CommandParser {
                     suggestionCallback
             );
             chain.suggestionCallback = suggestionCallback;
-            // prevent duplicates from being added (Fixes CommaneParseTest#singleCommandWithMultipleSyntax() failure)
+            // prevent duplicates from being added (Fixes CommandParseTest#singleCommandWithMultipleSyntax() failure)
             if (chain.getArgs().stream().noneMatch(arg -> arg.getId().equals(argument.getId()))) {
                 chain.append(nodeResult);
             }
