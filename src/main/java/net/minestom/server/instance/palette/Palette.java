@@ -115,6 +115,7 @@ public interface Palette {
                 if (bitsPerEntry == 0) {
                     // Single valued 0-0
                     final int value = buffer.read(VAR_INT);
+                    buffer.read(VAR_INT); // Skip size
                     return new PaletteSingle((byte) dimension, value);
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
