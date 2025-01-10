@@ -35,6 +35,7 @@ final class EntityView {
         this.entity = entity;
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
                 player -> {
+                    if (!player.getInstance().getEntityTracker().entities().contains(entity)) return;
                     // Add viewable
                     var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
                     var lock2 = lock1 == entity ? player : entity;
