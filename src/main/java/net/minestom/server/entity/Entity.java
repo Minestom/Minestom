@@ -1771,6 +1771,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         collidesWithEntities = !NO_ENTITY_COLLISION_ENTITIES.contains(entityType);
     }
 
+    @ApiStatus.Internal
+    public EntityTracker.Target<Entity> getTrackingTarget() {
+        return trackingTarget;
+    }
+
+    @ApiStatus.Internal
+    public EntityTracker.Update<Entity> getTrackingUpdate() {
+        return trackingUpdate;
+    }
+
     /**
      * Acquires this entity.
      *

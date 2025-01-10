@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -11,5 +12,10 @@ import java.util.UUID;
 public class SuperSharedInstance extends SharedInstance {
     public SuperSharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
         super(uniqueId, instanceContainer);
+        // register entities already inside of the instanceContainer
+        EntityTracker entityTracker = getEntityTracker();
+        for (Entity e : instanceContainer.getEntities()) {
+            entityTracker.register(e, e.getPosition(), e.getTrackingTarget(), e.getTrackingUpdate());
+        }
     }
 }
