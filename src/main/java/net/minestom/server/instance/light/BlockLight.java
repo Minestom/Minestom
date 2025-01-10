@@ -33,7 +33,7 @@ final class BlockLight implements Light {
         ShortArrayFIFOQueue lightSources = new ShortArrayFIFOQueue();
         // Apply section light
         blockPalette.getAllPresent((x, y, z, stateId) -> {
-            final Block block = Block.fromStateId((short) stateId);
+            final Block block = Block.fromStateId(stateId);
             assert block != null;
             final byte lightEmission = (byte) block.registry().lightEmission();
 
