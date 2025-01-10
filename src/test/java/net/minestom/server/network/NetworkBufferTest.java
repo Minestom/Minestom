@@ -11,6 +11,8 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -472,6 +474,62 @@ public class NetworkBufferTest {
         buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
 
         assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING)); // oom
+    }
+
+    @Test
+    public void oomStringUtf8Regression() {
+        var buffer = NetworkBuffer.resizableBuffer(100);
+        buffer.write(UNSIGNED_SHORT, 65535); // String length
+        buffer.write(RAW_BYTES, "Hello".getBytes(StandardCharsets.UTF_8)); // String data
+
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING)); // oom
+    }
+
+    @Test
+    public void testStringUtf8ModifiedWrite() throws IOException {
+        var stream = new java.io.ByteArrayOutputStream();
+        java.io.DataOutputStream out = new java.io.DataOutputStream(stream);
+        out.writeUTF("Hello");
+
+        assertBufferType(STRING_IO_UTF8, "Hello", stream.toByteArray());
+    }
+
+
+    @Test
+    public void testStringUtf8ModifiedRead() throws IOException {
+        var stream = new java.io.ByteArrayOutputStream();
+        java.io.DataOutputStream out = new java.io.DataOutputStream(stream);
+        out.writeUTF("Hello");
+        var buffer = NetworkBuffer.wrap(stream.toByteArray(), 0, stream.size());
+        assertEquals("Hello", buffer.read(STRING_IO_UTF8));
+    }
+
+    @Test
+    public void oomStringUtf8ModfiedRegression() throws IOException {
+        var buffer = NetworkBuffer.resizableBuffer(100);
+        buffer.write(UNSIGNED_SHORT, 65535); // String length
+        // Write the raw bytes that are invalid
+        buffer.write(RAW_BYTES, new byte[]{(byte) 0xC0, (byte) 0x80}); // Invalid UTF-8
+
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+        buffer.clear();
+
+        var stream = new java.io.ByteArrayOutputStream();
+        java.io.DataOutputStream out = new java.io.DataOutputStream(stream);
+        out.writeUTF("Hello");
+        var byteArray = stream.toByteArray();
+
+        // Mess with the length to 0
+        byteArray[0] = (byte) 0x00;
+        byteArray[1] = (byte) 0x00;
+
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
+
+        buffer.clear();
+        buffer.write(UNSIGNED_SHORT, 5);
+        buffer.write(RAW_BYTES, new byte[]{(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF}); // Invalid utf8
+
+        assertThrows(IllegalArgumentException.class, () -> buffer.read(STRING_IO_UTF8)); // oom
     }
 
     static <T> void assertBufferType(NetworkBuffer.@NotNull Type<T> type, @UnknownNullability T value, byte[] expected, @NotNull Action<T> action) {
