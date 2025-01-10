@@ -60,7 +60,7 @@ public class SuperSharedInstanceCommand extends Command {
                     });
                 }
                 case SPAWN_MOB -> {
-                    if (mob != null) {
+                    if (mob != null && !mob.isRemoved()) {
                         sender.sendMessage("There is already a mob! Run /supershared remove_mob");
                         return;
                     }
@@ -71,7 +71,7 @@ public class SuperSharedInstanceCommand extends Command {
                     });
                 }
                 case PUSH_MOB -> {
-                    if (mob == null) {
+                    if (mob == null || mob.isRemoved()) {
                         sender.sendMessage("There is no mob in the original container! Run /supershared spawn_mob");
                         return;
                     }
