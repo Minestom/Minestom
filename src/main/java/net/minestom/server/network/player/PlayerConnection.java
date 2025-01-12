@@ -141,9 +141,9 @@ public abstract class PlayerConnection {
      */
     public void disconnect() {
         this.online = false;
-        MinecraftServer.getConnectionManager().removePlayer(this);
-        final Player player = getPlayer();
+        final Player player = MinecraftServer.getConnectionManager().getPlayer(this);
         if (player != null) {
+            MinecraftServer.getConnectionManager().removePlayer(this);
             if (connectionState == ConnectionState.PLAY && !player.isRemoved())
                 player.scheduleNextTick(Entity::remove);
             else {
