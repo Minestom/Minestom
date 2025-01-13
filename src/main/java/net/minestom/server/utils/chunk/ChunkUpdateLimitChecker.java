@@ -12,6 +12,9 @@ public final class ChunkUpdateLimitChecker {
     private final long[] chunkHistory;
 
     public ChunkUpdateLimitChecker(int historySize) {
+        if (historySize <= 0) {
+            historySize = 0;
+        }
         this.historySize = historySize;
         this.chunkHistory = new long[historySize];
         this.clearHistory();
@@ -24,6 +27,9 @@ public final class ChunkUpdateLimitChecker {
      * @return {@code true} if it's a new chunk in the history
      */
     public boolean addToHistory(Chunk chunk) {
+        if (historySize <= 0) {
+            return true;
+        }
         final long index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         boolean result = true;
         final int lastIndex = historySize - 1;
