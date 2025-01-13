@@ -32,7 +32,12 @@ public class PlayerVehicleListener {
         /* The packet may have been received after already exiting the vehicle. */
         if (vehicle == null) return;
         if (!(vehicle.getEntityMeta() instanceof BoatMeta boat)) return;
-        boat.setLeftPaddleTurning(packet.leftPaddleTurning());
-        boat.setRightPaddleTurning(packet.rightPaddleTurning());
+        // Only send metadata packet if there are changes
+        if (boat.isLeftPaddleTurning() != packet.leftPaddleTurning()) {
+            boat.setLeftPaddleTurning(packet.leftPaddleTurning());
+        }
+        if (boat.isRightPaddleTurning() != packet.rightPaddleTurning()) {
+            boat.setRightPaddleTurning(packet.rightPaddleTurning());
+        }
     }
 }

@@ -36,6 +36,7 @@ public class ItemEntity extends Entity {
     private boolean pickable = true;
     private boolean mergeable = true;
     private float mergeRange = 1;
+    private boolean previousOnGround = false;
 
     private long spawnTime;
     private long pickupDelay;
@@ -92,6 +93,18 @@ public class ItemEntity extends Entity {
                         });
                     });
         }
+    }
+
+    @Override
+    public void movementTick() {
+        super.movementTick();
+
+        if (!previousOnGround && onGround) {
+            synchronizePosition();
+            sendPacketToViewers(getVelocityPacket());
+        }
+
+        previousOnGround = onGround;
     }
 
     @Override

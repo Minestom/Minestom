@@ -112,7 +112,7 @@ public final class LightCompute {
     }
 
     public static Block getBlock(Palette palette, int x, int y, int z) {
-        return Block.fromStateId((short) palette.get(x, y, z));
+        return Block.fromStateId(palette.get(x, y, z));
     }
 
     public static byte[] bake(byte[] content1, byte[] content2) {

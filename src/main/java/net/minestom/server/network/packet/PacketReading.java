@@ -159,7 +159,7 @@ public final class PacketReading {
         if (packetLength > maxPacketSize) {
             throw new DataFormatException("Packet too large: " + packetLength);
         }
-        // READ PAYLOAD https://wiki.vg/Protocol#Packet_format
+        // READ PAYLOAD https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Packet_format
         if (buffer.readableBytes() < packetLength) {
             // Can't read the full packet
             buffer.readIndex(beginMark);

@@ -96,7 +96,9 @@ public class EntityProjectile extends Entity {
         if (super.isRemoved()) return;
 
         final Pos posNow = getPosition();
-        if (isStuck(posBefore, posNow)) {
+        boolean isStuck = isStuck(posBefore, posNow);
+        if (isRemoved()) return;
+        if (isStuck) {
             if (super.onGround) {
                 return;
             }
@@ -153,6 +155,7 @@ public class EntityProjectile extends Entity {
             if (block.isSolid()) {
                 final ProjectileCollideWithBlockEvent event = new ProjectileCollideWithBlockEvent(this, pos, block);
                 EventDispatcher.call(event);
+                if (isRemoved()) return true;
                 if (!event.isCancelled()) {
                     teleport(pos);
                     return true;

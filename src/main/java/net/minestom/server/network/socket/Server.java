@@ -13,6 +13,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.net.*;
 import java.nio.channels.AsynchronousCloseException;
+import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
@@ -97,8 +98,8 @@ public final class Server {
             try {
                 // Read & process packets
                 connection.read(packetParser);
-            } catch (AsynchronousCloseException ignored) {
-                // We closed the socket during read, just exit.
+            } catch (ClosedChannelException ignored) {
+                break; // We closed the socket during read, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
                 break;
@@ -115,8 +116,8 @@ public final class Server {
         while (!stop) {
             try {
                 connection.flushSync();
-            } catch (AsynchronousCloseException ignored) {
-                // We closed the socket during write, just exit.
+            } catch (ClosedChannelException ignored) {
+                break; // We closed the socket during write, just exit.
             } catch (EOFException e) {
                 connection.disconnect();
                 break;
