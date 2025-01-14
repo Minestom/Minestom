@@ -12,6 +12,7 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityDamageEvent;
 import net.minestom.server.event.entity.EntityDeathEvent;
@@ -344,14 +345,15 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
 
             // Additional hearts support
-            if (this instanceof Player player) {
-                final float additionalHearts = player.getAdditionalHearts();
+            if (getEntityMeta() instanceof PlayerMeta playerMeta) {
+                final float additionalHearts = playerMeta.getAdditionalHearts();
+
                 if (additionalHearts > 0) {
                     if (remainingDamage > additionalHearts) {
                         remainingDamage -= additionalHearts;
-                        player.setAdditionalHearts(0);
+                        playerMeta.setAdditionalHearts(0);
                     } else {
-                        player.setAdditionalHearts(additionalHearts - remainingDamage);
+                        playerMeta.setAdditionalHearts(additionalHearts - remainingDamage);
                         remainingDamage = 0;
                     }
                 }
