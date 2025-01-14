@@ -6,15 +6,26 @@ import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Arrays;
 
+/**
+ * Allows to limit operations with recently operated chunks
+ * <p>
+ * {@link ChunkUpdateLimitChecker#historySize} defines how many last chunks will be remembered
+ * to skip operations with them via {@link ChunkUpdateLimitChecker#addToHistory(Chunk)} returning {@code false}
+ */
 @ApiStatus.Internal
 public final class ChunkUpdateLimitChecker {
+
     private final int historySize;
     private final long[] chunkHistory;
 
     public ChunkUpdateLimitChecker(int historySize) {
-        this.historySize = historySize;
-        this.chunkHistory = new long[historySize];
+        this.historySize = Math.max(0, historySize);
+        this.chunkHistory = new long[this.historySize];
         this.clearHistory();
+    }
+
+    public boolean isEnabled() {
+        return historySize > 0;
     }
 
     /**
@@ -24,14 +35,19 @@ public final class ChunkUpdateLimitChecker {
      * @return {@code true} if it's a new chunk in the history
      */
     public boolean addToHistory(Chunk chunk) {
+        if (!isEnabled()) {
+            return true;
+        }
         final long index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         boolean result = true;
         final int lastIndex = historySize - 1;
-        for (int i = 0; i < lastIndex; i++) {
+        for (int i = 0; i <= lastIndex; i++) {
             if (chunkHistory[i] == index) {
                 result = false;
             }
-            chunkHistory[i] = chunkHistory[i + 1];
+            if (i != lastIndex) {
+                chunkHistory[i] = chunkHistory[i + 1];
+            }
         }
         chunkHistory[lastIndex] = index;
         return result;
