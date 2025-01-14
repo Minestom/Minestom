@@ -79,6 +79,7 @@ public class Main {
         commandManager.register(new WorldBorderCommand());
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
+        commandManager.register(new SuperSharedInstanceCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

@@ -22,10 +22,7 @@ import net.minestom.server.event.entity.*;
 import net.minestom.server.event.instance.AddEntityToInstanceEvent;
 import net.minestom.server.event.instance.RemoveEntityFromInstanceEvent;
 import net.minestom.server.event.trait.EntityEvent;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.EntityTracker;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -790,7 +787,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
-                "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
+                "Instances need to be registered, please use InstanceManager#registerInstance, " +
+                        "InstanceManager#registerSharedInstance, or InstanceManager#registerSuperSharedInstance");
         final Instance previousInstance = this.instance;
         if (Objects.equals(previousInstance, instance)) {
             return teleport(spawnPosition); // Already in the instance, teleport to spawn point
@@ -817,6 +815,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                // register entity for SuperSharedInstances since they share entities and blocks
+                forEverySuperSharedInstance(instance, superSharedInstance -> superSharedInstance
+                        .getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate));
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -842,9 +843,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return setInstance(instance, this.position);
     }
 
+    private void forEverySuperSharedInstance(Instance instance, Consumer<SuperSharedInstance> toRun) {
+        if (instance instanceof InstanceContainer container) {
+            for (SuperSharedInstance superSharedInstance : container.getSuperSharedInstances()) {
+                toRun.accept(superSharedInstance);
+            }
+        }
+    }
+
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+        forEverySuperSharedInstance(instance, superSharedInstance -> superSharedInstance
+                .getEntityTracker().unregister(this, trackingTarget, trackingUpdate));
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1774,6 +1785,16 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected void updateCollisions() {
         preventBlockPlacement = !ALLOW_BLOCK_PLACEMENT_ENTITIES.contains(entityType);
         collidesWithEntities = !NO_ENTITY_COLLISION_ENTITIES.contains(entityType);
+    }
+
+    @ApiStatus.Internal
+    public EntityTracker.Target<Entity> getTrackingTarget() {
+        return trackingTarget;
+    }
+
+    @ApiStatus.Internal
+    public EntityTracker.Update<Entity> getTrackingUpdate() {
+        return trackingUpdate;
     }
 
     /**

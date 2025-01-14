@@ -515,6 +515,19 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets all the {@link SuperSharedInstance} linked to this container.
+     *
+     * @return an unmodifiable {@link List} containing all the {@link SuperSharedInstance} linked to this container
+     */
+    public List<SuperSharedInstance> getSuperSharedInstances() {
+        List<SuperSharedInstance> superSharedInstances = new ArrayList<>(sharedInstances.size());
+        for (SharedInstance shared : sharedInstances) {
+            if (shared instanceof SuperSharedInstance sup) superSharedInstances.add(sup);
+        }
+        return Collections.unmodifiableList(superSharedInstances);
+    }
+
+    /**
      * Gets if this instance has {@link SharedInstance} linked to it.
      *
      * @return true if {@link #getSharedInstances()} is not empty
