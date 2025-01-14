@@ -44,7 +44,7 @@ final class ParticleImpl {
             case "minecraft:vibration" -> new Particle.Vibration(namespace, id, Particle.Vibration.SourceType.BLOCK, Vec.ZERO, 0, 0, 0);
             case "minecraft:shriek" -> new Particle.Shriek(namespace, id, 0);
             case "minecraft:entity_effect" -> new Particle.EntityEffect(namespace, id, AlphaColor.WHITE);
-            case "minecraft:trail" -> new Particle.Trail(namespace, id, Vec.ZERO, Color.WHITE);
+            case "minecraft:trail" -> new Particle.Trail(namespace, id, Vec.ZERO, Color.WHITE, 0);
             case "minecraft:block_crumble" -> new Particle.BlockCrumble(namespace, id, Block.STONE);
             default -> new Particle.Simple(namespace, id);
         };

@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<BannerPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::bannerPattern);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<BannerPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::bannerPattern, true);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<BannerPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::bannerPattern);
 
     static @NotNull BannerPattern create(

@@ -8,6 +8,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
@@ -34,6 +35,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
@@ -95,7 +97,6 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.WINTER_DROP);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -135,12 +136,12 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.setGameMode(GameMode.SURVIVAL);
                 PlayerInventory inventory = event.getPlayer().getInventory();
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
+                inventory.addItemStack(ItemStack.of(Material.GOAT_HORN).with(ItemComponent.INSTRUMENT, Instrument.ADMIRE_GOAT_HORN));
 
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(
@@ -150,6 +151,8 @@ public class PlayerInit {
                     ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+
+                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
                 }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
