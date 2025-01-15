@@ -132,8 +132,8 @@ final class CommandParserImpl implements CommandParser {
         int start = reader.cursor();
 
         if (reader.hasRemaining()) {
-            ArgumentResult<?> result = parseArgument(sender, argument, reader);
             SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
+            ArgumentResult<?> result = parseArgument(sender, argument, reader);
             NodeResult nodeResult = new NodeResult(node, chain, (ArgumentResult<Object>) result, suggestionCallback);
             chain.append(nodeResult);
             if (suggestionCallback != null) chain.suggestionCallback = suggestionCallback;
@@ -200,12 +200,27 @@ final class CommandParserImpl implements CommandParser {
 
         if (reader.hasRemaining()) {
             // Trailing data is a syntax error
-            return new NodeResult(
-                    node,
+            // Can get to here if there's a default executor even if the user is still typing the command
+            // So let's supply the next argument's suggestion callback if it exists
+            Node returnNode = node;
+            SuggestionCallback suggestionCallback = argument.getSuggestionCallback();
+            List<Node> nextNodes = node.next();
+            if (!nextNodes.isEmpty()) {
+                returnNode = nextNodes.getFirst();
+                suggestionCallback = returnNode.argument().getSuggestionCallback();
+            }
+            NodeResult nodeResult = new NodeResult(
+                    returnNode,
                     chain,
                     new ArgumentResult.SyntaxError<>("Command has trailing data", "", -1),
-                    argument.getSuggestionCallback()
+                    suggestionCallback
             );
+            chain.suggestionCallback = suggestionCallback;
+            // prevent duplicates from being added (Fixes CommandParseTest#singleCommandWithMultipleSyntax() failure)
+            if (chain.getArgs().stream().noneMatch(arg -> arg.getId().equals(argument.getId()))) {
+                chain.append(nodeResult);
+            }
+            return nodeResult;
         }
 
         // Command was successful!
