@@ -46,6 +46,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -71,6 +72,7 @@ import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
+import net.minestom.server.particle.Particle;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.BelowNameTag;
@@ -85,6 +87,7 @@ import net.minestom.server.timer.Scheduler;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkCache;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
@@ -2344,5 +2347,44 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     @Override
     public @NotNull Acquirable<? extends Player> acquirable() {
         return (Acquirable<? extends Player>) super.acquirable();
+    }
+
+    @Override
+    protected boolean shouldSkipTouchTick() {
+        return gameMode == GameMode.SPECTATOR || super.shouldSkipTouchTick();
+    }
+
+    /*
+     * Override because players dont have a XZ and +Y Velocity component which does not allow the physics engine to calculate walls.
+     * So instead we are brute forcing the position, it could be optimized slightly by using the bottom physics and excluding diagonal blocks.
+     */
+    @Override
+    protected void touchTick() {
+        if (shouldSkipTouchTick()) return;
+
+        final Pos position = getPosition();
+        final BoundingBox boundingBox = getBoundingBox();
+        final ChunkCache cache = new ChunkCache(instance, currentChunk);
+
+        // Create a bounding box that is aligned and slightly bigger to check for collisons.
+        final BoundingBox collidingBoundingBox = new BoundingBox(
+                Math.ceil(boundingBox.width()) + 2 * Vec.EPSILON,
+                Math.ceil(boundingBox.height()) + 2 * Vec.EPSILON,
+                Math.ceil(boundingBox.depth()) + 2 * Vec.EPSILON
+        );
+
+        // Offset back to center and check for collisions
+        for (BoundingBox.PointIterator it = collidingBoundingBox.getBlocks(position.sub(Vec.EPSILON)); it.hasNext(); ) {
+            var point = it.next();
+            final Block block = cache.getBlock(point.blockX(), point.blockY(), point.blockZ(), Block.Getter.Condition.CACHED);
+            if (block == null) continue;
+            final BlockHandler handler = block.handler();
+            if (handler == null) continue;
+            final Vec blockPos = new Vec(point.blockX(), point.blockY(), point.blockZ());
+            final Point blockEntityVector = blockPos.sub(position).normalize().mul(0.01);
+            final Point modifiedPlayerPosition = position.sub(blockPos).add(blockEntityVector);
+            if (!block.registry().collisionShape().intersectBox(modifiedPlayerPosition, boundingBox)) continue;
+            handler.onTouch(new BlockHandler.Touch(block, instance, blockPos, this));
+        }
     }
 }

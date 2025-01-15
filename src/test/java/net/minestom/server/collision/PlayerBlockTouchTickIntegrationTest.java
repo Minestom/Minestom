@@ -1,16 +1,14 @@
 package net.minestom.server.collision;
 
-import net.minestom.server.utils.Direction;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -19,11 +17,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+// Separate because of how movement is calculated between players and entities.
+// We should expect this bad behavior from the player but not entities. unless the physics engine has gets a controller input vector.
 @EnvTest
-public class EntityBlockTouchTickIntegrationTest {
+public class PlayerBlockTouchTickIntegrationTest {
     @Test
-    public void entityPhysicsCheckTouchTick(Env env) {
+    public void playerPhysicsCheckTouchTick(Env env) {
         var instance = env.createFlatInstance();
 
         Set<Point> positions = new HashSet<>();
@@ -52,30 +53,29 @@ public class EntityBlockTouchTickIntegrationTest {
         }
         instance.setBlock(0, 42, 0, Block.STONE); // Regular floor as we are going to be sliding into the blocks.
 
-        var entity = new Entity(EntityType.ZOMBIE);
         var spawnPoint = new Pos(0.5, 43, 0.5);
-        entity.setInstance(instance, spawnPoint).join();
+        var player = env.createPlayer(instance, spawnPoint);
 
         Arrays.stream(Direction.values())
                 .filter(direction -> direction != Direction.DOWN)
                 .map(Direction::vec)
                 .forEachOrdered(vec -> {
-            entity.setVelocity(vec.mul(10));
-            entity.tick(0);
-            entity.teleport(spawnPoint);
-        });
+                    player.teleport(spawnPoint.add(vec.mul(0.5)));
+                    player.tick(0);
+                    player.teleport(spawnPoint);
+                });
 
         assertEquals(blockPos, positions);
 
         positions.clear(); // Final -Y check
         instance.setBlock(0, 42, 0, customBlock);
-        entity.tick(0);
+        player.tick(0);
         assertEquals(Set.of(new Vec(0, 42, 0)), positions);
 
-        assertEquals(instance, entity.getInstance());
+        assertEquals(instance, player.getInstance());
     }
     @Test
-    public void entityPhysicsCheckTouchTickFarPositiveXNegativeZ(Env env) {
+    public void playerPhysicsCheckTouchTickFarPositiveXNegativeZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(1000, 1000, -1000));
 
@@ -106,31 +106,30 @@ public class EntityBlockTouchTickIntegrationTest {
         }
         instance.setBlock(1000, 42, -1000, Block.STONE); // Regular floor as we are going to be sliding into the blocks.
 
-        var entity = new Entity(EntityType.ZOMBIE);
         var spawnPoint = new Pos(1000.5, 43, -999.5);
-        entity.setInstance(instance, spawnPoint).join();
+        var player = env.createPlayer(instance, spawnPoint);
 
         Arrays.stream(Direction.values())
                 .filter(direction -> direction != Direction.DOWN)
                 .map(Direction::vec)
                 .forEachOrdered(vec -> {
-                    entity.setVelocity(vec.mul(10));
-                    entity.tick(0);
-                    entity.teleport(spawnPoint);
+                    player.teleport(spawnPoint.add(vec.mul(0.5)));
+                    player.tick(0);
+                    player.teleport(spawnPoint);
                 });
 
         assertEquals(blockPos, positions);
 
         positions.clear(); // Final -Y check
         instance.setBlock(1000, 42, -1000, customBlock);
-        entity.tick(0);
+        player.tick(0);
         assertEquals(Set.of(new Vec(1000, 42, -1000)), positions);
 
-        assertEquals(instance, entity.getInstance());
+        assertEquals(instance, player.getInstance());
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarNegativeXPositiveZ(Env env) {
+    public void playerPhysicsCheckTouchTickFarNegativeXPositiveZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(-1000, 1000, 1000));
 
@@ -161,31 +160,30 @@ public class EntityBlockTouchTickIntegrationTest {
         }
         instance.setBlock(-1000, 42, 1000, Block.STONE); // Regular floor as we are going to be sliding into the blocks.
 
-        var entity = new Entity(EntityType.ZOMBIE);
         var spawnPoint = new Pos(-999.5, 43, 1000.5);
-        entity.setInstance(instance, spawnPoint).join();
+        var player = env.createPlayer(instance, spawnPoint);
 
         Arrays.stream(Direction.values())
                 .filter(direction -> direction != Direction.DOWN)
                 .map(Direction::vec)
                 .forEachOrdered(vec -> {
-                    entity.setVelocity(vec.mul(10));
-                    entity.tick(0);
-                    entity.teleport(spawnPoint);
+                    player.teleport(spawnPoint.add(vec.mul(0.5)));
+                    player.tick(0);
+                    player.teleport(spawnPoint);
                 });
 
         assertEquals(blockPos, positions);
 
         positions.clear(); // Final -Y check
         instance.setBlock(-1000, 42, 1000, customBlock);
-        entity.tick(0);
+        player.tick(0);
         assertEquals(Set.of(new Vec(-1000, 42, 1000)), positions);
 
-        assertEquals(instance, entity.getInstance());
+        assertEquals(instance, player.getInstance());
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarPositiveXZ(Env env) {
+    public void playerPhysicsCheckTouchTickFarPositiveXZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(1000, 1000, 1000));
 
@@ -216,31 +214,30 @@ public class EntityBlockTouchTickIntegrationTest {
         }
         instance.setBlock(1000, 42, 1000, Block.STONE); // Regular floor as we are going to be sliding into the blocks.
 
-        var entity = new Entity(EntityType.ZOMBIE);
         var spawnPoint = new Pos(1000.5, 43, 1000.5);
-        entity.setInstance(instance, spawnPoint).join();
+        var player = env.createPlayer(instance, spawnPoint);
 
         Arrays.stream(Direction.values())
                 .filter(direction -> direction != Direction.DOWN)
                 .map(Direction::vec)
                 .forEachOrdered(vec -> {
-                    entity.setVelocity(vec.mul(10));
-                    entity.tick(0);
-                    entity.teleport(spawnPoint);
+                    player.teleport(spawnPoint.add(vec.mul(0.5)));
+                    player.tick(0);
+                    player.teleport(spawnPoint);
                 });
 
         assertEquals(blockPos, positions);
 
         positions.clear(); // Final -Y check
         instance.setBlock(1000, 42, 1000, customBlock);
-        entity.tick(0);
+        player.tick(0);
         assertEquals(Set.of(new Vec(1000, 42, 1000)), positions);
 
-        assertEquals(instance, entity.getInstance());
+        assertEquals(instance, player.getInstance());
     }
 
     @Test
-    public void entityPhysicsCheckTouchTickFarNegativeXZ(Env env) {
+    public void playerPhysicsCheckTouchTickFarNegativeXZ(Env env) {
         var instance = env.createFlatInstance();
         instance.loadChunk(new Pos(-1000, 1000, -1000));
 
@@ -271,37 +268,37 @@ public class EntityBlockTouchTickIntegrationTest {
         }
         instance.setBlock(-1000, 42, -1000, Block.STONE); // Regular floor as we are going to be sliding into the blocks.
 
-        var entity = new Entity(EntityType.ZOMBIE);
         var spawnPoint = new Pos(-999.5, 43, -999.5);
-        entity.setInstance(instance, spawnPoint).join();
+        var player = env.createPlayer(instance, spawnPoint);
 
         Arrays.stream(Direction.values())
                 .filter(direction -> direction != Direction.DOWN)
                 .map(Direction::vec)
                 .forEachOrdered(vec -> {
-                    entity.setVelocity(vec.mul(10));
-                    entity.tick(0);
-                    entity.teleport(spawnPoint);
+                    player.teleport(spawnPoint.add(vec.mul(0.5)));
+                    player.tick(0);
+                    player.teleport(spawnPoint);
                 });
 
         assertEquals(blockPos, positions);
 
         positions.clear(); // Final -Y check
         instance.setBlock(-1000, 42, -1000, customBlock);
-        entity.tick(0);
+        player.tick(0);
         assertEquals(Set.of(new Vec(-1000, 42, -1000)), positions);
 
-        assertEquals(instance, entity.getInstance());
+        assertEquals(instance, player.getInstance());
     }
-
+    
     @Test
-    public void entityTouchPhysicsBadBehavior(Env env) {
+    public void playerTouchPhysicsTestBadBehavior(Env env) {
         var instance = env.createFlatInstance();
+        var player = env.createPlayer(instance, new Pos(0, 43, 0));
 
         var block = Block.STONE.withHandler(new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                fail(touch + " should not happen");
+                assertEquals(new Vec(0, 42, 0), touch.blockPosition());
             }
 
             @Override
@@ -309,13 +306,8 @@ public class EntityBlockTouchTickIntegrationTest {
                 return NamespaceID.from("minestom:test");
             }
         });
-        instance.setBlock(0, 41, 0, Block.STONE);
         instance.setBlock(0, 42, 0, block);
-        instance.setBlock(0, 43, 0, block);
 
-        // Spawn entity inside existing blocks.
-        var entity = new Entity(EntityType.ZOMBIE);
-        entity.setInstance(instance, new Pos(0, 42, 0)).join();
-        entity.tick(0);
+        player.tick(0);
     }
 }
