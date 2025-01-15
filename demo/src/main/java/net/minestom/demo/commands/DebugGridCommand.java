@@ -37,6 +37,6 @@ public class DebugGridCommand extends Command {
             }
         }
         //noinspection ConstantConditions
-        relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), () -> {});
+        relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player));
     }
 }
