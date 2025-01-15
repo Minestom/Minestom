@@ -1,12 +1,15 @@
 package net.minestom.server.item;
 
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@EnvTest
 public class ItemAirTest {
     @Test
-    public void testAir() {
+    public void testAir(Env ignored) {
         var item = ItemStack.of(Material.DIAMOND_SWORD);
         assertFalse(item.isAir());
         assertTrue(ItemStack.AIR.isAir());

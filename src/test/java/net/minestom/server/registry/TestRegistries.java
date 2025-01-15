@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
@@ -33,6 +34,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects = null;
     public DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<Attribute> attributes = null;
 
     public TestRegistries() {
 
@@ -115,5 +117,10 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Attribute> attribute() {
+        return Objects.requireNonNull(attributes);
     }
 }

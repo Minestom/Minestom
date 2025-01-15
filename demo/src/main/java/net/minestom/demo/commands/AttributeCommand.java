@@ -1,6 +1,7 @@
 package net.minestom.demo.commands;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandContext;
@@ -12,9 +13,11 @@ import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import static net.kyori.adventure.text.Component.text;
@@ -39,7 +42,7 @@ public class AttributeCommand extends Command {
     private void setBase(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
-        Attribute attribute = attribute(ctx);
+        DynamicRegistry.Key<Attribute> attribute = attribute(ctx);
         if (check(attribute, ctx, sender)) return;
         double value = value(ctx);
         target.getAttribute(attribute).setBaseValue(value);
@@ -49,7 +52,7 @@ public class AttributeCommand extends Command {
     private void getBase(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
-        Attribute attribute = attribute(ctx);
+        DynamicRegistry.Key<Attribute> attribute = attribute(ctx);
         if (check(attribute, ctx, sender)) return;
         double value = target.getAttribute(attribute).getBaseValue();
         sender.sendMessage(translatable("commands.attribute.base_value.get.success").arguments(description(attribute), name(target), text(value)));
@@ -58,14 +61,14 @@ public class AttributeCommand extends Command {
     private void get(CommandSender sender, CommandContext ctx) {
         LivingEntity target = target(sender, ctx);
         if (check(target, ctx, sender)) return;
-        Attribute attribute = attribute(ctx);
+        DynamicRegistry.Key<Attribute> attribute = attribute(ctx);
         if (check(attribute, ctx, sender)) return;
         double value = target.getAttributeValue(attribute);
         sender.sendMessage(translatable("commands.attribute.value.get.success").arguments(description(attribute), name(target), text(value)));
     }
 
-    private Component description(Attribute attribute) {
-        return translatable(attribute.registry().translationKey());
+    private Component description(DynamicRegistry.Key<Attribute> attribute) {
+        return translatable(MinecraftServer.attribute().get(attribute).registry().translationKey());
     }
 
     private double value(CommandContext ctx) {
@@ -81,10 +84,10 @@ public class AttributeCommand extends Command {
         return livingEntity;
     }
 
-    @Nullable
-    private Attribute attribute(CommandContext ctx) {
+    @NotNull
+    private DynamicRegistry.Key<Attribute> attribute(CommandContext ctx) {
         String namespaceId = ctx.get("attribute");
-        return Attribute.fromNamespaceId(namespaceId);
+        return DynamicRegistry.Key.of(namespaceId);
     }
 
     private Component name(Entity entity) {
@@ -104,12 +107,12 @@ public class AttributeCommand extends Command {
         return false;
     }
 
-    @Contract("!null, _, _ -> false; null, _, _ -> true")
-    private boolean check(@Nullable Attribute attribute, CommandContext ctx, CommandSender sender) {
-        if (attribute == null) {
+    private boolean check(@NotNull DynamicRegistry.Key<Attribute> attribute, CommandContext ctx, CommandSender sender) {
+        if (MinecraftServer.process().attribute().get(attribute) == null) {
             sender.sendMessage(translatable("argument.resource.invalid_type").arguments(text(ctx.<String>get("attribute")), text("minecraft:attribute"), text("minecraft:attribute")));
             return true;
         }
+
         return false;
     }
 }
