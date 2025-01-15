@@ -100,7 +100,6 @@ public class ItemEntity extends Entity {
         super.movementTick();
 
         if (!previousOnGround && onGround) {
-            synchronizePosition();
             sendPacketToViewers(getVelocityPacket());
         }
 
