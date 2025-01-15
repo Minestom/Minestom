@@ -192,6 +192,14 @@ public class InstanceContainer extends Instance {
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
 
+            /* Check if the block was altered, cancel the rest of the operation.
+            Because the block might be changed by block handlers,
+            This is done so only the innermost setBlock handles the update.
+             */
+            if (chunk.getBlock(x, y, z) != block) {
+                return;
+            }
+
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
                 executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
