@@ -5,26 +5,17 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Event when an item is used without clicking on a block.
  */
-public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
-
-    private final Player player;
-    private final PlayerHand hand;
-    private final ItemStack itemStack;
-
-    private long itemUseTime;
-    private boolean cancelled;
+public record PlayerUseItemEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long itemUseTime, boolean cancelled) implements PlayerInstanceEvent, ItemEvent, CancellableEvent<PlayerUseItemEvent> {
 
     public PlayerUseItemEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long itemUseTime) {
-        this.player = player;
-        this.hand = hand;
-        this.itemStack = itemStack;
-        this.itemUseTime = itemUseTime;
+        this(player, hand, itemStack, itemUseTime, false);
     }
 
     /**
@@ -32,7 +23,8 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      *
      * @return the hand used
      */
-    public @NotNull PlayerHand getHand() {
+    @Override
+    public @NotNull PlayerHand hand() {
         return hand;
     }
 
@@ -42,7 +34,7 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public @NotNull ItemStack itemStack() {
         return itemStack;
     }
 
@@ -52,31 +44,63 @@ public class PlayerUseItemEvent implements PlayerInstanceEvent, ItemEvent, Cance
      *
      * @return the item use time
      */
-    public long getItemUseTime() {
+    @Override
+    public long itemUseTime() {
         return itemUseTime;
     }
 
-    /**
-     * Changes the item usage duration.
-     *
-     * @param itemUseTime the new item use time
-     */
-    public void setItemUseTime(long itemUseTime) {
-        this.itemUseTime = itemUseTime;
+    @Override
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
+    public static class Mutator implements EventMutatorCancellable<PlayerUseItemEvent> {
+        private final Player player;
+        private final PlayerHand hand;
+        private final ItemStack itemStack;
+        private long itemUseTime;
+        private boolean cancelled;
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
-    }
+        public Mutator(PlayerUseItemEvent event) {
+            this.player = event.player;
+            this.hand = event.hand;
+            this.itemStack = event.itemStack;
+            this.itemUseTime = event.itemUseTime;
+            this.cancelled = event.cancelled;
+        }
 
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
+        @Override
+        public boolean isCancelled() {
+            return cancelled;
+        }
+
+        @Override
+        public void setCancelled(boolean cancel) {
+            this.cancelled = cancel;
+        }
+
+        /**
+         * Gets the item usage duration. After this amount of milliseconds,
+         * the animation will stop automatically and {@link net.minestom.server.event.item.PlayerFinishItemUseEvent} is called.
+         *
+         * @return the item use time
+         */
+        public long getItemUseTime() {
+            return itemUseTime;
+        }
+
+        /**
+         * Changes the item usage duration.
+         *
+         * @param itemUseTime the new item use time
+         */
+        public void setItemUseTime(long itemUseTime) {
+            this.itemUseTime = itemUseTime;
+        }
+
+        @Override
+        public @NotNull PlayerUseItemEvent mutated() {
+            return new PlayerUseItemEvent(this.player, this.hand, this.itemStack, this.itemUseTime, this.cancelled);
+        }
     }
 }

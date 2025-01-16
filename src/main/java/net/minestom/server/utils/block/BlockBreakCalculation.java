@@ -29,9 +29,9 @@ public class BlockBreakCalculation {
     private static final Tag SWORD_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.ITEMS, "minecraft:swords"));
 
     /**
-     * Calculates the block break time in ticks
+     * Calculates the block break time in fireTicks
      *
-     * @return the block break time in ticks, -1 if the block is unbreakable
+     * @return the block break time in fireTicks, -1 if the block is unbreakable
      */
     public static int breakTicks(@NotNull Block block, @NotNull Player player) {
         if (player.getGameMode() == GameMode.CREATIVE) {

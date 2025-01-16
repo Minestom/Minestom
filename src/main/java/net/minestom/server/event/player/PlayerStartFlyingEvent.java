@@ -7,16 +7,4 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player start flying.
  */
-public class PlayerStartFlyingEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-
-    public PlayerStartFlyingEvent(@NotNull Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
-}
+public record PlayerStartFlyingEvent(@NotNull Player player) implements PlayerInstanceEvent {}

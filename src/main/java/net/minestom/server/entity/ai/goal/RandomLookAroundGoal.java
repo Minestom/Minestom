@@ -21,7 +21,7 @@ public class RandomLookAroundGoal extends GoalSelector {
         this(entityCreature, chancePerTick,
                 // These two functions act similarly enough to how MC randomly looks around.
 
-                // Look in one direction for at most 40 ticks and at minimum 20 ticks.
+                // Look in one direction for at most 40 fireTicks and at minimum 20 fireTicks.
                 () -> 20 + RANDOM.nextInt(20),
                 // Look at a random block
                 (creature) -> {

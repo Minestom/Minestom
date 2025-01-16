@@ -1,6 +1,8 @@
 package net.minestom.server.event;
 
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.MutableEvent;
+import net.minestom.server.event.trait.mutation.EventMutator;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.ApiStatus;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -190,6 +193,11 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         getHandle((Class<T>) event.getClass()).call(event);
     }
 
+    default <E extends T> E callMutable(@NotNull E event) {
+        //noinspection unchecked
+        return getHandle((Class<E>) event.getClass()).callMutable(event);
+    }
+
     default boolean hasListener(@NotNull Class<? extends T> type) {
         return getHandle(type).hasListener();
     }
@@ -204,6 +212,7 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
     @ApiStatus.Experimental
     <E extends T> @NotNull ListenerHandle<E> getHandle(@NotNull Class<E> handleType);
 
+
     /**
      * Execute a cancellable event with a callback to execute if the event is successful.
      * Event conditions and propagation is the same as {@link #call(Event)}.
@@ -211,11 +220,31 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
      * @param event           The event to execute
      * @param successCallback A callback if the event is not cancelled
      */
-    default void callCancellable(@NotNull T event, @NotNull Runnable successCallback) {
-        call(event);
-        if (!(event instanceof CancellableEvent cancellableEvent) || !cancellableEvent.isCancelled()) {
+    default <E extends T> E callCancellable(@NotNull E event, @NotNull Runnable successCallback) {
+        var call = callMutable(event);
+
+        if (!(event instanceof CancellableEvent<?> cancellableEvent) || !cancellableEvent.cancelled()) {
             successCallback.run();
         }
+
+        return call;
+    }
+
+    /**
+     * Execute a cancellable event with a callback to execute if the event is successful.
+     * Event conditions and propagation is the same as {@link #call(Event)}.
+     *
+     * @param event           The event to execute
+     * @param successCallback A callback if the event is not cancelled
+     */
+    default <E extends T> E callCancellable(@NotNull E event, @NotNull Consumer<E> successCallback) {
+        var call = callMutable(event);
+
+        if (!(event instanceof CancellableEvent<?> cancellableEvent) || !cancellableEvent.cancelled()) {
+            successCallback.accept(call);
+        }
+
+        return call;
     }
 
     @Contract(pure = true)
@@ -329,6 +358,13 @@ public sealed interface EventNode<T extends Event> permits EventNodeImpl {
         return addListener(EventListener.of(eventType, listener));
     }
 
+    @Contract(value = "_, _ -> this")
+    default <E extends MutableEvent<E>> @NotNull EventNode<T> addListener(@NotNull Class<E> eventType, @NotNull Function<@NotNull E, @Nullable EventMutator<E>> listener) {
+        if (!getEventType().isAssignableFrom(eventType)) {
+            throw new IllegalArgumentException("Event type " + eventType + " is not assignable from " + getEventType());
+        }
+        return addListener((EventListener<? extends T>) EventListener.of(eventType, listener));
+    }
     @Contract(value = "_ -> this")
     @NotNull EventNode<T> removeListener(@NotNull EventListener<? extends T> listener);
 

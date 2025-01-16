@@ -113,9 +113,8 @@ public non-sealed class PlayerInventory extends AbstractInventory {
             final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
             if (equipmentSlot == null) continue;
 
-            EntityEquipEvent entityEquipEvent = new EntityEquipEvent(player, item, equipmentSlot);
-            EventDispatcher.call(entityEquipEvent);
-            item = entityEquipEvent.getEquippedItem();
+            var entityEquipEvent = EventDispatcher.callMutable(new EntityEquipEvent(player, item, equipmentSlot));
+            item = entityEquipEvent.equippedItem();
 
             player.updateEquipmentAttributes(previous, item, equipmentSlot);
             player.syncEquipment(equipmentSlot, item);

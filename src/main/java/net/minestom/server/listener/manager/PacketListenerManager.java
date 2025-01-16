@@ -121,9 +121,9 @@ public final class PacketListenerManager {
 
         // Event
         if (state == ConnectionState.PLAY) {
-            PlayerPacketEvent playerPacketEvent = new PlayerPacketEvent(connection.getPlayer(), packet);
-            EventDispatcher.call(playerPacketEvent);
-            if (playerPacketEvent.isCancelled()) {
+            assert connection.getPlayer() != null: "Player is null during the PlayerPacketEvent!";
+            final var playerPacketEvent = EventDispatcher.callCancellable(new PlayerPacketEvent(connection.getPlayer(), packet));
+            if (playerPacketEvent.cancelled()) {
                 return;
             }
         }

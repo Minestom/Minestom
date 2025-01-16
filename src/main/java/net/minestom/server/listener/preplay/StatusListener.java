@@ -17,15 +17,14 @@ public final class StatusListener {
     public static void requestListener(@NotNull StatusRequestPacket packet, @NotNull PlayerConnection connection) {
         final ServerListPingType pingVersion = ServerListPingType.fromModernProtocolVersion(connection.getProtocolVersion());
         final ServerListPingEvent statusRequestEvent = new ServerListPingEvent(connection, pingVersion);
-        EventDispatcher.callCancellable(statusRequestEvent, () ->
-                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequestEvent.getResponseData()))));
+        EventDispatcher.callCancellable(statusRequestEvent, (statusRequest) ->
+                connection.sendPacket(new ResponsePacket(pingVersion.getPingResponse(statusRequest.responseData()))));
     }
 
     public static void pingRequestListener(@NotNull ClientPingRequestPacket packet, @NotNull PlayerConnection connection) {
-        final ClientPingServerEvent clientPingEvent = new ClientPingServerEvent(connection, packet.number());
-        EventDispatcher.call(clientPingEvent);
+        final var clientPingEvent = EventDispatcher.callCancellable(new ClientPingServerEvent(connection, packet.number()));
 
-        if (clientPingEvent.isCancelled()) {
+        if (clientPingEvent.cancelled()) {
             connection.disconnect();
         } else {
             if (clientPingEvent.getDelay().isZero()) {

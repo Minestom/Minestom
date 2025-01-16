@@ -2,24 +2,27 @@ package net.minestom.server.event.trait;
 
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.trait.mutation.EventMutator;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Represents an {@link Event} which can be cancelled.
  * Called using {@link EventDispatcher#callCancellable(CancellableEvent, Runnable)}.
  */
-public interface CancellableEvent extends Event {
+public interface CancellableEvent<E extends CancellableEvent<E>> extends MutableEvent<E>, Event {
 
     /**
-     * Gets if the {@link Event} should be cancelled or not.
-     *
-     * @return true if the event should be cancelled
+     * Gets if the {@link Event} is cancelled or not.
      */
-    boolean isCancelled();
+    boolean cancelled();
 
     /**
-     * Marks the {@link Event} as cancelled or not.
+     * Gets the {@link EventMutatorCancellable} for this event.
      *
-     * @param cancel true if the event should be cancelled, false otherwise
+     * @return the mutator
      */
-    void setCancelled(boolean cancel);
+    @Override
+    @NotNull
+    EventMutatorCancellable<E> mutator();
 }

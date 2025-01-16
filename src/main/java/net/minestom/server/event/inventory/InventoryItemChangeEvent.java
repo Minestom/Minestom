@@ -10,27 +10,16 @@ import org.jetbrains.annotations.NotNull;
  * Called when {@link AbstractInventory#setItemStack(int, ItemStack)} is being invoked.
  * This event cannot be cancelled and items related to the change are already moved.
  */
-public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent {
-
-    private final AbstractInventory inventory;
-    private final int slot;
-    private final ItemStack previousItem;
-    private final ItemStack newItem;
-
-    public InventoryItemChangeEvent(@NotNull AbstractInventory inventory, int slot,
-                                    @NotNull ItemStack previousItem, @NotNull ItemStack newItem) {
-        this.inventory = inventory;
-        this.slot = slot;
-        this.previousItem = previousItem;
-        this.newItem = newItem;
-    }
+public record InventoryItemChangeEvent(@NotNull AbstractInventory inventory, int slot,
+                                       @NotNull ItemStack previousItem, @NotNull ItemStack newItem) implements InventoryEvent, RecursiveEvent {
 
     /**
      * Gets the changed slot number.
      *
      * @return the changed slot number.
      */
-    public int getSlot() {
+    @Override
+    public int slot() {
         return slot;
     }
 
@@ -39,7 +28,8 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
      *
      * @return a previous item that was on changed slot.
      */
-    public @NotNull ItemStack getPreviousItem() {
+    @Override
+    public @NotNull ItemStack previousItem() {
         return previousItem;
     }
 
@@ -48,12 +38,13 @@ public class InventoryItemChangeEvent implements InventoryEvent, RecursiveEvent 
      *
      * @return a new item on a changed slot.
      */
-    public @NotNull ItemStack getNewItem() {
+    @Override
+    public @NotNull ItemStack newItem() {
         return newItem;
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public @NotNull AbstractInventory inventory() {
         return inventory;
     }
 }

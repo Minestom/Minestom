@@ -63,13 +63,21 @@ public class PlayerIntegrationTest {
         }
         // Change target gamemode event
         {
-            listener.followup(event -> event.setNewGameMode(GameMode.SPECTATOR));
+            listener.followup(event -> {
+                var mutator = event.mutator();
+                mutator.setNewGameMode(GameMode.SPECTATOR);
+                return mutator;
+            });
             assertTrue(player.setGameMode(GameMode.CREATIVE));
             assertEquals(GameMode.SPECTATOR, player.getGameMode());
         }
         // Cancel event
         {
-            listener.followup(event -> event.setCancelled(true));
+            listener.followup(event -> {
+                var mutator = event.mutator();
+                mutator.setCancelled(true);
+                return mutator;
+            });
             assertFalse(player.setGameMode(GameMode.CREATIVE));
             assertEquals(GameMode.SPECTATOR, player.getGameMode());
         }

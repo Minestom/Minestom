@@ -6,23 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Called right before an entity is removed
+ *
+ * @param entity the entity who is about to be removed
  */
-public class EntityDespawnEvent implements EntityInstanceEvent {
-
-    private final Entity entity;
-
-    public EntityDespawnEvent(@NotNull Entity entity) {
-        this.entity = entity;
-    }
-
-    /**
-     * Gets the entity who is about to be removed
-     *
-     * @return the entity
-     */
-    @NotNull
-    @Override
-    public Entity getEntity() {
-        return entity;
-    }
-}
+public record EntityDespawnEvent(@NotNull Entity entity) implements EntityInstanceEvent {}

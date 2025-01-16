@@ -30,12 +30,12 @@ import java.util.function.Function;
 public interface EventFilter<E extends Event, H> {
 
     EventFilter<Event, ?> ALL = from(Event.class, null, null);
-    EventFilter<EntityEvent, Entity> ENTITY = from(EntityEvent.class, Entity.class, EntityEvent::getEntity);
-    EventFilter<PlayerEvent, Player> PLAYER = from(PlayerEvent.class, Player.class, PlayerEvent::getPlayer);
-    EventFilter<ItemEvent, ItemStack> ITEM = from(ItemEvent.class, ItemStack.class, ItemEvent::getItemStack);
-    EventFilter<InstanceEvent, Instance> INSTANCE = from(InstanceEvent.class, Instance.class, InstanceEvent::getInstance);
-    EventFilter<InventoryEvent, AbstractInventory> INVENTORY = from(InventoryEvent.class, AbstractInventory.class, InventoryEvent::getInventory);
-    EventFilter<BlockEvent, Block> BLOCK = from(BlockEvent.class, Block.class, BlockEvent::getBlock);
+    EventFilter<EntityEvent, Entity> ENTITY = from(EntityEvent.class, Entity.class, EntityEvent::entity);
+    EventFilter<PlayerEvent, Player> PLAYER = from(PlayerEvent.class, Player.class, PlayerEvent::player);
+    EventFilter<ItemEvent, ItemStack> ITEM = from(ItemEvent.class, ItemStack.class, ItemEvent::itemStack);
+    EventFilter<InstanceEvent, Instance> INSTANCE = from(InstanceEvent.class, Instance.class, InstanceEvent::instance);
+    EventFilter<InventoryEvent, AbstractInventory> INVENTORY = from(InventoryEvent.class, AbstractInventory.class, InventoryEvent::inventory);
+    EventFilter<BlockEvent, Block> BLOCK = from(BlockEvent.class, Block.class, BlockEvent::block);
 
     static <E extends Event, H> EventFilter<E, H> from(@NotNull Class<E> eventType,
                                                        @Nullable Class<H> handlerType,

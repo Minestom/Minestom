@@ -57,7 +57,9 @@ public class InstanceUnregisterIntegrationTest {
 
             Game(Env env) {
                 instance = env.process().instance().createInstanceContainer();
-                instance.eventNode().addListener(PlayerMoveEvent.class, e -> System.out.println(instance));
+                instance.eventNode().addListener(PlayerMoveEvent.class, e -> {
+                    System.out.println(instance);
+                });
             }
         }
         var game = new Game(env);

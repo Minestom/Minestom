@@ -6,48 +6,39 @@ import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.ItemEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
-public class PickupItemEvent implements EntityInstanceEvent, ItemEvent, CancellableEvent {
-
-    private final LivingEntity livingEntity;
-    private final ItemEntity itemEntity;
-
-    private boolean cancelled;
+public record PickupItemEvent(@NotNull LivingEntity livingEntity, @NotNull ItemEntity itemEntity, boolean cancelled) implements EntityInstanceEvent, ItemEvent, CancellableEvent<PickupItemEvent> {
 
     public PickupItemEvent(@NotNull LivingEntity livingEntity, @NotNull ItemEntity itemEntity) {
-        this.livingEntity = livingEntity;
-        this.itemEntity = itemEntity;
+        this(livingEntity, itemEntity, false);
     }
 
     @NotNull
-    public LivingEntity getLivingEntity() {
+    public ItemStack itemStack() {
+        return itemEntity.getItemStack();
+    }
+
+    @Override
+    public @NotNull Entity entity() {
         return livingEntity;
     }
 
-    @NotNull
-    public ItemEntity getItemEntity() {
-        return itemEntity;
-    }
-
-    @NotNull
-    public ItemStack getItemStack() {
-        return getItemEntity().getItemStack();
-    }
-
     @Override
-    public boolean isCancelled() {
-        return cancelled;
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
-    }
+    public static class Mutator extends EventMutatorCancellable.Simple<PickupItemEvent> {
+        public Mutator(@NotNull PickupItemEvent event) {
+            super(event);
+        }
 
-    @Override
-    public @NotNull Entity getEntity() {
-        return livingEntity;
+        @Override
+        public @NotNull PickupItemEvent mutated() {
+            return new PickupItemEvent(this.event.livingEntity, this.event.itemEntity, this.isCancelled());
+        }
     }
 }

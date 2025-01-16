@@ -4,6 +4,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Chunk;
@@ -186,7 +187,11 @@ public class PlayerMovementIntegrationTest {
         var p1 = connection.connect(instance, new Pos(0, 40, 0));
         p1.refreshReceivedTeleportId(p1.getLastSentTeleportId()); // Don't care about teleport confirm from spawn
 
-        instance.eventNode().addListener(PlayerMoveEvent.class, event -> event.setCancelled(true));
+        instance.eventNode().addListener(PlayerMoveEvent.class, event -> {
+            var mutator = event.mutator();
+            mutator.setCancelled(true);
+            return mutator;
+        });
         var collector = connection.trackIncoming(PlayerPositionAndLookPacket.class);
 
         p1.addPacketToQueue(new ClientPlayerPositionPacket(new Pos(0.2, 40, 0), true, false));

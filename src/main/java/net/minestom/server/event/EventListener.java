@@ -1,6 +1,8 @@
 package net.minestom.server.event;
 
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.MutableEvent;
+import net.minestom.server.event.trait.mutation.EventMutator;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
@@ -21,7 +24,9 @@ public interface EventListener<T extends Event> {
 
     @NotNull Class<T> eventType();
 
-    @NotNull Result run(@NotNull T event);
+    @NotNull Result<T> run(@NotNull T event);
+
+    boolean isMutator();
 
     @Contract(pure = true)
     static <T extends Event> EventListener.@NotNull Builder<T> builder(@NotNull Class<T> eventType) {
@@ -39,7 +44,21 @@ public interface EventListener<T extends Event> {
      */
     @Contract(pure = true)
     static <T extends Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Consumer<@NotNull T> listener) {
-        return builder(eventType).handler(listener).build();
+        return builder(eventType).handler(new Handler.ConsumerHandler<>(listener)).build();
+    }
+
+    /**
+     * Create an mutable event listener without any special options. The given listener will be executed
+     * if the event passes all parent filtering.
+     *
+     * @param eventType The event type to handle
+     * @param listener  The handler function
+     * @param <T>       The event type to handle
+     * @return An event listener with the given properties
+     */
+    @Contract(pure = true)
+    static <T extends MutableEvent<T> & Event> @NotNull EventListener<T> of(@NotNull Class<T> eventType, @NotNull Function<@NotNull T, @NotNull EventMutator<T>> listener) {
+        return builder(eventType).handler(new Handler.FunctionHandler<>(listener.andThen(EventMutator::mutated))).build();
     }
 
     class Builder<T extends Event> {
@@ -48,7 +67,7 @@ public interface EventListener<T extends Event> {
         private boolean ignoreCancelled = true;
         private int expireCount;
         private Predicate<T> expireWhen;
-        private Consumer<T> handler;
+        private Handler<T> handler;
 
         protected Builder(Class<T> eventType) {
             this.eventType = eventType;
@@ -65,7 +84,7 @@ public interface EventListener<T extends Event> {
         }
 
         /**
-         * Specifies if the handler should still be called if {@link CancellableEvent#isCancelled()} returns {@code true}.
+         * Specifies if the handler should still be called if {@link CancellableEvent#cancelled()} returns {@code true}.
          * <p>
          * Default is set to {@code true}.
          *
@@ -105,7 +124,7 @@ public interface EventListener<T extends Event> {
          * all conditions.
          */
         @Contract(value = "_ -> this")
-        public @NotNull EventListener.Builder<T> handler(Consumer<T> handler) {
+        public @NotNull EventListener.Builder<T> handler(Handler<T> handler) {
             this.handler = handler;
             return this;
         }
@@ -120,6 +139,7 @@ public interface EventListener<T extends Event> {
 
             final var filters = new ArrayList<>(this.filters);
             final var handler = this.handler;
+            final var canMutate = handler instanceof Handler.FunctionHandler<T>;
             return new EventListener<>() {
                 @Override
                 public @NotNull Class<T> eventType() {
@@ -127,43 +147,58 @@ public interface EventListener<T extends Event> {
                 }
 
                 @Override
-                public @NotNull Result run(@NotNull T event) {
+                public @NotNull Result<T> run(@NotNull T event) {
                     // Event cancellation
-                    if (ignoreCancelled && event instanceof CancellableEvent &&
-                            ((CancellableEvent) event).isCancelled()) {
-                        return Result.INVALID;
+                    if (ignoreCancelled && event instanceof CancellableEvent<?> cancellableEvent &&
+                            cancellableEvent.cancelled()) {
+                        return (Result<T>) Result.INVALID;
                     }
                     // Expiration predicate
                     if (expireWhen != null && expireWhen.test(event)) {
-                        return Result.EXPIRED;
+                        return (Result<T>) Result.EXPIRED;
                     }
                     // Filtering
                     if (!filters.isEmpty()) {
                         for (var filter : filters) {
                             if (!filter.test(event)) {
                                 // Cancelled
-                                return Result.INVALID;
+                                return (Result<T>) Result.INVALID;
                             }
                         }
                     }
                     // Handler
                     if (handler != null) {
-                        handler.accept(event);
+                        if (handler instanceof Handler.FunctionHandler<T>(Function<T, T> handlerHolder)) {
+                            return new Result<>(handlerHolder.apply(event));
+                        } else if (handler instanceof Handler.ConsumerHandler<T>(Consumer<T> handlerHolder)) {
+                            handlerHolder.accept(event);
+                        }
                     }
                     // Expiration count
                     if (hasExpirationCount && expirationCount.decrementAndGet() == 0) {
-                        return Result.EXPIRED;
+                        return (Result<T>) Result.EXPIRED;
                     }
-                    return Result.SUCCESS;
+                    return (Result<T>) Result.SUCCESS;
+                }
+
+                @Override
+                public boolean isMutator() {
+                    return canMutate;
                 }
             };
         }
     }
 
-    enum Result {
-        SUCCESS,
-        INVALID,
-        EXPIRED,
-        EXCEPTION
+    sealed interface Handler<T extends Event> {
+        record FunctionHandler<T extends Event>(Function<T, T> handler) implements Handler<T> {}
+        record ConsumerHandler<T extends Event>(Consumer<T> handler) implements Handler<T> {}
+    }
+
+    // Dirty way to sometimes pass data back.
+    record Result<T extends Event>(T data) {
+        public static final Result<?> SUCCESS = new Result<>(null);
+        public static final Result<?> INVALID = new Result<>(null);
+        public static final Result<?> EXPIRED = new Result<>(null);
+        public static final Result<?> EXCEPTION = new Result<>(null);
     }
 }

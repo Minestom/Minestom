@@ -7,16 +7,4 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player stop flying.
  */
-public class PlayerStopFlyingEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-
-    public PlayerStopFlyingEvent(@NotNull Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
-}
+public record PlayerStopFlyingEvent(@NotNull Player player) implements PlayerInstanceEvent {}

@@ -56,7 +56,9 @@ public class EntityFireTest
 
         // Explicit negative in event
         env.listen(EntitySetFireEvent.class).followup(e -> {
-            e.setFireTicks(-1);
+            var mutator = e.mutator();
+            mutator.setFireTicks(-1);
+            return mutator;
         });
 
         entity.setFireTicks(1);
@@ -95,8 +97,8 @@ public class EntityFireTest
         AtomicInteger callCount = new AtomicInteger();
         env.listen(EntityFireExtinguishEvent.class).followup(e -> {
             callCount.getAndIncrement();
-            if (callCount.get() == 2) assertTrue(e.isNatural());
-            else assertFalse(e.isNatural());
+            if (callCount.get() == 2) assertTrue(e.natural());
+            else assertFalse(e.natural());
         });
 
         // Don't call when the entity is already on fire
@@ -117,7 +119,9 @@ public class EntityFireTest
 
         // Don't call if cancelled EntitySetFireEvent
         env.listen(EntitySetFireEvent.class).followup(e -> {
-            e.setCancelled(true);
+            var mutator = e.mutator();
+            mutator.setCancelled(true);
+            return mutator;
         });
         entity.setFireTicks(5);
         assertEquals(2, callCount.get());

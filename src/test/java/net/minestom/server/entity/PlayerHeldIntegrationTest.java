@@ -44,8 +44,8 @@ public class PlayerHeldIntegrationTest {
         player.addPacketToQueue(new ClientHeldItemChangePacket((short) 1));
         var listener = env.listen(PlayerChangeHeldSlotEvent.class);
         listener.followup(event -> {
-            assertEquals(player, event.getPlayer());
-            assertEquals(1, event.getSlot());
+            assertEquals(player, event.player());
+            assertEquals(1, event.slot());
         });
         player.interpretPacketQueue();
         assertEquals(ItemStack.of(Material.STONE), player.getItemInMainHand());

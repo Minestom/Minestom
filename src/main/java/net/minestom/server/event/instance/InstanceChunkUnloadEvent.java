@@ -8,18 +8,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a chunk in an instance is unloaded.
  */
-public class InstanceChunkUnloadEvent implements InstanceEvent {
-
-    private final Instance instance;
-    private final Chunk chunk;
-
-    public InstanceChunkUnloadEvent(@NotNull Instance instance, @NotNull Chunk chunk) {
-        this.instance = instance;
-        this.chunk = chunk;
-    }
+public record InstanceChunkUnloadEvent(@NotNull Instance instance, @NotNull Chunk chunk) implements InstanceEvent {
 
     @Override
-    public @NotNull Instance getInstance() {
+    public @NotNull Instance instance() {
         return instance;
     }
 
@@ -46,7 +38,8 @@ public class InstanceChunkUnloadEvent implements InstanceEvent {
      *
      * @return the chunk.
      */
-    public @NotNull Chunk getChunk() {
+    @Override
+    public @NotNull Chunk chunk() {
         return chunk;
     }
 }

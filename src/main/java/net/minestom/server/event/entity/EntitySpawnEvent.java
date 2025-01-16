@@ -8,15 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a new instance is set for an entity.
  */
-public class EntitySpawnEvent implements EntityInstanceEvent {
-
-    private final Entity entity;
-    private final Instance spawnInstance;
-
-    public EntitySpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance) {
-        this.entity = entity;
-        this.spawnInstance = spawnInstance;
-    }
+public record EntitySpawnEvent(@NotNull Entity entity, @NotNull Instance spawnInstance) implements EntityInstanceEvent {
 
     /**
      * Gets the entity who spawned in the instance.
@@ -25,7 +17,7 @@ public class EntitySpawnEvent implements EntityInstanceEvent {
      */
     @NotNull
     @Override
-    public Entity getEntity() {
+    public Entity entity() {
         return entity;
     }
 
@@ -34,8 +26,9 @@ public class EntitySpawnEvent implements EntityInstanceEvent {
      *
      * @return the instance
      */
+    @Override
     @NotNull
-    public Instance getSpawnInstance() {
+    public Instance spawnInstance() {
         return spawnInstance;
     }
 

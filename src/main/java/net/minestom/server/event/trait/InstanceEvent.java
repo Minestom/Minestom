@@ -14,5 +14,5 @@ public interface InstanceEvent extends Event {
      *
      * @return instance
      */
-    @NotNull Instance getInstance();
+    @NotNull Instance instance();
 }

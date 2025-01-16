@@ -12,30 +12,4 @@ import org.jetbrains.annotations.NotNull;
  *
  * @see ClientNameItemPacket
  */
-public class PlayerAnvilInputEvent implements PlayerInstanceEvent, InventoryEvent {
-
-    private final Player player;
-    private final Inventory inventory;
-    private final String input;
-
-    public PlayerAnvilInputEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull String input) {
-        this.player = player;
-        this.inventory = inventory;
-        this.input = input;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
-
-    public @NotNull String getInput() {
-        return input;
-    }
-
-    @Override
-    public @NotNull Inventory getInventory() {
-        return inventory;
-    }
-
-}
+public record PlayerAnvilInputEvent(@NotNull Player player, @NotNull Inventory inventory, @NotNull String input) implements PlayerInstanceEvent, InventoryEvent {}

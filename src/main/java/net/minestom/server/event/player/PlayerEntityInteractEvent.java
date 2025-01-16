@@ -10,34 +10,17 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a {@link Player} interacts (right-click) with an {@link Entity}.
  */
-public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-    private final Entity entityTarget;
-    private final PlayerHand hand;
-    private final Point interactPosition;
-
-    public PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity entityTarget, @NotNull PlayerHand hand,
-                                     @NotNull Point interactPosition) {
-        this.player = player;
-        this.entityTarget = entityTarget;
-        this.hand = hand;
-        this.interactPosition = interactPosition;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
+public record PlayerEntityInteractEvent(@NotNull Player player, @NotNull Entity target, @NotNull PlayerHand hand,
+                                        @NotNull Point interactPosition) implements PlayerInstanceEvent {
 
     /**
-     * Gets the {@link Entity} with who {@link #getPlayer()} is interacting.
+     * Gets the {@link Entity} with who {@link #player()} is interacting.
      *
      * @return the {@link Entity}
      */
-    @NotNull
-    public Entity getTarget() {
-        return entityTarget;
+    @Override
+    public @NotNull Entity target() {
+        return target;
     }
 
     /**
@@ -45,8 +28,8 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      *
      * @return the hand
      */
-    @NotNull
-    public PlayerHand getHand() {
+    @Override
+    public @NotNull PlayerHand hand() {
         return hand;
     }
 
@@ -56,8 +39,8 @@ public class PlayerEntityInteractEvent implements PlayerInstanceEvent {
      * @see net.minestom.server.network.packet.client.play.ClientInteractEntityPacket.InteractAt
      * @return the interaction position
      */
-    @NotNull
-    public Point getInteractPosition() {
+    @Override
+    public @NotNull Point interactPosition() {
         return interactPosition;
     }
 }

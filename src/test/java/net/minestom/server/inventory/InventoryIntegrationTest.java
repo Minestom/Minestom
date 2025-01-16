@@ -175,7 +175,7 @@ public class InventoryIntegrationTest {
         player.openInventory(firstInventory);
         player.getInventory().setCursorItem(ItemStack.of(Material.STONE));
         final var secondInventory = new Inventory(InventoryType.CHEST_1_ROW, "title");
-        listener.followup(event -> event.getPlayer().openInventory(secondInventory));
+        listener.followup(event -> { event.player().openInventory(secondInventory); });
         player.closeInventory();
         assertSame(secondInventory, player.getOpenInventory());
     }

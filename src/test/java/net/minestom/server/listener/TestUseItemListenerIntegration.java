@@ -34,9 +34,9 @@ public class TestUseItemListenerIntegration {
         UseItemListener.useItemListener(new ClientUseItemPacket(PlayerHand.MAIN, 42, 0f, 0f), player);
 
         useItemCollector.assertSingle(event -> {
-            assertEquals(PlayerHand.MAIN, event.getHand());
-            assertEquals(itemStack, event.getItemStack());
-            assertEquals(0, event.getItemUseTime());
+            assertEquals(PlayerHand.MAIN, event.hand());
+            assertEquals(itemStack, event.itemStack());
+            assertEquals(0, event.itemUseTime());
         });
     }
 

@@ -65,7 +65,7 @@ public final class ConnectionManager {
     // Players in play state
     private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
 
-    // The players who need keep alive ticks. This was added because we may not send a keep alive in
+    // The players who need keep alive fireTicks. This was added because we may not send a keep alive in
     // the time after sending finish configuration but before receiving configuration end (to swap to play).
     // I(mattw) could not come up with a better way to express this besides completely splitting client/server
     // states. Perhaps there will be an improvement in the future.
@@ -192,11 +192,10 @@ public final class ConnectionManager {
         }
         // Call pre login event
         LoginPluginMessageProcessor pluginMessageProcessor = connection.loginPluginMessageProcessor();
-        AsyncPlayerPreLoginEvent asyncPlayerPreLoginEvent = new AsyncPlayerPreLoginEvent(connection, gameProfile, pluginMessageProcessor);
-        EventDispatcher.call(asyncPlayerPreLoginEvent);
+        var asyncPlayerPreLoginEvent = EventDispatcher.callMutable(new AsyncPlayerPreLoginEvent(connection, gameProfile, pluginMessageProcessor));
         if (!connection.isOnline()) return gameProfile; // Player has been kicked
         // Change UUID/Username based on the event
-        gameProfile = asyncPlayerPreLoginEvent.getGameProfile();
+        gameProfile = asyncPlayerPreLoginEvent.gameProfile();
         // Wait for pending login plugin messages
         try {
             pluginMessageProcessor.awaitReplies(ServerFlag.LOGIN_PLUGIN_MESSAGE_TIMEOUT, TimeUnit.MILLISECONDS);
@@ -229,20 +228,19 @@ public final class ConnectionManager {
         // Request known packs immediately, but don't wait for the response until required (sending registry data).
         final var knownPacksFuture = player.getPlayerConnection().requestKnownPacks(List.of(SelectKnownPacksPacket.MINECRAFT_CORE));
 
-        var event = new AsyncPlayerConfigurationEvent(player, isFirstConfig);
-        EventDispatcher.call(event);
+        var event = EventDispatcher.callMutable(new AsyncPlayerConfigurationEvent(player, isFirstConfig));
         if (!player.isOnline()) return; // Player was kicked during config.
 
         // send player features that were enabled or disabled during async config event
-        player.sendPacket(new UpdateEnabledFeaturesPacket(event.getFeatureFlags().stream().map(StaticProtocolObject::name).toList()));
+        player.sendPacket(new UpdateEnabledFeaturesPacket(event.featureFlags().stream().map(StaticProtocolObject::name).toList()));
 
-        final Instance spawningInstance = event.getSpawningInstance();
+        final Instance spawningInstance = event.spawningInstance();
         Check.notNull(spawningInstance, "You need to specify a spawning instance in the AsyncPlayerConfigurationEvent");
 
-        if (event.willClearChat()) player.sendPacket(new ResetChatPacket());
+        if (event.clearChat()) player.sendPacket(new ResetChatPacket());
 
         // Registry data (if it should be sent)
-        if (event.willSendRegistryData()) {
+        if (event.sendRegistryData()) {
             List<SelectKnownPacksPacket.Entry> knownPacks;
             try {
                 knownPacks = knownPacksFuture.get(5, TimeUnit.SECONDS);
@@ -275,7 +273,7 @@ public final class ConnectionManager {
         if (packFuture != null) packFuture.join();
 
         keepAlivePlayers.remove(player);
-        player.setPendingOptions(spawningInstance, event.isHardcore());
+        player.setPendingOptions(spawningInstance, event.hardcore());
         player.sendPacket(new FinishConfigurationPacket());
     }
 

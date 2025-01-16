@@ -4,11 +4,13 @@ import net.minestom.server.ServerProcess;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
+import net.minestom.server.event.trait.mutation.EventMutator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -46,7 +48,9 @@ final class EnvImpl implements Env {
     public @NotNull <E extends Event> FlexibleListener<E> listen(@NotNull Class<E> eventType) {
         var handler = process.eventHandler();
         var flexible = new FlexibleListenerImpl<>(eventType);
-        var listener = EventListener.of(eventType, e -> flexible.handler.accept(e));
+        var listener = EventListener.builder(eventType)
+                .handler(new EventListener.Handler.FunctionHandler<>(flexible.handler))
+                .build();
         handler.addListener(listener);
         this.listeners.add(flexible);
         return flexible;
@@ -74,8 +78,7 @@ final class EnvImpl implements Env {
 
     static final class FlexibleListenerImpl<E extends Event> implements FlexibleListener<E> {
         private final Class<E> eventType;
-        private Consumer<E> handler = e -> {
-        };
+        private Function<E, E> handler = e -> e;
         private boolean initialized;
         private boolean called;
 
@@ -85,7 +88,15 @@ final class EnvImpl implements Env {
 
         @Override
         public void followup(@NotNull Consumer<E> handler) {
-            updateHandler(handler);
+            updateHandler(e -> {
+                handler.accept(e);
+                return e;
+            });
+        }
+
+        @Override
+        public void followup(@NotNull Function<E, EventMutator<?>> handler) {
+            updateHandler((Function<E, E>) handler.andThen(EventMutator::mutated));
         }
 
         @Override
@@ -93,13 +104,14 @@ final class EnvImpl implements Env {
             updateHandler(e -> fail("Event " + e.getClass().getSimpleName() + " was not expected"));
         }
 
-        void updateHandler(@NotNull Consumer<E> handler) {
+        void updateHandler(@NotNull Function<E, E> handler) {
             check();
             this.initialized = true;
             this.called = false;
             this.handler = e -> {
-                handler.accept(e);
+                var output = handler.apply(e);
                 this.called = true;
+                return output;
             };
         }
 

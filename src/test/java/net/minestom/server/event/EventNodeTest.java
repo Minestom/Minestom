@@ -5,6 +5,7 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -22,18 +23,28 @@ public class EventNodeTest {
     static class EventTest implements Event {
     }
 
-    static class CancellableTest implements CancellableEvent {
-        private boolean cancelled = false;
+    @Test
+    public void testCancellable() {
+        var node = EventNode.all("main");
+        AtomicBoolean result = new AtomicBoolean(false);
+        var listener = EventListener.builder(CancellableTest.class)
+                .handler(new EventListener.Handler.FunctionHandler<>(cancellableTest -> {
+                    var mutable = cancellableTest.mutator();
+                    mutable.setCancelled(true);
+                    result.set(true);
+                    assertTrue(mutable.isCancelled(), "The event should be cancelled");
+                    assertTrue(mutable.mutated().cancelled(), "The event should have parity with the object after construction.");
+                    return mutable.mutated();
+                })).build();
+        node.addListener(listener);
+        node.callMutable(new CancellableTest(false));
+        assertTrue(result.get(), "The event should be called after the call");
 
-        @Override
-        public boolean isCancelled() {
-            return cancelled;
-        }
-
-        @Override
-        public void setCancelled(boolean cancel) {
-            this.cancelled = cancel;
-        }
+        // Test cancelling
+        node.addListener(CancellableTest.class, event -> {
+            fail("The event must of not been cancelled");
+        });
+        node.callMutable(new CancellableTest(false));
     }
 
     static class Recursive1 implements RecursiveEvent {
@@ -42,17 +53,23 @@ public class EventNodeTest {
     static class Recursive2 extends Recursive1 {
     }
 
-    record ItemTestEvent(ItemStack item) implements ItemEvent {
+    record CancellableTest(boolean cancelled) implements CancellableEvent<CancellableTest> {
+
         @Override
-        public @NotNull ItemStack getItemStack() {
-            return item;
+        public @NotNull EventMutatorCancellable<CancellableTest> mutator() {
+            return new EventMutatorCancellable.Simple<>(this) {
+                @Override
+                public @NotNull CancellableTest mutated() {
+                    return new CancellableTest(this.isCancelled());
+                }
+            };
         }
     }
 
-    record EntityTestEvent(Entity entity) implements EntityEvent {
+    record ItemTestEvent(ItemStack item) implements ItemEvent {
         @Override
-        public @NotNull Entity getEntity() {
-            return entity;
+        public @NotNull ItemStack itemStack() {
+            return item;
         }
     }
 
@@ -83,23 +100,11 @@ public class EventNodeTest {
         assertSame(handle1, node.getHandle(CancellableTest.class));
     }
 
-    @Test
-    public void testCancellable() {
-        var node = EventNode.all("main");
-        AtomicBoolean result = new AtomicBoolean(false);
-        var listener = EventListener.builder(CancellableTest.class)
-                .handler(event -> {
-                    event.setCancelled(true);
-                    result.set(true);
-                    assertTrue(event.isCancelled(), "The event should be cancelled");
-                }).build();
-        node.addListener(listener);
-        node.call(new CancellableTest());
-        assertTrue(result.get(), "The event should be called after the call");
-
-        // Test cancelling
-        node.addListener(CancellableTest.class, event -> fail("The event must have been cancelled"));
-        node.call(new CancellableTest());
+    record EntityTestEvent(Entity entity) implements EntityEvent {
+        @Override
+        public @NotNull Entity entity() {
+            return entity;
+        }
     }
 
     @Test

@@ -3,6 +3,7 @@ package net.minestom.server.event.player;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.network.packet.server.ServerPacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,32 +14,25 @@ import org.jetbrains.annotations.NotNull;
  * Currently, do not support viewable packets.
  */
 @ApiStatus.Experimental
-public class PlayerPacketOutEvent implements PlayerEvent, CancellableEvent {
-    private final Player player;
-    private final ServerPacket packet;
-    private boolean cancelled;
+public record PlayerPacketOutEvent(@NotNull Player player, @NotNull ServerPacket packet, boolean cancelled) implements PlayerEvent, CancellableEvent<PlayerPacketOutEvent> {
 
-    public PlayerPacketOutEvent(Player player, ServerPacket packet) {
-        this.player = player;
-        this.packet = packet;
+    public PlayerPacketOutEvent(@NotNull Player player, @NotNull ServerPacket packet) {
+        this(player, packet, false);
     }
 
     @Override
-    public @NotNull Player getPlayer() {
-        return player;
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    public @NotNull ServerPacket getPacket() {
-        return packet;
-    }
+    public static class Mutator extends EventMutatorCancellable.Simple<PlayerPacketOutEvent> {
+        public Mutator(@NotNull PlayerPacketOutEvent event) {
+            super(event);
+        }
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+        @Override
+        public @NotNull PlayerPacketOutEvent mutated() {
+            return new PlayerPacketOutEvent(this.event.player, this.event.packet, this.isCancelled());
+        }
     }
 }

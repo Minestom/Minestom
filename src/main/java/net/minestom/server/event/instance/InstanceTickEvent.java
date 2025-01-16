@@ -7,19 +7,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when an instance processes a tick.
  */
-public class InstanceTickEvent implements InstanceEvent {
-
-    private final Instance instance;
-    private final int duration;
+public record InstanceTickEvent(@NotNull Instance instance, int duration) implements InstanceEvent {
 
     public InstanceTickEvent(@NotNull Instance instance, long time, long lastTickAge) {
-        this.instance = instance;
-        this.duration = (int) (time - lastTickAge);
-    }
-
-    @Override
-    public @NotNull Instance getInstance() {
-        return instance;
+        this(instance, (int) (time - lastTickAge));
     }
 
     /**
@@ -27,7 +18,8 @@ public class InstanceTickEvent implements InstanceEvent {
      *
      * @return the duration
      */
-    public int getDuration() {
+    @Override
+    public int duration() {
         return duration;
     }
 }

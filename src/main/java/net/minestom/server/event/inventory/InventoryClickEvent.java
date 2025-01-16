@@ -12,33 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * Called after {@link InventoryPreClickEvent}, this event cannot be cancelled and items related to the click
  * are already moved.
  */
-public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent {
-
-    private final AbstractInventory inventory;
-    private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private final ItemStack clickedItem;
-    private final ItemStack cursorItem;
-
-    public InventoryClickEvent(@NotNull AbstractInventory inventory, @NotNull Player player,
-                               int slot, @NotNull ClickType clickType,
-                               @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
-        this.inventory = inventory;
-        this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
-    }
+public record InventoryClickEvent(@NotNull AbstractInventory inventory, @NotNull Player player,
+                                  int slot, @NotNull ClickType clickType,
+                                  @NotNull ItemStack clickedItem, @NotNull ItemStack cursorItem) implements InventoryEvent, PlayerInstanceEvent {
 
     /**
      * Gets the player who clicked in the inventory.
      *
      * @return the player who clicked in the inventory
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player player() {
         return player;
     }
 
@@ -47,7 +30,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the clicked slot number
      */
-    public int getSlot() {
+    public int slot() {
         return slot;
     }
 
@@ -56,8 +39,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the click type
      */
-    @NotNull
-    public ClickType getClickType() {
+    public @NotNull ClickType clickType() {
         return clickType;
     }
 
@@ -66,8 +48,7 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the clicked item
      */
-    @NotNull
-    public ItemStack getClickedItem() {
+    public @NotNull ItemStack clickedItem() {
         return clickedItem;
     }
 
@@ -76,13 +57,12 @@ public class InventoryClickEvent implements InventoryEvent, PlayerInstanceEvent 
      *
      * @return the cursor item
      */
-    @NotNull
-    public ItemStack getCursorItem() {
+    public @NotNull ItemStack cursorItem() {
         return cursorItem;
     }
 
     @Override
-    public @NotNull AbstractInventory getInventory() {
+    public @NotNull AbstractInventory inventory() {
         return inventory;
     }
 }

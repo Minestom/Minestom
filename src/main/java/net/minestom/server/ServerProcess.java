@@ -117,7 +117,7 @@ public interface ServerProcess extends Registries, Snapshotable {
     @NotNull ThreadDispatcher<Chunk> dispatcher();
 
     /**
-     * Handles the server ticks.
+     * Handles the server fireTicks.
      */
     @NotNull Ticker ticker();
 

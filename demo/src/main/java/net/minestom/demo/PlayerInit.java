@@ -58,8 +58,8 @@ public class PlayerInit {
 
     private final EventNode<Event> DEMO_NODE = EventNode.all("demo")
             .addListener(EntityAttackEvent.class, event -> {
-                final Entity source = event.getEntity();
-                final Entity entity = event.getTarget();
+                final Entity source = event.entity();
+                final Entity entity = event.target();
 
                 entity.takeKnockback(0.4f, Math.sin(source.getPosition().yaw() * 0.017453292), -Math.cos(source.getPosition().yaw() * 0.017453292));
 
@@ -72,18 +72,29 @@ public class PlayerInit {
                     ((Player) source).sendMessage("You attacked something!");
                 }
             })
-            .addListener(PlayerDeathEvent.class, event -> event.setChatMessage(Component.text("custom death message")))
+            .addListener(PlayerDeathEvent.class, event -> {
+                var mutator = event.mutator();
+                mutator.setChatMessage(Component.text("custom death message"));
+                return mutator;
+            })
             .addListener(PickupItemEvent.class, event -> {
-                final Entity entity = event.getLivingEntity();
+                final Entity entity = event.livingEntity();
                 if (entity instanceof Player) {
+
                     // Cancel event if player does not have enough inventory space
-                    final ItemStack itemStack = event.getItemEntity().getItemStack();
-                    event.setCancelled(!((Player) entity).getInventory().addItemStack(itemStack));
+                    final ItemStack itemStack = event.itemStack();
+                    if (!((Player) entity).getInventory().addItemStack(itemStack)) {
+                        var mutator = event.mutator();
+                        mutator.setCancelled(true);
+                        return mutator;
+                    }
                 }
+
+                return null;
             })
             .addListener(ItemDropEvent.class, event -> {
-                final Player player = event.getPlayer();
-                ItemStack droppedItem = event.getItemStack();
+                final Player player = event.player();
+                ItemStack droppedItem = event.itemStack();
 
                 Pos playerPos = player.getPosition();
                 ItemEntity itemEntity = new ItemEntity(droppedItem);
@@ -92,22 +103,26 @@ public class PlayerInit {
                 Vec velocity = playerPos.direction().mul(6);
                 itemEntity.setVelocity(velocity);
             })
-            .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.getPlayer().getUsername()))
+            .addListener(PlayerDisconnectEvent.class, event -> System.out.println("DISCONNECTION " + event.player().getUsername()))
             .addListener(AsyncPlayerConfigurationEvent.class, event -> {
-                final Player player = event.getPlayer();
-
+                final Player player = event.player();
+                final var mutator = event.mutator();
                 // Show off adding and removing feature flags
-                event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
+                mutator.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
                 Instance instance = instances.stream().skip(new Random().nextInt(instances.size())).findFirst().orElse(null);
-                event.setSpawningInstance(instance);
+                mutator.setSpawningInstance(instance);
+                System.out.println("CONFIGURATION " + player.getUsername() + " " + event.firstConfig() + " " + instance);
                 int x = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
+
+                System.out.println(instance);
+                return mutator;
             })
             .addListener(PlayerSpawnEvent.class, event -> {
-                final Player player = event.getPlayer();
+                final Player player = event.player();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
@@ -136,15 +151,15 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                PlayerInventory inventory = event.getPlayer().getInventory();
+                PlayerInventory inventory = event.player().getInventory();
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
                 inventory.addItemStack(ItemStack.of(Material.GOAT_HORN).with(ItemComponent.INSTRUMENT, Instrument.ADMIRE_GOAT_HORN));
 
-                if (event.isFirstSpawn()) {
-                    event.getPlayer().sendNotification(new Notification(
+                if (event.firstSpawn()) {
+                    event.player().sendNotification(new Notification(
                             Component.text("Welcome!"),
                             FrameType.TASK,
                             Material.IRON_SWORD
@@ -163,10 +178,10 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != PlayerHand.MAIN) return;
+                if (event.hand() != PlayerHand.MAIN) return;
 
-                var itemStack = event.getItemStack();
-                var block = event.getInstance().getBlock(event.getPosition());
+                var itemStack = event.itemStack();
+                var block = event.instance().getBlock(event.position());
 
                 if ("false".equals(block.getProperty("waterlogged")) && itemStack.material().equals(Material.WATER_BUCKET)) {
                     block = block.withProperty("waterlogged", "true");
@@ -174,44 +189,46 @@ public class PlayerInit {
                     block = block.withProperty("waterlogged", "false");
                 } else return;
 
-                event.getInstance().setBlock(event.getPosition(), block);
+                event.instance().setBlock(event.position(), block);
 
             })
             .addListener(PlayerBeginItemUseEvent.class, event -> {
-                final Player player = event.getPlayer();
-                final ItemStack itemStack = event.getItemStack();
+                final Player player = event.player();
+                final ItemStack itemStack = event.itemStack();
                 final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
                 if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
                     // "shoot" the arrow
-                    player.setItemInHand(event.getHand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
-                    event.getPlayer().sendMessage("pew pew!");
-                    event.setItemUseDuration(0); // Do not start using the item
-                    return;
+                    var mutator = event.mutator();
+                    player.setItemInHand(event.hand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    event.player().sendMessage("pew pew!");
+                    mutator.setItemUseDuration(0); // Do not start using the item
+                    return mutator;
                 }
+                return null;
             })
             .addListener(PlayerFinishItemUseEvent.class, event -> {
-                if (event.getItemStack().material() == Material.APPLE) {
-                    event.getPlayer().sendMessage("yummy yummy apple");
+                if (event.itemStack().material() == Material.APPLE) {
+                    event.player().sendMessage("yummy yummy apple");
                 }
             })
             .addListener(PlayerCancelItemUseEvent.class, event -> {
-                final Player player = event.getPlayer();
-                final ItemStack itemStack = event.getItemStack();
+                final Player player = event.player();
+                final ItemStack itemStack = event.itemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
                     player.setItemInHand(event.getHand(), itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
                     return;
                 }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
-                var block = event.getBlock();
+                var block = event.block();
                 var rawOpenProp = block.getProperty("open");
                 if (rawOpenProp != null) {
                     block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
-                    event.getInstance().setBlock(event.getBlockPosition(), block);
+                    event.instance().setBlock(event.blockPosition(), block);
                 }
 
                 if (block.id() == Block.CRAFTING_TABLE.id()) {
-                    event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                    event.player().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
                 }
             });
 
@@ -243,7 +260,7 @@ public class PlayerInit {
         MinestomAdventure.AUTOMATIC_COMPONENT_TRANSLATION = true;
         MinestomAdventure.COMPONENT_TRANSLATOR = (c, l) -> c;
 
-        eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.getTickMonitor()));
+        eventHandler.addListener(ServerTickMonitorEvent.class, event -> LAST_TICK.set(event.tickMonitor()));
 
         BenchmarkManager benchmarkManager = MinecraftServer.getBenchmarkManager();
         MinecraftServer.getSchedulerManager().buildTask(() -> {

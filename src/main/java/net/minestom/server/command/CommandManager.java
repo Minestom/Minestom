@@ -118,11 +118,10 @@ public final class CommandManager {
         command = command.trim();
         // Command event
         if (sender instanceof Player player) {
-            PlayerCommandEvent playerCommandEvent = new PlayerCommandEvent(player, command);
-            EventDispatcher.call(playerCommandEvent);
-            if (playerCommandEvent.isCancelled())
+            var playerCommandEvent = EventDispatcher.callCancellable(new PlayerCommandEvent(player, command));
+            if (playerCommandEvent.cancelled())
                 return CommandResult.of(CommandResult.Type.CANCELLED, command);
-            command = playerCommandEvent.getCommand();
+            command = playerCommandEvent.command();
         }
         // Process the command
         final CommandParser.Result parsedCommand = parseCommand(sender, command);

@@ -11,11 +11,11 @@ public class AnimationListener {
 
     public static void animationListener(ClientAnimationPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
-        final ItemStack itemStack = player.getItemInHand(hand);
+        //final ItemStack itemStack = player.getItemInHand(hand);
         //itemStack.onLeftClick(player, hand);
         PlayerHandAnimationEvent handAnimationEvent = new PlayerHandAnimationEvent(player, hand);
-        EventDispatcher.callCancellable(handAnimationEvent, () -> {
-            switch (hand) {
+        EventDispatcher.callCancellable(handAnimationEvent, (handEvent) -> {
+            switch (handEvent.hand()) {
                 case MAIN -> player.swingMainHand(true);
                 case OFF -> player.swingOffHand(true);
             }

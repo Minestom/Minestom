@@ -1,8 +1,11 @@
 package net.minestom.server.event.server;
 
+import net.minestom.server.event.Event;
 import net.minestom.server.event.trait.CancellableEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.utils.time.TimeUnit;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
@@ -12,16 +15,15 @@ import java.time.Duration;
  * Called when a {@link PlayerConnection} sends a ping packet,
  * usually after the status packet. Only used in versions since the netty rewrite; 1.7+
  *
+ * @param connection the player connection
+ * @param payload    the payload the client sent
+ * @param delay      the delay until minestom will send the ping response packet
+ * @param cancelled  true if the event is cancelled, false otherwise
+ *
  * @see ServerListPingEvent
  */
-public class ClientPingServerEvent implements CancellableEvent {
+public record ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, @NotNull Duration delay, boolean cancelled) implements CancellableEvent<ClientPingServerEvent> {
     private static final Duration DEFAULT_DELAY = Duration.of(0, TimeUnit.MILLISECOND);
-
-    private final PlayerConnection connection;
-    private long payload;
-
-    private boolean cancelled = false;
-    private Duration delay;
 
     /**
      * Creates a new client ping server event with 0 delay
@@ -30,21 +32,18 @@ public class ClientPingServerEvent implements CancellableEvent {
      * @param payload    the payload the client sent
      */
     public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload) {
-        this.connection = connection;
-        this.payload = payload;
-        this.delay = DEFAULT_DELAY;
+        this(connection, payload, DEFAULT_DELAY, false);
     }
 
     /**
-     * Creates a new client ping server event with 0 delay
+     * Creates a new client ping server event
      *
      * @param connection the player connection
      * @param payload    the payload the client sent
+     * @param delay      the delay until minestom will send the ping response packet
      */
-    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, Duration delay) {
-        this.connection = connection;
-        this.payload = payload;
-        this.delay = delay;
+    public ClientPingServerEvent(@NotNull PlayerConnection connection, long payload, @NotNull Duration delay) {
+        this(connection, payload, delay, false);
     }
 
     /**
@@ -67,17 +66,6 @@ public class ClientPingServerEvent implements CancellableEvent {
     }
 
     /**
-     * Sets the payload to respond with.
-     * <p>
-     * Note: This should be the same as the client sent, however vanilla 1.17 seems to be OK with a different payload.
-     *
-     * @param payload the payload
-     */
-    public void setPayload(long payload) {
-        this.payload = payload;
-    }
-
-    /**
      * Gets the delay until minestom will send the ping response packet.
      *
      * @return the delay
@@ -86,43 +74,85 @@ public class ClientPingServerEvent implements CancellableEvent {
         return delay;
     }
 
-    /**
-     * Adds to the delay until minestom will send the ping response packet.
-     *
-     * @param delay the delay
-     */
-    public void addDelay(@NotNull Duration delay) {
-        this.delay = this.delay.plus(delay);
-    }
-
-    /**
-     * Sets the delay until minestom will send the ping response packet.
-     *
-     * @param delay the delay
-     */
-    public void setDelay(@NotNull Duration delay) {
-        this.delay = delay;
-    }
-
-    /**
-     * Clears the delay until minestom will send the ping response packet.
-     */
-    public void noDelay() {
-        this.delay = DEFAULT_DELAY;
-    }
-
     @Override
-    public boolean isCancelled() {
+    public boolean cancelled() {
         return cancelled;
     }
 
-    /**
-     * Cancelling this event will cause the server to appear offline in the vanilla server list.
-     *
-     * @param cancel true if the event should be cancelled, false otherwise
-     */
     @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public @NotNull Mutator mutator() {
+        return null;
+    }
+
+    public static class Mutator implements EventMutatorCancellable<ClientPingServerEvent> {
+        private final PlayerConnection connection;
+
+        private long payload;
+        private Duration delay;
+        private boolean cancelled;
+
+        public Mutator(ClientPingServerEvent event) {
+            this.connection = event.connection;
+            this.payload = event.payload;
+            this.delay = event.delay;
+            this.cancelled = event.cancelled;
+        }
+
+        /**
+         * Sets the payload to respond with.
+         * <p>
+         * Note: This should be the same as the client sent, however vanilla 1.17 seems to be OK with a different payload.
+         *
+         * @param payload the payload
+         */
+        public void setPayload(long payload) {
+            this.payload = payload;
+        }
+
+        /**
+         * Adds to the delay until minestom will send the ping response packet.
+         *
+         * @param delay the delay
+         */
+        public void addDelay(@NotNull Duration delay) {
+            this.delay = this.delay.plus(delay);
+        }
+
+        /**
+         * Sets the delay until minestom will send the ping response packet.
+         *
+         * @param delay the delay
+         */
+        public void setDelay(@NotNull Duration delay) {
+            this.delay = delay;
+        }
+
+        /**
+         * Clears the delay until minestom will send the ping response packet.
+         */
+        public void noDelay() {
+            this.delay = DEFAULT_DELAY;
+        }
+
+        @Override
+        public boolean isCancelled() {
+            return this.cancelled;
+        }
+
+        /**
+         * Cancelling this event will cause the server to appear offline in the vanilla server list.
+         *
+         * @param cancel true if the event should be cancelled, false otherwise
+         */
+        @Override
+        public void setCancelled(boolean cancel) {
+            this.cancelled = cancel;
+        }
+
+        @Contract(pure = true)
+        @Override
+        public @NotNull ClientPingServerEvent mutated() {
+            return new ClientPingServerEvent(this.connection, this.payload, this.delay, this.cancelled);
+        }
     }
 }

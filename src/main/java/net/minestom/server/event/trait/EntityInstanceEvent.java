@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface EntityInstanceEvent extends EntityEvent, InstanceEvent {
     @Override
-    default @NotNull Instance getInstance() {
-        final Instance instance = getEntity().getInstance();
+    default @NotNull Instance instance() {
+        final Instance instance = entity().getInstance();
         assert instance != null : "EntityInstanceEvent is only supported on events where the entity's instance is non-null!";
         return instance;
     }

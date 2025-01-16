@@ -80,9 +80,8 @@ public final class PlayerDiggingListener {
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         final boolean instantBreak = breakTicks == 0;
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
-            EventDispatcher.call(playerStartDiggingEvent);
-            return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
+            var playerStartDiggingEvent = EventDispatcher.callCancellable(new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace));
+            return new DiggingResult(block, !playerStartDiggingEvent.cancelled());
         }
         // Client only sends a single STARTED_DIGGING when insta-break is enabled
         return breakBlock(instance, player, blockPosition, block, blockFace);
@@ -117,7 +116,7 @@ public final class PlayerDiggingListener {
         PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
         EventDispatcher.call(playerFinishDiggingEvent);
 
-        return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
+        return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.block(), blockFace);
     }
 
     private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
@@ -157,15 +156,14 @@ public final class PlayerDiggingListener {
         if (meta == null || !meta.isHandActive()) return;
         final PlayerHand hand = meta.getActiveHand();
 
-        PlayerCancelItemUseEvent cancelUseEvent = new PlayerCancelItemUseEvent(player, hand, player.getItemInHand(hand), player.getCurrentItemUseTime());
-        EventDispatcher.call(cancelUseEvent);
+        final var cancelUseEvent = EventDispatcher.callMutable(new PlayerCancelItemUseEvent(player, hand, player.getItemInHand(hand), player.getCurrentItemUseTime()));
 
         // Reset client state
         player.triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
 
         // Reset server state
         final boolean isOffHand = hand == PlayerHand.OFF;
-        player.refreshActiveHand(false, isOffHand, cancelUseEvent.isRiptideSpinAttack());
+        player.refreshActiveHand(false, isOffHand, cancelUseEvent.riptideSpinAttack());
         player.clearItemUse();
     }
 
@@ -173,9 +171,9 @@ public final class PlayerDiggingListener {
         final ItemStack mainHand = player.getItemInMainHand();
         final ItemStack offHand = player.getItemInOffHand();
         PlayerSwapItemEvent swapItemEvent = new PlayerSwapItemEvent(player, offHand, mainHand);
-        EventDispatcher.callCancellable(swapItemEvent, () -> {
-            player.setItemInMainHand(swapItemEvent.getMainHandItem());
-            player.setItemInOffHand(swapItemEvent.getOffHandItem());
+        EventDispatcher.callCancellable(swapItemEvent, (sawpEvent) -> {
+            sawpEvent.player().setItemInMainHand(sawpEvent.mainHandItem());
+            sawpEvent.player().setItemInOffHand(sawpEvent.offHandItem());
         });
     }
 

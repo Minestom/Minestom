@@ -35,7 +35,7 @@ public class EntityProjectileIntegrationTest {
 
         // Ensure the position is correct.
         // x doesn't change
-        // Big delta because ticks aren't very accurate
+        // Big delta because fireTicks aren't very accurate
         assertEquals(before.x(), after.x());
         assertEquals(target.y(), after.y(), 0.6);
         assertEquals(target.z(), after.z(), 0.6);

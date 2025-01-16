@@ -1,10 +1,13 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.event.Event;
+import net.minestom.server.event.trait.MutableEvent;
+import net.minestom.server.event.trait.mutation.EventMutator;
 import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.network.plugin.LoginPlugin;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -14,11 +17,9 @@ import java.util.concurrent.CompletableFuture;
  * Called before the player initialization, it can be used to kick the player before any connection
  * or to change his final username/uuid.
  */
-public class AsyncPlayerPreLoginEvent implements Event {
-
-    private final PlayerConnection connection;
-    private GameProfile gameProfile;
-    private final LoginPluginMessageProcessor pluginMessageProcessor;
+public record AsyncPlayerPreLoginEvent(@NotNull PlayerConnection connection,
+                                       @NotNull GameProfile gameProfile,
+                                       @NotNull LoginPluginMessageProcessor pluginMessageProcessor) implements MutableEvent<AsyncPlayerPreLoginEvent> {
 
     public AsyncPlayerPreLoginEvent(@NotNull PlayerConnection connection,
                                     @NotNull GameProfile gameProfile,
@@ -26,18 +27,6 @@ public class AsyncPlayerPreLoginEvent implements Event {
         this.connection = connection;
         this.gameProfile = gameProfile;
         this.pluginMessageProcessor = pluginMessageProcessor;
-    }
-
-    public @NotNull PlayerConnection getConnection() {
-        return connection;
-    }
-
-    public GameProfile getGameProfile() {
-        return gameProfile;
-    }
-
-    public void setGameProfile(GameProfile gameProfile) {
-        this.gameProfile = gameProfile;
     }
 
     /**
@@ -52,18 +41,35 @@ public class AsyncPlayerPreLoginEvent implements Event {
         return pluginMessageProcessor.request(channel, requestPayload);
     }
 
-    @Deprecated
-    public @NotNull String getUsername() {
-        return gameProfile.name();
+    @Override
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    @Deprecated
-    public void setUsername(@NotNull String username) {
-        this.gameProfile = new GameProfile(gameProfile.uuid(), username, gameProfile.properties());
-    }
+    public static class Mutator implements EventMutator<AsyncPlayerPreLoginEvent> {
+        private final PlayerConnection connection;
+        private final LoginPluginMessageProcessor pluginMessageProcessor;
 
-    @Deprecated
-    public @NotNull UUID getPlayerUuid() {
-        return gameProfile.uuid();
+        private GameProfile gameProfile;
+
+        public Mutator(AsyncPlayerPreLoginEvent event) {
+            this.connection = event.connection;
+            this.gameProfile = event.gameProfile;
+            this.pluginMessageProcessor = event.pluginMessageProcessor;
+        }
+
+        public void setGameProfile(GameProfile gameProfile) {
+            this.gameProfile = gameProfile;
+        }
+
+        public GameProfile getGameProfile() {
+            return gameProfile;
+        }
+
+        @Contract(pure = true)
+        @Override
+        public @NotNull AsyncPlayerPreLoginEvent mutated() {
+            return new AsyncPlayerPreLoginEvent(this.connection, this.gameProfile, this.pluginMessageProcessor);
+        }
     }
 }

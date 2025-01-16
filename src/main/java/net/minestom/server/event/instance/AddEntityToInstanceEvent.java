@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.EntityEvent;
 import net.minestom.server.event.trait.InstanceEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,21 +12,10 @@ import org.jetbrains.annotations.NotNull;
  * Called by an Instance when an entity is added to it.
  * Can be used attach data.
  */
-public class AddEntityToInstanceEvent implements InstanceEvent, EntityEvent, CancellableEvent {
-
-    private final Instance instance;
-    private final Entity entity;
-
-    private boolean cancelled;
+public record AddEntityToInstanceEvent(@NotNull Instance instance, @NotNull Entity entity, boolean cancelled) implements InstanceEvent, EntityEvent, CancellableEvent<AddEntityToInstanceEvent> {
 
     public AddEntityToInstanceEvent(@NotNull Instance instance, @NotNull Entity entity) {
-        this.instance = instance;
-        this.entity = entity;
-    }
-
-    @Override
-    public @NotNull Instance getInstance() {
-        return instance;
+        this(instance, entity, false);
     }
 
     /**
@@ -34,17 +24,23 @@ public class AddEntityToInstanceEvent implements InstanceEvent, EntityEvent, Can
      * @return the entity being added
      */
     @NotNull
-    public Entity getEntity() {
+    public Entity entity() {
         return entity;
     }
 
     @Override
-    public boolean isCancelled() {
-        return cancelled;
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public static class Mutator extends EventMutatorCancellable.Simple<AddEntityToInstanceEvent> {
+        public Mutator(@NotNull AddEntityToInstanceEvent event) {
+            super(event);
+        }
+
+        @Override
+        public @NotNull AddEntityToInstanceEvent mutated() {
+            return new AddEntityToInstanceEvent(this.event.instance, this.event.entity, this.isCancelled());
+        }
     }
 }

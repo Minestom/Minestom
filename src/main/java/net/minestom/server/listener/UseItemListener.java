@@ -66,24 +66,23 @@ public class UseItemListener {
         }
 
         boolean usingMainHand = player.getItemUseHand() == PlayerHand.MAIN && hand == PlayerHand.OFF;
-        PlayerUseItemEvent useItemEvent = new PlayerUseItemEvent(player, hand, itemStack,
-                usingMainHand ? 0 : useItemTime);
-        EventDispatcher.call(useItemEvent);
+        final var useItemEvent = EventDispatcher.callCancellable(new PlayerUseItemEvent(player, hand, itemStack,
+                usingMainHand ? 0 : useItemTime));
 
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         final PlayerInventory playerInventory = player.getInventory();
-        if (useItemEvent.isCancelled()) {
+        if (useItemEvent.cancelled()) {
             playerInventory.update();
             return;
         }
 
-        useItemTime = useItemEvent.getItemUseTime();
+        useItemTime = useItemEvent.itemUseTime();
         if (useItemTime != 0) {
             final PlayerBeginItemUseEvent beginUseEvent = new PlayerBeginItemUseEvent(player, hand, itemStack, useAnimation, useItemTime);
-            EventDispatcher.callCancellable(beginUseEvent, () -> {
-                if (beginUseEvent.getItemUseDuration() <= 0) return;
+            EventDispatcher.callCancellable(beginUseEvent, (useEvent) -> {
+                if (useEvent.itemUseDuration() <= 0) return;
 
-                player.refreshItemUse(hand, beginUseEvent.getItemUseDuration());
+                player.refreshItemUse(hand, useEvent.itemUseDuration());
                 player.refreshActiveHand(true, hand == PlayerHand.OFF, false);
             });
 

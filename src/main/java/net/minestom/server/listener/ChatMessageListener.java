@@ -37,16 +37,16 @@ public class ChatMessageListener {
         PlayerChatEvent playerChatEvent = new PlayerChatEvent(player, players, message);
 
         // Call the event
-        EventDispatcher.callCancellable(playerChatEvent, () -> {
-            final Collection<Player> recipients = playerChatEvent.getRecipients();
+        EventDispatcher.callCancellable(playerChatEvent, (event) -> {
+            final Collection<Player> recipients = event.recipients();
 
             if (!recipients.isEmpty()) {
                 // delegate to the messenger to avoid sending messages we shouldn't be
                 Messenger.sendMessage(
                         recipients,
-                        playerChatEvent.getFormattedMessage(),
+                        event.formattedMessage(),
                         ChatPosition.CHAT,
-                        player.getUuid());
+                        event.player().getUuid());
             }
         });
     }

@@ -6,7 +6,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.inventory.TransactionType;
 import net.minestom.server.inventory.condition.InventoryCondition;
@@ -418,12 +417,11 @@ public final class InventoryClickProcessor {
         player.UNSAFE_changeDidCloseInventory(false);
         // InventoryPreClickEvent
         {
-            InventoryPreClickEvent inventoryPreClickEvent = new InventoryPreClickEvent(inventory, player, slot, clickType,
-                    clickResult.getClicked(), clickResult.getCursor());
-            EventDispatcher.call(inventoryPreClickEvent);
-            clickResult.setCursor(inventoryPreClickEvent.getCursorItem());
-            clickResult.setClicked(inventoryPreClickEvent.getClickedItem());
-            if (inventoryPreClickEvent.isCancelled()) {
+            var inventoryPreClickEvent = EventDispatcher.callCancellable(new InventoryPreClickEvent(inventory, player, slot, clickType,
+                    clickResult.getClicked(), clickResult.getCursor()));
+            clickResult.setCursor(inventoryPreClickEvent.cursorItem());
+            clickResult.setClicked(inventoryPreClickEvent.clickedItem());
+            if (inventoryPreClickEvent.cancelled()) {
                 clickResult.setCancel(true);
             }
         }

@@ -54,8 +54,8 @@ public class EntityProjectileCollisionIntegrationTest {
 
         var event = eventRef.get();
         assertNotNull(event);
-        assertEquals(blockPosition, new Vec(event.getCollisionPosition().blockX(), event.getCollisionPosition().blockY(), event.getCollisionPosition().blockZ()));
-        assertEquals(block, event.getBlock());
+        assertEquals(blockPosition, new Vec(event.collisionPosition().blockX(), event.collisionPosition().blockY(), event.collisionPosition().blockZ()));
+        assertEquals(block, event.block());
 
         final var eventRef2 = new AtomicReference<ProjectileUncollideEvent>();
         MinecraftServer.getGlobalEventHandler().addListener(ProjectileUncollideEvent.class, eventRef2::set);
@@ -69,7 +69,7 @@ public class EntityProjectileCollisionIntegrationTest {
         final var event2 = eventRef2.get();
         assertNotNull(event);
         assertNotNull(event2);
-        assertEquals(blockPosition.withY(y -> y - 1), new Vec(event.getCollisionPosition().blockX(), event.getCollisionPosition().blockY(), event.getCollisionPosition().blockZ()));
+        assertEquals(blockPosition.withY(y -> y - 1), new Vec(event.collisionPosition().blockX(), event.collisionPosition().blockY(), event.collisionPosition().blockZ()));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class EntityProjectileCollisionIntegrationTest {
         final var eventRef = new AtomicReference<ProjectileCollideWithEntityEvent>();
         final var eventNode = EventNode.all("projectile-test");
         eventNode.addListener(ProjectileCollideWithEntityEvent.class, event -> {
-            event.getEntity().remove();
+            event.entity().remove();
             eventRef.set(event);
             MinecraftServer.getGlobalEventHandler().removeChild(eventNode);
         });
@@ -115,8 +115,8 @@ public class EntityProjectileCollisionIntegrationTest {
 
         final var event = eventRef.get();
         assertNotNull(event, "Could not hit entity at " + targetPosition);
-        assertSame(target, event.getTarget());
-        assertTrue(projectile.getBoundingBox().intersectEntity(event.getCollisionPosition(), target));
+        assertSame(target, event.target());
+        assertTrue(projectile.getBoundingBox().intersectEntity(event.collisionPosition(), target));
         target.remove();
     }
 
@@ -135,7 +135,7 @@ public class EntityProjectileCollisionIntegrationTest {
 
         final var eventRef = new AtomicReference<ProjectileCollideWithEntityEvent>();
         MinecraftServer.getGlobalEventHandler().addListener(ProjectileCollideWithEntityEvent.class, event -> {
-            event.getEntity().remove();
+            event.entity().remove();
             eventRef.set(event);
         });
 
@@ -148,7 +148,7 @@ public class EntityProjectileCollisionIntegrationTest {
 
         final var event = eventRef.get();
         assertNotNull(event);
-        assertSame(shooter, event.getTarget());
+        assertSame(shooter, event.target());
         assertTrue(shooter.getBoundingBox().intersectEntity(shooter.getPosition(), projectile));
     }
 

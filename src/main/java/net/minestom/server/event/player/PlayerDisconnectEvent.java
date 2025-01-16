@@ -7,16 +7,4 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player disconnect.
  */
-public class PlayerDisconnectEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-
-    public PlayerDisconnectEvent(@NotNull Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
-}
+public record PlayerDisconnectEvent(@NotNull Player player) implements PlayerInstanceEvent {}

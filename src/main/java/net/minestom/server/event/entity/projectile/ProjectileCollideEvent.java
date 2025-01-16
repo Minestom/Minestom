@@ -7,33 +7,14 @@ import net.minestom.server.event.trait.EntityInstanceEvent;
 import net.minestom.server.event.trait.RecursiveEvent;
 import org.jetbrains.annotations.NotNull;
 
-class ProjectileCollideEvent implements EntityInstanceEvent, CancellableEvent, RecursiveEvent {
-
-    private final @NotNull Entity projectile;
-    private final @NotNull Pos position;
-    private boolean cancelled;
-
-    protected ProjectileCollideEvent(@NotNull Entity projectile, @NotNull Pos position) {
-        this.projectile = projectile;
-        this.position = position;
-    }
+sealed interface ProjectileCollideEvent<T extends CancellableEvent<T>> extends EntityInstanceEvent, RecursiveEvent, CancellableEvent<T> permits ProjectileCollideWithBlockEvent, ProjectileCollideWithEntityEvent {
 
     @Override
-    public @NotNull Entity getEntity() {
-        return projectile;
+    default @NotNull Entity entity() {
+        return projectile();
     }
 
-    public @NotNull Pos getCollisionPosition() {
-        return position;
-    }
+    @NotNull Entity projectile();
 
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        cancelled = cancel;
-    }
+    @NotNull Pos collisionPosition();
 }

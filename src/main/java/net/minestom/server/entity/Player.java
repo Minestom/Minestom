@@ -315,9 +315,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 break;
             }
         }
-        PlayerSkinInitEvent skinInitEvent = new PlayerSkinInitEvent(this, profileSkin);
-        EventDispatcher.call(skinInitEvent);
-        this.skin = skinInitEvent.getSkin();
+        PlayerSkinInitEvent skinInitEvent = EventDispatcher.callMutable(new PlayerSkinInitEvent(this, profileSkin));
+        this.skin = skinInitEvent.skin();
         // FIXME: when using Geyser, this line remove the skin of the client
         PacketSendingUtils.broadcastPlayPacket(getAddPlayerToList());
 
@@ -393,9 +392,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
                         if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
-                            PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
-                            EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                                short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                           EventDispatcher.callCancellable(new PickupExperienceEvent(this, experienceOrb), (pickupExperienceEvent) -> {
+                                short experienceCount = pickupExperienceEvent.experienceCount(); // TODO give to player
                                 experienceOrb.remove();
                             });
                         }
@@ -407,15 +405,14 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             final PlayerHand itemUseHand = this.itemUseHand;
             if (itemUseTime > 0 && getCurrentItemUseTime() >= itemUseTime) {
                 final ItemStack itemStack = getItemInHand(itemUseHand);
-                PlayerFinishItemUseEvent finishUseEvent = new PlayerFinishItemUseEvent(this, itemUseHand, itemStack, itemUseTime);
-                EventDispatcher.call(finishUseEvent);
+                var finishUseEvent = EventDispatcher.callMutable(new PlayerFinishItemUseEvent(this, itemUseHand, itemStack, itemUseTime));
 
                 // Reset client state
                 triggerStatus((byte) EntityStatuses.Player.MARK_ITEM_FINISHED);
 
                 // Reset server state
                 final boolean isOffHand = itemUseHand == PlayerHand.OFF;
-                refreshActiveHand(false, isOffHand, finishUseEvent.isRiptideSpinAttack());
+                refreshActiveHand(false, isOffHand, finishUseEvent.riptideSpinAttack());
                 clearItemUse();
 
                 // The client has predicted that the itemstack will have its count reduced, if the server
@@ -459,11 +456,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
 
             // Call player death event
-            PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(this, deathText, chatMessage);
-            EventDispatcher.call(playerDeathEvent);
+            var playerDeathEvent = EventDispatcher.callMutable(new PlayerDeathEvent(this, deathText, chatMessage));
 
-            deathText = playerDeathEvent.getDeathText();
-            chatMessage = playerDeathEvent.getChatMessage();
+            deathText = playerDeathEvent.deathText();
+            chatMessage = playerDeathEvent.chatMessage();
 
             // #buildDeathScreenText can return null, check here
             if (deathText != null) {
@@ -500,12 +496,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 DEFAULT_SEA_LEVEL));
         refreshClientStateAfterRespawn();
 
-        PlayerRespawnEvent respawnEvent = new PlayerRespawnEvent(this);
-        EventDispatcher.call(respawnEvent);
+        var respawnEvent = EventDispatcher.callMutable(new PlayerRespawnEvent(this));
         refreshIsDead(false);
         updatePose();
 
-        Pos respawnPosition = respawnEvent.getRespawnPosition();
+        Pos respawnPosition = respawnEvent.respawnPosition();
 
         // The client unloads chunks when respawning, so resend all chunks next to spawn
         ChunkRange.chunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
@@ -1123,9 +1118,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Gets the amount of ticks which have passed since the player started using an item.
+     * Gets the amount of fireTicks which have passed since the player started using an item.
      *
-     * @return the amount of ticks which have passed, or zero if the player is not using an item
+     * @return the amount of fireTicks which have passed, or zero if the player is not using an item
      */
     public long getCurrentItemUseTime() {
         if (!isUsingItem()) return 0;
@@ -1277,9 +1272,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     public boolean dropItem(@NotNull ItemStack item) {
         if (item.isAir()) return false;
-        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
-        EventDispatcher.call(itemDropEvent);
-        return !itemDropEvent.isCancelled();
+        var itemDropEvent = EventDispatcher.callCancellable(new ItemDropEvent(this, item));
+        return !itemDropEvent.cancelled();
     }
 
     @Override
@@ -1390,7 +1384,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     /**
      * Used to retrieve the default spawn point.
      * <p>
-     * Can be altered by the {@link PlayerRespawnEvent#setRespawnPosition(Pos)}.
+     * Can be altered by the {@link PlayerRespawnEvent#mutator()}.
      *
      * @return a copy of the default respawn point
      */
@@ -1607,14 +1601,13 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return true if the gamemode was changed successfully, false otherwise (cancelled by event)
      */
     public boolean setGameMode(@NotNull GameMode gameMode) {
-        PlayerGameModeChangeEvent playerGameModeChangeEvent = new PlayerGameModeChangeEvent(this, gameMode);
-        EventDispatcher.call(playerGameModeChangeEvent);
-        if (playerGameModeChangeEvent.isCancelled()) {
+        var playerGameModeChangeEvent = EventDispatcher.callCancellable(new PlayerGameModeChangeEvent(this, gameMode));
+        if (playerGameModeChangeEvent.cancelled()) {
             // Abort
             return false;
         }
 
-        gameMode = playerGameModeChangeEvent.getNewGameMode();
+        gameMode = playerGameModeChangeEvent.newGameMode();
 
         this.gameMode = gameMode;
         // Condition to prevent sending the packets before spawning the player
@@ -1732,20 +1725,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
      */
     public boolean openInventory(@NotNull Inventory inventory) {
-        InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
-
-        EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
+        var inventoryOpenEvent = EventDispatcher.callCancellable(new InventoryOpenEvent(inventory, this), (event) -> {
             AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
             }
 
-            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
+            AbstractInventory newInventory = event.inventory();
 
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
-        return !inventoryOpenEvent.isCancelled();
+        return !inventoryOpenEvent.cancelled();
     }
 
     /**
@@ -1761,8 +1752,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         AbstractInventory openInventory = getOpenInventory();
         if (openInventory == null) return;
 
-        InventoryCloseEvent inventoryCloseEvent = new InventoryCloseEvent(openInventory, this, fromClient);
-        EventDispatcher.call(inventoryCloseEvent);
+        var inventoryCloseEvent = EventDispatcher.callMutable(new InventoryCloseEvent(openInventory, this, fromClient));
 
         if (!fromClient) {
             didCloseInventory = true;
@@ -1774,7 +1764,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         didCloseInventory = false;
 
-        Inventory newInventory = inventoryCloseEvent.getNewInventory();
+        Inventory newInventory = inventoryCloseEvent.newInventory();
         if (newInventory != null)
             openInventory(newInventory);
     }

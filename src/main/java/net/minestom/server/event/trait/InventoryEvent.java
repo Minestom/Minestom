@@ -12,5 +12,5 @@ public interface InventoryEvent extends Event {
     /**
      * Gets the inventory that was clicked.
      */
-    @NotNull AbstractInventory getInventory();
+    @NotNull AbstractInventory inventory();
 }

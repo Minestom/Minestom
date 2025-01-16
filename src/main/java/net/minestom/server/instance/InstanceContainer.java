@@ -234,10 +234,10 @@ public class InstanceContainer extends Instance {
         }
         PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
         EventDispatcher.call(blockBreakEvent);
-        final boolean allowed = !blockBreakEvent.isCancelled();
+        final boolean allowed = !blockBreakEvent.cancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
+            final Block resultBlock = blockBreakEvent.resultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet

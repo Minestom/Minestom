@@ -67,13 +67,12 @@ public class PlayerPositionListener {
             return;
         }
 
-        PlayerMoveEvent playerMoveEvent = new PlayerMoveEvent(player, packetPosition, onGround);
-        EventDispatcher.call(playerMoveEvent);
+        final var playerMoveEvent = EventDispatcher.callCancellable(new PlayerMoveEvent(player, packetPosition, onGround));
         if (!currentPosition.equals(player.getPosition())) {
             // Player has been teleported in the event
             return;
         }
-        if (playerMoveEvent.isCancelled()) {
+        if (playerMoveEvent.cancelled()) {
             // Teleport to previous position & cancel any velocity
             player.sendPacket(new PlayerPositionAndLookPacket(player.getNextTeleportId(), currentPosition,
                     Vec.ZERO, currentPosition.yaw(), currentPosition.pitch(), (byte) 0x00));

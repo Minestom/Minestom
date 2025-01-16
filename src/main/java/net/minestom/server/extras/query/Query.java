@@ -184,12 +184,12 @@ public class Query {
 
                     if (remaining == 0) { // basic
                         BasicQueryEvent event = new BasicQueryEvent(sender, sessionID);
-                        EventDispatcher.callCancellable(event, () ->
-                                sendResponse(BasicQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
+                        EventDispatcher.callCancellable(event, (out) ->
+                                sendResponse(BasicQueryResponse.SERIALIZER, out.queryResponse(), sessionID, sender));
                     } else if (remaining == 5) { // full
                         FullQueryEvent event = new FullQueryEvent(sender, sessionID);
-                        EventDispatcher.callCancellable(event, () ->
-                                sendResponse(FullQueryResponse.SERIALIZER, event.getQueryResponse(), sessionID, sender));
+                        EventDispatcher.callCancellable(event, (out) ->
+                                sendResponse(FullQueryResponse.SERIALIZER, out.queryResponse(), sessionID, sender));
                     }
                 }
             }

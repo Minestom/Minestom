@@ -158,7 +158,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
-    // Network synchronization, send the absolute position of the entity every n ticks
+    // Network synchronization, send the absolute position of the entity every n fireTicks
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
@@ -654,9 +654,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Gets the number of ticks this entity has been active for.
+     * Gets the number of fireTicks this entity has been active for.
      *
-     * @return the number of ticks this entity has been active for
+     * @return the number of fireTicks this entity has been active for
      */
     public long getAliveTicks() {
         return ticks;
@@ -777,9 +777,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (Objects.equals(previousInstance, instance)) {
             return teleport(spawnPosition); // Already in the instance, teleport to spawn point
         }
-        AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
-        EventDispatcher.call(event);
-        if (event.isCancelled()) return null; // TODO what to return?
+        var event = EventDispatcher.callCancellable(new AddEntityToInstanceEvent(instance, this));
+        if (event.cancelled()) return null; // TODO what to return?
 
         if (previousInstance != null) removeFromInstance(previousInstance);
 
@@ -849,7 +848,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void setVelocity(@NotNull Vec velocity) {
         EntityVelocityEvent entityVelocityEvent = new EntityVelocityEvent(this, velocity);
         EventDispatcher.callCancellable(entityVelocityEvent, () -> {
-            this.velocity = entityVelocityEvent.getVelocity();
+            this.velocity = entityVelocityEvent.velocity();
             sendPacketToViewersAndSelf(getVelocityPacket());
         });
     }
@@ -1568,7 +1567,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Returns the current synchronization interval. The default value is {@link ServerFlag#ENTITY_SYNCHRONIZATION_TICKS}
      * but can be overridden per entity with {@link #setSynchronizationTicks(long)}.
      *
-     * @return The current synchronization ticks
+     * @return The current synchronization fireTicks
      */
     public long getSynchronizationTicks() {
         return this.synchronizationTicks;

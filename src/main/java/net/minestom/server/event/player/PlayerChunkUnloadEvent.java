@@ -9,23 +9,15 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Could be used to unload the chunk internally in order to save memory.
  */
-public class PlayerChunkUnloadEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-    private final int chunkX, chunkZ;
-
-    public PlayerChunkUnloadEvent(@NotNull Player player, int chunkX, int chunkZ) {
-        this.player = player;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-    }
+public record PlayerChunkUnloadEvent(@NotNull Player player, int chunkX, int chunkZ) implements PlayerInstanceEvent {
 
     /**
      * Gets the chunk X.
      *
      * @return the chunk X
      */
-    public int getChunkX() {
+    @Override
+    public int chunkX() {
         return chunkX;
     }
 
@@ -34,12 +26,8 @@ public class PlayerChunkUnloadEvent implements PlayerInstanceEvent {
      *
      * @return the chunk Z
      */
-    public int getChunkZ() {
-        return chunkZ;
-    }
-
     @Override
-    public @NotNull Player getPlayer() {
-        return player;
+    public int chunkZ() {
+        return chunkZ;
     }
 }

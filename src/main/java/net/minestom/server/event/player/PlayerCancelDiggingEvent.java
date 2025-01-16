@@ -11,24 +11,14 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a {@link Player} stops digging a block before it is broken
  */
-public class PlayerCancelDiggingEvent implements PlayerInstanceEvent, BlockEvent {
-    private final Player player;
-    private final Block block;
-    private final BlockVec blockPosition;
-
-    public PlayerCancelDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition) {
-        this.player = player;
-        this.block = block;
-        this.blockPosition = blockPosition;
-    }
-
+public record PlayerCancelDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition) implements PlayerInstanceEvent, BlockEvent {
     /**
      * Gets the block which was being dug.
      *
      * @return the block
      */
     @Override
-    public @NotNull Block getBlock() {
+    public @NotNull Block block() {
         return block;
     }
 
@@ -38,12 +28,12 @@ public class PlayerCancelDiggingEvent implements PlayerInstanceEvent, BlockEvent
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public @NotNull BlockVec blockPosition() {
         return blockPosition;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public @NotNull Player player() {
         return player;
     }
 }

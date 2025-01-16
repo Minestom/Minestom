@@ -149,9 +149,8 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     private ItemStack slotChangeEvent(@NotNull ItemStack itemStack, @NotNull EquipmentSlot slot) {
-        EntityEquipEvent entityEquipEvent = new EntityEquipEvent(this, itemStack, slot);
-        EventDispatcher.call(entityEquipEvent);
-        return entityEquipEvent.getEquippedItem();
+        var entityEquipEvent = EventDispatcher.callMutable(new EntityEquipEvent(this, itemStack, slot));
+        return entityEquipEvent.equippedItem();
     }
 
 
@@ -277,27 +276,26 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     }
 
     /**
-     * Gets the amount of ticks this entity is on fire for.
+     * Gets the amount of fireTicks this entity is on fire for.
      *
-     * @return the remaining duration of fire in ticks, 0 if not on fire
+     * @return the remaining duration of fire in fireTicks, 0 if not on fire
      */
     public int getFireTicks() {
         return remainingFireTicks;
     }
 
     /**
-     * Sets this entity on fire for the given ticks.
+     * Sets this entity on fire for the given fireTicks.
      *
-     * @param ticks duration of fire in ticks
+     * @param ticks duration of fire in fireTicks
      */
     public void setFireTicks(int ticks) {
         int fireTicks = Math.max(0, ticks);
         if (fireTicks > 0) {
-            EntitySetFireEvent entitySetFireEvent = new EntitySetFireEvent(this, ticks);
-            EventDispatcher.call(entitySetFireEvent);
-            if (entitySetFireEvent.isCancelled()) return;
+            EntitySetFireEvent entitySetFireEvent = EventDispatcher.callCancellable(new EntitySetFireEvent(this, ticks));
+            if (entitySetFireEvent.cancelled()) return;
 
-            fireTicks = Math.max(0, entitySetFireEvent.getFireTicks());
+            fireTicks = Math.max(0, entitySetFireEvent.fireTicks());
             if (fireTicks > 0) {
                 remainingFireTicks = fireTicks;
                 entityMeta.setOnFire(true);
@@ -330,8 +328,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             return false;
         }
 
-        EntityDamageEvent entityDamageEvent = new EntityDamageEvent(this, damage, damage.getSound(this));
-        EventDispatcher.callCancellable(entityDamageEvent, () -> {
+        var event = EventDispatcher.callCancellable(new EntityDamageEvent(this, damage, damage.getSound(this)), (entityDamageEvent) -> {
             // Set the last damage type since the event is not cancelled
             this.lastDamage = entityDamageEvent.getDamage();
 
@@ -374,7 +371,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             }
         });
 
-        return !entityDamageEvent.isCancelled();
+        return !event.cancelled();
     }
 
     /**

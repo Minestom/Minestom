@@ -87,25 +87,25 @@ public class Main {
         MinecraftServer.getSchedulerManager().buildShutdownTask(() -> System.out.println("Good night"));
 
         MinecraftServer.getGlobalEventHandler().addListener(ServerListPingEvent.class, event -> {
-            ResponseData responseData = event.getResponseData();
+            ResponseData responseData = event.responseData().clone();
             responseData.addEntry(NamedAndIdentified.named("The first line is separated from the others"));
             responseData.addEntry(NamedAndIdentified.named("Could be a name, or a message"));
 
             // on modern versions, you can obtain the player connection directly from the event
-            if (event.getConnection() != null) {
-                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.getConnection().getRemoteAddress().toString()));
+            if (event.connection() != null) {
+                responseData.addEntry(NamedAndIdentified.named("IP test: " + event.connection().getRemoteAddress().toString()));
 
                 responseData.addEntry(NamedAndIdentified.named("Connection Info:"));
-                String ip = event.getConnection().getServerAddress();
+                String ip = event.connection().getServerAddress();
                 responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
                         .append(Component.text(" IP: ", NamedTextColor.GRAY))
                         .append(Component.text(ip != null ? ip : "???", NamedTextColor.YELLOW))));
                 responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
                         .append(Component.text(" PORT: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getServerPort()))));
+                        .append(Component.text(event.connection().getServerPort()))));
                 responseData.addEntry(NamedAndIdentified.named(Component.text('-', NamedTextColor.DARK_GRAY)
                         .append(Component.text(" VERSION: ", NamedTextColor.GRAY))
-                        .append(Component.text(event.getConnection().getProtocolVersion()))));
+                        .append(Component.text(event.connection().getProtocolVersion()))));
             }
             responseData.addEntry(NamedAndIdentified.named(Component.text("Time", NamedTextColor.YELLOW)
                     .append(Component.text(": ", NamedTextColor.GRAY))
@@ -118,6 +118,11 @@ public class Main {
             // on legacy versions, colors will be converted to the section format so it'll work there too
             responseData.setDescription(Component.text("This is a Minestom Server", TextColor.color(0x66b3ff)));
             //responseData.setPlayersHidden(true);
+
+            // Mutate the data
+            var mutator = event.mutator();
+            mutator.setResponseData(responseData);
+            return mutator;
         });
 
         MinecraftServer.getRecipeManager().addRecipe(new ShapelessRecipe(

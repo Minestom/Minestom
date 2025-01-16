@@ -1,11 +1,11 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.event.trait.mutation.EventMutatorCancellable;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
@@ -18,21 +18,13 @@ import org.jetbrains.annotations.NotNull;
  * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
-public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
+public record PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
+                                     @NotNull BlockFace blockFace, boolean cancelled) implements PlayerInstanceEvent, BlockEvent, CancellableEvent<PlayerStartDiggingEvent> {
 
-    private final Player player;
-    private final Block block;
-    private final BlockVec blockPosition;
-    private final BlockFace blockFace;
-
-    private boolean cancelled;
 
     public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
                                    @NotNull BlockFace blockFace) {
-        this.player = player;
-        this.block = block;
-        this.blockPosition = blockPosition;
-        this.blockFace = blockFace;
+        this(player, block, blockPosition, blockFace, false);
     }
 
     /**
@@ -41,7 +33,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block
      */
     @Override
-    public @NotNull Block getBlock() {
+    public @NotNull Block block() {
         return block;
     }
 
@@ -51,7 +43,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block position
      */
     @Override
-    public @NotNull BlockVec getBlockPosition() {
+    public @NotNull BlockVec blockPosition() {
         return blockPosition;
     }
 
@@ -60,22 +52,24 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    public @NotNull BlockFace blockFace() {
         return blockFace;
     }
 
     @Override
-    public boolean isCancelled() {
-        return cancelled;
+    public @NotNull Mutator mutator() {
+        return new Mutator(this);
     }
 
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
+    public static class Mutator extends EventMutatorCancellable.Simple<PlayerStartDiggingEvent> {
+        public Mutator(@NotNull PlayerStartDiggingEvent event) {
+            super(event);
+        }
+
+        @Override
+        public @NotNull PlayerStartDiggingEvent mutated() {
+            return new PlayerStartDiggingEvent(event.player, event.block, event.blockPosition, event.blockFace, this.isCancelled());
+        }
     }
 
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
 }

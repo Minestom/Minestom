@@ -17,13 +17,12 @@ public class PlayerHeldListener {
 
         final byte slot = (byte) packet.slot();
 
-        PlayerChangeHeldSlotEvent changeHeldSlotEvent = new PlayerChangeHeldSlotEvent(player, slot);
-        EventDispatcher.call(changeHeldSlotEvent);
+        final var changeHeldSlotEvent = EventDispatcher.callCancellable(new PlayerChangeHeldSlotEvent(player, slot));
 
-        if (!changeHeldSlotEvent.isCancelled()) {
+        if (!changeHeldSlotEvent.cancelled()) {
             // Event hasn't been canceled, process it
 
-            final byte resultSlot = changeHeldSlotEvent.getSlot();
+            final byte resultSlot = changeHeldSlotEvent.slot();
 
             // If the held slot has been changed by the event, send the change to the player
             if (resultSlot != slot) {

@@ -7,23 +7,15 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player receive a new chunk data.
  */
-public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
-
-    private final Player player;
-    private final int chunkX, chunkZ;
-
-    public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) {
-        this.player = player;
-        this.chunkX = chunkX;
-        this.chunkZ = chunkZ;
-    }
+public record PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) implements PlayerInstanceEvent {
 
     /**
      * Gets the chunk X.
      *
      * @return the chunk X
      */
-    public int getChunkX() {
+    @Override
+    public int chunkX() {
         return chunkX;
     }
 
@@ -32,12 +24,13 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
      *
      * @return the chunk Z
      */
-    public int getChunkZ() {
+    @Override
+    public int chunkZ() {
         return chunkZ;
     }
 
     @Override
-    public @NotNull Player getPlayer() {
+    public @NotNull Player player() {
         return player;
     }
 }

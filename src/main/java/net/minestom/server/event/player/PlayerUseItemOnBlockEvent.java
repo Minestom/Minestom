@@ -12,32 +12,29 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Used when a player is clicking on a block with an item (but is not a block in item form).
  */
-public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent {
-
-    private final Player player;
-    private final PlayerHand hand;
-    private final ItemStack itemStack;
-    private final Point position;
-    private final BlockFace blockFace;
-
-    public PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull PlayerHand hand,
-                                     @NotNull ItemStack itemStack,
-                                     @NotNull Point position, @NotNull Point cursorPosition,
-                                     @NotNull BlockFace blockFace) {
-        this.player = player;
-        this.hand = hand;
-        this.itemStack = itemStack;
-        this.position = position;
-        this.blockFace = blockFace;
-    }
+public record PlayerUseItemOnBlockEvent(@NotNull Player player, @NotNull PlayerHand hand,
+                                        @NotNull ItemStack itemStack,
+                                        @NotNull Point position, @NotNull Point cursorPosition,
+                                        @NotNull BlockFace blockFace) implements PlayerInstanceEvent, ItemEvent {
 
     /**
      * Gets the position of the interacted block.
      *
      * @return the block position
      */
-    public @NotNull Point getPosition() {
+    @Override
+    public @NotNull Point position() {
         return position;
+    }
+
+    /**
+     * Gets the cursor position of the player when interacting with the block.
+     *
+     * @return the cursor position
+     */
+    @Override
+    public @NotNull Point cursorPosition() {
+        return cursorPosition;
     }
 
     /**
@@ -45,7 +42,8 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the block face
      */
-    public @NotNull BlockFace getBlockFace() {
+    @Override
+    public @NotNull BlockFace blockFace() {
         return blockFace;
     }
 
@@ -54,7 +52,8 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      *
      * @return the hand
      */
-    public @NotNull PlayerHand getHand() {
+    @Override
+    public @NotNull PlayerHand hand() {
         return hand;
     }
 
@@ -64,12 +63,7 @@ public class PlayerUseItemOnBlockEvent implements PlayerInstanceEvent, ItemEvent
      * @return the item
      */
     @Override
-    public @NotNull ItemStack getItemStack() {
+    public @NotNull ItemStack itemStack() {
         return itemStack;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
     }
 }

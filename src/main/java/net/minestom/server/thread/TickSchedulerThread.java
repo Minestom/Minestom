@@ -35,8 +35,8 @@ public final class TickSchedulerThread extends MinestomThread {
             long nextTickTime = baseTime + ticks * TICK_TIME_NANOS;
             waitUntilNextTick(nextTickTime);
             // Check if the server can not keep up with the tickrate
-            // if it gets too far behind, reset the ticks & baseTime
-            // to avoid running too many ticks at once
+            // if it gets too far behind, reset the fireTicks & baseTime
+            // to avoid running too many fireTicks at once
             if (System.nanoTime() > nextTickTime + TICK_TIME_NANOS * ServerFlag.SERVER_MAX_TICK_CATCH_UP) {
                 baseTime = System.nanoTime();
                 ticks = 0;

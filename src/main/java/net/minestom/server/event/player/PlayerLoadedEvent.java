@@ -9,15 +9,4 @@ import org.jetbrains.annotations.NotNull;
  *
  * <p>This is driven by the client so should be considered as such.</p>
  */
-public class PlayerLoadedEvent implements PlayerInstanceEvent {
-    private final Player player;
-
-    public PlayerLoadedEvent(Player player) {
-        this.player = player;
-    }
-
-    @Override
-    public @NotNull Player getPlayer() {
-        return player;
-    }
-}
+public record PlayerLoadedEvent(@NotNull Player player) implements PlayerInstanceEvent {}

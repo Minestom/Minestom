@@ -19,7 +19,7 @@ import java.util.*;
  *
  * @see ServerListPingEvent
  */
-public class ResponseData {
+public class ResponseData implements Cloneable {
     private static final Component DEFAULT_DESCRIPTION = Component.text("Minestom Server");
 
     private final List<NamedAndIdentified> entries;
@@ -324,6 +324,20 @@ public class ResponseData {
     @Deprecated
     public @NotNull JsonObject build() {
         return ServerListPingType.getModernPingResponse(this, true);
+    }
+
+    @Override
+    public ResponseData clone() {
+        var responseData = new ResponseData();
+        responseData.setVersion(version);
+        responseData.setProtocol(protocol);
+        responseData.setMaxPlayer(maxPlayer);
+        responseData.setOnline(online);
+        responseData.setDescription(description);
+        responseData.setFavicon(favicon);
+        responseData.setPlayersHidden(playersHidden);
+        responseData.addEntries(entries);
+        return responseData;
     }
 
     /**

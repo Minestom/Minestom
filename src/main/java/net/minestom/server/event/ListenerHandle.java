@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @ApiStatus.Experimental
 public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Handle {
+
     /**
      * Calls the given event.
      * Will try to fast exit the execution when possible if {@link #hasListener()} return {@code false}.
@@ -22,6 +23,18 @@ public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Ha
      * @param event the event to call
      */
     void call(@NotNull E event);
+
+
+    /**
+     * Calls the given event.
+     * Will try to fast exit the execution when possible if {@link #hasListener()} return {@code false}.
+     * <p>
+     * Anonymous and subclasses are not supported, events must have the exact type {@code E}.
+     *
+     * @param event the event to call
+     * @return the event if it has mutated have been called
+     */
+    E callMutable(@NotNull E event);
 
     /**
      * Gets if any listener has been registered for the given handle.
@@ -34,4 +47,11 @@ public sealed interface ListenerHandle<E extends Event> permits EventNodeImpl.Ha
      * @return true if the event has 1 or more listeners
      */
     boolean hasListener();
+
+    /**
+     * Gets if any listeners registered can mutate the event.
+     *
+     * @return true if any listeners can mutate the event
+     */
+    boolean isMutable();
 }

@@ -47,14 +47,17 @@ final class TestConnectionImpl implements TestConnection {
         final GameProfile gameProfile = new GameProfile(UUID.randomUUID(), "RandName");
         var player = process.connection().createPlayer(playerConnection, gameProfile);
         player.eventNode().addListener(AsyncPlayerConfigurationEvent.class, event -> {
-            event.setSpawningInstance(instance);
-            event.getPlayer().setRespawnPoint(pos);
+            System.out.println("AsyncPlayerConfigurationEvent");
+            var mutator = event.mutator();
+            mutator.setSpawningInstance(instance);
+            event.player().setRespawnPoint(pos);
+            return mutator;
         });
 
         // Force the player through the entirety of the login process manually
         CompletableFuture<Player> future = new CompletableFuture<>();
         Thread.startVirtualThread(() -> {
-            // `isFirstConfig` is set to false in order to not block the thread
+            // `firstConfig` is set to false in order to not block the thread
             // waiting for known packs.
             // The consequence is that registry packets cannot be listened to.
             process.connection().doConfiguration(player, false);
