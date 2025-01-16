@@ -65,7 +65,7 @@ public final class ConnectionManager {
     // Players in play state
     private final Set<Player> playPlayers = new CopyOnWriteArraySet<>();
 
-    // The players who need keep alive fireTicks. This was added because we may not send a keep alive in
+    // The players who need keep alive ticks. This was added because we may not send a keep alive in
     // the time after sending finish configuration but before receiving configuration end (to swap to play).
     // I(mattw) could not come up with a better way to express this besides completely splitting client/server
     // states. Perhaps there will be an improvement in the future.

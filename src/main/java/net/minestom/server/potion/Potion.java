@@ -15,7 +15,7 @@ import static net.minestom.server.network.NetworkBuffer.VAR_INT;
  *
  * @param effect    the potion effect
  * @param amplifier the amplifier starting at 0 (level 1)
- * @param duration  the duration (in fireTicks) that the potion will last
+ * @param duration  the duration (in ticks) that the potion will last
  * @param flags     the flags of the potion, see {@link #flags()}
  */
 public record Potion(@NotNull PotionEffect effect, int amplifier, int duration, byte flags) {

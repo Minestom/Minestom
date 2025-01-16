@@ -12,7 +12,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.function.IntFunction;
 
 /**
- * ThreadDispatcher can be used to dispatch updates (fireTicks) across a number of "partitions" (such as chunks) that
+ * ThreadDispatcher can be used to dispatch updates (ticks) across a number of "partitions" (such as chunks) that
  * house {@link Tickable} instances (such as entities). The parallelism of such updates is defined when the dispatcher
  * is constructed.
  * <p>

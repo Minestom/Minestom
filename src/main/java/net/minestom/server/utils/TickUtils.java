@@ -11,7 +11,7 @@ import java.time.Duration;
  */
 public final class TickUtils {
     /**
-     * Number of fireTicks per second for the default Java-edition client.
+     * Number of ticks per second for the default Java-edition client.
      */
     public static final int CLIENT_TPS = 20;
 
@@ -21,10 +21,10 @@ public final class TickUtils {
     public static final int CLIENT_TICK_MS = 50;
 
     /**
-     * Creates a number of fireTicks from a given duration, based on {@link MinecraftServer#TICK_MS}.
+     * Creates a number of ticks from a given duration, based on {@link MinecraftServer#TICK_MS}.
      *
      * @param duration the duration
-     * @return the number of fireTicks
+     * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
     public static int fromDuration(@NotNull Duration duration) {
@@ -32,11 +32,11 @@ public final class TickUtils {
     }
 
     /**
-     * Creates a number of fireTicks from a given duration.
+     * Creates a number of ticks from a given duration.
      *
      * @param duration  the duration
      * @param msPerTick the number of milliseconds per tick
-     * @return the number of fireTicks
+     * @return the number of ticks
      * @throws IllegalArgumentException if duration is negative
      */
     public static int fromDuration(@NotNull Duration duration, int msPerTick) {

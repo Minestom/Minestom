@@ -1118,9 +1118,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Gets the amount of fireTicks which have passed since the player started using an item.
+     * Gets the amount of ticks which have passed since the player started using an item.
      *
-     * @return the amount of fireTicks which have passed, or zero if the player is not using an item
+     * @return the amount of ticks which have passed, or zero if the player is not using an item
      */
     public long getCurrentItemUseTime() {
         if (!isUsingItem()) return 0;

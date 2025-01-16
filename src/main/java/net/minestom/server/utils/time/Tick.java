@@ -39,9 +39,9 @@ public final class Tick implements TemporalUnit {
     }
 
     /**
-     * Creates a duration from an amount of fireTicks.
+     * Creates a duration from an amount of ticks.
      *
-     * @param ticks the amount of fireTicks
+     * @param ticks the amount of ticks
      * @return the duration
      */
     public static Duration server(long ticks) {
@@ -49,9 +49,9 @@ public final class Tick implements TemporalUnit {
     }
 
     /**
-     * Creates a duration from an amount of client-side fireTicks.
+     * Creates a duration from an amount of client-side ticks.
      *
-     * @param ticks the amount of fireTicks
+     * @param ticks the amount of ticks
      * @return the duration
      */
     public static Duration client(long ticks) {
@@ -59,11 +59,11 @@ public final class Tick implements TemporalUnit {
     }
 
     /**
-     * Gets the number of whole fireTicks that occur in the provided duration. Note that this
-     * method returns an {@code int} as this is the unit that Minecraft stores fireTicks in.
+     * Gets the number of whole ticks that occur in the provided duration. Note that this
+     * method returns an {@code int} as this is the unit that Minecraft stores ticks in.
      *
      * @param duration the duration
-     * @return the number of whole fireTicks in this duration
+     * @return the number of whole ticks in this duration
      * @throws ArithmeticException if the duration is zero or an overflow occurs
      */
     public int fromDuration(Duration duration) {
@@ -71,7 +71,7 @@ public final class Tick implements TemporalUnit {
     }
 
     /**
-     * Gets the whole number of these fireTicks that occur in one second.
+     * Gets the whole number of these ticks that occur in one second.
      *
      * @return the number
      */

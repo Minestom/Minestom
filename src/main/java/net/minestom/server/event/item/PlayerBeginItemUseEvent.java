@@ -27,7 +27,7 @@ public record PlayerBeginItemUseEvent(@NotNull Player player, @NotNull PlayerHan
     }
 
     /**
-     * Returns the item use duration, in fireTicks. A duration of zero will prevent consumption (same effect as cancellation).
+     * Returns the item use duration, in ticks. A duration of zero will prevent consumption (same effect as cancellation).
      *
      * @return the current item use duration
      */
@@ -59,7 +59,7 @@ public record PlayerBeginItemUseEvent(@NotNull Player player, @NotNull PlayerHan
         }
 
         /**
-         * Returns the item use duration, in fireTicks. A duration of zero will prevent consumption (same effect as cancellation).
+         * Returns the item use duration, in ticks. A duration of zero will prevent consumption (same effect as cancellation).
          *
          * @return the current item use duration
          */
@@ -68,7 +68,7 @@ public record PlayerBeginItemUseEvent(@NotNull Player player, @NotNull PlayerHan
         }
 
         /**
-         * Sets the item use duration, in fireTicks.
+         * Sets the item use duration, in ticks.
          */
         public void setItemUseDuration(long itemUseDuration) {
             Check.argCondition(itemUseDuration < 0, "Item use duration cannot be negative");

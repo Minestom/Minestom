@@ -119,7 +119,7 @@ public class EntityVelocityIntegrationTest {
         player.setFlying(true);
         env.tick();
 
-        // Every tick, the y velocity is multiplied by 0.6, and after 27 fireTicks it should be 0
+        // Every tick, the y velocity is multiplied by 0.6, and after 27 ticks it should be 0
         for (int i = 0; i < 22; i++) {
             assertEquals(player.getVelocity().y(), previousVelocity * 0.6, epsilon);
             previousVelocity = player.getVelocity().y();

@@ -17,7 +17,7 @@ public interface Snapshotable {
      * Be careful to do not store {@code updater} anywhere as its data will change when building requested references.
      * <p>
      * This method is not thread-safe, and targeted at internal use
-     * since its execution rely on safe-points (e.g. end of fireTicks)
+     * since its execution rely on safe-points (e.g. end of ticks)
      *
      * @param updater the snapshot updater/context
      * @return the updated snapshot

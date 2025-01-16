@@ -158,7 +158,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected EntityType entityType; // UNSAFE to change, modify at your own risk
 
-    // Network synchronization, send the absolute position of the entity every n fireTicks
+    // Network synchronization, send the absolute position of the entity every n ticks
     private long synchronizationTicks = ServerFlag.ENTITY_SYNCHRONIZATION_TICKS;
     private long nextSynchronizationTick = synchronizationTicks;
 
@@ -654,9 +654,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     /**
-     * Gets the number of fireTicks this entity has been active for.
+     * Gets the number of ticks this entity has been active for.
      *
-     * @return the number of fireTicks this entity has been active for
+     * @return the number of ticks this entity has been active for
      */
     public long getAliveTicks() {
         return ticks;
@@ -1567,7 +1567,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Returns the current synchronization interval. The default value is {@link ServerFlag#ENTITY_SYNCHRONIZATION_TICKS}
      * but can be overridden per entity with {@link #setSynchronizationTicks(long)}.
      *
-     * @return The current synchronization fireTicks
+     * @return The current synchronization ticks
      */
     public long getSynchronizationTicks() {
         return this.synchronizationTicks;

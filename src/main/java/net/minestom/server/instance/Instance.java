@@ -514,10 +514,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Supplying 0 means that the client will never be synchronized with the current natural instance time
      * (time will still change server-side)
      *
-     * @param timeSynchronizationTicks the rate to update time in fireTicks
+     * @param timeSynchronizationTicks the rate to update time in ticks
      */
     public void setTimeSynchronizationTicks(int timeSynchronizationTicks) {
-        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization fireTicks cannot be lower than 0");
+        Check.stateCondition(timeSynchronizationTicks < 0, "The time Synchronization ticks cannot be lower than 0");
         this.timeSynchronizationTicks = timeSynchronizationTicks;
     }
 
@@ -813,10 +813,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Sets the weather on this instance, transitions over time
      *
      * @param weather         the new weather
-     * @param transitionTicks the fireTicks to transition to new weather
+     * @param transitionTicks the ticks to transition to new weather
      */
     public void setWeather(@NotNull Weather weather, int transitionTicks) {
-        Check.stateCondition(transitionTicks < 1, "Transition fireTicks cannot be lower than 0");
+        Check.stateCondition(transitionTicks < 1, "Transition ticks cannot be lower than 0");
         this.weather = weather;
         remainingRainTransitionTicks = transitionTicks;
         remainingThunderTransitionTicks = transitionTicks;
