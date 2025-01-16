@@ -677,6 +677,7 @@ public class InstanceContainer extends Instance {
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
                     this,
+                    this,
                     neighborPosition,
                     neighborBlock,
                     updateFace.getOppositeFace()

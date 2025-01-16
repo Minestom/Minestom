@@ -71,10 +71,15 @@ public abstract class BlockPlacementRule {
         }
     }
 
-    public record UpdateState(@NotNull Block.Getter instance,
+    public record UpdateState(@NotNull Block.Getter blockGetter,
+                              @NotNull Block.Setter blockSetter,
                               @NotNull Point blockPosition,
                               @NotNull Block currentBlock,
                               @NotNull BlockFace fromFace) {
+        @Deprecated
+        public Block.Getter instance() {
+            return this.blockGetter;
+        }
     }
 
     public record Replacement(
