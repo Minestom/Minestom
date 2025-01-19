@@ -35,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -135,11 +137,24 @@ public final class Registry {
         return new JukeboxSongEntry(namespace, main, null);
     }
 
+    public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
+        // 1. Try to load from jar resources
+        InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
+
+        // 2. Try to load from working directory
+        if (resourceStream == null && Files.exists(Path.of(resource.name))) {
+            resourceStream = Files.newInputStream(Path.of(resource.name));
+        }
+
+        // 3. Not found :(
+        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+        return resourceStream;
+    }
+
     @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+        try (InputStream resourceStream = loadRegistryFile(resource)) {
             try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));

@@ -860,7 +860,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var iter = bb.getBlocks(getPosition());
         while (iter.hasNext()) {
             var pos = iter.next();
-            var block = instance.getBlock(pos.blockX(), pos.blockY(), pos.blockZ(), Block.Getter.Condition.TYPE);
+            Block block;
+            try {
+                block = instance.getBlock(pos.blockX(), pos.blockY(), pos.blockZ(), Block.Getter.Condition.TYPE);
+            } catch (NullPointerException ignored) {
+                block = null;
+            }
+
+            // Block was in unloaded chunk, no bounding box.
+            if (block == null) continue;
 
             // For now just ignore scaffolding. It seems to have a dynamic bounding box, or is just parsed
             // incorrectly in MinestomDataGenerator.
