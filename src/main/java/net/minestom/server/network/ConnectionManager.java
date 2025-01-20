@@ -333,6 +333,7 @@ public final class ConnectionManager {
     public void updateWaitingPlayers() {
         this.waitingPlayers.drain(player -> {
             if (!player.isOnline()) return; // Player disconnected while in queued to join
+            configurationPlayers.remove(player);
             playPlayers.add(player);
             keepAlivePlayers.add(player);
 

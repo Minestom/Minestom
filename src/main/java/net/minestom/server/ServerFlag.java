@@ -27,6 +27,7 @@ public final class ServerFlag {
     public static final int PLAYER_PACKET_QUEUE_SIZE = intProperty("minestom.packet-queue-size", 1000);
     public static final long KEEP_ALIVE_DELAY = longProperty("minestom.keep-alive-delay", 10_000);
     public static final long KEEP_ALIVE_KICK = longProperty("minestom.keep-alive-kick", 15_000);
+    public static final int PLAYER_CHUNK_UPDATE_LIMITER_HISTORY_SIZE = intProperty("minestom.player.chunk-update-limiter-history-size", 5, 0, Integer.MAX_VALUE);
 
     // Network buffers
     public static final int MAX_PACKET_SIZE = intProperty("minestom.max-packet-size", 2_097_151); // 3 bytes var-int
@@ -98,8 +99,19 @@ public final class ServerFlag {
         return System.getProperty(name);
     }
 
+    private static int intProperty(String name, int defaultValue, int minValue, int maxValue) {
+        int value = Integer.getInteger(name, defaultValue);
+        if (value < minValue || value > maxValue) {
+            throw new IllegalArgumentException(String.format(
+                    "Property '%s' value must be in range [%d..%d] but was %d",
+                    name, minValue, maxValue, value
+            ));
+        }
+        return value;
+    }
+
     private static int intProperty(String name, int defaultValue) {
-        return Integer.getInteger(name, defaultValue);
+        return intProperty(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
     private static long longProperty(String name, long defaultValue) {

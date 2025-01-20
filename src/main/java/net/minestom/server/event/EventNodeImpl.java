@@ -292,8 +292,19 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
                     aClass -> new Handle<>((Class<T>) aClass));
             handle.invalidate();
         });
+        invalidateRecursiveSuperclasses(eventClass);
         final EventNodeImpl<? super T> parent = this.parent;
         if (parent != null) parent.invalidateEvent(eventClass);
+    }
+
+    private void invalidateRecursiveSuperclasses(@NotNull Class<?> eventClass) {
+        if (RecursiveEvent.class.isAssignableFrom(eventClass)) {
+            for (var cls : this.handleMap.keySet()) {
+                if (eventClass.isAssignableFrom(cls)) {
+                    this.handleMap.get(cls).invalidate();
+                }
+            }
+        }
     }
 
     private ListenerEntry<T> getEntry(Class<? extends T> type) {
