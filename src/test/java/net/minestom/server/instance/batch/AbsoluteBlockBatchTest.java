@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 // These tests also cover ChunkBatch
 @EnvTest
-public class AbsoluteBlockBatchTest {
+class AbsoluteBlockBatchTest {
     @Test
     public void singleChunk(Env env) {
         final var instance = env.createFlatInstance();
@@ -36,7 +36,7 @@ public class AbsoluteBlockBatchTest {
 
         final var inverse = batch.apply(instance).join();
         assertNotNull(inverse, "Inverse batch null with BatchOption#calculateInverse true");
-        assertEquals(instance.getBlock(point), Block.GRASS_BLOCK);
+        assertEquals(Block.GRASS_BLOCK, instance.getBlock(point));
 
         inverse.apply(instance).join();
         assertEquals(originalBlock, instance.getBlock(point));
@@ -76,7 +76,7 @@ public class AbsoluteBlockBatchTest {
         assertNotNull(inverse, "Inverse batch null with BatchOption#calculateInverse true");
 
         for (Point point : points) {
-            assertEquals(instance.getBlock(point), Block.GRASS_BLOCK);
+            assertEquals(Block.GRASS_BLOCK, instance.getBlock(point));
         }
 
         inverse.apply(instance).join();

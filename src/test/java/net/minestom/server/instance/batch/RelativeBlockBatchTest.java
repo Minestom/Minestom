@@ -4,7 +4,6 @@ import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -16,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnvTest
-public class RelativeBlockBatchTest {
+class RelativeBlockBatchTest {
     @Test
     public void basic(Env env) {
         final var instance = env.createFlatInstance();
@@ -56,7 +55,7 @@ public class RelativeBlockBatchTest {
         assertNotNull(inverse, "Inverse batch null with BatchOption#calculateInverse true");
 
         for (Point point : points) {
-            assertEquals(instance.getBlock(point.add(offset)), Block.GRASS_BLOCK);
+            assertEquals(Block.GRASS_BLOCK, instance.getBlock(point.add(offset)));
         }
         inverse.apply(instance).join();
 

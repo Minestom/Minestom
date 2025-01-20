@@ -71,8 +71,10 @@ public class AbsoluteBlockBatch implements Batch {
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance) {
-        final List<CompletableFuture<ChunkBatch>> chunkBatchFutures = new ArrayList<>();
+        final List<CompletableFuture<Void>> chunkBatchFutures = new ArrayList<>();
         final LongList chunkBatchIndexes = new LongArrayList();
+        final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ?
+                new AbsoluteBlockBatch(inverseOption) : null;
 
         synchronized (chunkBatchesMap) {
             for (var entry : Long2ObjectMaps.fastIterable(chunkBatchesMap)) {
@@ -81,24 +83,24 @@ public class AbsoluteBlockBatch implements Batch {
                 final int chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
                 final ChunkBatch batch = entry.getValue();
 
-                chunkBatchFutures.add(batch.apply(instance, chunkX, chunkZ, true));
+                final var future = batch.apply(instance, chunkX, chunkZ, true)
+                        .thenApply((chunkInverse) -> {
+                            if (chunkInverse == null || inverse == null) {
+                                return null;
+                            }
+                            synchronized (inverse.chunkBatchesMap) {
+                                inverse.chunkBatchesMap.put(chunkIndex, chunkInverse);
+                            }
+
+                            return (Void) null;
+                        });
+
+                chunkBatchFutures.add(future);
                 chunkBatchIndexes.add(chunkIndex);
             }
         }
 
-        return CompletableFuture.supplyAsync(() -> {
-            // await chunkBatch futures and collect inverse batches
-            final AbsoluteBlockBatch inverse = this.options.shouldCalculateInverse() ?
-                    new AbsoluteBlockBatch(inverseOption) : null;
-
-            for (int index = 0; index < chunkBatchIndexes.size(); index++) {
-                final long chunkIndex = chunkBatchIndexes.getLong(index);
-                final ChunkBatch chunkInverse = chunkBatchFutures.get(index).join();
-                if (inverse != null) {
-                    inverse.chunkBatchesMap.put(chunkIndex, chunkInverse);
-                }
-            }
-
+        return CompletableFuture.allOf(chunkBatchFutures.toArray(new CompletableFuture[0])).thenApplyAsync(v -> {
             sendLighting(instance, chunkBatchIndexes);
 
             return inverse;

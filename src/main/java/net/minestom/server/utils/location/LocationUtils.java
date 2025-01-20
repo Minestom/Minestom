@@ -7,7 +7,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
-public class LocationUtils {
+public final class LocationUtils {
     private static final int HORIZONTAL_BIT_MASK = 0x3FFFFFF;
     private static final int VERTICAL_BIT_MASK = 0xFFF;
 
@@ -23,13 +23,6 @@ public class LocationUtils {
      * @return an index which can be used to store and retrieve later data linked to a block position
      */
     public static long getGlobalBlockIndex(int x, int y, int z) {
-//        Check.argCondition(((x & HORIZONTAL_BIT_MASK) << 6 >> 6) != x,
-//                "x position may not be more than 26 bits long (value: {})", x);
-//        Check.argCondition(((y & VERTICAL_BIT_MASK) << 20 >> 20) != y,
-//                "y position may not be more than 12 bits long (value: {})", y);
-//        Check.argCondition(((z & HORIZONTAL_BIT_MASK) << 6 >> 6) != z,
-//                "z position may not be more than 26 bits long (value: {})", z);
-
         return (((long) x & HORIZONTAL_BIT_MASK) << 38) |
                 (((long) z & HORIZONTAL_BIT_MASK) << 12) |
                 ((long) y & VERTICAL_BIT_MASK);
