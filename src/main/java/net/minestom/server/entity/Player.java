@@ -2284,16 +2284,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     @Override
-    public boolean isPlayer() {
-        return true;
-    }
-
-    @Override
-    public Player asPlayer() {
-        return this;
-    }
-
-    @Override
     protected void updateCollisions() {
         preventBlockPlacement = gameMode != GameMode.SPECTATOR;
         collidesWithEntities = gameMode != GameMode.SPECTATOR;
