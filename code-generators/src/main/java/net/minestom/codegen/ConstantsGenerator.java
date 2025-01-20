@@ -1,7 +1,7 @@
 package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 public class ConstantsGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConstantsGenerator.class);

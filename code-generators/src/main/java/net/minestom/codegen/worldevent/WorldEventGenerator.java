@@ -3,7 +3,7 @@ package net.minestom.codegen.worldevent;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.squareup.javapoet.*;
+import com.palantir.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
