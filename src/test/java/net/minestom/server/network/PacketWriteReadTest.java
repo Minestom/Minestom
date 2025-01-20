@@ -5,6 +5,7 @@ import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.GameMode;
@@ -14,6 +15,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.handshake.ClientHandshakePacket;
+import net.minestom.server.network.packet.client.play.ClientVehicleMovePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.common.DisconnectPacket;
 import net.minestom.server.network.packet.server.common.PingResponsePacket;
@@ -141,6 +143,8 @@ public class PacketWriteReadTest {
     @BeforeAll
     public static void setupClient() {
         CLIENT_PACKETS.add(new ClientHandshakePacket(755, "localhost", 25565, ClientHandshakePacket.Intent.LOGIN));
+        CLIENT_PACKETS.add(new ClientVehicleMovePacket(new Pos(5, 5, 5, 45f, 45f), true));
+        CLIENT_PACKETS.add(new ClientVehicleMovePacket(new Pos(6, 5, 6, 82f, 12.5f), false));
     }
 
     @SuppressWarnings("unchecked")
