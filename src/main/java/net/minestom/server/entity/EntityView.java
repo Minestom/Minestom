@@ -247,6 +247,9 @@ final class EntityView {
                 var bitSet = viewableOption.bitSet;
                 if (bitSet.isEmpty()) return Collections.emptyIterator();
                 Instance instance = entity.getInstance();
+                boolean isInstanceContainer = instance instanceof InstanceContainer;
+                List<SharedInstance> sharedInstances = null;
+                if (isInstanceContainer) sharedInstances = ((InstanceContainer) instance).getSharedInstances();
                 if (instance == null) return Collections.emptyIterator();
                 players = new ArrayList<>(bitSet.size());
                 for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
@@ -254,8 +257,8 @@ final class EntityView {
                     final Player player = (Player) instance.getEntityById(id);
                     if (player != null) players.add(player);
                     // viewer might be part of a SharedInstance that sharedEntities with this instance
-                    else if (instance instanceof InstanceContainer container) {
-                        attemptToLocateAndAddPlayer(container.getSharedInstances(), players, id);
+                    else if (isInstanceContainer) {
+                        attemptToLocateAndAddPlayer(sharedInstances, players, id);
                     }
                 }
             }
