@@ -14,6 +14,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
+import net.minestom.server.entity.metadata.other.BoatMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -590,7 +591,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             effectTick();
         }
         // Scheduled synchronization
-        if (vehicle == null && ticks >= nextSynchronizationTick) {
+        if (vehicle == null && ticks >= nextSynchronizationTick && !(entityMeta instanceof BoatMeta)) {
             synchronizePosition();
             sendPacketToViewers(getVelocityPacket());
         }
