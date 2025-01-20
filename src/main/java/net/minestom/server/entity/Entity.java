@@ -815,7 +815,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 // register entity for SharedInstances that share entities with this instance
-                forEveryEntitySharingInstance(instance, superSharedInstance -> superSharedInstance
+                forEveryEntitySharingInstance(instance, sharedInstance -> sharedInstance
                         .getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate));
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
@@ -854,7 +854,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
-        forEveryEntitySharingInstance(instance, superSharedInstance -> superSharedInstance
+        forEveryEntitySharingInstance(instance, sharedInstance -> sharedInstance
                 .getEntityTracker().unregister(this, trackingTarget, trackingUpdate));
         this.viewEngine.forManuals(this::removeViewer);
     }
