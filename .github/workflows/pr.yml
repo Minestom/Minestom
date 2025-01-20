@@ -27,7 +27,7 @@ jobs:
         maven-local-ignore-paths: |
           net/minestom/
     - name: Build Minestom
-      run: ./gradlew classes testClasses
+      run: ./gradlew classes testClasses javadoc
     - name: Run Minestom tests
       run: ./gradlew test
   publish:

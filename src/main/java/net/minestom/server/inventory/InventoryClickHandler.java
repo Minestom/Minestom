@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
  * Represents an inventory which can receive click input.
  * All methods returning boolean returns true if the action is successful, false otherwise.
  * <p>
- * See https://wiki.vg/Protocol#Click_Window for more information.
+ * See <a href="https://minecraft.wiki/w/Minecraft_Wiki:Projects/wiki.vg_merge/Protocol#Click_Container">the Minecraft wiki</a> for more information.
  */
 public sealed interface InventoryClickHandler permits AbstractInventory {
 

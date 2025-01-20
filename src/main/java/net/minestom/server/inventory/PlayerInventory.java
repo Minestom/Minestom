@@ -219,7 +219,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         final ItemStack clicked = getItemStack(convertedSlot);
         final boolean hotBarClick = convertWindowSlotToMinestomSlot(slot, WINDOW_0_OFFSET) < 9;
         final int start = hotBarClick ? 9 : 0;
-        final int end = hotBarClick ? getSize() - 9 : 8;
+        final int end = hotBarClick ? getSize() - 9 : 9;
         final InventoryClickResult clickResult = clickProcessor.shiftClick(
                 this, this,
                 start, end, 1,

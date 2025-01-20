@@ -8,6 +8,11 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnvTest
@@ -98,5 +103,22 @@ public class EntityTeleportIntegrationTest {
         var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
         player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
         assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
+    }
+
+    @Test
+    public void entityTeleportToInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+        assertEquals(new Pos(0, 42, 0), entity.getPosition());
+
+        entity.teleport(new Pos(Double.POSITIVE_INFINITY, 42, 52)).join();
+        CompletableFuture.runAsync(() -> entity.tick(System.currentTimeMillis()))
+                .get(10, TimeUnit.SECONDS);
+        // This should not hang forever
+
+        // The position should have been capped at 2 billion.
+        assertEquals(new Pos(2_000_000_000, 42, 52), entity.getPosition());
     }
 }

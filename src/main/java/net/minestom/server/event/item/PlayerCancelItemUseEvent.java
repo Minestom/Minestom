@@ -18,6 +18,7 @@ public class PlayerCancelItemUseEvent implements PlayerInstanceEvent, ItemEvent 
     private final PlayerHand hand;
     private final ItemStack itemStack;
     private final long useDuration;
+    private boolean isRiptideSpinAttack = false;
 
     public PlayerCancelItemUseEvent(@NotNull Player player, @NotNull PlayerHand hand, @NotNull ItemStack itemStack, long useDuration) {
         this.player = player;
@@ -42,5 +43,19 @@ public class PlayerCancelItemUseEvent implements PlayerInstanceEvent, ItemEvent 
 
     public long getUseDuration() {
         return useDuration;
+    }
+
+    /**
+     * True if this event will transition the player into a riptide spin attack.
+     */
+    public boolean isRiptideSpinAttack() {
+        return isRiptideSpinAttack;
+    }
+
+    /**
+     * True if this event will transition the player into a riptide spin attack.
+     */
+    public void setRiptideSpinAttack(boolean riptideSpinAttack) {
+        isRiptideSpinAttack = riptideSpinAttack;
     }
 }

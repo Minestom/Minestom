@@ -11,15 +11,6 @@ public class BoatMeta extends AbstractVehicleMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Type getType() {
-        return Type.VALUES[metadata.get(MetadataDef.Boat.TYPE)];
-    }
-
-    public void setType(@NotNull Type value) {
-        metadata.set(MetadataDef.Boat.TYPE, value.ordinal());
-    }
-
     public boolean isLeftPaddleTurning() {
         return metadata.get(MetadataDef.Boat.IS_LEFT_PADDLE_TURNING);
     }
@@ -43,19 +34,4 @@ public class BoatMeta extends AbstractVehicleMeta {
     public void setSplashTimer(int value) {
         metadata.set(MetadataDef.Boat.SPLASH_TIMER, value);
     }
-
-    public enum Type {
-        OAK,
-        SPRUCE,
-        BIRCH,
-        JUNGLE,
-        ACACIA,
-        CHERRY,
-        DARK_OAK,
-        MANGROVE,
-        BAMBOO;
-
-        private final static Type[] VALUES = values();
-    }
-
 }

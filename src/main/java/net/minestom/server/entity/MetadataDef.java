@@ -141,10 +141,9 @@ public sealed class MetadataDef {
     }
 
     public static final class Boat extends AbstractVehicle {
-        public static final Entry<Integer> TYPE = index(0, Metadata::VarInt, 0);
-        public static final Entry<Boolean> IS_LEFT_PADDLE_TURNING = index(1, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_RIGHT_PADDLE_TURNING = index(2, Metadata::Boolean, false);
-        public static final Entry<Integer> SPLASH_TIMER = index(3, Metadata::VarInt, 0);
+        public static final Entry<Boolean> IS_LEFT_PADDLE_TURNING = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_RIGHT_PADDLE_TURNING = index(1, Metadata::Boolean, false);
+        public static final Entry<Integer> SPLASH_TIMER = index(2, Metadata::VarInt, 0);
     }
 
     public static sealed class AbstractMinecart extends AbstractVehicle {
@@ -187,7 +186,7 @@ public sealed class MetadataDef {
 
     public static final class ItemFrame extends MetadataDef {
         public static final Entry<ItemStack> ITEM = index(0, Metadata::ItemStack, ItemStack.AIR);
-        public static final Entry<Integer> ROTATION = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> ROTATION = index(1, Metadata::VarInt, 0);
     }
 
     public static final class Painting extends MetadataDef {
@@ -212,7 +211,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Player extends LivingEntity {
-        public static final Entry<Float> ADDITIONAL_HEARTS = index(0, Metadata::Float, 1f);
+        public static final Entry<Float> ADDITIONAL_HEARTS = index(0, Metadata::Float, 0f);
         public static final Entry<Integer> SCORE = index(1, Metadata::VarInt, 0);
         public static final Entry<Byte> DISPLAYED_SKIN_PARTS_FLAGS = index(2, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_CAPE_ENABLED = bitMask(2, (byte) 0x01, false);
