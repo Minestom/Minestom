@@ -16,6 +16,7 @@ jcTools = "4.0.5"
 
 # Quality
 junit-jupiter = "5.9.3"
+junit-pioneer = "2.3.0"
 junit-platform = "1.9.3"
 jmh = "1.36"
 jcstress = "0.16"
@@ -59,6 +60,7 @@ jcTools = { group = "org.jctools", name = "jctools-core", version.ref = "jcTools
 junit-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit-jupiter" }
 junit-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit-jupiter" }
 junit-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit-jupiter" }
+junit-pioneer = { group = "org.junit-pioneer", name = "junit-pioneer", version.ref = "junit-pioneer" }
 junit-suite-api = { group = "org.junit.platform", name = "junit-platform-suite-api", version.ref = "junit-platform" }
 junit-suite-engine = { group = "org.junit.platform", name = "junit-platform-suite-engine", version.ref = "junit-platform" }
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
@@ -79,7 +81,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 
 flare = ["flare", "flare-fastutil"]
 adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
-junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
+junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine", "junit-pioneer"]
 mockito = ["mockito-core", "mockito-junit-jupiter"]
 logback = ["logback-core", "logback-classic"]
 
