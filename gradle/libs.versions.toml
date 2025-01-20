@@ -19,6 +19,7 @@ junit-jupiter = "5.9.3"
 junit-platform = "1.9.3"
 jmh = "1.36"
 jcstress = "0.16"
+mockito-bom = "5.15.2"
 
 # Code Generation
 javaPoet = "1.13.0"
@@ -63,6 +64,9 @@ junit-suite-engine = { group = "org.junit.platform", name = "junit-platform-suit
 jmh-core = { group = "org.openjdk.jmh", name = "jmh-core", version.ref = "jmh" }
 jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-annprocess", version.ref = "jmh" }
 jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
+mockito-bom = { group = "org.mockito", name = "mockito-bom", version.ref = "mockito-bom" }
+mockito-core = { group = "org.mockito", name = "mockito-core" }
+mockito-junit-jupiter = { group = "org.mockito", name = "mockito-junit-jupiter" }
 
 # Code Generation
 javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
@@ -76,6 +80,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 flare = ["flare", "flare-fastutil"]
 adventure = ["adventure-api", "adventure-nbt", "adventure-serializer-gson", "adventure-serializer-legacy", "adventure-serializer-plain", "adventure-text-logger-slf4j"]
 junit = ["junit-api", "junit-engine", "junit-params", "junit-suite-api", "junit-suite-engine"]
+mockito = ["mockito-core", "mockito-junit-jupiter"]
 logback = ["logback-core", "logback-classic"]
 
 [plugins]
