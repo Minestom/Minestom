@@ -2,14 +2,27 @@ package net.minestom.server.utils.location;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @ApiStatus.Internal
 public final class LocationUtils {
-    private static final int HORIZONTAL_BIT_MASK = 0x3FFFFFF;
-    private static final int VERTICAL_BIT_MASK = 0xFFF;
+    private static final int X_BIT_OFFSET = 38;
+    private static final int Z_BIT_OFFSET = 12;
+    private static final int Y_BIT_OFFSET = 0;
+
+    private static final int HORIZONTAL_BIT_SIZE = 26;
+    private static final int VERTICAL_BIT_SIZE   = 12;
+
+    private static final int HORIZONTAL_BIT_MASK = (1 << HORIZONTAL_BIT_SIZE) - 1;
+    private static final int VERTICAL_BIT_MASK =   (1 << VERTICAL_BIT_SIZE)   - 1;
+
+    private static final int X_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (HORIZONTAL_BIT_SIZE + X_BIT_OFFSET);
+    private static final int X_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (HORIZONTAL_BIT_SIZE);
+    private static final int Z_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (HORIZONTAL_BIT_SIZE + Z_BIT_OFFSET);
+    private static final int Z_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (HORIZONTAL_BIT_SIZE);
+    private static final int Y_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (VERTICAL_BIT_SIZE + Y_BIT_OFFSET);
+    private static final int Y_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (VERTICAL_BIT_SIZE);
 
     private LocationUtils() {}
 
@@ -23,9 +36,9 @@ public final class LocationUtils {
      * @return an index which can be used to store and retrieve later data linked to a block position
      */
     public static long getGlobalBlockIndex(int x, int y, int z) {
-        return (((long) x & HORIZONTAL_BIT_MASK) << 38) |
-                (((long) z & HORIZONTAL_BIT_MASK) << 12) |
-                ((long) y & VERTICAL_BIT_MASK);
+        return ( ((long) x & HORIZONTAL_BIT_MASK) << X_BIT_OFFSET) |
+                (((long) z & HORIZONTAL_BIT_MASK) << Z_BIT_OFFSET) |
+                (((long) y & VERTICAL_BIT_MASK)   << Y_BIT_OFFSET);
     }
 
     /**
@@ -57,7 +70,7 @@ public final class LocationUtils {
      * @return the position X of the index
      */
     public static int globalBlockIndexToPositionX(long index) {
-        return (int) (index >> 38); // 38-64 bits
+        return (int) (index << X_SIGN_EXTEND_SHIFT_LEFT >> X_SIGN_EXTEND_SHIFT_RIGHT);
     }
 
     /**
@@ -67,7 +80,7 @@ public final class LocationUtils {
      * @return the position Y of the index
      */
     public static int globalBlockIndexToPositionY(long index) {
-        return (int) (index << 52 >> 52); // 0-12 bits
+        return (int) (index << Y_SIGN_EXTEND_SHIFT_LEFT >> Y_SIGN_EXTEND_SHIFT_RIGHT);
     }
 
     /**
@@ -77,6 +90,6 @@ public final class LocationUtils {
      * @return the position Z of the index
      */
     public static int globalBlockIndexToPositionZ(long index) {
-        return (int) (index << 26 >> 38); // 12-38 bits
+        return (int) (index << Z_SIGN_EXTEND_SHIFT_LEFT >> Z_SIGN_EXTEND_SHIFT_RIGHT);
     }
 }
