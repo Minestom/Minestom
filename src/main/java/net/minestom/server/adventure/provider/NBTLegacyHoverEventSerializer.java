@@ -15,6 +15,11 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.UUID;
 
+
+/**
+ * Hover Events for ShowItem and ShowEntity no longer use NBT (this was updated roughly around the same time Data Components were introduced), so the following methods no longer work
+ * See <a href="https://minecraft.wiki/w/Text_component_format">the text component format</a>.
+ */
 @Deprecated
 final class NBTLegacyHoverEventSerializer implements LegacyHoverEventSerializer {
     static final NBTLegacyHoverEventSerializer INSTANCE = new NBTLegacyHoverEventSerializer();

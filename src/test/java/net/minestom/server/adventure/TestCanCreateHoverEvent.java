@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class TestCanCreateHoverEvent {
+class TestCanCreateHoverEvent {
 
     @Test
-    public void createHoverEvent() {
+    void createHoverEvent() {
         ItemStack itemStack = ItemStack.of(Material.GOLD_INGOT).with(ItemComponent.CUSTOM_NAME, Component.text("Gold!", NamedTextColor.GOLD));
         HoverEvent<HoverEvent.ShowItem> hoverEvent = itemStack.asHoverEvent();
         assertEquals(Key.key("minecraft", "gold_ingot"), hoverEvent.value().item());
