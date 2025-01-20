@@ -108,21 +108,6 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and registers a {@link SuperSharedInstance}
-     *
-     * @param instanceContainer the container assigned to the super shared instance
-     * @return the created {@link SuperSharedInstance}
-     * @throws IllegalStateException if {@code instanceContainer} is not registered
-     */
-    public @NotNull SuperSharedInstance createSuperSharedInstance(@NotNull InstanceContainer instanceContainer) {
-        Check.notNull(instanceContainer, "Instance container cannot be null when creating a SuperSharedInstance!");
-        Check.stateCondition(!instanceContainer.isRegistered(), "The container needs to be register in the InstanceManager");
-
-        final SuperSharedInstance superSharedInstance = new SuperSharedInstance(UUID.randomUUID(), instanceContainer);
-        return (SuperSharedInstance) registerSharedInstance(superSharedInstance);
-    }
-
-    /**
      * Unregisters the {@link Instance} internally.
      * <p>
      * If {@code instance} is an {@link InstanceContainer} all chunks are unloaded.

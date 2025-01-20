@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -10,8 +11,7 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -20,6 +20,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
+    private boolean sharesEntities = false;
 
     public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
         super(uniqueId, instanceContainer.getDimensionType());
@@ -124,6 +125,51 @@ public class SharedInstance extends Instance {
      */
     public @NotNull InstanceContainer getInstanceContainer() {
         return instanceContainer;
+    }
+
+    @Override
+    public @NotNull Set<@NotNull Player> getPlayers() {
+        Set<Player> allPlayers = super.getPlayers();
+        if (!sharesEntities) return allPlayers;
+        Set<Player> playersHere = new HashSet<>();
+        for (Player p : allPlayers) {
+            if (p.getInstance().equals(this)) playersHere.add(p);
+        }
+        return Collections.unmodifiableSet(playersHere);
+    }
+
+    /**
+     * Changes whether this {@link SharedInstance} should share entities from the underlying {@link InstanceContainer}.
+     * If this is changed from true to false, the entities from the underlying {@link InstanceContainer} will no longer
+     * show in this {@link SharedInstance} and vice-versa.
+     *
+     * @param sharesEntities whether this {@link SharedInstance} should share the entities from the underlying {@link InstanceContainer}
+     */
+    public void setSharesEntities(boolean sharesEntities) {
+        if (sharesEntities == this.sharesEntities) return;
+        this.sharesEntities = sharesEntities;
+        EntityTracker entityTracker = getEntityTracker();
+        Set<Entity> containerEntities = instanceContainer.getEntities();
+        if (sharesEntities) {
+            // register entities already inside the instanceContainer
+            for (Entity e : containerEntities) {
+                entityTracker.register(e, e.getPosition(), e.getTrackingTarget(), e.getTrackingUpdate());
+            }
+        } else {
+            // unregister entities already inside the instanceContainer
+            for (Entity e : containerEntities) {
+                entityTracker.unregister(e,  e.getTrackingTarget(), e.getTrackingUpdate());
+            }
+        }
+    }
+
+    /**
+     * Gets if this {@link SharedInstance} is sharing entities from the underlying {@link InstanceContainer}
+     *
+     * @return true if this {@link SharedInstance} is sharing entities from the underlying {@link InstanceContainer}
+     */
+    public boolean sharesEntities() {
+        return sharesEntities;
     }
 
     /**

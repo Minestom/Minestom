@@ -769,8 +769,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
-                "Instances need to be registered, please use InstanceManager#registerInstance, " +
-                        "InstanceManager#registerSharedInstance, or InstanceManager#registerSuperSharedInstance");
+                "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
         if (Objects.equals(previousInstance, instance)) {
             return teleport(spawnPosition); // Already in the instance, teleport to spawn point
@@ -797,8 +796,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
-                // register entity for SuperSharedInstances since they share entities and blocks
-                forEverySuperSharedInstance(instance, superSharedInstance -> superSharedInstance
+                // register entity for SharedInstances that share entities with this instance
+                forEveryEntitySharingInstance(instance, superSharedInstance -> superSharedInstance
                         .getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate));
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
@@ -825,10 +824,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return setInstance(instance, this.position);
     }
 
-    private void forEverySuperSharedInstance(Instance instance, Consumer<SuperSharedInstance> toRun) {
+    private void forEveryEntitySharingInstance(Instance instance, Consumer<SharedInstance> toRun) {
         if (instance instanceof InstanceContainer container) {
-            for (SuperSharedInstance superSharedInstance : container.getSuperSharedInstances()) {
-                toRun.accept(superSharedInstance);
+            for (SharedInstance sharedInstance : container.getSharedInstances()) {
+                if (!sharedInstance.sharesEntities()) continue;
+                toRun.accept(sharedInstance);
             }
         }
     }
@@ -836,7 +836,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
-        forEverySuperSharedInstance(instance, superSharedInstance -> superSharedInstance
+        forEveryEntitySharingInstance(instance, superSharedInstance -> superSharedInstance
                 .getEntityTracker().unregister(this, trackingTarget, trackingUpdate));
         this.viewEngine.forManuals(this::removeViewer);
     }

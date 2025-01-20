@@ -11,19 +11,19 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.LightingChunk;
-import net.minestom.server.instance.SuperSharedInstance;
+import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
 
-public class SuperSharedInstanceCommand extends Command {
+public class EntitySharedInstanceCommand extends Command {
     private static final Point SPAWN_POINT = new Vec(0, 42, 0);
 
     private InstanceContainer container;
     private Entity mob;
 
-    public SuperSharedInstanceCommand() {
-        super("supershared");
+    public EntitySharedInstanceCommand() {
+        super("entityshared");
         setCondition((sender, commandString) -> sender instanceof Player);
-        setDefaultExecutor((sender, context) -> sender.sendMessage("/supershared <init/create_shared/goto_original_container/spawn_mob/push_mob/remove_mob>"));
+        setDefaultExecutor((sender, context) -> sender.sendMessage("/entityshared <init/create_shared/goto_original_container/spawn_mob/push_mob/remove_mob>"));
         Argument<Option> optionArgument = new ArgumentEnum<>("option", Option.class).setFormat(ArgumentEnum.Format.LOWER_CASED);
         addSyntax((sender, context) -> {
             Player player = (Player) sender;
@@ -40,18 +40,19 @@ public class SuperSharedInstanceCommand extends Command {
                 }
                 case CREATE_SHARED -> {
                     if (container == null) {
-                        sender.sendMessage("There is no original container! Run /supershared init");
+                        sender.sendMessage("There is no original container! Run /entityshared init");
                         return;
                     }
-                    SuperSharedInstance superSharedInstance = MinecraftServer.getInstanceManager().createSuperSharedInstance(container);
-                    player.setInstance(superSharedInstance, SPAWN_POINT).whenComplete((unused, throwable) -> {
+                    SharedInstance sharedInstance = MinecraftServer.getInstanceManager().createSharedInstance(container);
+                    sharedInstance.setSharesEntities(true);
+                    player.setInstance(sharedInstance, SPAWN_POINT).whenComplete((unused, throwable) -> {
                         if (throwable != null) return;
-                        sender.sendMessage("You are now in a super shared instance!");
+                        sender.sendMessage("You are now in an entity shared instance!");
                     });
                 }
                 case GOTO_ORIGINAL_CONTAINER -> {
                     if (container == null) {
-                        sender.sendMessage("There is no original container! Run /supershared init");
+                        sender.sendMessage("There is no original container! Run /entityshared init");
                         return;
                     }
                     player.setInstance(container, SPAWN_POINT).whenComplete((unused, throwable) -> {
@@ -61,7 +62,7 @@ public class SuperSharedInstanceCommand extends Command {
                 }
                 case SPAWN_MOB -> {
                     if (mob != null && !mob.isRemoved()) {
-                        sender.sendMessage("There is already a mob! Run /supershared remove_mob");
+                        sender.sendMessage("There is already a mob! Run /entityshared remove_mob");
                         return;
                     }
                     mob = new Entity(EntityType.PIG);
@@ -72,7 +73,7 @@ public class SuperSharedInstanceCommand extends Command {
                 }
                 case PUSH_MOB -> {
                     if (mob == null || mob.isRemoved()) {
-                        sender.sendMessage("There is no mob in the original container! Run /supershared spawn_mob");
+                        sender.sendMessage("There is no mob in the original container! Run /entityshared spawn_mob");
                         return;
                     }
                     mob.setVelocity(new Vec(3, 6));
@@ -80,7 +81,7 @@ public class SuperSharedInstanceCommand extends Command {
                 }
                 case REMOVE_MOB -> {
                     if (mob == null) {
-                        sender.sendMessage("There is no mob in the original container! Run /supershared spawn_mob");
+                        sender.sendMessage("There is no mob in the original container! Run /entityshared spawn_mob");
                         return;
                     }
                     mob.remove();
