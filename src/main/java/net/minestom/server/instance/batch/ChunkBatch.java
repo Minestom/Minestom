@@ -94,59 +94,47 @@ public class ChunkBatch implements Batch {
     public @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
             @NotNull Instance instance, int chunkX, int chunkZ, boolean subBatch) {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
-        if (chunk == null) {
-            LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
-                    chunkX, chunkZ, instance.getUniqueId());
-            return CompletableFuture.completedFuture(null);
-        }
-        return apply(instance, chunk, subBatch);
-    }
+        CompletableFuture<Chunk> chunkFuture = CompletableFuture.completedFuture(chunk);
 
-    /**
-     * Apply this batch to the given chunk, and execute the callback depending on safeCallback.
-     *
-     * @param instance     The instance in which the batch should be applied
-     * @param chunk        The target chunk
-     * @return A completable future to the inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    protected @NotNull CompletableFuture<@Nullable ChunkBatch> apply(
-            @NotNull Instance instance, @NotNull Chunk chunk, boolean subBatch) {
-        return CompletableFuture.supplyAsync(() -> {
-            final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(inverseOption) : null;
-            synchronized (chunk) {
-                singleThreadFlush(instance, chunk, inverse, subBatch);
+        if (chunk == null || !chunk.isLoaded()) {
+            if (!instance.hasEnabledAutoChunkLoad()) {
+                LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
+                        chunkX, chunkZ, instance.getUniqueId());
+                return CompletableFuture.completedFuture(null);
             }
-            return inverse;
-        });
+            chunkFuture = instance.loadChunk(chunkX, chunkZ);
+        }
+
+        return chunkFuture.thenApplyAsync((targetChunk) -> applyLocal(instance, targetChunk, subBatch));
     }
 
     /**
      * Applies this batch in the current thread.
+     * Target chunk should be loaded, callers should check this.
      */
-    private void singleThreadFlush(Instance instance, Chunk chunk, @Nullable ChunkBatch inverse, boolean subBatch) {
+    @Nullable
+    private ChunkBatch applyLocal(Instance instance, Chunk chunk, boolean subBatch) {
+        final ChunkBatch inverse = this.options.shouldCalculateInverse() ? new ChunkBatch(inverseOption) : null;
+
+        if (this.options.isFullChunk()) {
+            // Clear the chunk
+            // FIXME: take inverse batch from before this
+            chunk.reset();
+        }
+
+        if (blocks.isEmpty()) {
+            // Nothing to flush
+            return null;
+        }
+
         try {
-            if (!chunk.isLoaded()) {
-                LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
-                        chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
-                return;
-            }
-
-            if (this.options.isFullChunk()) {
-                // Clear the chunk
-                // FIXME: take inverse batch from before this
-                chunk.reset();
-            }
-
-            if (blocks.isEmpty()) {
-                // Nothing to flush
-                return;
-            }
-
-            synchronized (blocks) {
-                for (var entry : Int2ObjectMaps.fastIterable(blocks)) {
-                    final int position = entry.getIntKey();
-                    final Block block = entry.getValue();
-                    applyBlock(chunk, position, block, inverse);
+            synchronized (chunk) {
+                synchronized (blocks) {
+                    for (var entry : Int2ObjectMaps.fastIterable(blocks)) {
+                        final int position = entry.getIntKey();
+                        final Block block = entry.getValue();
+                        applyBlock(chunk, position, block, inverse);
+                    }
                 }
             }
 
@@ -154,6 +142,8 @@ public class ChunkBatch implements Batch {
         } catch (Exception e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
+
+        return inverse;
     }
 
     /**

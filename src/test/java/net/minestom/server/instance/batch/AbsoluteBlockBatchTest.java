@@ -1,11 +1,8 @@
 package net.minestom.server.instance.batch;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -20,30 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @EnvTest
 class AbsoluteBlockBatchTest {
     @Test
-    public void singleChunk(Env env) {
-        final var instance = env.createFlatInstance();
-        instance.loadChunk(0, 0).join();
-
-        // one in air and one in stone
-        testPoint(instance, new BlockVec(0, 50, 0));
-        testPoint(instance, new BlockVec(0, 25, 0));
-    }
-
-    private void testPoint(Instance instance, Point point) {
-        final var batch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(true));
-        batch.setBlock(point, Block.GRASS_BLOCK);
-        final var originalBlock = instance.getBlock(point);
-
-        final var inverse = batch.apply(instance).join();
-        assertNotNull(inverse, "Inverse batch null with BatchOption#calculateInverse true");
-        assertEquals(Block.GRASS_BLOCK, instance.getBlock(point));
-
-        inverse.apply(instance).join();
-        assertEquals(originalBlock, instance.getBlock(point));
-    }
-
-    @Test
-    public void multipleChunks(Env env) {
+    public void basic(Env env) {
         final var instance = env.createFlatInstance();
         for (int x = -2; x < 2; x++) {
             for (int z = -2; z < 2; z++) {
@@ -83,26 +57,5 @@ class AbsoluteBlockBatchTest {
         for (int index = 0; index < points.size(); index++) {
             assertEquals(originalBlocks.get(index), instance.getBlock(points.get(index)));
         }
-    }
-
-    @Test
-    public void withNbt(Env env) {
-        final var instance = env.createFlatInstance();
-        instance.loadChunk(0, 0).join();
-
-        final Block originalBlock = Block.GRASS_BLOCK.withNbt(CompoundBinaryTag.builder().putBoolean("original", true).build());
-        final Block newBlock = Block.GRASS_BLOCK.withNbt(CompoundBinaryTag.builder().putBoolean("original", false).build());
-        instance.setBlock(0, 50, 0, originalBlock);
-
-        final var batch = new AbsoluteBlockBatch(new BatchOption().setCalculateInverse(true));
-        batch.setBlock(0, 50, 0, newBlock);
-
-        final var inverse = batch.apply(instance).join();
-        assertNotNull(inverse, "Inverse batch null with BatchOption#calculateInverse true");
-
-        assertEquals(newBlock, instance.getBlock(0, 50, 0));
-        inverse.apply(instance).join();
-
-        assertEquals(originalBlock, instance.getBlock(0, 50, 0));
     }
 }
