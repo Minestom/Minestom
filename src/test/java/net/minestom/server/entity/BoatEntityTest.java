@@ -45,7 +45,7 @@ class BoatEntityTest {
     @DisplayName("Test if velocity packet is not sent after 20 ticks if the entity a boat")
     @Issue("1880")
     void testIfVelocityPacketIsNotSent(EntityType entityType, Env env) {
-        final Entity entity = Mockito.spy(new Entity(EntityTypes.ACACIA_BOAT));
+        final Entity entity = Mockito.spy(new Entity(entityType));
         Instance flatInstance = env.createFlatInstance();
         entity.setInstance(flatInstance, Pos.ZERO).join();
         for (int i = 0; i < 21; i++) {
