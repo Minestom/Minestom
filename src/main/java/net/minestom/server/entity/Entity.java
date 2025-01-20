@@ -815,7 +815,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 }
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 // register entity for SharedInstances that share entities with this instance
-                forEveryEntitySharingInstance(instance, sharedInstance -> sharedInstance
+                forEntitySharedInstances(instance, sharedInstance -> sharedInstance
                         .getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate));
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
@@ -842,11 +842,18 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return setInstance(instance, this.position);
     }
 
-    private void forEveryEntitySharingInstance(Instance instance, Consumer<SharedInstance> toRun) {
+    /**
+     * Runs a consumer on every {@link SharedInstance} that has the `sharesEntities` flag enabled.
+     *
+     * @param instance the instance to query for {@link SharedInstance}s
+     * @param consumer the consumer to run on each {@link SharedInstance} of the provided {@link Instance} if it's an
+     * {@link InstanceContainer}
+     */
+    private void forEntitySharedInstances(Instance instance, Consumer<SharedInstance> consumer) {
         if (instance instanceof InstanceContainer container) {
             for (SharedInstance sharedInstance : container.getSharedInstances()) {
                 if (!sharedInstance.sharesEntities()) continue;
-                toRun.accept(sharedInstance);
+                consumer.accept(sharedInstance);
             }
         }
     }
@@ -854,7 +861,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
         instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
-        forEveryEntitySharingInstance(instance, sharedInstance -> sharedInstance
+        forEntitySharedInstances(instance, sharedInstance -> sharedInstance
                 .getEntityTracker().unregister(this, trackingTarget, trackingUpdate));
         this.viewEngine.forManuals(this::removeViewer);
     }
