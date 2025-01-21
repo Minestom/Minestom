@@ -1,5 +1,8 @@
 package net.minestom.server.item.drop;
 
+/**
+ * The item was dropped from the hotbar (default key: q)
+ */
 public class DropReasonHotbar extends DropReason {
     private final int slot;
 

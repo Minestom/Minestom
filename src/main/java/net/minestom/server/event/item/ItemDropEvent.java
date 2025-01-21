@@ -56,5 +56,4 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
         SINGLE,
         STACK
     }
-
 }

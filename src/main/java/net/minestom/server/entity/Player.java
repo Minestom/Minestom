@@ -53,6 +53,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
+import net.minestom.server.item.drop.DropReason;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatPosition;
 import net.minestom.server.message.Messenger;
@@ -1267,16 +1268,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Calls an {@link ItemDropEvent} with a specified item.
+     * Calls an {@link ItemDropEvent} with a specified item, reason, and drop amount
      * <p>
      * Returns false if {@code item} is air.
      *
      * @param item the item to drop
+     * @param dropReason The source of the item drop, from an inventory, player's hotbar, etc
+     * @param dropAmount How much was dropped, a single item or the whole stack
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
-    public boolean dropItem(@NotNull ItemStack item) {
+    public boolean dropItem(@NotNull ItemStack item, @NotNull DropReason dropReason, @NotNull ItemDropEvent.DropAmount dropAmount) {
         if (item.isAir()) return false;
-        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
+        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item, dropReason, dropAmount);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }
