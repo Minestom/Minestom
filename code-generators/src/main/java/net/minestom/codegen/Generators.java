@@ -52,6 +52,7 @@ public class Generators {
         generator.generate(resource("attributes.json"), "net.minestom.server.entity.attribute", "Attribute", "AttributeImpl", "Attributes");
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
         generator.generate(resource("villager_professions.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
+        generator.generate(resource("game_events.json"), "net.minestom.server.game", "GameEvent", "GameEventImpl", "GameEvents");
 
 
         // Dynamic registries
