@@ -42,7 +42,7 @@ public class Generators {
                 resource("villager_types.json"), outputFolder).generate();
         new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
                 resource("world_events.json"), outputFolder).generate();
-        new BlockSoundTypesGenerator("net.minestom.server.sound", "BlockSoundType",
+        new BlockSoundTypesGenerator("net.minestom.server.sound", "BlockSoundTypes", "BlockSoundTypeImpl",
                 resource("block_sound_types.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);

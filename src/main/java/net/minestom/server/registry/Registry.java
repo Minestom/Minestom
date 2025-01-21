@@ -24,6 +24,7 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.BlockSoundType;
+import net.minestom.server.sound.BlockSoundTypes;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -333,7 +334,7 @@ public final class Registry {
             this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
-            this.blockSoundType = BlockSoundType.getBlockSoundType(main.getString("soundType"));
+            this.blockSoundType = BlockSoundTypes.getBlockSoundType(main.getString("soundType"));
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
