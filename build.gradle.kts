@@ -196,3 +196,7 @@ tasks {
         sign(publishing.publications)
     }
 }
+
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-parameters")
+}
