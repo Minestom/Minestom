@@ -202,6 +202,20 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
  <a href="BoundingBox.AxisMask.html" title="enum class in net.minestom.server.collision">BoundingBox.AxisMask</a>&nbsp;axisMask,
  double&nbsp;axis)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grow(double,double,double)" class="member-name-link">grow</a><wbr>(double&nbsp;x,
+ double&nbsp;y,
+ double&nbsp;z)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size from its center in every plane.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#growSymmetrically(double,double,double)" class="member-name-link">growSymmetrically</a><wbr>(double&nbsp;x,
+ double&nbsp;y,
+ double&nbsp;z)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size from its center in every plane.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -445,6 +459,50 @@ implements <a href="Shape.html" title="interface in net.minestom.server.collisio
 <dd><code>offset</code> - the offset</dd>
 <dt>Returns:</dt>
 <dd>a new bounding box with an offset.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="grow(double,double,double)">
+<h3>grow</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">grow</span><wbr><span class="parameters">(double&nbsp;x,
+ double&nbsp;y,
+ double&nbsp;z)</span></div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size from its center in every plane.
+ <p>
+ Equivalent to an expansion and an offset where the point is the three-axis offset.
+ Particularly useful when you already use centered and aligned minY=0 position.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>x</code> - the X offset, this will be applied on both sides</dd>
+<dd><code>y</code> - the Y offset, this will be applied on both sides</dd>
+<dd><code>z</code> - the Z offset, this will be applied on both sides</dd>
+<dt>Returns:</dt>
+<dd>a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> expanded and centered from the original minY</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="growSymmetrically(double,double,double)">
+<h3>growSymmetrically</h3>
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BoundingBox.html" title="class in net.minestom.server.collision">BoundingBox</a></span>&nbsp;<span class="element-name">growSymmetrically</span><wbr><span class="parameters">(double&nbsp;x,
+ double&nbsp;y,
+ double&nbsp;z)</span></div>
+<div class="block">Creates a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> with an expanded size from its center in every plane.
+ <p>
+ Equivalent to a double expansion and an offset where the point is the three-axis offset.
+ Particularly useful when you already use centered and aligned minY=0 position.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>x</code> - the X offset, this will be applied on both sides</dd>
+<dd><code>y</code> - the Y offset, this will be applied on both sides</dd>
+<dd><code>z</code> - the Z offset, this will be applied on both sides</dd>
+<dt>Returns:</dt>
+<dd>a new <a href="BoundingBox.html" title="class in net.minestom.server.collision"><code>BoundingBox</code></a> expanded and centered from the original minY</dd>
 </dl>
 </section>
 </li>
