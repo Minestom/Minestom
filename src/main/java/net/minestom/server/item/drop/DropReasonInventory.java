@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The item was dropped from an inventory
  */
-public class DropReasonInventory extends DropReason {
+public final class DropReasonInventory extends DropReason {
 
     private final AbstractInventory inventory;
 

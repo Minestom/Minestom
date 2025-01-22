@@ -3,7 +3,7 @@ package net.minestom.server.item.drop;
 /**
  * The item was dropped from the hotbar (default key: q)
  */
-public class DropReasonHotbar extends DropReason {
+public final class DropReasonHotbar extends DropReason {
     private final int slot;
 
     public DropReasonHotbar(int slot) {
