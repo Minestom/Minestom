@@ -108,8 +108,9 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      */
     @Contract(pure = true)
     public @NotNull BoundingBox grow(double x, double y, double z) {
-        final Vec centerOffset = new Vec(-(width() + x) / 2, minY() - y / 2, -(depth() + z) / 2);
-        return new BoundingBox(width() + x, height() + y, depth() + z, centerOffset);
+        final double newWidth = width() + x, newDepth = depth() + z;
+        final Vec centerOffset = new Vec(-newWidth / 2, minY() - y / 2, -newDepth / 2);
+        return new BoundingBox(newWidth, height() + y, newDepth, centerOffset);
     }
 
     /**
@@ -125,8 +126,8 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      */
     @Contract(pure = true)
     public @NotNull BoundingBox growSymmetrically(double x, double y, double z) {
-        final Vec centerOffset = new Vec(-width() / 2 - x, minY() - y, -depth() / 2 - z);
-        return new BoundingBox(width() + 2 * x, height() + 2 * y, depth() + 2 * z, centerOffset);
+        // Double all amounts to make it symmetric conformance to xyz
+        return grow(x * 2, y * 2, z * 2);
     }
 
     public double width() {
