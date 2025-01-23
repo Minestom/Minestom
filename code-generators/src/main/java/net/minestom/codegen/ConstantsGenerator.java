@@ -1,7 +1,7 @@
 package net.minestom.codegen;
 
 import com.google.gson.JsonObject;
-import com.palantir.javapoet.*;
+import com.squareup.javapoet.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;

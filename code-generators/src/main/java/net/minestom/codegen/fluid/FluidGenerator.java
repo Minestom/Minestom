@@ -1,7 +1,7 @@
 package net.minestom.codegen.fluid;
 
 import com.google.gson.JsonObject;
-import com.palantir.javapoet.*;
+import com.squareup.javapoet.*;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

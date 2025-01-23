@@ -21,7 +21,7 @@ jmh = "1.37"
 jcstress = "0.16"
 
 # Code Generation
-javaPoet = "0.6.0"
+javaPoet = "1.13.0"
 
 # Log impl (for demo & codegen)
 logback = "1.5.16"
@@ -65,7 +65,7 @@ jmh-annotationprocessor = { group = "org.openjdk.jmh", name = "jmh-generator-ann
 jcstress-core = { group = "org.openjdk.jcstress", name = "jcstress-core", version.ref = "jcstress" }
 
 # Code Generation
-javaPoet = { group = "com.palantir.javapoet", name = "javapoet", version.ref = "javaPoet" }
+javaPoet = { group = "com.squareup", name = "javapoet", version.ref = "javaPoet" }
 
 # Log impl (for demo & codegen)
 logback-core = { group = "ch.qos.logback", name = "logback-core", version.ref = "logback" }
