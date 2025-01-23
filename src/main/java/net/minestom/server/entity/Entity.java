@@ -850,11 +850,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * {@link InstanceContainer}
      */
     private void forEntitySharedInstances(Instance instance, Consumer<SharedInstance> consumer) {
-        if (instance instanceof InstanceContainer container) {
-            for (SharedInstance sharedInstance : container.getSharedInstances()) {
-                if (!sharedInstance.sharesEntities()) continue;
-                consumer.accept(sharedInstance);
-            }
+        if (!(instance instanceof InstanceContainer container)) return;
+        for (SharedInstance sharedInstance : container.getSharedInstances()) {
+            if (!sharedInstance.sharesEntities()) continue;
+            consumer.accept(sharedInstance);
         }
     }
 
