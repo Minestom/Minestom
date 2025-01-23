@@ -53,8 +53,7 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) impleme
             public final boolean isInRadius(int radius, int radiusSq, int x, int z, int ox, int oz) {
                 var dx = Math.abs(x - ox);
                 var dz = Math.abs(z - oz);
-                var d = dx + dz;
-                return d <= radius;
+                return dx + dz <= radius;
             }
         };
 

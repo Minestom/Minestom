@@ -11,6 +11,7 @@ import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
@@ -19,11 +20,16 @@ import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.packet.client.common.ClientKeepAlivePacket;
+import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
+import net.minestom.server.network.packet.client.common.ClientPongPacket;
+import net.minestom.server.network.packet.client.play.*;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.List;
 
@@ -125,6 +131,32 @@ public class Main {
                         .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
                         .build()
         ));
+
+        MinecraftServer.getGlobalEventHandler().addListener(PlayerPacketEvent.class, event -> {
+            var packet = event.getPacket();
+            if (packet instanceof ClientTickEndPacket) return;
+            if (packet instanceof ClientChunkBatchReceivedPacket) return;
+            if (packet instanceof ClientPlayerPositionPacket) return;
+            if (packet instanceof ClientPlayerPositionAndRotationPacket) return;
+            if (packet instanceof ClientPlayerRotationPacket) return;
+            if (packet instanceof ClientKeepAlivePacket) return;
+            if (packet instanceof ClientTeleportConfirmPacket) return;
+            if (packet instanceof ClientPlayerPositionStatusPacket) return;
+            if (packet instanceof ClientInputPacket) return;
+            if (packet instanceof ClientEntityActionPacket) return;
+            if (packet instanceof ClientPongPacket) return;
+            if (packet instanceof ClientClickWindowPacket) return;
+            if (packet instanceof ClientHeldItemChangePacket) return;
+            if (packet instanceof ClientChatSessionUpdatePacket) return;
+            if (packet instanceof ClientCloseWindowPacket) return;
+            if (packet instanceof ClientPluginMessagePacket(String channel, byte[] data)) {
+                if (channel.equals("minecraft:register") || channel.equals("minecraft:unregister")) {
+                    System.out.println(channel + ": " + new String(data, StandardCharsets.UTF_8));
+                    return;
+                }
+            }
+            System.out.println(packet);
+        });
 
         new PlayerInit().init();
 
