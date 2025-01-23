@@ -30,8 +30,8 @@ public final class TagManager {
 
     public @Nullable Tag getTag(Tag.BasicType type, String namespace) {
         final var tags = tagMap.get(type);
-        for (var tag : tags) {
-            if (tag.getName().asString().equals(namespace))
+        for (final var tag : tags) {
+            if (tag.name().equals(namespace))
                 return tag;
         }
         return null;
@@ -46,10 +46,10 @@ public final class TagManager {
         for (Map.Entry<Tag.BasicType, List<Tag>> entry : tagMap.entrySet()) {
             final Tag.BasicType type = entry.getKey();
             final String registry = type.getIdentifier();
-            List<TagsPacket.Tag> tags = new ArrayList<>();
-            for (Tag tag : entry.getValue()) {
-                final String identifier = tag.getName().asString();
-                final int[] values = tag.getValues().stream().mapToInt(value -> type.getFunction().apply(value.asString(), registries)).toArray();
+            final List<TagsPacket.Tag> tags = new ArrayList<>();
+            for (final Tag tag : entry.getValue()) {
+                final String identifier = tag.name();
+                final int[] values = tag.getValues().stream().mapToInt(value -> type.getFunction().apply(value.asString(), registries).orElse(null)).filter(Objects::nonNull).toArray();
                 tags.add(new TagsPacket.Tag(identifier, values));
             }
             registryList.add(new TagsPacket.Registry(registry, tags));

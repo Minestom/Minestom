@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.instance.block.BlockFace;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,6 +93,41 @@ public record BoundingBox(Vec relativeStart, Vec relativeEnd) implements Shape {
      */
     public @NotNull BoundingBox withOffset(Point offset) {
         return new BoundingBox(width(), height(), depth(), offset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to an expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public @NotNull BoundingBox grow(double x, double y, double z) {
+        final double newWidth = width() + x, newDepth = depth() + z;
+        final Vec centerOffset = new Vec(-newWidth / 2, minY() - y / 2, -newDepth / 2);
+        return new BoundingBox(newWidth, height() + y, newDepth, centerOffset);
+    }
+
+    /**
+     * Creates a new {@link BoundingBox} with an expanded size from its center in every plane.
+     * <p>
+     * Equivalent to a double expansion and an offset where the point is the three-axis offset.
+     * Particularly useful when you already use centered and aligned minY=0 position.
+     *
+     * @param x the X offset, this will be applied on both sides
+     * @param y the Y offset, this will be applied on both sides
+     * @param z the Z offset, this will be applied on both sides
+     * @return a new {@link BoundingBox} expanded and centered from the original minY
+     */
+    @Contract(pure = true)
+    public @NotNull BoundingBox growSymmetrically(double x, double y, double z) {
+        // Double all amounts to make it symmetric conformance to xyz
+        return grow(x * 2, y * 2, z * 2);
     }
 
     public double width() {

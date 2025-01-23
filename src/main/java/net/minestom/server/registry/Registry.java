@@ -137,6 +137,10 @@ public final class Registry {
         return new JukeboxSongEntry(namespace, main, null);
     }
 
+    public static GameEventEntry gameEventEntry(String namespace, Properties properties) {
+        return new GameEventEntry(namespace, properties, null);
+    }
+
     public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
         // 1. Try to load from jar resources
         InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
@@ -245,6 +249,7 @@ public final class Registry {
         ENTITY_TYPE_TAGS("tags/entity_type.json"),
         FLUID_TAGS("tags/fluid.json"),
         GAMEPLAY_TAGS("tags/game_event.json"),
+        GAME_EVENTS("game_events.json"),
         ITEM_TAGS("tags/item.json"),
         ENCHANTMENT_TAGS("tags/enchantment.json"),
         BIOME_TAGS("tags/biome.json"),
@@ -267,6 +272,12 @@ public final class Registry {
 
         public @NotNull String fileName() {
             return name;
+        }
+    }
+
+    public record GameEventEntry(NamespaceID namespace, Properties main, Properties custom) implements Entry {
+        public GameEventEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace), main, custom);
         }
     }
 
