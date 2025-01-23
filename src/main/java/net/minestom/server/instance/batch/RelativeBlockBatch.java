@@ -1,22 +1,25 @@
 package net.minestom.server.instance.batch;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.utils.location.LocationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.concurrent.CompletableFuture;
 
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders, and
  * are going to be reused in different places. If translation is not required, {@link AbsoluteBlockBatch}
  * should be used instead for efficiency purposes.
  * <p>
- * Coordinates are relative to (0, 0, 0) with some limitations. All coordinates must
- * fit within a 16 bit integer of the first coordinate (32,767 blocks). If blocks must
- * be spread out over a larger area, an {@link AbsoluteBlockBatch} should be used.
+ * Coordinates are relative to (0, 0, 0) with some limitations.
+ * The Y position must fit within a 12-bit signed integer,
+ * and the X/Z positions must fit within a 26-bit signed integer.
  * <p>
  * All inverses are {@link AbsoluteBlockBatch}s and represent the inverse of the application
  * at the position which it was applied.
@@ -28,61 +31,40 @@ import org.jetbrains.annotations.Nullable;
  * @see Batch
  * @see AbsoluteBlockBatch
  */
-public class RelativeBlockBatch implements Batch<Runnable> {
-    // relative pos format: nothing/relative x/relative y/relative z (16/16/16/16 bits)
-
+public class RelativeBlockBatch implements Batch {
     // Need to be synchronized manually
-    // Format: relative pos - block
-    private final Long2ObjectMap<Block> blockIdMap = new Long2ObjectOpenHashMap<>();
+    // Format: global position index - block
+    private final Long2ObjectMap<Block> blocks = new Long2ObjectOpenHashMap<>();
 
     private final BatchOption options;
-
-    private volatile boolean firstEntry = true;
-    private int offsetX, offsetY, offsetZ;
+    private final BatchOption inverseOption;
 
     public RelativeBlockBatch() {
         this(new BatchOption());
     }
 
-    public RelativeBlockBatch(BatchOption options) {
+    public RelativeBlockBatch(@NotNull BatchOption options) {
+        this(options, new BatchOption());
+    }
+
+    public RelativeBlockBatch(@NotNull BatchOption options, @NotNull BatchOption inverseOption) {
         this.options = options;
+        this.inverseOption = inverseOption;
     }
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        // Save the offsets if it is the first entry
-        if (firstEntry) {
-            this.firstEntry = false;
+        final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
 
-            this.offsetX = x;
-            this.offsetY = y;
-            this.offsetZ = z;
-        }
-
-        // Subtract offset
-        x -= offsetX;
-        y -= offsetY;
-        z -= offsetZ;
-
-        // Verify that blocks are not too far from each other
-        Check.argCondition(Math.abs(x) > Short.MAX_VALUE, "Relative x position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(y) > Short.MAX_VALUE, "Relative y position may not be more than 16 bits long.");
-        Check.argCondition(Math.abs(z) > Short.MAX_VALUE, "Relative z position may not be more than 16 bits long.");
-
-        long pos = Short.toUnsignedLong((short)x);
-        pos = (pos << 16) | Short.toUnsignedLong((short)y);
-        pos = (pos << 16) | Short.toUnsignedLong((short)z);
-
-        //final int block = (blockStateId << 16) | customBlockId;
-        synchronized (blockIdMap) {
-            this.blockIdMap.put(pos, block);
+        synchronized (blocks) {
+            this.blocks.put(index, block);
         }
     }
 
     @Override
     public void clear() {
-        synchronized (blockIdMap) {
-            this.blockIdMap.clear();
+        synchronized (blocks) {
+            this.blocks.clear();
         }
     }
 
@@ -90,12 +72,11 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      * Applies this batch to the given instance at the origin (0, 0, 0) of the instance.
      *
      * @param instance The instance in which the batch should be applied
-     * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
     @Override
-    public AbsoluteBlockBatch apply(@NotNull Instance instance, @Nullable Runnable callback) {
-        return apply(instance, 0, 0, 0, callback);
+    public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance) {
+        return apply(instance, 0, 0, 0);
     }
 
     /**
@@ -103,55 +84,23 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      *
      * @param instance The instance in which the batch should be applied
      * @param position The position to apply the batch
-     * @param callback The callback to be executed when the batch is applied
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    public AbsoluteBlockBatch apply(@NotNull Instance instance, @NotNull Point position, @Nullable Runnable callback) {
-        return apply(instance, position.blockX(), position.blockY(), position.blockZ(), callback);
+    public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, @NotNull Point position) {
+        return apply(instance, position.blockX(), position.blockY(), position.blockZ());
     }
 
     /**
      * Applies this batch to the given instance at the given position.
      *
-     * @param instance The instance in which the batch should be applied
-     * @param x        The x position to apply the batch
-     * @param y        The y position to apply the batch
-     * @param z        The z position to apply the batch
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    public AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
-        return apply(instance, x, y, z, callback, true);
-    }
-
-    /**
-     * Applies this batch to the given instance at the given position, and execute the callback
-     * immediately when the blocks have been applied, int an unknown thread.
-     *
-     * @param instance The instance in which the batch should be applied
-     * @param x        The x position to apply the batch
-     * @param y        The y position to apply the batch
-     * @param z        The z position to apply the batch
-     * @param callback The callback to be executed when the batch is applied
-     * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
-     */
-    public AbsoluteBlockBatch applyUnsafe(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback) {
-        return apply(instance, x, y, z, callback, false);
-    }
-
-    /**
-     * Applies this batch to the given instance at the given position, execute the callback depending on safeCallback.
-     *
      * @param instance     The instance in which the batch should be applied
      * @param x            The x position to apply the batch
      * @param y            The y position to apply the batch
      * @param z            The z position to apply the batch
-     * @param callback     The callback to be executed when the batch is applied
-     * @param safeCallback If true, the callback will be executed in the next instance update. Otherwise it will be executed immediately upon completion
      * @return The inverse of this batch, if inverse is enabled in the {@link BatchOption}
      */
-    protected AbsoluteBlockBatch apply(@NotNull Instance instance, int x, int y, int z, @Nullable Runnable callback, boolean safeCallback) {
-        return this.toAbsoluteBatch(x, y, z).apply(instance, callback, safeCallback);
+    public @NotNull CompletableFuture<@Nullable AbsoluteBlockBatch> apply(@NotNull Instance instance, int x, int y, int z) {
+        return this.toAbsoluteBatch(x, y, z).apply(instance);
     }
 
     /**
@@ -174,20 +123,19 @@ public class RelativeBlockBatch implements Batch<Runnable> {
      */
     @NotNull
     public AbsoluteBlockBatch toAbsoluteBatch(int x, int y, int z) {
-        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options);
-        synchronized (blockIdMap) {
-            for (var entry : blockIdMap.long2ObjectEntrySet()) {
+        final AbsoluteBlockBatch batch = new AbsoluteBlockBatch(this.options, this.inverseOption);
+
+        synchronized (blocks) {
+            for (var entry : Long2ObjectMaps.fastIterable(blocks)) {
                 final long pos = entry.getLongKey();
-                final short relZ = (short) (pos & 0xFFFF);
-                final short relY = (short) ((pos >> 16) & 0xFFFF);
-                final short relX = (short) ((pos >> 32) & 0xFFFF);
 
                 final Block block = entry.getValue();
 
-                final int finalX = x + offsetX + relX;
-                final int finalY = y + offsetY + relY;
-                final int finalZ = z + offsetZ + relZ;
+                final int finalX = x + LocationUtils.globalBlockIndexToPositionX(pos);
+                final int finalY = y + LocationUtils.globalBlockIndexToPositionY(pos);
+                final int finalZ = z + LocationUtils.globalBlockIndexToPositionZ(pos);
 
+                // this batch was made in the function, no one else has it
                 batch.setBlock(finalX, finalY, finalZ, block);
             }
         }
