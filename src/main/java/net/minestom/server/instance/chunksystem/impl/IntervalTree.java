@@ -23,41 +23,42 @@ public class IntervalTree<T> {
         Node<T> e = new Node<>(start, end, data, parent);
         if (addToLeft) parent.left = e;
         else parent.right = e;
-        fixAfterInsertion(e);
-        size++;
-        modCount++;
+        this.fixAfterInsertion(e);
+        this.size++;
+        this.modCount++;
     }
 
     private void addEntryToEmptyMap(int start, int end, T data) {
-        root = new Node<>(start, end, data, null);
-        size = 1;
-        modCount++;
+        this.root = new Node<>(start, end, data, null);
+        this.size = 1;
+        this.modCount++;
     }
 
     public void clear() {
-        root = null;
-        size = 0;
-        modCount++;
+        this.root = null;
+        this.size = 0;
+        this.modCount++;
     }
 
-    public boolean insert(int start, int end, T data) {
-        return put(start, end, data);
+    public T insert(int start, int end, T data) {
+        return this.put(start, end, data);
     }
 
     public T insertOrGet(int start, int end, Supplier<T> supplier) {
-        return put(start, end, supplier);
+        return this.put(start, end, supplier);
     }
 
-    public boolean delete(int start) {
-        var node = getEntry(start);
+    public boolean delete(int start, int end) {
+        var node = this.getEntry(start);
         if (node == null) return false;
-        deleteEntry(node);
+        if (!node.end.containsKey(end)) return false;
+        this.deleteEntry(node);
         return true;
     }
 
     public List<Node<T>> searchNodes(int point) {
         var nodes = new ArrayList<Node<T>>();
-        search(root, point, nodes);
+        this.search(this.root, point, nodes);
         return nodes;
     }
 
@@ -67,51 +68,25 @@ public class IntervalTree<T> {
 
 
         // left checks handled by recursion
-        search(node.left, point, result);
+        this.search(node.left, point, result);
 
-        if (point >= node.start && point <= node.end) {
+        if (point >= node.start && point <= node.end.lastKey()) {
             result.add(node);
         }
 
         if (point >= node.start) {
-            search(node.right, point, result);
+            this.search(node.right, point, result);
         }
     }
 
     public Node<T> getRoot() {
-        return root;
+        return this.root;
     }
 
-    private boolean put(int start, int end, T data) {
-        Node<T> t = root;
+    private T put(int start, int end, T data) {
+        Node<T> t = this.root;
         if (t == null) {
-            addEntryToEmptyMap(start, end, data);
-            return true;
-        }
-        int cmp;
-        Node<T> parent;
-        do {
-            parent = t;
-
-            // update maxEnd for all parents on the way down
-            t.maxEnd = Math.max(t.maxEnd, end);
-
-            cmp = Integer.compare(start, t.start);
-            if (cmp == 0) {
-                // already contains
-                return false;
-            }
-            t = cmp < 0 ? t.left : t.right;
-        } while (t != null);
-        addEntry(start, end, data, parent, cmp < 0);
-        return true;
-    }
-
-    private T put(int start, int end, Supplier<T> supplier) {
-        Node<T> t = root;
-        if (t == null) {
-            T data = supplier.get();
-            addEntryToEmptyMap(start, end, data);
+            this.addEntryToEmptyMap(start, end, data);
             return data;
         }
         int cmp;
@@ -125,12 +100,38 @@ public class IntervalTree<T> {
             cmp = Integer.compare(start, t.start);
             if (cmp == 0) {
                 // already contains
-                return t.data;
+                return t.add(end, data);
+            }
+            t = cmp < 0 ? t.left : t.right;
+        } while (t != null);
+        this.addEntry(start, end, data, parent, cmp < 0);
+        return data;
+    }
+
+    private T put(int start, int end, Supplier<T> supplier) {
+        Node<T> t = this.root;
+        if (t == null) {
+            T data = supplier.get();
+            this.addEntryToEmptyMap(start, end, data);
+            return data;
+        }
+        int cmp;
+        Node<T> parent;
+        do {
+            parent = t;
+
+            // update maxEnd for all parents on the way down
+            t.maxEnd = Math.max(t.maxEnd, end);
+
+            cmp = Integer.compare(start, t.start);
+            if (cmp == 0) {
+                // already contains
+                return t.add(end, supplier.get());
             }
             t = cmp < 0 ? t.left : t.right;
         } while (t != null);
         T data = supplier.get();
-        addEntry(start, end, data, parent, cmp < 0);
+        this.addEntry(start, end, data, parent, cmp < 0);
         return data;
     }
 
@@ -148,7 +149,7 @@ public class IntervalTree<T> {
      */
     final Node<T> getEntry(int key) {
         // Offload comparator-based version for sake of performance
-        Node<T> p = root;
+        Node<T> p = this.root;
         while (p != null) {
             int cmp = Integer.compare(key, p.start);
             if (cmp < 0) p = p.left;
@@ -167,7 +168,7 @@ public class IntervalTree<T> {
             p.right = r.left;
             if (r.left != null) r.left.parent = p;
             r.parent = p.parent;
-            if (p.parent == null) root = r;
+            if (p.parent == null) this.root = r;
             else if (p.parent.left == p) p.parent.left = r;
             else p.parent.right = r;
             r.left = p;
@@ -187,7 +188,7 @@ public class IntervalTree<T> {
             p.left = l.right;
             if (l.right != null) l.right.parent = p;
             l.parent = p.parent;
-            if (p.parent == null) root = l;
+            if (p.parent == null) this.root = l;
             else if (p.parent.right == p) p.parent.right = l;
             else p.parent.left = l;
             l.right = p;
@@ -211,7 +212,7 @@ public class IntervalTree<T> {
     private void fixAfterInsertion(Node<T> x) {
         x.color = RED;
 
-        while (x != null && x != root && x.parent.color == RED) {
+        while (x != null && x != this.root && x.parent.color == RED) {
             if (parentOf(x) == leftOf(parentOf(parentOf(x)))) {
                 Node<T> y = rightOf(parentOf(parentOf(x)));
                 if (colorOf(y) == RED) {
@@ -246,22 +247,22 @@ public class IntervalTree<T> {
                 }
             }
         }
-        root.color = BLACK;
+        this.root.color = BLACK;
     }
 
     /**
      * Delete node p, and then rebalance the tree.
      */
     private void deleteEntry(Node<T> p) {
-        modCount++;
-        size--;
+        this.modCount++;
+        this.size--;
 
         // If strictly internal, copy successor's element to p and then make p
         // point to successor.
         if (p.left != null && p.right != null) {
             Node<T> s = successor(p);
             p.replaceData(s);
-            fixMaxEnd(p);
+            this.fixMaxEnd(p);
             p = s;
         } // p has 2 children
 
@@ -271,24 +272,24 @@ public class IntervalTree<T> {
         if (replacement != null) {
             // Link replacement to parent
             replacement.parent = p.parent;
-            if (p.parent == null) root = replacement;
+            if (p.parent == null) this.root = replacement;
             else if (p == p.parent.left) {
                 p.parent.left = replacement;
-                fixMaxEnd(p);
+                this.fixMaxEnd(p);
             } else {
                 p.parent.right = replacement;
-                fixMaxEnd(p);
+                this.fixMaxEnd(p);
             }
 
             // Null out links so they are OK to use by fixAfterDeletion.
             p.left = p.right = p.parent = null;
 
             // Fix replacement
-            if (p.color == BLACK) fixAfterDeletion(replacement);
+            if (p.color == BLACK) this.fixAfterDeletion(replacement);
         } else if (p.parent == null) { // return if we are the only node.
-            root = null;
+            this.root = null;
         } else { //  No children. Use self as phantom replacement and unlink.
-            if (p.color == BLACK) fixAfterDeletion(p);
+            if (p.color == BLACK) this.fixAfterDeletion(p);
 
             if (p.parent != null) {
                 if (p == p.parent.left) p.parent.left = null;
@@ -302,14 +303,14 @@ public class IntervalTree<T> {
      * From CLR
      */
     private void fixAfterDeletion(Node<T> x) {
-        while (x != root && colorOf(x) == BLACK) {
+        while (x != this.root && colorOf(x) == BLACK) {
             if (x == leftOf(parentOf(x))) {
                 Node<T> sib = rightOf(parentOf(x));
 
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
                     setColor(parentOf(x), RED);
-                    rotateLeft(parentOf(x));
+                    this.rotateLeft(parentOf(x));
                     sib = rightOf(parentOf(x));
                 }
 
@@ -320,14 +321,14 @@ public class IntervalTree<T> {
                     if (colorOf(rightOf(sib)) == BLACK) {
                         setColor(leftOf(sib), BLACK);
                         setColor(sib, RED);
-                        rotateRight(sib);
+                        this.rotateRight(sib);
                         sib = rightOf(parentOf(x));
                     }
                     setColor(sib, colorOf(parentOf(x)));
                     setColor(parentOf(x), BLACK);
                     setColor(rightOf(sib), BLACK);
-                    rotateLeft(parentOf(x));
-                    x = root;
+                    this.rotateLeft(parentOf(x));
+                    x = this.root;
                 }
             } else { // symmetric
                 Node<T> sib = leftOf(parentOf(x));
@@ -335,7 +336,7 @@ public class IntervalTree<T> {
                 if (colorOf(sib) == RED) {
                     setColor(sib, BLACK);
                     setColor(parentOf(x), RED);
-                    rotateRight(parentOf(x));
+                    this.rotateRight(parentOf(x));
                     sib = leftOf(parentOf(x));
                 }
 
@@ -346,14 +347,14 @@ public class IntervalTree<T> {
                     if (colorOf(leftOf(sib)) == BLACK) {
                         setColor(rightOf(sib), BLACK);
                         setColor(sib, RED);
-                        rotateLeft(sib);
+                        this.rotateLeft(sib);
                         sib = leftOf(parentOf(x));
                     }
                     setColor(sib, colorOf(parentOf(x)));
                     setColor(parentOf(x), BLACK);
                     setColor(leftOf(sib), BLACK);
-                    rotateRight(parentOf(x));
-                    x = root;
+                    this.rotateRight(parentOf(x));
+                    x = this.root;
                 }
             }
         }
@@ -422,13 +423,13 @@ public class IntervalTree<T> {
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     public boolean equals(Object other) {
         if (!(other instanceof IntervalTree<?> tree)) return false;
-        if (size != tree.size) return false;
-        return equals(root, tree.root);
+        if (this.size != tree.size) return false;
+        return this.equals(this.root, tree.root);
     }
 
     private boolean equals(Node<?> node, Node<?> o) {
@@ -438,21 +439,21 @@ public class IntervalTree<T> {
     }
 
     public int height() {
-        return height(root);
+        return this.height(root);
     }
 
     public IntervalTree<T> copy() {
         var tree = new IntervalTree<T>();
-        tree.root = deepCopy(root);
-        tree.size = size;
+        tree.root = this.deepCopy(this.root);
+        tree.size = this.size;
         return tree;
     }
 
     private Node<T> deepCopy(Node<T> origin) {
         if (origin == null) return null;
-        var node = copySingleWithoutLinks(origin);
-        var left = deepCopy(origin.left);
-        var right = deepCopy(origin.right);
+        var node = this.copySingleWithoutLinks(origin);
+        var left = this.deepCopy(origin.left);
+        var right = this.deepCopy(origin.right);
         if (left != null) {
             left.parent = node;
             node.left = left;
@@ -475,108 +476,110 @@ public class IntervalTree<T> {
 
     public int[] preOrder() {
         var list = new ArrayList<Integer>();
-        preOrder(n -> list.add(n.start), root);
+        this.preOrder(n -> list.add(n.start), root);
         return list.stream().mapToInt(i -> i).toArray();
     }
 
     public void preOrder(Consumer<Node<T>> consumer) {
-        preOrder(consumer, root);
+        this.preOrder(consumer, root);
     }
 
     public int[] inOrder() {
         var list = new ArrayList<Integer>();
-        inOrder(list, root);
+        this.inOrder(list, root);
         return list.stream().mapToInt(i -> i).toArray();
     }
 
     private void preOrder(Consumer<Node<T>> consumer, Node<T> node) {
         if (node == null) return;
         consumer.accept(node);
-        preOrder(consumer, node.left);
-        preOrder(consumer, node.right);
+        this.preOrder(consumer, node.left);
+        this.preOrder(consumer, node.right);
     }
 
     private void inOrder(ArrayList<Integer> list, Node<T> node) {
         if (node == null) return;
-        inOrder(list, node.left);
+        this.inOrder(list, node.left);
         list.add(node.start);
-        inOrder(list, node.right);
+        this.inOrder(list, node.right);
     }
 
     private int height(Node<T> node) {
         if (node == null) return 0;
-        return 1 + Math.max(height(node.left), height(node.right));
+        return 1 + Math.max(this.height(node.left), this.height(node.right));
     }
 
     public static class Node<T> {
-        public T data;
         public int start;
-        public int end;
+        public TreeMap<Integer, ArrayList<T>> end = new TreeMap<>();
         public Node<T> left, right, parent;
         public boolean color;
         public int maxEnd;
 
         public Node(int start, int end, T data, @Nullable IntervalTree.Node<T> parent) {
             this.start = start;
-            this.end = end;
-            this.data = data;
+            this.add(end, data);
             this.maxEnd = end;
             this.parent = parent;
+        }
+
+        private T add(int end, T data) {
+            this.end.computeIfAbsent(end, unused -> new ArrayList<>()).add(data);
+            return data;
         }
 
         @Override
         public boolean equals(Object obj) {
             if (!(obj instanceof Node<?> other)) return false;
-            return equalsDown(other) && equalsUp(other);
+            return this.equalsDown(other) && this.equalsUp(other);
         }
 
         private boolean equalsUp(Node<?> other) {
             if (other == null) return false;
-            if (hasDifferingValues(other)) return false;
-            if (parent == null && other.parent == null) return true;
-            if (parent == null || other.parent == null) return false;
-            return parent.equalsUp(other.parent);
+            if (this.hasDifferingValues(other)) return false;
+            if (this.parent == null && other.parent == null) return true;
+            if (this.parent == null || other.parent == null) return false;
+            return this.parent.equalsUp(other.parent);
         }
 
         private boolean equalsDown(Node<?> other) {
             if (other == null) return false;
-            if (hasDifferingValues(other)) return false;
-            if (left != null) {
-                if (!left.equalsDown(other.left)) return false;
+            if (this.hasDifferingValues(other)) return false;
+            if (this.left != null) {
+                if (!this.left.equalsDown(other.left)) return false;
             } else if (other.left != null) return false;
-            if (right != null) {
-                return right.equalsDown(other.right);
+            if (this.right != null) {
+                return this.right.equalsDown(other.right);
             } else return other.right == null;
         }
 
         private boolean hasDifferingValues(Node<?> other) {
-            return start != other.start || end != other.end || maxEnd != other.maxEnd || color != other.color || !Objects.equals(data, other.data);
+            return this.start != other.start || this.end.equals(other.end) || this.maxEnd != other.maxEnd || this.color != other.color;
         }
 
         private void resetMaxEnd() {
-            maxEnd = calculateMaxEnd();
+            this.maxEnd = this.calculateMaxEnd();
         }
 
         public int calculateMaxEnd() {
-            var val = end;
-            if (left != null) {
-                val = Math.max(val, left.maxEnd);
+            var val = this.end.lastKey();
+            if (this.left != null) {
+                val = Math.max(val, this.left.maxEnd);
             }
-            if (right != null) {
-                val = Math.max(val, right.maxEnd);
+            if (this.right != null) {
+                val = Math.max(val, this.right.maxEnd);
             }
             return val;
         }
 
         private void replaceData(Node<T> other) {
             this.start = other.start;
-            this.end = other.end;
-            this.data = other.data;
+            this.end = new TreeMap<>(other.end);
         }
 
         @Override
         public String toString() {
-            return "[%d,%d]".formatted(start, end);
+            return "[%d,%s]".formatted(this.start, this.end);
         }
     }
 }

@@ -33,7 +33,7 @@ public class IntervalTreeTest {
     static void setupDegenerateTree() {
         degenerateTree = new IntervalTree<>();
         for (var i = 0; i < 10000; i++) {
-            assertTrue(degenerateTree.insert(i, i + 50, i));
+            assertEquals(i, degenerateTree.insert(i, i + 50, i));
         }
         degenerateTreeCopy = degenerateTree.copy();
     }
@@ -46,7 +46,7 @@ public class IntervalTreeTest {
         var len = 100_000;
         for (var i = 0; i < len; i++) {
             var num = random.nextInt(len);
-            if (!largeTree.insert(num, num + 50, num)) continue;
+            assertEquals(num, largeTree.insert(num, num + 50, num));
             if (largeTreeValidStarts.size() < 1000) largeTreeValidStarts.add(num);
         }
         largeTreeCopy = largeTree.copy();
@@ -178,8 +178,8 @@ public class IntervalTreeTest {
         tree.insert(0, 10, 5);
         tree.insert(-5, 10, 4);
         assertEquals(3, tree.insertOrGet(0, 50, () -> 3));
-        assertEquals(3, tree.insertOrGet(0, 50, () -> 9));
-        
+        assertEquals(9, tree.insertOrGet(0, 50, () -> 9));
+
         System.out.println(Arrays.toString(tree.inOrder()));
     }
 
@@ -189,9 +189,9 @@ public class IntervalTreeTest {
             var result = degenerateTree.searchNodes(i);
             assertEquals(51, result.size());
             for (var node : result) {
-                assertEquals(50, node.end - node.start);
+                assertEquals(50, node.end.lastKey() - node.start);
                 assertTrue(node.start <= i);
-                assertTrue(node.end >= i);
+                assertTrue(node.end.lastKey() >= i);
             }
         }
     }
@@ -240,7 +240,7 @@ public class IntervalTreeTest {
         if (node == null) return Integer.MIN_VALUE;
         var left = validateMaxEnd(node.left);
         var right = validateMaxEnd(node.right);
-        var maxEnd = Math.max(node.end, Math.max(left, right));
+        var maxEnd = Math.max(node.end.lastKey(), Math.max(left, right));
         assertEquals(node.maxEnd, maxEnd, "Node maxEnd incorrect");
         return maxEnd;
     }
