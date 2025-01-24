@@ -39,7 +39,7 @@ body:
         2. ...
         3. ...
     validations:
-      required: true
+      required: false
   - type: textarea
     attributes:
       label: Code sample
@@ -57,4 +57,4 @@ body:
         [Paste your code here]
         ```
     validations:
-      required: true
+      required: false
