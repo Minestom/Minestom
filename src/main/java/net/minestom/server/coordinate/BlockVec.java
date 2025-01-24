@@ -29,6 +29,21 @@ public record BlockVec(double x, double y, double z) implements Point {
     }
 
     @Override
+    public int blockX() {
+        return (int) x;
+    }
+
+    @Override
+    public int blockY() {
+        return (int) y;
+    }
+
+    @Override
+    public int blockZ() {
+        return (int) z;
+    }
+
+    @Override
     public @NotNull Point withX(@NotNull DoubleUnaryOperator operator) {
         return new Vec(operator.applyAsDouble(x), y, z);
     }

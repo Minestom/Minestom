@@ -16,7 +16,7 @@ import java.util.Collection;
 
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
-    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.map(MaterialImpl::getId, Material::id);
+    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(MaterialImpl::getId, Material::id);
     BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.STRING.map(MaterialImpl::getSafe, Material::name);
 
     /**

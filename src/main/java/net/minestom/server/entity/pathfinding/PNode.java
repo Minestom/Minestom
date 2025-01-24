@@ -95,7 +95,7 @@ public class PNode {
     }
 
     @ApiStatus.Internal
-    @NotNull Type getType() {
+    public @NotNull Type getType() {
         return type;
     }
 

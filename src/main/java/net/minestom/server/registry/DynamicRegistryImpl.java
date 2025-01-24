@@ -3,7 +3,6 @@ package net.minestom.server.registry;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
@@ -49,7 +48,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         }
     }
 
-    private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(true));
+    private Registries registries = null;
+    private CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
     private final List<T> entryById = new CopyOnWriteArrayList<>();
@@ -137,13 +137,19 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         lock.lock();
         try {
             int id = idByName.indexOf(namespaceId);
-            if (id == -1) id = entryById.size();
-
-            entryById.add(id, object);
             entryByName.put(namespaceId, object);
-            idByName.add(namespaceId);
-            packById.add(id, pack);
-            vanillaRegistryDataPacket.invalidate();
+            if (id == -1) {
+                idByName.add(namespaceId);
+                entryById.add(object);
+                packById.add(pack);
+            } else {
+                idByName.set(id, namespaceId);
+                entryById.set(id, object);
+                packById.set(id, pack);
+            }
+            if (vanillaRegistryDataPacket != null) {
+                vanillaRegistryDataPacket.invalidate();
+            }
             return Key.of(namespaceId);
         } finally {
             lock.unlock();
@@ -163,7 +169,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             entryByName.remove(namespaceId);
             idByName.remove(id);
             packById.remove(id);
-            vanillaRegistryDataPacket.invalidate();
+            if (vanillaRegistryDataPacket != null) {
+                vanillaRegistryDataPacket.invalidate();
+            }
             return true;
         } finally {
             lock.unlock();
@@ -171,15 +179,23 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull SendablePacket registryDataPacket(boolean excludeVanilla) {
+    public @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
         // We cache the vanilla packet because that is by far the most common case. If some client claims not to have
         // the vanilla datapack we can compute the entire thing.
-        return excludeVanilla ? vanillaRegistryDataPacket : createRegistryDataPacket(false);
+        if (excludeVanilla) {
+            if (this.registries != registries) {
+                vanillaRegistryDataPacket.invalidate();
+                this.registries = registries;
+            }
+            return vanillaRegistryDataPacket;
+        }
+
+        return createRegistryDataPacket(registries, false);
     }
 
-    private @NotNull RegistryDataPacket createRegistryDataPacket(boolean excludeVanilla) {
+    private @NotNull RegistryDataPacket createRegistryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
         Check.notNull(nbtType, "Cannot create registry data packet for server-only registry");
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), true);
+        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, true);
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());
         for (int i = 0; i < entryById.size(); i++) {
             CompoundBinaryTag data = null;
@@ -214,7 +230,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
         Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.fileName())) {
+        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
             final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
             if (!(tag instanceof CompoundBinaryTag compound)) {

@@ -1,17 +1,21 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.component.*;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +38,7 @@ public final class ItemComponent {
     public static final DataComponent<Unbreakable> UNBREAKABLE = register("unbreakable", Unbreakable.NETWORK_TYPE, Unbreakable.NBT_TYPE);
     public static final DataComponent<Component> CUSTOM_NAME = register("custom_name", NetworkBuffer.COMPONENT, BinaryTagSerializer.JSON_COMPONENT);
     public static final DataComponent<Component> ITEM_NAME = register("item_name", NetworkBuffer.COMPONENT, BinaryTagSerializer.JSON_COMPONENT);
+    public static final DataComponent<String> ITEM_MODEL = register("item_model", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     public static final DataComponent<List<Component>> LORE = register("lore", NetworkBuffer.COMPONENT.list(256), BinaryTagSerializer.JSON_COMPONENT.list());
     public static final DataComponent<ItemRarity> RARITY = register("rarity", ItemRarity.NETWORK_TYPE, ItemRarity.NBT_TYPE);
     public static final DataComponent<EnchantmentList> ENCHANTMENTS = register("enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
@@ -48,8 +53,17 @@ public final class ItemComponent {
     public static final DataComponent<Boolean> ENCHANTMENT_GLINT_OVERRIDE = register("enchantment_glint_override", NetworkBuffer.BOOLEAN, BinaryTagSerializer.BOOLEAN);
     public static final DataComponent<Unit> INTANGIBLE_PROJECTILE = register("intangible_projectile", null, BinaryTagSerializer.UNIT);
     public static final DataComponent<Food> FOOD = register("food", Food.NETWORK_TYPE, Food.NBT_TYPE);
-    public static final DataComponent<Unit> FIRE_RESISTANT = register("fire_resistant", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
+    public static final DataComponent<Consumable> CONSUMABLE = register("consumable", Consumable.NETWORK_TYPE, Consumable.NBT_TYPE);
+    public static final DataComponent<ItemStack> USE_REMAINDER = register("use_remainder", ItemStack.NETWORK_TYPE, BinaryTagSerializer.ITEM);
+    public static final DataComponent<UseCooldown> USE_COOLDOWN = register("use_cooldown", UseCooldown.NETWORK_TYPE, UseCooldown.NBT_TYPE);
+    public static final DataComponent<DamageResistant> DAMAGE_RESISTANT = register("damage_resistant", DamageResistant.NETWORK_TYPE, DamageResistant.NBT_TYPE);
     public static final DataComponent<Tool> TOOL = register("tool", Tool.NETWORK_TYPE, Tool.NBT_TYPE);
+    public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", BinaryTagSerializer.INT));
+    public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.NBT_TYPE);
+    public static final DataComponent<ObjectSet<Material>> REPAIRABLE = register("repairable", ObjectSet.networkType(Tag.BasicType.ITEMS), wrapObject("items", ObjectSet.nbtType(Tag.BasicType.ITEMS)));
+    public static final DataComponent<Unit> GLIDER = register("glider", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
+    public static final DataComponent<String> TOOLTIP_STYLE = register("tooltip_style", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
+    public static final DataComponent<DeathProtection> DEATH_PROTECTION = register("death_protection", DeathProtection.NETWORK_TYPE, DeathProtection.NBT_TYPE);
     public static final DataComponent<EnchantmentList> STORED_ENCHANTMENTS = register("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
     public static final DataComponent<DyedItemColor> DYED_COLOR = register("dyed_color", DyedItemColor.NETWORK_TYPE, DyedItemColor.NBT_TYPE);
     public static final DataComponent<RGBLike> MAP_COLOR = register("map_color", Color.NETWORK_TYPE, Color.NBT_TYPE);
@@ -82,7 +96,8 @@ public final class ItemComponent {
     public static final DataComponent<List<ItemStack>> CONTAINER = register("container", ItemStack.NETWORK_TYPE.list(256), BinaryTagSerializer.ITEM.list());
     public static final DataComponent<ItemBlockState> BLOCK_STATE = register("block_state", ItemBlockState.NETWORK_TYPE, ItemBlockState.NBT_TYPE);
     public static final DataComponent<List<Bee>> BEES = register("bees", Bee.NETWORK_TYPE.list(Short.MAX_VALUE), Bee.NBT_TYPE.list());
-    public static final DataComponent<String> LOCK = register("lock", null, BinaryTagSerializer.STRING);
+    // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
+    public static final DataComponent<CompoundBinaryTag> LOCK = register("lock", null, BinaryTagSerializer.COMPOUND);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);
@@ -109,6 +124,11 @@ public final class ItemComponent {
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
+    }
+
+    // There are some components that are serialized to nbt as an object containing a single field, for now we just inline them here.
+    private static <T> @NotNull BinaryTagSerializer<T> wrapObject(@NotNull String fieldName, @NotNull BinaryTagSerializer<T> serializer) {
+        return BinaryTagTemplate.object(fieldName, serializer, t -> t, t -> t);
     }
 
     private ItemComponent() {

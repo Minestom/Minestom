@@ -43,7 +43,7 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
     @Test
     void alternativeNbtSyntax() {
         var value = ItemComponent.POTION_CONTENTS.read(BinaryTagSerializer.Context.EMPTY, StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
-        var expected = new PotionContents(PotionType.STRONG_SWIFTNESS, null, List.of());
+        var expected = new PotionContents(PotionType.STRONG_SWIFTNESS, null, List.of(), null);
         assertEquals(expected, value);
     }
 }

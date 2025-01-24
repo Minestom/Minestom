@@ -40,7 +40,7 @@ public interface Env {
     }
 
     default @NotNull Player createPlayer(@NotNull Instance instance, @NotNull Pos pos) {
-        return createConnection().connect(instance, pos).join();
+        return createConnection().connect(instance, pos);
     }
 
     default @NotNull Instance createFlatInstance() {

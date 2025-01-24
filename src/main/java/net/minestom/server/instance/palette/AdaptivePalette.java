@@ -2,7 +2,6 @@ package net.minestom.server.instance.palette;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
-import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +19,7 @@ final class AdaptivePalette implements Palette, Cloneable {
         this.dimension = dimension;
         this.maxBitsPerEntry = maxBitsPerEntry;
         this.defaultBitsPerEntry = bitsPerEntry;
-        this.palette = new FilledPalette(dimension, 0);
+        this.palette = new PaletteSingle(dimension, 0);
     }
 
     @Override
@@ -51,12 +50,12 @@ final class AdaptivePalette implements Palette, Cloneable {
 
     @Override
     public void fill(int value) {
-        this.palette = new FilledPalette(dimension, value);
+        this.palette = new PaletteSingle(dimension, value);
     }
 
     @Override
     public void setAll(@NotNull EntrySupplier supplier) {
-        SpecializedPalette newPalette = new FlexiblePalette(this);
+        SpecializedPalette newPalette = new PaletteIndirect(this);
         newPalette.setAll(supplier);
         this.palette = newPalette;
     }
@@ -105,31 +104,24 @@ final class AdaptivePalette implements Palette, Cloneable {
         }
     }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        final SpecializedPalette optimized = optimizedPalette();
-        this.palette = optimized;
-        optimized.write(writer);
-    }
-
     SpecializedPalette optimizedPalette() {
         var currentPalette = this.palette;
-        if (currentPalette instanceof FlexiblePalette flexiblePalette) {
-            final int count = flexiblePalette.count();
+        if (currentPalette instanceof PaletteIndirect paletteIndirect) {
+            final int count = paletteIndirect.count();
             if (count == 0) {
-                return new FilledPalette(dimension, 0);
+                return new PaletteSingle(dimension, 0);
             } else {
                 // Find all entries and compress the palette
-                IntSet entries = new IntOpenHashSet(flexiblePalette.paletteToValueList.size());
-                flexiblePalette.getAll((x, y, z, value) -> entries.add(value));
-                final int currentBitsPerEntry = flexiblePalette.bitsPerEntry();
+                IntSet entries = new IntOpenHashSet(paletteIndirect.paletteToValueList.size());
+                paletteIndirect.getAll((x, y, z, value) -> entries.add(value));
+                final int currentBitsPerEntry = paletteIndirect.bitsPerEntry();
                 final int bitsPerEntry;
                 if (entries.size() == 1) {
-                    return new FilledPalette(dimension, entries.iterator().nextInt());
+                    return new PaletteSingle(dimension, entries.iterator().nextInt());
                 } else if (currentBitsPerEntry > defaultBitsPerEntry &&
                         (bitsPerEntry = MathUtils.bitsToRepresent(entries.size() - 1)) < currentBitsPerEntry) {
-                    flexiblePalette.resize((byte) bitsPerEntry);
-                    return flexiblePalette;
+                    paletteIndirect.resize((byte) bitsPerEntry);
+                    return paletteIndirect;
                 }
             }
         }
@@ -138,9 +130,9 @@ final class AdaptivePalette implements Palette, Cloneable {
 
     Palette flexiblePalette() {
         SpecializedPalette currentPalette = this.palette;
-        if (currentPalette instanceof FilledPalette filledPalette) {
-            currentPalette = new FlexiblePalette(this);
-            currentPalette.fill(filledPalette.value());
+        if (currentPalette instanceof PaletteSingle paletteSingle) {
+            currentPalette = new PaletteIndirect(this);
+            currentPalette.fill(paletteSingle.value());
             this.palette = currentPalette;
         }
         return currentPalette;

@@ -1,7 +1,6 @@
 package net.minestom.server.extras;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.ServerFlag;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
 import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.utils.validate.Check;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import java.security.KeyPair;
 
 public final class MojangAuth {
-    public static final String AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
     private static volatile boolean enabled = false;
     private static volatile KeyPair keyPair;
 

@@ -16,7 +16,7 @@ public final class AnvilListener {
         if (openInventory.getInventoryType() != InventoryType.ANVIL)
             return;
 
-        EventDispatcher.call(new PlayerAnvilInputEvent(player, packet.itemName()));
+        EventDispatcher.call(new PlayerAnvilInputEvent(player, openInventory, packet.itemName()));
     }
 
     private AnvilListener() {

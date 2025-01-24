@@ -1,32 +1,29 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PigMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 2;
-
     public PigMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public boolean isHasSaddle() {
-        return super.metadata.getIndex(OFFSET, false);
+        return metadata.get(MetadataDef.Pig.HAS_SADDLE);
     }
 
     public void setHasSaddle(boolean value) {
-        super.metadata.setIndex(OFFSET, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Pig.HAS_SADDLE, value);
     }
 
     public int getTimeToBoost() {
-        return super.metadata.getIndex(OFFSET + 1, 0);
+        return metadata.get(MetadataDef.Pig.BOOST_TIME);
     }
 
     public void setTimeToBoost(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Pig.BOOST_TIME, value);
     }
 
 }

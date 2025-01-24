@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
@@ -26,8 +27,8 @@ public class ArgumentUUID extends Argument<UUID> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:uuid";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.UUID;
     }
 
     @Override

@@ -21,8 +21,8 @@ import java.util.concurrent.CompletableFuture;
 public class SharedInstance extends Instance {
     private final InstanceContainer instanceContainer;
 
-    public SharedInstance(@NotNull UUID uniqueId, @NotNull InstanceContainer instanceContainer) {
-        super(uniqueId, instanceContainer.getDimensionType());
+    public SharedInstance(@NotNull UUID uuid, @NotNull InstanceContainer instanceContainer) {
+        super(uuid, instanceContainer.getDimensionType());
         this.instanceContainer = instanceContainer;
     }
 

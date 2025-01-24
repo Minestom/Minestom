@@ -5,25 +5,17 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.notifications.Notification;
-import net.minestom.server.advancements.notifications.NotificationCenter;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.GameMode;
-import net.minestom.server.entity.ItemEntity;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
+import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
-import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.PickupItemEvent;
+import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.instance.Instance;
@@ -35,26 +27,23 @@ import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
-import net.minestom.server.item.component.EnchantmentList;
-import net.minestom.server.item.component.LodestoneTracker;
-import net.minestom.server.item.component.PotionContents;
-import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.potion.CustomPotionEffect;
-import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -106,7 +95,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
 
                 // Show off adding and removing feature flags
-                event.addFeatureFlag(FeatureFlag.BUNDLE);
+                event.addFeatureFlag(FeatureFlag.WINTER_DROP);
                 event.removeFeatureFlag(FeatureFlag.TRADE_REBALANCE); // not enabled by default, just removed for demonstration
 
                 var instances = MinecraftServer.getInstanceManager().getInstances();
@@ -116,18 +105,6 @@ public class PlayerInit {
                 int z = Math.abs(ThreadLocalRandom.current().nextInt()) % 500 - 250;
                 player.setRespawnPoint(new Pos(0, 40f, 0));
             })
-            .addListener(PlayerHandAnimationEvent.class, event -> {
-                class A {
-                    static boolean b = false;
-                }
-                if (A.b) {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).removeModifier(NamespaceID.from("test"));
-                } else {
-                    event.getPlayer().getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).addModifier(new AttributeModifier(NamespaceID.from("test"), 0.5, AttributeOperation.ADD_VALUE));
-                }
-                A.b = !A.b;
-            })
-
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
@@ -149,6 +126,7 @@ public class PlayerInit {
                         new ServerLinksPacket.Entry(Component.text("Hello world!"), "https://minestom.net")
                 ));
 
+                // TODO(1.21.2): Handle bundle slot selection
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
                         .set(ItemComponent.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
@@ -157,38 +135,19 @@ public class PlayerInit {
                         .build();
                 player.getInventory().addItemStack(bundle);
 
-                player.getInventory().addItemStack(ItemStack.builder(Material.COMPASS)
-                        .set(ItemComponent.LODESTONE_TRACKER, new LodestoneTracker(player.getInstance().getDimensionName(), new Vec(10, 10, 10), true))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(
-                                Enchantment.SHARPNESS, 10
-                        )))
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.STONE_SWORD)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.BLACK_BANNER)
-                        .build());
-
-                player.getInventory().addItemStack(ItemStack.builder(Material.POTION)
-                        .set(ItemComponent.POTION_CONTENTS, new PotionContents(null, null, List.of(
-                                new CustomPotionEffect(PotionEffect.JUMP_BOOST, new CustomPotionEffect.Settings((byte) 4,
-                                        45 * 20, false, true, true, null))
-                        )))
-                        .customName(Component.text("Sharpness 10 Sword").append(Component.space()).append(Component.text("§c§l[LEGENDARY]")))
-                        .build());
+                player.setGameMode(GameMode.SURVIVAL);
+                PlayerInventory inventory = event.getPlayer().getInventory();
+                inventory.addItemStack(getFoodItem(20));
+                inventory.addItemStack(getFoodItem(10000));
+                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
 
                 if (event.isFirstSpawn()) {
-                    Notification notification = new Notification(
+                    event.getPlayer().sendNotification(new Notification(
                             Component.text("Welcome!"),
                             FrameType.TASK,
                             Material.IRON_SWORD
-                    );
-                    NotificationCenter.send(notification, event.getPlayer());
+                    ));
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
                 }
@@ -201,7 +160,7 @@ public class PlayerInit {
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
-                if (event.getHand() != Player.Hand.MAIN) return;
+                if (event.getHand() != PlayerHand.MAIN) return;
 
                 var itemStack = event.getItemStack();
                 var block = event.getInstance().getBlock(event.getPosition());
@@ -215,16 +174,42 @@ public class PlayerInit {
                 event.getInstance().setBlock(event.getPosition(), block);
 
             })
-            .addListener(PlayerBlockPlaceEvent.class, event -> {
-//                event.setDoBlockUpdates(false);
+            .addListener(PlayerBeginItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
+                final ItemStack itemStack = event.getItemStack();
+                final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
+                if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
+                    // "shoot" the arrow
+                    player.setItemInHand(event.getHand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    event.getPlayer().sendMessage("pew pew!");
+                    event.setItemUseDuration(0); // Do not start using the item
+                    return;
+                }
+            })
+            .addListener(PlayerFinishItemUseEvent.class, event -> {
+                if (event.getItemStack().material() == Material.APPLE) {
+                    event.getPlayer().sendMessage("yummy yummy apple");
+                }
+            })
+            .addListener(PlayerCancelItemUseEvent.class, event -> {
+                final Player player = event.getPlayer();
+                final ItemStack itemStack = event.getItemStack();
+                if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
+                    player.setItemInHand(event.getHand(), itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    return;
+                }
             })
             .addListener(PlayerBlockInteractEvent.class, event -> {
                 var block = event.getBlock();
                 var rawOpenProp = block.getProperty("open");
-                if (rawOpenProp == null) return;
+                if (rawOpenProp != null) {
+                    block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
+                    event.getInstance().setBlock(event.getBlockPosition(), block);
+                }
 
-                block = block.withProperty("open", String.valueOf(!Boolean.parseBoolean(rawOpenProp)));
-                event.getInstance().setBlock(event.getBlockPosition(), block);
+                if (block.id() == Block.CRAFTING_TABLE.id()) {
+                    event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                }
             });
 
     {
@@ -241,22 +226,6 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
-
-//        var i2 = new InstanceContainer(UUID.randomUUID(), DimensionType.OVERWORLD, null, NamespaceID.from("minestom:demo"));
-//        instanceManager.registerInstance(i2);
-//        i2.setGenerator(unit -> unit.modifier().fillHeight(0, 40, Block.GRASS_BLOCK));
-//        i2.setChunkSupplier(LightingChunk::new);
-
-        // System.out.println("start");
-        // var chunks = new ArrayList<CompletableFuture<Chunk>>();
-        // ChunkUtils.forChunksInRange(0, 0, 32, (x, z) -> chunks.add(instanceContainer.loadChunk(x, z)));
-
-        // CompletableFuture.runAsync(() -> {
-        //     CompletableFuture.allOf(chunks.toArray(CompletableFuture[]::new)).join();
-        //     System.out.println("load end");
-        //     LightingChunk.relight(instanceContainer, instanceContainer.getChunks());
-        //     System.out.println("light end");
-        // });
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
@@ -290,5 +259,17 @@ public class PlayerInit {
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+    }
+
+    public static ItemStack getFoodItem(int consumeTicks) {
+        return ItemStack.builder(Material.IRON_NUGGET)
+                .amount(64)
+                .set(ItemComponent.CONSUMABLE, new Consumable(
+                        (float) consumeTicks / 20,
+                        ItemAnimation.EAT,
+                        SoundEvent.BLOCK_CHAIN_STEP,
+                        true,
+                        new ArrayList<>()))
+                .build();
     }
 }

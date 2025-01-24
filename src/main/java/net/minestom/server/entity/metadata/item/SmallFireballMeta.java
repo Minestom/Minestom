@@ -1,21 +1,29 @@
 package net.minestom.server.entity.metadata.item;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
-import net.minestom.server.item.Material;
+import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SmallFireballMeta extends ItemContainingMeta implements ObjectDataProvider, ProjectileMeta {
-    public static final byte OFFSET = ItemContainingMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 0;
-
+public class SmallFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
     private Entity shooter;
 
     public SmallFireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
-        super(entity, metadata, Material.FIRE_CHARGE);
+        super(entity, metadata);
+    }
+
+    @NotNull
+    public ItemStack getItem() {
+        return metadata.get(MetadataDef.SmartFireball.ITEM);
+    }
+
+    public void setItem(@NotNull ItemStack item) {
+        metadata.set(MetadataDef.SmartFireball.ITEM, item);
     }
 
     @Override

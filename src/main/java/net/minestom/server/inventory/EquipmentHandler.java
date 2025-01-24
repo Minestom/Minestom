@@ -2,7 +2,7 @@ package net.minestom.server.inventory;
 
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.EntityEquipmentPacket;
 import net.minestom.server.utils.validate.Check;
@@ -67,7 +67,7 @@ public interface EquipmentHandler {
      * @param hand the Hand to get the {@link ItemStack} from
      * @return the {@link ItemStack} in {@code hand}
      */
-    default @NotNull ItemStack getItemInHand(@NotNull Player.Hand hand) {
+    default @NotNull ItemStack getItemInHand(@NotNull PlayerHand hand) {
         return switch (hand) {
             case MAIN -> getItemInMainHand();
             case OFF -> getItemInOffHand();
@@ -80,7 +80,7 @@ public interface EquipmentHandler {
      * @param hand  the hand to set the item to
      * @param stack the {@link ItemStack} to set
      */
-    default void setItemInHand(@NotNull Player.Hand hand, @NotNull ItemStack stack) {
+    default void setItemInHand(@NotNull PlayerHand hand, @NotNull ItemStack stack) {
         switch (hand) {
             case MAIN -> setItemInMainHand(stack);
             case OFF -> setItemInOffHand(stack);
@@ -187,11 +187,14 @@ public interface EquipmentHandler {
      * @param slot the slot of the equipment
      */
     default void syncEquipment(@NotNull EquipmentSlot slot) {
+        syncEquipment(slot, getEquipment(slot));
+    }
+
+    default void syncEquipment(@NotNull EquipmentSlot slot, @NotNull ItemStack stack) {
         Check.stateCondition(!(this instanceof Entity), "Only accessible for Entity");
 
         Entity entity = (Entity) this;
-        final ItemStack itemStack = getEquipment(slot);
-        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(), Map.of(slot, itemStack)));
+        entity.sendPacketToViewers(new EntityEquipmentPacket(entity.getEntityId(), Map.of(slot, stack)));
     }
 
     /**

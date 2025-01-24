@@ -1,6 +1,7 @@
 package net.minestom.server.gamedata.tags;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.packet.server.common.TagsPacket;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public final class TagManager {
         // Load required tags from files
         for (var type : Tag.BasicType.values()) {
             if (type.getResource() == null || type.getFunction() == null) continue;
-            final var json = Registry.load(type.getResource());
+            final var json = net.minestom.server.registry.Registry.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
             json.keySet().forEach(tagName -> {
                 final var tag = new Tag(NamespaceID.from(tagName), getValues(json, tagName));
@@ -29,8 +30,8 @@ public final class TagManager {
 
     public @Nullable Tag getTag(Tag.BasicType type, String namespace) {
         final var tags = tagMap.get(type);
-        for (var tag : tags) {
-            if (tag.getName().asString().equals(namespace))
+        for (final var tag : tags) {
+            if (tag.name().equals(namespace))
                 return tag;
         }
         return null;
@@ -38,6 +39,22 @@ public final class TagManager {
 
     public Map<Tag.BasicType, List<Tag>> getTagMap() {
         return Collections.unmodifiableMap(tagMap);
+    }
+
+    public TagsPacket packet(Registries registries) {
+        List<TagsPacket.Registry> registryList = new ArrayList<>();
+        for (Map.Entry<Tag.BasicType, List<Tag>> entry : tagMap.entrySet()) {
+            final Tag.BasicType type = entry.getKey();
+            final String registry = type.getIdentifier();
+            final List<TagsPacket.Tag> tags = new ArrayList<>();
+            for (final Tag tag : entry.getValue()) {
+                final String identifier = tag.name();
+                final int[] values = tag.getValues().stream().mapToInt(value -> type.getFunction().apply(value.asString(), registries).orElse(null)).filter(Objects::nonNull).toArray();
+                tags.add(new TagsPacket.Tag(identifier, values));
+            }
+            registryList.add(new TagsPacket.Registry(registry, tags));
+        }
+        return new TagsPacket(registryList);
     }
 
     private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {

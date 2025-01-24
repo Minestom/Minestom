@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChangeHeldSlotEvent;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
@@ -34,6 +35,12 @@ public class PlayerHeldListener {
         } else {
             // Event has been canceled, send the last held slot to refresh the client
             player.setHeldItemSlot(player.getHeldSlot());
+        }
+
+        // Player is not using offhand, reset item use
+        if (player.getItemUseHand() != PlayerHand.OFF) {
+            player.refreshActiveHand(false, false, false);
+            player.clearItemUse();
         }
     }
 
