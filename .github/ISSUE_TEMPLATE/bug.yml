@@ -2,6 +2,7 @@ name: Report a bug
 description: You found a bug? Let us know!
 title: "[Bug]: "
 labels: [ "bug", "needs triage" ]
+projects: ["minestom/6"]
 body:
   - type: markdown
     attributes:
