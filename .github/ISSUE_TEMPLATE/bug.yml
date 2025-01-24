@@ -18,7 +18,7 @@ body:
     attributes:
       label: Affected Version
       description: |
-        The unique version of the Use Dependency.
+        The unique version of the used dependency.
         It can be found out via the Git class or in the dependency.
     validations:
       required: true
@@ -47,8 +47,8 @@ body:
         Please create a reproducible sample to show us the bug in action and attach it below between the lines with the backticks.
         This helps us to verify that the bug is valid and prevents us from having to ask you for a sample later.
         
-        Without this we will unlikely be able to progress on the issue, and because of that
-        we regretfully will have to close it.
+        Without this we will be unlikely to be able to progress on the issue, so
+        we'll regretfully have to close it.
 
         **Note**: Please do not upload screenshots of text. Instead, use code blocks
         or the above mentioned ways to upload your code sample.
