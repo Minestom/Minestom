@@ -1,0 +1,36 @@
+name: Build
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    # Run on all label events (won't be duplicated) or all push events or on PR syncs not from the same repo
+    if: github.repository_owner == 'Minestom'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          cache: gradle
+          java-version: 21
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Publish to Central via Build
+        run: |
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
+        env:
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
