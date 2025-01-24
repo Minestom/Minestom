@@ -66,14 +66,15 @@ sourceSets {
         }
         blossom {
             javaSources {
+
                 val gitCommit = System.getenv("GIT_COMMIT")
                 val gitBranch = System.getenv("GIT_BRANCH")
                 val group = System.getenv("GROUP")
                 val artifact = System.getenv("ARTIFACT")
-                property("\"&COMMIT\"", if (gitCommit == null) "null" else "\"${gitCommit}\"")
-                property("\"&BRANCH\"", if (gitBranch == null) "null" else "\"${gitBranch}\"")
-                property("\"&GROUP\"", if (group == null) "null" else "\"${group}\"")
-                property("\"&ARTIFACT\"", if (artifact == null) "null" else "\"${artifact}\"")
+                property("COMMIT", gitCommit ?: "UNKNOWN")
+                property("BRANCH", gitBranch ?: "UNKNOWN")
+                property("GROUP", group ?: "UNKNOWN")
+                property("ARTIFACT", artifact ?: "UNKNOWN")
             }
         }
     }
