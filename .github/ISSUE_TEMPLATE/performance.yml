@@ -1,6 +1,7 @@
 name: Performance Problem
 description: Report a performance problem which is related to Minestom
 labels: [ "needs triage", "performance" ]
+projects: ["minestom/6"]
 body:
   - type: markdown
     attributes:
