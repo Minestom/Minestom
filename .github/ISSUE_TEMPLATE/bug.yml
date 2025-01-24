@@ -18,7 +18,7 @@ body:
     attributes:
       label: Affected Version
       description: |
-        The unique version of the Use Dependency.
+        The unique version of the used dependency.
         It can be found out via the Git class or in the dependency.
     validations:
       required: true
