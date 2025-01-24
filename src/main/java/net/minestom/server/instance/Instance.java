@@ -755,6 +755,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     /**
+     * Gets the instance unique id.
+     *
+     * @return the instance unique id
+     * @deprecated Use Instance#getUuid
+     */
+    @Deprecated(forRemoval = true)
+    public @NotNull UUID getUniqueId() {
+        return uuid;
+    }
+
+    /**
      * Performs a single tick in the instance, including scheduled tasks from {@link #scheduleNextTick(Consumer)}.
      * <p>
      * Warning: this does not update chunks and entities.
