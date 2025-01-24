@@ -758,7 +758,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * Gets the instance unique id.
      *
      * @return the instance unique id
-     * @deprecated Use Instance#getUuid
+     * @deprecated Replace with Instance#getUuid
      */
     @Deprecated(forRemoval = true)
     public @NotNull UUID getUniqueId() {
