@@ -21,11 +21,11 @@ public class ItemAttributeTest extends AbstractItemComponentTest<AttributeList> 
     protected @NotNull List<Map.Entry<String, AttributeList>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", AttributeList.EMPTY),
-                Map.entry("single", new AttributeList(new AttributeList.Modifier(Attribute.GENERIC_MOVEMENT_SPEED, new AttributeModifier("minestom:movement_test", 0.1, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))),
+                Map.entry("single", new AttributeList(new AttributeList.Modifier(Attribute.MOVEMENT_SPEED, new AttributeModifier("minestom:movement_test", 0.1, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND))),
                 Map.entry("multiple", new AttributeList(List.of(
-                        new AttributeList.Modifier(Attribute.GENERIC_MAX_HEALTH, new AttributeModifier("minestom:health_test", 5, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND),
-                        new AttributeList.Modifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test", 3, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.ANY),
-                        new AttributeList.Modifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test_1", 1.4, AttributeOperation.MULTIPLY_BASE), EquipmentSlotGroup.CHEST)
+                        new AttributeList.Modifier(Attribute.MAX_HEALTH, new AttributeModifier("minestom:health_test", 5, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND),
+                        new AttributeList.Modifier(Attribute.ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test", 3, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.ANY),
+                        new AttributeList.Modifier(Attribute.ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test_1", 1.4, AttributeOperation.MULTIPLY_BASE), EquipmentSlotGroup.CHEST)
 
                 )))
         );

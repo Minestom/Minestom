@@ -4,8 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.PacketUtils;
-import net.minestom.server.utils.UniqueIdUtils;
+import net.minestom.server.utils.PacketSendingUtils;
+import net.minestom.server.utils.UUIDUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public final class TeamManager {
      */
     protected void registerNewTeam(@NotNull Team team) {
         this.teams.add(team);
-        PacketUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
+        PacketSendingUtils.broadcastPlayPacket(team.createTeamsCreationPacket());
     }
 
     /**
@@ -60,7 +60,7 @@ public final class TeamManager {
      */
     public boolean deleteTeam(@NotNull Team team) {
         // Sends to all online players a team destroy packet
-        PacketUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
+        PacketSendingUtils.broadcastPlayPacket(team.createTeamDestructionPacket());
         return this.teams.remove(team);
     }
 
@@ -158,7 +158,7 @@ public final class TeamManager {
     public List<String> getPlayers(Team team) {
         List<String> players = new ArrayList<>();
         for (String member : team.getMembers()) {
-            boolean match = UniqueIdUtils.isUniqueId(member);
+            boolean match = UUIDUtils.isUuid(member);
 
             if (!match) players.add(member);
         }
@@ -176,7 +176,7 @@ public final class TeamManager {
     public List<String> getEntities(Team team) {
         List<String> entities = new ArrayList<>();
         for (String member : team.getMembers()) {
-            boolean match = UniqueIdUtils.isUniqueId(member);
+            boolean match = UUIDUtils.isUuid(member);
 
             if (match) entities.add(member);
         }

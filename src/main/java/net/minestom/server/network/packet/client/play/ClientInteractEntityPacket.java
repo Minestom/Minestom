@@ -1,45 +1,52 @@
 package net.minestom.server.network.packet.client.play;
 
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
-import net.minestom.server.utils.binary.Writeable;
 import org.jetbrains.annotations.NotNull;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boolean sneaking) implements ClientPacket {
-    public ClientInteractEntityPacket(@NotNull NetworkBuffer reader) {
-        this(reader.read(VAR_INT), switch (reader.read(VAR_INT)) {
-            case 0 -> new Interact(reader);
-            case 1 -> new Attack();
-            case 2 -> new InteractAt(reader);
-            default -> throw new RuntimeException("Unknown action id");
-        }, reader.read(BOOLEAN));
-    }
 
-    @Override
-    public void write(@NotNull NetworkBuffer writer) {
-        writer.write(VAR_INT, targetId);
-        writer.write(VAR_INT, type.id());
-        writer.write(type);
-        writer.write(BOOLEAN, sneaking);
-    }
-
-    public sealed interface Type extends Writer
-            permits Interact, Attack, InteractAt {
-        int id();
-    }
-
-    public record Interact(Player.@NotNull Hand hand) implements Type {
-        public Interact(@NotNull NetworkBuffer reader) {
-            this(reader.readEnum(Player.Hand.class));
+    public static final NetworkBuffer.Type<ClientInteractEntityPacket> SERIALIZER = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ClientInteractEntityPacket value) {
+            buffer.write(VAR_INT, value.targetId);
+            buffer.write(VAR_INT, value.type.id());
+            @SuppressWarnings("unchecked") NetworkBuffer.Type<Type> serializer = (NetworkBuffer.Type<Type>) typeSerializer(value.type.id());
+            buffer.write(serializer, value.type);
+            buffer.write(BOOLEAN, value.sneaking);
         }
 
         @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.writeEnum(Player.Hand.class, hand);
+        public ClientInteractEntityPacket read(@NotNull NetworkBuffer buffer) {
+            final int targetId = buffer.read(VAR_INT);
+            final Type type = typeSerializer(buffer.read(VAR_INT)).read(buffer);
+            final boolean sneaking = buffer.read(BOOLEAN);
+            return new ClientInteractEntityPacket(targetId, type, sneaking);
         }
+    };
+
+    private static NetworkBuffer.Type<? extends Type> typeSerializer(int id) {
+        return switch (id) {
+            case 0 -> Interact.SERIALIZER;
+            case 1 -> Attack.SERIALIZER;
+            case 2 -> InteractAt.SERIALIZER;
+            default -> throw new RuntimeException("Unknown action id");
+        };
+    }
+
+    public sealed interface Type permits Interact, Attack, InteractAt {
+        int id();
+    }
+
+    public record Interact(@NotNull PlayerHand hand) implements Type {
+        public static final NetworkBuffer.Type<Interact> SERIALIZER = NetworkBufferTemplate.template(
+                NetworkBuffer.Enum(PlayerHand.class), Interact::hand,
+                Interact::new
+        );
 
         @Override
         public int id() {
@@ -48,10 +55,7 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     public record Attack() implements Type {
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            // Empty
-        }
+        public static final NetworkBuffer.Type<Attack> SERIALIZER = NetworkBufferTemplate.template(Attack::new);
 
         @Override
         public int id() {
@@ -60,19 +64,14 @@ public record ClientInteractEntityPacket(int targetId, @NotNull Type type, boole
     }
 
     public record InteractAt(float targetX, float targetY, float targetZ,
-                             Player.@NotNull Hand hand) implements Type {
-        public InteractAt(@NotNull NetworkBuffer reader) {
-            this(reader.read(FLOAT), reader.read(FLOAT), reader.read(FLOAT),
-                    reader.readEnum(Player.Hand.class));
-        }
-
-        @Override
-        public void write(@NotNull NetworkBuffer writer) {
-            writer.write(FLOAT, targetX);
-            writer.write(FLOAT, targetY);
-            writer.write(FLOAT, targetZ);
-            writer.writeEnum(Player.Hand.class, hand);
-        }
+                             @NotNull PlayerHand hand) implements Type {
+        public static final NetworkBuffer.Type<InteractAt> SERIALIZER = NetworkBufferTemplate.template(
+                FLOAT, InteractAt::targetX,
+                FLOAT, InteractAt::targetY,
+                FLOAT, InteractAt::targetZ,
+                NetworkBuffer.Enum(PlayerHand.class), InteractAt::hand,
+                InteractAt::new
+        );
 
         @Override
         public int id() {

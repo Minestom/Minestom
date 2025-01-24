@@ -1,25 +1,22 @@
 package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class TropicalFishMeta extends AbstractFishMeta implements ObjectDataProvider {
-    public static final byte OFFSET = AbstractFishMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 1;
-
     public TropicalFishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public Variant getVariant() {
-        return getVariantFromID(super.metadata.getIndex(OFFSET, 0));
+        return getVariantFromID(metadata.get(MetadataDef.TropicalFish.VARIANT));
     }
 
     public void setVariant(Variant variant) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(getVariantID(variant)));
+        metadata.set(MetadataDef.TropicalFish.VARIANT, getVariantID(variant));
     }
 
     public static int getVariantID(Variant variant) {

@@ -1,15 +1,17 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.network.packet.server.play.EntityHeadLookPacket;
-import net.minestom.testing.Env;
-import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
+import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.testing.Env;
+import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -44,12 +46,12 @@ public class EntityTeleportIntegrationTest {
     public void playerChunkTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
         assertEquals(instance, player.getInstance());
         assertEquals(new Pos(0, 40, 0), player.getPosition());
 
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(0, 40, 0)).join();
+        viewerConnection.connect(instance, new Pos(0, 40, 0));
 
         var tracker = connection.trackIncoming(ServerPacket.class);
         var viewerTracker = viewerConnection.trackIncoming(ServerPacket.class);
@@ -62,27 +64,24 @@ public class EntityTeleportIntegrationTest {
                 packet -> assertEquals(teleportPosition, packet.position()));
         // Verify broadcast packet(s)
 
-        viewerTracker.assertCount(2);
-        List<ServerPacket> packets = viewerTracker.collect();
-        var teleportPacket = (EntityTeleportPacket) packets.get(0);
-        assertEquals(player.getEntityId(), teleportPacket.entityId());
-        assertEquals(teleportPosition, teleportPacket.position());
-
-        var headLookPacket = (EntityHeadLookPacket) packets.get(1);
-        assertEquals(player.getEntityId(), headLookPacket.entityId());
-        assertEquals(teleportPosition.yaw(), headLookPacket.yaw());
+        viewerTracker.assertCount(1);
+        viewerTracker.assertSingle(EntityPositionSyncPacket.class, packet -> {
+            assertEquals(player.getEntityId(), packet.entityId());
+            assertEquals(teleportPosition, packet.position());
+            assertEquals(teleportPosition.yaw(), packet.yaw());
+        });
     }
 
     @Test
     public void playerTeleport(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 40, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 40, 0));
         assertEquals(instance, player.getInstance());
         assertEquals(new Pos(0, 40, 0), player.getPosition());
 
         var viewerConnection = env.createConnection();
-        viewerConnection.connect(instance, new Pos(0, 40, 0)).join();
+        viewerConnection.connect(instance, new Pos(0, 40, 0));
 
         var teleportPosition = new Pos(4999, 42, 4999);
         player.teleport(teleportPosition).join();
@@ -93,7 +92,7 @@ public class EntityTeleportIntegrationTest {
     public void playerTeleportWithFlagsTest(Env env) {
         var instance = env.createFlatInstance();
         var connection = env.createConnection();
-        var player = connection.connect(instance, new Pos(0, 0, 0)).join();
+        var player = connection.connect(instance, new Pos(0, 0, 0));
 
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
         assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
@@ -104,5 +103,22 @@ public class EntityTeleportIntegrationTest {
         var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
         player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
         assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
+    }
+
+    @Test
+    public void entityTeleportToInfinity(Env env) throws ExecutionException, InterruptedException, TimeoutException {
+        var instance = env.createFlatInstance();
+        var entity = new Entity(EntityTypes.ZOMBIE);
+        entity.setInstance(instance, new Pos(0, 42, 0)).join();
+        assertEquals(instance, entity.getInstance());
+        assertEquals(new Pos(0, 42, 0), entity.getPosition());
+
+        entity.teleport(new Pos(Double.POSITIVE_INFINITY, 42, 52)).join();
+        CompletableFuture.runAsync(() -> entity.tick(System.currentTimeMillis()))
+                .get(10, TimeUnit.SECONDS);
+        // This should not hang forever
+
+        // The position should have been capped at 2 billion.
+        assertEquals(new Pos(2_000_000_000, 42, 52), entity.getPosition());
     }
 }

@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft.registry;
 
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.builder.arguments.minecraft.SuggestionType;
 import net.minestom.server.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,8 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
     }
 
     @Override
-    public String parser() {
-        return "minecraft:resource_location";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.RESOURCE_LOCATION;
     }
 
     @Override

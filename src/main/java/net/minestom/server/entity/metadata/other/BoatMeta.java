@@ -1,88 +1,37 @@
 package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.entity.metadata.AbstractVehicleMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class BoatMeta extends EntityMeta {
-    public static final byte OFFSET = EntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 7;
-
+public class BoatMeta extends AbstractVehicleMeta {
     public BoatMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public int getTimeSinceLastHit() {
-        return super.metadata.getIndex(OFFSET, 0);
-    }
-
-    public void setTimeSinceLastHit(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
-    }
-
-    public int getForwardDirection() {
-        return super.metadata.getIndex(OFFSET + 1, 1);
-    }
-
-    public void setForwardDirection(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
-    }
-
-    public float getDamageTaken() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
-    }
-
-    public void setDamageTaken(float value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Float(value));
-    }
-
-    @NotNull
-    public Type getType() {
-        return Type.VALUES[super.metadata.getIndex(OFFSET + 3, 0)];
-    }
-
-    public void setType(@NotNull Type value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.VarInt(value.ordinal()));
-    }
-
     public boolean isLeftPaddleTurning() {
-        return super.metadata.getIndex(OFFSET + 4, false);
+        return metadata.get(MetadataDef.Boat.IS_LEFT_PADDLE_TURNING);
     }
 
     public void setLeftPaddleTurning(boolean value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Boat.IS_LEFT_PADDLE_TURNING, value);
     }
 
     public boolean isRightPaddleTurning() {
-        return super.metadata.getIndex(OFFSET + 5, false);
+        return metadata.get(MetadataDef.Boat.IS_RIGHT_PADDLE_TURNING);
     }
 
     public void setRightPaddleTurning(boolean value) {
-        super.metadata.setIndex(OFFSET + 5, Metadata.Boolean(value));
+        metadata.set(MetadataDef.Boat.IS_RIGHT_PADDLE_TURNING, value);
     }
 
     public int getSplashTimer() {
-        return super.metadata.getIndex(OFFSET + 6, 0);
+        return metadata.get(MetadataDef.Boat.SPLASH_TIMER);
     }
 
     public void setSplashTimer(int value) {
-        super.metadata.setIndex(OFFSET + 6, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Boat.SPLASH_TIMER, value);
     }
-
-    public enum Type {
-        OAK,
-        SPRUCE,
-        BIRCH,
-        JUNGLE,
-        ACACIA,
-        CHERRY,
-        DARK_OAK,
-        MANGROVE,
-        BAMBOO;
-
-        private final static Type[] VALUES = values();
-    }
-
 }

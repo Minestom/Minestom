@@ -2,10 +2,11 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.chars.CharList;
+import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.binary.BinaryWriter;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,14 +71,12 @@ public class ArgumentTime extends Argument<Duration> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return BinaryWriter.makeArray(packetWriter -> {
-            packetWriter.writeInt(min);
-        });
+        return NetworkBuffer.makeArray(NetworkBuffer.INT, min);
     }
 
     @Override
-    public String parser() {
-        return "minecraft:time";
+    public ArgumentParserType parser() {
+        return ArgumentParserType.TIME;
     }
 
     @Override

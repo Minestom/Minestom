@@ -45,33 +45,33 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     private void writeInnerComponent(@NotNull NetworkBuffer buffer, @NotNull Component component) {
         buffer.write(BYTE, TAG_STRING); // Start first tag (always the type)
-        writeUtf(buffer, "type");
+        buffer.write(STRING_IO_UTF8, "type");
         switch (component) {
             case TextComponent text -> {
-                writeUtf(buffer, "text");
+                buffer.write(STRING_IO_UTF8, "text");
 
                 buffer.write(BYTE, TAG_STRING); // Start "text" tag
-                writeUtf(buffer, "text");
-                writeUtf(buffer, text.content());
+                buffer.write(STRING_IO_UTF8, "text");
+                buffer.write(STRING_IO_UTF8, text.content());
             }
             case TranslatableComponent translatable -> {
-                writeUtf(buffer, "translatable");
+                buffer.write(STRING_IO_UTF8, "translatable");
 
                 buffer.write(BYTE, TAG_STRING); // Start "translate" tag
-                writeUtf(buffer, "translate");
-                writeUtf(buffer, translatable.key());
+                buffer.write(STRING_IO_UTF8, "translate");
+                buffer.write(STRING_IO_UTF8, translatable.key());
 
                 final String fallback = translatable.fallback();
                 if (fallback != null) {
                     buffer.write(BYTE, TAG_STRING);
-                    writeUtf(buffer, "fallback");
-                    writeUtf(buffer, fallback);
+                    buffer.write(STRING_IO_UTF8, "fallback");
+                    buffer.write(STRING_IO_UTF8, fallback);
                 }
 
                 final List<TranslationArgument> args = translatable.arguments();
                 if (!args.isEmpty()) {
                     buffer.write(BYTE, TAG_LIST);
-                    writeUtf(buffer, "with");
+                    buffer.write(STRING_IO_UTF8, "with");
                     buffer.write(BYTE, TAG_COMPOUND); // List type
                     buffer.write(INT, args.size());
                     for (final TranslationArgument arg : args)
@@ -79,42 +79,42 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 }
             }
             case ScoreComponent score -> {
-                writeUtf(buffer, "score");
+                buffer.write(STRING_IO_UTF8, "score");
 
                 buffer.write(BYTE, TAG_COMPOUND); // Start "score" tag
-                writeUtf(buffer, "score");
+                buffer.write(STRING_IO_UTF8, "score");
                 {
                     buffer.write(BYTE, TAG_STRING);
-                    writeUtf(buffer, "name");
-                    writeUtf(buffer, score.name());
+                    buffer.write(STRING_IO_UTF8, "name");
+                    buffer.write(STRING_IO_UTF8, score.name());
 
                     buffer.write(BYTE, TAG_STRING);
-                    writeUtf(buffer, "objective");
-                    writeUtf(buffer, score.objective());
+                    buffer.write(STRING_IO_UTF8, "objective");
+                    buffer.write(STRING_IO_UTF8, score.objective());
                 }
                 buffer.write(BYTE, TAG_END); // End "score" tag
 
             }
             case SelectorComponent selector -> {
-                writeUtf(buffer, "selector");
+                buffer.write(STRING_IO_UTF8, "selector");
 
                 buffer.write(BYTE, TAG_STRING);
-                writeUtf(buffer, "selector");
-                writeUtf(buffer, selector.pattern());
+                buffer.write(STRING_IO_UTF8, "selector");
+                buffer.write(STRING_IO_UTF8, selector.pattern());
 
                 final Component separator = selector.separator();
                 if (separator != null) {
                     buffer.write(BYTE, TAG_COMPOUND);
-                    writeUtf(buffer, "separator");
+                    buffer.write(STRING_IO_UTF8, "separator");
                     writeInnerComponent(buffer, separator);
                 }
             }
             case KeybindComponent keybind -> {
-                writeUtf(buffer, "keybind");
+                buffer.write(STRING_IO_UTF8, "keybind");
 
                 buffer.write(BYTE, TAG_STRING);
-                writeUtf(buffer, "keybind");
-                writeUtf(buffer, keybind.keybind());
+                buffer.write(STRING_IO_UTF8, "keybind");
+                buffer.write(STRING_IO_UTF8, keybind.keybind());
             }
             case NBTComponent<?, ?> nbt -> {
                 //todo
@@ -126,7 +126,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         // Children
         if (!component.children().isEmpty()) {
             buffer.write(BYTE, TAG_LIST);
-            writeUtf(buffer, "extra");
+            buffer.write(STRING_IO_UTF8, "extra");
             buffer.write(BYTE, TAG_COMPOUND); // List type
 
             buffer.write(INT, component.children().size());
@@ -144,59 +144,59 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         final TextColor color = style.color();
         if (color != null) {
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "color");
+            buffer.write(STRING_IO_UTF8, "color");
             if (color instanceof NamedTextColor namedColor)
-                writeUtf(buffer, namedColor.toString());
-            else writeUtf(buffer, color.asHexString());
+                buffer.write(STRING_IO_UTF8, namedColor.toString());
+            else buffer.write(STRING_IO_UTF8, color.asHexString());
         }
 
         final Key font = style.font();
         if (font != null) {
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "font");
-            writeUtf(buffer, font.asString());
+            buffer.write(STRING_IO_UTF8, "font");
+            buffer.write(STRING_IO_UTF8, font.asString());
         }
 
         final TextDecoration.State bold = style.decoration(TextDecoration.BOLD);
         if (bold != TextDecoration.State.NOT_SET) {
             buffer.write(BYTE, TAG_BYTE);
-            writeUtf(buffer, "bold");
+            buffer.write(STRING_IO_UTF8, "bold");
             buffer.write(BYTE, bold == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
         }
 
         final TextDecoration.State italic = style.decoration(TextDecoration.ITALIC);
         if (italic != TextDecoration.State.NOT_SET) {
             buffer.write(BYTE, TAG_BYTE);
-            writeUtf(buffer, "italic");
+            buffer.write(STRING_IO_UTF8, "italic");
             buffer.write(BYTE, italic == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
         }
 
         final TextDecoration.State underlined = style.decoration(TextDecoration.UNDERLINED);
         if (underlined != TextDecoration.State.NOT_SET) {
             buffer.write(BYTE, TAG_BYTE);
-            writeUtf(buffer, "underlined");
+            buffer.write(STRING_IO_UTF8, "underlined");
             buffer.write(BYTE, underlined == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
         }
 
         final TextDecoration.State strikethrough = style.decoration(TextDecoration.STRIKETHROUGH);
         if (strikethrough != TextDecoration.State.NOT_SET) {
             buffer.write(BYTE, TAG_BYTE);
-            writeUtf(buffer, "strikethrough");
+            buffer.write(STRING_IO_UTF8, "strikethrough");
             buffer.write(BYTE, strikethrough == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
         }
 
         final TextDecoration.State obfuscated = style.decoration(TextDecoration.OBFUSCATED);
         if (obfuscated != TextDecoration.State.NOT_SET) {
             buffer.write(BYTE, TAG_BYTE);
-            writeUtf(buffer, "obfuscated");
+            buffer.write(STRING_IO_UTF8, "obfuscated");
             buffer.write(BYTE, obfuscated == TextDecoration.State.TRUE ? (byte) 1 : (byte) 0);
         }
 
         final String insertion = style.insertion();
         if (insertion != null) {
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "insertion");
-            writeUtf(buffer, insertion);
+            buffer.write(STRING_IO_UTF8, "insertion");
+            buffer.write(STRING_IO_UTF8, insertion);
         }
 
         final ClickEvent clickEvent = style.clickEvent();
@@ -208,44 +208,45 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     private void writeClickEvent(@NotNull NetworkBuffer buffer, @NotNull ClickEvent clickEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
-        writeUtf(buffer, "clickEvent");
+        buffer.write(STRING_IO_UTF8, "clickEvent");
 
         buffer.write(BYTE, TAG_STRING);
-        writeUtf(buffer, "action");
-        writeUtf(buffer, clickEvent.action().name().toLowerCase(Locale.ROOT));
+        buffer.write(STRING_IO_UTF8, "action");
+        buffer.write(STRING_IO_UTF8, clickEvent.action().name().toLowerCase(Locale.ROOT));
 
         buffer.write(BYTE, TAG_STRING);
-        writeUtf(buffer, "value");
-        writeUtf(buffer, clickEvent.value());
+        buffer.write(STRING_IO_UTF8, "value");
+        buffer.write(STRING_IO_UTF8, clickEvent.value());
 
         buffer.write(BYTE, TAG_END);
     }
 
-    @SuppressWarnings("unchecked") private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
+    @SuppressWarnings("unchecked")
+    private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
-        writeUtf(buffer, "hoverEvent");
+        buffer.write(STRING_IO_UTF8, "hoverEvent");
 
         buffer.write(BYTE, TAG_STRING);
-        writeUtf(buffer, "action");
-        writeUtf(buffer, hoverEvent.action().toString().toLowerCase(Locale.ROOT));
+        buffer.write(STRING_IO_UTF8, "action");
+        buffer.write(STRING_IO_UTF8, hoverEvent.action().toString().toLowerCase(Locale.ROOT));
 
         buffer.write(BYTE, TAG_COMPOUND); // Start contents tag
-        writeUtf(buffer, "contents");
+        buffer.write(STRING_IO_UTF8, "contents");
         if (hoverEvent.action() == HoverEvent.Action.SHOW_TEXT) {
             writeInnerComponent(buffer, (Component) hoverEvent.value());
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ITEM) {
             var value = ((HoverEvent<HoverEvent.ShowItem>) hoverEvent).value();
 
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "id");
-            writeUtf(buffer, value.item().asString());
+            buffer.write(STRING_IO_UTF8, "id");
+            buffer.write(STRING_IO_UTF8, value.item().asString());
 
             buffer.write(BYTE, TAG_INT);
-            writeUtf(buffer, "count");
+            buffer.write(STRING_IO_UTF8, "count");
             buffer.write(INT, value.count());
 
             buffer.write(BYTE, TAG_COMPOUND);
-            writeUtf(buffer, "components");
+            buffer.write(STRING_IO_UTF8, "components");
             //todo item components
             buffer.write(BYTE, TAG_END);
 
@@ -256,17 +257,17 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             final Component name = value.name();
             if (name != null) {
                 buffer.write(BYTE, TAG_COMPOUND);
-                writeUtf(buffer, "name");
+                buffer.write(STRING_IO_UTF8, "name");
                 writeInnerComponent(buffer, name);
             }
 
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "type");
-            writeUtf(buffer, value.type().asString());
+            buffer.write(STRING_IO_UTF8, "type");
+            buffer.write(STRING_IO_UTF8, value.type().asString());
 
             buffer.write(BYTE, TAG_STRING);
-            writeUtf(buffer, "id");
-            writeUtf(buffer, value.id().toString());
+            buffer.write(STRING_IO_UTF8, "id");
+            buffer.write(STRING_IO_UTF8, value.id().toString());
 
             buffer.write(BYTE, TAG_END); // End contents tag
         } else {
@@ -275,49 +276,4 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
         buffer.write(BYTE, TAG_END);
     }
-
-    /**
-     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)}. We need the data in the java
-     * modified utf-8 format, and I couldnt find a method without creating a new buffer for it.
-     * 
-     * @param buffer the buffer to write to
-     * @param str the string to write
-     */
-    private static void writeUtf(@NotNull NetworkBuffer buffer, @NotNull String str) {
-        final int strlen = str.length();
-        int utflen = strlen; // optimized for ASCII
-
-        for (int i = 0; i < strlen; i++) {
-            int c = str.charAt(i);
-            if (c >= 0x80 || c == 0)
-                utflen += (c >= 0x800) ? 2 : 1;
-        }
-
-        if (utflen > 65535 || /* overflow */ utflen < strlen)
-            throw new RuntimeException("UTF-8 string too long");
-
-        buffer.write(SHORT, (short) utflen);
-        buffer.ensureSize(utflen);
-        int i;
-        for (i = 0; i < strlen; i++) { // optimized for initial run of ASCII
-            int c = str.charAt(i);
-            if (c >= 0x80 || c == 0) break;
-            buffer.nioBuffer.put(buffer.writeIndex++, (byte) c);
-        }
-
-        for (; i < strlen; i++) {
-            int c = str.charAt(i);
-            if (c < 0x80 && c != 0) {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) c);
-            } else if (c >= 0x800) {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0xE0 | ((c >> 12) & 0x0F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  6) & 0x3F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  0) & 0x3F)));
-            } else {
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0xC0 | ((c >>  6) & 0x1F)));
-                buffer.nioBuffer.put(buffer.writeIndex++, (byte) (0x80 | ((c >>  0) & 0x3F)));
-            }
-        }
-    }
-
 }

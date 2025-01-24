@@ -60,9 +60,9 @@ public class PaletteOptimizationTest {
         }
         // Verify size
         {
-            var array = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(palette));
+            var array = NetworkBuffer.makeArray(Palette.BLOCK_SERIALIZER, palette);
             int length1 = array.length;
-            array = NetworkBuffer.makeArray(networkBuffer -> networkBuffer.write(optimized));
+            array = NetworkBuffer.makeArray(Palette.BLOCK_SERIALIZER, optimized);
             int length2 = array.length;
             assertTrue(length1 >= length2, "Optimized palette is bigger than the original one: " + length1 + " : " + length2);
         }

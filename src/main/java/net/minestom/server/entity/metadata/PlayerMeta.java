@@ -3,131 +3,124 @@ package net.minestom.server.entity.metadata;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class PlayerMeta extends LivingEntityMeta {
-    public static final byte OFFSET = LivingEntityMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 5;
-
-    private final static byte CAPE_BIT = 0x01;
-    private final static byte JACKET_BIT = 0x02;
-    private final static byte LEFT_SLEEVE_BIT = 0x04;
-    private final static byte RIGHT_SLEEVE_BIT = 0x08;
-    private final static byte LEFT_LEG_BIT = 0x10;
-    private final static byte RIGHT_LEG_BIT = 0x20;
-    private final static byte HAT_BIT = 0x40;
-
     public PlayerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public float getAdditionalHearts() {
-        return super.metadata.getIndex(OFFSET, 0F);
+        return metadata.get(MetadataDef.Player.ADDITIONAL_HEARTS);
     }
 
     public void setAdditionalHearts(float value) {
-        super.metadata.setIndex(OFFSET, Metadata.Float(value));
+        metadata.set(MetadataDef.Player.ADDITIONAL_HEARTS, value);
     }
 
     public int getScore() {
-        return super.metadata.getIndex(OFFSET + 1, 0);
+        return metadata.get(MetadataDef.Player.SCORE);
     }
 
     public void setScore(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Player.SCORE, value);
     }
 
     public boolean isCapeEnabled() {
-        return getMaskBit(OFFSET + 2, CAPE_BIT);
+        return metadata.get(MetadataDef.Player.IS_CAPE_ENABLED);
     }
 
     public void setCapeEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, CAPE_BIT, value);
+        metadata.set(MetadataDef.Player.IS_CAPE_ENABLED, value);
     }
 
     public boolean isJacketEnabled() {
-        return getMaskBit(OFFSET + 2, JACKET_BIT);
+        return metadata.get(MetadataDef.Player.IS_JACKET_ENABLED);
     }
 
     public void setJacketEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, JACKET_BIT, value);
+        metadata.set(MetadataDef.Player.IS_JACKET_ENABLED, value);
     }
 
     public boolean isLeftSleeveEnabled() {
-        return getMaskBit(OFFSET + 2, LEFT_SLEEVE_BIT);
+        return metadata.get(MetadataDef.Player.IS_LEFT_SLEEVE_ENABLED);
     }
 
     public void setLeftSleeveEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, LEFT_SLEEVE_BIT, value);
+        metadata.set(MetadataDef.Player.IS_LEFT_SLEEVE_ENABLED, value);
     }
 
     public boolean isRightSleeveEnabled() {
-        return getMaskBit(OFFSET + 2, RIGHT_SLEEVE_BIT);
+        return metadata.get(MetadataDef.Player.IS_RIGHT_SLEEVE_ENABLED);
     }
 
     public void setRightSleeveEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, RIGHT_SLEEVE_BIT, value);
+        metadata.set(MetadataDef.Player.IS_RIGHT_SLEEVE_ENABLED, value);
     }
 
     public boolean isLeftLegEnabled() {
-        return getMaskBit(OFFSET + 2, LEFT_LEG_BIT);
+        return metadata.get(MetadataDef.Player.IS_LEFT_PANTS_LEG_ENABLED);
     }
 
     public void setLeftLegEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, LEFT_LEG_BIT, value);
+        metadata.set(MetadataDef.Player.IS_LEFT_PANTS_LEG_ENABLED, value);
     }
 
     public boolean isRightLegEnabled() {
-        return getMaskBit(OFFSET + 2, RIGHT_LEG_BIT);
+        return metadata.get(MetadataDef.Player.IS_RIGHT_PANTS_LEG_ENABLED);
     }
 
     public void setRightLegEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, RIGHT_LEG_BIT, value);
+        metadata.set(MetadataDef.Player.IS_RIGHT_PANTS_LEG_ENABLED, value);
     }
 
     public boolean isHatEnabled() {
-        return getMaskBit(OFFSET + 2, HAT_BIT);
+        return metadata.get(MetadataDef.Player.IS_HAT_ENABLED);
     }
 
     public void setHatEnabled(boolean value) {
-        setMaskBit(OFFSET + 2, HAT_BIT, value);
+        metadata.set(MetadataDef.Player.IS_HAT_ENABLED, value);
+    }
+
+    public byte getDisplayedSkinParts() {
+        return metadata.get(MetadataDef.Player.DISPLAYED_SKIN_PARTS_FLAGS);
     }
 
     public void setDisplayedSkinParts(byte skinDisplayByte) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.Byte(skinDisplayByte));
+        metadata.set(MetadataDef.Player.DISPLAYED_SKIN_PARTS_FLAGS, skinDisplayByte);
     }
 
     public boolean isRightMainHand() {
-        return super.metadata.getIndex(OFFSET + 3, (byte) 1) == (byte) 1;
+        return metadata.get(MetadataDef.Player.MAIN_HAND) == (byte) 1;
     }
 
     public void setRightMainHand(boolean value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.Byte(value ? (byte) 1 : (byte) 0));
+        metadata.set(MetadataDef.Player.MAIN_HAND, value ? (byte) 1 : (byte) 0);
     }
 
-    @Nullable
+    @NotNull
     public BinaryTag getLeftShoulderEntityData() {
-        return super.metadata.getIndex(OFFSET + 4, null);
+        return metadata.get(MetadataDef.Player.LEFT_SHOULDER_ENTITY_DATA);
     }
 
     public void setLeftShoulderEntityData(@Nullable BinaryTag value) {
         if (value == null) value = CompoundBinaryTag.empty();
 
-        super.metadata.setIndex(OFFSET + 4, Metadata.NBT(value));
+        metadata.set(MetadataDef.Player.LEFT_SHOULDER_ENTITY_DATA, value);
     }
 
-    @Nullable
+    @NotNull
     public BinaryTag getRightShoulderEntityData() {
-        return super.metadata.getIndex(OFFSET + 5, null);
+        return metadata.get(MetadataDef.Player.RIGHT_SHOULDER_ENTITY_DATA);
     }
 
     public void setRightShoulderEntityData(@Nullable BinaryTag value) {
         if (value == null) value = CompoundBinaryTag.empty();
 
-        super.metadata.setIndex(OFFSET + 5, Metadata.NBT(value));
+        metadata.set(MetadataDef.Player.RIGHT_SHOULDER_ENTITY_DATA, value);
     }
 
 }

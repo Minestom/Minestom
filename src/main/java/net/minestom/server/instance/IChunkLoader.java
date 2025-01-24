@@ -2,15 +2,11 @@ package net.minestom.server.instance;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.anvil.AnvilLoader;
-import net.minestom.server.utils.async.AsyncUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.Phaser;
 
 /**
  * Interface implemented to change the way chunks are loaded/saved.
@@ -37,22 +33,19 @@ public interface IChunkLoader {
      * @param instance the {@link Instance} where the {@link Chunk} belong
      * @param chunkX   the chunk X
      * @param chunkZ   the chunk Z
-     * @return a {@link CompletableFuture} containing the chunk, or null if not present
+     * @return the chunk, or null if not present
      */
-    @NotNull CompletableFuture<@Nullable Chunk> loadChunk(@NotNull Instance instance, int chunkX, int chunkZ);
+    @Nullable Chunk loadChunk(@NotNull Instance instance, int chunkX, int chunkZ);
 
-    default @NotNull CompletableFuture<Void> saveInstance(@NotNull Instance instance) {
-        return AsyncUtils.VOID_FUTURE;
+    default void saveInstance(@NotNull Instance instance) {
     }
 
     /**
      * Saves a {@link Chunk} with an optional callback for when it is done.
      *
      * @param chunk the {@link Chunk} to save
-     * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
-     * should be called even if the saving failed (you can throw an exception).
      */
-    @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk);
+    void saveChunk(@NotNull Chunk chunk);
 
     /**
      * Saves multiple chunks with an optional callback for when it is done.
@@ -60,37 +53,31 @@ public interface IChunkLoader {
      * Implementations need to check {@link #supportsParallelSaving()} to support the feature if possible.
      *
      * @param chunks the chunks to save
-     * @return a {@link CompletableFuture} executed when the {@link Chunk} is done saving,
-     * should be called even if the saving failed (you can throw an exception).
      */
-    default @NotNull CompletableFuture<Void> saveChunks(@NotNull Collection<Chunk> chunks) {
+    default void saveChunks(@NotNull Collection<Chunk> chunks) {
         if (supportsParallelSaving()) {
-            ExecutorService parallelSavingThreadPool = ForkJoinPool.commonPool();
-            chunks.forEach(c -> parallelSavingThreadPool.execute(() -> saveChunk(c)));
-            try {
-                parallelSavingThreadPool.shutdown();
-                parallelSavingThreadPool.awaitTermination(1L, java.util.concurrent.TimeUnit.DAYS);
-            } catch (InterruptedException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-            }
-            return AsyncUtils.VOID_FUTURE;
-        } else {
-            CompletableFuture<Void> completableFuture = new CompletableFuture<>();
-            AtomicInteger counter = new AtomicInteger();
+            Phaser phaser = new Phaser(1);
             for (Chunk chunk : chunks) {
-                saveChunk(chunk).whenComplete((unused, throwable) -> {
-                    final boolean isLast = counter.incrementAndGet() == chunks.size();
-                    if (isLast) {
-                        completableFuture.complete(null);
+                phaser.register();
+                Thread.startVirtualThread(() -> {
+                    try {
+                        saveChunk(chunk);
+                        phaser.arriveAndDeregister();
+                    } catch (Throwable e) {
+                        MinecraftServer.getExceptionManager().handleException(e);
                     }
                 });
             }
-            return completableFuture;
+            phaser.arriveAndAwaitAdvance();
+        } else {
+            for (Chunk chunk : chunks) {
+                saveChunk(chunk);
+            }
         }
     }
 
     /**
-     * Does this {@link IChunkLoader} allow for multi-threaded saving of {@link Chunk}?
+     * Supports for instance/chunk saving in virtual threads.
      *
      * @return true if the chunk loader supports parallel saving
      */
@@ -99,7 +86,7 @@ public interface IChunkLoader {
     }
 
     /**
-     * Does this {@link IChunkLoader} allow for multi-threaded loading of {@link Chunk}?
+     * Supports for instance/chunk loading in virtual threads.
      *
      * @return true if the chunk loader supports parallel loading
      */
@@ -114,5 +101,6 @@ public interface IChunkLoader {
      *
      * @param chunk the chunk to unload
      */
-    default void unloadChunk(Chunk chunk) {}
+    default void unloadChunk(Chunk chunk) {
+    }
 }

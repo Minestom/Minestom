@@ -1,95 +1,87 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Metadata;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import org.jetbrains.annotations.NotNull;
 
 public class PandaMeta extends AnimalMeta {
-    public static final byte OFFSET = AnimalMeta.MAX_OFFSET;
-    public static final byte MAX_OFFSET = OFFSET + 6;
-
-    private final static byte SNEEZING_BIT = 0x02;
-    private final static byte ROLLING_BIT = 0x04;
-    private final static byte SITTING_BIT = 0x08;
-    private final static byte ON_BACK_BIT = 0x10;
-
     public PandaMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
     public int getBreedTimer() {
-        return super.metadata.getIndex(OFFSET, 0);
+        return metadata.get(MetadataDef.Panda.BREED_TIMER);
     }
 
     public void setBreedTimer(int value) {
-        super.metadata.setIndex(OFFSET, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Panda.BREED_TIMER, value);
     }
 
     public int getSneezeTimer() {
-        return super.metadata.getIndex(OFFSET + 1, 0);
+        return metadata.get(MetadataDef.Panda.SNEEZE_TIMER);
     }
 
     public void setSneezeTimer(int value) {
-        super.metadata.setIndex(OFFSET + 1, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Panda.SNEEZE_TIMER, value);
     }
 
     public int getEatTimer() {
-        return super.metadata.getIndex(OFFSET + 2, 0);
+        return metadata.get(MetadataDef.Panda.EAT_TIMER);
     }
 
     public void setEatTimer(int value) {
-        super.metadata.setIndex(OFFSET + 2, Metadata.VarInt(value));
+        metadata.set(MetadataDef.Panda.EAT_TIMER, value);
     }
 
     @NotNull
     public Gene getMainGene() {
-        return Gene.VALUES[super.metadata.getIndex(OFFSET + 3, (byte) 0)];
+        return Gene.VALUES[metadata.get(MetadataDef.Panda.MAIN_GENE)];
     }
 
     public void setMainGene(@NotNull Gene value) {
-        super.metadata.setIndex(OFFSET + 3, Metadata.Byte((byte) value.ordinal()));
+        metadata.set(MetadataDef.Panda.MAIN_GENE, (byte) value.ordinal());
     }
 
     @NotNull
     public Gene getHiddenGene() {
-        return Gene.VALUES[super.metadata.getIndex(OFFSET + 4, (byte) 0)];
+        return Gene.VALUES[metadata.get(MetadataDef.Panda.HIDDEN_GENE)];
     }
 
     public void setHiddenGene(@NotNull Gene value) {
-        super.metadata.setIndex(OFFSET + 4, Metadata.Byte((byte) value.ordinal()));
+        metadata.set(MetadataDef.Panda.HIDDEN_GENE, (byte) value.ordinal());
     }
 
     public boolean isSneezing() {
-        return getMaskBit(OFFSET + 5, SNEEZING_BIT);
+        return metadata.get(MetadataDef.Panda.IS_SNEEZING);
     }
 
     public void setSneezing(boolean value) {
-        setMaskBit(OFFSET + 5, SNEEZING_BIT, value);
+        metadata.set(MetadataDef.Panda.IS_SNEEZING, value);
     }
 
     public boolean isRolling() {
-        return getMaskBit(OFFSET + 5, ROLLING_BIT);
+        return metadata.get(MetadataDef.Panda.IS_ROLLING);
     }
 
     public void setRolling(boolean value) {
-        setMaskBit(OFFSET + 5, ROLLING_BIT, value);
+        metadata.set(MetadataDef.Panda.IS_ROLLING, value);
     }
 
     public boolean isSitting() {
-        return getMaskBit(OFFSET + 5, SITTING_BIT);
+        return metadata.get(MetadataDef.Panda.IS_SITTING);
     }
 
     public void setSitting(boolean value) {
-        setMaskBit(OFFSET + 5, SITTING_BIT, value);
+        metadata.set(MetadataDef.Panda.IS_SITTING, value);
     }
 
     public boolean isOnBack() {
-        return getMaskBit(OFFSET + 5, ON_BACK_BIT);
+        return metadata.get(MetadataDef.Panda.IS_ON_BACK);
     }
 
     public void setOnBack(boolean value) {
-        setMaskBit(OFFSET + 5, ON_BACK_BIT, value);
+        metadata.set(MetadataDef.Panda.IS_ON_BACK, value);
     }
 
     public enum Gene {

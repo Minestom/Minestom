@@ -18,10 +18,10 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("attribute", AttributeEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("apply_mob_effect", EntityEffect.ApplyPotionEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("attribute", AttributeEffect.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("change_item_damage", EntityEffect.ChangeItemDamage.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("damage_entity", EntityEffect.DamageEntity.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("damage_item", EntityEffect.DamageItem.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("explode", EntityEffect.Explode.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("ignite", EntityEffect.Ignite.NBT_TYPE, DataPack.MINECRAFT_CORE);
         registry.register("play_sound", EntityEffect.PlaySound.NBT_TYPE, DataPack.MINECRAFT_CORE);

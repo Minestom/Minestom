@@ -35,6 +35,8 @@ import org.jetbrains.annotations.Nullable;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -68,6 +70,11 @@ public final class Registry {
     @ApiStatus.Internal
     public static EntityEntry entity(String namespace, @NotNull Properties main) {
         return new EntityEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
+    public static VillagerProfessionEntry villagerProfession(String namespace, @NotNull Properties main) {
+        return new VillagerProfessionEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -130,11 +137,28 @@ public final class Registry {
         return new JukeboxSongEntry(namespace, main, null);
     }
 
+    public static GameEventEntry gameEventEntry(String namespace, Properties properties) {
+        return new GameEventEntry(namespace, properties, null);
+    }
+
+    public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
+        // 1. Try to load from jar resources
+        InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
+
+        // 2. Try to load from working directory
+        if (resourceStream == null && Files.exists(Path.of(resource.name))) {
+            resourceStream = Files.newInputStream(Path.of(resource.name));
+        }
+
+        // 3. Not found :(
+        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+        return resourceStream;
+    }
+
     @ApiStatus.Internal
     public static Map<String, Map<String, Object>> load(Resource resource) {
         Map<String, Map<String, Object>> map = new HashMap<>();
-        try (InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name)) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+        try (InputStream resourceStream = loadRegistryFile(resource)) {
             try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
@@ -214,7 +238,6 @@ public final class Registry {
         ENTITIES("entities.json"),
         FEATURE_FLAGS("feature_flags.json"),
         SOUNDS("sounds.json"),
-        COMMAND_ARGUMENTS("command_arguments.json"),
         STATISTICS("custom_statistics.json"),
         POTION_EFFECTS("potion_effects.json"),
         POTION_TYPES("potions.json"),
@@ -226,8 +249,10 @@ public final class Registry {
         ENTITY_TYPE_TAGS("tags/entity_type.json"),
         FLUID_TAGS("tags/fluid.json"),
         GAMEPLAY_TAGS("tags/game_event.json"),
+        GAME_EVENTS("game_events.json"),
         ITEM_TAGS("tags/item.json"),
         ENCHANTMENT_TAGS("tags/enchantment.json"),
+        BIOME_TAGS("tags/biome.json"),
         DIMENSION_TYPES("dimension_types.json"),
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
@@ -236,7 +261,8 @@ public final class Registry {
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
-        JUKEBOX_SONGS("jukebox_songs.json");
+        JUKEBOX_SONGS("jukebox_songs.json"),
+        VILLAGER_PROFESSIONS("villager_professions.json");
 
         private final String name;
 
@@ -246,6 +272,12 @@ public final class Registry {
 
         public @NotNull String fileName() {
             return name;
+        }
+    }
+
+    public record GameEventEntry(NamespaceID namespace, Properties main, Properties custom) implements Entry {
+        public GameEventEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace), main, custom);
         }
     }
 
@@ -263,6 +295,7 @@ public final class Registry {
         private final boolean solid;
         private final boolean liquid;
         private final boolean occludes;
+        private final boolean requiresTool;
         private final int lightEmission;
         private final boolean replaceable;
         private final String blockEntity;
@@ -288,6 +321,7 @@ public final class Registry {
             this.solid = main.getBoolean("solid");
             this.liquid = main.getBoolean("liquid", false);
             this.occludes = main.getBoolean("occludes", true);
+            this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
             {
@@ -363,6 +397,10 @@ public final class Registry {
 
         public boolean occludes() {
             return occludes;
+        }
+
+        public boolean requiresTool() {
+            return requiresTool;
         }
 
         public int lightEmission() {
@@ -642,6 +680,9 @@ public final class Registry {
         private final double width;
         private final double height;
         private final double eyeHeight;
+        private final int clientTrackingRange;
+        private final boolean fireImmune;
+        private final Map<String, List<Double>> entityOffsets;
         private final BoundingBox boundingBox;
         private final Properties custom;
 
@@ -652,6 +693,8 @@ public final class Registry {
             this.drag = main.getDouble("drag", 0.02);
             this.acceleration = main.getDouble("acceleration", 0.08);
             this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+            this.fireImmune = main.getBoolean("fireImmune", false);
+            this.clientTrackingRange = main.getInt("clientTrackingRange");
 
             // Dimensions
             this.width = main.getDouble("width");
@@ -660,9 +703,14 @@ public final class Registry {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
+            this.entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
-                //todo
+                var allAttachments = attachments.asMap().keySet();
+                for (String key : allAttachments) {
+                    var offset = attachments.getNestedDoubleArray(key);
+                    this.entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                }
             }
 
             this.custom = custom;
@@ -704,8 +752,57 @@ public final class Registry {
             return eyeHeight;
         }
 
+        public boolean fireImmune() { return fireImmune; }
+
+        public int clientTrackingRange() { return clientTrackingRange; }
+
+        /**
+         *
+         * Gets the entity attachment by name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         * @param attachmentName The attachment to retrieve
+         * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
+         */
+        public @Nullable List<Double> entityAttachment(@NotNull String attachmentName) {
+            return entityOffsets.get(attachmentName);
+        }
+
         public @NotNull BoundingBox boundingBox() {
             return boundingBox;
+        }
+
+        @Override
+        public Properties custom() {
+            return custom;
+        }
+    }
+
+    public static final class VillagerProfessionEntry implements Entry {
+        private final NamespaceID namespace;
+        private final int id;
+        private final SoundEvent workSound;
+        private final Properties custom;
+
+        public VillagerProfessionEntry(String namespace, Properties main, Properties custom) {
+            this.namespace = NamespaceID.from(namespace);
+            this.id = main.getInt("id");
+            if (main.containsKey("workSound")) {
+                this.workSound = SoundEvent.fromNamespaceId(main.getString("workSound"));
+            } else {
+                this.workSound = null;
+            }
+            this.custom = custom;
+        }
+
+        public @NotNull NamespaceID namespace() {
+            return namespace;
+        }
+
+        public int id() {
+            return id;
+        }
+
+        public @Nullable SoundEvent workSound() {
+            return workSound;
         }
 
         @Override
@@ -1002,6 +1099,12 @@ public final class Registry {
         }
 
         @Override
+        public List<List<Double>> getNestedDoubleArray(String name) {
+            var element = element(name);
+            return element != null ? (List<List<Double>>) element : List.of();
+        }
+
+        @Override
         public boolean getBoolean(String name) {
             return element(name);
         }
@@ -1061,6 +1164,8 @@ public final class Registry {
         boolean getBoolean(String name, boolean defaultValue);
 
         boolean getBoolean(String name);
+
+        List<List<Double>> getNestedDoubleArray(String name);
 
         Properties section(String name);
 

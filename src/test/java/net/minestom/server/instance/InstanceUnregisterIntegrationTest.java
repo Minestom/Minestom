@@ -24,7 +24,7 @@ public class InstanceUnregisterIntegrationTest {
         var instance = instanceManager.createInstanceContainer();
         var shared1 = instanceManager.createSharedInstance(instance);
         var connection = env.createConnection();
-        var player = connection.connect(shared1, new Pos(0, 40, 0)).join();
+        var player = connection.connect(shared1, new Pos(0, 40, 0));
 
         var listener = env.listen(PlayerTickEvent.class);
         listener.followup();
@@ -99,7 +99,7 @@ public class InstanceUnregisterIntegrationTest {
 
     private void tmp(InstanceContainer instanceContainer) {
         instanceContainer.eventNode().addListener(InstanceTickEvent.class, (e) -> {
-            var uuid = instanceContainer.getUniqueId();
+            var uuid = instanceContainer.getUuid();
         });
     }
 }
