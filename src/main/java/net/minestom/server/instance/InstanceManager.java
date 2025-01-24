@@ -151,7 +151,7 @@ public final class InstanceManager {
     public @Nullable Instance getInstance(@NotNull UUID uuid) {
         Optional<Instance> instance = getInstances()
                 .stream()
-                .filter(someInstance -> someInstance.getUniqueId().equals(uuid))
+                .filter(someInstance -> someInstance.getUuid().equals(uuid))
                 .findFirst();
         return instance.orElse(null);
     }

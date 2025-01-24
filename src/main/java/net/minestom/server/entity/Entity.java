@@ -46,6 +46,7 @@ import net.minestom.server.timer.Schedulable;
 import net.minestom.server.timer.Scheduler;
 import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.ArrayUtils;
+import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockIterator;
@@ -79,6 +80,10 @@ import java.util.function.UnaryOperator;
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
         HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
+    // This is somewhat arbitrary, but we don't want to hit the max int ever because it is very easy to
+    // overflow while working with a position at the max int (for example, looping over a bounding box)
+    private static final int MAX_COORDINATE = 2_000_000_000;
+
     private static final AtomicInteger LAST_ENTITY_ID = new AtomicInteger();
 
     // Certain entities should only have their position packets sent during synchronization
@@ -96,7 +101,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected Instance instance;
     protected Chunk currentChunk;
-    protected Pos position;
+    protected Pos position; // Should be updated by setPositionInternal only.
     protected Pos previousPosition;
     protected Pos lastSyncedPosition;
     protected boolean onGround;
@@ -200,6 +205,19 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     public Entity(@NotNull EntityType entityType) {
         this(entityType, UUID.randomUUID());
+    }
+
+    protected void setPositionInternal(@NotNull Pos newPosition) {
+        if (newPosition.x() >= MAX_COORDINATE || newPosition.x() <= -MAX_COORDINATE ||
+                newPosition.y() >= MAX_COORDINATE || newPosition.y() <= -MAX_COORDINATE ||
+                newPosition.z() >= MAX_COORDINATE || newPosition.z() <= -MAX_COORDINATE) {
+            newPosition = newPosition.withCoord(
+                    MathUtils.clamp(newPosition.x(), -MAX_COORDINATE, MAX_COORDINATE),
+                    MathUtils.clamp(newPosition.y(), -MAX_COORDINATE, MAX_COORDINATE),
+                    MathUtils.clamp(newPosition.z(), -MAX_COORDINATE, MAX_COORDINATE)
+            );
+        }
+        this.position = newPosition;
     }
 
     /**
@@ -325,7 +343,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         final Runnable endCallback = () -> {
             this.previousPosition = this.position;
-            this.position = globalPosition;
+            setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
             if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
@@ -356,7 +374,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     public void setView(float yaw, float pitch) {
         final Pos currentPosition = this.position;
         if (currentPosition.sameView(yaw, pitch)) return;
-        this.position = currentPosition.withView(yaw, pitch);
+        setPositionInternal(currentPosition.withView(yaw, pitch));
         synchronizeView();
     }
 
@@ -784,7 +802,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         if (previousInstance != null) removeFromInstance(previousInstance);
 
         this.isActive = true;
-        this.position = spawnPosition;
+        setPositionInternal(spawnPosition);
         this.previousPosition = spawnPosition;
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
@@ -1236,7 +1254,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final var previousPosition = this.position;
         final Pos position = ignoreView ? previousPosition.withCoord(newPosition) : newPosition;
         if (position.equals(lastSyncedPosition)) return;
-        this.position = position;
+        setPositionInternal(position);
         this.previousPosition = previousPosition;
         if (!position.samePoint(previousPosition)) refreshCoordinate(position);
         if (nextSynchronizationTick <= ticks + 1 || !sendPackets) {
@@ -1297,7 +1315,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         final Pos newPassengerPos = oldPassengerPos.withCoord(newPosition.x(),
                 newPosition.y() + EntityUtils.getPassengerHeightOffset(this, passenger),
                 newPosition.z());
-        passenger.position = newPassengerPos;
+        passenger.setPositionInternal(newPassengerPos);
         passenger.previousPosition = oldPassengerPos;
         passenger.refreshCoordinate(newPassengerPos);
     }
@@ -1474,7 +1492,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.removed = true;
         if (!permanent) {
             // Reset some state to be ready for re-use
-            this.position = Pos.ZERO;
+            setPositionInternal(Pos.ZERO);
             this.previousPosition = Pos.ZERO;
             this.lastSyncedPosition = Pos.ZERO;
         }

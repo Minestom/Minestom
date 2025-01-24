@@ -99,7 +99,7 @@ public class InstanceUnregisterIntegrationTest {
 
     private void tmp(InstanceContainer instanceContainer) {
         instanceContainer.eventNode().addListener(InstanceTickEvent.class, (e) -> {
-            var uuid = instanceContainer.getUniqueId();
+            var uuid = instanceContainer.getUuid();
         });
     }
 }

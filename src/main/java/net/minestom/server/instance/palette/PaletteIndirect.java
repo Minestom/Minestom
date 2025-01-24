@@ -49,8 +49,6 @@ final class PaletteIndirect implements SpecializedPalette, Cloneable {
             this.paletteToValueList.add(palette[i]);
             this.valueToPaletteMap.put(palette[i], i);
         }
-
-        this.values = new long[arrayLength(dimension(), bitsPerEntry)];
     }
 
     PaletteIndirect(int dimension, int maxBitsPerEntry, byte bitsPerEntry) {
