@@ -241,97 +241,98 @@ public class LightingChunk extends DynamicChunk {
     @Override
     protected LightData createLightData(boolean requiredFullChunk) {
         packetGenerationLock.lock();
-        if (requiredFullChunk) {
-            if (fullLightData != null) {
-                packetGenerationLock.unlock();
-                return fullLightData;
-            }
-        } else {
-            if (partialLightData != null) {
-                packetGenerationLock.unlock();
-                return partialLightData;
-            }
-        }
-
-        BitSet skyMask = new BitSet();
-        BitSet blockMask = new BitSet();
-        BitSet emptySkyMask = new BitSet();
-        BitSet emptyBlockMask = new BitSet();
-        List<byte[]> skyLights = new ArrayList<>();
-        List<byte[]> blockLights = new ArrayList<>();
-
-        int chunkMin = instance.getCachedDimensionType().minY();
-        int highestNeighborBlock = instance.getCachedDimensionType().minY();
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
-                if (neighborChunk == null) continue;
-
-                if (neighborChunk instanceof LightingChunk light) {
-                    light.getOcclusionMap();
-                    highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+        try {
+            if (requiredFullChunk) {
+                if (fullLightData != null) {
+                    return fullLightData;
                 }
-            }
-        }
-
-        int index = 0;
-        for (Section section : sections) {
-            boolean wasUpdatedBlock = false;
-            boolean wasUpdatedSky = false;
-
-            if (section.blockLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
-                wasUpdatedBlock = true;
-            } else if (requiredFullChunk || section.blockLight().requiresSend()) {
-                wasUpdatedBlock = true;
-            }
-
-            if (section.skyLight().requiresUpdate()) {
-                relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
-                wasUpdatedSky = true;
-            } else if (requiredFullChunk || section.skyLight().requiresSend()) {
-                wasUpdatedSky = true;
-            }
-
-            final int sectionMinY = index * 16 + chunkMin;
-            index++;
-
-            if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
-                final byte[] skyLight = section.skyLight().array();
-
-                if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {
-                    skyLights.add(skyLight);
-                    skyMask.set(index);
-                } else {
-                    emptySkyMask.set(index);
+            } else {
+                if (partialLightData != null) {
+                    return partialLightData;
                 }
             }
 
-            if (wasUpdatedBlock) {
-                final byte[] blockLight = section.blockLight().array();
+            BitSet skyMask = new BitSet();
+            BitSet blockMask = new BitSet();
+            BitSet emptySkyMask = new BitSet();
+            BitSet emptyBlockMask = new BitSet();
+            List<byte[]> skyLights = new ArrayList<>();
+            List<byte[]> blockLights = new ArrayList<>();
 
-                if (blockLight.length != 0 && blockLight != EMPTY_CONTENT) {
-                    blockLights.add(blockLight);
-                    blockMask.set(index);
-                } else {
-                    emptyBlockMask.set(index);
+            int chunkMin = instance.getCachedDimensionType().minY();
+            int highestNeighborBlock = instance.getCachedDimensionType().minY();
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    Chunk neighborChunk = instance.getChunk(chunkX + i, chunkZ + j);
+                    if (neighborChunk == null) continue;
+
+                    if (neighborChunk instanceof LightingChunk light) {
+                        light.getOcclusionMap();
+                        highestNeighborBlock = Math.max(highestNeighborBlock, light.highestBlock);
+                    }
                 }
             }
+
+            int index = 0;
+            for (Section section : sections) {
+                boolean wasUpdatedBlock = false;
+                boolean wasUpdatedSky = false;
+
+                if (section.blockLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.BLOCK);
+                    wasUpdatedBlock = true;
+                } else if (requiredFullChunk || section.blockLight().requiresSend()) {
+                    wasUpdatedBlock = true;
+                }
+
+                if (section.skyLight().requiresUpdate()) {
+                    relightSection(instance, this.chunkX, index + minSection, chunkZ, LightType.SKY);
+                    wasUpdatedSky = true;
+                } else if (requiredFullChunk || section.skyLight().requiresSend()) {
+                    wasUpdatedSky = true;
+                }
+
+                final int sectionMinY = index * 16 + chunkMin;
+                index++;
+
+                if ((wasUpdatedSky) && this.instance.getCachedDimensionType().hasSkylight() && sectionMinY <= (highestNeighborBlock + 16)) {
+                    final byte[] skyLight = section.skyLight().array();
+
+                    if (skyLight.length != 0 && skyLight != EMPTY_CONTENT) {
+                        skyLights.add(skyLight);
+                        skyMask.set(index);
+                    } else {
+                        emptySkyMask.set(index);
+                    }
+                }
+
+                if (wasUpdatedBlock) {
+                    final byte[] blockLight = section.blockLight().array();
+
+                    if (blockLight.length != 0 && blockLight != EMPTY_CONTENT) {
+                        blockLights.add(blockLight);
+                        blockMask.set(index);
+                    } else {
+                        emptyBlockMask.set(index);
+                    }
+                }
+            }
+
+            LightData lightData = new LightData(skyMask, blockMask,
+                    emptySkyMask, emptyBlockMask,
+                    skyLights, blockLights);
+
+            if (requiredFullChunk) {
+                this.fullLightData = lightData;
+            } else {
+                this.partialLightData = lightData;
+            }
+
+
+            return lightData;
+        } finally {
+            packetGenerationLock.unlock();
         }
-
-        LightData lightData = new LightData(skyMask, blockMask,
-                emptySkyMask, emptyBlockMask,
-                skyLights, blockLights);
-
-        if (requiredFullChunk) {
-            this.fullLightData = lightData;
-        } else {
-            this.partialLightData = lightData;
-        }
-
-        packetGenerationLock.unlock();
-
-        return lightData;
     }
 
     @Override

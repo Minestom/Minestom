@@ -21,7 +21,7 @@ public final class UUIDUtils {
      * @return {@code true} if the input an unique identifier, otherwise {@code false}
      */
     public static boolean isUuid(String input) {
-        return input.matches(UNIQUE_ID_PATTERN.pattern());
+        return UNIQUE_ID_PATTERN.matcher(input).matches();
     }
 
     public static @NotNull UUID fromNbt(@NotNull IntArrayBinaryTag tag) {
