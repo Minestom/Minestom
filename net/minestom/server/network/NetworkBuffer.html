@@ -388,7 +388,8 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registries()" class="member-name-link">registries</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;<br>@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;T&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#RegistryKey(java.util.function.Function)" class="member-name-link">RegistryKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#RegistryKey(java.util.function.Function,boolean)" class="member-name-link">RegistryKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector,
+ boolean&nbsp;holder)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#resizableBuffer()" class="member-name-link">resizableBuffer</a>()</code></div>
@@ -714,12 +715,13 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="RegistryKey(java.util.function.Function)">
+<section class="detail" id="RegistryKey(java.util.function.Function,boolean)">
 <h3>RegistryKey</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T extends <a href="../registry/ProtocolObject.html" title="interface in net.minestom.server.registry">ProtocolObject</a>&gt;</span>
 <span class="return-type">@NotNull <a href="NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="../registry/DynamicRegistry.Key.html" title="interface in net.minestom.server.registry">DynamicRegistry.Key</a>&lt;T&gt;&gt;</span>&nbsp;<span class="element-name">RegistryKey</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/function/Function.html" title="class or interface in java.util.function" class="external-link">Function</a>&lt;<a href="../registry/Registries.html" title="interface in net.minestom.server.registry">Registries</a>,<wbr><a href="../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a>&lt;T&gt;&gt;&nbsp;selector,
+ boolean&nbsp;holder)</span></div>
 </section>
 </li>
 <li>
