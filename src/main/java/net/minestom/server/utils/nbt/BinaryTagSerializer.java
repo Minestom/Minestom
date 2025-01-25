@@ -14,7 +14,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.NamespaceID;
-import net.minestom.server.utils.UniqueIdUtils;
+import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -257,7 +257,7 @@ public interface BinaryTagSerializer<T> {
     BinaryTagSerializer<UUID> UUID = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(java.util.@NotNull UUID value) {
-            return UniqueIdUtils.toNbt(value);
+            return UUIDUtils.toNbt(value);
         }
 
         @Override
@@ -265,7 +265,7 @@ public interface BinaryTagSerializer<T> {
             if (!(tag instanceof IntArrayBinaryTag intArrayTag)) {
                 throw new IllegalArgumentException("unexpected uuid type: " + tag.type());
             }
-            return UniqueIdUtils.fromNbt(intArrayTag);
+            return UUIDUtils.fromNbt(intArrayTag);
         }
     };
 
