@@ -77,7 +77,7 @@ public final class ItemComponent {
     public static final DataComponent<WritableBookContent> WRITABLE_BOOK_CONTENT = register("writable_book_content", WritableBookContent.NETWORK_TYPE, WritableBookContent.NBT_TYPE);
     public static final DataComponent<WrittenBookContent> WRITTEN_BOOK_CONTENT = register("written_book_content", WrittenBookContent.NETWORK_TYPE, WrittenBookContent.NBT_TYPE);
     public static final DataComponent<ArmorTrim> TRIM = register("trim", ArmorTrim.NETWORK_TYPE, ArmorTrim.NBT_TYPE);
-    public static final DataComponent<DebugStickState> DEBUG_STICK_STATE = register("debug_stick_state", null, DebugStickState.NBT_TYPE);
+    public static final DataComponent<DebugStickState> DEBUG_STICK_STATE = register("debug_stick_state", DebugStickState.NETWORK_TYPE, DebugStickState.NBT_TYPE);
     public static final DataComponent<CustomData> ENTITY_DATA = register("entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<CustomData> BUCKET_ENTITY_DATA = register("bucket_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<CustomData> BLOCK_ENTITY_DATA = register("block_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
