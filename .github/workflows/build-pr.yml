@@ -25,3 +25,16 @@ jobs:
           restore-keys: ${{ runner.os }}-gradle
       - name: Build on ${{ matrix.os }}
         run: ./gradlew test
+  publish:
+    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Publish Artifacts
+        env:
+          MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
+          MINESTOM_CHANNEL: snapshot
+        run: |
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
