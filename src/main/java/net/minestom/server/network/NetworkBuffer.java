@@ -12,6 +12,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -103,6 +104,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     static <T> @NotNull Type<T> Lazy(@NotNull Supplier<@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
+    }
+
+    static <T> @NotNull Type<T> TypedNBT(@NotNull BinaryTagSerializer<T> serializer) {
+        return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
     <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;

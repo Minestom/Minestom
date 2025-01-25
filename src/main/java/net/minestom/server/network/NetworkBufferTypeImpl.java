@@ -13,6 +13,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -705,6 +706,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public T read(@NotNull NetworkBuffer buffer) {
             if (type == null) type = supplier.get();
             return null;
+        }
+    }
+
+    record TypedNbtType<T>(@NotNull BinaryTagSerializer<T> nbtType) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            buffer.write(NBT, nbtType.write(new BinaryTagSerializer.ContextWithRegistries(registries), value));
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            final BinaryTag tag = buffer.read(NBT);
+            return nbtType.read(new BinaryTagSerializer.ContextWithRegistries(registries), tag);
         }
     }
 
