@@ -2,7 +2,7 @@ name: Build PR
 on: [pull_request]
 jobs:
   build_pr:
-    if: github.repository_owner == 'Minestom'
+    name: Build PR
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -26,7 +26,8 @@ jobs:
       - name: Build on ${{ matrix.os }}
         run: ./gradlew test
   publish:
-    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request')
+    name: Publish PR
+    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository

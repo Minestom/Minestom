@@ -4,9 +4,9 @@ on:
     branches:
       - master
 jobs:
-  build:
+  Build:
+    name: Build and Publish
     # Run on all label events (won't be duplicated) or all push events or on PR syncs not from the same repo
-    if: github.repository_owner == 'Minestom'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,6 +26,7 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
       - name: Publish to Central via Build
+        if: github.repository_owner == 'Minestom'
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
           echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
