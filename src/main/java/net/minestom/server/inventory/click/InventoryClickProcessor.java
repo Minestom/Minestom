@@ -5,7 +5,6 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryClickEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
-import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -15,6 +14,7 @@ import net.minestom.server.inventory.condition.InventoryConditionResult;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.drop.DropReason;
+import net.minestom.server.item.drop.DropReasonInventory;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -363,7 +363,7 @@ public final class InventoryClickProcessor {
                 // Left (drop all)
                 final int amount = resultCursor.amount();
                 final ItemStack dropItem = resultCursor.withAmount(amount);
-                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.STACK);
+                final boolean dropResult = player.dropItem(dropItem, new DropReasonInventory(inventory, DropReason.DropAmount.STACK));
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     resultCursor = ItemStack.AIR;
@@ -371,7 +371,7 @@ public final class InventoryClickProcessor {
             } else if (button == 1) {
                 // Right (drop 1)
                 final ItemStack dropItem = resultCursor.withAmount(1);
-                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.SINGLE);
+                final boolean dropResult = player.dropItem(dropItem, new DropReasonInventory(inventory, DropReason.DropAmount.SINGLE));
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = resultCursor.amount();
@@ -384,7 +384,7 @@ public final class InventoryClickProcessor {
             if (button == 0) {
                 // Drop key Q (drop 1)
                 final ItemStack dropItem = resultClicked.withAmount(1);
-                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.SINGLE);
+                final boolean dropResult = player.dropItem(dropItem, new DropReasonInventory(inventory, DropReason.DropAmount.SINGLE));
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = resultClicked.amount();
@@ -395,7 +395,7 @@ public final class InventoryClickProcessor {
                 // Ctrl + Drop key Q (drop all)
                 final int amount = resultClicked.amount();
                 final ItemStack dropItem = resultClicked.withAmount(amount);
-                final boolean dropResult = player.dropItem(dropItem, DropReason.fromInventory(inventory), ItemDropEvent.DropAmount.STACK);
+                final boolean dropResult = player.dropItem(dropItem, new DropReasonInventory(inventory, DropReason.DropAmount.STACK));
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     resultClicked = ItemStack.AIR;

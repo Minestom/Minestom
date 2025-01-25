@@ -1,17 +1,8 @@
 package net.minestom.server.item.drop;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * The item was dropped from the hotbar (default key: q)
  */
-public final class DropReasonHotbar extends DropReason {
-    private final int slot;
-
-    public DropReasonHotbar(int slot) {
-        this.slot = slot;
-    }
-
-
-    public int getSlot() {
-        return slot;
-    }
-}
+public record DropReasonHotbar(int slot, @NotNull DropAmount dropAmount) implements DropReason { }
