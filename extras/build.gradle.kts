@@ -3,23 +3,26 @@ plugins {
     `maven-publish`
     signing
 }
-val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
-group = "net.minestom.testing"
-val shortDescription = "1.21 Lightweight Minecraft server testing framework"
 
-// version declared by root project
+val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
+group = "net.minestom.extra"
+val shortDescription = "1.21 Lightweight Minecraft server extras"
+
+repositories {
+    mavenCentral()
+}
 
 dependencies {
     api(rootProject)
-
-    api(libs.junit.api)
-    api(libs.junit.params)
-    api(libs.junit.suite.api)
-    runtimeOnly(libs.junit.engine)
-    runtimeOnly(libs.junit.suite.engine)
+    // Testing
+    testImplementation(libs.bundles.junit)
+    testImplementation(project(":testing"))
 }
 
 tasks {
+    test {
+        useJUnitPlatform()
+    }
     publishing.publications.create<MavenPublication>("maven") {
         groupId = "net.minestom"
         // todo: decide on publishing scheme
