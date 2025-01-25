@@ -823,7 +823,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             // "Holder" references can either be a registry entry or the entire object itself. The id is zero if the
             // entire object follows, but we only support registry objects currently so always offset by 1.
             // FIXME: Support sending the entire registry object instead of an ID reference.
-            final int id = holder ? registry.getId(value) + 1 : registry.getId(value);
+            final int id = registry.getId(value) + (holder ? 1 : 0);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
         }
@@ -833,7 +833,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             DynamicRegistry<T> registry = selector.apply(registries);
-            final int id = buffer.read(VAR_INT);
+            // See note above about holder references.
+            final int id = buffer.read(VAR_INT) + (holder ? -1 : 0);
             final DynamicRegistry.Key<T> key = registry.getKey(id);
             Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
             return key;
