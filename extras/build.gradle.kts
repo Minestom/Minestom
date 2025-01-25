@@ -26,7 +26,7 @@ tasks {
     publishing.publications.create<MavenPublication>("maven") {
         groupId = "net.minestom"
         // todo: decide on publishing scheme
-        artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
+        artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom"
         version = project.version.toString()
 
         from(project.components["java"])
