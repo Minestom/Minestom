@@ -1,5 +1,6 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.network.NetworkBuffer;
@@ -25,6 +26,10 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
             ItemComponent.GLIDER
     );
 
+    static {
+        MinecraftServer.init();
+    }
+
     @Override
     protected @NotNull DataComponent<Unit> component() {
         return UNIT_COMPONENTS.getFirst();
@@ -46,7 +51,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
             // Try to write as a Unit and if it fails we can ignore that type
             try {
                 //noinspection unchecked
-                ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(), Unit.INSTANCE);
+                ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(MinecraftServer.process()), Unit.INSTANCE);
             } catch (ClassCastException ignored) {
                 continue;
             }
