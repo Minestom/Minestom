@@ -6,9 +6,8 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    name: Build and deploy Javadoc
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 21
