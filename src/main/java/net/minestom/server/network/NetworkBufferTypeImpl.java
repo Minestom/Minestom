@@ -13,6 +13,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -708,6 +709,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record TypedNbtType<T>(@NotNull BinaryTagSerializer<T> nbtType) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            buffer.write(NBT, nbtType.write(new BinaryTagSerializer.ContextWithRegistries(registries), value));
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            final BinaryTag tag = buffer.read(NBT);
+            return nbtType.read(new BinaryTagSerializer.ContextWithRegistries(registries), tag);
+        }
+    }
+
     record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
                                @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
@@ -794,15 +812,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record RegistryTypeType<T extends ProtocolObject>(
-            @NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+            @NotNull Function<Registries, DynamicRegistry<T>> selector,
+            boolean holder
+    ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final DynamicRegistry<T> registry = selector.apply(registries);
-            // Painting variants may be sent in their entirety rather than a registry reference so the ID is offset by 1 to indicate this.
+            // "Holder" references can either be a registry entry or the entire object itself. The id is zero if the
+            // entire object follows, but we only support registry objects currently so always offset by 1.
             // FIXME: Support sending the entire registry object instead of an ID reference.
-            final int id = registry.id().equals("minecraft:painting_variant") ? registry.getId(value) + 1 : registry.getId(value);
+            final int id = registry.getId(value) + (holder ? 1 : 0);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
         }
@@ -812,7 +833,8 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             DynamicRegistry<T> registry = selector.apply(registries);
-            final int id = buffer.read(VAR_INT);
+            // See note above about holder references.
+            final int id = buffer.read(VAR_INT) + (holder ? -1 : 0);
             final DynamicRegistry.Key<T> key = registry.getKey(id);
             Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
             return key;

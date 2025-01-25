@@ -141,7 +141,6 @@ public class PlayerInit {
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
 
-
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(
                             Component.text("Welcome!"),
