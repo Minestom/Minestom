@@ -25,6 +25,8 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
+      - id: vars
+        run: echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
       - name: Publish to Central via Build
         if: github.repository_owner == 'Minestom'
         run: |
