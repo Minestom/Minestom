@@ -2,27 +2,21 @@ package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.chunksystem.impl.IntervalTree;
 import net.minestom.server.instance.chunksystem.impl.IntervalTree.Node;
+import net.minestom.server.utils.Range;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class IntervalTreeTest {
-    private static IntervalTree<Integer> singletonTree;
-    private static int singletonTreeStart;
     private static IntervalTree<Integer> degenerateTree;
     private static IntervalTree<Integer> degenerateTreeCopy;
     private static IntervalTree<Integer> largeTree;
     private static IntervalTree<Integer> largeTreeCopy;
-    private static ArrayList<Integer> largeTreeValidStarts;
+    private static ArrayList<Range.Int> largeTreeValidEntries;
 
     @BeforeAll
     static void setupSingletonTree() {
@@ -33,7 +27,9 @@ public class IntervalTreeTest {
     static void setupDegenerateTree() {
         degenerateTree = new IntervalTree<>();
         for (var i = 0; i < 10000; i++) {
-            assertEquals(i, degenerateTree.insert(i, i + 50, i));
+            int finalI = i;
+            var val = degenerateTree.insertOrGet(i, i + 50, () -> finalI);
+            assertEquals(i, val);
         }
         degenerateTreeCopy = degenerateTree.copy();
     }
@@ -41,15 +37,26 @@ public class IntervalTreeTest {
     @BeforeAll
     static void setupLargeTree() {
         largeTree = new IntervalTree<>();
-        largeTreeValidStarts = new ArrayList<>();
+        largeTreeValidEntries = new ArrayList<>();
         var random = new Random(105976);
         var len = 100_000;
         for (var i = 0; i < len; i++) {
-            var num = random.nextInt(len);
-            assertEquals(num, largeTree.insert(num, num + 50, num));
-            if (largeTreeValidStarts.size() < 1000) largeTreeValidStarts.add(num);
+            var num = random.nextInt(len * 2);
+            var state = largeTree.state();
+            largeTree.insertOrGet(num, num + 50, () -> num);
+            if (largeTree.modifiedSince(state)) {
+                if (largeTreeValidEntries.size() < 1000) largeTreeValidEntries.add(new Range.Int(num, num + 50));
+            }
         }
         largeTreeCopy = largeTree.copy();
+    }
+
+    @Test
+    void validateSmallTreeCopy() {
+        var smallTree = new IntervalTree<Integer>();
+        smallTree.insertOrGet(0, 10, () -> 3);
+        var st2 = smallTree.copy();
+        assertEquals(smallTree, st2);
     }
 
     @Test
@@ -146,11 +153,27 @@ public class IntervalTreeTest {
     void validateLargeTreeCorrectRemoval() {
         var copy = largeTree.copy();
         var prevSize = largeTree.size();
-        for (var start : largeTreeValidStarts) {
-            assertTrue(copy.delete(start));
+        for (var start : largeTreeValidEntries) {
+            assertTrue(copy.delete(start.min(), start.max()));
         }
-        assertEquals(prevSize - largeTreeValidStarts.size(), copy.size());
+        assertEquals(prevSize - largeTreeValidEntries.size(), copy.size());
     }
+
+    @Test
+    void validateGetLargeTree() {
+        for (var range : largeTreeValidEntries) {
+            var num = largeTree.get(range.min(), range.max());
+            assertEquals(range.min(), num);
+        }
+    }
+    
+    /*
+    
+    record ClaimData(int priority)
+    
+    int minX, int minY, int maxX, int maxY -> List<ClaimData>
+    
+     */
 
     @Test
     void validateSizeLargeTree() {
@@ -173,14 +196,12 @@ public class IntervalTreeTest {
     }
 
     @Test
-    void testInsertOrGet() {
+    void validateInsertOrGet() {
         var tree = new IntervalTree<Integer>();
-        tree.insert(0, 10, 5);
-        tree.insert(-5, 10, 4);
+        tree.insertOrGet(0, 10, () -> 5);
+        tree.insertOrGet(-5, 10, () -> 4);
         assertEquals(3, tree.insertOrGet(0, 50, () -> 3));
-        assertEquals(9, tree.insertOrGet(0, 50, () -> 9));
-
-        System.out.println(Arrays.toString(tree.inOrder()));
+        assertEquals(3, tree.insertOrGet(0, 50, () -> 9));
     }
 
     @Test
@@ -194,22 +215,6 @@ public class IntervalTreeTest {
                 assertTrue(node.end.lastKey() >= i);
             }
         }
-    }
-
-    @Disabled
-    @Test
-    void performanceSelection() {
-        for (var i = 0; i < 10000; i++) {
-            // try to make sure this gets JIT'ed
-            degenerateTree.searchNodes(i);
-        }
-        var time1 = System.nanoTime();
-        var result = degenerateTree.searchNodes(60);
-        var totalTime = System.nanoTime() - time1;
-        for (var node : result) {
-            System.out.println(node);
-        }
-        System.out.println(TimeUnit.NANOSECONDS.toNanos(totalTime) + "nanos");
     }
 
     private static void validateSize(IntervalTree<?> tree) {

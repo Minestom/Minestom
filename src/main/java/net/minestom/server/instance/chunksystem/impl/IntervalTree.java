@@ -4,7 +4,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class IntervalTree<T> {
 
@@ -28,6 +30,14 @@ public class IntervalTree<T> {
         this.modCount++;
     }
 
+    public int state() {
+        return modCount;
+    }
+
+    public boolean modifiedSince(int state) {
+        return modCount != state;
+    }
+
     private void addEntryToEmptyMap(int start, int end, T data) {
         this.root = new Node<>(start, end, data, null);
         this.size = 1;
@@ -40,20 +50,27 @@ public class IntervalTree<T> {
         this.modCount++;
     }
 
-    public T insert(int start, int end, T data) {
-        return this.put(start, end, data);
-    }
-
     public T insertOrGet(int start, int end, Supplier<T> supplier) {
         return this.put(start, end, supplier);
+    }
+
+    @Nullable
+    public T get(int start, int end) {
+        var entry = getEntry(start);
+        if (entry == null) return null;
+        return entry.end.get(end);
     }
 
     public boolean delete(int start, int end) {
         var node = this.getEntry(start);
         if (node == null) return false;
-        if (!node.end.containsKey(end)) return false;
-        this.deleteEntry(node);
-        return true;
+        if (node.delete(end)) {
+            if (node.end.isEmpty()) {
+                this.deleteEntry(node);
+            }
+            return true;
+        }
+        return false;
     }
 
     public List<Node<T>> searchNodes(int point) {
@@ -83,31 +100,6 @@ public class IntervalTree<T> {
         return this.root;
     }
 
-    private T put(int start, int end, T data) {
-        Node<T> t = this.root;
-        if (t == null) {
-            this.addEntryToEmptyMap(start, end, data);
-            return data;
-        }
-        int cmp;
-        Node<T> parent;
-        do {
-            parent = t;
-
-            // update maxEnd for all parents on the way down
-            t.maxEnd = Math.max(t.maxEnd, end);
-
-            cmp = Integer.compare(start, t.start);
-            if (cmp == 0) {
-                // already contains
-                return t.add(end, data);
-            }
-            t = cmp < 0 ? t.left : t.right;
-        } while (t != null);
-        this.addEntry(start, end, data, parent, cmp < 0);
-        return data;
-    }
-
     private T put(int start, int end, Supplier<T> supplier) {
         Node<T> t = this.root;
         if (t == null) {
@@ -125,8 +117,11 @@ public class IntervalTree<T> {
 
             cmp = Integer.compare(start, t.start);
             if (cmp == 0) {
-                // already contains
-                return t.add(end, supplier.get());
+                if (t.end.containsKey(end)) {
+                    return t.end.get(end);
+                }
+                modCount++;
+                return t.forceAdd(end, supplier.get());
             }
             t = cmp < 0 ? t.left : t.right;
         } while (t != null);
@@ -275,10 +270,10 @@ public class IntervalTree<T> {
             if (p.parent == null) this.root = replacement;
             else if (p == p.parent.left) {
                 p.parent.left = replacement;
-                this.fixMaxEnd(p);
+                this.fixMaxEnd(p.parent);
             } else {
                 p.parent.right = replacement;
-                this.fixMaxEnd(p);
+                this.fixMaxEnd(p.parent);
             }
 
             // Null out links so they are OK to use by fixAfterDeletion.
@@ -443,17 +438,21 @@ public class IntervalTree<T> {
     }
 
     public IntervalTree<T> copy() {
+        return deepCopy(s -> s);
+    }
+
+    public IntervalTree<T> deepCopy(Function<T, T> copyFunction) {
         var tree = new IntervalTree<T>();
-        tree.root = this.deepCopy(this.root);
+        tree.root = this.deepCopy(this.root, copyFunction);
         tree.size = this.size;
         return tree;
     }
 
-    private Node<T> deepCopy(Node<T> origin) {
+    private Node<T> deepCopy(Node<T> origin, Function<T, T> copyFunction) {
         if (origin == null) return null;
-        var node = this.copySingleWithoutLinks(origin);
-        var left = this.deepCopy(origin.left);
-        var right = this.deepCopy(origin.right);
+        var node = this.copySingleWithoutLinks(origin, copyFunction);
+        var left = this.deepCopy(origin.left, copyFunction);
+        var right = this.deepCopy(origin.right, copyFunction);
         if (left != null) {
             left.parent = node;
             node.left = left;
@@ -465,12 +464,15 @@ public class IntervalTree<T> {
         return node;
     }
 
-    private Node<T> copySingleWithoutLinks(Node<T> origin) {
+    private Node<T> copySingleWithoutLinks(Node<T> origin, Function<T, T> copyFunction) {
         if (origin == null) return null;
         var node = new Node<T>(0, 0, null, null);
-        node.replaceData(origin);
+        node.start = origin.start;
         node.maxEnd = origin.maxEnd;
         node.color = origin.color;
+        for (var entry : origin.end.entrySet()) {
+            node.end.put(entry.getKey(), copyFunction.apply(entry.getValue()));
+        }
         return node;
     }
 
@@ -481,13 +483,14 @@ public class IntervalTree<T> {
     }
 
     public void preOrder(Consumer<Node<T>> consumer) {
-        this.preOrder(consumer, root);
+        this.preOrder(consumer, this.root);
     }
 
-    public int[] inOrder() {
-        var list = new ArrayList<Integer>();
-        this.inOrder(list, root);
-        return list.stream().mapToInt(i -> i).toArray();
+    @SuppressWarnings("unchecked")
+    public Node<T>[] inOrder() {
+        var list = new ArrayList<Node<T>>();
+        this.inOrder(list::add, this.root);
+        return list.toArray(Node[]::new);
     }
 
     private void preOrder(Consumer<Node<T>> consumer, Node<T> node) {
@@ -497,11 +500,11 @@ public class IntervalTree<T> {
         this.preOrder(consumer, node.right);
     }
 
-    private void inOrder(ArrayList<Integer> list, Node<T> node) {
+    private void inOrder(Consumer<Node<T>> consumer, Node<T> node) {
         if (node == null) return;
-        this.inOrder(list, node.left);
-        list.add(node.start);
-        this.inOrder(list, node.right);
+        this.inOrder(consumer, node.left);
+        consumer.accept(node);
+        this.inOrder(consumer, node.right);
     }
 
     private int height(Node<T> node) {
@@ -511,22 +514,32 @@ public class IntervalTree<T> {
 
     public static class Node<T> {
         public int start;
-        public TreeMap<Integer, ArrayList<T>> end = new TreeMap<>();
+        public TreeMap<Integer, T> end = new TreeMap<>();
         public Node<T> left, right, parent;
         public boolean color;
         public int maxEnd;
 
         public Node(int start, int end, T data, @Nullable IntervalTree.Node<T> parent) {
             this.start = start;
-            this.add(end, data);
+            if (data != null) this.forceAdd(end, data);
             this.maxEnd = end;
             this.parent = parent;
         }
 
-        private T add(int end, T data) {
-            this.end.computeIfAbsent(end, unused -> new ArrayList<>()).add(data);
+        private T forceAdd(int end, T data) {
+            this.end.put(end, data);
             return data;
         }
+
+        private boolean delete(int end) {
+            var removed = this.end.remove(end);
+            return removed != null;
+        }
+
+//        private T add(int end, T data) {
+//            this.end.put(end, data);
+//            return data;
+//        }
 
         @Override
         public boolean equals(Object obj) {
@@ -554,7 +567,7 @@ public class IntervalTree<T> {
         }
 
         private boolean hasDifferingValues(Node<?> other) {
-            return this.start != other.start || this.end.equals(other.end) || this.maxEnd != other.maxEnd || this.color != other.color;
+            return this.start != other.start || !this.end.equals(other.end) || this.maxEnd != other.maxEnd || this.color != other.color;
         }
 
         private void resetMaxEnd() {
@@ -579,7 +592,8 @@ public class IntervalTree<T> {
 
         @Override
         public String toString() {
-            return "[%d,%s]".formatted(this.start, this.end);
+            if (this.end.isEmpty()) return "[nil]";
+            return this.end.entrySet().stream().map(e -> "[%d,%d]=%s".formatted(start, e.getKey(), e.getValue())).collect(Collectors.joining(", "));
         }
     }
 }

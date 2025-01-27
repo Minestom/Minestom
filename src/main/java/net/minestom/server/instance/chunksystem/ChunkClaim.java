@@ -30,34 +30,48 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) impleme
      * The shape of a claim. Only matters if radius > 0
      */
     public enum Shape {
-        CIRCLE {
+        CIRCLE(true) {
             @Override
-            public final boolean isInRadius(int radius, int radiusSq, int x, int z, int ox, int oz) {
+            public final boolean isInRadius(int radiusSqX, int radiusSqZ, int x, int z, int ox, int oz) {
                 var dx = x - ox;
                 var dz = z - oz;
-                var dSq = dx * dx + dz * dz;
-                return dSq <= radiusSq;
+                var dxSq = dx * dx;
+                var dzSq = dz * dz;
+                return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
             }
         },
-        SQUARE {
+        SQUARE(true) {
             @Override
-            public final boolean isInRadius(int radius, int radiusSq, int x, int z, int ox, int oz) {
+            public final boolean isInRadius(int radiusSqX, int radiusSqZ, int x, int z, int ox, int oz) {
                 var dx = Math.abs(x - ox);
                 var dz = Math.abs(z - oz);
-                var d = Math.max(dx, dz);
-                return d <= radius;
+                var dxSq = dx * dx;
+                var dzSq = dz * dz;
+                return dxSq <= radiusSqX && dzSq <= radiusSqZ;
             }
         },
-        DIAMOND {
+        DIAMOND(false) {
             @Override
-            public final boolean isInRadius(int radius, int radiusSq, int x, int z, int ox, int oz) {
+            public final boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
                 var dx = Math.abs(x - ox);
                 var dz = Math.abs(z - oz);
-                return dx + dz <= radius;
+                var d = (float) dx / radiusX + (float) dz / radiusZ;
+                return d <= 1F;
             }
         };
 
+        private final boolean wantSquared;
+
+        Shape(boolean wantSquared) {
+            this.wantSquared = wantSquared;
+        }
+
         @ApiStatus.Internal
-        public abstract boolean isInRadius(int radius, int radiusSq, int x, int z, int ox, int oz);
+        public boolean doesWantSquared() {
+            return wantSquared;
+        }
+
+        @ApiStatus.Internal
+        public abstract boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
     }
 }

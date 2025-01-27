@@ -80,6 +80,7 @@ public final class QuadTree {
         if (cy - radius > y) return false;
         if (cy + radius < y) return false;
 
+        // TODO fix this, params are incorrect for isInRadius
         return entry.claim.shape().isInRadius(radius, radius * radius, cx, cy, x, y);
     }
 
