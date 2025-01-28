@@ -5,7 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.UniqueIdUtils;
+import net.minestom.server.utils.UUIDUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -158,7 +158,7 @@ public final class TeamManager {
     public List<String> getPlayers(Team team) {
         List<String> players = new ArrayList<>();
         for (String member : team.getMembers()) {
-            boolean match = UniqueIdUtils.isUniqueId(member);
+            boolean match = UUIDUtils.isUuid(member);
 
             if (!match) players.add(member);
         }
@@ -176,7 +176,7 @@ public final class TeamManager {
     public List<String> getEntities(Team team) {
         List<String> entities = new ArrayList<>();
         for (String member : team.getMembers()) {
-            boolean match = UniqueIdUtils.isUniqueId(member);
+            boolean match = UUIDUtils.isUuid(member);
 
             if (match) entities.add(member);
         }

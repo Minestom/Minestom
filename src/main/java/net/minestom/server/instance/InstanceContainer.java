@@ -89,30 +89,30 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uniqueId, dimensionType, null, dimensionType.namespace());
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+        this(uuid, dimensionType, null, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
-        this(uniqueId, dimensionType, null, dimensionName);
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+        this(uuid, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
-        this(uniqueId, dimensionType, loader, dimensionType.namespace());
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+        this(uuid, dimensionType, loader, dimensionType.namespace());
     }
 
-    public InstanceContainer(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, loader, dimensionName);
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
             @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
-            @NotNull UUID uniqueId,
+            @NotNull UUID uuid,
             @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
             @NotNull NamespaceID dimensionName
     ) {
-        super(dimensionTypeRegistry, uniqueId, dimensionType, dimensionName);
+        super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);

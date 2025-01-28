@@ -103,7 +103,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private final ChunkCache blockRetriever = new ChunkCache(this, null, null);
 
     // the uuid of this instance
-    protected UUID uniqueId;
+    protected UUID uuid;
 
     // instance custom data
     protected TagHandler tagHandler = TagHandler.newHandler();
@@ -119,31 +119,31 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uniqueId      the {@link UUID} of the instance
+     * @param uuid      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uniqueId, dimensionType, dimensionType.namespace());
+    public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+        this(uuid, dimensionType, dimensionType.namespace());
     }
 
     /**
      * Creates a new instance.
      *
-     * @param uniqueId      the {@link UUID} of the instance
+     * @param uuid      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
-        this(MinecraftServer.getDimensionTypeRegistry(), uniqueId, dimensionType, dimensionName);
+    public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+        this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, dimensionName);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param uniqueId      the {@link UUID} of the instance
+     * @param uuid      the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uniqueId, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
-        this.uniqueId = uniqueId;
+    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+        this.uuid = uuid;
         this.dimensionType = dimensionType;
         this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
         Check.argCondition(cachedDimensionType == null, "The dimension " + dimensionType + " is not registered! Please add it to the registry (`MinecraftServer.getDimensionTypeRegistry().registry(dimensionType)`).");
@@ -153,7 +153,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         targetBorderDiameter = this.worldBorder.diameter();
 
         this.pointers = Pointers.builder()
-                .withDynamic(Identity.UUID, this::getUniqueId)
+                .withDynamic(Identity.UUID, this::getUuid)
                 .build();
 
         final ServerProcess process = MinecraftServer.process();
@@ -750,8 +750,19 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the instance unique id
      */
+    public @NotNull UUID getUuid() {
+        return uuid;
+    }
+
+    /**
+     * Gets the instance unique id.
+     *
+     * @return the instance unique id
+     * @deprecated Replace with {@link Instance#getUuid()}
+     */
+    @Deprecated(forRemoval = true)
     public @NotNull UUID getUniqueId() {
-        return uniqueId;
+        return uuid;
     }
 
     /**

@@ -5,7 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.item.ItemStack;
-import net.minestom.server.utils.UniqueIdUtils;
+import net.minestom.server.utils.UUIDUtils;
 
 import java.util.function.Function;
 
@@ -23,7 +23,7 @@ final class Serializers {
     static final Entry<String, StringBinaryTag> STRING = new Entry<>(BinaryTagTypes.STRING, StringBinaryTag::value, StringBinaryTag::stringBinaryTag);
     static final Entry<BinaryTag, BinaryTag> NBT_ENTRY = new Entry<>(null, Function.identity(), Function.identity());
 
-    static final Entry<java.util.UUID, IntArrayBinaryTag> UUID = new Entry<>(BinaryTagTypes.INT_ARRAY, UniqueIdUtils::fromNbt, UniqueIdUtils::toNbt);
+    static final Entry<java.util.UUID, IntArrayBinaryTag> UUID = new Entry<>(BinaryTagTypes.INT_ARRAY, UUIDUtils::fromNbt, UUIDUtils::toNbt);
     static final Entry<ItemStack, CompoundBinaryTag> ITEM = new Entry<>(BinaryTagTypes.COMPOUND, ItemStack::fromItemNBT, ItemStack::toItemNBT);
     static final Entry<Component, StringBinaryTag> COMPONENT = new Entry<>(BinaryTagTypes.STRING, input -> GsonComponentSerializer.gson().deserialize(input.value()),
             component -> StringBinaryTag.stringBinaryTag(GsonComponentSerializer.gson().serialize(component)));

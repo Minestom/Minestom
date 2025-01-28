@@ -13,6 +13,7 @@ import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -708,6 +709,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record TypedNbtType<T>(@NotNull BinaryTagSerializer<T> nbtType) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            buffer.write(NBT, nbtType.write(new BinaryTagSerializer.ContextWithRegistries(registries), value));
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final Registries registries = impl(buffer).registries;
+            Check.stateCondition(registries == null, "Buffer does not have registries");
+            final BinaryTag tag = buffer.read(NBT);
+            return nbtType.read(new BinaryTagSerializer.ContextWithRegistries(registries), tag);
+        }
+    }
+
     record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
                                @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
@@ -794,15 +812,18 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     }
 
     record RegistryTypeType<T extends ProtocolObject>(
-            @NotNull Function<Registries, DynamicRegistry<T>> selector) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
+            @NotNull Function<Registries, DynamicRegistry<T>> selector,
+            boolean holder
+    ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             final DynamicRegistry<T> registry = selector.apply(registries);
-            // Painting variants may be sent in their entirety rather than a registry reference so the ID is offset by 1 to indicate this.
+            // "Holder" references can either be a registry entry or the entire object itself. The id is zero if the
+            // entire object follows, but we only support registry objects currently so always offset by 1.
             // FIXME: Support sending the entire registry object instead of an ID reference.
-            final int id = registry.id().equals("minecraft:painting_variant") ? registry.getId(value) + 1 : registry.getId(value);
+            final int id = registry.getId(value) + (holder ? 1 : 0);
             Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
             buffer.write(VAR_INT, id);
         }
@@ -812,10 +833,128 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
             DynamicRegistry<T> registry = selector.apply(registries);
-            final int id = buffer.read(VAR_INT);
+            // See note above about holder references.
+            final int id = buffer.read(VAR_INT) + (holder ? -1 : 0);
             final DynamicRegistry.Key<T> key = registry.getKey(id);
             Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
             return key;
+        }
+    }
+
+    /**
+     * This is a very gross version of {@link java.io.DataOutputStream#writeUTF(String)} & ${@link DataInputStream#readUTF()}. We need the data in the java
+     * modified utf-8 format for Component, and I couldnt find a method without creating a new buffer for it.
+     */
+    record IOUTF8StringType() implements NetworkBufferTypeImpl<String> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, String value) {
+            final int strlen = value.length();
+            int utflen = strlen; // optimized for ASCII
+
+            for (int i = 0; i < strlen; i++) {
+                int c = value.charAt(i);
+                if (c >= 0x80 || c == 0)
+                    utflen += (c >= 0x800) ? 2 : 1;
+            }
+
+            if (utflen > 65535 || /* overflow */ utflen < strlen)
+                throw new RuntimeException("UTF-8 string too long");
+
+            buffer.write(SHORT, (short) utflen);
+            buffer.ensureWritable(utflen);
+            var impl = (NetworkBufferImpl) buffer;
+            int i;
+            for (i = 0; i < strlen; i++) { // optimized for initial run of ASCII
+                int c = value.charAt(i);
+                if (c >= 0x80 || c == 0) break;
+                impl._putByte(buffer.writeIndex(), (byte) c);
+                impl.advanceWrite(1);
+            }
+
+            for (; i < strlen; i++) {
+                int c = value.charAt(i);
+                if (c < 0x80 && c != 0) {
+                    impl._putByte(buffer.writeIndex(), (byte) c);
+                    impl.advanceWrite(1);
+                } else if (c >= 0x800) {
+                    impl._putByte(buffer.writeIndex(), (byte) (0xE0 | ((c >> 12) & 0x0F)));
+                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 6) & 0x3F)));
+                    impl._putByte(buffer.writeIndex() + 2, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                    impl.advanceWrite(3);
+                } else {
+                    impl._putByte(buffer.writeIndex(), (byte) (0xC0 | ((c >> 6) & 0x1F)));
+                    impl._putByte(buffer.writeIndex() + 1, (byte) (0x80 | ((c >> 0) & 0x3F)));
+                    impl.advanceWrite(2);
+                }
+            }
+        }
+
+        @Override
+        public String read(@NotNull NetworkBuffer buffer) {
+            int utflen = buffer.read(UNSIGNED_SHORT);
+            if (buffer.readableBytes() < utflen) throw new IllegalArgumentException("Invalid String size.");
+            byte[] bytearr = buffer.read(RAW_BYTES);
+            final char[] chararr = new char[utflen];
+
+            int c, char2, char3;
+            int count = 0;
+            int chararr_count = 0;
+
+            while (count < utflen) {
+                c = (int) bytearr[count] & 0xff;
+                if (c > 127) break;
+                count++;
+                chararr[chararr_count++] = (char) c;
+            }
+
+            while (count < utflen) {
+                c = (int) bytearr[count] & 0xff;
+                try { // Surround in try catch to throw a runtime exception instead of a checked one
+                    switch (c >> 4) {
+                        case 0, 1, 2, 3, 4, 5, 6, 7 -> {
+                            /* 0xxxxxxx*/
+                            count++;
+                            chararr[chararr_count++] = (char) c;
+                        }
+                        case 12, 13 -> {
+                            /* 110x xxxx   10xx xxxx*/
+                            count += 2;
+                            if (count > utflen)
+                                throw new UTFDataFormatException(
+                                        "malformed input: partial character at end");
+                            char2 = bytearr[count - 1];
+                            if ((char2 & 0xC0) != 0x80)
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + count);
+                            chararr[chararr_count++] = (char) (((c & 0x1F) << 6) |
+                                    (char2 & 0x3F));
+                        }
+                        case 14 -> {
+                            /* 1110 xxxx  10xx xxxx  10xx xxxx */
+                            count += 3;
+                            if (count > utflen)
+                                throw new UTFDataFormatException(
+                                        "malformed input: partial character at end");
+                            char2 = bytearr[count - 2];
+                            char3 = bytearr[count - 1];
+                            if (((char2 & 0xC0) != 0x80) || ((char3 & 0xC0) != 0x80))
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + (count - 1));
+                            chararr[chararr_count++] = (char) (((c & 0x0F) << 12) |
+                                    ((char2 & 0x3F) << 6) |
+                                    ((char3 & 0x3F) << 0));
+                        }
+                        default ->
+                            /* 10xx xxxx,  1111 xxxx */
+                                throw new UTFDataFormatException(
+                                        "malformed input around byte " + count);
+                    }
+                } catch (UTFDataFormatException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+            // The number of chars produced may be less than utflen
+            return new String(chararr, 0, chararr_count);
         }
     }
 

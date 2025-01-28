@@ -12,6 +12,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -45,6 +46,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
+    Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
     @SuppressWarnings({"unchecked", "rawtypes"})
     Type<CompoundBinaryTag> NBT_COMPOUND = (Type) new NetworkBufferTypeImpl.NbtType();
@@ -63,8 +65,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector) {
-        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector);
+    static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
+        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
     }
 
     // METADATA
@@ -102,6 +104,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     static <T> @NotNull Type<T> Lazy(@NotNull Supplier<@NotNull Type<T>> supplier) {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
+    }
+
+    static <T> @NotNull Type<T> TypedNBT(@NotNull BinaryTagSerializer<T> serializer) {
+        return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
     <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;

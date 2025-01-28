@@ -106,7 +106,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         final Chunk chunk = instance.getChunk(chunkX, chunkZ);
         if (chunk == null) {
             LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
-                    chunkX, chunkZ, instance.getUniqueId());
+                    chunkX, chunkZ, instance.getUuid());
             return null;
         }
         return apply(instance, chunk, callback);
@@ -165,7 +165,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
         try {
             if (!chunk.isLoaded()) {
                 LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
-                        chunk.getChunkX(), chunk.getChunkZ(), instance.getUniqueId());
+                        chunk.getChunkX(), chunk.getChunkZ(), instance.getUuid());
                 return;
             }
 
