@@ -32,9 +32,9 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     private static final Pattern USERNAME_PATTERN = Pattern.compile("[a-zA-Z0-9_]{1,16}");
     private static final String SELECTOR_PREFIX = "@";
-    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s");
+    private static final List<String> SELECTOR_VARIABLES = Arrays.asList("@p", "@r", "@a", "@e", "@s", "@n");
     private static final List<String> PLAYERS_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@a", "@s");
-    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s");
+    private static final List<String> SINGLE_ONLY_SELECTOR = Arrays.asList("@p", "@r", "@s", "@n");
     // List with all the valid arguments
     private static final List<String> VALID_ARGUMENTS = Arrays.asList(
             "x", "y", "z",
@@ -297,6 +297,8 @@ public class ArgumentEntity extends Argument<EntityFinder> {
     private static EntityFinder.TargetSelector toTargetSelector(@NotNull String selectorVariable) {
         if (selectorVariable.equals("@p"))
             return EntityFinder.TargetSelector.NEAREST_PLAYER;
+        if (selectorVariable.equals("@n"))
+            return EntityFinder.TargetSelector.NEAREST_ENTITY;
         if (selectorVariable.equals("@r"))
             return EntityFinder.TargetSelector.RANDOM_PLAYER;
         if (selectorVariable.equals("@a"))
