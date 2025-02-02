@@ -37,6 +37,7 @@ import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
+import net.minestom.server.event.inventory.InventorySwapEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.item.PlayerFinishItemUseEvent;
@@ -1734,6 +1735,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public boolean openInventory(@NotNull Inventory inventory) {
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
+        AbstractInventory previouslyOpenInventory = this.openInventory;
+
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
             AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
@@ -1745,7 +1748,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
-        return !inventoryOpenEvent.isCancelled();
+        boolean wasSuccessfulOpened = !inventoryOpenEvent.isCancelled();
+        if (wasSuccessfulOpened && previouslyOpenInventory != null) {
+            InventorySwapEvent inventorySwapEvent = new InventorySwapEvent(previouslyOpenInventory, this.openInventory, this);
+            EventDispatcher.call(inventorySwapEvent);
+        }
+        return wasSuccessfulOpened;
     }
 
     /**
