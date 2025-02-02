@@ -5,6 +5,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.projectile.ProjectileCollideWithEntityEvent;
+import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventorySwapEvent;
 import net.minestom.server.network.packet.client.play.ClientCloseWindowPacket;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
@@ -51,5 +52,29 @@ public class InventorySwapStateTest {
         assertEquals(firstInventory, event.getOldInventory(), "First opened inventory should be the old inventory.");
         assertEquals(secondInventory, event.getNewInventory(), "Second opened inventory should be the new inventory.");
         assertNotEquals(event.getOldInventory(), event.getNewInventory(), "Old inventory should not be the new inventory.");
+    }
+
+    @Test
+    public void doNotFireInventoryCloseOnInventorySwap(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        assertEquals(instance, player.getInstance());
+
+        final var eventRef = new AtomicReference<InventoryCloseEvent>();
+        final var eventNode = EventNode.all("inventory-no-close-test");
+        eventNode.addListener(InventoryCloseEvent.class, event -> {
+            eventRef.set(event);
+            MinecraftServer.getGlobalEventHandler().removeChild(eventNode);
+        });
+        MinecraftServer.getGlobalEventHandler().addChild(eventNode);
+
+        var firstInventory = new Inventory(InventoryType.CHEST_2_ROW, Component.text("First inventory"));
+        player.openInventory(firstInventory);
+        var secondInventory = new Inventory(InventoryType.CHEST_2_ROW, Component.text("Second inventory"));
+        player.openInventory(secondInventory);
+
+        final var event = eventRef.get();
+        assertNull(event, "Event was called");
     }
 }
