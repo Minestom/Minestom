@@ -32,8 +32,7 @@ public class InventorySwapEvent implements PlayerInstanceEvent {
      *
      * @return the player who opens the inventory
      */
-    @NotNull
-    public Player getPlayer() {
+    public @NotNull Player getPlayer() {
         return player;
     }
 
@@ -51,7 +50,7 @@ public class InventorySwapEvent implements PlayerInstanceEvent {
      *
      * @return the new inventory
      */
-    public AbstractInventory getNewInventory() {
+    public @NotNull AbstractInventory getNewInventory() {
         return newInventory;
     }
 }
