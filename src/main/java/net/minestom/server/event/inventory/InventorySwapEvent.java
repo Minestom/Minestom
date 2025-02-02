@@ -15,13 +15,11 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Executed by {@link Player#openInventory(Inventory)} if another inventory was already open.
  */
-public class InventorySwapEvent implements PlayerInstanceEvent, CancellableEvent {
+public class InventorySwapEvent implements PlayerInstanceEvent {
 
     private final AbstractInventory oldInventory;
     private final AbstractInventory newInventory;
     private final Player player;
-
-    private boolean cancelled;
 
     public InventorySwapEvent(@NotNull AbstractInventory oldInventory, @NotNull AbstractInventory newInventory, @NotNull Player player) {
         this.oldInventory = oldInventory;
@@ -55,15 +53,5 @@ public class InventorySwapEvent implements PlayerInstanceEvent, CancellableEvent
      */
     public AbstractInventory getNewInventory() {
         return newInventory;
-    }
-
-    @Override
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    @Override
-    public void setCancelled(boolean cancel) {
-        this.cancelled = cancel;
     }
 }
