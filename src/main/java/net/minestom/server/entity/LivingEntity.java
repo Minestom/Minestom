@@ -82,6 +82,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
     private int arrowCount;
     private float health = 1F;
+    private int removalAnimationDelay = 1000;
 
     // Equipments
     private ItemStack mainHandItem = ItemStack.AIR;
@@ -274,6 +275,14 @@ public class LivingEntity extends Entity implements EquipmentHandler {
 
         EntityDeathEvent entityDeathEvent = new EntityDeathEvent(this);
         EventDispatcher.call(entityDeathEvent);
+
+        if (removalAnimationDelay > 0) {
+            // Needed for proper death animation (wait for it to finish before destroying the entity)
+            scheduleRemove(Duration.of(removalAnimationDelay, TimeUnit.MILLISECOND));
+        } else {
+            // Instant removal without animation playback
+            remove();
+        }
     }
 
     /**
@@ -311,6 +320,26 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
 
         remainingFireTicks = fireTicks;
+    }
+
+    /**
+     * Gets the kill animation delay before vanishing the entity.
+     *
+     * @return the removal animation delay in milliseconds, 0 if not any
+     */
+    public int getRemovalAnimationDelay() {
+        return removalAnimationDelay;
+    }
+
+    /**
+     * Changes the removal animation delay of the entity.
+     * <p>
+     * Testing shows that 1000 is the minimum value to display the death particles.
+     *
+     * @param removalAnimationDelay the new removal animation delay in milliseconds, 0 to remove it
+     */
+    public void setRemovalAnimationDelay(int removalAnimationDelay) {
+        this.removalAnimationDelay = removalAnimationDelay;
     }
 
     public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {

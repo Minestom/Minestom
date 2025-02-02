@@ -4,7 +4,8 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityProjectile;
 import net.minestom.server.entity.EntityType;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.AIGoal;
+import net.minestom.server.entity.ai.target.ClosestEntityTarget;
 import net.minestom.server.entity.pathfinding.Navigator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -13,12 +14,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
+import java.util.List;
 import java.util.function.Function;
 
 /**
  * Allows entity to perform both melee and ranged attacks.
  */
-public class CombinedAttackGoal extends GoalSelector {
+public class CombinedAttackGoal extends AIGoal {
 
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
@@ -118,7 +120,7 @@ public class CombinedAttackGoal extends GoalSelector {
                               int meleeRange, Duration meleeDelay,
                               int rangedRange, double rangedPower, double rangedSpread, Duration rangedDelay,
                               int desirableRange, boolean comeClose) {
-        super(entityCreature);
+        super(entityCreature, List.of(new ClosestEntityTarget(10, e -> true)), 0);
         this.meleeRangeSquared = meleeRange * meleeRange;
         this.meleeDelay = meleeDelay;
         this.rangedRangeSquared = rangedRange * rangedRange;
@@ -134,13 +136,13 @@ public class CombinedAttackGoal extends GoalSelector {
         return this.cooldown;
     }
 
-    public void setProjectileGenerator(Function<Entity, EntityProjectile> projectileGenerator) {
+    public void setProjectileGenerator(@NotNull Function<Entity, EntityProjectile> projectileGenerator) {
         this.projectileGenerator = projectileGenerator;
     }
 
     @Override
     public boolean shouldStart() {
-        this.cachedTarget = findTarget();
+        this.cachedTarget = findTargetEntity();
         return this.cachedTarget != null;
     }
 
@@ -156,7 +158,7 @@ public class CombinedAttackGoal extends GoalSelector {
             target = this.cachedTarget;
             this.cachedTarget = null;
         } else {
-            target = findTarget();
+            target = findTargetEntity();
         }
         if (target == null) {
             this.stop = true;

@@ -1,7 +1,7 @@
 package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.AIGoal;
 import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +9,7 @@ import java.util.Random;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class RandomLookAroundGoal extends GoalSelector {
+public class RandomLookAroundGoal extends AIGoal {
     private static final Random RANDOM = new Random();
     private final int chancePerTick;
     private final Supplier<Integer> minimalLookTimeSupplier;
@@ -45,7 +45,7 @@ public class RandomLookAroundGoal extends GoalSelector {
             int chancePerTick,
             @NotNull Supplier<Integer> minimalLookTimeSupplier,
             @NotNull Function<EntityCreature, Vec> randomDirectionFunction) {
-        super(entityCreature);
+        super(entityCreature, null, 0);
         this.chancePerTick = chancePerTick;
         this.minimalLookTimeSupplier = minimalLookTimeSupplier;
         this.randomDirectionFunction = randomDirectionFunction;
