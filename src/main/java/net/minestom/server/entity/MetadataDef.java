@@ -432,9 +432,9 @@ public sealed class MetadataDef {
 
     public static final class Cat extends TameableAnimal {
         public static final Entry<CatMeta.Variant> VARIANT = index(0, Metadata::CatVariant, CatMeta.Variant.BLACK);
-        public static final Entry<Boolean> IS_LYING = index(2, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_RELAXED = index(3, Metadata::Boolean, false);
-        public static final Entry<Integer> COLLAR_COLOR = index(4, Metadata::VarInt, 14);
+        public static final Entry<Boolean> IS_LYING = index(1, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_RELAXED = index(2, Metadata::Boolean, false);
+        public static final Entry<Integer> COLLAR_COLOR = index(3, Metadata::VarInt, 14);
     }
 
     public static final class Wolf extends TameableAnimal {
