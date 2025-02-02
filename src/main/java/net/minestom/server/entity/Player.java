@@ -1728,6 +1728,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
+     * If a previous inventory exists, an {@link InventorySwapEvent} will be called,
+     * with both the old and new inventory.
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
