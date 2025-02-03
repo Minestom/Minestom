@@ -70,6 +70,17 @@ public final class ServerFlag {
     // Experimental/Unstable
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");
+    /**
+     * Valid values:
+     * <ul>
+     *     <li>simple (fastest, inaccurate)</li>
+     *     <li>hypotenuse-squared (rather cheap, more accurate)</li>
+     *     <li>hypotenuse (expensive, very accurate)</li>
+     * </ul>
+     * <p>
+     *  Defaults to hypotenuse-squared on invalid value
+     */
+    public static final String CHUNK_SYSTEM_PRIORITY_DROP = stringProperty("minestom.chunk-system-priority-drop");
 
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 

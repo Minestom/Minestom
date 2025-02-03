@@ -50,6 +50,11 @@ public class IntervalTree<T> {
         this.modCount++;
     }
 
+    @Override
+    public String toString() {
+        return Node.toStringRecursive(this.root);
+    }
+
     public T insertOrGet(int start, int end, Supplier<T> supplier) {
         return this.put(start, end, supplier);
     }
@@ -438,7 +443,7 @@ public class IntervalTree<T> {
     }
 
     public IntervalTree<T> copy() {
-        return deepCopy(s -> s);
+        return this.deepCopy(s -> s);
     }
 
     public IntervalTree<T> deepCopy(Function<T, T> copyFunction) {
@@ -588,6 +593,15 @@ public class IntervalTree<T> {
         private void replaceData(Node<T> other) {
             this.start = other.start;
             this.end = new TreeMap<>(other.end);
+        }
+
+        static String toStringRecursive(Node<?> node) {
+            if (node == null) return "[nil]";
+            return node.end.entrySet().stream().map(e -> "[[%d,%d]=%s,left=%s,right=%s]".formatted(node.start, e.getKey(), e.getValue(), toStringRecursive(node.left), toStringRecursive(node.right))).collect(Collectors.joining(", "));
+        }
+
+        public String toStringRecursive() {
+            return toStringRecursive(this);
         }
 
         @Override

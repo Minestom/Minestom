@@ -67,6 +67,17 @@ public class ChunkClaimTreeTest {
         assertTrue(entries.contains(player2));
         assertTrue(entries.contains(player3));
     }
+    
+    @Test
+    void testRemoveAll() {
+        tree.delete(player1S);
+        tree.delete(player1C);
+        tree.delete(player1D);
+        tree.delete(player2);
+        tree.delete(player3);
+        tree.delete(player4);
+        tree.delete(player5);
+    }
 
     @Test
     void validateDuplicateEntries() {
