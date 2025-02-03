@@ -94,4 +94,52 @@ public final class CoordConversion {
         final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
         return new Vec(x, y, z);
     }
+
+    // BLOCK INDEX FROM GLOBAL
+
+    private static final int HORIZONTAL_BIT_SIZE = 26;
+    private static final int VERTICAL_BIT_SIZE   = 12;
+
+    private static final int Y_BIT_OFFSET = 0;
+    private static final int Z_BIT_OFFSET = Y_BIT_OFFSET + VERTICAL_BIT_SIZE;
+    private static final int X_BIT_OFFSET = Z_BIT_OFFSET + HORIZONTAL_BIT_SIZE;
+
+    private static final int HORIZONTAL_BIT_MASK = (1 << HORIZONTAL_BIT_SIZE) - 1;
+    private static final int VERTICAL_BIT_MASK =   (1 << VERTICAL_BIT_SIZE)   - 1;
+
+    private static final int X_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (HORIZONTAL_BIT_SIZE + X_BIT_OFFSET);
+    private static final int X_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (HORIZONTAL_BIT_SIZE);
+    private static final int Z_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (HORIZONTAL_BIT_SIZE + Z_BIT_OFFSET);
+    private static final int Z_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (HORIZONTAL_BIT_SIZE);
+    private static final int Y_SIGN_EXTEND_SHIFT_LEFT  = Long.SIZE - (VERTICAL_BIT_SIZE + Y_BIT_OFFSET);
+    private static final int Y_SIGN_EXTEND_SHIFT_RIGHT = Long.SIZE - (VERTICAL_BIT_SIZE);
+
+    public static long getGlobalBlockIndex(int x, int y, int z) {
+        return ( ((long) x & HORIZONTAL_BIT_MASK) << X_BIT_OFFSET) |
+                (((long) z & HORIZONTAL_BIT_MASK) << Z_BIT_OFFSET) |
+                (((long) y & VERTICAL_BIT_MASK)   << Y_BIT_OFFSET);
+    }
+
+    public static long getGlobalBlockIndex(Point point) {
+        return getGlobalBlockIndex(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public static @NotNull BlockVec globalBlockIndexGetPosition(long index) {
+        final int x = globalBlockIndexGetX(index);
+        final int y = globalBlockIndexGetY(index);
+        final int z = globalBlockIndexGetZ(index);
+        return new BlockVec(x, y, z);
+    }
+
+    public static int globalBlockIndexGetX(long index) {
+        return (int) (index << X_SIGN_EXTEND_SHIFT_LEFT >> X_SIGN_EXTEND_SHIFT_RIGHT);
+    }
+
+    public static int globalBlockIndexGetY(long index) {
+        return (int) (index << Y_SIGN_EXTEND_SHIFT_LEFT >> Y_SIGN_EXTEND_SHIFT_RIGHT);
+    }
+
+    public static int globalBlockIndexGetZ(long index) {
+        return (int) (index << Z_SIGN_EXTEND_SHIFT_LEFT >> Z_SIGN_EXTEND_SHIFT_RIGHT);
+    }
 }

@@ -3,10 +3,10 @@ package net.minestom.server.instance.batch;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.utils.location.LocationUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,7 +54,7 @@ public class RelativeBlockBatch implements Batch {
 
     @Override
     public void setBlock(int x, int y, int z, @NotNull Block block) {
-        final long index = LocationUtils.getGlobalBlockIndex(x, y, z);
+        final long index = CoordConversion.getGlobalBlockIndex(x, y, z);
 
         synchronized (blocks) {
             this.blocks.put(index, block);
@@ -131,9 +131,9 @@ public class RelativeBlockBatch implements Batch {
 
                 final Block block = entry.getValue();
 
-                final int finalX = x + LocationUtils.globalBlockIndexToPositionX(pos);
-                final int finalY = y + LocationUtils.globalBlockIndexToPositionY(pos);
-                final int finalZ = z + LocationUtils.globalBlockIndexToPositionZ(pos);
+                final int finalX = x + CoordConversion.globalBlockIndexGetX(pos);
+                final int finalY = y + CoordConversion.globalBlockIndexGetY(pos);
+                final int finalZ = z + CoordConversion.globalBlockIndexGetZ(pos);
 
                 // this batch was made in the function, no one else has it
                 batch.setBlock(finalX, finalY, finalZ, block);
