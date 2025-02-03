@@ -67,7 +67,7 @@ public class EntityCreature extends Entity implements PathWalker, EntityAI {
         this.aiGroup = aiGroup;
         // Update entity creatures in AI goal
         // TODO: Is this needed?
-        for (AIGoal aiGoal : aiGroup.getGoalSelectors()) {
+        for (AIGoal aiGoal : aiGroup.getAIGoals()) {
             aiGoal.setEntityCreature(this);
         }
     }

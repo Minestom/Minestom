@@ -26,7 +26,7 @@ public interface EntityAI {
     void setAIGroup(@NotNull EntityAIGroup aiGroup);
 
     default void addGoals(@NotNull List<AIGoal> aiGoals) {
-        getAIGroup().getGoalSelectors().addAll(aiGoals);
+        getAIGroup().getAIGoals().addAll(aiGoals);
     }
 
     default void aiTick(long time) {

@@ -13,7 +13,7 @@ public class EntityAIGroupBuilder {
      * @return this builder.
      */
     public EntityAIGroupBuilder addAIGoal(@NotNull AIGoal goalSelector) {
-        this.group.getGoalSelectors().add(goalSelector);
+        this.group.getAIGoals().add(goalSelector);
         return this;
     }
 

@@ -79,9 +79,11 @@ public abstract class AIGoal implements Comparable<AIGoal> {
 
     /**
      * Checks to see if this goal should interrupt the current goal, given the entity creature's current state
+     * <p></p>
+     * Note: {@link EntityAIGroup} will only interrupt the current goal with this one if {@link #shouldStart()} is true as well.
      * @return true if this goal should interrupt the current one, false to continue as normal
      */
-    public boolean shouldInterrupt() {
+    public boolean canInterrupt(@NotNull AIGoal currentGoal) {
         return false;
     }
 

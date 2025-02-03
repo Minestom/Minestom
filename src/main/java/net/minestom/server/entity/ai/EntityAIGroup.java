@@ -12,8 +12,8 @@ import java.util.List;
  */
 public class EntityAIGroup {
 
-    private AIGoal currentGoalSelector;
-    private final List<AIGoal> goalSelectors = new ArrayList<>();
+    private AIGoal currentAIGoal;
+    private final List<AIGoal> aiGoals = new ArrayList<>();
 
     /**
      * Gets the goal selectors of this group.
@@ -21,12 +21,12 @@ public class EntityAIGroup {
      * @return an unmodifiable list containing this group's goal selectors
      */
     @NotNull
-    public List<AIGoal> getGoalSelectors() {
-        return Collections.unmodifiableList(goalSelectors);
+    public List<AIGoal> getAIGoals() {
+        return Collections.unmodifiableList(aiGoals);
     }
 
     public void addAIGoals(@NotNull List<AIGoal> goalSelectors) {
-        this.goalSelectors.addAll(goalSelectors);
+        this.aiGoals.addAll(goalSelectors);
         Collections.sort(goalSelectors);
     }
 
@@ -36,24 +36,24 @@ public class EntityAIGroup {
      * @return the current AI goal of this group, null if not any
      */
     @Nullable
-    public AIGoal getCurrentGoalSelector() {
-        return this.currentGoalSelector;
+    public AIGoal getCurrentAIGoal() {
+        return this.currentAIGoal;
     }
 
     public void tick(long time) {
-        AIGoal currentGoalSelector = getCurrentGoalSelector();
+        AIGoal currentGoal = getCurrentAIGoal();
 
-         if (currentGoalSelector != null) {
-            if (currentGoalSelector.shouldEnd()) {
-                currentGoalSelector.end();
-                this.currentGoalSelector = null;
+         if (currentGoal != null) {
+            if (currentGoal.shouldEnd()) {
+                currentGoal.end();
+                this.currentAIGoal = null;
             } else {
-                currentGoalSelector.tick(time);
+                currentGoal.tick(time);
                 // Check for any goal interrupts
-                for (var goal : goalSelectors) {
-                    if (goal.shouldInterrupt()) {
-                        currentGoalSelector.end();
-                        this.currentGoalSelector = goal;
+                for (var goal : aiGoals) {
+                    if (goal.canInterrupt(currentGoal) && goal.shouldStart()) {
+                        currentGoal.end();
+                        this.currentAIGoal = goal;
                         goal.start();
                         break;
                     }
@@ -61,11 +61,11 @@ public class EntityAIGroup {
             }
         }
 
-        if (currentGoalSelector == null) {
+        if (currentGoal == null) {
             // We don't have a current goal, pick one with the highest priority
-            for (var goal : goalSelectors) {
+            for (var goal : aiGoals) {
                 if (goal.shouldStart()) {
-                    this.currentGoalSelector = goal;
+                    this.currentAIGoal = goal;
                     goal.start();
                     break;
                 }
