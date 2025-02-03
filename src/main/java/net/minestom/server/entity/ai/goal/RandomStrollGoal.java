@@ -1,15 +1,12 @@
 package net.minestom.server.entity.ai.goal;
 
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.ai.AIGoal;
 import net.minestom.server.entity.ai.target.RandomNearbyPositionTarget;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class RandomStrollGoal extends AIGoal {
 

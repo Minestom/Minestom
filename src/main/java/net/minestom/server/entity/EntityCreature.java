@@ -1,29 +1,26 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.ai.AIGoal;
 import net.minestom.server.entity.ai.EntityAI;
 import net.minestom.server.entity.ai.EntityAIGroup;
-import net.minestom.server.entity.pathfinding.NavigableEntity;
 import net.minestom.server.entity.pathfinding.Navigator;
+import net.minestom.server.entity.pathfinding.PathWalker;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityAttackEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.packet.server.play.EntityAnimationPacket;
 import net.minestom.server.thread.Acquirable;
-import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.time.Duration;
-import java.util.Collection;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArraySet;
 
-public class EntityCreature extends Entity implements NavigableEntity, EntityAI {
+public class EntityCreature extends Entity implements PathWalker, EntityAI {
 
     private EntityAIGroup aiGroup = new EntityAIGroup();
 
@@ -95,7 +92,6 @@ public class EntityCreature extends Entity implements NavigableEntity, EntityAI 
     }
 
     @NotNull
-    @Override
     public Navigator getNavigator() {
         return navigator;
     }
@@ -129,5 +125,11 @@ public class EntityCreature extends Entity implements NavigableEntity, EntityAI 
     @Override
     public @NotNull Acquirable<? extends EntityCreature> acquirable() {
         return (Acquirable<? extends EntityCreature>) super.acquirable();
+    }
+
+    @Override
+    public void updateNewPosition(@NotNull Vec speed, float yaw, float pitch) {
+        final var physicsResult = CollisionUtils.handlePhysics(this, speed);
+        this.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
     }
 }

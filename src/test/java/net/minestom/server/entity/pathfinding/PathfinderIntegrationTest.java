@@ -2,6 +2,7 @@ package net.minestom.server.entity.pathfinding;
 
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityCreature;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.generators.GroundNodeGenerator;
@@ -15,8 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class PathfinderIntegrationTest {
@@ -26,19 +26,16 @@ public class PathfinderIntegrationTest {
      * Currently only checks to make sure path is not null, and that nodes are not inside blocks
      *
      * @param nodes the nodes to validate
-     * @return true if the path is valid
      */
-    private boolean validateNodes(List<PNode> nodes, Instance instance) {
+    private void validateNodes(List<PNode> nodes, Instance instance) {
         if (nodes == null) fail("Path is null");
-        if (nodes.size() == 0) fail("Path is empty");
+        if (nodes.isEmpty()) fail("Path is empty");
 
         nodes.forEach((node) -> {
             if (instance.getBlock(node.blockX(), node.blockY(), node.blockZ()).isSolid()) {
                 fail("Node is inside a block");
             }
         });
-
-        return true;
     }
 
     @Test
@@ -49,7 +46,7 @@ public class PathfinderIntegrationTest {
             i.loadChunk(x, z).join();
         });
 
-        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
         zombie.setBoundingBox(3f, 6.5f, 3f);
 
@@ -72,7 +69,7 @@ public class PathfinderIntegrationTest {
             i.loadChunk(x, z).join();
         });
 
-        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
 
         Navigator nav = new Navigator(zombie);
@@ -92,7 +89,7 @@ public class PathfinderIntegrationTest {
             i.loadChunk(x, z).join();
         });
 
-        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
 
         Navigator nav = new Navigator(zombie);
@@ -113,7 +110,7 @@ public class PathfinderIntegrationTest {
             i.loadChunk(x, z).join();
         });
 
-        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(43.972731367054266, 40.000000000040735, -39.89155139999369));
 
         zombie.tick(0);
@@ -131,7 +128,7 @@ public class PathfinderIntegrationTest {
     }
 
     @Test
-    public void testPFNodeEqual(Env env) {
+    public void testPFNodeEqual() {
         PNode node1 = new PNode(new Pos(0.777, 0, 0), 2, 0, PNode.Type.WALK, null);
         PNode node2 = new PNode(new Pos(0.777, 0, 0), 0, 3, PNode.Type.WALK, node1);
 
@@ -181,7 +178,7 @@ public class PathfinderIntegrationTest {
         i.setBlock(6, 41, 5, Block.STONE);
         i.setBlock(7, 41, 5, Block.STONE);
 
-        var zombie = new LivingEntity(EntityType.ZOMBIE);
+        var zombie = new EntityCreature(EntityType.ZOMBIE);
         zombie.setInstance(i, new Pos(0, 40, 0));
         zombie.setBoundingBox(zombie.getBoundingBox().expand(4f, 4f, 4f));
 
@@ -207,6 +204,7 @@ public class PathfinderIntegrationTest {
         var nodeGenerator = new GroundNodeGenerator();
 
         var snapped = nodeGenerator.gravitySnap(i, -140.74433362614695, 40.58268292446131, 18.87966960447388, zombie.getBoundingBox(), 100);
+        assertTrue(snapped.isPresent());
         assertEquals(40.0, snapped.getAsDouble());
     }
 }

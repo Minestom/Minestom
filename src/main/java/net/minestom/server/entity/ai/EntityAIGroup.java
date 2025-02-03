@@ -1,16 +1,11 @@
 package net.minestom.server.entity.ai;
 
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 /**
  * Represents a collection of {@link AIGoal ai goals}.

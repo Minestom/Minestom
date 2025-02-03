@@ -3,7 +3,6 @@ package net.minestom.server.entity.pathfinding;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.pathfinding.followers.GroundNodeFollower;
 import net.minestom.server.entity.pathfinding.followers.NodeFollower;
@@ -23,11 +22,11 @@ import java.util.List;
 import java.util.function.Supplier;
 
 /**
- * Necessary object for all {@link NavigableEntity}.
+ * Necessary object for all {@link PathWalker}.
  */
 public final class Navigator {
     private Point goalPosition;
-    private final Entity entity;
+    private final PathWalker pathWalker;
 
     // Essentially a double buffer. Wait until a path is done computing before replacing the old one.
     private PPath computingPath;
@@ -38,9 +37,9 @@ public final class Navigator {
     NodeGenerator nodeGenerator = new GroundNodeGenerator();
     private NodeFollower nodeFollower;
 
-    public Navigator(@NotNull Entity entity) {
-        this.entity = entity;
-        nodeFollower = new GroundNodeFollower(entity);
+    public Navigator(@NotNull PathWalker pathWalker) {
+        this.pathWalker = pathWalker;
+        nodeFollower = new GroundNodeFollower(pathWalker);
     }
 
     public @NotNull PPath.State getState() {
@@ -50,7 +49,7 @@ public final class Navigator {
     }
 
     public synchronized boolean setPathTo(@Nullable Point point) {
-        BoundingBox bb = this.entity.getBoundingBox();
+        BoundingBox bb = this.pathWalker.getBoundingBox();
         double centerToCorner = Math.sqrt(bb.width() * bb.width() + bb.depth() * bb.depth()) / 2;
         return setPathTo(point, centerToCorner, null);
     }
@@ -70,7 +69,7 @@ public final class Navigator {
      * @return true if a path is being generated
      */
     public synchronized boolean setPathTo(@Nullable Point point, double minimumDistance, double maxDistance, double pathVariance, @Nullable Runnable onComplete) {
-        final Instance instance = entity.getInstance();
+        final Instance instance = pathWalker.getInstance();
         if (point == null) {
             this.path = null;
             return false;
@@ -94,12 +93,12 @@ public final class Navigator {
         }
 
         this.minimumDistance = minimumDistance;
-        if (this.entity.getPosition().distance(point) < minimumDistance) {
+        if (this.pathWalker.getPosition().distance(point) < minimumDistance) {
             if (onComplete != null) onComplete.run();
             return false;
         }
 
-        if (point.sameBlock(entity.getPosition())) {
+        if (point.sameBlock(pathWalker.getPosition())) {
             if (onComplete != null) onComplete.run();
             return false;
         }
@@ -107,12 +106,12 @@ public final class Navigator {
         if (this.computingPath != null) this.computingPath.setState(PPath.State.TERMINATING);
 
         this.computingPath = PathGenerator.generate(instance,
-                this.entity.getPosition(),
+                this.pathWalker.getPosition(),
                 point,
                 minimumDistance, maxDistance,
                 pathVariance,
-                this.entity.getBoundingBox(),
-                this.entity.isOnGround(),
+                this.pathWalker.getBoundingBox(),
+                this.pathWalker.isOnGround(),
                 this.nodeGenerator,
                 onComplete);
 
@@ -123,7 +122,7 @@ public final class Navigator {
     @ApiStatus.Internal
     public synchronized void tick() {
         if (goalPosition == null) return; // No path
-        if (entity instanceof LivingEntity && ((LivingEntity) entity).isDead())
+        if (pathWalker instanceof LivingEntity livingEntity && livingEntity.isDead())
             return; // No pathfinding tick for dead entities
         if (computingPath != null && (computingPath.getState() == PPath.State.COMPUTED || computingPath.getState() == PPath.State.BEST_EFFORT)) {
             path = computingPath;
@@ -137,7 +136,7 @@ public final class Navigator {
             path.setState(PPath.State.FOLLOWING);
             // Remove nodes that are too close to the start. Prevents doubling back to hit points that have already been hit
             for (int i = 0; i < path.getNodes().size(); i++) {
-                if (isSameBlock(path.getNodes().get(i), entity.getPosition())) {
+                if (isSameBlock(path.getNodes().get(i), pathWalker.getPosition())) {
                     path.getNodes().subList(0, i).clear();
                     break;
                 }
@@ -148,7 +147,7 @@ public final class Navigator {
         if (path.getState() != PPath.State.FOLLOWING) return;
 
         // If we're near the entity, we're done
-        if (this.entity.getPosition().distance(goalPosition) < minimumDistance) {
+        if (this.pathWalker.getPosition().distance(goalPosition) < minimumDistance) {
             path.runComplete();
             path = null;
 
@@ -162,11 +161,11 @@ public final class Navigator {
         if (currentTarget == null || path.getCurrentType() == PNode.Type.REPATH || path.getCurrentType() == null) {
             if (computingPath != null && computingPath.getState() == PPath.State.CALCULATING) return;
 
-            computingPath = PathGenerator.generate(entity.getInstance(),
-                    entity.getPosition(),
+            computingPath = PathGenerator.generate(pathWalker.getInstance(),
+                    pathWalker.getPosition(),
                     Pos.fromPoint(goalPosition),
                     minimumDistance, path.maxDistance(),
-                    path.pathVariance(), entity.getBoundingBox(), this.entity.isOnGround(), nodeGenerator, null);
+                    path.pathVariance(), pathWalker.getBoundingBox(), this.pathWalker.isOnGround(), nodeGenerator, null);
 
             return;
         }
@@ -193,12 +192,12 @@ public final class Navigator {
     }
 
     /**
-     * Gets the entity which is navigating.
+     * Gets the PathWalker which is navigating.
      *
      * @return the entity
      */
-    public @NotNull Entity getEntity() {
-        return entity;
+    public @NotNull PathWalker getPathWalker() {
+        return pathWalker;
     }
 
     public void reset() {
@@ -212,7 +211,7 @@ public final class Navigator {
 
     public boolean isComplete() {
         if (this.path == null) return true;
-        return goalPosition == null || entity.getPosition().sameBlock(goalPosition);
+        return goalPosition == null || pathWalker.getPosition().sameBlock(goalPosition);
     }
 
     public List<PNode> getNodes() {
@@ -243,7 +242,7 @@ public final class Navigator {
 
         for (PNode point : path.getNodes()) {
             var packet = new ParticlePacket(Particle.COMPOSTER, point.x(), point.y() + 0.5, point.z(), 0, 0, 0, 0, 1);
-            entity.sendPacketToViewers(packet);
+            pathWalker.getInstance().sendGroupedPacket(packet);
         }
     }
 
