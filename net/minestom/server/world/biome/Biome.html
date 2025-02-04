@@ -111,15 +111,12 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second odd-row-color"><code><a href="Biome.Getter.html" class="type-name-link" title="interface in net.minestom.server.world.biome">Biome.Getter</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Biome.Precipitation.html" class="type-name-link" title="enum class in net.minestom.server.world.biome">Biome.Precipitation</a></code></div>
+<div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="Biome.Setter.html" class="type-name-link" title="interface in net.minestom.server.world.biome">Biome.Setter</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static interface&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="Biome.Setter.html" class="type-name-link" title="interface in net.minestom.server.world.biome">Biome.Setter</a></code></div>
+<div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="Biome.TemperatureModifier.html" class="type-name-link" title="enum class in net.minestom.server.world.biome">Biome.TemperatureModifier</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="Biome.TemperatureModifier.html" class="type-name-link" title="enum class in net.minestom.server.world.biome">Biome.TemperatureModifier</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -352,8 +349,8 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="BiomeEffects.html" title="class in net.minestom.server.world.biome">BiomeEffects</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#effects()" class="member-name-link">effects</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Biome.Precipitation.html" title="enum class in net.minestom.server.world.biome">Biome.Precipitation</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#precipitation()" class="member-name-link">precipitation</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#hasPrecipitation()" class="member-name-link">hasPrecipitation</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../../registry/Registry.BiomeEntry.html" title="class in net.minestom.server.registry">Registry.BiomeEntry</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
@@ -814,10 +811,9 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 </section>
 </li>
 <li>
-<section class="detail" id="precipitation()">
-<h3>precipitation</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="Biome.Precipitation.html" title="enum class in net.minestom.server.world.biome">Biome.Precipitation</a></span>&nbsp;<span class="element-name">precipitation</span>()</div>
+<section class="detail" id="hasPrecipitation()">
+<h3>hasPrecipitation</h3>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">hasPrecipitation</span>()</div>
 </section>
 </li>
 <li>
