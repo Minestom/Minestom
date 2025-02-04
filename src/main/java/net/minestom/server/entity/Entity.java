@@ -250,7 +250,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     /**
      * Called each tick.
      *
-     * @param time time of the update in milliseconds
+     * @param time time of the update in milliseconds. This may only be used as a delta and has no meaning in the real world
      */
     public void update(long time) {
 
@@ -585,7 +585,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * <p>
      * Ignored if {@link #getInstance()} returns null.
      *
-     * @param time the update time in milliseconds
+     * @param time the update time in milliseconds. This may only be used as a delta and has no meaning in the real world.
      */
     @Override
     public void tick(long time) {
