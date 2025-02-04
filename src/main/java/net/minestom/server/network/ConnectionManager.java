@@ -377,7 +377,7 @@ public final class ConnectionManager {
             if (lastKeepAlive > TimeUnit.MILLISECONDS.toNanos(ServerFlag.KEEP_ALIVE_DELAY) && player.didAnswerKeepAlive()) {
                 player.refreshKeepAlive(tickStart);
                 player.sendPacket(keepAlivePacket);
-            } else if (lastKeepAlive >= TimeUnit.MICROSECONDS.toNanos(ServerFlag.KEEP_ALIVE_KICK)) {
+            } else if (lastKeepAlive >= TimeUnit.MILLISECONDS.toNanos(ServerFlag.KEEP_ALIVE_KICK)) {
                 player.kick(TIMEOUT_TEXT);
             }
         }
