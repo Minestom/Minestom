@@ -49,6 +49,7 @@ import net.minestom.server.thread.ThreadProvider;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
+import net.minestom.server.utils.time.Tick;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -443,8 +444,8 @@ final class ServerProcessImpl implements ServerProcess {
             }
         }
 
-        private void serverTick(long tickStart) {
-            long milliStart = TimeUnit.NANOSECONDS.toMillis(tickStart);
+        private void serverTick(long nanoStart) {
+            long milliStart = TimeUnit.NANOSECONDS.toMillis(nanoStart);
             // Tick all instances
             for (Instance instance : instance().getInstances()) {
                 try {
@@ -454,11 +455,13 @@ final class ServerProcessImpl implements ServerProcess {
                 }
             }
             // Tick all chunks (and entities inside)
-            dispatcher().updateAndAwait(milliStart);
+            dispatcher().updateAndAwait(nanoStart);
 
             // Clear removed entities & update threads
-            final long tickTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - tickStart);
-            dispatcher().refreshThreads(tickTime);
+            final long tickDuration = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - nanoStart);
+            final long remainingTickDuration = Tick.SERVER_TICKS.getDuration().toNanos() - tickDuration;
+            // the nanoTimeout for refreshThreads is the remaining tick duration
+            dispatcher().refreshThreads(remainingTickDuration);
         }
     }
 }
