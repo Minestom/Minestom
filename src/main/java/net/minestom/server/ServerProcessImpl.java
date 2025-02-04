@@ -420,15 +420,13 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
-            final long nanoStart = System.nanoTime();
-
             scheduler().processTick();
 
             // Connection tick (let waiting clients in, send keep alives, handle configuration players packets)
-            connection().tick(nanoStart);
+            connection().tick(nanoTime);
 
             // Server tick (chunks/entities)
-            serverTick(nanoStart);
+            serverTick(nanoTime);
 
             scheduler().processTickEnd();
 
