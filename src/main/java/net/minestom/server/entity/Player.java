@@ -37,7 +37,6 @@ import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
-import net.minestom.server.event.inventory.InventorySwapEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.item.PlayerFinishItemUseEvent;
@@ -1728,8 +1727,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
-     * If a previous inventory exists, an {@link InventorySwapEvent} will be called,
-     * with both the old and new inventory.
+     * If the client already has an open inventory, the client will "swap" them instead of
+     * closing the old and opening the new inventory.
+     * The biggest difference between "swapping" and server-side closing-opening is,
+     * that the cursor-position within the inventory screen is not reset by the client.
+     * If a previous inventory exists, the previous inventory will be gettable through
+     * {@link InventoryOpenEvent#getOldInventory()}.
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
@@ -1737,25 +1740,17 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public boolean openInventory(@NotNull Inventory inventory) {
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
-        AbstractInventory previouslyOpenInventory = this.openInventory;
-
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
+            Inventory newInventory = inventoryOpenEvent.getInventory();
             AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
             }
 
-            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
-
             newInventory.addViewer(this);
             this.openInventory = newInventory;
         });
-        boolean wasSuccessfulOpened = !inventoryOpenEvent.isCancelled();
-        if (wasSuccessfulOpened && previouslyOpenInventory != null) {
-            InventorySwapEvent inventorySwapEvent = new InventorySwapEvent(previouslyOpenInventory, this.openInventory, this);
-            EventDispatcher.call(inventorySwapEvent);
-        }
-        return wasSuccessfulOpened;
+        return !inventoryOpenEvent.isCancelled();
     }
 
     /**
