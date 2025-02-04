@@ -772,7 +772,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * Warning: this does not update chunks and entities.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in milliseconds, which may only be used as a delta and has no meaning in real life
      */
     @Override
     public void tick(long time) {
