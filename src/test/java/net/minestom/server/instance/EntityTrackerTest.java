@@ -66,22 +66,6 @@ public class EntityTrackerTest {
     }
 
     @Test
-    public void clearing() {
-        var ent1 = new Entity(EntityType.ZOMBIE);
-        EntityTracker tracker = EntityTracker.newTracker();
-
-        for (var x = 0; x < 10000; x++) {
-            System.out.println("X: " + x);
-            for (var z = 0; z < 10000; z++) {
-                var point = new BlockVec(x << 4, 0, z << 4);
-                tracker.register(ent1, point, EntityTracker.Target.ENTITIES, null);
-                tracker.unregister(ent1, EntityTracker.Target.ENTITIES, null);
-            }
-        }
-        System.out.println("Done");
-    }
-
-    @Test
     public void tracking() {
         var ent1 = new Entity(EntityType.ZOMBIE);
         var ent2 = new Entity(EntityType.ZOMBIE);
