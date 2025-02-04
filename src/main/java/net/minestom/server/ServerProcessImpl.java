@@ -59,6 +59,7 @@ import java.io.IOException;
 import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -418,15 +419,15 @@ final class ServerProcessImpl implements ServerProcess {
     private final class TickerImpl implements Ticker {
         @Override
         public void tick(long nanoTime) {
-            final long msTime = System.currentTimeMillis();
+            final long nanoStart = System.nanoTime();
 
             scheduler().processTick();
 
             // Connection tick (let waiting clients in, send keep alives, handle configuration players packets)
-            connection().tick(msTime);
+            connection().tick(nanoStart);
 
             // Server tick (chunks/entities)
-            serverTick(msTime);
+            serverTick(nanoStart);
 
             scheduler().processTickEnd();
 
@@ -443,19 +444,20 @@ final class ServerProcessImpl implements ServerProcess {
         }
 
         private void serverTick(long tickStart) {
+            long milliStart = TimeUnit.NANOSECONDS.toMillis(tickStart);
             // Tick all instances
             for (Instance instance : instance().getInstances()) {
                 try {
-                    instance.tick(tickStart);
+                    instance.tick(milliStart);
                 } catch (Exception e) {
                     exception().handleException(e);
                 }
             }
             // Tick all chunks (and entities inside)
-            dispatcher().updateAndAwait(tickStart);
+            dispatcher().updateAndAwait(milliStart);
 
             // Clear removed entities & update threads
-            final long tickTime = System.currentTimeMillis() - tickStart;
+            final long tickTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - tickStart);
             dispatcher().refreshThreads(tickTime);
         }
     }

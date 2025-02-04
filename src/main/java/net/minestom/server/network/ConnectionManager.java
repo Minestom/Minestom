@@ -368,16 +368,16 @@ public final class ConnectionManager {
     /**
      * Updates keep alive by checking the last keep alive packet and send a new one if needed.
      *
-     * @param tickStart the time of the update in milliseconds, forwarded to the packet
+     * @param tickStart the time of the update in nanoseconds, forwarded to the packet
      */
     private void handleKeepAlive(@NotNull Collection<Player> playerGroup, long tickStart) {
         final KeepAlivePacket keepAlivePacket = new KeepAlivePacket(tickStart);
         for (Player player : playerGroup) {
             final long lastKeepAlive = tickStart - player.getLastKeepAlive();
-            if (lastKeepAlive > ServerFlag.KEEP_ALIVE_DELAY && player.didAnswerKeepAlive()) {
+            if (lastKeepAlive > TimeUnit.MILLISECONDS.toNanos(ServerFlag.KEEP_ALIVE_DELAY) && player.didAnswerKeepAlive()) {
                 player.refreshKeepAlive(tickStart);
                 player.sendPacket(keepAlivePacket);
-            } else if (lastKeepAlive >= ServerFlag.KEEP_ALIVE_KICK) {
+            } else if (lastKeepAlive >= TimeUnit.MICROSECONDS.toNanos(ServerFlag.KEEP_ALIVE_KICK)) {
                 player.kick(TIMEOUT_TEXT);
             }
         }

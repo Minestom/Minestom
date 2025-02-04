@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
@@ -62,6 +63,22 @@ public class EntityTrackerTest {
         tracker.move(ent1, new Vec(32, 0, 32), EntityTracker.Target.ENTITIES, updater);
         assertEquals(0, tracker.chunkEntities(Vec.ZERO, EntityTracker.Target.ENTITIES).size());
         assertEquals(1, tracker.chunkEntities(new Vec(32, 0, 32), EntityTracker.Target.ENTITIES).size());
+    }
+
+    @Test
+    public void clearing() {
+        var ent1 = new Entity(EntityType.ZOMBIE);
+        EntityTracker tracker = EntityTracker.newTracker();
+
+        for (var x = 0; x < 10000; x++) {
+            System.out.println("X: " + x);
+            for (var z = 0; z < 10000; z++) {
+                var point = new BlockVec(x << 4, 0, z << 4);
+                tracker.register(ent1, point, EntityTracker.Target.ENTITIES, null);
+                tracker.unregister(ent1, EntityTracker.Target.ENTITIES, null);
+            }
+        }
+        System.out.println("Done");
     }
 
     @Test

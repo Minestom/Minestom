@@ -54,6 +54,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -97,7 +98,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private int remainingThunderTransitionTicks;
 
     // Field for tick events
-    private long lastTickAge = System.currentTimeMillis();
+    private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
