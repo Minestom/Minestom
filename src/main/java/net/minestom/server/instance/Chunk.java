@@ -1,11 +1,14 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.Tickable;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.EntityQuery;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -23,9 +26,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Consumer;
+
+import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
+import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
 
 // TODO light data & API
 
@@ -70,9 +75,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
         final DimensionType instanceDim = instance.getCachedDimensionType();
         this.minSection = instanceDim.minY() / CHUNK_SECTION_SIZE;
         this.maxSection = (instanceDim.minY() + instanceDim.height()) / CHUNK_SECTION_SIZE;
-        final List<SharedInstance> shared = instance instanceof InstanceContainer instanceContainer ?
-                instanceContainer.getSharedInstances() : List.of();
-        this.viewable = instance.getEntityTracker().viewable(shared, chunkX, chunkZ);
+        this.viewable = new ChunkView();
     }
 
     /**
@@ -103,7 +106,9 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract @NotNull Section getSection(int section);
 
     public abstract @NotNull Heightmap motionBlockingHeightmap();
+
     public abstract @NotNull Heightmap worldSurfaceHeightmap();
+
     public abstract void loadHeightmapsFromNBT(CompoundBinaryTag heightmaps);
 
     public @NotNull Section getSectionAt(int blockY) {
@@ -321,4 +326,63 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * Invalidate the chunk caches
      */
     public abstract void invalidate();
+
+    private final class ChunkView implements Viewable {
+        final Set<Player> set = new ChunkView.SetImpl();
+        private int lastReferenceCount;
+
+        @Override
+        public boolean addViewer(@NotNull Player player) {
+            throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        }
+
+        @Override
+        public boolean removeViewer(@NotNull Player player) {
+            throw new UnsupportedOperationException("Chunk does not support manual viewers");
+        }
+
+        @Override
+        public @NotNull Set<@NotNull Player> getViewers() {
+            return set;
+        }
+
+        private Collection<Player> references() {
+            Int2ObjectOpenHashMap<Player> entityMap = new Int2ObjectOpenHashMap<>(lastReferenceCount);
+            collectPlayers(instance.getEntityTracker(), entityMap);
+            if (instance instanceof InstanceContainer instanceContainer && instanceContainer.hasSharedInstances()) {
+                for (SharedInstance sharedInstance : instanceContainer.getSharedInstances()) {
+                    collectPlayers(sharedInstance.getEntityTracker(), entityMap);
+                }
+            }
+            this.lastReferenceCount = entityMap.size();
+            return entityMap.values();
+        }
+
+        private void collectPlayers(EntityTracker tracker, Int2ObjectOpenHashMap<Player> map) {
+            tracker.queryConsume(
+                    EntityQuery.entityQuery(
+                            equalsCondition(EntityQuery.PLAYER, true),
+                            chunkRangeCondition(ServerFlag.CHUNK_VIEW_DISTANCE)
+                    ), Chunk.this.toPosition(),
+                    player -> map.putIfAbsent(player.getEntityId(), (Player) player)
+            );
+        }
+
+        final class SetImpl extends AbstractSet<Player> {
+            @Override
+            public @NotNull Iterator<Player> iterator() {
+                return references().iterator();
+            }
+
+            @Override
+            public int size() {
+                return references().size();
+            }
+
+            @Override
+            public void forEach(Consumer<? super Player> action) {
+                references().forEach(action);
+            }
+        }
+    }
 }

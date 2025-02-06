@@ -122,11 +122,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private final int id;
-    // Players must be aware of all surrounding entities
-    // General entities should only be aware of surrounding players to update their viewing list
-    private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
-            EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
-    protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
+    protected final EntityTracker.Update trackingUpdate = new EntityTracker.Update() {
         @Override
         public void add(@NotNull Entity entity) {
             viewEngine.handleAutoViewAddition(entity);
@@ -816,7 +812,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
-                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.getEntityTracker().register(this, spawnPosition, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -844,7 +840,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().unregister(this, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1342,7 +1338,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();

@@ -1,20 +1,23 @@
 package net.minestom.server.entity;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
+import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
+import static net.minestom.server.entity.EntityQuery.entityQuery;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.*;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
 
 final class EntityView {
     private static final int RANGE = ServerFlag.ENTITY_VIEW_DISTANCE;
@@ -33,7 +36,7 @@ final class EntityView {
 
     public EntityView(Entity entity) {
         this.entity = entity;
-        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
+        this.viewableOption = new Option<>(true, Entity::autoViewEntities,
                 player -> {
                     // Add viewable
                     var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
@@ -62,7 +65,7 @@ final class EntityView {
                     }
                     entity.updateOldViewer(player);
                 });
-        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
+        this.viewerOption = new Option<>(false, Entity::isAutoViewable,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
     }
@@ -131,7 +134,7 @@ final class EntityView {
         @SuppressWarnings("rawtypes")
         private static final AtomicIntegerFieldUpdater<EntityView.Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(EntityView.Option.class, "auto");
         // Entities that should be tracked from this option
-        private final EntityTracker.Target<T> target;
+        private final boolean players;
         // The condition that must be met for this option to be considered auto.
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
@@ -144,9 +147,9 @@ final class EntityView {
         // null if auto-viewable
         private Predicate<T> predicate = null;
 
-        public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
+        public Option(boolean players, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
-            this.target = target;
+            this.players = players;
             this.loopPredicate = loopPredicate;
             this.addition = addition;
             this.removal = removal;
@@ -232,8 +235,13 @@ final class EntityView {
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            instance.getEntityTracker().nearbyEntitiesByChunkRange(point, RANGE, target,
-                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
+            final EntityQuery nearbyQuery = players ? entityQuery(
+                    equalsCondition(EntityQuery.PLAYER, true),
+                    chunkRangeCondition(RANGE)
+            ) : entityQuery(chunkRangeCondition(RANGE));
+            //noinspection unchecked
+            instance.getEntityTracker().queryConsume(nearbyQuery, point,
+                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), (T) entity));
             this.lastSize = entityMap.size();
             return entityMap.values();
         }

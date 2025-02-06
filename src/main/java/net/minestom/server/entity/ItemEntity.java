@@ -1,9 +1,14 @@
 package net.minestom.server.entity;
 
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
+
+import static net.minestom.server.entity.EntityQuery.Condition.*;
+import static net.minestom.server.entity.EntityQuery.entityQuery;
+
 import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.MathUtils;
@@ -12,9 +17,6 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.time.Duration;
-import java.time.temporal.TemporalUnit;
 
 /**
  * Represents an item on the ground.
@@ -73,25 +75,29 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            this.instance.getEntityTracker().nearbyEntities(position, mergeRange,
-                    EntityTracker.Target.ITEMS, itemEntity -> {
-                        if (itemEntity == this) return;
-                        if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
-                        if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
+            final EntityQuery itemQuery = entityQuery(
+                    equalsCondition(EntityQuery.TYPE, EntityType.ITEM),
+                    lowerEqualsCondition(EntityQuery.DISTANCE, (double) mergeRange)
+            );
+            this.instance.getEntityTracker().queryConsume(itemQuery, position, ent -> {
+                if (!(ent instanceof ItemEntity itemEntity)) return;
+                if (itemEntity == this) return;
+                if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
+                if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
-                        final ItemStack itemStackEntity = itemEntity.getItemStack();
-                        final boolean canStack = itemStack.isSimilar(itemStackEntity);
+                final ItemStack itemStackEntity = itemEntity.getItemStack();
+                final boolean canStack = itemStack.isSimilar(itemStackEntity);
 
-                        if (!canStack) return;
-                        final int totalAmount = itemStack.amount() + itemStackEntity.amount();
-                        if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
-                        final ItemStack result = itemStack.withAmount(totalAmount);
-                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
-                        EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
-                            setItemStack(entityItemMergeEvent.getResult());
-                            itemEntity.remove();
-                        });
-                    });
+                if (!canStack) return;
+                final int totalAmount = itemStack.amount() + itemStackEntity.amount();
+                if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
+                final ItemStack result = itemStack.withAmount(totalAmount);
+                EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
+                EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
+                    setItemStack(entityItemMergeEvent.getResult());
+                    itemEntity.remove();
+                });
+            });
         }
     }
 

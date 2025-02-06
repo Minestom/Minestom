@@ -1,5 +1,12 @@
 package net.minestom.server.entity;
 
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
+import static net.minestom.server.entity.EntityQuery.Condition.*;
+import static net.minestom.server.entity.EntityQuery.entityQuery;
+
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
@@ -19,7 +26,6 @@ import net.minestom.server.event.entity.EntityFireExtinguishEvent;
 import net.minestom.server.event.entity.EntitySetFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
@@ -40,10 +46,6 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
@@ -199,19 +201,23 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
             final Point loweredPosition = position.sub(0, .5, 0);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
-                    EntityTracker.Target.ITEMS, itemEntity -> {
-                        if (this instanceof Player player && !itemEntity.isViewer(player)) return;
-                        if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                                final ItemStack item = itemEntity.getItemStack();
-                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
-                                itemEntity.remove();
-                            });
-                        }
+            final EntityQuery itemQuery = entityQuery(
+                    equalsCondition(EntityQuery.TYPE, EntityType.ITEM),
+                    lowerEqualsCondition(EntityQuery.DISTANCE, expandedBoundingBox.width())
+            );
+            this.instance.getEntityTracker().queryConsume(itemQuery, position, ent -> {
+                if (!(ent instanceof ItemEntity itemEntity)) return;
+                if (this instanceof Player player && !itemEntity.isViewer(player)) return;
+                if (!itemEntity.isPickable()) return;
+                if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
+                    PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                    EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                        final ItemStack item = itemEntity.getItemStack();
+                        sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
+                        itemEntity.remove();
                     });
+                }
+            });
         }
     }
 

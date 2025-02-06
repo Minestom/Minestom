@@ -1,5 +1,10 @@
 package net.minestom.server.instance;
 
+import java.util.*;
+
+import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
+import static net.minestom.server.network.NetworkBuffer.SHORT;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
@@ -8,6 +13,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntityQueries;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
@@ -33,11 +39,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.*;
-
-import static net.minestom.server.coordinate.CoordConversion.globalToSectionRelative;
-import static net.minestom.server.network.NetworkBuffer.SHORT;
 
 /**
  * Represents a {@link Chunk} which store each individual block in memory.
@@ -335,7 +336,7 @@ public class DynamicChunk extends Chunk {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
-        var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        var entities = instance.getEntityTracker().queryStream(EntityQueries.atChunk(chunkX, chunkZ)).toList();
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),

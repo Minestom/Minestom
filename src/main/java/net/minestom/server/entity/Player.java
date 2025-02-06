@@ -1,5 +1,19 @@
 package net.minestom.server.entity;
 
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
+
+import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
+import static net.minestom.server.entity.EntityQuery.Condition.lowerEqualsCondition;
+import static net.minestom.server.entity.EntityQuery.entityQuery;
+
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
@@ -42,7 +56,6 @@ import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.item.PlayerFinishItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
@@ -98,16 +111,6 @@ import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server
@@ -390,16 +393,20 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
             final Point loweredPosition = position.sub(0, .5, 0);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
-                    EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
-                            PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
-                            EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                                short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                                experienceOrb.remove();
-                            });
-                        }
+            final EntityQuery orbQuery = entityQuery(
+                    equalsCondition(EntityQuery.TYPE, EntityType.EXPERIENCE_ORB),
+                    lowerEqualsCondition(EntityQuery.DISTANCE, expandedBoundingBox.width())
+            );
+            this.instance.getEntityTracker().queryConsume(orbQuery, position, ent -> {
+                if (!(ent instanceof ExperienceOrb experienceOrb)) return;
+                if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
+                    PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
+                    EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
+                        short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
+                        experienceOrb.remove();
                     });
+                }
+            });
         }
 
         // Eating animation
@@ -511,8 +518,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         ChunkRange.chunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.effectiveViewDistance(),
-                EntityTracker.Target.ENTITIES, entity -> {
+        this.instance.getEntityTracker().queryConsume(EntityQueries.nearbyByChunkRange(settings.effectiveViewDistance()), respawnPosition,
+                entity -> {
                     // Skip refreshing self with a new viewer
                     if (!entity.getUuid().equals(getUuid()) && entity.isViewer(this)) {
                         entity.updateNewViewer(this);
