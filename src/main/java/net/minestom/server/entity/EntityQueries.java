@@ -1,21 +1,24 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.coordinate.Point;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 import java.util.UUID;
 
 import static net.minestom.server.entity.EntityQuery.*;
 import static net.minestom.server.entity.EntityQuery.Condition.*;
 
-import net.minestom.server.coordinate.Point;
-import org.jetbrains.annotations.NotNull;
-
 public final class EntityQueries {
+    private static final EntityQuery ALL = entityQuery(List.of());
+    private static final EntityQuery PLAYERS = entityQuery(Target.ALL_PLAYERS, Sort.ARBITRARY, -1, List.of());
+
     public static @NotNull EntityQuery all() {
-        return entityQuery(List.of());
+        return ALL;
     }
 
     public static @NotNull EntityQuery players() {
-        return entityQuery(Target.ALL_PLAYERS, Sort.ARBITRARY, -1, List.of());
+        return PLAYERS;
     }
 
     public static @NotNull EntityQuery name(@NotNull String name) {

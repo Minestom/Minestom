@@ -1,11 +1,5 @@
 package net.minestom.server.instance;
 
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
-
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
@@ -22,7 +16,6 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityQueries;
-import net.minestom.server.entity.EntityQuery;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -56,6 +49,13 @@ import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -644,7 +644,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return entityTracker.queryStream(EntityQuery.entityQuery(EntityQuery.Condition.equalsCondition(EntityQuery.PLAYER, true)))
+        return entityTracker.queryStream(EntityQueries.players())
                 .map(entity -> (Player) entity)
                 .collect(Collectors.toUnmodifiableSet());
     }
@@ -657,7 +657,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        var chunkEntities = entityTracker.queryStream(EntityQueries.atChunk(chunk.toPosition()));
+        final Stream<Entity> chunkEntities = entityTracker.queryStream(EntityQueries.atChunk(chunk.toPosition()));
         return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
 

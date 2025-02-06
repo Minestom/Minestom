@@ -11,6 +11,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityQueries;
 import net.minestom.server.entity.EntityQuery;
+import net.minestom.server.entity.Player;
 import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ final class EntityTrackerImpl implements EntityTracker {
     // Indexes
     private final Int2ObjectMap<TrackedEntity> idIndex = new Int2ObjectOpenHashMap<>();
     private final Map<UUID, TrackedEntity> uuidIndex = new HashMap<>();
+    private final Int2ObjectMap<TrackedEntity> playerIdIndex = new Int2ObjectOpenHashMap<>();
 
     // Spatial partitioning
     private final Long2ObjectMap<Set<Entity>> chunksEntities = new Long2ObjectOpenHashMap<>();
@@ -40,6 +42,10 @@ final class EntityTrackerImpl implements EntityTracker {
         Check.isTrue(prevEntryWithId == null, "There is already an entity registered with id {0}", entity.getEntityId());
         TrackedEntity prevEntryWithUuid = uuidIndex.putIfAbsent(entity.getUuid(), newEntry);
         Check.isTrue(prevEntryWithUuid == null, "There is already an entity registered with uuid {0}", entity.getUuid());
+        if (entity instanceof Player) {
+            TrackedEntity prevEntryWithPlayerId = playerIdIndex.putIfAbsent(entity.getEntityId(), newEntry);
+            Check.isTrue(prevEntryWithPlayerId == null, "There is already an entity registered with player id {0}", entity.getEntityId());
+        }
         // Spatial partitioning
         final long index = CoordConversion.chunkIndex(point);
         Set<Entity> chunkEntities = chunksEntities.computeIfAbsent(index, t -> new HashSet<>());
@@ -58,10 +64,13 @@ final class EntityTrackerImpl implements EntityTracker {
     public synchronized void unregister(@NotNull Entity entity, @Nullable Update update) {
         // Indexing
         TrackedEntity entry = idIndex.remove(entity.getEntityId());
+        if (entry == null) return;
         uuidIndex.remove(entity.getUuid());
-        final Point point = entry == null ? null : entry.lastPosition().getPlain();
-        if (point == null) return;
+        if (entity instanceof Player) {
+            playerIdIndex.remove(entity.getEntityId());
+        }
         // Spatial partitioning
+        final Point point = entry.lastPosition().getPlain();
         final long index = CoordConversion.chunkIndex(point);
         Set<Entity> chunkEntities = chunksEntities.computeIfAbsent(index, t -> new HashSet<>());
         chunkEntities.remove(entity);
@@ -120,13 +129,32 @@ final class EntityTrackerImpl implements EntityTracker {
 
     @Override
     public synchronized @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntityQuery query, @NotNull Point origin) {
-        Stream<TrackedEntity> stream = idIndex.values().stream();
-        if (query.limit() != -1) {
-            stream = stream.limit(query.limit());
-        }
-        // TODO: query.target
+        Stream<TrackedEntity> stream = switch (query.target()) {
+            case ALL_ENTITIES -> idIndex.values().stream();
+            case ALL_PLAYERS -> playerIdIndex.values().stream();
+            case NEAREST_ENTITY -> {
+                final TrackedEntity nearest = findNearest(origin, false);
+                yield nearest != null ? Stream.of(nearest) : Stream.empty();
+            }
+            case NEAREST_PLAYER -> {
+                final TrackedEntity nearest = findNearest(origin, true);
+                yield nearest != null ? Stream.of(nearest) : Stream.empty();
+            }
+            case RANDOM_PLAYER -> {
+                if (!playerIdIndex.isEmpty()) {
+                    var players = playerIdIndex.values();
+                    var randomEntry = players.stream().skip(new Random().nextInt(players.size())).findFirst().orElse(null);
+                    yield Stream.of(randomEntry);
+                } else {
+                    yield Stream.empty();
+                }
+            }
+            case SELF -> Stream.empty();
+        };
 
-        stream = stream.filter(trackedEntity -> EntityUtils.validateQuery(trackedEntity.entity, trackedEntity.lastPosition().getPlain(), query, origin));
+        if (!query.conditions().isEmpty()) {
+            stream = stream.filter(trackedEntity -> EntityUtils.validateQuery(trackedEntity.entity, trackedEntity.lastPosition().getPlain(), query, origin));
+        }
 
         switch (query.sort()) {
             case ARBITRARY -> {
@@ -149,7 +177,18 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         }
 
+        if (query.limit() != -1) {
+            stream = stream.limit(query.limit());
+        }
+
         return stream.map(TrackedEntity::entity);
+    }
+
+    private TrackedEntity findNearest(Point origin, boolean player) {
+        Stream<TrackedEntity> stream = player ? playerIdIndex.values().stream() : idIndex.values().stream();
+        return stream.min(Comparator.comparingDouble(
+                trackedEntity -> origin.distanceSquared(trackedEntity.lastPosition().getPlain())
+        )).orElse(null);
     }
 
     private void difference(Point oldPoint, Point newPoint, @NotNull Update update) {

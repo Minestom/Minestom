@@ -45,9 +45,9 @@ public sealed interface EntityQuery permits EntityQueryImpl {
     @NotNull List<Condition<Object>> conditions();
 
     enum Target {
-        NEAREST_PLAYER, RANDOM_PLAYER,
-        ALL_PLAYERS, ALL_ENTITIES,
-        SELF, NEAREST_ENTITY
+        ALL_ENTITIES, ALL_PLAYERS,
+        NEAREST_ENTITY, NEAREST_PLAYER,
+        RANDOM_PLAYER, SELF,
     }
 
     enum Sort {
@@ -123,26 +123,22 @@ public sealed interface EntityQuery permits EntityQueryImpl {
         }
     }
 
-    static @NotNull EntityQuery entityQuery(EntityQuery.Target target,
-                                            EntityQuery.Sort sort,
-                                            int limit,
-                                            List<EntityQuery.Condition<?>> conditions) {
+    static @NotNull EntityQuery entityQuery(Target target, Sort sort, int limit,
+                                            List<Condition<?>> conditions) {
         //noinspection rawtypes,unchecked
         return new EntityQueryImpl(target, sort, limit, (List) conditions);
     }
 
-    static @NotNull EntityQuery entityQuery(EntityQuery.Target target,
-                                            EntityQuery.Sort sort,
-                                            int limit,
-                                            EntityQuery.Condition<?>... conditions) {
+    static @NotNull EntityQuery entityQuery(Target target, Sort sort, int limit,
+                                            Condition<?>... conditions) {
         return entityQuery(target, sort, limit, List.of(conditions));
     }
 
-    static @NotNull EntityQuery entityQuery(List<EntityQuery.Condition<?>> conditions) {
+    static @NotNull EntityQuery entityQuery(List<Condition<?>> conditions) {
         return entityQuery(Target.ALL_ENTITIES, Sort.ARBITRARY, -1, conditions);
     }
 
-    static @NotNull EntityQuery entityQuery(EntityQuery.Condition<?>... conditions) {
+    static @NotNull EntityQuery entityQuery(Condition<?>... conditions) {
         return entityQuery(Target.ALL_ENTITIES, Sort.ARBITRARY, -1, List.of(conditions));
     }
 
