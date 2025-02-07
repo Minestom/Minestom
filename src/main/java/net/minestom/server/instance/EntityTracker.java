@@ -26,8 +26,15 @@ public sealed interface EntityTracker extends EntityQuery.Finder permits EntityT
      * Callback to know the newly visible entities and those to remove.
      */
     interface Update {
+
+        /**
+         * Entity should be visible.
+         */
         void add(@NotNull Entity entity);
 
+        /**
+         * Entity should be invisible
+         */
         void remove(@NotNull Entity entity);
 
         default void referenceUpdate(@NotNull Point point, @Nullable EntityTracker tracker) {

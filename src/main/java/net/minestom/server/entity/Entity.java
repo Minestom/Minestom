@@ -113,7 +113,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -143,7 +142,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     };
 
     protected final EntityView viewEngine = new EntityView(this);
-    protected final Set<Player> viewers = viewEngine.set;
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
@@ -518,7 +516,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers;
+        return viewEngine.set;
     }
 
     /**

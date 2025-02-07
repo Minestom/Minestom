@@ -65,15 +65,15 @@ public sealed interface EntityQuery permits EntityQueryImpl {
         boolean test(@NotNull Point origin, @NotNull T value);
 
         static <T> Condition<T> equalsCondition(Property<T> property, T value) {
-            return __condition(property, (point, t) -> t.equals(value));
+            return condition(property, (point, t) -> t.equals(value));
         }
 
         static <T> Condition<T> notEqualsCondition(Property<T> property, T value) {
-            return __condition(property, (origin, t) -> !value.equals(t));
+            return condition(property, (origin, t) -> !value.equals(t));
         }
 
         static <T extends Number> Condition<T> rangeCondition(Property<T> property, Range<T> range) {
-            return __condition(property, (origin, t) -> switch (range) {
+            return condition(property, (origin, t) -> switch (range) {
                 case Range.Byte aByte -> aByte.inRange((Byte) t);
                 case Range.Double aDouble -> aDouble.inRange((Double) t);
                 case Range.Float aFloat -> aFloat.inRange((Float) t);
@@ -84,7 +84,7 @@ public sealed interface EntityQuery permits EntityQueryImpl {
         }
 
         static Condition<Point> chunkRangeCondition(int radius) {
-            return __condition(COORD, (origin, coord) -> {
+            return condition(COORD, (origin, coord) -> {
                 final int originChunkX = origin.chunkX();
                 final int originChunkZ = origin.chunkZ();
                 final int coordChunkX = coord.chunkX();
@@ -96,19 +96,19 @@ public sealed interface EntityQuery permits EntityQueryImpl {
         }
 
         static <T extends Number> Condition<T> higherCondition(Property<T> property, T value) {
-            return __condition(property, (origin, t) -> t.doubleValue() > value.doubleValue());
+            return condition(property, (origin, t) -> t.doubleValue() > value.doubleValue());
         }
 
         static <T extends Number> Condition<T> higherEqualsCondition(Property<T> property, T value) {
-            return __condition(property, (origin, t) -> t.doubleValue() >= value.doubleValue());
+            return condition(property, (origin, t) -> t.doubleValue() >= value.doubleValue());
         }
 
         static <T extends Number> Condition<T> lowerCondition(Property<T> property, T value) {
-            return __condition(property, (origin, t) -> t.doubleValue() < value.doubleValue());
+            return condition(property, (origin, t) -> t.doubleValue() < value.doubleValue());
         }
 
         static <T extends Number> Condition<T> lowerEqualsCondition(Property<T> property, T value) {
-            return __condition(property, (origin, t) -> t.doubleValue() <= value.doubleValue());
+            return condition(property, (origin, t) -> t.doubleValue() <= value.doubleValue());
         }
 
         /**
@@ -118,7 +118,7 @@ public sealed interface EntityQuery permits EntityQueryImpl {
          * Use at your own risk.
          */
         @ApiStatus.Internal
-        static <T> Condition<T> __condition(Property<T> property, BiPredicate<Point, T> predicate) {
+        static <T> Condition<T> condition(Property<T> property, BiPredicate<Point, T> predicate) {
             return new EntityQueryImpl.ConditionImpl<>(property, predicate);
         }
     }

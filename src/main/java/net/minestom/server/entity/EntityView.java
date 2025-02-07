@@ -1,14 +1,5 @@
 package net.minestom.server.entity;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
-import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
-import static net.minestom.server.entity.EntityQuery.entityQuery;
-
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntIterator;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
@@ -19,6 +10,15 @@ import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.*;
+import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
+import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
+import static net.minestom.server.entity.EntityQuery.entityQuery;
+
 final class EntityView {
     private static final int RANGE = ServerFlag.ENTITY_VIEW_DISTANCE;
     private final Entity entity;
@@ -26,7 +26,7 @@ final class EntityView {
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
-    // Decide if this entity should view X entities
+    // Decide if this entity should view X entities (Only useful for players)
     public final Option<Entity> viewerOption;
 
     final Set<Player> set = new SetImpl();
@@ -65,6 +65,7 @@ final class EntityView {
                     }
                     entity.updateOldViewer(player);
                 });
+        // An entity viewing another entity is no-op, only players matter.
         this.viewerOption = new Option<>(false, Entity::isAutoViewable,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
@@ -202,10 +203,12 @@ final class EntityView {
 
         void updateRule0(Predicate<T> predicate) {
             if (predicate == null) {
+                // No predicate, add all auto-entity which were previously manually hidden
                 update(loopPredicate, entity -> {
                     if (!isRegistered(entity)) addition.accept(entity);
                 });
             } else {
+                // New predicate, add/remove accordingly
                 update(loopPredicate, entity -> {
                     final boolean result = predicate.test(entity);
                     if (result != isRegistered(entity)) {
@@ -229,6 +232,10 @@ final class EntityView {
         private int lastSize;
 
         private Collection<T> references() {
+            // Slow operation to collect all nearby entities affected by this option:
+            // * viewable = collect players
+            // * viewer   = collect entities
+            // This is necessary when update rules are modified.
             final TrackedLocation trackedLocation = EntityView.this.trackedLocation;
             if (trackedLocation == null) return List.of();
             final Instance instance = trackedLocation.instance();
