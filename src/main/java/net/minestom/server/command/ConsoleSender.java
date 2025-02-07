@@ -46,7 +46,7 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public @NotNull Stream<@NotNull Entity> selectEntityStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+    public <R extends Entity> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
         return MinecraftServer.getInstanceManager().getInstances().stream()
                 .flatMap(instance -> instance.getEntityTracker().selectEntityStream(query, origin));
     }

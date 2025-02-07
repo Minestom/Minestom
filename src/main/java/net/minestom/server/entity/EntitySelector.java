@@ -94,26 +94,26 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
     }
 
     interface Finder<T> {
-        @NotNull Stream<@NotNull T> selectEntityStream(@NotNull EntitySelector<? extends T> query, @NotNull Point origin);
+        <R extends T> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin);
 
-        default @NotNull Stream<@NotNull T> selectEntityStream(@NotNull EntitySelector<? extends T> query) {
+        default <R extends T> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query) {
             return selectEntityStream(query, Vec.ZERO);
         }
 
-        default void selectEntityConsume(@NotNull EntitySelector<? extends T> query, @NotNull Point origin, Consumer<T> consumer) {
-            final Stream<T> stream = selectEntityStream(query, origin);
+        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> query, @NotNull Point origin, Consumer<R> consumer) {
+            final Stream<R> stream = selectEntityStream(query, origin);
             stream.forEach(consumer);
         }
 
-        default void selectEntityConsume(@NotNull EntitySelector<? extends T> query, Consumer<T> consumer) {
+        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> query, Consumer<R> consumer) {
             selectEntityConsume(query, Vec.ZERO, consumer);
         }
 
-        default @Nullable T selectEntityFirst(@NotNull EntitySelector<? extends T> query, @NotNull Point origin) {
+        default <R extends T> @Nullable T selectEntityFirst(@NotNull EntitySelector<R> query, @NotNull Point origin) {
             return selectEntityStream(query, origin).findFirst().orElse(null);
         }
 
-        default @Nullable T selectEntityFirst(@NotNull EntitySelector<? extends T> query) {
+        default <R extends T> @Nullable T selectEntityFirst(@NotNull EntitySelector<R> query) {
             return selectEntityFirst(query, Vec.ZERO);
         }
     }

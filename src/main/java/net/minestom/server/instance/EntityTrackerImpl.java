@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.CoordConversion;
@@ -17,6 +18,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.MessageFormat;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -128,7 +130,7 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized @NotNull Stream<@NotNull Entity> selectEntityStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+    public synchronized <R extends Entity> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
         Stream<TrackedEntity> stream = switch (query.target()) {
             case ALL_ENTITIES -> idIndex.values().stream();
             case ALL_PLAYERS -> playerIdIndex.values().stream();
@@ -150,10 +152,12 @@ final class EntityTrackerImpl implements EntityTracker {
                 }
             }
         };
-        {
-            EntitySelector<Entity> selector = (EntitySelector<Entity>) query;
-            stream = stream.filter(trackedEntity -> selector.test(origin, trackedEntity.entity()));
-        }
+        stream = stream.filter(trackedEntity -> {
+            // TODO Gathers API goes here
+            final var unwrappedEntity = trackedEntity.<R>unwrapSafely();
+            if (unwrappedEntity == null) return false;
+            return query.test(origin, unwrappedEntity);
+        });
 
         switch (query.sort()) {
             case ARBITRARY -> {
@@ -180,7 +184,7 @@ final class EntityTrackerImpl implements EntityTracker {
             stream = stream.limit(query.limit());
         }
 
-        return stream.map(TrackedEntity::entity);
+        return stream.map(TrackedEntity::unwrap);
     }
 
     private TrackedEntity findNearest(Point origin, boolean player) {
@@ -206,5 +210,23 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     private record TrackedEntity(Entity entity, AtomicReference<Point> lastPosition) {
+        public <R extends Entity> @Nullable R unwrapSafely() {
+            try {
+                return (R) entity;
+            } catch (ClassCastException ignored) {
+            }
+            return null;
+        }
+
+        public <R extends Entity> @NotNull R unwrap() {
+            try {
+                return (R) entity;
+            } catch (ClassCastException error) {
+                MinecraftServer.getExceptionManager().handleException(error);
+                Check.fail(MessageFormat.format("Invalid unwrap during entity query for {}, are your conditions correct?", entity.getUuid()));
+            }
+            // We can never reach here.
+            return null;
+        }
     }
 }

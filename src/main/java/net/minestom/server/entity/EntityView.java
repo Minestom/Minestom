@@ -238,13 +238,12 @@ final class EntityView {
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            final EntitySelector<Entity> selector = EntitySelector.selector(builder -> {
+            final EntitySelector<T> selector = EntitySelector.selector(builder -> {
                 if (players) builder.requirePlayer();
                 builder.chunkRange(RANGE);
             });
-            //noinspection unchecked
             instance.getEntityTracker().selectEntityConsume(selector, point,
-                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), (T) entity));
+                    (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             this.lastSize = entityMap.size();
             return entityMap.values();
         }
