@@ -1,5 +1,9 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.DoubleBinaryTag;
+import net.kyori.adventure.nbt.FloatBinaryTag;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -1626,6 +1630,29 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 updater.reference(instance), chunk.getChunkX(), chunk.getChunkZ(),
                 viewersId, passengersId, vehicle == null ? -1 : vehicle.getEntityId(),
                 tagHandler.readableCopy());
+    }
+
+    public CompoundBinaryTag writeToTag() {
+        var builder = CompoundBinaryTag.builder();
+        // @formatter:off
+        builder
+                .put("position", CompoundBinaryTag.builder()
+                        .put("x", DoubleBinaryTag.doubleBinaryTag(position.x()))
+                        .put("y", DoubleBinaryTag.doubleBinaryTag(position.y()))
+                        .put("z", DoubleBinaryTag.doubleBinaryTag(position.z()))
+                        .put("yaw", FloatBinaryTag.floatBinaryTag(position.yaw()))
+                        .put("pitch", FloatBinaryTag.floatBinaryTag(position.pitch()))
+                        .build()
+                )
+                .put("velocity", CompoundBinaryTag.builder()
+                        .put("x", DoubleBinaryTag.doubleBinaryTag(velocity.x()))
+                        .put("y", DoubleBinaryTag.doubleBinaryTag(velocity.y()))
+                        .put("z", DoubleBinaryTag.doubleBinaryTag(velocity.z()))
+                        .build()
+                );
+        // @formatter:on
+
+        return builder.build();
     }
 
     @Override
