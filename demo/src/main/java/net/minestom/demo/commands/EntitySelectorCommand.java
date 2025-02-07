@@ -6,7 +6,7 @@ import net.minestom.server.command.builder.CommandContext;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.entity.EntitySelector;
 
 import java.util.List;
 
@@ -26,8 +26,8 @@ public class EntitySelectorCommand extends Command {
     }
 
     private void executor(CommandSender commandSender, CommandContext context) {
-        EntityFinder entityFinder = context.get("entities");
-        List<Entity> entities = entityFinder.find(commandSender);
+        EntitySelector<Entity> selector = context.get("entities");
+        List<Entity> entities = commandSender.queryStream(selector).toList();
         System.out.println("found " + entities.size() + " entities");
     }
 }

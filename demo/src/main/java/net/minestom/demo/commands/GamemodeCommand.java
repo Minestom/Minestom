@@ -9,9 +9,9 @@ import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.List;
 import java.util.Locale;
@@ -73,11 +73,11 @@ public class GamemodeCommand extends Command {
                 return;
             }
 
-            EntityFinder finder = context.get(player);
+            EntitySelector<Entity> selector = context.get(player);
             GameMode mode = context.get(gamemode);
 
             //Set the gamemode for the targets
-            executeOthers(sender, mode, finder.find(sender));
+            executeOthers(sender, mode, sender.queryStream(selector).toList());
         }, gamemode, player);
     }
 

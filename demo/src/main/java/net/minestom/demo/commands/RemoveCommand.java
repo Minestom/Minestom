@@ -7,7 +7,7 @@ import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.condition.Conditions;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.utils.entity.EntityFinder;
+import net.minestom.server.entity.EntitySelector;
 
 public class RemoveCommand extends Command {
 
@@ -27,8 +27,8 @@ public class RemoveCommand extends Command {
         }
 
         private void remove(CommandSender commandSender, CommandContext commandContext) {
-            final EntityFinder entityFinder = commandContext.get(entity);
-            entityFinder.find(commandSender).forEach(Entity::remove);
+            final EntitySelector<Entity> selector = commandContext.get(entity);
+            commandSender.queryStream(selector).toList().forEach(Entity::remove);
         }
     }
 }

@@ -1,12 +1,16 @@
 package net.minestom.server.command;
 
-import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.stream.Stream;
 
 /**
  * Represents the console when sending a command to the server.
@@ -27,11 +31,6 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public void sendMessage(@NotNull Identity source, @NotNull Component message, @NotNull MessageType type) {
-        LOGGER.info(message);
-    }
-
-    @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
     }
@@ -44,5 +43,11 @@ public class ConsoleSender implements CommandSender {
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    @Override
+    public @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+        return MinecraftServer.getInstanceManager().getInstances().stream()
+                .flatMap(instance -> instance.getEntityTracker().queryStream(query, origin));
     }
 }

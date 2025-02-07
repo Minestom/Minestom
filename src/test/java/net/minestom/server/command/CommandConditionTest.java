@@ -3,11 +3,15 @@ package net.minestom.server.command;
 import net.kyori.adventure.identity.Identity;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandDispatcher;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -132,6 +136,11 @@ public class CommandConditionTest {
         @Override
         public @NotNull Identity identity() {
             return Identity.nil();
+        }
+
+        @Override
+        public @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+            throw new UnsupportedOperationException();
         }
     }
 }

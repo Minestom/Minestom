@@ -10,9 +10,9 @@ import net.minestom.server.command.builder.arguments.minecraft.ArgumentEntity;
 import net.minestom.server.command.builder.arguments.minecraft.ArgumentResource;
 import net.minestom.server.command.builder.arguments.number.ArgumentDouble;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.utils.entity.EntityFinder;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.Nullable;
@@ -73,8 +73,8 @@ public class AttributeCommand extends Command {
     }
 
     private LivingEntity target(CommandSender sender, CommandContext ctx) {
-        EntityFinder finder = ctx.get("target");
-        Entity entity = finder.findFirstEntity(sender);
+        EntitySelector<Entity> selector = ctx.get("target");
+        Entity entity = sender.queryFirst(selector);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return null;
         }

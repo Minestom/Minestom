@@ -72,6 +72,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 /**
  * Could be a player, a monster, or an object.
@@ -79,7 +80,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
+        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity>, EntitySelector.Finder<Entity> {
     // This is somewhat arbitrary, but we don't want to hit the max int ever because it is very easy to
     // overflow while working with a position at the max int (for example, looping over a bounding box)
     private static final int MAX_COORDINATE = 2_000_000_000;
@@ -340,7 +341,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            if (this instanceof Player player)
+                player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -1790,4 +1792,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return acquirable;
     }
 
+    @Override
+    public @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+        final Instance instance = getInstance();
+        if (instance == null) {
+            return Stream.empty();
+        }
+        return instance.getEntityTracker().queryStream(query, origin);
+    }
 }

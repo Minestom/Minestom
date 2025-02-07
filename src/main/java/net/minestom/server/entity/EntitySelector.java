@@ -31,6 +31,9 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
         return new EntitySelectorImpl.PropertyImpl<>(name, function);
     }
 
+    @Override
+    boolean test(Point origin, E entity);
+
     @NotNull Target target();
 
     @NotNull Sort sort();

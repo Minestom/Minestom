@@ -16,12 +16,12 @@ public final class EntitySelectors {
     // Properties
     public static final Property<Entity, Integer> ID = property("id", Entity::getEntityId);
     public static final Property<Entity, UUID> UUID = property("uuid", Entity::getUuid);
-    public static final Property<Player, String> NAME = property("name", Player::getUsername);
+    public static final Property<Entity, String> NAME = property("name", entity -> entity instanceof Player player ? player.getUsername() : null);
     public static final Property<Entity, Pos> POS = property("coord", Entity::getPosition);
     public static final Property<Entity, EntityType> TYPE = property("entity_type", Entity::getEntityType);
     public static final Property<Player, GameMode> GAME_MODE = property("game_mode", Player::getGameMode);
-    public static final Property<Player, Integer> LEVEL = property("experience", Player::getLevel);
-    public static final Property<Player, Float> EXPERIENCE = property("experience", Player::getExp);
+    public static final Property<Entity, Integer> LEVEL = property("experience", entity -> entity instanceof Player player ? player.getLevel() : 0);
+    public static final Property<Entity, Float> EXPERIENCE = property("experience", entity -> entity instanceof Player player ? player.getExp() : 0f);
 
     public static @NotNull EntitySelector<Entity> all() {
         return ALL;

@@ -4,10 +4,15 @@ import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.tag.TagHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
+
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -31,7 +36,6 @@ public class CommandSenderTest {
     }
 
     private static final class SenderTest implements CommandSender {
-
         private final TagHandler handler = TagHandler.newHandler();
 
         private Component mostRecentMessage = null;
@@ -53,6 +57,11 @@ public class CommandSenderTest {
         @Override
         public @NotNull Identity identity() {
             return Identity.nil();
+        }
+
+        @Override
+        public @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+            throw new UnsupportedOperationException();
         }
     }
 }

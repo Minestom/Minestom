@@ -2,12 +2,11 @@ package net.minestom.demo.commands;
 
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.entity.EntityFinder;
 
 import java.util.List;
 
-import static net.minestom.server.command.builder.arguments.ArgumentType.Boolean;
 import static net.minestom.server.command.builder.arguments.ArgumentType.*;
 
 public class AutoViewCommand extends Command {
@@ -33,8 +32,8 @@ public class AutoViewCommand extends Command {
         // Modify viewable rule
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
-            EntityFinder finder = context.get("targets");
-            final List<Entity> entities = finder.find(sender);
+            final EntitySelector<Entity> selector = context.get("targets");
+            final List<Entity> entities = sender.queryStream(selector).toList();
             player.updateViewableRule(entities::contains);
             player.sendMessage("Viewable rule updated to see " + entities.size() + " players");
         }, Literal("rule-viewable"), Entity("targets").onlyPlayers(true));
@@ -42,8 +41,8 @@ public class AutoViewCommand extends Command {
         // Modify viewer rule
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
-            EntityFinder finder = context.get("targets");
-            final List<Entity> entities = finder.find(sender);
+            final EntitySelector<Entity> selector = context.get("targets");
+            final List<Entity> entities = sender.queryStream(selector).toList();
             player.updateViewerRule(entities::contains);
             player.sendMessage("Viewer rule updated to see " + entities.size() + " entities");
         }, Literal("rule-viewer"), Entity("targets"));
