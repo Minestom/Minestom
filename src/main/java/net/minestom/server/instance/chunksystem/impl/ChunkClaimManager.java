@@ -1,5 +1,6 @@
 package net.minestom.server.instance.chunksystem.impl;
 
+import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleOpenHashMap;
@@ -13,7 +14,8 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.event.instance.InstanceTickEvent;
+import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.chunksystem.ChunkAndClaim;
 import net.minestom.server.instance.chunksystem.ChunkClaim;
@@ -27,9 +29,9 @@ import org.slf4j.LoggerFactory;
 import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.CancellationException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**
  * This class is responsible for managing the chunk claims.
@@ -114,18 +116,6 @@ public class ChunkClaimManager implements Runnable {
         case "hypotenuse" -> new PriorityDrop.Hypotenuse();
         case null, default -> new PriorityDrop.HypotenuseSquared();
     };
-    /**
-     * Use a common worker pool for all managers. A manager may only submit a task if he holds
-     * a permit in {@link #AVAILABLE_TASKS}
-     */
-    private static final ExecutorService WORKER_EXECUTOR;
-    /**
-     * We allow twice the amount of available processors to be submitted before waiting.
-     * This is so we don't waste time.
-     * As soon as a task finishes, the thread will be able to take the next task,
-     * which has already been submitted.
-     */
-    private static final Semaphore AVAILABLE_TASKS = new Semaphore(Runtime.getRuntime().availableProcessors() * 2);
 
     private final CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
     private final ChunkClaimTree tree = new ChunkClaimTree();
@@ -143,7 +133,17 @@ public class ChunkClaimManager implements Runnable {
      */
     private final Long2ObjectMap<Chunk> unloadingChunks = new Long2ObjectOpenHashMap<>();
     /**
-     * Identity strategy so we can identify the correct claims and remove them.
+     * HashMap for saving chunks. We don't want to save the same chunk concurrently, and we don't want unnecessary saves
+     */
+    private final Long2ObjectMap<SaveTask> savingChunks = new Long2ObjectOpenHashMap<>();
+    /**
+     * HashMap to contain all chunks that have their save request delayed. A chunk may be requested for saving
+     * while it is being saved already. This save will work on old data though, we want the newest data, so we have
+     * to reschedule the save after the first save finishes.
+     */
+    private final Long2ObjectMap<SaveTask> savingChunksDelayed = new Long2ObjectOpenHashMap<>();
+    /**
+     * Identity strategy, so we can identify the correct claims and remove them.
      */
     private final Object2ObjectMap<ChunkClaim, ClaimedChunk> claimMap = new Object2ObjectOpenCustomHashMap<>(IDENTITY);
     private final Long2ObjectMap<Collection<ClaimedChunk>> claimsByChunk = new Long2ObjectOpenHashMap<>();
@@ -151,18 +151,15 @@ public class ChunkClaimManager implements Runnable {
     private final Instance instance;
     private final ChunkGenerationHandler chunkGenerationHandler;
     private final ConcurrentLinkedQueue<Task> tasks = new ConcurrentLinkedQueue<>();
-    private final ConcurrentLinkedQueue<Runnable> instanceTasks = new ConcurrentLinkedQueue<>();
-    private final ReentrantLock signalLock = new ReentrantLock();
-    private final Condition hasSignalled = this.signalLock.newCondition();
     private final ChunkAccess chunkAccess;
-    /**
-     * May only ever be written to from inside the lock, may be read from anywhere.
-     * This is volatile, because we expect a high amount of reading with very little writing.
-     * This allows us to optimize signalling to not need to lock in some situations.
-     */
-    private volatile boolean signalled = false;
+    private final ManagerSignaling signaling = new ManagerSignaling();
     private volatile boolean exit = false;
 
+    /**
+     * Same as {@link #savingChunks} for instance data
+     */
+    private boolean savingInstance = false;
+    private CompletableFuture<Void> savingInstanceDelayed = null;
     /**
      * TODO in the InstanceContainer code this was volatile. Check why? Other fields like chunkLoader should also have been volatile?
      * the chunk generator used, can be null
@@ -186,58 +183,29 @@ public class ChunkClaimManager implements Runnable {
         this.setChunkLoader(chunkLoader);
         this.setChunkSupplier(Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
         this.chunkLoader.loadInstance(instance);
-        // we finally start ourselves. Now we start accepting tasks. Virtual thread is appropriate here, we
-        // will spend most time waiting for signals/workers
+        // We finally start ourselves.
+        // Now we start accepting tasks.
+        // Virtual thread is appropriate here, we
+        // will spend most time waiting for signals/workers.
+        // Also, 1 platform thread per instance can become quite expensive
         Thread.startVirtualThread(this);
-        instance.eventNode().addListener(InstanceTickEvent.class, event -> instanceTick());
-    }
-
-    private void instanceTick() {
-        while (true) {
-            var task = instanceTasks.poll();
-            if (task == null) break;
-            task.run();
-        }
-    }
-
-    private void runOnInstance(Runnable runnable) {
-        instanceTasks.offer(runnable);
     }
 
     @Override
     public void run() {
         while (!this.exit) {
-            this.signalLock.lock();
-            try {
-                // set signalled to false, all updates up to here will have been picked up
-                this.signalled = false;
-            } finally {
-                this.signalLock.unlock();
-            }
+            this.signaling.startIteration();
             while (true) {
                 var task = this.tasks.poll();
                 if (task == null) break;
                 this.workTask(task);
             }
             this.workIteration();
-            if (this.hasUpdated) continue;
-            // check signalled, if we have already been signalled we can avoid having to lock
-            if (!this.signalled) {
-                this.signalLock.lock();
-                try {
-                    // re-check condition, may have changed since locking, and we don't want to deadlock
-                    if (!this.signalled) {
-                        try {
-                            // TODO we could also use awaitUninterruptibly, but should we?
-                            this.hasSignalled.await();
-                        } catch (InterruptedException e) {
-                            LOGGER.error("Unexpected interrupt. Someone is meddling with the ChunkClaimManager, this is not allowed! Shutting ChunkClaimManager down!", e);
-                            break;
-                        }
-                    }
-                } finally {
-                    this.signalLock.unlock();
-                }
+            if (this.hasUpdated || this.exit) continue;
+
+            if (this.signaling.waitForSignal()) {
+                // A problem occurred. Probably an InterruptedException
+                break;
             }
         }
         // after we shut down normally, we shouldn't have to process the remaining tasks.
@@ -245,7 +213,7 @@ public class ChunkClaimManager implements Runnable {
     }
 
     public @NotNull IChunkLoader getChunkLoader() {
-        return chunkLoader;
+        return this.chunkLoader;
     }
 
     public void setChunkLoader(@Nullable IChunkLoader chunkLoader) {
@@ -253,7 +221,7 @@ public class ChunkClaimManager implements Runnable {
     }
 
     public @NotNull ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
+        return this.chunkSupplier;
     }
 
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
@@ -261,7 +229,7 @@ public class ChunkClaimManager implements Runnable {
     }
 
     public boolean isAutosaveEnabled() {
-        return autosaveEnabled;
+        return this.autosaveEnabled;
     }
 
     public void setAutosaveEnabled(boolean autosaveEnabled) {
@@ -278,6 +246,11 @@ public class ChunkClaimManager implements Runnable {
             case Task.RemoveClaim removeClaim -> workRemoveClaim(removeClaim.claim, removeClaim.future);
             case Task.ChunkGenerationFinished chunkGenerationFinished ->
                     workChunkGenerationFinished(chunkGenerationFinished.chunk);
+            case Task.SaveChunk saveChunk -> workSaveChunk(saveChunk.chunk, saveChunk.future);
+            case Task.SaveChunks saveChunks -> workSaveChunks(saveChunks.future);
+            case Task.SaveInstanceData saveInstanceData -> workSaveInstanceData(saveInstanceData.future);
+            case Task.SaveInstanceDataAndChunks saveInstanceDataAndChunks ->
+                    workSaveInstanceDataAndChunks(saveInstanceDataAndChunks.future);
         }
     }
 
@@ -290,7 +263,7 @@ public class ChunkClaimManager implements Runnable {
         this.claimMap.put(claim, claimedChunk);
         this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimedChunk);
 
-        // if the chunk is already loaded we can complete the future right here.
+        // If the chunk is already loaded, we can complete the future right here.
         // The new claim has been inserted into the map, the chunk may not be unloaded
         // as long as the claim exists, so there shouldn't be any issues with this.
         this.completeIfLoaded(x, z, chunkAndClaim);
@@ -314,7 +287,7 @@ public class ChunkClaimManager implements Runnable {
 
         this.tree.delete(x, z, claim.radius(), claim.priority(), claim.shape());
         this.submitUpdate(x, z, claim.priority(), UpdateType.REMOVE_CLAIM_EXPLICIT);
-        // we can complete the future right here, the claim was removed.
+        // We can complete the future right here, the claim was removed.
         // Removing a claim makes no guarantees about when the chunk is unloaded, so this is the easiest
         // and most obvious place to complete the future
         this.complete(future, null);
@@ -322,56 +295,120 @@ public class ChunkClaimManager implements Runnable {
     }
 
     private void workChunkGenerationFinished(Chunk chunk) {
-        // the claim may have been removed by now. We will first have to check that
+        // The claim may have been removed by now. We will first have to check that
         var x = chunk.getChunkX();
         var z = chunk.getChunkZ();
         var chunkIndex = CoordConversion.chunkIndex(x, z);
         var loadTask = this.loadingChunks.remove(chunkIndex);
         var entry = this.findHighestPriorityEntry(x, z);
         if (entry == null) {
-            // last claim was removed. The chunk should not be loaded, ignore
+            // The last claim was removed. The chunk should not be loaded, ignore
             return;
         }
         var index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         this.chunks.put(index, chunk);
         this.chunksLastUpdatePriority.put(index, loadTask.lastUpdatePriority);
-        this.runOnInstance(() -> cacheChunk(chunk));
+        // add this scheduler before adding the dispatcher partition to make sure it is executed first
+        chunk.getScheduler().scheduleNextProcess(() -> {
+            var event = new InstanceChunkLoadEvent(this.instance, chunk);
+            EventDispatcher.call(event);
+        });
+        MinecraftServer.process().dispatcher().createPartition(chunk);
     }
 
-    private void cacheChunk(Chunk chunk) {
-        var dispatcher = MinecraftServer.process().dispatcher();
-        dispatcher.createPartition(chunk);
+    private void workSaveChunk(Chunk chunk, CompletableFuture<Void> future) {
+        var chunkIndex = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        if (this.savingChunks.containsKey(chunkIndex)) {
+            // Already saving, this is a new task. 
+            // Old task will most likely work on outdated data, 
+            // so we need to start a new task after the old one finishes
+            var saving = this.savingChunksDelayed.get(chunkIndex);
+            if (saving != null) {
+                // The chunk is already scheduled to be saved again.
+                // In this case, we don't need to do anything and can
+                // complete the future when saving again has finished.
+                link(saving.future, future);
+                return;
+            }
+            // this is enough to schedule the chunk to be saved again
+            this.savingChunksDelayed.put(chunkIndex, new SaveTask(chunk, future));
+            return;
+        }
+        workSaveChunk0(new SaveTask(chunk, future));
+    }
+
+    private void workSaveChunk0(SaveTask saveTask) {
+        var chunk = saveTask.chunk;
+        var chunkIndex = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        this.savingChunks.put(chunkIndex, saveTask);
+    }
+
+    private void workSaveInstanceData(CompletableFuture<Void> future) {
+        if (this.savingInstance) {
+            if (this.savingInstanceDelayed != null) {
+                link(savingInstanceDelayed, future);
+                return;
+            }
+            this.savingInstanceDelayed = future;
+            return;
+        }
+    }
+
+    private void workSaveInstanceData0() {
+
+    }
+
+    private void workSaveChunks(CompletableFuture<Void> future) {
+        var futures = new CompletableFuture[this.chunks.size()];
+        var i = 0;
+        for (var chunk : this.chunks.values()) {
+            var f = new CompletableFuture<Void>();
+            futures[i++] = f;
+            this.workSaveChunk(chunk, f);
+        }
+        link(CompletableFuture.allOf(futures), future);
+    }
+
+    private void workSaveInstanceDataAndChunks(CompletableFuture<Void> future) {
+        var chunks = new CompletableFuture<Void>();
+        this.workSaveChunks(chunks);
+        var data = new CompletableFuture<Void>();
+        this.workSaveInstanceData(data);
+        link(CompletableFuture.allOf(chunks, data), future);
     }
 
     private void uncacheChunk(Chunk chunk) {
-        this.instance.getEntityTracker().chunkEntities(chunk.getChunkX(), chunk.getChunkZ(), EntityTracker.Target.ENTITIES).forEach(Entity::remove);
+        this.instance
+                .getEntityTracker()
+                .chunkEntities(chunk.getChunkX(), chunk.getChunkZ(), EntityTracker.Target.ENTITIES)
+                .forEach(Entity::remove);
         var loadedChunk = this.chunks.remove(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
         // TODO
     }
 
     private void propagateUpdates(@Nullable ChunkClaimTree.CompleteEntry origin, double originPriority, int x, int z, UpdateType updateType) {
-        propagateUpdate(origin, originPriority, x + 1, z, updateType);
-        propagateUpdate(origin, originPriority, x - 1, z, updateType);
-        propagateUpdate(origin, originPriority, x, z + 1, updateType);
-        propagateUpdate(origin, originPriority, x, z - 1, updateType);
+        this.propagateUpdate(origin, originPriority, x + 1, z, updateType);
+        this.propagateUpdate(origin, originPriority, x - 1, z, updateType);
+        this.propagateUpdate(origin, originPriority, x, z + 1, updateType);
+        this.propagateUpdate(origin, originPriority, x, z - 1, updateType);
     }
 
     private void propagateUpdate(@Nullable ChunkClaimTree.CompleteEntry origin, double originPriority, int x, int z, UpdateType updateType) {
         if (origin != null) {
             // propagate load update
-            var priority = calculatePriority(origin, x, z);
+            var priority = this.calculatePriority(origin, x, z);
             if (priority >= originPriority) {
                 // updates can't propagate to higher priorities
                 return;
             }
-            submitUpdate(x, z, priority, updateType);
+            this.submitUpdate(x, z, priority, updateType);
         } else {
-            // propagate unload update. On unload, there is no origin entry, so priority calculation may become difficult.
-            // instead of precise priorities based on a shape, we can just unload in any order, considering this isn't seen
+            // Propagate unload update. On unload, there is no origin entry, so priority calculation may become difficult.
+            // Instead of precise priorities based on a shape, we can just unload in any order, considering this isn't seen
             // by any player and should not be noticeable. Also considering unloads happen before loads, so no new load
             // tasks will be issued until all unloads have finished.
             // Instead of completely random order, we can prioritize by manifold distance, so just originPriority - 1
-            submitUpdate(x, z, originPriority - 1, updateType);
+            this.submitUpdate(x, z, originPriority - 1, updateType);
         }
     }
 
@@ -387,7 +424,7 @@ public class ChunkClaimManager implements Runnable {
         // All updates up to here have been seen. We will handle them now.
         this.hasUpdated = false;
 
-        // this loop should not run very long. It will first do any maintenance work (removing stale updates)
+        // This loop should not run very long. It will first do any maintenance work (removing stale updates)
         // then it will submit updates as long as the workers can handle these updates, then it will exit,
         // because otherwise the workers would be overloaded
         while (!this.updateQueue.isEmpty()) {
@@ -405,6 +442,22 @@ public class ChunkClaimManager implements Runnable {
         var chunk = this.chunks.get(index);
         if (chunk == null) return;
         this.complete(chunkAndClaim.chunkFuture(), chunk);
+    }
+
+    private boolean isValidUpdate(double updatePriority, double highestClaimPriority) {
+        if (updatePriority > highestClaimPriority + Vec.EPSILON) {
+            // Higher priority claim was removed, lower priority claim remaining for chunk.
+            // Ignore this stale update caused by higher priority.
+            return false;
+        }
+        //noinspection RedundantIfStatement makes this more readable, I think
+        if (updatePriority < highestClaimPriority - Vec.EPSILON) {
+            // update from lower priority claim.
+            // this should already have been handled by the update for the higher priority claim, so
+            // we can just go next.
+            return false;
+        }
+        return true;
     }
 
     /*
@@ -445,39 +498,32 @@ public class ChunkClaimManager implements Runnable {
     private boolean workUpdate(PrioritizedUpdate update) {
         var x = update.x();
         var z = update.z();
-        // check if update priority changed. This could be because a high priority claim was removed.
+        // Check if update priority changed. This could be because a high priority claim was removed.
         var chunkIndex = CoordConversion.chunkIndex(x, z);
         var entry = this.findHighestPriorityEntry(x, z);
         if (entry == null) {
-            // last claim was removed. We may have to remove the chunk from the chunks map, if that hasn't happened already
+            // The last claim was removed. We may have to remove the chunk from the chunks map if that hasn't happened already
             var chunk = this.chunks.remove(chunkIndex);
             if (chunk != null) {
                 this.unloadChunk(chunk);
-                // we have to propagate the updates to (potentially) unload neighbours
-                this.propagateUpdates(null, update.priority, x, z, UpdateType.UNLOAD_PROPAGATE);
+                // we have to propagate the updates to (potentially) unload neighbors
+                this.propagateUpdates(null, update.priority(), x, z, UpdateType.UNLOAD_PROPAGATE);
             }
-            assert !this.chunks.containsKey(chunkIndex);
             return true;
         }
 
         var highestClaimPriority = calculatePriority(entry, x, z);
-        if (update.priority() > highestClaimPriority + Vec.EPSILON) {
-            // higher priority claim was removed, lower priority claim remaining for chunk.
-            // Ignore this stale update caused by higher priority.
-            return true;
-        }
-        if (update.priority() < highestClaimPriority - Vec.EPSILON) {
-            // update from lower priority claim.
-            // this should already have been handled by the update for the higher priority claim, so
-            // we can just go next.
-            return true;
-        }
 
+        // Check if the update is still valid. If not, we can ignore it
+        if (!this.isValidUpdate(update.priority(), highestClaimPriority)) {
+            return true;
+        }
 
         var chunk = this.chunks.get(chunkIndex);
+
         if (chunk != null) {
-            // if the chunk is already up-to-date we can also ignore this update.
-            // This could especially be a problem if manifold priority drop is used, because
+            // If the chunk is already up to date, we can also ignore this update.
+            // This could especially be a problem if a manifold priority drop is used, because
             // updates with the same existing priority will be scheduled and propagated down the line.
             // This can be prevented by saving the last update priority of a chunk
             var lastUpdatePriority = this.chunksLastUpdatePriority.get(chunkIndex);
@@ -500,7 +546,7 @@ public class ChunkClaimManager implements Runnable {
             }
         }
 
-        // we have to propagate the updates to (potentially) load neighbours
+        // we have to propagate the updates to (potentially) load neighbors
         this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
 
         // The chunk may already be loaded, only start a worker for unloaded chunks
@@ -517,7 +563,7 @@ public class ChunkClaimManager implements Runnable {
             if (unloading != null) {
                 var task = new LoadTask(x, z, highestClaimPriority);
                 this.loadingChunks.put(chunkIndex, task);
-                return tryRunOnWorker(() -> {
+                return ChunkWorker.tryRunOnWorker(() -> {
                     try {
                         var copy = unloading.copy(unloading.getInstance(), x, z);
                         this.workerFinishedGeneration(copy);
@@ -530,7 +576,7 @@ public class ChunkClaimManager implements Runnable {
             var task = new LoadTask(x, z, highestClaimPriority);
             this.loadingChunks.put(chunkIndex, task);
 
-            return tryRunOnWorker(() -> {
+            return ChunkWorker.tryRunOnWorker(() -> {
                 try {
                     this.workerGenerateChunk(task);
                 } catch (Throwable throwable) {
@@ -542,38 +588,15 @@ public class ChunkClaimManager implements Runnable {
         return true;
     }
 
-    private static boolean tryRunOnWorker(Runnable runnable) {
-        // try to reserve a worker
-        if (!AVAILABLE_TASKS.tryAcquire()) {
-            // no worker available
-            return false;
-        }
-        runOnWorker(() -> {
-            try {
-                runnable.run();
-            } catch (Throwable t) {
-                LOGGER.error("Exception during task on worker", t);
-            } finally {
-                AVAILABLE_TASKS.release();
-            }
-        });
-        return true;
-    }
-
-    /**
-     * Wrapper for worker execution.
-     * The worker logic could be improved to dynamically change its behaviour based on detected uses.
-     * If the average chunk loads are very fast (void gen/simple gen) we could use virtual threads with a lower
-     * permit count (as not to use all carrier threads).
-     * Even the carrier threads used by chunk generation will not be used very long and the virtual thread FIFO task queue
-     * will not fill up because of the way loads are lazy.
-     */
-    private static void runOnWorker(Runnable runnable) {
-        WORKER_EXECUTOR.execute(runnable);
-    }
-
     private void unloadChunk(@NotNull Chunk chunk) {
+        var x = chunk.getChunkX();
+        var z = chunk.getChunkZ();
+        var chunkIndex = CoordConversion.chunkIndex(x, z);
+        unloadingChunks.put(chunkIndex, chunk);
+        var scheduler = chunk.getScheduler();
+        scheduler.scheduleNextProcess(() -> {
 
+        });
     }
 
     private void workerGenerateChunk(LoadTask task) {
@@ -622,28 +645,9 @@ public class ChunkClaimManager implements Runnable {
         });
     }
 
-    private void signal() {
-        // we can check if the signalled flag is already set.
-        // If that is true, then the one full iteration will start, but has not started yet, so we don't have to lock
-        // All submitted data will be handled in the next iteration at the latest.
-        // avoiding locking when signalling (when possible) has benefits, because the worker will be able to read with 
-        // less contention, and all operations should just happen faster.
-        if (this.signalled) return;
-        this.signalLock.lock();
-        try {
-            // re-check signalled, maybe someone else already signalled?
-            if (this.signalled) return;
-            this.signalled = true;
-            // signal. We have only 1 reader (manager thread), so we don't need signalAll()
-            this.hasSignalled.signal();
-        } finally {
-            this.signalLock.unlock();
-        }
-    }
-
     private void addTask(Task task) {
         this.tasks.add(task);
-        this.signal();
+        this.signaling.signal();
     }
 
     /**
@@ -654,7 +658,7 @@ public class ChunkClaimManager implements Runnable {
      */
     private <T> void complete(CompletableFuture<T> future, T value) {
         future.complete(value);
-//        Thread.startVirtualThread(() -> future.complete(value));
+        //        Thread.startVirtualThread(() -> future.complete(value));
     }
 
     /**
@@ -665,76 +669,57 @@ public class ChunkClaimManager implements Runnable {
      */
     private void completeExceptionally(CompletableFuture<?> future, Throwable throwable) {
         future.completeExceptionally(throwable);
-//        Thread.startVirtualThread(() -> future.completeExceptionally(throwable));
+        //        Thread.startVirtualThread(() -> future.completeExceptionally(throwable));
     }
 
-    public void addClaim(int x, int z, ChunkAndClaim chunkAndClaim) {
-        addTask(new Task.AddClaim(x, z, chunkAndClaim));
+    private static <T> void link(CompletableFuture<T> future1, CompletableFuture<T> future2) {
+        link(future1, future2, v -> (T) v);
     }
 
-    public void removeClaim(ChunkClaim claim, @NotNull CompletableFuture<Void> future) {
-        addTask(new Task.RemoveClaim(claim, future));
+    private static <T, V> void link(CompletableFuture<T> future1, CompletableFuture<V> future2, Function<T, V> function) {
+        future1.whenComplete((val, throwable) -> {
+            if (throwable != null) future2.completeExceptionally(throwable);
+            else future2.complete(function.apply(val));
+        });
+    }
+
+    public void addClaim(int x, int z, @NotNull ChunkAndClaim chunkAndClaim) {
+        this.addTask(new Task.AddClaim(x, z, chunkAndClaim));
+    }
+
+    public void removeClaim(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) {
+        this.addTask(new Task.RemoveClaim(claim, future));
+    }
+
+    public void saveChunk(@NotNull Chunk chunk, CompletableFuture<Void> future) {
+        this.addTask(new Task.SaveChunk(chunk, future));
+    }
+
+    public void saveChunks(@NotNull CompletableFuture<Void> future) {
+        this.addTask(new Task.SaveChunks(future));
+    }
+
+    public void saveInstanceData(@NotNull CompletableFuture<Void> future) {
+        this.addTask(new Task.SaveInstanceData(future));
+    }
+
+    public void saveInstanceDataAndChunks(@NotNull CompletableFuture<Void> future) {
+        this.addTask(new Task.SaveInstanceDataAndChunks(future));
     }
 
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
-        return Collections.unmodifiableCollection(chunks.values());
+        return Collections.unmodifiableCollection(this.chunks.values());
     }
 
     /**
-     * {@link PrioritizedUpdate#updateType} should only be used for prioritizing, not to execute different update functionality
+     * friendly shutdown without using interrupts or similar.
+     *
+     * @return the future for when shutdown has completed
      */
-    private record PrioritizedUpdate(UpdateType updateType, double priority, int x, int z) {
-        /**
-         * This comparator first compares by update type, then by priority.
-         * Update type order is:
-         * - {@link UpdateType#REMOVE_CLAIM_EXPLICIT}
-         * - {@link UpdateType#ADD_CLAIM_EXPLICIT}
-         * - {@link UpdateType#UNLOAD_PROPAGATE}
-         * - {@link UpdateType#LOAD_PROPAGATE}
-         * <p>
-         * In a specific update type, the order is descending by priority.
-         */
-        private static final Comparator<PrioritizedUpdate> COMPARATOR = Comparator.comparing(PrioritizedUpdate::updateType).thenComparingDouble(PrioritizedUpdate::priority).reversed();
-    }
-
-    /**
-     * <b>Order of the entries is important. Ordered from least important to most important.</b>
-     */
-    private enum UpdateType {
-        /**
-         * When a normal load update happens, which was not explicitly requested (origin of claim).
-         * Basically when a claim tries to load a chunk because of the radius of the claim.
-         */
-        LOAD_PROPAGATE(false),
-        /**
-         * When an unload update occurs. This should always be handled before any implicit loads,
-         * to make sure we actually unload chunks at some point. Otherwise, if there are many chunks
-         * to load and the unload update has a low priority, it will never get handled.
-         */
-        UNLOAD_PROPAGATE(false),
-        /**
-         * Used for the origin chunk of a claim. All origin chunks are handled as prioritized and handled
-         * before any implicit updates. This should make the entire system more snappy to requests.
-         */
-        ADD_CLAIM_EXPLICIT(true),
-        /**
-         * Used for the origin chunk of a claim. All origin chunks are handled as prioritized and handled
-         * before any implicit updates. This should make the entire system more snappy to requests.
-         */
-        REMOVE_CLAIM_EXPLICIT(true);
-
-        private final boolean explicit;
-
-        UpdateType(boolean explicit) {
-            this.explicit = explicit;
-        }
-
-        public boolean isExplicit() {
-            return explicit;
-        }
-    }
-
-    private record ClaimedChunk(int x, int z, CompletableFuture<Chunk> future) {
+    public CompletableFuture<?> shutdown() {
+        this.exit = true;
+        this.signaling.signal();
+        return this.shutdownFuture;
     }
 
     private static final class LoadTask {
@@ -749,6 +734,9 @@ public class ChunkClaimManager implements Runnable {
         }
     }
 
+    private record SaveTask(@NotNull Chunk chunk, @NotNull CompletableFuture<Void> future) {
+    }
+
     private sealed interface Task {
         record AddClaim(int x, int z, ChunkAndClaim chunkAndClaim) implements Task {
         }
@@ -756,97 +744,22 @@ public class ChunkClaimManager implements Runnable {
         record RemoveClaim(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) implements Task {
         }
 
+        record SaveChunk(@NotNull Chunk chunk, @NotNull CompletableFuture<Void> future) implements Task {
+        }
+
+        record SaveChunks(@NotNull CompletableFuture<Void> future) implements Task {
+        }
+
+        record SaveInstanceData(@NotNull CompletableFuture<Void> future) implements Task {
+        }
+
+        record SaveInstanceDataAndChunks(@NotNull CompletableFuture<Void> future) implements Task {
+        }
+
         record ChunkGenerationFinished(@NotNull Chunk chunk) implements Task {
         }
     }
 
-    /**
-     * Used to calculate how much the priority should drop for a chunk with a given distance from the center of the claim.
-     * This is used to make closer chunks load first.
-     */
-    private sealed interface PriorityDrop {
-        /**
-         * Calculates the drop-off for the chunk at x,z.
-         * Returns a double, this should only be used internally.
-         */
-        double calculate(int claimX, int claimZ, int x, int z);
-
-        /**
-         * deltaX^2 + deltaZ^2
-         */
-        record HypotenuseSquared() implements PriorityDrop {
-            @Override
-            public double calculate(int claimX, int claimZ, int x, int z) {
-                var dx = claimX - x;
-                var dz = claimZ - z;
-                return dx * dx + dz * dz;
-            }
-        }
-
-        /**
-         * sqrt(deltaX^2 + deltaZ^2)
-         */
-        record Hypotenuse() implements PriorityDrop {
-            @Override
-            public double calculate(int claimX, int claimZ, int x, int z) {
-                var dx = claimX - x;
-                var dz = claimZ - z;
-                return Math.sqrt(dx * dx + dz * dz);
-            }
-        }
-
-        /**
-         * deltaX + deltaZ
-         */
-        record Simple() implements PriorityDrop {
-            @Override
-            public double calculate(int claimX, int claimZ, int x, int z) {
-                var dx = claimX - x;
-                var dz = claimZ - z;
-                return Math.abs(dx) + Math.abs(dz);
-            }
-        }
-    }
-
-    /**
-     * friendly shutdown without using interrupts or similar.
-     *
-     * @return the future for when shutdown has completed
-     */
-    public CompletableFuture<?> shutdown() {
-        this.exit = true;
-        this.signal();
-        this.WORKER_EXECUTOR.shutdownNow();
-        return this.shutdownFuture.thenCompose(v -> {
-            var fut = new CompletableFuture<Void>();
-            // check this late, in the shutdownFuture. Maybe we don't even have to wait for termination
-            if (this.WORKER_EXECUTOR.isTerminated()) {
-                fut.complete(null);
-            } else {
-                Thread.startVirtualThread(() -> {
-                    try {
-                        if (!this.WORKER_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
-                            LOGGER.error("Generator pool termination took more than 5 seconds. This indicates the generation for a single chunk took more than 5 seconds. No bueno");
-                        }
-                    } catch (InterruptedException e) {
-                        LOGGER.error("Interrupted generation pool termination waiting. This should not happen", e);
-                    } finally {
-                        fut.complete(null);
-                    }
-                });
-            }
-            return fut;
-        });
-    }
-
-    static {
-        WORKER_EXECUTOR = new ForkJoinPool(Runtime.getRuntime().availableProcessors(), pool -> new ForkJoinWorkerThread(pool) {
-            {
-                // set the priority very low. Generation takes time and resources, we don't want generation to slow down any
-                // other logic, such as ticking. Low priority does not mean less total CPU gets used, it just tells the scheduler
-                // to prefer more important tasks, and if there is nothing important to do, then do generation.
-                setPriority(Thread.MIN_PRIORITY);
-            }
-        }, null, true);
+    private record ClaimedChunk(int x, int z, CompletableFuture<Chunk> future) {
     }
 }

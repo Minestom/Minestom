@@ -1,5 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
@@ -13,7 +14,9 @@ public class ChunkManagerGUITest {
     private static final int RGB_WHITE = 0xFFFFFF;
 
     @Test
+    @Disabled // comment this if you want to test the UI to visualize chunk loading
     void gui() {
+        // TODO not quite implemented yet
         var onClose = new CompletableFuture<Void>();
         var frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

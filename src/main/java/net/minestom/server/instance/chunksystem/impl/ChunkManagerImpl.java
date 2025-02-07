@@ -52,22 +52,30 @@ public class ChunkManagerImpl implements ChunkManager {
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstanceData() {
-        return null;
+        var future = new CompletableFuture<Void>();
+        this.chunkClaimManager.saveInstanceData(future);
+        return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
-        return null;
+        var future = new CompletableFuture<Void>();
+        this.chunkClaimManager.saveChunk(chunk, future);
+        return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunks() {
-        return null;
+        var future = new CompletableFuture<Void>();
+        this.chunkClaimManager.saveChunks(future);
+        return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstanceDataAndChunks() {
-        return null;
+        var future = new CompletableFuture<Void>();
+        this.chunkClaimManager.saveInstanceDataAndChunks(future);
+        return future;
     }
 
     @Override
