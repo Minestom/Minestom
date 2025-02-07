@@ -15,7 +15,8 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityQueries;
+import net.minestom.server.entity.EntitySelector;
+import net.minestom.server.entity.EntitySelectors;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -600,7 +601,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
-        return entityTracker.queryStream(EntityQueries.all()).collect(Collectors.toUnmodifiableSet());
+        return entityTracker.queryStream(EntitySelectors.all()).collect(Collectors.toUnmodifiableSet());
     }
 
     /**
@@ -610,7 +611,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the entity having the specified id, null if not found
      */
     public @Nullable Entity getEntityById(int id) {
-        return entityTracker.queryFirst(EntityQueries.id(id));
+        return entityTracker.queryFirst(EntitySelector.selector(EntitySelectors.ID, id));
     }
 
     /**
@@ -620,7 +621,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the entity having the specified uuid, null if not found
      */
     public @Nullable Entity getEntityByUuid(UUID uuid) {
-        return entityTracker.queryFirst(EntityQueries.uuid(uuid));
+        return entityTracker.queryFirst(EntitySelector.selector(EntitySelectors.UUID, uuid));
     }
 
     /**
@@ -644,7 +645,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return entityTracker.queryStream(EntityQueries.players())
+        return entityTracker.queryStream(EntitySelectors.players())
                 .map(entity -> (Player) entity)
                 .collect(Collectors.toUnmodifiableSet());
     }
@@ -657,7 +658,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        final Stream<Entity> chunkEntities = entityTracker.queryStream(EntityQueries.atChunk(chunk.toPosition()));
+        final Stream<Entity> chunkEntities = entityTracker.queryStream(EntitySelector.selector(builder -> builder.chunk(chunk.toPosition())));
         return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
 
@@ -669,7 +670,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return entities that are not further than the specified distance from the transmitted position.
      */
     public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
-        return entityTracker.queryStream(EntityQueries.nearby(range), point).toList();
+        return entityTracker.queryStream(EntitySelector.selector(builder -> builder.range(range)), point).toList();
     }
 
     @Override
@@ -855,7 +856,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
                 value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
-        final List<Entity> entities = getEntityTracker().queryStream(EntityQueries.all()).toList();
+        final List<Entity> entities = getEntityTracker().queryStream(EntitySelectors.all()).toList();
         final int[] entitiesIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
                 getDimensionType(), getWorldAge(), getTime(), chunksMap, entitiesIds,

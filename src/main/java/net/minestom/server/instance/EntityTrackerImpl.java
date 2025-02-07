@@ -9,10 +9,8 @@ import net.minestom.server.coordinate.ChunkRange;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityQueries;
-import net.minestom.server.entity.EntityQuery;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.Player;
-import net.minestom.server.utils.entity.EntityUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +23,8 @@ import java.util.stream.Stream;
 
 final class EntityTrackerImpl implements EntityTracker {
     private static final Logger LOGGER = LoggerFactory.getLogger(EntityTrackerImpl.class);
+
+    private static final EntitySelector<Entity> SELECTOR = EntitySelector.selector(builder -> builder.chunkRange(ServerFlag.ENTITY_VIEW_DISTANCE));
 
     // Indexes
     private final Int2ObjectMap<TrackedEntity> idIndex = new Int2ObjectOpenHashMap<>();
@@ -53,7 +53,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Update
         if (update != null) {
             update.referenceUpdate(point, this);
-            queryConsume(EntityQueries.nearbyByChunkRange(ServerFlag.ENTITY_VIEW_DISTANCE), point, newEntity -> {
+            queryConsume(SELECTOR, point, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -80,7 +80,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Update
         if (update != null) {
             update.referenceUpdate(point, null);
-            queryConsume(EntityQueries.nearbyByChunkRange(ServerFlag.ENTITY_VIEW_DISTANCE), point, newEntity -> {
+            queryConsume(SELECTOR, point, newEntity -> {
                 if (newEntity == entity) return;
                 update.remove(newEntity);
             });
@@ -128,7 +128,7 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntityQuery query, @NotNull Point origin) {
+    public synchronized @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
         Stream<TrackedEntity> stream = switch (query.target()) {
             case ALL_ENTITIES -> idIndex.values().stream();
             case ALL_PLAYERS -> playerIdIndex.values().stream();
@@ -149,11 +149,10 @@ final class EntityTrackerImpl implements EntityTracker {
                     yield Stream.empty();
                 }
             }
-            case SELF -> Stream.empty();
         };
-
-        if (!query.conditions().isEmpty()) {
-            stream = stream.filter(trackedEntity -> EntityUtils.validateQuery(trackedEntity.entity, trackedEntity.lastPosition().getPlain(), query, origin));
+        {
+            EntitySelector<Entity> selector = (EntitySelector<Entity>) query;
+            stream = stream.filter(trackedEntity -> selector.test(origin, trackedEntity.entity()));
         }
 
         switch (query.sort()) {

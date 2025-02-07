@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityQuery;
+import net.minestom.server.entity.EntitySelector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Implementations are expected to be thread-safe.
  */
-public sealed interface EntityTracker extends EntityQuery.Finder permits EntityTrackerImpl {
+public sealed interface EntityTracker extends EntitySelector.Finder<Entity> permits EntityTrackerImpl {
     static @NotNull EntityTracker newTracker() {
         return new EntityTrackerImpl();
     }

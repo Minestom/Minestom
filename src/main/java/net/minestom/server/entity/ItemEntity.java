@@ -1,11 +1,5 @@
 package net.minestom.server.entity;
 
-import java.time.Duration;
-import java.time.temporal.TemporalUnit;
-
-import static net.minestom.server.entity.EntityQuery.Condition.*;
-import static net.minestom.server.entity.EntityQuery.entityQuery;
-
 import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
@@ -17,6 +11,9 @@ import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.time.Duration;
+import java.time.temporal.TemporalUnit;
 
 /**
  * Represents an item on the ground.
@@ -75,11 +72,11 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            final EntityQuery itemQuery = entityQuery(
-                    equalsCondition(EntityQuery.TYPE, EntityType.ITEM),
-                    lowerEqualsCondition(EntityQuery.DISTANCE, (double) mergeRange)
-            );
-            this.instance.getEntityTracker().queryConsume(itemQuery, position, ent -> {
+            final EntitySelector itemSelector = EntitySelector.selector(builder -> {
+                builder.type(EntityType.ITEM);
+                builder.range(mergeRange);
+            });
+            this.instance.getEntityTracker().queryConsume(itemSelector, position, ent -> {
                 if (!(ent instanceof ItemEntity itemEntity)) return;
                 if (itemEntity == this) return;
                 if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;

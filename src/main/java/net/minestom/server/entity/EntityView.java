@@ -15,10 +15,6 @@ import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
-import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
-import static net.minestom.server.entity.EntityQuery.entityQuery;
-
 final class EntityView {
     private static final int RANGE = ServerFlag.ENTITY_VIEW_DISTANCE;
     private final Entity entity;
@@ -242,12 +238,12 @@ final class EntityView {
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            final EntityQuery nearbyQuery = players ? entityQuery(
-                    equalsCondition(EntityQuery.PLAYER, true),
-                    chunkRangeCondition(RANGE)
-            ) : entityQuery(chunkRangeCondition(RANGE));
+            final EntitySelector<Entity> selector = EntitySelector.selector(builder -> {
+                if (players) builder.requirePlayer();
+                builder.chunkRange(RANGE);
+            });
             //noinspection unchecked
-            instance.getEntityTracker().queryConsume(nearbyQuery, point,
+            instance.getEntityTracker().queryConsume(selector, point,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), (T) entity));
             this.lastSize = entityMap.size();
             return entityMap.values();

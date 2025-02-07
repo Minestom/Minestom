@@ -1,19 +1,5 @@
 package net.minestom.server.entity;
 
-import java.nio.charset.StandardCharsets;
-import java.time.Duration;
-import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
-
-import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
-import static net.minestom.server.entity.EntityQuery.Condition.lowerEqualsCondition;
-import static net.minestom.server.entity.EntityQuery.entityQuery;
-
 import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
@@ -111,6 +97,16 @@ import org.jctools.queues.MpscArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Those are the major actors of the server
@@ -393,11 +389,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (experiencePickupCooldown.isReady(time)) {
             experiencePickupCooldown.refreshLastUpdate(time);
             final Point loweredPosition = position.sub(0, .5, 0);
-            final EntityQuery orbQuery = entityQuery(
-                    equalsCondition(EntityQuery.TYPE, EntityType.EXPERIENCE_ORB),
-                    lowerEqualsCondition(EntityQuery.DISTANCE, expandedBoundingBox.width())
-            );
-            this.instance.getEntityTracker().queryConsume(orbQuery, position, ent -> {
+            final EntitySelector orbSelector = EntitySelector.selector(builder -> {
+                builder.type(EntityType.EXPERIENCE_ORB);
+                builder.range(expandedBoundingBox.width());
+            });
+            this.instance.getEntityTracker().queryConsume(orbSelector, position, ent -> {
                 if (!(ent instanceof ExperienceOrb experienceOrb)) return;
                 if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
                     PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
@@ -518,7 +514,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         ChunkRange.chunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
         chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
         // Client also needs all entities resent to them, since those are unloaded as well
-        this.instance.getEntityTracker().queryConsume(EntityQueries.nearbyByChunkRange(settings.effectiveViewDistance()), respawnPosition,
+        this.instance.getEntityTracker().queryConsume(EntitySelector.selector(builder -> builder.chunkRange(settings.effectiveViewDistance())), respawnPosition,
                 entity -> {
                     // Skip refreshing self with a new viewer
                     if (!entity.getUuid().equals(getUuid()) && entity.isViewer(this)) {
@@ -952,7 +948,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     /**
      * Plays a given worldEvent at the given position for this player.
      *
-     * @param worldEvent                the worldEvent to play
+     * @param worldEvent            the worldEvent to play
      * @param x                     x position of the worldEvent
      * @param y                     y position of the worldEvent
      * @param z                     z position of the worldEvent

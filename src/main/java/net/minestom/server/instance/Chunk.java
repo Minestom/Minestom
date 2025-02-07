@@ -8,7 +8,7 @@ import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.EntityQuery;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -28,9 +28,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
-
-import static net.minestom.server.entity.EntityQuery.Condition.chunkRangeCondition;
-import static net.minestom.server.entity.EntityQuery.Condition.equalsCondition;
 
 // TODO light data & API
 
@@ -360,10 +357,11 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
 
         private void collectPlayers(EntityTracker tracker, Int2ObjectOpenHashMap<Player> map) {
             tracker.queryConsume(
-                    EntityQuery.entityQuery(
-                            equalsCondition(EntityQuery.PLAYER, true),
-                            chunkRangeCondition(ServerFlag.CHUNK_VIEW_DISTANCE)
-                    ), Chunk.this.toPosition(),
+                    EntitySelector.selector(builder -> {
+                        builder.requirePlayer();
+                        builder.chunkRange(ServerFlag.CHUNK_VIEW_DISTANCE);
+                    }),
+                    Chunk.this.toPosition(),
                     player -> map.putIfAbsent(player.getEntityId(), (Player) player)
             );
         }
