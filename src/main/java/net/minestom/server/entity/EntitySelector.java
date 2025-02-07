@@ -108,11 +108,11 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
             selectEntityConsume(query, Vec.ZERO, consumer);
         }
 
-        default <R extends T> @Nullable T selectEntityFirst(@NotNull EntitySelector<R> query, @NotNull Point origin) {
+        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> query, @NotNull Point origin) {
             return selectEntityStream(query, origin).findFirst().orElse(null);
         }
 
-        default <R extends T> @Nullable T selectEntityFirst(@NotNull EntitySelector<R> query) {
+        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> query) {
             return selectEntityFirst(query, Vec.ZERO);
         }
     }
