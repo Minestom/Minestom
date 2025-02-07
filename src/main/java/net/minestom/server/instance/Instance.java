@@ -69,7 +69,7 @@ import java.util.stream.Stream;
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
 public abstract class Instance implements Block.Getter, Block.Setter,
-        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience, EntitySelector.Finder<Entity> {
 
     private boolean registered;
 
@@ -945,6 +945,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    @Override
+    public @NotNull <R extends Entity> Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
+        return entityTracker.selectEntityStream(query, origin);
     }
 
     public int getBlockLight(int blockX, int blockY, int blockZ) {
