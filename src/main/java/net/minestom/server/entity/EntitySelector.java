@@ -2,6 +2,8 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagReadable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +31,10 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
 
     static <E, T> @NotNull Property<E, T> property(@NotNull String name, Function<E, T> function) {
         return new EntitySelectorImpl.PropertyImpl<>(name, function);
+    }
+
+    static <E extends TagReadable, T> @NotNull Property<E, T> tagProperty(@NotNull Tag<T> tag) {
+        return property(tag.getKey(), e -> e.getTag(tag));
     }
 
     @Override
