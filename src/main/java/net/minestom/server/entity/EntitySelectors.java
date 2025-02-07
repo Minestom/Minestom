@@ -6,12 +6,14 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-import static net.minestom.server.entity.EntitySelector.Builder;
+import static net.minestom.server.entity.EntitySelector.Target.ALL_ENTITIES;
+import static net.minestom.server.entity.EntitySelector.Target.ALL_PLAYERS;
 import static net.minestom.server.entity.EntitySelector.property;
+import static net.minestom.server.entity.EntitySelector.selector;
 
 public final class EntitySelectors {
-    private static final EntitySelector<Entity> ALL = EntitySelector.selector(builder -> {});
-    private static final EntitySelector<Player> PLAYERS = EntitySelector.selector(Builder::requirePlayer);
+    private static final EntitySelector<Entity> ALL = selector(s -> s.target(ALL_ENTITIES));
+    private static final EntitySelector<Player> PLAYERS = selector(s -> s.target(ALL_PLAYERS));
 
     // Properties
     public static final Property<Entity, Integer> ID = property("id", Entity::getEntityId);

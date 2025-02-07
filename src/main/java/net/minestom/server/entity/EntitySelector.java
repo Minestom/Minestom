@@ -86,7 +86,6 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
         ARBITRARY, FURTHEST, NEAREST, RANDOM
     }
 
-    @SuppressWarnings("unused")
     sealed interface Property<E, T> permits EntitySelectorImpl.PropertyImpl {
         @NotNull String name();
 
