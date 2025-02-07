@@ -40,7 +40,7 @@ public class GiveCommand extends Command {
                 itemStacks.add(itemStack.withAmount(count));
             }
 
-            final List<Entity> targets = sender.queryStream(selector).toList();
+            final List<Entity> targets = sender.selectEntityStream(selector).toList();
             for (Entity target : targets) {
                 if (target instanceof Player) {
                     Player player = (Player) target;

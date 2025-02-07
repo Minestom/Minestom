@@ -77,7 +77,7 @@ public class GamemodeCommand extends Command {
             GameMode mode = context.get(gamemode);
 
             //Set the gamemode for the targets
-            executeOthers(sender, mode, sender.queryStream(selector).toList());
+            executeOthers(sender, mode, sender.selectEntityStream(selector).toList());
         }, gamemode, player);
     }
 

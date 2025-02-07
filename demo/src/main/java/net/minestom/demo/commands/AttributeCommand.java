@@ -74,7 +74,7 @@ public class AttributeCommand extends Command {
 
     private LivingEntity target(CommandSender sender, CommandContext ctx) {
         EntitySelector<Entity> selector = ctx.get("target");
-        Entity entity = sender.queryFirst(selector);
+        Entity entity = sender.selectEntityFirst(selector);
         if (!(entity instanceof LivingEntity livingEntity)) {
             return null;
         }

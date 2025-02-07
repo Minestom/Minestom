@@ -88,27 +88,27 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
     }
 
     interface Finder<T> {
-        @NotNull Stream<@NotNull T> queryStream(@NotNull EntitySelector<? extends T> query, @NotNull Point origin);
+        @NotNull Stream<@NotNull T> selectEntityStream(@NotNull EntitySelector<? extends T> query, @NotNull Point origin);
 
-        default @NotNull Stream<@NotNull T> queryStream(@NotNull EntitySelector<? extends T> query) {
-            return queryStream(query, Vec.ZERO);
+        default @NotNull Stream<@NotNull T> selectEntityStream(@NotNull EntitySelector<? extends T> query) {
+            return selectEntityStream(query, Vec.ZERO);
         }
 
-        default void queryConsume(@NotNull EntitySelector<? extends T> query, @NotNull Point origin, Consumer<T> consumer) {
-            final Stream<T> stream = queryStream(query, origin);
+        default void selectEntityConsume(@NotNull EntitySelector<? extends T> query, @NotNull Point origin, Consumer<T> consumer) {
+            final Stream<T> stream = selectEntityStream(query, origin);
             stream.forEach(consumer);
         }
 
-        default void queryConsume(@NotNull EntitySelector<? extends T> query, Consumer<T> consumer) {
-            queryConsume(query, Vec.ZERO, consumer);
+        default void selectEntityConsume(@NotNull EntitySelector<? extends T> query, Consumer<T> consumer) {
+            selectEntityConsume(query, Vec.ZERO, consumer);
         }
 
-        default @Nullable T queryFirst(@NotNull EntitySelector<? extends T> query, @NotNull Point origin) {
-            return queryStream(query, origin).findFirst().orElse(null);
+        default @Nullable T selectEntityFirst(@NotNull EntitySelector<? extends T> query, @NotNull Point origin) {
+            return selectEntityStream(query, origin).findFirst().orElse(null);
         }
 
-        default @Nullable T queryFirst(@NotNull EntitySelector<? extends T> query) {
-            return queryFirst(query, Vec.ZERO);
+        default @Nullable T selectEntityFirst(@NotNull EntitySelector<? extends T> query) {
+            return selectEntityFirst(query, Vec.ZERO);
         }
     }
 }

@@ -72,11 +72,11 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            final EntitySelector itemSelector = EntitySelector.selector(builder -> {
+            final EntitySelector<Entity> itemSelector = EntitySelector.selector(builder -> {
                 builder.type(EntityType.ITEM);
                 builder.range(mergeRange);
             });
-            this.instance.getEntityTracker().queryConsume(itemSelector, position, ent -> {
+            this.instance.getEntityTracker().selectEntityConsume(itemSelector, position, ent -> {
                 if (!(ent instanceof ItemEntity itemEntity)) return;
                 if (itemEntity == this) return;
                 if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;

@@ -30,13 +30,13 @@ public class EntityTrackerTest {
             }
         };
         EntityTracker tracker = EntityTracker.newTracker();
-        assertTrue(tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().isEmpty());
+        assertTrue(tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().isEmpty());
 
         tracker.register(ent1, Vec.ZERO, updater);
-        assertEquals(1, tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
 
         tracker.unregister(ent1, updater);
-        assertEquals(0, tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(0, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
     }
 
     @Test
@@ -57,11 +57,11 @@ public class EntityTrackerTest {
         EntityTracker tracker = EntityTracker.newTracker();
 
         tracker.register(ent1, Vec.ZERO, updater);
-        assertEquals(1, tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
 
         tracker.move(ent1, new Vec(32, 0, 32), updater);
-        assertEquals(0, tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
-        assertEquals(1, tracker.queryStream(EntitySelector.selector(builder -> builder.chunk(new Vec(32, 0, 32)))).toList().size());
+        assertEquals(0, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(new Vec(32, 0, 32)))).toList().size());
     }
 
     @Test
@@ -144,35 +144,35 @@ public class EntityTrackerTest {
         tracker.register(ent2, new Vec(5, 0, 0), updater);
         tracker.register(ent3, new Vec(50, 0, 0), updater);
 
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(4)), Vec.ZERO, entity -> fail("No entity should be nearby"));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(4)), Vec.ZERO, entity -> fail("No entity should be nearby"));
 
         tracker.register(ent1, Vec.ZERO, updater);
 
         Set<Entity> entities = new HashSet<>();
 
         entities.add(ent1);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(4)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(4)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
 
         entities.add(ent1);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(4.99)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(4.99)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
 
         entities.add(ent1);
         entities.add(ent2);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(5)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(5)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
 
         entities.add(ent1);
         entities.add(ent2);
         entities.add(ent3);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(50)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(50)), Vec.ZERO, entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
 
         // Chunk border
         tracker.move(ent1, new Vec(16, 0, 0), updater);
         entities.add(ent1);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(2)), new Vec(15, 0, 0), entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(2)), new Vec(15, 0, 0), entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
     }
 
@@ -202,17 +202,17 @@ public class EntityTrackerTest {
 
         entities.add(ent1);
         entities.add(ent2);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(16)), Vec.ZERO, entities::add);
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(16)), Vec.ZERO, entities::add);
         assertEquals(Set.of(ent1, ent2), entities);
         entities.clear();
 
         entities.add(ent1);
         entities.add(ent2);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(5)), new Vec(8, 0, 8), entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(5)), new Vec(8, 0, 8), entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
 
         entities.add(ent2);
-        tracker.queryConsume(EntitySelector.selector(builder -> builder.range(1)), new Vec(8, 0, 8), entity -> assertTrue(entities.remove(entity)));
+        tracker.selectEntityConsume(EntitySelector.selector(builder -> builder.range(1)), new Vec(8, 0, 8), entity -> assertTrue(entities.remove(entity)));
         assertEquals(0, entities.size());
     }
 }

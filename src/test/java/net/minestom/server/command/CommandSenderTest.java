@@ -60,7 +60,7 @@ public class CommandSenderTest {
         }
 
         @Override
-        public @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+        public @NotNull Stream<@NotNull Entity> selectEntityStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
             throw new UnsupportedOperationException();
         }
     }

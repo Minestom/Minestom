@@ -243,7 +243,7 @@ final class EntityView {
                 builder.chunkRange(RANGE);
             });
             //noinspection unchecked
-            instance.getEntityTracker().queryConsume(selector, point,
+            instance.getEntityTracker().selectEntityConsume(selector, point,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), (T) entity));
             this.lastSize = entityMap.size();
             return entityMap.values();

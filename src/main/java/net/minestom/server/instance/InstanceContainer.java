@@ -268,7 +268,7 @@ public class InstanceContainer extends Instance {
         chunk.sendPacketToViewers(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
         // Remove all entities in chunk
-        getEntityTracker().queryConsume(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ)), Entity::remove);
+        getEntityTracker().selectEntityConsume(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ)), Entity::remove);
         // Clear cache
         this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         chunk.unload();

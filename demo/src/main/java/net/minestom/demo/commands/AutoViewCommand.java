@@ -33,7 +33,7 @@ public class AutoViewCommand extends Command {
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
             final EntitySelector<Entity> selector = context.get("targets");
-            final List<Entity> entities = sender.queryStream(selector).toList();
+            final List<Entity> entities = sender.selectEntityStream(selector).toList();
             player.updateViewableRule(entities::contains);
             player.sendMessage("Viewable rule updated to see " + entities.size() + " players");
         }, Literal("rule-viewable"), Entity("targets").onlyPlayers(true));
@@ -42,7 +42,7 @@ public class AutoViewCommand extends Command {
         addSyntax((sender, context) -> {
             if (!(sender instanceof Player player)) return;
             final EntitySelector<Entity> selector = context.get("targets");
-            final List<Entity> entities = sender.queryStream(selector).toList();
+            final List<Entity> entities = sender.selectEntityStream(selector).toList();
             player.updateViewerRule(entities::contains);
             player.sendMessage("Viewer rule updated to see " + entities.size() + " entities");
         }, Literal("rule-viewer"), Entity("targets"));

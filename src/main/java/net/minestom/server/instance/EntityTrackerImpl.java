@@ -53,7 +53,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Update
         if (update != null) {
             update.referenceUpdate(point, this);
-            queryConsume(SELECTOR, point, newEntity -> {
+            selectEntityConsume(SELECTOR, point, newEntity -> {
                 if (newEntity == entity) return;
                 update.add(newEntity);
             });
@@ -80,7 +80,7 @@ final class EntityTrackerImpl implements EntityTracker {
         // Update
         if (update != null) {
             update.referenceUpdate(point, null);
-            queryConsume(SELECTOR, point, newEntity -> {
+            selectEntityConsume(SELECTOR, point, newEntity -> {
                 if (newEntity == entity) return;
                 update.remove(newEntity);
             });
@@ -128,7 +128,7 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized @NotNull Stream<@NotNull Entity> queryStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
+    public synchronized @NotNull Stream<@NotNull Entity> selectEntityStream(@NotNull EntitySelector<? extends Entity> query, @NotNull Point origin) {
         Stream<TrackedEntity> stream = switch (query.target()) {
             case ALL_ENTITIES -> idIndex.values().stream();
             case ALL_PLAYERS -> playerIdIndex.values().stream();

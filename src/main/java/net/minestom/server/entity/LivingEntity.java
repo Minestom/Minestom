@@ -198,11 +198,11 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
             final Point loweredPosition = position.sub(0, .5, 0);
-            final EntitySelector itemSelector = EntitySelector.selector(builder -> {
+            final EntitySelector<Entity> itemSelector = EntitySelector.selector(builder -> {
                 builder.type(EntityType.ITEM);
                 builder.range(expandedBoundingBox.width());
             });
-            this.instance.getEntityTracker().queryConsume(itemSelector, position, ent -> {
+            this.instance.getEntityTracker().selectEntityConsume(itemSelector, position, ent -> {
                 if (!(ent instanceof ItemEntity itemEntity)) return;
                 if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                 if (!itemEntity.isPickable()) return;
