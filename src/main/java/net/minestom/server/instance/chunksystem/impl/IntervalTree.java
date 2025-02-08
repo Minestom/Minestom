@@ -8,6 +8,14 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * Modified RBTree taken from {@link TreeSet} to support intervals.
+ * Every node contains an extra maxEnd and a {@link TreeMap}, more information
+ * can be taken on from
+ * <a href="https://en.wikipedia.org/w/index.php?title=Interval_tree&oldid=1233051410">Wikipedia</a>
+ *
+ * @param <T>
+ */
 public class IntervalTree<T> {
 
     static final boolean RED = false;
