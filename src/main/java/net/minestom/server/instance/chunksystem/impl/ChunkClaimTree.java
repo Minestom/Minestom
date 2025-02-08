@@ -114,15 +114,7 @@ public class ChunkClaimTree {
                         var entries = treeZEntry.getValue();
                         for (var entry : entries) {
                             var shape = entry.shape();
-                            var inX = radiusX;
-                            var inZ = radiusZ;
-                            if (shape.doesWantSquared()) {
-                                inX = radiusSqX;
-                                if (inX == -1) inX = radiusSqX = radiusX * radiusX;
-                                inZ = radiusSqZ;
-                                if (inZ == -1) inZ = radiusSqZ = radiusZ * radiusZ;
-                            }
-                            if (shape.isInRadius(inX, inZ, centerX, centerZ, x, z)) {
+                            if (shape.isInRadius(radiusX, radiusZ, centerX, centerZ, x, z)) {
                                 if (!function.test(new CompleteEntry(minX, minZ, maxX, maxZ, entry))) {
                                     return false;
                                 }

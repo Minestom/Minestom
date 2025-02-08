@@ -28,47 +28,47 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) {
     /**
      * The shape of a claim. Only matters if radius > 0
      */
-    public enum Shape {
-        CIRCLE(true) {
-            @Override
-            public final boolean isInRadius(int radiusSqX, int radiusSqZ, int x, int z, int ox, int oz) {
-                var dx = x - ox;
-                var dz = z - oz;
-                var dxSq = dx * dx;
-                var dzSq = dz * dz;
-                return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
-            }
-        }, SQUARE(true) {
-            @Override
-            public final boolean isInRadius(int radiusSqX, int radiusSqZ, int x, int z, int ox, int oz) {
-                var dx = Math.abs(x - ox);
-                var dz = Math.abs(z - oz);
-                var dxSq = dx * dx;
-                var dzSq = dz * dz;
-                return dxSq <= radiusSqX && dzSq <= radiusSqZ;
-            }
-        }, DIAMOND(false) {
-            @Override
-            public final boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
-                var dx = Math.abs(x - ox);
-                var dz = Math.abs(z - oz);
-                var d = (float) dx / radiusX + (float) dz / radiusZ;
-                return d <= 1F;
-            }
-        };
+    public interface Shape {
+        @NotNull Shape CIRCLE = new CircleShape();
+        @NotNull Shape SQUARE = new SquareShape();
+        @NotNull Shape DIAMOND = new DiamondShape();
 
-        private final boolean wantSquared;
+        boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
+    }
 
-        Shape(boolean wantSquared) {
-            this.wantSquared = wantSquared;
+    private record CircleShape() implements Shape {
+        @Override
+        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+            var radiusSqX = radiusX * radiusX;
+            var radiusSqZ = radiusZ * radiusZ;
+            var dx = x - ox;
+            var dz = z - oz;
+            var dxSq = dx * dx;
+            var dzSq = dz * dz;
+            return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
         }
+    }
 
-        @ApiStatus.Internal
-        public boolean doesWantSquared() {
-            return wantSquared;
+    private record SquareShape() implements Shape {
+        @Override
+        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+            var radiusSqX = radiusX * radiusX;
+            var radiusSqZ = radiusZ * radiusZ;
+            var dx = Math.abs(x - ox);
+            var dz = Math.abs(z - oz);
+            var dxSq = dx * dx;
+            var dzSq = dz * dz;
+            return dxSq <= radiusSqX && dzSq <= radiusSqZ;
         }
+    }
 
-        @ApiStatus.Internal
-        public abstract boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
+    private record DiamondShape() implements Shape {
+        @Override
+        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+            var dx = (float) Math.abs(x - ox);
+            var dz = (float) Math.abs(z - oz);
+            var d = dx / radiusX + dz / radiusZ;
+            return d <= 1F;
+        }
     }
 }
