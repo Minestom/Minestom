@@ -3,7 +3,6 @@ package net.minestom.server.entity;
 import net.minestom.server.entity.metadata.item.ItemEntityMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.entity.EntityItemMergeEvent;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.thread.Acquirable;
 import net.minestom.server.utils.MathUtils;
@@ -73,25 +72,29 @@ public class ItemEntity extends Entity {
                 (mergeDelay == null || !Cooldown.hasCooldown(time, lastMergeCheck, mergeDelay))) {
             this.lastMergeCheck = time;
 
-            this.instance.getEntityTracker().nearbyEntities(position, mergeRange,
-                    EntityTracker.Target.ITEMS, itemEntity -> {
-                        if (itemEntity == this) return;
-                        if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
-                        if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
+            final EntitySelector<Entity> itemSelector = EntitySelector.selector(builder -> {
+                builder.type(EntityType.ITEM);
+                builder.range(mergeRange);
+            });
+            this.instance.getEntityTracker().selectEntityConsume(itemSelector, position, ent -> {
+                if (!(ent instanceof ItemEntity itemEntity)) return;
+                if (itemEntity == this) return;
+                if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
+                if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
-                        final ItemStack itemStackEntity = itemEntity.getItemStack();
-                        final boolean canStack = itemStack.isSimilar(itemStackEntity);
+                final ItemStack itemStackEntity = itemEntity.getItemStack();
+                final boolean canStack = itemStack.isSimilar(itemStackEntity);
 
-                        if (!canStack) return;
-                        final int totalAmount = itemStack.amount() + itemStackEntity.amount();
-                        if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
-                        final ItemStack result = itemStack.withAmount(totalAmount);
-                        EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
-                        EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
-                            setItemStack(entityItemMergeEvent.getResult());
-                            itemEntity.remove();
-                        });
-                    });
+                if (!canStack) return;
+                final int totalAmount = itemStack.amount() + itemStackEntity.amount();
+                if (!MathUtils.isBetween(totalAmount, 0, itemStack.maxStackSize())) return;
+                final ItemStack result = itemStack.withAmount(totalAmount);
+                EntityItemMergeEvent entityItemMergeEvent = new EntityItemMergeEvent(this, itemEntity, result);
+                EventDispatcher.callCancellable(entityItemMergeEvent, () -> {
+                    setItemStack(entityItemMergeEvent.getResult());
+                    itemEntity.remove();
+                });
+            });
         }
     }
 

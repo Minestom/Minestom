@@ -52,12 +52,18 @@ public class ChunkViewerIntegrationTest {
         // Check chunk#sendChunk
         {
             var tracker = connection.trackIncoming(ChunkDataPacket.class);
+            int invalidViewer = 0;
             for (int x = -viewRadius; x <= viewRadius; x++) {
                 for (int z = -viewRadius; z <= viewRadius; z++) {
-                    instance.getChunk(x, z).sendChunk();
+                    final Chunk chunk = instance.getChunk(x, z);
+                    assert chunk != null;
+                    if (chunk.getViewers().size() != 1) {
+                        invalidViewer += 1;
+                    }
+                    chunk.sendChunk();
                 }
             }
-            assertEquals(count, tracker.collect().size());
+            assertEquals(count, tracker.collect().size(), "Invalid viewer count: " + invalidViewer);
         }
     }
 }

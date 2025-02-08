@@ -12,7 +12,7 @@ public final class EntityUtils {
             EntityType.ZOMBIFIED_PIGLIN);
 
     /**
-     * @param vehicle the target vehicle
+     * @param vehicle   the target vehicle
      * @param passenger the target passenger
      * @return the height offset for the passenger of this vehicle
      */

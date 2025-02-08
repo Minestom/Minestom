@@ -6,7 +6,6 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +22,7 @@ final class EntityView {
 
     // Decide if this entity should be viewable to X players
     public final Option<Player> viewableOption;
-    // Decide if this entity should view X entities
+    // Decide if this entity should view X entities (Only useful for players)
     public final Option<Entity> viewerOption;
 
     final Set<Player> set = new SetImpl();
@@ -33,7 +32,7 @@ final class EntityView {
 
     public EntityView(Entity entity) {
         this.entity = entity;
-        this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
+        this.viewableOption = new Option<>(true, Entity::autoViewEntities,
                 player -> {
                     // Add viewable
                     var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
@@ -62,7 +61,8 @@ final class EntityView {
                     }
                     entity.updateOldViewer(player);
                 });
-        this.viewerOption = new Option<>(EntityTracker.Target.ENTITIES, Entity::isAutoViewable,
+        // An entity viewing another entity is no-op, only players matter.
+        this.viewerOption = new Option<>(false, Entity::isAutoViewable,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.addition.accept(player) : null,
                 entity instanceof Player player ? e -> e.viewEngine.viewableOption.removal.accept(player) : null);
     }
@@ -131,7 +131,7 @@ final class EntityView {
         @SuppressWarnings("rawtypes")
         private static final AtomicIntegerFieldUpdater<EntityView.Option> UPDATER = AtomicIntegerFieldUpdater.newUpdater(EntityView.Option.class, "auto");
         // Entities that should be tracked from this option
-        private final EntityTracker.Target<T> target;
+        private final boolean players;
         // The condition that must be met for this option to be considered auto.
         private final Predicate<T> loopPredicate;
         // The consumers to be called when an entity is added/removed.
@@ -144,9 +144,9 @@ final class EntityView {
         // null if auto-viewable
         private Predicate<T> predicate = null;
 
-        public Option(EntityTracker.Target<T> target, Predicate<T> loopPredicate,
+        public Option(boolean players, Predicate<T> loopPredicate,
                       Consumer<T> addition, Consumer<T> removal) {
-            this.target = target;
+            this.players = players;
             this.loopPredicate = loopPredicate;
             this.addition = addition;
             this.removal = removal;
@@ -199,10 +199,12 @@ final class EntityView {
 
         void updateRule0(Predicate<T> predicate) {
             if (predicate == null) {
+                // No predicate, add all auto-entity which were previously manually hidden
                 update(loopPredicate, entity -> {
                     if (!isRegistered(entity)) addition.accept(entity);
                 });
             } else {
+                // New predicate, add/remove accordingly
                 update(loopPredicate, entity -> {
                     final boolean result = predicate.test(entity);
                     if (result != isRegistered(entity)) {
@@ -226,13 +228,21 @@ final class EntityView {
         private int lastSize;
 
         private Collection<T> references() {
+            // Slow operation to collect all nearby entities affected by this option:
+            // * viewable = collect players
+            // * viewer   = collect entities
+            // This is necessary when update rules are modified.
             final TrackedLocation trackedLocation = EntityView.this.trackedLocation;
             if (trackedLocation == null) return List.of();
             final Instance instance = trackedLocation.instance();
             final Point point = trackedLocation.point();
 
             Int2ObjectOpenHashMap<T> entityMap = new Int2ObjectOpenHashMap<>(lastSize);
-            instance.getEntityTracker().nearbyEntitiesByChunkRange(point, RANGE, target,
+            final EntitySelector<T> selector = EntitySelector.selector(builder -> {
+                if (players) builder.requirePlayer();
+                builder.chunkRange(RANGE);
+            });
+            instance.getEntityTracker().selectEntityConsume(selector, point,
                     (entity) -> entityMap.putIfAbsent(entity.getEntityId(), entity));
             this.lastSize = entityMap.size();
             return entityMap.values();

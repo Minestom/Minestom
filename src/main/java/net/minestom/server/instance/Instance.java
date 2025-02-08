@@ -15,8 +15,8 @@ import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ExperienceOrb;
+import net.minestom.server.entity.EntitySelector;
+import net.minestom.server.entity.EntitySelectors;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -56,6 +56,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Instances are what are called "worlds" in Minecraft, you can add an entity in it using {@link Entity#setInstance(Instance)}.
@@ -68,7 +69,7 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
 public abstract class Instance implements Block.Getter, Block.Setter,
-        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience, EntitySelector.Finder<Entity> {
 
     private boolean registered;
 
@@ -119,7 +120,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
@@ -129,7 +130,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
@@ -139,7 +140,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
@@ -439,7 +440,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the age of this instance in tick. It will send the age to all players.
      * Will send new age to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
-     * 
+     *
      * @param worldAge the age of this instance in tick
      */
     public void setWorldAge(long worldAge) {
@@ -600,7 +601,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return an unmodifiable {@link Set} containing all the entities in the instance
      */
     public @NotNull Set<@NotNull Entity> getEntities() {
-        return entityTracker.entities();
+        return entityTracker.selectEntity(EntitySelectors.all()).collect(Collectors.toUnmodifiableSet());
     }
 
     /**
@@ -610,7 +611,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the entity having the specified id, null if not found
      */
     public @Nullable Entity getEntityById(int id) {
-        return entityTracker.getEntityById(id);
+        return entityTracker.selectEntityFirst(EntitySelector.selector(EntitySelectors.ID, id));
     }
 
     /**
@@ -620,7 +621,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the entity having the specified uuid, null if not found
      */
     public @Nullable Entity getEntityByUuid(UUID uuid) {
-        return entityTracker.getEntityByUuid(uuid);
+        return entityTracker.selectEntityFirst(EntitySelector.selector(EntitySelectors.UUID, uuid));
     }
 
     /**
@@ -630,7 +631,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return the player having the specified uuid, null if not found or not a player
      */
     public @Nullable Player getPlayerByUuid(UUID uuid) {
-        Entity entity = entityTracker.getEntityByUuid(uuid);
+        final Entity entity = getEntityByUuid(uuid);
         if (entity instanceof Player player) {
             return player;
         }
@@ -644,32 +645,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      */
     @Override
     public @NotNull Set<@NotNull Player> getPlayers() {
-        return entityTracker.entities(EntityTracker.Target.PLAYERS);
-    }
-
-    /**
-     * Gets the creatures in the instance;
-     *
-     * @return an unmodifiable {@link Set} containing all the creatures in the instance
-     */
-    @Deprecated
-    public @NotNull Set<@NotNull EntityCreature> getCreatures() {
-        return entityTracker.entities().stream()
-                .filter(EntityCreature.class::isInstance)
-                .map(entity -> (EntityCreature) entity)
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    /**
-     * Gets the experience orbs in the instance.
-     *
-     * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
-     */
-    @Deprecated
-    public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
-        return entityTracker.entities().stream()
-                .filter(ExperienceOrb.class::isInstance)
-                .map(entity -> (ExperienceOrb) entity)
+        return entityTracker.selectEntity(EntitySelectors.players())
+                .map(entity -> (Player) entity)
                 .collect(Collectors.toUnmodifiableSet());
     }
 
@@ -681,7 +658,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * if {@code chunk} is unloaded, return an empty {@link HashSet}
      */
     public @NotNull Set<@NotNull Entity> getChunkEntities(Chunk chunk) {
-        var chunkEntities = entityTracker.chunkEntities(chunk.toPosition(), EntityTracker.Target.ENTITIES);
+        final Stream<Entity> chunkEntities = entityTracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(chunk.toPosition())));
         return ObjectArraySet.ofUnchecked(chunkEntities.toArray(Entity[]::new));
     }
 
@@ -693,9 +670,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @return entities that are not further than the specified distance from the transmitted position.
      */
     public @NotNull Collection<Entity> getNearbyEntities(@NotNull Point point, double range) {
-        List<Entity> result = new ArrayList<>();
-        this.entityTracker.nearbyEntities(point, range, EntityTracker.Target.ENTITIES, result::add);
-        return result;
+        return entityTracker.selectEntity(EntitySelector.selector(builder -> builder.range(range)), point).toList();
     }
 
     @Override
@@ -881,9 +856,10 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public @NotNull InstanceSnapshot updateSnapshot(@NotNull SnapshotUpdater updater) {
         final Map<Long, AtomicReference<ChunkSnapshot>> chunksMap = updater.referencesMapLong(getChunks(),
                 value -> CoordConversion.chunkIndex(value.getChunkX(), value.getChunkZ()));
-        final int[] entities = ArrayUtils.mapToIntArray(entityTracker.entities(), Entity::getEntityId);
+        final List<Entity> entities = getEntityTracker().selectEntity(EntitySelectors.all()).toList();
+        final int[] entitiesIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Instance(updater.reference(MinecraftServer.process()),
-                getDimensionType(), getWorldAge(), getTime(), chunksMap, entities,
+                getDimensionType(), getWorldAge(), getTime(), chunksMap, entitiesIds,
                 tagHandler.readableCopy());
     }
 
@@ -969,6 +945,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     public @NotNull Pointers pointers() {
         return this.pointers;
+    }
+
+    @Override
+    public @NotNull <R extends Entity> Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
+        return entityTracker.selectEntity(selector, origin);
     }
 
     public int getBlockLight(int blockX, int blockY, int blockZ) {

@@ -72,6 +72,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Stream;
 
 /**
  * Could be a player, a monster, or an object.
@@ -79,7 +80,7 @@ import java.util.function.UnaryOperator;
  * To create your own entity you probably want to extend {@link LivingEntity} or {@link EntityCreature} instead.
  */
 public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, EventHandler<EntityEvent>, Taggable,
-        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity> {
+        HoverEventSource<ShowEntity>, Sound.Emitter, Shape, AcquirableSource<Entity>, EntitySelector.Finder<Entity> {
     // This is somewhat arbitrary, but we don't want to hit the max int ever because it is very easy to
     // overflow while working with a position at the max int (for example, looping over a bounding box)
     private static final int MAX_COORDINATE = 2_000_000_000;
@@ -113,7 +114,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     // Velocity
     protected Vec velocity = Vec.ZERO; // Movement in block per second
-    protected boolean lastVelocityWasZero = true;
     protected boolean hasPhysics = true;
     protected boolean collidesWithEntities = true;
     protected boolean preventBlockPlacement = true;
@@ -122,11 +122,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     protected int gravityTickCount; // Number of tick where gravity tick was applied
 
     private final int id;
-    // Players must be aware of all surrounding entities
-    // General entities should only be aware of surrounding players to update their viewing list
-    private final EntityTracker.Target<Entity> trackingTarget = this instanceof Player ?
-            EntityTracker.Target.ENTITIES : EntityTracker.Target.class.cast(EntityTracker.Target.PLAYERS);
-    protected final EntityTracker.Update<Entity> trackingUpdate = new EntityTracker.Update<>() {
+    protected final EntityTracker.Update trackingUpdate = new EntityTracker.Update() {
         @Override
         public void add(@NotNull Entity entity) {
             viewEngine.handleAutoViewAddition(entity);
@@ -147,7 +143,6 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     };
 
     protected final EntityView viewEngine = new EntityView(this);
-    protected final Set<Player> viewers = viewEngine.set;
     private final TagHandler tagHandler = TagHandler.newHandler();
     private final Scheduler scheduler = Scheduler.newScheduler();
     private final EventNode<EntityEvent> eventNode;
@@ -346,7 +341,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            if (this instanceof Player player)
+                player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -522,7 +518,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     @Override
     public @NotNull Set<Player> getViewers() {
-        return viewers;
+        return viewEngine.set;
     }
 
     /**
@@ -816,7 +812,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                     player.sendPacket(instance.createTimePacket());
                     player.sendPackets(instance.getWeather().createWeatherPackets());
                 }
-                instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
+                instance.getEntityTracker().register(this, spawnPosition, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
             } catch (Exception e) {
@@ -844,7 +840,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     private void removeFromInstance(Instance instance) {
         EventDispatcher.call(new RemoveEntityFromInstanceEvent(instance, this));
-        instance.getEntityTracker().unregister(this, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().unregister(this, trackingUpdate);
         this.viewEngine.forManuals(this::removeViewer);
     }
 
@@ -1342,7 +1338,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         // Handle chunk switch
         final Instance instance = getInstance();
         assert instance != null;
-        instance.getEntityTracker().move(this, newPosition, trackingTarget, trackingUpdate);
+        instance.getEntityTracker().move(this, newPosition, trackingUpdate);
         final int lastChunkX = currentChunk.getChunkX();
         final int lastChunkZ = currentChunk.getChunkZ();
         final int newChunkX = newPosition.chunkX();
@@ -1796,4 +1792,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return acquirable;
     }
 
+    @Override
+    public <R extends Entity> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
+        final Instance instance = getInstance();
+        if (instance == null) {
+            return Stream.empty();
+        }
+        return instance.getEntityTracker().selectEntity(selector, origin);
+    }
 }

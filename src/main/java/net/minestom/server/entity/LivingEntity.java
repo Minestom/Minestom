@@ -19,7 +19,6 @@ import net.minestom.server.event.entity.EntityFireExtinguishEvent;
 import net.minestom.server.event.entity.EntitySetFireEvent;
 import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
-import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
@@ -199,19 +198,23 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
             final Point loweredPosition = position.sub(0, .5, 0);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
-                    EntityTracker.Target.ITEMS, itemEntity -> {
-                        if (this instanceof Player player && !itemEntity.isViewer(player)) return;
-                        if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                                final ItemStack item = itemEntity.getItemStack();
-                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
-                                itemEntity.remove();
-                            });
-                        }
+            final EntitySelector<Entity> itemSelector = EntitySelector.selector(builder -> {
+                builder.type(EntityType.ITEM);
+                builder.range(expandedBoundingBox.width());
+            });
+            this.instance.getEntityTracker().selectEntityConsume(itemSelector, position, ent -> {
+                if (!(ent instanceof ItemEntity itemEntity)) return;
+                if (this instanceof Player player && !itemEntity.isViewer(player)) return;
+                if (!itemEntity.isPickable()) return;
+                if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
+                    PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                    EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                        final ItemStack item = itemEntity.getItemStack();
+                        sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
+                        itemEntity.remove();
                     });
+                }
+            });
         }
     }
 

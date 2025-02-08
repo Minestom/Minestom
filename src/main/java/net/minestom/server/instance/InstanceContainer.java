@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
@@ -23,8 +24,8 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
-import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketSendingUtils;
@@ -267,7 +268,7 @@ public class InstanceContainer extends Instance {
         chunk.sendPacketToViewers(new UnloadChunkPacket(chunkX, chunkZ));
         EventDispatcher.call(new InstanceChunkUnloadEvent(this, chunk));
         // Remove all entities in chunk
-        getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).forEach(Entity::remove);
+        getEntityTracker().selectEntityConsume(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ)), Entity::remove);
         // Clear cache
         this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         chunk.unload();

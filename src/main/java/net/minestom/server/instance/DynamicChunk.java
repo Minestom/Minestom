@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.EntitySelector;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
@@ -335,7 +336,7 @@ public class DynamicChunk extends Chunk {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
-        var entities = instance.getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES);
+        var entities = instance.getEntityTracker().selectEntity(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ))).toList();
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),
