@@ -27,7 +27,7 @@ public class EntitySelectorCommand extends Command {
 
     private void executor(CommandSender commandSender, CommandContext context) {
         EntitySelector<Entity> selector = context.get("entities");
-        List<Entity> entities = commandSender.selectEntityStream(selector).toList();
+        List<Entity> entities = commandSender.selectEntity(selector).toList();
         System.out.println("found " + entities.size() + " entities");
     }
 }

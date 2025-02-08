@@ -30,13 +30,13 @@ public class EntityTrackerTest {
             }
         };
         EntityTracker tracker = EntityTracker.newTracker();
-        assertTrue(tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().isEmpty());
+        assertTrue(tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().isEmpty());
 
         tracker.register(ent1, Vec.ZERO, updater);
-        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
 
         tracker.unregister(ent1, updater);
-        assertEquals(0, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(0, tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
     }
 
     @Test
@@ -57,11 +57,11 @@ public class EntityTrackerTest {
         EntityTracker tracker = EntityTracker.newTracker();
 
         tracker.register(ent1, Vec.ZERO, updater);
-        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
 
         tracker.move(ent1, new Vec(32, 0, 32), updater);
-        assertEquals(0, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
-        assertEquals(1, tracker.selectEntityStream(EntitySelector.selector(builder -> builder.chunk(new Vec(32, 0, 32)))).toList().size());
+        assertEquals(0, tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(Vec.ZERO))).toList().size());
+        assertEquals(1, tracker.selectEntity(EntitySelector.selector(builder -> builder.chunk(new Vec(32, 0, 32)))).toList().size());
     }
 
     @Test

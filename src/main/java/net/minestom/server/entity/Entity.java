@@ -1793,11 +1793,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     @Override
-    public <R extends Entity> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
+    public <R extends Entity> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
         final Instance instance = getInstance();
         if (instance == null) {
             return Stream.empty();
         }
-        return instance.getEntityTracker().selectEntityStream(query, origin);
+        return instance.getEntityTracker().selectEntity(selector, origin);
     }
 }

@@ -336,7 +336,7 @@ public class DynamicChunk extends Chunk {
         Section[] clonedSections = new Section[sections.size()];
         for (int i = 0; i < clonedSections.length; i++)
             clonedSections[i] = sections.get(i).clone();
-        var entities = instance.getEntityTracker().selectEntityStream(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ))).toList();
+        var entities = instance.getEntityTracker().selectEntity(EntitySelector.selector(builder -> builder.chunk(chunkX, chunkZ))).toList();
         final int[] entityIds = ArrayUtils.mapToIntArray(entities, Entity::getEntityId);
         return new SnapshotImpl.Chunk(minSection, chunkX, chunkZ,
                 clonedSections, entries.clone(), entityIds, updater.reference(instance),

@@ -139,7 +139,7 @@ public class CommandConditionTest {
         }
 
         @Override
-        public <R extends Entity> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
+        public <R extends Entity> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
             throw new UnsupportedOperationException();
         }
     }

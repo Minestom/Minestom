@@ -130,8 +130,8 @@ final class EntityTrackerImpl implements EntityTracker {
     }
 
     @Override
-    public synchronized <R extends Entity> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin) {
-        Stream<TrackedEntity> stream = switch (query.target()) {
+    public synchronized <R extends Entity> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
+        Stream<TrackedEntity> stream = switch (selector.target()) {
             case ALL_ENTITIES -> idIndex.values().stream();
             case ALL_PLAYERS -> playerIdIndex.values().stream();
             case NEAREST_ENTITY -> {
@@ -156,10 +156,10 @@ final class EntityTrackerImpl implements EntityTracker {
             // TODO Gathers API goes here
             final var unwrappedEntity = trackedEntity.<R>unwrapSafely();
             if (unwrappedEntity == null) return false;
-            return query.test(origin, unwrappedEntity);
+            return selector.test(origin, unwrappedEntity);
         });
 
-        switch (query.sort()) {
+        switch (selector.sort()) {
             case ARBITRARY -> {
                 // Do not sort
             }
@@ -180,8 +180,8 @@ final class EntityTrackerImpl implements EntityTracker {
             }
         }
 
-        if (query.limit() != -1) {
-            stream = stream.limit(query.limit());
+        if (selector.limit() != -1) {
+            stream = stream.limit(selector.limit());
         }
 
         return stream.map(TrackedEntity::unwrap);

@@ -93,27 +93,27 @@ public sealed interface EntitySelector<E> extends BiPredicate<Point, E> permits 
     }
 
     interface Finder<T> {
-        <R extends T> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query, @NotNull Point origin);
+        <R extends T> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector, @NotNull Point origin);
 
-        default <R extends T> @NotNull Stream<@NotNull R> selectEntityStream(@NotNull EntitySelector<R> query) {
-            return selectEntityStream(query, Vec.ZERO);
+        default <R extends T> @NotNull Stream<@NotNull R> selectEntity(@NotNull EntitySelector<R> selector) {
+            return selectEntity(selector, Vec.ZERO);
         }
 
-        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> query, @NotNull Point origin, Consumer<R> consumer) {
-            final Stream<R> stream = selectEntityStream(query, origin);
+        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> selector, @NotNull Point origin, Consumer<R> consumer) {
+            final Stream<R> stream = selectEntity(selector, origin);
             stream.forEach(consumer);
         }
 
-        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> query, Consumer<R> consumer) {
-            selectEntityConsume(query, Vec.ZERO, consumer);
+        default <R extends T> void selectEntityConsume(@NotNull EntitySelector<R> selector, Consumer<R> consumer) {
+            selectEntityConsume(selector, Vec.ZERO, consumer);
         }
 
-        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> query, @NotNull Point origin) {
-            return selectEntityStream(query, origin).findFirst().orElse(null);
+        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> selector, @NotNull Point origin) {
+            return selectEntity(selector, origin).findFirst().orElse(null);
         }
 
-        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> query) {
-            return selectEntityFirst(query, Vec.ZERO);
+        default <R extends T> @Nullable R selectEntityFirst(@NotNull EntitySelector<R> selector) {
+            return selectEntityFirst(selector, Vec.ZERO);
         }
     }
 }
