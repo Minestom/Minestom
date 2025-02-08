@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @param <T>
  */
-class IntervalTree<T> {
+public class IntervalTree<T> {
 
     static final boolean RED = false;
     static final boolean BLACK = true;

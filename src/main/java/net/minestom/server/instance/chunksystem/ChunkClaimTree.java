@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * Also contains utility methods to calculate the highest priority of any given position (x,z),
  * find all entries overlapping with any given position, and then some.
  */
-class ChunkClaimTree {
+public class ChunkClaimTree {
     private final IntervalTree<IntervalTree<Entries>> tree = new IntervalTree<>();
     private int size;
 
