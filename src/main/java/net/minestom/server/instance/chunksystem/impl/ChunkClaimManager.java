@@ -8,6 +8,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
@@ -97,17 +98,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  */
 public class ChunkClaimManager implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkClaimManager.class);
-    private static final Hash.Strategy<ChunkClaim> IDENTITY = new Hash.Strategy<>() {
-        @Override
-        public int hashCode(ChunkClaim o) {
-            return System.identityHashCode(o);
-        }
-
-        @Override
-        public boolean equals(ChunkClaim a, ChunkClaim b) {
-            return a == b;
-        }
-    };
     /**
      * TODO we could also make this per-instance configurable
      */
@@ -145,7 +135,7 @@ public class ChunkClaimManager implements Runnable {
     /**
      * Identity strategy, so we can identify the correct claims and remove them.
      */
-    private final Object2ObjectMap<ChunkClaim, ClaimedChunk> claimMap = new Object2ObjectOpenCustomHashMap<>(IDENTITY);
+    private final Object2ObjectMap<ChunkClaim, ClaimedChunk> claimMap = new Object2ObjectOpenHashMap<>();
     private final Long2ObjectMap<Collection<ClaimedChunk>> claimsByChunk = new Long2ObjectOpenHashMap<>();
     private final ObjectHeapPriorityQueue<PrioritizedUpdate> updateQueue = new ObjectHeapPriorityQueue<>(PrioritizedUpdate.COMPARATOR);
     private final Instance instance;

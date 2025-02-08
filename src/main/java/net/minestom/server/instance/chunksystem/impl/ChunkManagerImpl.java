@@ -38,7 +38,7 @@ public class ChunkManagerImpl implements ChunkManager {
 
     @Override
     public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull ChunkClaim.Shape shape) {
-        var chunkAndClaim = new ChunkAndClaim(new CompletableFuture<>(), new ChunkClaim(radius, priority, shape));
+        var chunkAndClaim = new ChunkAndClaim(new CompletableFuture<>(), new ChunkClaimImpl(radius, priority, shape));
         this.chunkClaimManager.addClaim(chunkX, chunkZ, chunkAndClaim);
         return chunkAndClaim;
     }

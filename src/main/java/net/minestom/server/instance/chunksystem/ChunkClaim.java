@@ -1,34 +1,43 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * A {@link ChunkClaim} is an object that can keep a chunk loaded/load new chunks.
  * {@link ChunkClaim}s are specific for a chunk, meaning it is for chunk (X,Z) and only for that chunk.
  * <p>
- * <b>{@link ChunkClaim} instances must NEVER be created manually.</b>
- * Instead, use the instance returned when adding a claim.
- * <p>
- * A chunk can have multiple identical {@link ChunkClaim}s, so that {@code claim1.equals(claim2)} equals {@code true}.
- * In case of claim removal, only one {@link ChunkClaim} will be removed from the chunk (per call).
- * <p>
  * The {@link Chunk} reference is not in this class, but rather in {@link ChunkAndClaim}.
- *
- * @param radius   the radius of this {@link ChunkClaim}. Use 0 for a single chunk.
- * @param priority the priority of this {@link ChunkClaim}. Higher priorities are loaded first.
- * @param shape    the shape used for this {@link ChunkClaim}. {@link net.minestom.server.entity.Player Players} may want to use {@link Shape#CIRCLE}
  */
-public record ChunkClaim(int radius, int priority, @NotNull Shape shape) {
-    @ApiStatus.Internal
-    public ChunkClaim {
-    }
+public interface ChunkClaim {
+    /**
+     * Get the radius of this claim. 0 is a single chunk,
+     * 1 is 3x3 area in shape of {@link #shape()}
+     *
+     * @return the radius of this claim
+     */
+    int radius();
+
+    /**
+     * Get the priority of this claim.
+     * Higher priorities are loaded first.
+     *
+     * @return the priority of this claim
+     */
+    int priority();
+
+    /**
+     * Get the shape of this claim.
+     * {@link net.minestom.server.entity.Player Players} would use {@link Shape#CIRCLE}
+     *
+     * @return the shape of this claim
+     */
+    @NotNull Shape shape();
 
     /**
      * The shape of a claim. Only matters if radius > 0
      */
-    public interface Shape {
+    interface Shape {
         @NotNull Shape CIRCLE = new CircleShape();
         @NotNull Shape SQUARE = new SquareShape();
         @NotNull Shape DIAMOND = new DiamondShape();
@@ -36,7 +45,13 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) {
         boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
     }
 
-    private record CircleShape() implements Shape {
+    /**
+     * Obtain an instance by {@link Shape#CIRCLE}
+     */
+    final class CircleShape implements Shape {
+        private CircleShape() {
+        }
+
         @Override
         public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
             var radiusSqX = radiusX * radiusX;
@@ -49,7 +64,13 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) {
         }
     }
 
-    private record SquareShape() implements Shape {
+    /**
+     * Obtain an instance by {@link Shape#SQUARE}
+     */
+    final class SquareShape implements Shape {
+        private SquareShape() {
+        }
+
         @Override
         public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
             var radiusSqX = radiusX * radiusX;
@@ -62,7 +83,13 @@ public record ChunkClaim(int radius, int priority, @NotNull Shape shape) {
         }
     }
 
-    private record DiamondShape() implements Shape {
+    /**
+     * Obtain an instance by {@link Shape#DIAMOND}
+     */
+    final class DiamondShape implements Shape {
+        private DiamondShape() {
+        }
+
         @Override
         public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
             var dx = (float) Math.abs(x - ox);
