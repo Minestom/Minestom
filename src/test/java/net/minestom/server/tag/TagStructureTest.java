@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TagStructureTest {
 
-    private static final Tag<Entry> STRUCTURE_TAG = Tag.Structure("node", new TagSerializer<>() {
+    private static final Tag<Entry> STRUCTURE_TAG = Tag.Structure("entry", new TagSerializer<>() {
         private static final Tag<String> VALUE_TAG = Tag.String("value");
 
         @Override
@@ -27,7 +27,7 @@ public class TagStructureTest {
         }
     });
 
-    private static final Tag<Entry> STRUCTURE_TAG2 = Tag.Structure("node", new TagSerializer<>() {
+    private static final Tag<Entry> STRUCTURE_TAG2 = Tag.Structure("entry", new TagSerializer<>() {
         private static final Tag<String> VALUE_TAG = Tag.String("value2");
 
         @Override
@@ -51,10 +51,10 @@ public class TagStructureTest {
         assertNull(handler.getTag(STRUCTURE_TAG));
         assertFalse(handler.hasTag(STRUCTURE_TAG));
 
-        var node = new Entry("hello");
-        handler.setTag(STRUCTURE_TAG, node);
+        var entry = new Entry("hello");
+        handler.setTag(STRUCTURE_TAG, entry);
         assertTrue(handler.hasTag(STRUCTURE_TAG));
-        assertEquals(node, handler.getTag(STRUCTURE_TAG));
+        assertEquals(entry, handler.getTag(STRUCTURE_TAG));
 
         handler.removeTag(STRUCTURE_TAG);
         assertFalse(handler.hasTag(STRUCTURE_TAG));
@@ -64,11 +64,11 @@ public class TagStructureTest {
     @Test
     public void snbt() {
         var handler = TagHandler.newHandler();
-        var node = new Entry("hello");
-        handler.setTag(STRUCTURE_TAG, node);
+        var entry = new Entry("hello");
+        handler.setTag(STRUCTURE_TAG, entry);
         assertEqualsSNBT("""
                 {
-                  "node": {
+                  "entry": {
                     "value":"hello"
                   }
                 }
@@ -87,13 +87,13 @@ public class TagStructureTest {
         var entry1 = new Entry("hello");
         var entry2 = new Entry("hello2");
 
-        // Add first node
+        // Add first entry
         {
             handler.setTag(STRUCTURE_TAG, entry1);
             assertTrue(handler.hasTag(STRUCTURE_TAG));
             assertEquals(entry1, handler.getTag(STRUCTURE_TAG));
         }
-        // Add second node
+        // Add second entry
         {
             handler.setTag(STRUCTURE_TAG2, entry2);
             assertTrue(handler.hasTag(STRUCTURE_TAG2));
@@ -109,23 +109,23 @@ public class TagStructureTest {
         var handler = TagHandler.newHandler();
         var entry1 = new Entry("hello");
         var entry2 = new Entry("hello2");
-        // Add first node
+        // Add first entry
         {
             handler.setTag(STRUCTURE_TAG, entry1);
             assertEqualsSNBT("""
                     {
-                      "node": {
+                      "entry": {
                         "value":"hello"
                       }
                     }
                     """, handler.asCompound());
         }
-        // Add second node
+        // Add second entry
         {
             handler.setTag(STRUCTURE_TAG2, entry2);
             assertEqualsSNBT("""
                     {
-                      "node": {
+                      "entry": {
                         "value2": "hello2"
                       }
                     }
