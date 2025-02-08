@@ -1,4 +1,4 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 /**
  * <b>Order of the entries is important. Ordered from least important to most important.</b>

@@ -1,7 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
-import net.minestom.server.instance.chunksystem.impl.IntervalTree;
-import net.minestom.server.instance.chunksystem.impl.IntervalTree.Node;
+import net.minestom.server.instance.chunksystem.IntervalTree.Node;
 import net.minestom.server.utils.Range;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

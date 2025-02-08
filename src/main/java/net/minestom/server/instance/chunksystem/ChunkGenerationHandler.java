@@ -1,4 +1,4 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.minestom.server.MinecraftServer;

@@ -1,4 +1,4 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * @param <T>
  */
-public class IntervalTree<T> {
+class IntervalTree<T> {
 
     static final boolean RED = false;
     static final boolean BLACK = true;

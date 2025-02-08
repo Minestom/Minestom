@@ -1,13 +1,11 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Function;
-import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
 import it.unimi.dsi.fastutil.longs.Long2DoubleOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenCustomHashMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import net.minestom.server.MinecraftServer;
@@ -18,8 +16,6 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.instance.*;
-import net.minestom.server.instance.chunksystem.ChunkAndClaim;
-import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +92,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *     </li>
  * </ul>
  */
-public class ChunkClaimManager implements Runnable {
+class ChunkClaimManager implements Runnable {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkClaimManager.class);
     /**
      * TODO we could also make this per-instance configurable

@@ -1,4 +1,4 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 /**
  * Used to calculate how much the priority should drop for a chunk with a given distance from the center of the claim.

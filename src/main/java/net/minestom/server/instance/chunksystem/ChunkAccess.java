@@ -1,4 +1,4 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;

@@ -1,6 +1,5 @@
 package net.minestom.server.instance.chunksystem;
 
-import net.minestom.server.instance.chunksystem.impl.ChunkClaimTree;
 import org.openjdk.jmh.annotations.*;
 import org.openjdk.jmh.infra.Blackhole;
 

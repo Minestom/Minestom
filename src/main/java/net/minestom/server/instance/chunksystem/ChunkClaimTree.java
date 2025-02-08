@@ -1,14 +1,11 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
-import it.unimi.dsi.fastutil.objects.Object2BooleanFunction;
 import net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.BooleanSupplier;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
  * Also contains utility methods to calculate the highest priority of any given position (x,z),
  * find all entries overlapping with any given position, and then some.
  */
-public class ChunkClaimTree {
+class ChunkClaimTree {
     private final IntervalTree<IntervalTree<Entries>> tree = new IntervalTree<>();
     private int size;
 

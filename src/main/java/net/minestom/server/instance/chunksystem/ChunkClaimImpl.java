@@ -1,6 +1,5 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
-import net.minestom.server.instance.chunksystem.ChunkClaim;
 import org.jetbrains.annotations.NotNull;
 
 /**

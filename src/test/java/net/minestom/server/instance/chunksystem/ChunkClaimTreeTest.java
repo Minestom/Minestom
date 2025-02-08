@@ -1,6 +1,5 @@
 package net.minestom.server.instance.chunksystem;
 
-import net.minestom.server.instance.chunksystem.impl.ChunkClaimTree;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

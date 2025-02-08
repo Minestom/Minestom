@@ -1,7 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.chunksystem.impl.ChunkClaimTree;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.CompletableFuture;

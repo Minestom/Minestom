@@ -1,11 +1,8 @@
-package net.minestom.server.instance.chunksystem.impl;
+package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.chunksystem.ChunkAndClaim;
-import net.minestom.server.instance.chunksystem.ChunkClaim;
-import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -13,12 +10,10 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
-@ApiStatus.Internal
-public class ChunkManagerImpl implements ChunkManager {
+class ChunkManagerImpl implements ChunkManager {
     private final ChunkClaimManager chunkClaimManager;
     private int defaultPriority;
 

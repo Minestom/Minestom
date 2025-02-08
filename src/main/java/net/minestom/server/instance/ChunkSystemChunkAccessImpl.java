@@ -1,6 +1,6 @@
 package net.minestom.server.instance;
 
-import net.minestom.server.instance.chunksystem.impl.ChunkAccess;
+import net.minestom.server.instance.chunksystem.ChunkAccess;
 import org.jetbrains.annotations.ApiStatus;
 
 /**

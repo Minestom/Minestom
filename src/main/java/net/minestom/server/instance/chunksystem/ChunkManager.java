@@ -1,7 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.*;
-import net.minestom.server.instance.chunksystem.impl.ChunkManagerImpl;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

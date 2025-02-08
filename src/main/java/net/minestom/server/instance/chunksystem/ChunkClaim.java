@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * The {@link Chunk} reference is not in this class, but rather in {@link ChunkAndClaim}.
  */
-public interface ChunkClaim {
+public sealed interface ChunkClaim permits ChunkClaimImpl {
     /**
      * Get the radius of this claim. 0 is a single chunk,
      * 1 is 3x3 area in shape of {@link #shape()}
