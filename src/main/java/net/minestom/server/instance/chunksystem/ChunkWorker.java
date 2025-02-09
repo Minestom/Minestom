@@ -1,5 +1,7 @@
 package net.minestom.server.instance.chunksystem;
 
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,57 @@ public class ChunkWorker {
      * which has already been submitted.
      */
     private static final Semaphore AVAILABLE_TASKS = new Semaphore(Runtime.getRuntime().availableProcessors() * 2);
-    
+
+    private final ChunkClaimManager chunkClaimManager;
+    private final ChunkGenerationHandler chunkGenerationHandler;
+    private final Instance instance;
+    private final ChunkAccess chunkAccess;
+
+    ChunkWorker(ChunkClaimManager chunkClaimManager, ChunkAccess chunkAccess) {
+        this.chunkClaimManager = chunkClaimManager;
+        this.instance = chunkClaimManager.getInstance();
+        this.chunkGenerationHandler = new ChunkGenerationHandler(this.instance);
+        this.chunkAccess = chunkAccess;
+    }
+
+    void workerCopyFromMemory(Chunk unloading, int x, int z) {
+        try {
+            var copy = unloading.copy(unloading.getInstance(), x, z);
+            // TODO copy entities
+            this.workerFinishedGeneration(copy);
+        } catch (Throwable throwable) {
+            LOGGER.error("Exception while re-loading chunk", throwable);
+        }
+    }
+
+    void workerGenerateChunk(ChunkClaimManager.LoadTask task) {
+        final var loader = this.chunkClaimManager.getChunkLoader();
+        final var supplier = this.chunkClaimManager.getChunkSupplier();
+        final var generator = this.chunkClaimManager.getGenerator();
+        if (!loader.supportsParallelLoading()) {
+            // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
+            throw new AssertionError("ChunkLoaders must support parallel loading. Please migrate your system");
+        }
+
+        var x = task.x;
+        var z = task.z;
+
+        var chunk = loader.loadChunk(instance, x, z);
+        if (chunk == null) {
+            // Loader couldn't load the chunk, generate it
+            chunk = chunkGenerationHandler.createChunk(supplier, generator, x, z);
+            chunk.onGenerate();
+        }
+
+        this.workerFinishedGeneration(chunk);
+    }
+
+    void workerFinishedGeneration(Chunk chunk) {
+        this.chunkAccess.onLoad(chunk);
+        this.chunkClaimManager.addTask(new ChunkClaimManager.Task.ChunkGenerationFinished(chunk));
+        // TODO
+    }
+
     static {
         WORKER_EXECUTOR = new ForkJoinPool(Runtime
                 .getRuntime()
@@ -74,21 +126,37 @@ public class ChunkWorker {
         WORKER_EXECUTOR.execute(runnable);
     }
 
-    static boolean tryRunOnWorker(Runnable runnable) {
-        // try to reserve a worker
-        if (!AVAILABLE_TASKS.tryAcquire()) {
-            // no worker available
-            return false;
-        }
+    static boolean tryReserve() {
+        return AVAILABLE_TASKS.tryAcquire();
+    }
+
+    static void reserve() throws InterruptedException {
+        AVAILABLE_TASKS.acquire();
+    }
+
+    static void release() {
+        AVAILABLE_TASKS.release();
+    }
+
+    static void submitReserved(Runnable runnable) {
         runOnWorker(() -> {
             try {
                 runnable.run();
             } catch (Throwable t) {
                 LOGGER.error("Exception during task on worker", t);
             } finally {
-                AVAILABLE_TASKS.release();
+                release();
             }
         });
+    }
+
+    static boolean tryRunOnWorker(Runnable runnable) {
+        // try to reserve a worker
+        if (!tryReserve()) {
+            // no worker available
+            return false;
+        }
+        submitReserved(runnable);
         return true;
     }
 }
