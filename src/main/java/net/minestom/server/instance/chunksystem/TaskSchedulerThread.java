@@ -119,7 +119,12 @@ class TaskSchedulerThread implements Runnable {
         while (!this.exit) {
             this.signaling.startIteration();
             this.singleThreadedManagerLock.lock();
-            var res = this.syncWork(this.singleThreadedManager::workIteration);
+            SingleThreadedManager.IterationResult res;
+            try {
+                res = this.syncWork(this.singleThreadedManager::workIteration);
+            } finally {
+                this.singleThreadedManagerLock.unlock();
+            }
 
             if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL) {
                 if (this.exit) continue;
@@ -258,7 +263,7 @@ class TaskSchedulerThread implements Runnable {
                     this.singleThreadedManager.saveChunkCompleted(saveChunkCompleted.x(), saveChunkCompleted.z());
             case Task.RetryUnload retryUnload -> this.singleThreadedManager.unloadChunk(retryUnload.chunk);
             case Task.FinishUnloadAfterSave finishUnloadAfterSave ->
-                    this.singleThreadedManager.finishUnloadChunk(finishUnloadAfterSave.chunk());
+                    this.singleThreadedManager.finishUnloadChunkAfterSave(finishUnloadAfterSave.chunk());
             case Task.EnqueueUpdate(var update) -> this.singleThreadedManager.enqueue(update);
         }
     }
@@ -342,11 +347,17 @@ class TaskSchedulerThread implements Runnable {
     }
 
     static final class LoadTask {
+        final IChunkLoader loader;
+        final ChunkSupplier chunkSupplier;
+        final @Nullable Generator generator;
         final int x;
         final int z;
         double lastUpdatePriority;
 
-        LoadTask(int x, int z, double lastUpdatePriority) {
+        LoadTask(IChunkLoader loader, ChunkSupplier chunkSupplier, @Nullable Generator generator, int x, int z, double lastUpdatePriority) {
+            this.loader = loader;
+            this.chunkSupplier = chunkSupplier;
+            this.generator = generator;
             this.x = x;
             this.z = z;
             this.lastUpdatePriority = lastUpdatePriority;

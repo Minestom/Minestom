@@ -10,12 +10,16 @@ import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
+import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -60,7 +64,13 @@ class SingleThreadedManager {
     private final Object2ObjectMap<ChunkClaim, TaskSchedulerThread.ClaimedChunk> claimMap = new Object2ObjectOpenHashMap<>();
     private final Long2ObjectMap<Collection<TaskSchedulerThread.ClaimedChunk>> claimsByChunk = new Long2ObjectOpenHashMap<>();
     private final ObjectHeapPriorityQueue<PrioritizedUpdate> updateQueue = new ObjectHeapPriorityQueue<>(PrioritizedUpdate.COMPARATOR);
+    /**
+     * Utility to track running tasks.
+     * TODO Could help later with shutdown to ensure all tasks have finished before terminating the manager.
+     */
+    private final TaskTracking taskTracking = new TaskTracking();
     private final ChunkWorker chunkWorker;
+    private final ChunkAccess chunkAccess;
     private final Instance instance;
     /**
      * (chunk index -> chunk) map, contains all the chunks in the instance.
@@ -92,6 +102,7 @@ class SingleThreadedManager {
 
     public SingleThreadedManager(TaskSchedulerThread taskSchedulerThread, ChunkAccess chunkAccess) {
         this.taskSchedulerThread = taskSchedulerThread;
+        this.chunkAccess = chunkAccess;
         this.chunkWorker = new ChunkWorker(taskSchedulerThread, chunkAccess);
         this.instance = taskSchedulerThread.getInstance();
     }
@@ -182,9 +193,11 @@ class SingleThreadedManager {
         this.chunks.put(index, chunk);
         this.chunksLastUpdatePriority.put(index, loadTask.lastUpdatePriority);
         // add this scheduler before adding the dispatcher partition to make sure it is executed first
+        this.taskTracking.runningTickScheduledCount.incrementAndGet();
         chunk.getScheduler().scheduleNextProcess(() -> {
             var event = new InstanceChunkLoadEvent(this.instance, chunk);
             EventDispatcher.call(event);
+            this.taskTracking.runningTickScheduledCount.decrementAndGet();
         });
         MinecraftServer.process().dispatcher().createPartition(chunk);
     }
@@ -211,13 +224,13 @@ class SingleThreadedManager {
     }
 
     private void saveChunk0(TaskSchedulerThread.SaveTask saveTask) {
-        // for saving with file IO we use a virtual thread instead of scheduling it to the worker.
+        // For saving with file IO, we use a virtual thread instead of scheduling it to the worker.
         // This way we don't need to reserve a worker, which may otherwise prove to be difficult.
         var chunk = saveTask.chunk();
         var chunkIndex = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         var chunkLoader = this.chunkLoader;
         this.savingChunks.put(chunkIndex, saveTask);
-        Thread.startVirtualThread(() -> {
+        this.runOnSaveExecutor(() -> {
             try {
                 chunkLoader.saveChunk(chunk);
                 this.taskSchedulerThread.complete(saveTask.future(), null);
@@ -252,11 +265,11 @@ class SingleThreadedManager {
     }
 
     void saveInstanceData0(CompletableFuture<Void> future) {
-        // for saving with file IO we use a virtual thread instead of scheduling it to the worker.
+        // For saving with file IO, we use a virtual thread instead of scheduling it to the worker.
         // This way we don't need to reserve a worker, which may otherwise prove to be difficult.
         this.savingInstance = true;
         var chunkLoader = this.chunkLoader;
-        Thread.startVirtualThread(() -> {
+        this.runOnSaveExecutor(() -> {
             try {
                 chunkLoader.saveInstance(instance);
                 this.taskSchedulerThread.complete(future, null);
@@ -399,6 +412,8 @@ class SingleThreadedManager {
             if (this.checkUpToDateLoaded(chunkIndex, highestClaimPriority)) {
                 return UpdateResult.ALREADY_UP_TO_DATE;
             }
+            // Not already up-to-date, update last priority
+            this.chunksLastUpdatePriority.put(chunkIndex, highestClaimPriority);
             // we have to propagate the updates to (potentially) load neighbors
             this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
             return UpdateResult.UPDATE_PROPAGATED_FOR_LOADED;
@@ -435,10 +450,10 @@ class SingleThreadedManager {
             // we have to propagate the updates to (potentially) load neighbors
             this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
 
-            var task = new TaskSchedulerThread.LoadTask(x, z, highestClaimPriority);
+            var task = new TaskSchedulerThread.LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
             this.loadingChunks.put(chunkIndex, task);
 
-            ChunkWorker.submitReserved(() -> {
+            this.submitReserved(() -> {
                 try {
                     this.chunkWorker.workerGenerateChunk(task);
                 } catch (Throwable throwable) {
@@ -460,13 +475,13 @@ class SingleThreadedManager {
         if (unloadTask.partitionDeleted.isDone()) {
             if (ChunkWorker.tryReserve()) {
                 var unloading = unloadTask.chunk;
-                var task = new TaskSchedulerThread.LoadTask(x, z, highestClaimPriority);
+                var task = new TaskSchedulerThread.LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
                 this.loadingChunks.put(chunkIndex, task);
 
                 // we have to propagate the updates to (potentially) load neighbors
                 this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
 
-                ChunkWorker.submitReserved(() -> {
+                this.submitReserved(() -> {
                     try {
                         this.chunkWorker.workerCopyFromMemory(unloading, x, z);
                     } catch (Throwable throwable) {
@@ -485,7 +500,7 @@ class SingleThreadedManager {
 
     private UpdateResult updateNoRemainingClaims(long chunkIndex, int x, int z, PrioritizedUpdate update) {
         // The last claim was removed. We may have to remove the chunk from the chunks map if that hasn't happened already
-        var chunk = this.chunks.remove(chunkIndex);
+        var chunk = this.chunks.get(chunkIndex);
         if (chunk != null) {
             this.unloadChunk(chunk);
             // we have to propagate the updates to (potentially) unload neighbors
@@ -513,32 +528,48 @@ class SingleThreadedManager {
         var unloadFuture = new CompletableFuture<Void>();
         var task = new TaskSchedulerThread.UnloadTask(chunk, unloadFuture);
         this.unloadingChunks.put(chunkIndex, task);
-        var scheduler = chunk.getScheduler();
-        scheduler.scheduleNextProcess(() -> {
+        this.chunks.remove(chunkIndex);
+        this.chunksLastUpdatePriority.remove(chunkIndex);
+
+        // This future will be completed once the chunk has been saved
+        var saveFuture = new CompletableFuture<Void>();
+
+        this.taskTracking.runningTickScheduledCount.addAndGet(2);
+        this.instance.scheduler().scheduleNextProcess(() -> {
+            this.instance.getChunkEntities(chunk).stream().filter(e -> e instanceof Player).map(p -> (Player) p).forEach(p -> p.kick("Your chunk was unloaded, go cry to server admin \uD83D\uDE1B"));
+            this.taskTracking.runningTickScheduledCount.decrementAndGet();
+        });
+        chunk.getScheduler().scheduleNextProcess(() -> {
+            chunk.sendPacketToViewers(new UnloadChunkPacket(x, z));
+            EventDispatcher.call(new InstanceChunkUnloadEvent(this.instance, chunk));
+            this.chunkAccess.unload(chunk);
             MinecraftServer.process().dispatcher().deletePartition(chunk);
             task.partitionDeleted.complete(null);
+            this.taskTracking.runningTickScheduledCount.decrementAndGet();
         });
+
         if (this.autosaveEnabled) {
-            var saveFuture = new CompletableFuture<Void>();
             this.saveChunk(chunk, saveFuture);
             saveFuture.whenComplete((unused, throwable) -> {
                 if (throwable != null) {
                     LOGGER.error("Exception when saving chunk", throwable);
                     return;
                 }
-                // TODO
+                this.taskSchedulerThread.addTask(new Task.FinishUnloadAfterSave(chunk));
             });
-            // TODO
-            return;
+        } else {
+            this.finishUnloadChunkAfterSave(chunk);
         }
     }
-
 
     /**
      * Finish unloading after saving has completed
      */
-    void finishUnloadChunk(@NotNull Chunk chunk) {
-
+    void finishUnloadChunkAfterSave(@NotNull Chunk chunk) {
+        var x = chunk.getChunkX();
+        var z = chunk.getChunkZ();
+        var chunkIndex = CoordConversion.chunkIndex(x, z);
+        this.unloadingChunks.remove(chunkIndex);
     }
 
     void completeIfLoaded(int x, int z, ChunkAndClaim chunkAndClaim) {
@@ -588,13 +619,8 @@ class SingleThreadedManager {
 
     private boolean checkUpToDateLoaded(long chunkIndex, double highestClaimPriority) {
         var lastUpdatePriority = this.chunksLastUpdatePriority.get(chunkIndex);
-        if (doubleEqual(highestClaimPriority, lastUpdatePriority)) {
-            // same priority (compared with Vec.EPSILON precision)
-            // The update has already been handled for this chunk, we can ignore it
-            return true;
-        }
-        this.chunksLastUpdatePriority.put(chunkIndex, highestClaimPriority);
-        return false;
+        // same priority (compared with Vec.EPSILON precision)
+        return doubleEqual(highestClaimPriority, lastUpdatePriority);
     }
 
     private boolean isUpToDateLoading(long chunkIndex, double highestClaimPriority) {
@@ -619,6 +645,28 @@ class SingleThreadedManager {
             return false;
         }
         return true;
+    }
+
+    private void submitReserved(Runnable runnable) {
+        this.taskTracking.runningWorkerTaskCount.incrementAndGet();
+        ChunkWorker.submitReserved(() -> {
+            try {
+                runnable.run();
+            } finally {
+                this.taskTracking.runningWorkerTaskCount.decrementAndGet();
+            }
+        });
+    }
+
+    private void runOnSaveExecutor(Runnable runnable) {
+        this.taskTracking.runningSaveTaskCount.incrementAndGet();
+        ChunkWorker.runOnSaveExecutor(() -> {
+            try {
+                runnable.run();
+            } finally {
+                this.taskTracking.runningSaveTaskCount.decrementAndGet();
+            }
+        });
     }
 
     /**

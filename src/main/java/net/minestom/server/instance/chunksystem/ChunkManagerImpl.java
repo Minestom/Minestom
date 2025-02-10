@@ -3,6 +3,7 @@ package net.minestom.server.instance.chunksystem;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -110,6 +111,26 @@ class ChunkManagerImpl implements ChunkManager {
     @Override
     public void setDefaultPriority(int priority) {
         this.defaultPriority = priority;
+    }
+
+    @Override
+    public void setChunkSupplier(@NotNull ChunkSupplier supplier) {
+        this.taskSchedulerThread.setChunkSupplier(supplier);
+    }
+
+    @Override
+    public @NotNull ChunkSupplier getChunkSupplier() {
+        return this.taskSchedulerThread.getChunkSupplier();
+    }
+
+    @Override
+    public void setGenerator(@Nullable Generator generator) {
+        this.taskSchedulerThread.setGenerator(generator);
+    }
+
+    @Override
+    public @Nullable Generator getGenerator() {
+        return this.taskSchedulerThread.getGenerator();
     }
 
     @Override

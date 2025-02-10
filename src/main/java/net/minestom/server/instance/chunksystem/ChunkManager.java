@@ -1,6 +1,7 @@
 package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.*;
+import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -30,6 +31,26 @@ public interface ChunkManager {
      * @param priority the new default priority
      */
     void setDefaultPriority(int priority);
+
+    /**
+     * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
+     * <p>
+     * Uses {@link DynamicChunk} by default.
+     * <p>
+     * WARNING: if you need to save this instance's chunks later,
+     * the code needs to be predictable for {@link IChunkLoader#loadChunk(Instance, int, int)}
+     * to create the correct type of {@link Chunk}. tl;dr: Need chunk save = no random type.
+     *
+     * @param supplier the new {@link ChunkSupplier} of this instance, chunks need to be non-null
+     * @throws NullPointerException if {@code chunkSupplier} is null
+     */
+    void setChunkSupplier(@NotNull ChunkSupplier supplier);
+
+    @NotNull ChunkSupplier getChunkSupplier();
+
+    void setGenerator(@Nullable Generator generator);
+
+    @Nullable Generator getGenerator();
 
     /**
      * @return whether autosave is enabled

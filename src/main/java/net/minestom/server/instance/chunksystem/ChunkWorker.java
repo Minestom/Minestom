@@ -28,6 +28,7 @@ public class ChunkWorker {
     private static final Semaphore AVAILABLE_TASKS = new Semaphore(Runtime.getRuntime().availableProcessors() * 2);
     private static final ReentrantLock WAITING_LOCK = new ReentrantLock();
     private static final Set<ManagerSignaling> WAITING = new HashSet<>();
+    private static final ExecutorService SAVE_EXECUTOR;
 
     private final TaskSchedulerThread taskSchedulerThread;
     private final ChunkGenerationHandler chunkGenerationHandler;
@@ -79,46 +80,6 @@ public class ChunkWorker {
         // TODO
     }
 
-    static {
-        WORKER_EXECUTOR = new ForkJoinPool(Runtime
-                .getRuntime()
-                .availableProcessors(), pool -> new ForkJoinWorkerThread(pool) {
-            {
-                // Set the priority very low.
-                // Generation takes time and resources; we don't want generation to slow down any
-                // other logic, such as ticking.
-                // Low priority does not mean less total CPU gets used, it just tells the scheduler
-                // to prefer more important tasks,
-                // and if there is nothing important to do, then do generation.
-                setPriority(Thread.MIN_PRIORITY);
-            }
-        }, null, true);
-    }
-
-    @ApiStatus.Internal
-    public static CompletableFuture<Void> globalShutdown() {
-        WORKER_EXECUTOR.shutdownNow();
-        var fut = new CompletableFuture<Void>();
-        // Check this late, in the shutdownFuture. Maybe we don't even have to wait for termination
-        if (WORKER_EXECUTOR.isTerminated()) {
-            fut.complete(null);
-        } else {
-            Thread.startVirtualThread(() -> {
-                try {
-                    if (!WORKER_EXECUTOR.awaitTermination(5, TimeUnit.SECONDS)) {
-                        LOGGER.error("Generator pool termination took more than 5 seconds. This indicates the generation for a single chunk took" +
-                                " more than 5 seconds. No bueno, fix your generation logic. Server may take a while to shut down...");
-                    }
-                } catch (InterruptedException e) {
-                    LOGGER.error("Interrupted generation pool termination waiting. This should not happen", e);
-                } finally {
-                    fut.complete(null);
-                }
-            });
-        }
-        return fut;
-    }
-
     /**
      * Wrapper for worker execution.
      * The worker logic could be improved to dynamically change its behavior based on detected uses.
@@ -133,10 +94,6 @@ public class ChunkWorker {
 
     static boolean tryReserve() {
         return AVAILABLE_TASKS.tryAcquire();
-    }
-
-    static void reserve() throws InterruptedException {
-        AVAILABLE_TASKS.acquire();
     }
 
     static void release() {
@@ -188,13 +145,62 @@ public class ChunkWorker {
         });
     }
 
-    static boolean tryRunOnWorker(Runnable runnable) {
-        // try to reserve a worker
-        if (!tryReserve()) {
-            // no worker available
-            return false;
+    static void runOnSaveExecutor(Runnable runnable) {
+        SAVE_EXECUTOR.execute(runnable);
+    }
+
+    @ApiStatus.Internal
+    public static CompletableFuture<Void> globalShutdown() {
+        // We give the workers a little time (5 seconds) to shut down.
+        // We give chunk saving more time (60 seconds).
+        // Considering it's probably IO bound, and we don't want corrupt chunks,
+        // a minute should be appropriate to ensure it's more than enough time.
+        return CompletableFuture.allOf(shutdown(WORKER_EXECUTOR, 5), shutdown(SAVE_EXECUTOR, 60));
+    }
+
+    private static CompletableFuture<Void> shutdown(ExecutorService service, int timeoutSeconds) {
+        var fut = new CompletableFuture<Void>();
+        service.shutdown();
+        if (service.isTerminated()) {
+            fut.complete(null);
+        } else {
+            Thread.startVirtualThread(() -> {
+                try {
+                    if (!service.awaitTermination(timeoutSeconds, TimeUnit.SECONDS)) {
+                        LOGGER.error("Pool termination took more than {} seconds. This is not good", timeoutSeconds);
+                    }
+                } catch (InterruptedException e) {
+                    LOGGER.error("Interrupted generation pool termination waiting. This should not happen", e);
+                } finally {
+                    fut.complete(null);
+                }
+            });
         }
-        submitReserved(runnable);
-        return true;
+        return fut;
+    }
+
+
+    static {
+        WORKER_EXECUTOR = createLowPriority(1);
+
+        // We should be able to get away with using fewer threads here.
+        // Saving chunks should be rare enough.
+        // TODO benchmark this
+        SAVE_EXECUTOR = createLowPriority(0.5);
+    }
+
+    static ForkJoinPool createLowPriority(double multiplier) {
+        var parallelism = Math.max(1, (int) (Runtime.getRuntime().availableProcessors() * multiplier));
+        return new ForkJoinPool(parallelism, pool -> new ForkJoinWorkerThread(pool) {
+            {
+                // Set the priority very low.
+                // Generation takes time and resources; we don't want generation to slow down any
+                // other logic, such as ticking.
+                // Low priority does not mean less total CPU gets used, it just tells the scheduler
+                // to prefer more important tasks,
+                // and if there is nothing important to do, then do generation.
+                setPriority(Thread.MIN_PRIORITY);
+            }
+        }, null, true);
     }
 }

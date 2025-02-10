@@ -220,9 +220,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @ApiStatus.Internal
     public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
 
-    public @NotNull ChunkManager getChunkManager() {
-        throw new UnsupportedOperationException();
-    }
+    public abstract @NotNull ChunkManager getChunkManager();
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.

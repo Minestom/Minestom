@@ -2,6 +2,7 @@ package net.minestom.server.instance.chunksystem;
 
 import net.minestom.server.instance.Chunk;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <b>For internal use only, may be changed at any time. Do not use this.</b>
@@ -12,4 +13,6 @@ import org.jetbrains.annotations.ApiStatus;
 @ApiStatus.Internal
 public interface ChunkAccess {
     void onLoad(Chunk chunk);
+
+    void unload(@NotNull Chunk chunk);
 }
