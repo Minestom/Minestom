@@ -6,7 +6,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
 public class ChunkWorker {
@@ -23,15 +26,17 @@ public class ChunkWorker {
      * which has already been submitted.
      */
     private static final Semaphore AVAILABLE_TASKS = new Semaphore(Runtime.getRuntime().availableProcessors() * 2);
+    private static final ReentrantLock WAITING_LOCK = new ReentrantLock();
+    private static final Set<ManagerSignaling> WAITING = new HashSet<>();
 
-    private final ChunkClaimManager chunkClaimManager;
+    private final TaskSchedulerThread taskSchedulerThread;
     private final ChunkGenerationHandler chunkGenerationHandler;
     private final Instance instance;
     private final ChunkAccess chunkAccess;
 
-    ChunkWorker(ChunkClaimManager chunkClaimManager, ChunkAccess chunkAccess) {
-        this.chunkClaimManager = chunkClaimManager;
-        this.instance = chunkClaimManager.getInstance();
+    ChunkWorker(TaskSchedulerThread taskSchedulerThread, ChunkAccess chunkAccess) {
+        this.taskSchedulerThread = taskSchedulerThread;
+        this.instance = taskSchedulerThread.getInstance();
         this.chunkGenerationHandler = new ChunkGenerationHandler(this.instance);
         this.chunkAccess = chunkAccess;
     }
@@ -46,10 +51,10 @@ public class ChunkWorker {
         }
     }
 
-    void workerGenerateChunk(ChunkClaimManager.LoadTask task) {
-        final var loader = this.chunkClaimManager.getChunkLoader();
-        final var supplier = this.chunkClaimManager.getChunkSupplier();
-        final var generator = this.chunkClaimManager.getGenerator();
+    void workerGenerateChunk(TaskSchedulerThread.LoadTask task) {
+        final var loader = this.taskSchedulerThread.getChunkLoader();
+        final var supplier = this.taskSchedulerThread.getChunkSupplier();
+        final var generator = this.taskSchedulerThread.getGenerator();
         if (!loader.supportsParallelLoading()) {
             // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
             throw new AssertionError("ChunkLoaders must support parallel loading. Please migrate your system");
@@ -61,7 +66,7 @@ public class ChunkWorker {
         var chunk = loader.loadChunk(instance, x, z);
         if (chunk == null) {
             // Loader couldn't load the chunk, generate it
-            chunk = chunkGenerationHandler.createChunk(supplier, generator, x, z);
+            chunk = this.chunkGenerationHandler.createChunk(supplier, generator, x, z);
             chunk.onGenerate();
         }
 
@@ -70,7 +75,7 @@ public class ChunkWorker {
 
     void workerFinishedGeneration(Chunk chunk) {
         this.chunkAccess.onLoad(chunk);
-        this.chunkClaimManager.addTask(new ChunkClaimManager.Task.ChunkGenerationFinished(chunk));
+        this.taskSchedulerThread.addTask(new TaskSchedulerThread.Task.ChunkGenerationFinished(chunk));
         // TODO
     }
 
@@ -138,6 +143,38 @@ public class ChunkWorker {
         AVAILABLE_TASKS.release();
     }
 
+    /**
+     * We need this unconventional logic to make sure the manager thread can wake up from other sources, too
+     */
+    static void signalWhenReady(ManagerSignaling signaling) {
+        if (AVAILABLE_TASKS.availablePermits() > 0) {
+            signaling.signal();
+        } else {
+            WAITING_LOCK.lock();
+            try {
+                if (AVAILABLE_TASKS.availablePermits() > 0) {
+                    signaling.signal();
+                    return;
+                }
+                WAITING.add(signaling);
+            } finally {
+                WAITING_LOCK.unlock();
+            }
+        }
+    }
+
+    private static void signalAll() {
+        WAITING_LOCK.lock();
+        try {
+            for (var managerSignaling : WAITING) {
+                managerSignaling.signal();
+            }
+            WAITING.clear();
+        } finally {
+            WAITING_LOCK.unlock();
+        }
+    }
+
     static void submitReserved(Runnable runnable) {
         runOnWorker(() -> {
             try {
@@ -146,6 +183,7 @@ public class ChunkWorker {
                 LOGGER.error("Exception during task on worker", t);
             } finally {
                 release();
+                signalAll();
             }
         });
     }

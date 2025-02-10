@@ -29,36 +29,36 @@ import java.util.HashSet;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 
-import static net.minestom.server.instance.chunksystem.ChunkClaimManager.*;
+import static net.minestom.server.instance.chunksystem.TaskSchedulerThread.*;
 
 class SingleThreadedManager {
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadedManager.class);
     private final ChunkClaimTree tree = new ChunkClaimTree();
-    private final ChunkClaimManager chunkClaimManager;
+    private final TaskSchedulerThread taskSchedulerThread;
     private final Long2DoubleMap chunksLastUpdatePriority = new Long2DoubleOpenHashMap();
-    private final Long2ObjectMap<ChunkClaimManager.LoadTask> loadingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<TaskSchedulerThread.LoadTask> loadingChunks = new Long2ObjectOpenHashMap<>();
     /**
      * This HashMap is used to quickly access loaded chunks in case of added claims after they are scheduled for unload.
      * Otherwise, we'd have to wait for the unload/write to finish, and only then could we start the next load.
      * With this, we cache the chunk, and if it is loaded again, we can just copy it and use the new copy.
      * This way we also ensure the chunks are not changed while saving, which may cause issues with the ChunkLoader/-Saver.
      */
-    private final Long2ObjectMap<ChunkClaimManager.UnloadTask> unloadingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<TaskSchedulerThread.UnloadTask> unloadingChunks = new Long2ObjectOpenHashMap<>();
     /**
      * HashMap for saving chunks. We don't want to save the same chunk concurrently, and we don't want unnecessary saves
      */
-    private final Long2ObjectMap<ChunkClaimManager.SaveTask> savingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<TaskSchedulerThread.SaveTask> savingChunks = new Long2ObjectOpenHashMap<>();
     /**
      * HashMap to contain all chunks that have their save request delayed. A chunk may be requested for saving
      * while it is being saved already. This save will work on old data though, we want the newest data, so we have
      * to reschedule the save after the first save finishes.
      */
-    private final Long2ObjectMap<ChunkClaimManager.SaveTask> savingChunksDelayed = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<TaskSchedulerThread.SaveTask> savingChunksDelayed = new Long2ObjectOpenHashMap<>();
     /**
      * Identity strategy, so we can identify the correct claims and remove them.
      */
-    private final Object2ObjectMap<ChunkClaim, ChunkClaimManager.ClaimedChunk> claimMap = new Object2ObjectOpenHashMap<>();
-    private final Long2ObjectMap<Collection<ChunkClaimManager.ClaimedChunk>> claimsByChunk = new Long2ObjectOpenHashMap<>();
+    private final Object2ObjectMap<ChunkClaim, TaskSchedulerThread.ClaimedChunk> claimMap = new Object2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<Collection<TaskSchedulerThread.ClaimedChunk>> claimsByChunk = new Long2ObjectOpenHashMap<>();
     private final ObjectHeapPriorityQueue<PrioritizedUpdate> updateQueue = new ObjectHeapPriorityQueue<>(PrioritizedUpdate.COMPARATOR);
     private final ChunkWorker chunkWorker;
     private final Instance instance;
@@ -90,16 +90,16 @@ class SingleThreadedManager {
 
     private boolean hasUpdated = false;
 
-    public SingleThreadedManager(ChunkClaimManager chunkClaimManager, ChunkAccess chunkAccess) {
-        this.chunkClaimManager = chunkClaimManager;
-        this.chunkWorker = new ChunkWorker(chunkClaimManager, chunkAccess);
-        this.instance = chunkClaimManager.getInstance();
+    public SingleThreadedManager(TaskSchedulerThread taskSchedulerThread, ChunkAccess chunkAccess) {
+        this.taskSchedulerThread = taskSchedulerThread;
+        this.chunkWorker = new ChunkWorker(taskSchedulerThread, chunkAccess);
+        this.instance = taskSchedulerThread.getInstance();
     }
 
     /**
      * This method is responsible for selecting and submitting the chunks to load.
      */
-    private void workIteration() {
+    IterationResult workIteration() {
         // All updates up to here have been seen. We will handle them now.
         this.hasUpdated = false;
 
@@ -108,21 +108,30 @@ class SingleThreadedManager {
         // because otherwise the workers would be overloaded
         while (!this.updateQueue.isEmpty()) {
             var update = this.updateQueue.dequeue();
-            var successfulUpdate = this.workUpdate(update);
-            if (!successfulUpdate) {
-                // we should stop the iteration here
-                // we must resubmit the update to the queue
+            var result = this.workUpdate(update);
+            if (result instanceof UpdateResult.WaitingForWorker) {
+                // The worker is busy. Exit loop here
                 this.updateQueue.enqueue(update);
                 break;
+            } else if (result instanceof UpdateResult.WaitingForFuture(CompletableFuture<?> future)) {
+                future.whenComplete((o, throwable) -> this.taskSchedulerThread.addTask(new Task.EnqueueUpdate(update)));
             }
         }
+        if (this.hasUpdated) {
+            return IterationResult.RUN_AGAIN;
+        }
+        return IterationResult.WAIT_FOR_SIGNAL;
     }
 
-    void workAddClaim(int x, int z, ChunkAndClaim chunkAndClaim) {
+    void enqueue(PrioritizedUpdate update) {
+        this.updateQueue.enqueue(update);
+    }
+
+    void addClaim(int x, int z, ChunkAndClaim chunkAndClaim) {
         var claim = chunkAndClaim.chunkClaim();
         this.tree.insert(x, z, claim.radius(), claim.priority(), claim.shape());
 
-        var claimedChunk = new ChunkClaimManager.ClaimedChunk(x, z, chunkAndClaim.chunkFuture());
+        var claimedChunk = new TaskSchedulerThread.ClaimedChunk(x, z, chunkAndClaim.chunkFuture());
         var chunkIndex = CoordConversion.chunkIndex(x, z);
         this.claimMap.put(claim, claimedChunk);
         this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimedChunk);
@@ -134,10 +143,10 @@ class SingleThreadedManager {
         this.submitUpdate(x, z, claim.priority(), UpdateType.ADD_CLAIM_EXPLICIT);
     }
 
-    void workRemoveClaim(ChunkClaim claim, CompletableFuture<Void> future) {
+    void removeClaim(ChunkClaim claim, CompletableFuture<Void> future) {
         var claimedChunk = this.claimMap.remove(claim);
         if (claimedChunk == null) {
-            this.chunkClaimManager.completeExceptionally(future, new IllegalStateException("The claim you attempted to remove is not valid"));
+            this.taskSchedulerThread.completeExceptionally(future, new IllegalStateException("The claim you attempted to remove is not valid"));
             return;
         }
         var x = claimedChunk.x();
@@ -154,11 +163,11 @@ class SingleThreadedManager {
         // We can complete the future right here, the claim was removed.
         // Removing a claim makes no guarantees about when the chunk is unloaded, so this is the easiest
         // and most obvious place to complete the future
-        this.chunkClaimManager.complete(future, null);
-        this.chunkClaimManager.completeExceptionally(claimedChunk.future(), new CancellationException("Claim was removed"));
+        this.taskSchedulerThread.complete(future, null);
+        this.taskSchedulerThread.completeExceptionally(claimedChunk.future(), new CancellationException("Claim was removed"));
     }
 
-    void workChunkGenerationFinished(Chunk chunk) {
+    void chunkGenerationFinished(Chunk chunk) {
         // The claim may have been removed by now. We will first have to check that
         var x = chunk.getChunkX();
         var z = chunk.getChunkZ();
@@ -180,7 +189,7 @@ class SingleThreadedManager {
         MinecraftServer.process().dispatcher().createPartition(chunk);
     }
 
-    void workSaveChunk(Chunk chunk, CompletableFuture<Void> future) {
+    void saveChunk(Chunk chunk, CompletableFuture<Void> future) {
         var chunkIndex = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
         if (this.savingChunks.containsKey(chunkIndex)) {
             // Already saving, this is a new task.
@@ -195,13 +204,13 @@ class SingleThreadedManager {
                 return;
             }
             // this is enough to schedule the chunk to be saved again
-            this.savingChunksDelayed.put(chunkIndex, new ChunkClaimManager.SaveTask(chunk, future));
+            this.savingChunksDelayed.put(chunkIndex, new TaskSchedulerThread.SaveTask(chunk, future));
             return;
         }
-        this.workSaveChunk0(new ChunkClaimManager.SaveTask(chunk, future));
+        this.saveChunk0(new TaskSchedulerThread.SaveTask(chunk, future));
     }
 
-    void workSaveChunk0(ChunkClaimManager.SaveTask saveTask) {
+    private void saveChunk0(TaskSchedulerThread.SaveTask saveTask) {
         // for saving with file IO we use a virtual thread instead of scheduling it to the worker.
         // This way we don't need to reserve a worker, which may otherwise prove to be difficult.
         var chunk = saveTask.chunk();
@@ -211,26 +220,26 @@ class SingleThreadedManager {
         Thread.startVirtualThread(() -> {
             try {
                 chunkLoader.saveChunk(chunk);
-                this.chunkClaimManager.complete(saveTask.future(), null);
+                this.taskSchedulerThread.complete(saveTask.future(), null);
             } catch (Throwable t) {
-                this.chunkClaimManager.completeExceptionally(saveTask.future(), t);
+                this.taskSchedulerThread.completeExceptionally(saveTask.future(), t);
             } finally {
-                this.chunkClaimManager.addTask(new ChunkClaimManager.Task.SaveChunkCompleted(chunk.getChunkX(), chunk.getChunkZ()));
+                this.taskSchedulerThread.addTask(new TaskSchedulerThread.Task.SaveChunkCompleted(chunk.getChunkX(), chunk.getChunkZ()));
             }
         });
     }
 
-    void workSaveChunkCompleted(int x, int z) {
+    void saveChunkCompleted(int x, int z) {
         var chunkIndex = CoordConversion.chunkIndex(x, z);
         if (this.savingChunksDelayed.containsKey(chunkIndex)) {
             var delayedTask = this.savingChunksDelayed.remove(chunkIndex);
-            workSaveChunk0(delayedTask);
+            saveChunk0(delayedTask);
             return;
         }
         this.savingChunks.remove(chunkIndex);
     }
 
-    void workSaveInstanceData(CompletableFuture<Void> future) {
+    void saveInstanceData(CompletableFuture<Void> future) {
         if (this.savingInstance) {
             if (this.savingInstanceDelayed != null) {
                 link(savingInstanceDelayed, future);
@@ -239,10 +248,10 @@ class SingleThreadedManager {
             this.savingInstanceDelayed = future;
             return;
         }
-        this.workSaveInstanceData0(future);
+        this.saveInstanceData0(future);
     }
 
-    void workSaveInstanceData0(CompletableFuture<Void> future) {
+    void saveInstanceData0(CompletableFuture<Void> future) {
         // for saving with file IO we use a virtual thread instead of scheduling it to the worker.
         // This way we don't need to reserve a worker, which may otherwise prove to be difficult.
         this.savingInstance = true;
@@ -250,43 +259,83 @@ class SingleThreadedManager {
         Thread.startVirtualThread(() -> {
             try {
                 chunkLoader.saveInstance(instance);
-                this.chunkClaimManager.complete(future, null);
+                this.taskSchedulerThread.complete(future, null);
             } catch (Throwable t) {
-                this.chunkClaimManager.completeExceptionally(future, t);
+                this.taskSchedulerThread.completeExceptionally(future, t);
             } finally {
-                this.chunkClaimManager.addTask(new ChunkClaimManager.Task.SaveInstanceDataCompleted());
+                this.taskSchedulerThread.addTask(new TaskSchedulerThread.Task.SaveInstanceDataCompleted());
             }
         });
     }
 
-    void workSaveInstanceCompleted() {
+    void saveInstanceCompleted() {
         if (this.savingInstanceDelayed != null) {
-            workSaveInstanceData0(this.savingInstanceDelayed);
+            saveInstanceData0(this.savingInstanceDelayed);
             this.savingInstanceDelayed = null;
             return;
         }
         this.savingInstance = false;
     }
 
-    void workSaveChunks(CompletableFuture<Void> future) {
+    void saveChunks(CompletableFuture<Void> future) {
         var futures = new CompletableFuture[this.chunks.size()];
         var i = 0;
         for (var chunk : this.chunks.values()) {
             var f = new CompletableFuture<Void>();
             futures[i++] = f;
-            this.workSaveChunk(chunk, f);
+            this.saveChunk(chunk, f);
         }
         link(CompletableFuture.allOf(futures), future);
     }
 
-    void workSaveInstanceDataAndChunks(CompletableFuture<Void> future) {
+    void saveInstanceDataAndChunks(CompletableFuture<Void> future) {
         var chunks = new CompletableFuture<Void>();
-        this.workSaveChunks(chunks);
+        this.saveChunks(chunks);
         var data = new CompletableFuture<Void>();
-        this.workSaveInstanceData(data);
+        this.saveInstanceData(data);
         link(CompletableFuture.allOf(chunks, data), future);
     }
 
+    // Should make control flow more obvious
+    @SuppressWarnings({"IfStatementWithIdenticalBranches", "RedundantIfStatement"})
+    private boolean shouldIgnoreUpdate(PrioritizedUpdate update) {
+        var x = update.x();
+        var z = update.z();
+        // Check if update priority changed. This could be because a high priority claim was removed.
+        var chunkIndex = CoordConversion.chunkIndex(x, z);
+        var entry = this.findHighestPriorityEntry(x, z);
+        if (entry == null) {
+            // ignore if no claim and not loaded, otherwise don't ignore
+            return !this.chunks.containsKey(chunkIndex);
+        }
+
+        var highestClaimPriority = calculatePriority(entry, x, z);
+
+        if (!this.isValidUpdate(update.priority(), highestClaimPriority)) {
+            // Update has different priority than the highest claim, ignore
+            return true;
+        }
+
+        var chunk = this.chunks.get(chunkIndex);
+        if (chunk == null) {
+            var loading = this.loadingChunks.get(chunkIndex);
+            if (loading == null) {
+                // claim exists, no chunk, not loading -> don't ignore, we have to load
+                return false;
+            }
+            if (doubleEqual(loading.lastUpdatePriority, highestClaimPriority)) {
+                // already up to date, we can ignore
+                return true;
+            }
+            return false;
+        } else {
+            if (doubleEqual(this.chunksLastUpdatePriority.get(chunkIndex), highestClaimPriority)) {
+                // already up to date, we can ignore
+                return true;
+            }
+            return false;
+        }
+    }
 
     /*
     Update logic:
@@ -323,7 +372,7 @@ class SingleThreadedManager {
         submit update to worker
 
      */
-    private boolean workUpdate(PrioritizedUpdate update) {
+    private UpdateResult workUpdate(PrioritizedUpdate update) {
         var x = update.x();
         var z = update.z();
         // Check if update priority changed. This could be because a high priority claim was removed.
@@ -337,7 +386,7 @@ class SingleThreadedManager {
 
         // Check if the update is still valid. If not, we can ignore it
         if (!this.isValidUpdate(update.priority(), highestClaimPriority)) {
-            return true;
+            return UpdateResult.INVALID_UPDATE;
         }
 
         var chunk = this.chunks.get(chunkIndex);
@@ -348,96 +397,102 @@ class SingleThreadedManager {
         // This can be prevented by saving the last update priority of a chunk
         if (chunk != null) {
             if (this.checkUpToDateLoaded(chunkIndex, highestClaimPriority)) {
-                return true;
+                return UpdateResult.ALREADY_UP_TO_DATE;
             }
             // we have to propagate the updates to (potentially) load neighbors
             this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
-            return true;
+            return UpdateResult.UPDATE_PROPAGATED_FOR_LOADED;
         } else {
-            // We may have to load the chunk. If we don't have a worker available, we can stop
-            // this update here and reschedule it.
-            if (!ChunkWorker.tryReserve()) return false;
-
-            if (this.checkUpToDateLoading(chunkIndex, highestClaimPriority)) {
-                return true;
+            if (this.isUpToDateLoading(chunkIndex, highestClaimPriority)) {
+                return UpdateResult.ALREADY_UP_TO_DATE;
             }
-
-            // we have to propagate the updates to (potentially) load neighbors
-            this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
 
             // The chunk may already be loaded, only start a worker for unloaded chunks
-            return this.updateLoadChunk(chunkIndex, x, z, highestClaimPriority);
+            return this.updateLoadChunk(chunkIndex, x, z, highestClaimPriority, entry);
         }
     }
 
-    /**
-     * This update must have a worker reserved before this method is called
-     */
-    private boolean updateLoadChunk(long chunkIndex, int x, int z, double highestClaimPriority) {
+    private UpdateResult updateLoadChunk(long chunkIndex, int x, int z, double highestClaimPriority, ChunkClaimTree.CompleteEntry entry) {
         // if we are already loading the chunk, we can just use that task
         var loading = this.loadingChunks.get(chunkIndex);
         if (loading != null) {
-            // We didn't need the permit
-            // TODO check if there is a good way to not have to reserve the permit, even if we don't end up needing it
-            ChunkWorker.release();
-            return true;
+            loading.lastUpdatePriority = highestClaimPriority;
+
+            // we have to propagate the updates to (potentially) load neighbors
+            this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
+
+            return UpdateResult.LOAD_SCHEDULED_EXISTING;
         }
 
         // if we are in the process of unloading/saving the chunk, we can use the cached chunk
         var unloadTask = this.unloadingChunks.get(chunkIndex);
         if (unloadTask != null) {
-            return this.updateLoadChunkFromMemory(chunkIndex, x, z, highestClaimPriority, unloadTask);
+            return this.updateLoadChunkFromMemory(chunkIndex, x, z, highestClaimPriority, entry, unloadTask);
         }
 
-        var task = new ChunkClaimManager.LoadTask(x, z, highestClaimPriority);
-        this.loadingChunks.put(chunkIndex, task);
+        if (ChunkWorker.tryReserve()) {
 
-        ChunkWorker.submitReserved(() -> {
-            try {
-                this.chunkWorker.workerGenerateChunk(task);
-            } catch (Throwable throwable) {
-                LOGGER.error("Exception during chunk loading/generation", throwable);
-            }
-        });
-        return true;
+            // we have to propagate the updates to (potentially) load neighbors
+            this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
+
+            var task = new TaskSchedulerThread.LoadTask(x, z, highestClaimPriority);
+            this.loadingChunks.put(chunkIndex, task);
+
+            ChunkWorker.submitReserved(() -> {
+                try {
+                    this.chunkWorker.workerGenerateChunk(task);
+                } catch (Throwable throwable) {
+                    LOGGER.error("Exception during chunk loading/generation", throwable);
+                }
+            });
+            return UpdateResult.LOAD_SCHEDULED;
+        }
+        return UpdateResult.WAITING_FOR_WORKER;
     }
 
-    /**
-     * This update must have a worker reserved before this method is called
-     */
-    private boolean updateLoadChunkFromMemory(long chunkIndex, int x, int z, double highestClaimPriority, ChunkClaimManager.UnloadTask unloadTask) {
+    private UpdateResult updateLoadChunkFromMemory(long chunkIndex, int x, int z, double highestClaimPriority, ChunkClaimTree.CompleteEntry entry, UnloadTask unloadTask) {
         // If the partition is not yet deleted, we must wait until it has finished.
-        // Otherwise InstanceChunkLoadEvent/InstanceChunkUnloadEvent may be fired out of order for
+        // Otherwise, InstanceChunkLoadEvent/InstanceChunkUnloadEvent may be fired out of order for
         // the same chunk.
         // Example:
         // InstanceChunkLoadEvent - InstanceChunkLoadEvent - InstanceChunkUnloadEvent - InstanceChunkUnloadEvent
-        var unloading = unloadTask.chunk;
-        var task = new ChunkClaimManager.LoadTask(x, z, highestClaimPriority);
-        this.loadingChunks.put(chunkIndex, task);
+
         if (unloadTask.partitionDeleted.isDone()) {
-            ChunkWorker.submitReserved(() -> this.chunkWorker.workerCopyFromMemory(unloading, x, z));
-            this.chunkClaimManager.addTask(new ChunkClaimManager.Task.CompleteLoadTask(x, z));
-            return false;
+            if (ChunkWorker.tryReserve()) {
+                var unloading = unloadTask.chunk;
+                var task = new TaskSchedulerThread.LoadTask(x, z, highestClaimPriority);
+                this.loadingChunks.put(chunkIndex, task);
+
+                // we have to propagate the updates to (potentially) load neighbors
+                this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
+
+                ChunkWorker.submitReserved(() -> {
+                    try {
+                        this.chunkWorker.workerCopyFromMemory(unloading, x, z);
+                    } catch (Throwable throwable) {
+                        LOGGER.error("Exception when copying chunk from old (in memory)", throwable);
+                    }
+                });
+                return UpdateResult.LOAD_COPY_SCHEDULED;
+            } else {
+                return UpdateResult.WAITING_FOR_WORKER;
+            }
         } else {
-            unloadTask.partitionDeleted.whenComplete((unused, throwable) -> {
-                if (throwable != null) {
-                    LOGGER.error("Error in partitionDeleted future", throwable);
-                }
-                this.chunkClaimManager.addTask(new ChunkClaimManager.Task.CompleteLoadTask(x, z));
-            });
-            return true;
+            // This update must wait until the future has completed.
+            return new UpdateResult.WaitingForFuture(unloadTask.partitionDeleted);
         }
     }
 
-    private boolean updateNoRemainingClaims(long chunkIndex, int x, int z, PrioritizedUpdate update) {
+    private UpdateResult updateNoRemainingClaims(long chunkIndex, int x, int z, PrioritizedUpdate update) {
         // The last claim was removed. We may have to remove the chunk from the chunks map if that hasn't happened already
         var chunk = this.chunks.remove(chunkIndex);
         if (chunk != null) {
             this.unloadChunk(chunk);
             // we have to propagate the updates to (potentially) unload neighbors
             this.propagateUpdates(null, update.priority(), x, z, UpdateType.UNLOAD_PROPAGATE);
+            return UpdateResult.UNLOAD_SCHEDULED;
         }
-        return true;
+        return UpdateResult.INVALID_UPDATE;
     }
 
     /**
@@ -456,14 +511,16 @@ class SingleThreadedManager {
             return;
         }
         var unloadFuture = new CompletableFuture<Void>();
-        this.unloadingChunks.put(chunkIndex, new ChunkClaimManager.UnloadTask(chunk, unloadFuture));
+        var task = new TaskSchedulerThread.UnloadTask(chunk, unloadFuture);
+        this.unloadingChunks.put(chunkIndex, task);
         var scheduler = chunk.getScheduler();
         scheduler.scheduleNextProcess(() -> {
             MinecraftServer.process().dispatcher().deletePartition(chunk);
+            task.partitionDeleted.complete(null);
         });
         if (this.autosaveEnabled) {
             var saveFuture = new CompletableFuture<Void>();
-            this.workSaveChunk(chunk, saveFuture);
+            this.saveChunk(chunk, saveFuture);
             saveFuture.whenComplete((unused, throwable) -> {
                 if (throwable != null) {
                     LOGGER.error("Exception when saving chunk", throwable);
@@ -488,7 +545,7 @@ class SingleThreadedManager {
         var index = CoordConversion.chunkIndex(x, z);
         var chunk = this.chunks.get(index);
         if (chunk == null) return;
-        this.chunkClaimManager.complete(chunkAndClaim.chunkFuture(), chunk);
+        this.taskSchedulerThread.complete(chunkAndClaim.chunkFuture(), chunk);
     }
 
     private @Nullable ChunkClaimTree.CompleteEntry findHighestPriorityEntry(int x, int z) {
@@ -531,7 +588,7 @@ class SingleThreadedManager {
 
     private boolean checkUpToDateLoaded(long chunkIndex, double highestClaimPriority) {
         var lastUpdatePriority = this.chunksLastUpdatePriority.get(chunkIndex);
-        if (highestClaimPriority > lastUpdatePriority - Vec.EPSILON && highestClaimPriority < lastUpdatePriority + Vec.EPSILON) {
+        if (doubleEqual(highestClaimPriority, lastUpdatePriority)) {
             // same priority (compared with Vec.EPSILON precision)
             // The update has already been handled for this chunk, we can ignore it
             return true;
@@ -540,15 +597,10 @@ class SingleThreadedManager {
         return false;
     }
 
-    private boolean checkUpToDateLoading(long chunkIndex, double highestClaimPriority) {
+    private boolean isUpToDateLoading(long chunkIndex, double highestClaimPriority) {
         var loadingChunk = this.loadingChunks.get(chunkIndex);
         if (loadingChunk != null) {
-            if (highestClaimPriority > loadingChunk.lastUpdatePriority - Vec.EPSILON && highestClaimPriority < loadingChunk.lastUpdatePriority + Vec.EPSILON) {
-                // same priority (compared with Vec.EPSILON precision)
-                // The update has already been handled for this chunk, we can ignore it
-                return true;
-            }
-            loadingChunk.lastUpdatePriority = highestClaimPriority;
+            return doubleEqual(highestClaimPriority, loadingChunk.lastUpdatePriority);
         }
         return false;
     }
@@ -578,5 +630,53 @@ class SingleThreadedManager {
 
     static Comparator<ChunkClaimTree.CompleteEntry> entryComparator(int x, int z) {
         return Comparator.comparingDouble(e -> calculatePriority(e, x, z));
+    }
+
+    private static boolean doubleEqual(double d1, double d2) {
+        return d1 > d2 - Vec.EPSILON && d1 < d2 + Vec.EPSILON;
+    }
+
+    enum IterationResult {
+        RUN_AGAIN, WAIT_FOR_SIGNAL
+    }
+
+    // TODO I thought I'm gonna need to pass data to these, maybe I don't need to though.
+    //  Check later and maybe convert to enum.
+    interface UpdateResult {
+        UpdateResult INVALID_UPDATE = new InvalidUpdate();
+        UpdateResult LOAD_SCHEDULED = new LoadScheduled();
+        UpdateResult LOAD_SCHEDULED_EXISTING = new WaitForScheduledLoad();
+        UpdateResult UNLOAD_SCHEDULED = new UnloadScheduled();
+        UpdateResult ALREADY_UP_TO_DATE = new AlreadyUpToDate();
+        UpdateResult UPDATE_PROPAGATED_FOR_LOADED = new UpdatePropagatedForLoaded();
+        UpdateResult WAITING_FOR_WORKER = new WaitingForWorker();
+        UpdateResult LOAD_COPY_SCHEDULED = new LoadCopyScheduled();
+
+        record LoadCopyScheduled() implements UpdateResult {
+        }
+
+        record InvalidUpdate() implements UpdateResult {
+        }
+
+        record LoadScheduled() implements UpdateResult {
+        }
+
+        record UnloadScheduled() implements UpdateResult {
+        }
+
+        record WaitForScheduledLoad() implements UpdateResult {
+        }
+
+        record AlreadyUpToDate() implements UpdateResult {
+        }
+
+        record UpdatePropagatedForLoaded() implements UpdateResult {
+        }
+
+        record WaitingForWorker() implements UpdateResult {
+        }
+
+        record WaitingForFuture(CompletableFuture<?> future) implements UpdateResult {
+        }
     }
 }

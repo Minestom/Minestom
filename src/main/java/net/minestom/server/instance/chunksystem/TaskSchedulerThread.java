@@ -1,20 +1,8 @@
 package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Function;
-import it.unimi.dsi.fastutil.longs.Long2DoubleMap;
-import it.unimi.dsi.fastutil.longs.Long2DoubleOpenHashMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectHeapPriorityQueue;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -23,12 +11,12 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 
 import java.util.*;
-import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Supplier;
 
 /**
  * This class is responsible for managing the chunk claims.
@@ -92,8 +80,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  *     </li>
  * </ul>
  */
-class ChunkClaimManager implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ChunkClaimManager.class);
+class TaskSchedulerThread implements Runnable {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TaskSchedulerThread.class);
     /**
      * TODO we could also make this per-instance configurable
      */
@@ -104,15 +92,15 @@ class ChunkClaimManager implements Runnable {
     };
 
     private final CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
+    private final ReentrantLock singleThreadedManagerLock = new ReentrantLock();
     private final SingleThreadedManager singleThreadedManager;
-
 
     private final Instance instance;
     private final ConcurrentLinkedQueue<Task> tasks = new ConcurrentLinkedQueue<>();
     private final ManagerSignaling signaling = new ManagerSignaling();
     private volatile boolean exit = false;
 
-    public ChunkClaimManager(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, ChunkAccess chunkAccess) {
+    public TaskSchedulerThread(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, ChunkAccess chunkAccess) {
         this.instance = instance;
         this.singleThreadedManager = new SingleThreadedManager(this, chunkAccess);
         this.setChunkLoader(chunkLoader);
@@ -130,41 +118,90 @@ class ChunkClaimManager implements Runnable {
     public void run() {
         while (!this.exit) {
             this.signaling.startIteration();
-            while (true) {
-                var task = this.tasks.poll();
-                if (task == null) break;
-                this.workTask(task);
-            }
-            this.workIteration();
-            if (this.hasUpdated || this.exit) continue;
+            this.singleThreadedManagerLock.lock();
+            var res = this.syncWork(this.singleThreadedManager::workIteration);
 
-            if (this.signaling.waitForSignal()) {
-                // A problem occurred. Probably an InterruptedException
-                break;
+            if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL) {
+                if (this.exit) continue;
+
+                ChunkWorker.signalWhenReady(this.signaling);
+                if (this.signaling.waitForSignal()) {
+                    // A problem occurred. Probably an InterruptedException
+                    break;
+                }
             }
         }
         // after we shut down normally, we shouldn't have to process the remaining tasks.
         // TODO check in the future if this assumption holds
     }
 
+    /**
+     * This method must be used for any "logic" that the singleThreadedManager should do.
+     * <p>
+     * This is required to ensure tasks get submitted in FIFO order.
+     * Otherwise, a queued addClaim task can be removed by a sync removeClaim call,
+     * before the addClaim has been handled.
+     * <p>
+     * To mitigate this, anytime we execute logic other than a simple getter/setter we
+     * must handle all queued tasks first.
+     */
+    private <T> T syncWork(Supplier<T> supplier) {
+        this.singleThreadedManagerLock.lock();
+        while (true) {
+            var task = this.tasks.poll();
+            if (task == null) break;
+            this.handleTask(task);
+        }
+        try {
+            return supplier.get();
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
+    }
+
     public @NotNull IChunkLoader getChunkLoader() {
-        return this.singleThreadedManager.chunkLoader;
+        this.singleThreadedManagerLock.lock();
+        try {
+            return this.singleThreadedManager.chunkLoader;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public void setChunkLoader(@Nullable IChunkLoader chunkLoader) {
-        this.singleThreadedManager.chunkLoader = Objects.requireNonNullElse(chunkLoader, IChunkLoader.noop());
+        this.singleThreadedManagerLock.lock();
+        try {
+            this.singleThreadedManager.chunkLoader = Objects.requireNonNullElse(chunkLoader, IChunkLoader.noop());
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public @NotNull ChunkSupplier getChunkSupplier() {
-        return this.singleThreadedManager.chunkSupplier;
+        this.singleThreadedManagerLock.lock();
+        try {
+            return this.singleThreadedManager.chunkSupplier;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public @Nullable Generator getGenerator() {
-        return this.singleThreadedManager.generator;
+        this.singleThreadedManagerLock.lock();
+        try {
+            return this.singleThreadedManager.generator;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public void setGenerator(@Nullable Generator generator) {
-        this.singleThreadedManager.generator = generator;
+        this.singleThreadedManagerLock.lock();
+        try {
+            this.singleThreadedManager.generator = generator;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public Instance getInstance() {
@@ -172,43 +209,57 @@ class ChunkClaimManager implements Runnable {
     }
 
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
-        this.singleThreadedManager.chunkSupplier = chunkSupplier;
+        this.singleThreadedManagerLock.lock();
+        try {
+            this.singleThreadedManager.chunkSupplier = chunkSupplier;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public boolean isAutosaveEnabled() {
-        return this.singleThreadedManager.autosaveEnabled;
+        this.singleThreadedManagerLock.lock();
+        try {
+            return this.singleThreadedManager.autosaveEnabled;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public void setAutosaveEnabled(boolean autosaveEnabled) {
-        this.singleThreadedManager.autosaveEnabled = autosaveEnabled;
+        this.singleThreadedManagerLock.lock();
+        try {
+            this.singleThreadedManager.autosaveEnabled = autosaveEnabled;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
     }
 
     public @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ) {
         return this.singleThreadedManager.chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
     }
 
-    private void workTask(Task task) {
+    private void handleTask(Task task) {
         switch (task) {
             case Task.AddClaim addClaim ->
-                    this.singleThreadedManager.workAddClaim(addClaim.x, addClaim.z, addClaim.chunkAndClaim);
+                    this.singleThreadedManager.addClaim(addClaim.x, addClaim.z, addClaim.chunkAndClaim);
             case Task.RemoveClaim removeClaim ->
-                    this.singleThreadedManager.workRemoveClaim(removeClaim.claim, removeClaim.future);
+                    this.singleThreadedManager.removeClaim(removeClaim.claim, removeClaim.future);
             case Task.ChunkGenerationFinished chunkGenerationFinished ->
-                    this.singleThreadedManager.workChunkGenerationFinished(chunkGenerationFinished.chunk);
-            case Task.SaveChunk saveChunk ->
-                    this.singleThreadedManager.workSaveChunk(saveChunk.chunk, saveChunk.future);
-            case Task.SaveChunks saveChunks -> this.singleThreadedManager.workSaveChunks(saveChunks.future);
+                    this.singleThreadedManager.chunkGenerationFinished(chunkGenerationFinished.chunk);
+            case Task.SaveChunk saveChunk -> this.singleThreadedManager.saveChunk(saveChunk.chunk, saveChunk.future);
+            case Task.SaveChunks saveChunks -> this.singleThreadedManager.saveChunks(saveChunks.future);
             case Task.SaveInstanceData saveInstanceData ->
-                    this.singleThreadedManager.workSaveInstanceData(saveInstanceData.future);
+                    this.singleThreadedManager.saveInstanceData(saveInstanceData.future);
             case Task.SaveInstanceDataAndChunks saveInstanceDataAndChunks ->
-                    this.singleThreadedManager.workSaveInstanceDataAndChunks(saveInstanceDataAndChunks.future);
-            case Task.SaveInstanceDataCompleted saveInstanceDataCompleted ->
-                    this.singleThreadedManager.workSaveInstanceCompleted();
+                    this.singleThreadedManager.saveInstanceDataAndChunks(saveInstanceDataAndChunks.future);
+            case Task.SaveInstanceDataCompleted ignored -> this.singleThreadedManager.saveInstanceCompleted();
             case Task.SaveChunkCompleted saveChunkCompleted ->
-                    this.singleThreadedManager.workSaveChunkCompleted(saveChunkCompleted.x(), saveChunkCompleted.z());
+                    this.singleThreadedManager.saveChunkCompleted(saveChunkCompleted.x(), saveChunkCompleted.z());
             case Task.RetryUnload retryUnload -> this.singleThreadedManager.unloadChunk(retryUnload.chunk);
             case Task.FinishUnloadAfterSave finishUnloadAfterSave ->
                     this.singleThreadedManager.finishUnloadChunk(finishUnloadAfterSave.chunk());
+            case Task.EnqueueUpdate(var update) -> this.singleThreadedManager.enqueue(update);
         }
     }
 
@@ -251,27 +302,27 @@ class ChunkClaimManager implements Runnable {
         });
     }
 
-    public void addClaim(int x, int z, @NotNull ChunkAndClaim chunkAndClaim) {
+    public void addClaimAsync(int x, int z, @NotNull ChunkAndClaim chunkAndClaim) {
         this.addTask(new Task.AddClaim(x, z, chunkAndClaim));
     }
 
-    public void removeClaim(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) {
+    public void removeClaimAsync(@NotNull ChunkClaim claim, @NotNull CompletableFuture<Void> future) {
         this.addTask(new Task.RemoveClaim(claim, future));
     }
 
-    public void saveChunk(@NotNull Chunk chunk, CompletableFuture<Void> future) {
+    public void saveChunkAsync(@NotNull Chunk chunk, CompletableFuture<Void> future) {
         this.addTask(new Task.SaveChunk(chunk, future));
     }
 
-    public void saveChunks(@NotNull CompletableFuture<Void> future) {
+    public void saveChunksAsync(@NotNull CompletableFuture<Void> future) {
         this.addTask(new Task.SaveChunks(future));
     }
 
-    public void saveInstanceData(@NotNull CompletableFuture<Void> future) {
+    public void saveInstanceDataAsync(@NotNull CompletableFuture<Void> future) {
         this.addTask(new Task.SaveInstanceData(future));
     }
 
-    public void saveInstanceDataAndChunks(@NotNull CompletableFuture<Void> future) {
+    public void saveInstanceDataAndChunksAsync(@NotNull CompletableFuture<Void> future) {
         this.addTask(new Task.SaveInstanceDataAndChunks(future));
     }
 
@@ -342,6 +393,9 @@ class ChunkClaimManager implements Runnable {
         }
 
         record SaveChunkCompleted(int x, int z) implements Task {
+        }
+
+        record EnqueueUpdate(@NotNull PrioritizedUpdate update) implements Task {
         }
 
         record FinishUnloadAfterSave(@NotNull Chunk chunk) implements Task {

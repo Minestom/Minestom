@@ -4,7 +4,6 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.utils.chunk.ChunkSupplier;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -14,73 +13,73 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 class ChunkManagerImpl implements ChunkManager {
-    private final ChunkClaimManager chunkClaimManager;
+    private final TaskSchedulerThread taskSchedulerThread;
     private int defaultPriority;
 
     public ChunkManagerImpl(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, @NotNull ChunkAccess chunkAccess) {
-        this.chunkClaimManager = new ChunkClaimManager(instance, chunkSupplier, chunkLoader, chunkAccess);
+        this.taskSchedulerThread = new TaskSchedulerThread(instance, chunkSupplier, chunkLoader, chunkAccess);
     }
 
     @Override
     public @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ) {
-        return chunkClaimManager.getLoadedChunk(chunkX, chunkZ);
+        return taskSchedulerThread.getLoadedChunk(chunkX, chunkZ);
     }
 
     @Override
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
-        return chunkClaimManager.getLoadedChunks();
+        return taskSchedulerThread.getLoadedChunks();
     }
 
     @Override
     public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull ChunkClaim.Shape shape) {
         var chunkAndClaim = new ChunkAndClaim(new CompletableFuture<>(), new ChunkClaimImpl(radius, priority, shape));
-        this.chunkClaimManager.addClaim(chunkX, chunkZ, chunkAndClaim);
+        this.taskSchedulerThread.addClaimAsync(chunkX, chunkZ, chunkAndClaim);
         return chunkAndClaim;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> removeClaim(@NotNull ChunkClaim claim) {
         var future = new CompletableFuture<Void>();
-        this.chunkClaimManager.removeClaim(claim, future);
+        this.taskSchedulerThread.removeClaimAsync(claim, future);
         return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstanceData() {
         var future = new CompletableFuture<Void>();
-        this.chunkClaimManager.saveInstanceData(future);
+        this.taskSchedulerThread.saveInstanceDataAsync(future);
         return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunk(@NotNull Chunk chunk) {
         var future = new CompletableFuture<Void>();
-        this.chunkClaimManager.saveChunk(chunk, future);
+        this.taskSchedulerThread.saveChunkAsync(chunk, future);
         return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveChunks() {
         var future = new CompletableFuture<Void>();
-        this.chunkClaimManager.saveChunks(future);
+        this.taskSchedulerThread.saveChunksAsync(future);
         return future;
     }
 
     @Override
     public @NotNull CompletableFuture<Void> saveInstanceDataAndChunks() {
         var future = new CompletableFuture<Void>();
-        this.chunkClaimManager.saveInstanceDataAndChunks(future);
+        this.taskSchedulerThread.saveInstanceDataAndChunksAsync(future);
         return future;
     }
 
     @Override
     public void setChunkLoader(@NotNull IChunkLoader chunkLoader) {
-        this.chunkClaimManager.setChunkLoader(Objects.requireNonNull(chunkLoader, "Chunk loader cannot be null"));
+        this.taskSchedulerThread.setChunkLoader(Objects.requireNonNull(chunkLoader, "Chunk loader cannot be null"));
     }
 
     @Override
     public @NotNull IChunkLoader getChunkLoader() {
-        return this.chunkClaimManager.getChunkLoader();
+        return this.taskSchedulerThread.getChunkLoader();
     }
 
     @Override
@@ -115,11 +114,11 @@ class ChunkManagerImpl implements ChunkManager {
 
     @Override
     public boolean isAutosaveEnabled() {
-        return this.chunkClaimManager.isAutosaveEnabled();
+        return this.taskSchedulerThread.isAutosaveEnabled();
     }
 
     @Override
     public void setAutosaveEnabled(boolean autosaveEnabled) {
-        this.chunkClaimManager.setAutosaveEnabled(autosaveEnabled);
+        this.taskSchedulerThread.setAutosaveEnabled(autosaveEnabled);
     }
 }
