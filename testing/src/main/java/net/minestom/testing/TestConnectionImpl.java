@@ -17,7 +17,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -63,7 +62,6 @@ final class TestConnectionImpl implements TestConnection {
             future.complete(player);
         });
         future.join();
-
         playerConnection.setConnectionState(ConnectionState.PLAY);
         process.connection().updateWaitingPlayers();
         return player;

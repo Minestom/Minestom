@@ -49,7 +49,6 @@ public class InstanceBlockIntegrationTest {
         assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 50, 0));
 
         instance.unloadChunk(0, 0);
-        instance.getChunkManager().getUnloadFuture(0, 0).join();
 
         assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
                 "No exception throw when getting a block in an unloaded chunk");
