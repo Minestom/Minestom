@@ -11,12 +11,12 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.generator.Generator;
@@ -590,7 +590,10 @@ class SingleThreadedManager {
 
         this.taskTracking.runningTickScheduledCount.addAndGet(2);
         Runnable runInstance = () -> {
-            this.instance.getChunkEntities(chunk).stream().filter(e -> e instanceof Player).map(p -> (Player) p).forEach(p -> p.kick("Your chunk was unloaded, go cry to server admin \uD83D\uDE1B"));
+            this.instance.getEntityTracker().chunkEntities(chunk.getChunkX(), chunk.getChunkZ(), EntityTracker.Target.ENTITIES).forEach(e -> {
+                if (e instanceof Player p) p.kick("Your chunk was unloaded");
+                else e.remove();
+            });
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
         };
         Runnable runChunk = () -> {

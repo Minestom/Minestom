@@ -37,7 +37,8 @@ public class ChunkManagerGUITest {
     volatile boolean submitted = false;
     volatile boolean submittedAgain = false;
 
-//    @Disabled
+    // Enable this test for manual GUI visualization
+    @Disabled
     @Test
     void gui(Env env) {
         this.env = env;

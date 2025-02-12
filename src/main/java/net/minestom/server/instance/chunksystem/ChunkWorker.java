@@ -1,6 +1,8 @@
 package net.minestom.server.instance.chunksystem;
 
+import net.minestom.server.ServerFlag;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.ApiStatus;
 import org.slf4j.Logger;
@@ -8,12 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.WeakHashMap;
 import java.util.concurrent.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 @ApiStatus.Internal
 public class ChunkWorker {
     private static final Logger LOGGER = LoggerFactory.getLogger(ChunkWorker.class);
+    private static final WeakHashMap<IChunkLoader, Boolean> WARNED_LOADERS = new WeakHashMap<>();
     /**
      * Use a common worker pool for all managers. A manager may only submit a task if he holds
      * a permit in {@link #AVAILABLE_TASKS}
@@ -58,7 +62,12 @@ public class ChunkWorker {
         final var generator = this.taskSchedulerThread.getGenerator();
         if (!loader.supportsParallelLoading()) {
             // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
-            throw new AssertionError("ChunkLoaders must support parallel loading. Please migrate your system");
+            synchronized (WARNED_LOADERS) {
+                if (!WARNED_LOADERS.containsKey(loader)) {
+                    LOGGER.error("ChunkLoaders must support parallel loading. Please migrate your system. Violating loader: {}", loader, new AssertionError());
+                    WARNED_LOADERS.put(loader, true);
+                }
+            }
         }
 
         var x = task.x;
@@ -89,7 +98,15 @@ public class ChunkWorker {
      * will not fill up because of the way tasks/loads are lazy.
      */
     private static void runOnWorker(Runnable runnable) {
-        WORKER_EXECUTOR.execute(runnable);
+        // We want to execute everything sync when running tests.
+        // If we don't, we don't know when the async logic finishes and
+        // potential new tasks get submitted to the task queue,
+        // which may cause partition updates to be submitted, which
+        // in turn only gets updated when ticking.
+        // But because it is async, we don't know when we need to tick,
+        // so we are in a pickle.
+        if (ServerFlag.INSIDE_TEST) runnable.run();
+        else WORKER_EXECUTOR.execute(runnable);
     }
 
     static boolean tryReserve() {

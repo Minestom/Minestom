@@ -79,6 +79,10 @@ public class InstanceUnregisterIntegrationTest {
         //noinspection UnusedAssignment
         chunk = null;
 
+        // We must tick to remove the reference in the dispatcher
+        // from PartitionLoad/Unload
+        env.tick();
+
         waitUntilCleared(ref);
     }
 
@@ -94,6 +98,10 @@ public class InstanceUnregisterIntegrationTest {
         chunk = null;
         //noinspection UnusedAssignment
         instance = null;
+
+        // We must tick to remove the reference in the dispatcher
+        // from PartitionLoad/Unload
+        env.tick();
 
         waitUntilCleared(ref);
     }
