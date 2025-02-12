@@ -66,6 +66,9 @@ public abstract class BlockPlacementRule {
             boolean isPlayerShifting
     ) {
         @Deprecated
+        /**
+         * @deprecated Use {@link #blockGetter()} instead
+         */
         public Block.Getter instance() {
             return this.blockGetter;
         }
@@ -77,6 +80,9 @@ public abstract class BlockPlacementRule {
                               @NotNull Block currentBlock,
                               @NotNull BlockFace fromFace) {
         @Deprecated
+        /**
+         * @deprecated Use {@link #blockGetter()} instead
+         */
         public Block.Getter instance() {
             return this.blockGetter;
         }
