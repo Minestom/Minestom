@@ -269,7 +269,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public synchronized void unloadChunk(@NotNull Chunk chunk) {
+    public void unloadChunk(@NotNull Chunk chunk) {
         if (!isLoaded(chunk)) return;
         final int chunkX = chunk.getChunkX();
         final int chunkZ = chunk.getChunkZ();

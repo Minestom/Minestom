@@ -3,6 +3,7 @@ package net.minestom.server.instance.chunksystem;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
@@ -223,6 +224,16 @@ public interface ChunkManager {
      * @return the {@link IChunkLoader} of this chunk manager
      */
     @NotNull IChunkLoader getChunkLoader();
+
+    /**
+     * Gets a future which is completed as soon as a chunk is unloaded
+     *
+     * @param x the chunk x
+     * @param z the chunk z
+     * @return the future
+     */
+    @ApiStatus.Experimental
+    @NotNull CompletableFuture<Void> getUnloadFuture(int x, int z);
 
     /**
      * Allows creating a {@link ChunkManager} for any generic instance.

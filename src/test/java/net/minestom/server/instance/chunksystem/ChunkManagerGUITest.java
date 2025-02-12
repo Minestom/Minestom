@@ -20,6 +20,8 @@ import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.LockSupport;
 
 @EnvTest
 public class ChunkManagerGUITest {
@@ -35,11 +37,14 @@ public class ChunkManagerGUITest {
     volatile boolean submitted = false;
     volatile boolean submittedAgain = false;
 
-    @Disabled
+//    @Disabled
     @Test
     void gui(Env env) {
         this.env = env;
         instance = env.createFlatInstance();
+        instance.setGenerator(unit -> {
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
+        });
         try {
 //            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");

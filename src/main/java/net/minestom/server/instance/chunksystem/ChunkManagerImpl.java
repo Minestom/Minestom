@@ -84,6 +84,15 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
+    public @NotNull CompletableFuture<Void> getUnloadFuture(int x, int z) {
+        var chunk = getLoadedChunk(x, z);
+        if (chunk == null) return CompletableFuture.completedFuture(null);
+        var future = new CompletableFuture<Void>();
+        this.taskSchedulerThread.unloadFutureAsync(x, z, future);
+        return future;
+    }
+
+    @Override
     public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ) {
         return addClaim(chunkX, chunkZ, 0);
     }

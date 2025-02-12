@@ -18,7 +18,8 @@ public class ChunkWorker {
      * Use a common worker pool for all managers. A manager may only submit a task if he holds
      * a permit in {@link #AVAILABLE_TASKS}
      */
-    private static final ExecutorService WORKER_EXECUTOR;
+    private static ExecutorService WORKER_EXECUTOR;
+    private static ExecutorService SAVE_EXECUTOR;
     /**
      * We allow twice the number of available processors to be submitted before waiting.
      * This is so we don't waste time.
@@ -28,7 +29,6 @@ public class ChunkWorker {
     private static final Semaphore AVAILABLE_TASKS = new Semaphore(Runtime.getRuntime().availableProcessors() * 2);
     private static final ReentrantLock WAITING_LOCK = new ReentrantLock();
     private static final Set<ManagerSignaling> WAITING = new HashSet<>();
-    private static final ExecutorService SAVE_EXECUTOR;
 
     private final TaskSchedulerThread taskSchedulerThread;
     private final ChunkGenerationHandler chunkGenerationHandler;
@@ -149,13 +149,35 @@ public class ChunkWorker {
         SAVE_EXECUTOR.execute(runnable);
     }
 
+    static {
+        globalInit();
+    }
+
     @ApiStatus.Internal
-    public static CompletableFuture<Void> globalShutdown() {
+    public static synchronized CompletableFuture<Void> globalShutdown() {
+        // TODO make sure these workers are shut down correctly later
+        if (true) return CompletableFuture.completedFuture(null);
+        if (WORKER_EXECUTOR == null) throw new IllegalStateException();
         // We give the workers a little time (5 seconds) to shut down.
         // We give chunk saving more time (60 seconds).
         // Considering it's probably IO bound, and we don't want corrupt chunks,
         // a minute should be appropriate to ensure it's more than enough time.
-        return CompletableFuture.allOf(shutdown(WORKER_EXECUTOR, 5), shutdown(SAVE_EXECUTOR, 60));
+        var fut = CompletableFuture.allOf(shutdown(WORKER_EXECUTOR, 5), shutdown(SAVE_EXECUTOR, 60));
+        WORKER_EXECUTOR = null;
+        SAVE_EXECUTOR = null;
+        return fut;
+    }
+
+    @ApiStatus.Internal
+    public static synchronized void globalInit() {
+//        if (WORKER_EXECUTOR != null) throw new IllegalStateException();
+        if (WORKER_EXECUTOR != null) return;
+        WORKER_EXECUTOR = createLowPriority(1);
+
+        // We should be able to get away with using fewer threads here.
+        // Saving chunks should be rare enough.
+        // TODO benchmark this
+        SAVE_EXECUTOR = createLowPriority(0.5);
     }
 
     private static CompletableFuture<Void> shutdown(ExecutorService service, int timeoutSeconds) {
@@ -163,12 +185,15 @@ public class ChunkWorker {
         service.shutdown();
         if (service.isTerminated()) {
             fut.complete(null);
+            LOGGER.info("Already shutdown {}", timeoutSeconds);
         } else {
-            Thread.startVirtualThread(() -> {
+            Thread.ofPlatform().daemon(true).start(() -> {
                 try {
+                    LOGGER.info("Start shutdown {}", timeoutSeconds);
                     if (!service.awaitTermination(timeoutSeconds, TimeUnit.SECONDS)) {
                         LOGGER.error("Pool termination took more than {} seconds. This is not good", timeoutSeconds);
                     }
+                    LOGGER.info("Stop complete");
                 } catch (InterruptedException e) {
                     LOGGER.error("Interrupted generation pool termination waiting. This should not happen", e);
                 } finally {
@@ -177,16 +202,6 @@ public class ChunkWorker {
             });
         }
         return fut;
-    }
-
-
-    static {
-        WORKER_EXECUTOR = createLowPriority(1);
-
-        // We should be able to get away with using fewer threads here.
-        // Saving chunks should be rare enough.
-        // TODO benchmark this
-        SAVE_EXECUTOR = createLowPriority(0.5);
     }
 
     static ForkJoinPool createLowPriority(double multiplier) {

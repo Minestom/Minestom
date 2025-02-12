@@ -49,6 +49,8 @@ public class InstanceBlockIntegrationTest {
         assertEquals(Block.GRASS_BLOCK, instance.getBlock(0, 50, 0));
 
         instance.unloadChunk(0, 0);
+        instance.getChunkManager().getUnloadFuture(0, 0).join();
+
         assertThrows(NullPointerException.class, () -> instance.getBlock(0, 0, 0),
                 "No exception throw when getting a block in an unloaded chunk");
 
@@ -104,5 +106,15 @@ public class InstanceBlockIntegrationTest {
         instance.setBlock(1, 50, 0, theBlock);
 
         assertEquals(theBlock, currentBlock.get());
+    }
+
+    @Test
+    void testLoadManyChunks(Env env) {
+        var instance = env.createFlatInstance();
+        for (var x = 0; x < 100; x++) {
+            for (var z = 0; z < 100; z++) {
+                instance.loadChunk(x,z).join();
+            }
+        }
     }
 }

@@ -1,8 +1,11 @@
 package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Function;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.event.instance.InstanceRegisterEvent;
+import net.minestom.server.event.instance.InstanceUnregisterEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -15,6 +18,8 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Supplier;
 
@@ -81,7 +86,6 @@ import java.util.function.Supplier;
  * </ul>
  */
 class TaskSchedulerThread implements Runnable {
-    private static final Logger LOGGER = LoggerFactory.getLogger(TaskSchedulerThread.class);
     /**
      * TODO we could also make this per-instance configurable
      */
@@ -91,13 +95,18 @@ class TaskSchedulerThread implements Runnable {
         case null, default -> new PriorityDrop.HypotenuseSquared();
     };
 
-    private final CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
+    // Needed to make this reusable.
+    private final ReentrantLock mainLock = new ReentrantLock();
+    private CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
+
     private final ReentrantLock singleThreadedManagerLock = new ReentrantLock();
     private final SingleThreadedManager singleThreadedManager;
+    private final int id = ThreadLocalRandom.current().nextInt();
 
     private final Instance instance;
     private final ConcurrentLinkedQueue<Task> tasks = new ConcurrentLinkedQueue<>();
     private final ManagerSignaling signaling = new ManagerSignaling();
+    private final AtomicBoolean testRunning = new AtomicBoolean(false);
     private volatile boolean exit = false;
 
     public TaskSchedulerThread(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, ChunkAccess chunkAccess) {
@@ -106,16 +115,50 @@ class TaskSchedulerThread implements Runnable {
         this.setChunkLoader(chunkLoader);
         this.setChunkSupplier(Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
         this.singleThreadedManager.chunkLoader.loadInstance(instance);
-        // We finally start ourselves.
-        // Now we start accepting tasks.
-        // Virtual thread is appropriate here, we
-        // will spend most time waiting for signals/workers.
-        // Also, 1 platform thread per instance can become quite expensive
-        Thread.startVirtualThread(this);
+
+        this.registerEvents();
     }
 
     @Override
     public void run() {
+        this.run(true);
+
+        shutdownFuture.complete(null);
+        // after we shut down normally, we shouldn't have to process the remaining tasks.
+        // TODO check in the future if this assumption holds
+    }
+
+    /**
+     * Custom run method in tests.
+     * We want less stuff happening async.
+     * Otherwise, deadlocks in tests are going to be a real issue to deal with.
+     * <p>
+     * One example of this:
+     * If we add a ticket with radius 10 from inside a test,
+     * this method will only return once all tasks for that ticket have been submitted.
+     * This means all chunks in the radius have at least started generating.
+     */
+    private void testRun() {
+        if (!ServerFlag.INSIDE_TEST) return;
+        while (!this.exit) {
+            if (!this.testRunning.compareAndSet(false, true)) {
+                // Someone else is already running this logic.
+                // One thread should only run this at a time.
+                return;
+            }
+            try {
+                this.run(false);
+            } finally {
+                this.testRunning.set(false);
+            }
+            // We may have to retry if another task has been submitted
+            if (this.tasks.isEmpty()) {
+                break;
+            }
+        }
+    }
+
+    private void run(boolean waitForSignal) {
         while (!this.exit) {
             this.signaling.startIteration();
             this.singleThreadedManagerLock.lock();
@@ -126,18 +169,22 @@ class TaskSchedulerThread implements Runnable {
                 this.singleThreadedManagerLock.unlock();
             }
 
-            if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL) {
-                if (this.exit) continue;
-
+            if (this.exit) continue;
+            if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL_OR_WORKER) {
                 ChunkWorker.signalWhenReady(this.signaling);
+
+                if (this.signaling.waitForSignal()) {
+                    // A problem occurred. Probably an InterruptedException
+                    break;
+                }
+            } else if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL) {
+                if (!waitForSignal) break;
                 if (this.signaling.waitForSignal()) {
                     // A problem occurred. Probably an InterruptedException
                     break;
                 }
             }
         }
-        // after we shut down normally, we shouldn't have to process the remaining tasks.
-        // TODO check in the future if this assumption holds
     }
 
     /**
@@ -241,36 +288,36 @@ class TaskSchedulerThread implements Runnable {
     }
 
     public @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ) {
-        return this.singleThreadedManager.chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+        return this.singleThreadedManager.loadedChunk(chunkX, chunkZ);
     }
 
     private void handleTask(Task task) {
         switch (task) {
-            case Task.AddClaim addClaim ->
-                    this.singleThreadedManager.addClaim(addClaim.x, addClaim.z, addClaim.chunkAndClaim);
-            case Task.RemoveClaim removeClaim ->
-                    this.singleThreadedManager.removeClaim(removeClaim.claim, removeClaim.future);
-            case Task.ChunkGenerationFinished chunkGenerationFinished ->
-                    this.singleThreadedManager.chunkGenerationFinished(chunkGenerationFinished.chunk);
-            case Task.SaveChunk saveChunk -> this.singleThreadedManager.saveChunk(saveChunk.chunk, saveChunk.future);
-            case Task.SaveChunks saveChunks -> this.singleThreadedManager.saveChunks(saveChunks.future);
-            case Task.SaveInstanceData saveInstanceData ->
-                    this.singleThreadedManager.saveInstanceData(saveInstanceData.future);
-            case Task.SaveInstanceDataAndChunks saveInstanceDataAndChunks ->
-                    this.singleThreadedManager.saveInstanceDataAndChunks(saveInstanceDataAndChunks.future);
-            case Task.SaveInstanceDataCompleted ignored -> this.singleThreadedManager.saveInstanceCompleted();
-            case Task.SaveChunkCompleted saveChunkCompleted ->
-                    this.singleThreadedManager.saveChunkCompleted(saveChunkCompleted.x(), saveChunkCompleted.z());
-            case Task.RetryUnload retryUnload -> this.singleThreadedManager.unloadChunk(retryUnload.chunk);
-            case Task.FinishUnloadAfterSave finishUnloadAfterSave ->
-                    this.singleThreadedManager.finishUnloadChunkAfterSave(finishUnloadAfterSave.chunk());
+            case Task.AddClaim(var x, var z, var chunkAndClaim) ->
+                    this.singleThreadedManager.addClaim(x, z, chunkAndClaim);
+            case Task.RemoveClaim(var claim, var future) -> this.singleThreadedManager.removeClaim(claim, future);
+            case Task.ChunkGenerationFinished(var chunk) -> this.singleThreadedManager.chunkGenerationFinished(chunk);
+            case Task.SaveChunk(var chunk, var future) -> this.singleThreadedManager.saveChunk(chunk, future);
+            case Task.SaveChunks(var future) -> this.singleThreadedManager.saveChunks(future);
+            case Task.SaveInstanceData(var future) -> this.singleThreadedManager.saveInstanceData(future);
+            case Task.SaveInstanceDataAndChunks(var future) ->
+                    this.singleThreadedManager.saveInstanceDataAndChunks(future);
+            case Task.SaveInstanceDataCompleted() -> this.singleThreadedManager.saveInstanceCompleted();
+            case Task.SaveChunkCompleted(var x, var z) -> this.singleThreadedManager.saveChunkCompleted(x, z);
+            case Task.FinishUnloadAfterSave(var chunk) -> this.singleThreadedManager.finishUnloadChunkAfterSave(chunk);
             case Task.EnqueueUpdate(var update) -> this.singleThreadedManager.enqueue(update);
+            case Task.UnloadFuture(var x, var z, var future) -> this.singleThreadedManager.unloadFuture(x, z, future);
+            case Task.FinishUnloadAfterSaveAndPartition(var chunk) ->
+                    this.singleThreadedManager.finishUnloadChunkAfterSaveAndPartition(chunk);
         }
     }
 
     void addTask(Task task) {
         this.tasks.add(task);
         this.signaling.signal();
+        // If we are inside tests, try to run this right now.
+        // If not, this method does nothing
+        this.testRun();
     }
 
     /**
@@ -308,6 +355,7 @@ class TaskSchedulerThread implements Runnable {
     }
 
     public void addClaimAsync(int x, int z, @NotNull ChunkAndClaim chunkAndClaim) {
+        // Used for tests to start async ticking
         this.addTask(new Task.AddClaim(x, z, chunkAndClaim));
     }
 
@@ -331,8 +379,43 @@ class TaskSchedulerThread implements Runnable {
         this.addTask(new Task.SaveInstanceDataAndChunks(future));
     }
 
+    public void unloadFutureAsync(int x, int z, @NotNull CompletableFuture<Void> future) {
+        this.addTask(new Task.UnloadFuture(x, z, future));
+    }
+
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
-        return Collections.unmodifiableCollection(this.singleThreadedManager.chunks.values());
+        return this.singleThreadedManager.loadedChunks();
+    }
+
+    private void registerEvents() {
+        // Don't register this inside tests
+        if (ServerFlag.INSIDE_TEST) return;
+        this.instance.eventNode().addListener(InstanceRegisterEvent.class, event -> {
+            mainLock.lock();
+            try {
+                this.shutdownFuture = new CompletableFuture<>();
+                start();
+            } finally {
+                mainLock.unlock();
+            }
+        });
+        this.instance.eventNode().addListener(InstanceUnregisterEvent.class, event -> {
+            try {
+                mainLock.lock();
+                shutdown().join();
+            } finally {
+                mainLock.unlock();
+            }
+        });
+    }
+
+    private void start() {
+        // We finally start ourselves.
+        // Now we start accepting tasks.
+        // Virtual thread is appropriate here, we
+        // will spend most time waiting for signals/workers.
+        // Also, 1 platform thread per instance can become quite expensive
+        Thread.ofPlatform().name("ChunkTaskScheduler-" + id).start(this);
     }
 
     /**
@@ -340,7 +423,7 @@ class TaskSchedulerThread implements Runnable {
      *
      * @return the future for when shutdown has completed
      */
-    public CompletableFuture<?> shutdown() {
+    private CompletableFuture<?> shutdown() {
         this.exit = true;
         this.signaling.signal();
         return this.shutdownFuture;
@@ -412,17 +495,10 @@ class TaskSchedulerThread implements Runnable {
         record FinishUnloadAfterSave(@NotNull Chunk chunk) implements Task {
         }
 
-        /**
-         * This may seem weird, so I'm gonna explain it.
-         * A chunk may be unloaded. Unloading is not instant, so it may take a while.
-         * If the same chunk gets loaded during that time, it won't wait for unloading to finish.
-         * It sees there is still a stable version of the chunk in memory, so it just copies that version.
-         * If that second chunk then gets unloaded, then we can have two unloads at the same time.
-         * This is, obviously, not valid behavior. To mitigate this, the newer chunk unload will be delayed,
-         * until the first chunk finishes unloading. When that happens, then this task will be submitted
-         * (from the future) to unload the second chunk
-         */
-        record RetryUnload(@NotNull Chunk chunk) implements Task {
+        record UnloadFuture(int x, int z, @NotNull CompletableFuture<Void> future) implements Task {
+        }
+
+        record FinishUnloadAfterSaveAndPartition(@NotNull Chunk chunk) implements Task {
         }
     }
 
