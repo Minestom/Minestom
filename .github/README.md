@@ -13,7 +13,7 @@ Minestom is an open-source library that enables developers to create their own M
 
 Minestom does not include any vanilla features by default, however we have an extensive API which allows you to code any feature with ease.
 
-This is a library for developers, thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
+This is a library for developers, and thus it is not meant to be used by the average server owner. Replacing a Bukkit, Forge, or Fabric server with this **will not work**, because we do not implement their APIs.
 
 # Table of Contents
 - [Installation](#installation)
@@ -117,20 +117,20 @@ Being able to create instances directly on the go is a must-have, and we believe
 Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, meaning more CPU power.
 
 ## Blocks
-Minestom does not know what a chest is by default, you will have to define that it should open an inventory.
+Minestom does not recognize what a chest does by default, you will have to define that it should open an inventory when you right click it.
 
-Every "special block" that isn't purely visual will need a specialized block handler. After applying this handler, you have a block that can be placed anywhere simply.
+Every "special block" that isn't purely visual will need a specialized block handler. After applying this handler, you have a block that can be properly placed down and used.
 
-However, all blocks are visually there, they just won't have interaction by default.
+However, all blocks exist visually, they just won't have any interaction by default.
 
 ## Entities
-"Passive" or "hostile" mobs do not exist, there's nothing stopping you from making a flying chicken rushing into any players coming too close, and doing so with NMS quickly becomes a mess because of obfuscation and inheritance.
+"Passive" or "hostile" mobs do not exist, and there's nothing stopping you from making a flying chicken rushing into any players coming too close. Doing so with NMS quickly becomes a mess due to Minecraft's obfuscation and inheritance.
 
 ## Inventories
-In modern Minecraft, inventories are used as a GUI interface with clickable items, and we support these interactions natively without needing to program your own solution.
+In modern Minecraft, inventories are used as a graphical user interface with clickable items, and we support these interactions natively without needing to program your own solution.
 
 ## Commands
-Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.com/Mojang/brigadier)", and we have developed an API designed to use the new argument types to their full potential.
+Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.com/Mojang/brigadier)". We have developed an API designed to use the new argument types to their full potential.
 
 # Credits
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project.
