@@ -2,6 +2,7 @@ package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.Instance;
@@ -41,18 +42,12 @@ public class ChunkManagerGUITest {
     @Disabled
     @Test
     void gui(Env env) {
+        ServerFlag.ASYNC_CHUNK_SYSTEM = true;
         this.env = env;
         instance = env.createFlatInstance();
         instance.setGenerator(unit -> {
-            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(100));
+            LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(2));
         });
-        try {
-//            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException |
-                 UnsupportedLookAndFeelException e) {
-            throw new RuntimeException(e);
-        }
 
 
         // TODO not quite implemented yet
@@ -86,6 +81,7 @@ public class ChunkManagerGUITest {
         registerEvents();
 
         env.tickWhile(() -> !onClose.isDone(), Duration.ofDays(365));
+        ServerFlag.ASYNC_CHUNK_SYSTEM = false;
     }
 
     ConcurrentLinkedQueue<Runnable> queue = new ConcurrentLinkedQueue<>();
@@ -174,7 +170,7 @@ public class ChunkManagerGUITest {
                 x /= 4;
                 z /= 4;
                 if (pressed.contains(MouseEvent.BUTTON1)) {
-                    var claim = instance.getChunkManager().addClaim(x, z, 20, ChunkClaim.Shape.CIRCLE);
+                    var claim = instance.getChunkManager().addClaim(x, z, 20, ChunkClaim.Shape.SQUARE);
                     unload();
                     this.claim = claim.chunkClaim();
                 }

@@ -35,25 +35,13 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
     @NotNull Shape shape();
 
     /**
-     * The shape of a claim. Only matters if radius > 0
+     * The shape of a claim. Only matters if radius > 0.
+     * <p>
+     * Must return true for radius = 0
      */
+    @FunctionalInterface
     interface Shape {
-        @NotNull Shape CIRCLE = new CircleShape();
-        @NotNull Shape SQUARE = new SquareShape();
-        @NotNull Shape DIAMOND = new DiamondShape();
-
-        boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
-    }
-
-    /**
-     * Obtain an instance by {@link Shape#CIRCLE}
-     */
-    final class CircleShape implements Shape {
-        private CircleShape() {
-        }
-
-        @Override
-        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+        @NotNull Shape CIRCLE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var radiusSqX = radiusX * radiusX;
             var radiusSqZ = radiusZ * radiusZ;
             var dx = x - ox;
@@ -61,18 +49,8 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
             var dxSq = dx * dx;
             var dzSq = dz * dz;
             return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
-        }
-    }
-
-    /**
-     * Obtain an instance by {@link Shape#SQUARE}
-     */
-    final class SquareShape implements Shape {
-        private SquareShape() {
-        }
-
-        @Override
-        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+        };
+        @NotNull Shape SQUARE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var radiusSqX = radiusX * radiusX;
             var radiusSqZ = radiusZ * radiusZ;
             var dx = Math.abs(x - ox);
@@ -80,22 +58,14 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
             var dxSq = dx * dx;
             var dzSq = dz * dz;
             return dxSq <= radiusSqX && dzSq <= radiusSqZ;
-        }
-    }
-
-    /**
-     * Obtain an instance by {@link Shape#DIAMOND}
-     */
-    final class DiamondShape implements Shape {
-        private DiamondShape() {
-        }
-
-        @Override
-        public boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz) {
+        };
+        @NotNull Shape DIAMOND = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var dx = (float) Math.abs(x - ox);
             var dz = (float) Math.abs(z - oz);
             var d = dx / radiusX + dz / radiusZ;
             return d <= 1F;
-        }
+        };
+
+        boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
     }
 }

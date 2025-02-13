@@ -41,25 +41,25 @@ class SingleThreadedManager {
     private final ChunkClaimTree tree = new ChunkClaimTree();
     private final TaskSchedulerThread taskSchedulerThread;
     private final Long2DoubleMap chunksLastUpdatePriority = new Long2DoubleOpenHashMap();
-    private final Long2ObjectMap<TaskSchedulerThread.LoadTask> loadingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<LoadTask> loadingChunks = new Long2ObjectOpenHashMap<>();
     /**
      * This HashMap is used to quickly access loaded chunks in case of added claims after they are scheduled for unload.
      * Otherwise, we'd have to wait for the unload/write to finish, and only then could we start the next load.
      * With this, we cache the chunk, and if it is loaded again, we can just copy it and use the new copy.
      * This way we also ensure the chunks are not changed while saving, which may cause issues with the ChunkLoader/-Saver.
      */
-    private final Long2ObjectMap<TaskSchedulerThread.UnloadTask> unloadingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<UnloadTask> unloadingChunks = new Long2ObjectOpenHashMap<>();
     private final Long2ObjectMap<CompletableFuture<Void>> unloadFutures = new Long2ObjectOpenHashMap<>();
     /**
      * HashMap for saving chunks. We don't want to save the same chunk concurrently, and we don't want unnecessary saves
      */
-    private final Long2ObjectMap<TaskSchedulerThread.SaveTask> savingChunks = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<SaveTask> savingChunks = new Long2ObjectOpenHashMap<>();
     /**
      * HashMap to contain all chunks that have their save request delayed. A chunk may be requested for saving
      * while it is being saved already. This save will work on old data though, we want the newest data, so we have
      * to reschedule the save after the first save finishes.
      */
-    private final Long2ObjectMap<TaskSchedulerThread.SaveTask> savingChunksDelayed = new Long2ObjectOpenHashMap<>();
+    private final Long2ObjectMap<SaveTask> savingChunksDelayed = new Long2ObjectOpenHashMap<>();
     /**
      * Identity strategy, so we can identify the correct claims and remove them.
      */
@@ -190,11 +190,11 @@ class SingleThreadedManager {
         var chunkIndex = CoordConversion.chunkIndex(x, z);
         this.claimsByChunkLock.lock();
         try {
-        var claims = this.claimsByChunk.get(chunkIndex);
-        claims.remove(claimedChunk);
-        if (claims.isEmpty()) {
-            this.claimsByChunk.remove(chunkIndex);
-        }
+            var claims = this.claimsByChunk.get(chunkIndex);
+            claims.remove(claimedChunk);
+            if (claims.isEmpty()) {
+                this.claimsByChunk.remove(chunkIndex);
+            }
         } finally {
             this.claimsByChunkLock.unlock();
         }
@@ -206,54 +206,6 @@ class SingleThreadedManager {
         // and most obvious place to complete the future
         this.taskSchedulerThread.complete(future, null);
         this.taskSchedulerThread.completeExceptionally(claimedChunk.future(), new CancellationException("Claim was removed"));
-    }
-
-    void chunkGenerationFinished(Chunk chunk) {
-        // The claim may have been removed by now. We will first have to check that
-        var x = chunk.getChunkX();
-        var z = chunk.getChunkZ();
-        var chunkIndex = CoordConversion.chunkIndex(x, z);
-        var loadTask = this.loadingChunks.remove(chunkIndex);
-        var entry = this.findHighestPriorityEntry(x, z);
-        if (entry == null) {
-            // The last claim was removed. The chunk should not be loaded, ignore
-            return;
-        }
-        var index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
-        this.chunks.put(index, chunk);
-        this.chunksLastUpdatePriority.put(index, loadTask.lastUpdatePriority);
-        // add this scheduler before adding the dispatcher partition to make sure it is executed first
-        this.taskTracking.runningTickScheduledCount.incrementAndGet();
-        Runnable task = () -> {
-            var old = this.loadedChunks.put(index, chunk);
-            List<ClaimedChunk> claimsCopy;
-            claimsByChunkLock.lock();
-            try {
-                var claims = this.claimsByChunk.get(index);
-                claimsCopy = List.copyOf(claims);
-            } finally {
-                claimsByChunkLock.unlock();
-            }
-            for (var claim : claimsCopy) {
-                claim.future().complete(chunk);
-            }
-            if (old != null) {
-                LOGGER.error("Existing chunk loaded at ({}, {}): {}", x, z, old);
-            }
-            var event = new InstanceChunkLoadEvent(this.instance, chunk);
-            EventDispatcher.call(event);
-            this.taskTracking.runningTickScheduledCount.decrementAndGet();
-        };
-        // We must make sure to create the partition before executing the "task" runnable.
-        // Otherwise, the chunk partition may not exist when the chunk load has finished,
-        // and further entity partition calls will not work
-        MinecraftServer.process().dispatcher().createPartition(chunk);
-
-        if (ServerFlag.INSIDE_TEST) {
-            task.run();
-        } else {
-            chunk.getScheduler().scheduleNextProcess(task);
-        }
     }
 
     void saveChunk(Chunk chunk, CompletableFuture<Void> future) {
@@ -271,13 +223,13 @@ class SingleThreadedManager {
                 return;
             }
             // this is enough to schedule the chunk to be saved again
-            this.savingChunksDelayed.put(chunkIndex, new TaskSchedulerThread.SaveTask(chunk, future));
+            this.savingChunksDelayed.put(chunkIndex, new SaveTask(chunk, future));
             return;
         }
-        this.saveChunk0(new TaskSchedulerThread.SaveTask(chunk, future));
+        this.saveChunk0(new SaveTask(chunk, future));
     }
 
-    private void saveChunk0(TaskSchedulerThread.SaveTask saveTask) {
+    private void saveChunk0(SaveTask saveTask) {
         // For saving with file IO, we use a virtual thread instead of scheduling it to the worker.
         // This way we don't need to reserve a worker, which may otherwise prove to be difficult.
         var chunk = saveTask.chunk();
@@ -504,7 +456,7 @@ class SingleThreadedManager {
             // we have to propagate the updates to (potentially) load neighbors
             this.propagateUpdates(entry, highestClaimPriority, x, z, UpdateType.LOAD_PROPAGATE);
 
-            var task = new TaskSchedulerThread.LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
+            var task = new LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
             this.loadingChunks.put(chunkIndex, task);
 
             this.submitReserved(() -> {
@@ -529,7 +481,7 @@ class SingleThreadedManager {
         if (unloadTask.partitionDeleted.isDone()) {
             if (ChunkWorker.tryReserve()) {
                 var unloading = unloadTask.chunk;
-                var task = new TaskSchedulerThread.LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
+                var task = new LoadTask(this.chunkLoader, this.chunkSupplier, this.generator, x, z, highestClaimPriority);
                 this.loadingChunks.put(chunkIndex, task);
 
                 // we have to propagate the updates to (potentially) load neighbors
@@ -564,6 +516,55 @@ class SingleThreadedManager {
         return UpdateResult.INVALID_UPDATE;
     }
 
+    void chunkGenerationFinished(Chunk chunk) {
+        // The claim may have been removed by now. We will first have to check that
+        var x = chunk.getChunkX();
+        var z = chunk.getChunkZ();
+        var chunkIndex = CoordConversion.chunkIndex(x, z);
+        var loadTask = this.loadingChunks.remove(chunkIndex);
+        var entry = this.findHighestPriorityEntry(x, z);
+        if (entry == null) {
+            // The last claim was removed. The chunk should not be loaded, ignore
+            return;
+        }
+        var index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+        this.chunks.put(index, chunk);
+        this.chunksLastUpdatePriority.put(index, loadTask.lastUpdatePriority);
+        // add this scheduler before adding the dispatcher partition to make sure it is executed first
+        this.taskTracking.runningTickScheduledCount.incrementAndGet();
+        Runnable task = () -> {
+            var old = this.loadedChunks.put(index, chunk);
+            List<ClaimedChunk> claimsCopy;
+            claimsByChunkLock.lock();
+            try {
+                var claims = this.claimsByChunk.get(index);
+                // the claims could have been removed by now, the collection could be null
+                claimsCopy = claims == null ? List.of() : List.copyOf(claims);
+            } finally {
+                claimsByChunkLock.unlock();
+            }
+            for (var claim : claimsCopy) {
+                claim.future().complete(chunk);
+            }
+            if (old != null) {
+                LOGGER.error("Existing chunk loaded at ({}, {}): {}", x, z, old);
+            }
+            var event = new InstanceChunkLoadEvent(this.instance, chunk);
+            EventDispatcher.call(event);
+            this.taskTracking.runningTickScheduledCount.decrementAndGet();
+        };
+        // We must make sure to create the partition before executing the "task" runnable.
+        // Otherwise, the chunk partition may not exist when the chunk load has finished,
+        // and further entity partition calls will not work
+        MinecraftServer.process().dispatcher().createPartition(chunk);
+
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
+            task.run();
+        } else {
+            chunk.getScheduler().scheduleNextProcess(task);
+        }
+    }
+
     /**
      * Start to unload the chunk.
      * The chunk will be unloaded at some point in the future,
@@ -580,7 +581,7 @@ class SingleThreadedManager {
             return;
         }
         var unloadFuture = new CompletableFuture<Void>();
-        var task = new TaskSchedulerThread.UnloadTask(chunk, unloadFuture);
+        var task = new UnloadTask(chunk, unloadFuture, new CompletableFuture<>());
         this.unloadingChunks.put(chunkIndex, task);
         this.chunks.remove(chunkIndex);
         this.chunksLastUpdatePriority.remove(chunkIndex);
@@ -607,7 +608,7 @@ class SingleThreadedManager {
             task.partitionDeleted.complete(null);
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
         };
-        if (ServerFlag.INSIDE_TEST) {
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
             runInstance.run();
             runChunk.run();
         } else {
@@ -821,5 +822,30 @@ class SingleThreadedManager {
 
         record WaitingForFuture(CompletableFuture<?> future) implements UpdateResult {
         }
+    }
+
+    static final class LoadTask {
+        final IChunkLoader loader;
+        final ChunkSupplier chunkSupplier;
+        final @Nullable Generator generator;
+        final int x;
+        final int z;
+        double lastUpdatePriority;
+
+        LoadTask(IChunkLoader loader, ChunkSupplier chunkSupplier, @Nullable Generator generator, int x, int z, double lastUpdatePriority) {
+            this.loader = loader;
+            this.chunkSupplier = chunkSupplier;
+            this.generator = generator;
+            this.x = x;
+            this.z = z;
+            this.lastUpdatePriority = lastUpdatePriority;
+        }
+    }
+
+    private record UnloadTask(@NotNull Chunk chunk, CompletableFuture<Void> future,
+                              CompletableFuture<Void> partitionDeleted) {
+    }
+
+    private record SaveTask(@NotNull Chunk chunk, @NotNull CompletableFuture<Void> future) {
     }
 }

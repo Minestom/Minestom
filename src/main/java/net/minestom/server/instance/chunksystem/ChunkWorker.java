@@ -56,7 +56,7 @@ public class ChunkWorker {
         }
     }
 
-    void workerGenerateChunk(TaskSchedulerThread.LoadTask task) {
+    void workerGenerateChunk(SingleThreadedManager.LoadTask task) {
         final var loader = this.taskSchedulerThread.getChunkLoader();
         final var supplier = this.taskSchedulerThread.getChunkSupplier();
         final var generator = this.taskSchedulerThread.getGenerator();
@@ -105,7 +105,7 @@ public class ChunkWorker {
         // in turn only gets updated when ticking.
         // But because it is async, we don't know when we need to tick,
         // so we are in a pickle.
-        if (ServerFlag.INSIDE_TEST) runnable.run();
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM) runnable.run();
         else WORKER_EXECUTOR.execute(runnable);
     }
 

@@ -139,7 +139,7 @@ class TaskSchedulerThread implements Runnable {
      * This means all chunks in the radius have at least started generating.
      */
     private void testRun() {
-        if (!ServerFlag.INSIDE_TEST) return;
+        if (ServerFlag.ASYNC_CHUNK_SYSTEM) return;
         while (!this.exit) {
             if (!this.testRunning.compareAndSet(false, true)) {
                 // Someone else is already running this logic.
@@ -389,7 +389,7 @@ class TaskSchedulerThread implements Runnable {
 
     private void registerEvents() {
         // Don't register this inside tests
-        if (ServerFlag.INSIDE_TEST) return;
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM) return;
         this.instance.eventNode().addListener(InstanceRegisterEvent.class, event -> {
             mainLock.lock();
             try {
@@ -427,38 +427,6 @@ class TaskSchedulerThread implements Runnable {
         this.exit = true;
         this.signaling.signal();
         return this.shutdownFuture;
-    }
-
-    static final class LoadTask {
-        final IChunkLoader loader;
-        final ChunkSupplier chunkSupplier;
-        final @Nullable Generator generator;
-        final int x;
-        final int z;
-        double lastUpdatePriority;
-
-        LoadTask(IChunkLoader loader, ChunkSupplier chunkSupplier, @Nullable Generator generator, int x, int z, double lastUpdatePriority) {
-            this.loader = loader;
-            this.chunkSupplier = chunkSupplier;
-            this.generator = generator;
-            this.x = x;
-            this.z = z;
-            this.lastUpdatePriority = lastUpdatePriority;
-        }
-    }
-
-    static final class UnloadTask {
-        final @NotNull Chunk chunk;
-        final CompletableFuture<Void> future;
-        final CompletableFuture<Void> partitionDeleted = new CompletableFuture<>();
-
-        UnloadTask(@NotNull Chunk chunk, CompletableFuture<Void> future) {
-            this.chunk = chunk;
-            this.future = future;
-        }
-    }
-
-    record SaveTask(@NotNull Chunk chunk, @NotNull CompletableFuture<Void> future) {
     }
 
     sealed interface Task {
