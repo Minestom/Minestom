@@ -6,8 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.instance.EntityTracker;
-import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,6 +34,7 @@ final class EntityView {
         this.entity = entity;
         this.viewableOption = new Option<>(EntityTracker.Target.PLAYERS, Entity::autoViewEntities,
                 player -> {
+                    if (!player.getInstance().getEntityTracker().entities().contains(entity)) return;
                     // Add viewable
                     var lock1 = player.getEntityId() < entity.getEntityId() ? player : entity;
                     var lock2 = lock1 == entity ? player : entity;
@@ -247,15 +247,33 @@ final class EntityView {
                 var bitSet = viewableOption.bitSet;
                 if (bitSet.isEmpty()) return Collections.emptyIterator();
                 Instance instance = entity.getInstance();
+                boolean isInstanceContainer = instance instanceof InstanceContainer;
+                List<SharedInstance> sharedInstances = null;
+                if (isInstanceContainer) sharedInstances = ((InstanceContainer) instance).getSharedInstances();
                 if (instance == null) return Collections.emptyIterator();
                 players = new ArrayList<>(bitSet.size());
                 for (IntIterator it = bitSet.intIterator(); it.hasNext(); ) {
                     final int id = it.nextInt();
                     final Player player = (Player) instance.getEntityById(id);
                     if (player != null) players.add(player);
+                    // viewer might be part of a SharedInstance that sharedEntities with this instance
+                    else if (isInstanceContainer) {
+                        attemptToLocateAndAddPlayer(sharedInstances, players, id);
+                    }
                 }
             }
             return players.iterator();
+        }
+
+        private void attemptToLocateAndAddPlayer(List<SharedInstance> sharedInstances, List<Player> players, int id) {
+            for (SharedInstance sharedInstance : sharedInstances) {
+                if (!sharedInstance.sharesEntities()) return;
+                final Player p = (Player) sharedInstance.getEntityById(id);
+                if (p != null) {
+                    players.add(p);
+                    return;
+                }
+            }
         }
 
         @Override
