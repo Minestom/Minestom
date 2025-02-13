@@ -7,6 +7,7 @@ import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.drop.DropReasonClose;
 import net.minestom.server.network.packet.server.play.CloseWindowPacket;
 import net.minestom.server.network.packet.server.play.SetSlotPacket;
 import net.minestom.server.network.packet.server.play.WindowItemsPacket;
@@ -82,7 +83,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         player.getInventory().setCursorItem(ItemStack.AIR);
 
         if (!cursorItem.isAir()) {
-            if (!player.dropItem(cursorItem)) {
+            if (!player.dropItem(cursorItem, new DropReasonClose())) {
                 player.getInventory().addItemStack(cursorItem);
             }
         }
