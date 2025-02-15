@@ -118,7 +118,8 @@ final class CommandParserImpl implements CommandParser {
             return ValidCommand.defaultExecutor(input, chain);
         }
 
-        return InvalidCommand.invalid(input, chain);
+        ArgumentCallback argumentCallback = lastNode.argument().getCallback();
+        return InvalidCommand.invalid(input, chain, argumentCallback);
     }
 
     @Contract("null, _ -> null; !null, null -> fail; !null, !null -> _")
@@ -275,9 +276,9 @@ final class CommandParserImpl implements CommandParser {
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
-        static InvalidCommand invalid(String input, Chain chain) {
+        static InvalidCommand invalid(String input, Chain chain, @Nullable ArgumentCallback argumentCallback) {
             return new InvalidCommand(input, chain.mergedConditions(),
-                    null/*todo command syntax callback*/,
+                    argumentCallback,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
                     chain.collectArguments(), chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }
