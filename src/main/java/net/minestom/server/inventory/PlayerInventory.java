@@ -165,7 +165,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         }
         setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
+        callClickEvent(player, this, convertedSlot, ClickType.LEFT_CLICK, clicked, cursor);
         return true;
     }
 
@@ -181,7 +181,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         }
         setItemStack(convertedSlot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
+        callClickEvent(player, this, convertedSlot, ClickType.RIGHT_CLICK, clicked, cursor);
         return true;
     }
 
@@ -249,7 +249,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
         }
         setItemStack(convertedSlot, clickResult.getClicked());
         setItemStack(convertedKey, clickResult.getCursor());
-        callClickEvent(player, null, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
+        callClickEvent(player, this, convertedSlot, ClickType.CHANGE_HELD, clicked, cursorItem);
         return true;
     }
 

@@ -22,6 +22,7 @@ import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.monitoring.BenchmarkManager;
@@ -76,6 +77,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<Enchantment> enchantment;
     private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
+    private final DynamicRegistry<Instrument> instrument;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -121,6 +123,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.enchantment = Enchantment.createDefaultRegistry(this);
         this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
+        this.instrument = Instrument.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -186,6 +189,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<JukeboxSong> jukeboxSong() {
         return jukeboxSong;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Instrument> instrument() {
+        return instrument;
     }
 
     @Override
