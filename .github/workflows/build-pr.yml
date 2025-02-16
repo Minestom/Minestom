@@ -33,7 +33,9 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - id: vars
-        run: echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
+        run: |
+          export ACTUAL=${{ github.event.pull_request.head.sha }}
+          echo "short_commit_hash=${ACTUAL::10}" >> $GITHUB_OUTPUT
       - name: Publish Artifacts
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
@@ -44,4 +46,4 @@ jobs:
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY
