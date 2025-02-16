@@ -1727,6 +1727,12 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     /**
      * Opens the specified Inventory, close the previous inventory if existing.
+     * If the client already has an open inventory, the client will "swap" them instead of
+     * closing the old and opening the new inventory.
+     * The biggest difference between "swapping" and server-side closing-opening is,
+     * that the cursor-position within the inventory screen is not reset by the client.
+     * If a previous inventory exists, the previous inventory will be gettable through
+     * {@link InventoryOpenEvent#getOldInventory()}.
      *
      * @param inventory the inventory to open
      * @return true if the inventory has been opened/sent to the player, false otherwise (cancelled by event)
@@ -1735,12 +1741,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         InventoryOpenEvent inventoryOpenEvent = new InventoryOpenEvent(inventory, this);
 
         EventDispatcher.callCancellable(inventoryOpenEvent, () -> {
+            Inventory newInventory = inventoryOpenEvent.getInventory();
             AbstractInventory openInventory = getOpenInventory();
             if (openInventory != null) {
                 openInventory.removeViewer(this);
             }
-
-            AbstractInventory newInventory = inventoryOpenEvent.getInventory();
 
             newInventory.addViewer(this);
             this.openInventory = newInventory;
