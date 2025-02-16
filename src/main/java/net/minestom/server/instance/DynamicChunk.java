@@ -4,9 +4,9 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -106,26 +106,24 @@ public class DynamicChunk extends Chunk {
             lastCachedBlock = this.entries.remove(index);
         }
         // Block tick
-        if (handler != null && handler.isTickable()) {
+        if (handler != null && handler.tickable()) {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
+            var absoluteBlockPosition = new BlockVec(getChunkX() * CHUNK_SIZE_X + sectionRelativeX, y, getChunkZ() * CHUNK_SIZE_Z + sectionRelativeZ);
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, absoluteBlockPosition)));
         }
         if (handler != null) {
             // New placement
-
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
+            var absoluteBlockPosition = new BlockVec(getChunkX() * CHUNK_SIZE_X + sectionRelativeX, y, getChunkZ() * CHUNK_SIZE_Z + sectionRelativeZ);
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.Placement(block, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
@@ -188,6 +186,10 @@ public class DynamicChunk extends Chunk {
             final Block block = entry.getValue();
             final BlockHandler handler = block.handler();
             if (handler == null) return;
+            // We cannot throw an exception as that could cause other blocks to not get properly ticked.
+            if (!handler.tickable()) {
+                LOGGER.warn("Ticking a block {} using the handler {}, but it is no longer considered tickable. Previously, it was tickable, but this is unsupported since tickable is immutable.", block, handler);
+            }
             final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
             handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
         });
