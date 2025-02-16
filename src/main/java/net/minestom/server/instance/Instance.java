@@ -53,6 +53,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -96,7 +97,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     private int remainingThunderTransitionTicks;
 
     // Field for tick events
-    private long lastTickAge = System.currentTimeMillis();
+    private long lastTickAge = TimeUnit.NANOSECONDS.toMillis(System.nanoTime());
 
     private final EntityTracker entityTracker = new EntityTrackerImpl();
 
@@ -119,7 +120,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
     public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
@@ -770,7 +771,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * <p>
      * Warning: this does not update chunks and entities.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in milliseconds, which may only be used as a delta and has no meaning in real life
      */
     @Override
     public void tick(long time) {
