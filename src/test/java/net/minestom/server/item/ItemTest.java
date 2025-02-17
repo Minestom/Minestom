@@ -7,6 +7,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.item.component.EnchantmentList;
 import net.minestom.server.item.enchant.Enchantment;
+import net.minestom.server.tag.Tag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
@@ -135,6 +136,26 @@ public class ItemTest {
         var item2 = ItemStack.of(Material.CAMEL_SPAWN_EGG, 1);
         assertNotNull(item2.material().registry().spawnEntityType());
         assertEquals(EntityType.CAMEL, item2.material().registry().spawnEntityType());
+    }
+
+    @Test
+    public void testTagSerialization() {
+        var transientTag = Tag.Transient("test");
+        var tag = Tag.String("test2");
+
+        var item1 = ItemStack.of(Material.DIAMOND, 1)
+                .withTag(transientTag, "don't serialize me")
+                .withTag(tag, "serialize me");
+
+        assertTrue(item1.hasTag(transientTag));
+        assertTrue(item1.hasTag(tag));
+
+        var nbt = item1.toItemNBT();
+        var item2 = ItemStack.fromItemNBT(nbt);
+
+        assertFalse(item2.hasTag(transientTag));
+        assertTrue(item2.hasTag(tag));
+        assertEquals("serialize me", item2.getTag(tag));
     }
 
     static ItemStack createItem() {
