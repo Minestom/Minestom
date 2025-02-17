@@ -84,7 +84,7 @@ public class CommandParseTest {
                                                             assertEquals("B", context.get("b"));
                                                             assertEquals("C", context.get("c"));
                                                             assertEquals("D", context.get("d"));
-                                                        }, null)))))
+                                                        }, null, null)))))
                 .build());
         assertValid(foo, "foo T", b);
         expectedFirstArg.set("A");
@@ -148,6 +148,6 @@ public class CommandParseTest {
 
     @NotNull
     private static Graph.Execution createExecutor(AtomicBoolean atomicBoolean) {
-        return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null);
+        return new GraphImpl.ExecutionImpl(null, null, null, (sender, context) -> atomicBoolean.set(true), null, null);
     }
 }

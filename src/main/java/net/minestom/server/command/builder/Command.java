@@ -47,6 +47,7 @@ public class Command {
     private final String[] aliases;
     private final String[] names;
 
+    private ArgumentCallback fallbackArgumentCallback;
     private CommandExecutor defaultExecutor;
     private CommandCondition condition;
 
@@ -114,6 +115,14 @@ public class Command {
      */
     public void setArgumentCallback(@NotNull ArgumentCallback callback, @NotNull Argument<?> argument) {
         argument.setCallback(callback);
+    }
+
+    public ArgumentCallback getFallbackArgumentCallback() {
+        return fallbackArgumentCallback;
+    }
+
+    public void setFallbackArgumentCallback(@Nullable ArgumentCallback fallbackArgumentCallback) {
+        this.fallbackArgumentCallback = fallbackArgumentCallback;
     }
 
     public void addSubcommand(@NotNull Command command) {

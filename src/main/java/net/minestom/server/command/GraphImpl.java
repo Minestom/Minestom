@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.CommandSyntax;
@@ -99,7 +100,7 @@ record GraphImpl(NodeImpl root) implements Graph {
 
     record ExecutionImpl(Predicate<CommandSender> predicate,
                          CommandExecutor defaultExecutor, CommandExecutor globalListener,
-                         CommandExecutor executor, CommandCondition condition) implements Execution {
+                         CommandExecutor executor, CommandCondition condition, ArgumentCallback fallbackArgumentCallback) implements Execution {
         @Override
         public boolean test(CommandSender commandSender) {
             return predicate.test(commandSender);
@@ -121,14 +122,14 @@ record GraphImpl(NodeImpl root) implements Graph {
             final CommandExecutor globalListener = (sender, context) -> command.globalListener(sender, context, context.getInput());
 
             return new ExecutionImpl(commandSender -> defaultCondition == null || defaultCondition.canUse(commandSender, null),
-                    defaultExecutor, globalListener, executor, condition);
+                    defaultExecutor, globalListener, executor, condition, command.getFallbackArgumentCallback());
         }
 
         static ExecutionImpl fromSyntax(CommandSyntax syntax) {
             final CommandExecutor executor = syntax.getExecutor();
             final CommandCondition condition = syntax.getCommandCondition();
             return new ExecutionImpl(commandSender -> condition == null || condition.canUse(commandSender, null),
-                    null, null, executor, condition);
+                    null, null, executor, condition, null);
         }
     }
 
