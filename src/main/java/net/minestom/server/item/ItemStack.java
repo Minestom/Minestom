@@ -223,6 +223,17 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         return with(ItemComponent.MAX_STACK_SIZE, maxStackSize);
     }
 
+    /**
+     * Returns a new ItemStack with the specified tag and its associated value applied.
+     * This method is used to attach custom metadata or attributes to the item.
+     *
+     * @implNote When using transient tags, the item can't be moved by a player in creative mode. See #2396
+     *
+     * @param tag   The tag to apply to the item.
+     * @param value The value associated with the tag. Can be null to remove or reset the tag.
+     * @param <T>   The type of the tag value.
+     * @return A new ItemStack containing the specified tag and value.
+     */
     @Contract(value = "_, _ -> new", pure = true)
     <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value);
 
