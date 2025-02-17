@@ -13,10 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -27,6 +24,7 @@ final class CommandParserImpl implements CommandParser {
     static final class Chain {
         CommandExecutor defaultExecutor = null;
         SuggestionCallback suggestionCallback = null;
+        ArgumentCallback fallbackArgumentCallback = null;
         final ArrayDeque<NodeResult> nodeResults = new ArrayDeque<>();
         final List<CommandCondition> conditions = new ArrayList<>();
         final List<CommandExecutor> globalListeners = new ArrayList<>();
@@ -44,6 +42,11 @@ final class CommandParserImpl implements CommandParser {
                 // Merge global listeners
                 final CommandExecutor globalListener = execution.globalListener();
                 if (globalListener != null) globalListeners.add(globalListener);
+                // Track default argument callback
+                final ArgumentCallback argumentCallback = execution.fallbackArgumentCallback();
+                if (argumentCallback != null) {
+                    fallbackArgumentCallback = argumentCallback;
+                }
             }
         }
 
@@ -80,16 +83,18 @@ final class CommandParserImpl implements CommandParser {
               SuggestionCallback suggestionCallback,
               ArrayDeque<NodeResult> nodeResults,
               List<CommandCondition> conditions,
-              List<CommandExecutor> globalListeners) {
+              List<CommandExecutor> globalListeners,
+              ArgumentCallback fallbackArgumentCallback) {
             this.defaultExecutor = defaultExecutor;
             this.suggestionCallback = suggestionCallback;
             this.nodeResults.addAll(nodeResults);
             this.conditions.addAll(conditions);
             this.globalListeners.addAll(globalListeners);
+            this.fallbackArgumentCallback = fallbackArgumentCallback;
         }
 
         Chain fork() {
-            return new Chain(defaultExecutor, suggestionCallback, nodeResults, conditions, globalListeners);
+            return new Chain(defaultExecutor, suggestionCallback, nodeResults, conditions, globalListeners, fallbackArgumentCallback);
         }
     }
 
@@ -118,7 +123,30 @@ final class CommandParserImpl implements CommandParser {
             return ValidCommand.defaultExecutor(input, chain);
         }
 
-        return InvalidCommand.invalid(input, chain);
+        NodeResult[] results = chain.nodeResults.toArray(NodeResult[]::new);
+
+        // Determine which ArgumentCallback will be used
+        ArgumentCallback argumentCallback = null;
+
+        int argumentCount = input.split(" ").length;
+        if (argumentCount > 1) { // If the command has no arguments this doesn't need to be executed, default executor should be called
+            // Get the parent node of those nodes who attempted to parse an argument input (at this point all failed)
+            int parentOfAllIndex = chain.nodeResults.size() - 2;
+            NodeResult parentOfAll = results[parentOfAllIndex];
+
+            if (parentOfAll != null) {
+                List<Node> whoFailed = parentOfAll.node.next();
+
+                // If there's only one argument parser for an input we should call its argument callback
+                if (whoFailed.size() == 1) {
+                    argumentCallback = whoFailed.get(0).argument().getCallback();
+                } else if (whoFailed.size() > 1) { // If there's more and all of them failed we should call a fallback argument callback
+                    argumentCallback = chain.fallbackArgumentCallback;
+                }
+            }
+        }
+
+        return InvalidCommand.invalid(input, chain, argumentCallback);
     }
 
     @Contract("null, _ -> null; !null, null -> fail; !null, !null -> _")
@@ -275,9 +303,9 @@ final class CommandParserImpl implements CommandParser {
                           @Nullable SuggestionCallback suggestionCallback, List<Argument<?>> args)
             implements InternalKnownCommand, Result.KnownCommand.Invalid {
 
-        static InvalidCommand invalid(String input, Chain chain) {
+        static InvalidCommand invalid(String input, Chain chain, @Nullable ArgumentCallback argumentCallback) {
             return new InvalidCommand(input, chain.mergedConditions(),
-                    null/*todo command syntax callback*/,
+                    argumentCallback,
                     new ArgumentResult.SyntaxError<>("Command has trailing data.", null, -1),
                     chain.collectArguments(), chain.mergedGlobalExecutors(), chain.suggestionCallback, chain.getArgs());
         }

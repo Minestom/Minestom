@@ -1,5 +1,6 @@
 package net.minestom.server.command;
 
+import net.minestom.server.command.builder.ArgumentCallback;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.CommandExecutor;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -66,6 +67,11 @@ sealed interface Graph permits GraphImpl {
          * only on nodes that specify it
          */
         @Nullable CommandCondition condition();
+
+        /**
+         * Non-null if the command has specified a fallback argument callback.
+         */
+        @Nullable ArgumentCallback fallbackArgumentCallback();
     }
 
     sealed interface Builder permits GraphImpl.BuilderImpl {
