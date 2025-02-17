@@ -1,5 +1,6 @@
 package net.minestom.server.color;
 
+import net.kyori.adventure.util.ARGBLike;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
@@ -14,7 +15,7 @@ import java.util.Objects;
  * <p>
  * Colors must be in the range of 0-255.
  */
-public final class AlphaColor extends Color {
+public final class AlphaColor extends Color implements ARGBLike {
     private static final int BIT_MASK = 0xff;
 
     public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = NetworkBuffer.INT.transform(AlphaColor::new, AlphaColor::asARGB);
@@ -78,6 +79,7 @@ public final class AlphaColor extends Color {
         return (alpha << 24) + asRGB();
     }
 
+    @Override
     public int alpha() {
         return alpha;
     }
