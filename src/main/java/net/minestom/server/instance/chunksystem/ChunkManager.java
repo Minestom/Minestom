@@ -53,6 +53,12 @@ public interface ChunkManager {
 
     @Nullable Generator getGenerator();
 
+    @ApiStatus.Experimental
+    @NotNull PriorityDrop getPriorityDrop();
+
+    @ApiStatus.Experimental
+    void setPriorityDrop(@NotNull PriorityDrop priorityDrop);
+
     /**
      * @return whether autosave is enabled
      * @see #setAutosaveEnabled(boolean)

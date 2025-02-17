@@ -74,6 +74,7 @@ public final class ServerFlag {
      * Valid values:
      * <ul>
      *     <li>simple (same as taxicab/manhattan distance, fastest, inaccurate)</li>
+     *     <li>square (fastest, inaccurate)</li>
      *     <li>hypotenuse-squared (rather cheap, more accurate)</li>
      *     <li>hypotenuse (expensive, very accurate)</li>
      * </ul>

@@ -56,7 +56,7 @@ public class ChunkWorker {
         }
     }
 
-    void workerGenerateChunk(SingleThreadedManager.LoadTask task) {
+    void workerGenerateChunk(int x, int z) {
         final var loader = this.taskSchedulerThread.getChunkLoader();
         final var supplier = this.taskSchedulerThread.getChunkSupplier();
         final var generator = this.taskSchedulerThread.getGenerator();
@@ -69,9 +69,6 @@ public class ChunkWorker {
                 }
             }
         }
-
-        var x = task.x;
-        var z = task.z;
 
         var chunk = loader.loadChunk(instance, x, z);
         if (chunk == null) {

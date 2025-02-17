@@ -1,9 +1,7 @@
 package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Function;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.event.instance.InstanceRegisterEvent;
 import net.minestom.server.event.instance.InstanceUnregisterEvent;
 import net.minestom.server.instance.*;
@@ -12,8 +10,6 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnmodifiableView;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -86,15 +82,6 @@ import java.util.function.Supplier;
  * </ul>
  */
 class TaskSchedulerThread implements Runnable {
-    /**
-     * TODO we could also make this per-instance configurable
-     */
-    static final PriorityDrop PRIORITY_DROP = switch (ServerFlag.CHUNK_SYSTEM_PRIORITY_DROP) {
-        case "simple" -> new PriorityDrop.Simple();
-        case "hypotenuse" -> new PriorityDrop.Hypotenuse();
-        case null, default -> new PriorityDrop.HypotenuseSquared();
-    };
-
     // Needed to make this reusable.
     private final ReentrantLock mainLock = new ReentrantLock();
     private CompletableFuture<Void> shutdownFuture = new CompletableFuture<>();
@@ -173,6 +160,9 @@ class TaskSchedulerThread implements Runnable {
             if (res == SingleThreadedManager.IterationResult.WAIT_FOR_SIGNAL_OR_WORKER) {
                 ChunkWorker.signalWhenReady(this.signaling);
 
+                // We don't check waitForSignal input parameter here.
+                // A worker will signal when it is ready again, so this
+                // should not run indefinitely
                 if (this.signaling.waitForSignal()) {
                     // A problem occurred. Probably an InterruptedException
                     break;
@@ -256,6 +246,24 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
+    public @NotNull PriorityDrop getPriorityDrop() {
+        this.singleThreadedManagerLock.lock();
+        try {
+            return this.singleThreadedManager.priorityDrop;
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
+    }
+
+    public void setPriorityDrop(@NotNull PriorityDrop priorityDrop) {
+        this.singleThreadedManagerLock.lock();
+        try {
+            this.singleThreadedManager.priorityDrop = Objects.requireNonNull(priorityDrop);
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
+    }
+
     public Instance getInstance() {
         return this.instance;
     }
@@ -304,7 +312,8 @@ class TaskSchedulerThread implements Runnable {
                     this.singleThreadedManager.saveInstanceDataAndChunks(future);
             case Task.SaveInstanceDataCompleted() -> this.singleThreadedManager.saveInstanceCompleted();
             case Task.SaveChunkCompleted(var x, var z) -> this.singleThreadedManager.saveChunkCompleted(x, z);
-            case Task.FinishUnloadAfterSave(var chunk) -> this.singleThreadedManager.finishUnloadChunkAfterSave(chunk);
+            case Task.FinishUnloadAfterPartition(var chunk) ->
+                    this.singleThreadedManager.finishUnloadAfterPartition(chunk);
             case Task.EnqueueUpdate(var update) -> this.singleThreadedManager.enqueue(update);
             case Task.UnloadFuture(var x, var z, var future) -> this.singleThreadedManager.unloadFuture(x, z, future);
             case Task.FinishUnloadAfterSaveAndPartition(var chunk) ->
@@ -391,20 +400,20 @@ class TaskSchedulerThread implements Runnable {
         // Don't register this inside tests
         if (!ServerFlag.ASYNC_CHUNK_SYSTEM) return;
         this.instance.eventNode().addListener(InstanceRegisterEvent.class, event -> {
-            mainLock.lock();
+            this.mainLock.lock();
             try {
                 this.shutdownFuture = new CompletableFuture<>();
-                start();
+                this.start();
             } finally {
-                mainLock.unlock();
+                this.mainLock.unlock();
             }
         });
         this.instance.eventNode().addListener(InstanceUnregisterEvent.class, event -> {
+            this.mainLock.lock();
             try {
-                mainLock.lock();
-                shutdown().join();
+                this.shutdown().join();
             } finally {
-                mainLock.unlock();
+                this.mainLock.unlock();
             }
         });
     }
@@ -460,7 +469,7 @@ class TaskSchedulerThread implements Runnable {
         record EnqueueUpdate(@NotNull PrioritizedUpdate update) implements Task {
         }
 
-        record FinishUnloadAfterSave(@NotNull Chunk chunk) implements Task {
+        record FinishUnloadAfterPartition(@NotNull Chunk chunk) implements Task {
         }
 
         record UnloadFuture(int x, int z, @NotNull CompletableFuture<Void> future) implements Task {
@@ -468,8 +477,5 @@ class TaskSchedulerThread implements Runnable {
 
         record FinishUnloadAfterSaveAndPartition(@NotNull Chunk chunk) implements Task {
         }
-    }
-
-    record ClaimedChunk(int x, int z, CompletableFuture<Chunk> future) {
     }
 }

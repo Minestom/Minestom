@@ -143,6 +143,16 @@ class ChunkManagerImpl implements ChunkManager {
     }
 
     @Override
+    public @NotNull PriorityDrop getPriorityDrop() {
+        return this.taskSchedulerThread.getPriorityDrop();
+    }
+
+    @Override
+    public void setPriorityDrop(@NotNull PriorityDrop priorityDrop) {
+        this.taskSchedulerThread.setPriorityDrop(priorityDrop);
+    }
+
+    @Override
     public boolean isAutosaveEnabled() {
         return this.taskSchedulerThread.isAutosaveEnabled();
     }
