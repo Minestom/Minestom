@@ -10,7 +10,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.CustomModelData;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
@@ -21,7 +20,6 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -227,12 +225,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * Returns a new ItemStack with the specified tag and its associated value applied.
      * This method is used to attach custom metadata or attributes to the item.
      *
-     * @implNote When using transient tags, the item can't be moved by a player in creative mode. See #2396
-     *
      * @param tag   The tag to apply to the item.
      * @param value The value associated with the tag. Can be null to remove or reset the tag.
      * @param <T>   The type of the tag value.
      * @return A new ItemStack containing the specified tag and value.
+     * @implNote When using transient tags, the item can't be moved by a player in creative mode without the data getting lost. See #2396 for more details
      */
     @Contract(value = "_, _ -> new", pure = true)
     <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value);
