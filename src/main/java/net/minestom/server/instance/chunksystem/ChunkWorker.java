@@ -4,7 +4,11 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,10 +60,7 @@ public class ChunkWorker {
         }
     }
 
-    void workerGenerateChunk(int x, int z) {
-        final var loader = this.taskSchedulerThread.getChunkLoader();
-        final var supplier = this.taskSchedulerThread.getChunkSupplier();
-        final var generator = this.taskSchedulerThread.getGenerator();
+    void workerGenerateChunk(int x, int z, @NotNull IChunkLoader loader, @NotNull ChunkSupplier supplier, @Nullable Generator generator) {
         if (!loader.supportsParallelLoading()) {
             // TODO maybe revisit and add locking to allow for non-parallel loaders, but not right now
             synchronized (WARNED_LOADERS) {

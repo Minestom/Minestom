@@ -9,13 +9,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class PrioritizedUpdateTest {
     @Test
     void testOrder() {
-        var update1 = new PrioritizedUpdate(UpdateType.ADD_CLAIM_EXPLICIT, 1, 0, 0, 0);
-        var update2 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 2, 0, 0, 0);
-        var update3 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 3, 0, 0, 0);
-        var update4 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 4, 0, 0, 0);
-        var update5 = new PrioritizedUpdate(UpdateType.UNLOAD_PROPAGATE, -5, 0, 0, 0);
-        var update6 = new PrioritizedUpdate(UpdateType.UNLOAD_PROPAGATE, -3, 0, 0, 0);
-        var update7 = new PrioritizedUpdate(UpdateType.REMOVE_CLAIM_EXPLICIT, -10, 0, 0, 0);
+        var update1 = new PrioritizedUpdate(UpdateType.ADD_CLAIM_EXPLICIT, 1, 0, 0, 0, 0, null);
+        var update2 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 2, 0, 0, 0, 0, null);
+        var update3 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 3, 0, 0, 0, 0, null);
+        var update4 = new PrioritizedUpdate(UpdateType.LOAD_PROPAGATE, 4, 0, 0, 0, 0, null);
+        var update5 = new PrioritizedUpdate(UpdateType.UNLOAD_PROPAGATE, -5, 0, 0, 0, 0, null);
+        var update6 = new PrioritizedUpdate(UpdateType.UNLOAD_PROPAGATE, -3, 0, 0, 0, 0, null);
+        var update7 = new PrioritizedUpdate(UpdateType.REMOVE_CLAIM_EXPLICIT, -10, 0, 0, 0, 0, null);
 
         var list = Stream.of(update1, update2, update3, update4, update5, update6, update7).sorted(PrioritizedUpdate.COMPARATOR).toList();
 

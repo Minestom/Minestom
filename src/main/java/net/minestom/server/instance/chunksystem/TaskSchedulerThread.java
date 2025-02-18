@@ -98,9 +98,7 @@ class TaskSchedulerThread implements Runnable {
 
     public TaskSchedulerThread(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, ChunkAccess chunkAccess) {
         this.instance = instance;
-        this.singleThreadedManager = new SingleThreadedManager(this, chunkAccess);
-        this.setChunkLoader(chunkLoader);
-        this.setChunkSupplier(Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
+        this.singleThreadedManager = new SingleThreadedManager(this, chunkAccess, Objects.requireNonNullElse(chunkLoader, IChunkLoader.noop()), Objects.requireNonNullElse(chunkSupplier, DynamicChunk::new));
         this.singleThreadedManager.chunkLoader.loadInstance(instance);
 
         this.registerEvents();
@@ -311,13 +309,13 @@ class TaskSchedulerThread implements Runnable {
             case Task.SaveInstanceDataAndChunks(var future) ->
                     this.singleThreadedManager.saveInstanceDataAndChunks(future);
             case Task.SaveInstanceDataCompleted() -> this.singleThreadedManager.saveInstanceCompleted();
-            case Task.SaveChunkCompleted(var x, var z) -> this.singleThreadedManager.saveChunkCompleted(x, z);
-            case Task.FinishUnloadAfterPartition(var chunk) ->
-                    this.singleThreadedManager.finishUnloadAfterPartition(chunk);
-            case Task.EnqueueUpdate(var update) -> this.singleThreadedManager.enqueue(update);
-            case Task.UnloadFuture(var x, var z, var future) -> this.singleThreadedManager.unloadFuture(x, z, future);
-            case Task.FinishUnloadAfterSaveAndPartition(var chunk) ->
-                    this.singleThreadedManager.finishUnloadChunkAfterSaveAndPartition(chunk);
+            case Task.SaveChunkCompleted(var chunk) -> this.singleThreadedManager.saveChunkCompleted(chunk);
+            case Task.FinishUnloadAfterPartition(var unloading) ->
+                    this.singleThreadedManager.finishUnloadAfterPartition(unloading);
+            case Task.EnqueueUpdate(var update, var disablePropagation) ->
+                    this.singleThreadedManager.updateQueue.enqueue(update, disablePropagation);
+            case Task.FinishUnloadAfterSaveAndPartition(var unloading) ->
+                    this.singleThreadedManager.finishUnloadChunkAfterSaveAndPartition(unloading);
         }
     }
 
@@ -386,10 +384,6 @@ class TaskSchedulerThread implements Runnable {
 
     public void saveInstanceDataAndChunksAsync(@NotNull CompletableFuture<Void> future) {
         this.addTask(new Task.SaveInstanceDataAndChunks(future));
-    }
-
-    public void unloadFutureAsync(int x, int z, @NotNull CompletableFuture<Void> future) {
-        this.addTask(new Task.UnloadFuture(x, z, future));
     }
 
     public @UnmodifiableView @NotNull Collection<@NotNull Chunk> getLoadedChunks() {
@@ -463,19 +457,16 @@ class TaskSchedulerThread implements Runnable {
         record SaveInstanceDataCompleted() implements Task {
         }
 
-        record SaveChunkCompleted(int x, int z) implements Task {
+        record SaveChunkCompleted(@NotNull Chunk chunk) implements Task {
         }
 
-        record EnqueueUpdate(@NotNull PrioritizedUpdate update) implements Task {
+        record EnqueueUpdate(@NotNull PrioritizedUpdate update, boolean disablePropagation) implements Task {
         }
 
-        record FinishUnloadAfterPartition(@NotNull Chunk chunk) implements Task {
+        record FinishUnloadAfterPartition(@NotNull UpdateHandler.State.Unloading unloading) implements Task {
         }
 
-        record UnloadFuture(int x, int z, @NotNull CompletableFuture<Void> future) implements Task {
-        }
-
-        record FinishUnloadAfterSaveAndPartition(@NotNull Chunk chunk) implements Task {
+        record FinishUnloadAfterSaveAndPartition(@NotNull UpdateHandler.State.Unloading unloading) implements Task {
         }
     }
 }

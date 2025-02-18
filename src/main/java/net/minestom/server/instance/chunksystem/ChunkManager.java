@@ -232,16 +232,6 @@ public interface ChunkManager {
     @NotNull IChunkLoader getChunkLoader();
 
     /**
-     * Gets a future which is completed as soon as a chunk is unloaded
-     *
-     * @param x the chunk x
-     * @param z the chunk z
-     * @return the future
-     */
-    @ApiStatus.Experimental
-    @NotNull CompletableFuture<Void> getUnloadFuture(int x, int z);
-
-    /**
      * Allows creating a {@link ChunkManager} for any generic instance.
      * <p>
      * Only one {@link ChunkManager} may ever be created for an {@link Instance}.

@@ -66,6 +66,10 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
             return d <= 1F;
         };
 
+        default boolean isInRadius(@NotNull ChunkClaim claim, int claimX, int claimZ, int x, int z) {
+            return isInRadius(claim.radius(), claim.radius(), claimX, claimZ, x, z);
+        }
+
         boolean isInRadius(int radiusX, int radiusZ, int x, int z, int ox, int oz);
     }
 }

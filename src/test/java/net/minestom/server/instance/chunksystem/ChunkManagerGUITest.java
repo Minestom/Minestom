@@ -1,8 +1,16 @@
 package net.minestom.server.instance.chunksystem;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
+import it.unimi.dsi.fastutil.objects.ObjectSet;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -10,14 +18,13 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.time.Duration;
 import java.util.Arrays;
@@ -28,7 +35,7 @@ import java.util.concurrent.locks.LockSupport;
 
 @EnvTest
 public class ChunkManagerGUITest {
-    private static final int IMG_WIDTH = 200, IMG_HEIGHT = 200;
+    private static final int IMG_WIDTH = 800, IMG_HEIGHT = 800;
     private static final int RGB_WHITE = 0xFFFFFF;
 
     //    static {
@@ -42,16 +49,23 @@ public class ChunkManagerGUITest {
     ImageIcon mainImageIcon;
     BufferedImage updateImage;
     ImageIcon updateImageIcon;
+    BufferedImage saveImage;
+    ImageIcon saveImageIcon;
     JLabel mainImageLabel;
     JLabel updateImageLabel;
+    JLabel saveImageLabel;
     int loadedChunks = 0;
+    int savingChunks = 0;
     JLabel loadedChunksLabel;
+    JLabel savingChunksLabel;
     UpdateType[] updateTypes = UpdateType.values();
     JLabel[] sizeLabels = new JLabel[updateTypes.length];
     int[] updateQueueSizes = new int[updateTypes.length];
     volatile boolean submitted = false;
     volatile boolean submittedAgain = false;
 
+    // works but disabled cause this is again just visualization and doesn't test anything
+    @Disabled
     @Test
     void visualizeDrop() {
         var drop = new PriorityDrop.Square();
@@ -83,10 +97,10 @@ public class ChunkManagerGUITest {
     }
 
     // Enable this test for manual GUI visualization
-//    @Disabled
+    @Disabled
     @Test
     void gui(Env env) {
-//        ServerFlag.ASYNC_CHUNK_SYSTEM = true;
+        ServerFlag.ASYNC_CHUNK_SYSTEM = true;
         var s = new CompletableFuture<Void>();
         Thread.ofPlatform().daemon(true).start(() -> {
             s.complete(null);
@@ -106,7 +120,7 @@ public class ChunkManagerGUITest {
 
             @Override
             public void saveChunk(@NotNull Chunk chunk) {
-                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(200));
+                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(20));
             }
         });
         instance.setGenerator(unit -> {
@@ -129,16 +143,22 @@ public class ChunkManagerGUITest {
             }
         }
         updateImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+        saveImage = new BufferedImage(IMG_WIDTH, IMG_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 
         mainImageIcon = new ImageIcon(mainImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
         updateImageIcon = new ImageIcon(updateImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
+        saveImageIcon = new ImageIcon(saveImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
         mainImageLabel = new JLabel(mainImageIcon);
         updateImageLabel = new JLabel(updateImageIcon);
+        saveImageLabel = new JLabel(saveImageIcon);
 
         var imagePanel = new JPanel();
         imagePanel.setLayout(new OverlayLayout(imagePanel));
+        imagePanel.add(saveImageLabel);
         imagePanel.add(updateImageLabel);
         imagePanel.add(mainImageLabel);
+
+        var scrollpane = new JScrollPane(imagePanel);
 
         var panel = new JPanel(new BorderLayout());
         var desc = new JPanel(new GridLayout(5, 1));
@@ -149,11 +169,14 @@ public class ChunkManagerGUITest {
             desc.add(sizeLabels[i]);
         }
         loadedChunksLabel = new JLabel();
+        savingChunksLabel = new JLabel();
         updateLoadedChunks();
+        updateSavingChunks();
         desc.add(loadedChunksLabel);
+        desc.add(savingChunksLabel);
 
         panel.add(desc, BorderLayout.EAST);
-        panel.add(imagePanel, BorderLayout.WEST);
+        panel.add(scrollpane, BorderLayout.WEST);
 
         frame.add(panel, BorderLayout.CENTER);
 
@@ -168,18 +191,19 @@ public class ChunkManagerGUITest {
 
         addMouse();
         registerEvents();
-//        start1();
+//        start2();
 
-        Thread.ofPlatform().daemon(true).start(() -> {
-            for (var i = 0; i < 100; i++) {
-                manager.addClaim(150, i, 0, 10, ChunkClaim.Shape.SQUARE);
-            }
-            manager.addClaim(140, 50, 30, 20, ChunkClaim.Shape.SQUARE);
-            System.out.println(manager.getLoadedChunks().size());
-        });
+//        Thread.ofPlatform().daemon(true).start(() -> {
+//            for (var i = 0; i < 100; i++) {
+//                manager.addClaim(150, i, 0, 10, ChunkClaim.Shape.SQUARE);
+//            }
+//            manager.addClaim(140, 50, 30, 20, ChunkClaim.Shape.SQUARE);
+//            System.out.println(manager.getLoadedChunks().size());
+//        });
 
 
-        onClose.join();
+        if (!ServerFlag.ASYNC_CHUNK_SYSTEM)
+            onClose.join();
 
         env.tickWhile(() -> !onClose.isDone(), Duration.ofDays(365));
         ServerFlag.ASYNC_CHUNK_SYSTEM = false;
@@ -192,7 +216,7 @@ public class ChunkManagerGUITest {
                 futures[i] = manager.addClaim(150, i, 0, 10, ChunkClaim.Shape.SQUARE).chunkFuture();
             }
             CompletableFuture.allOf(futures).join();
-            LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(1));
+//            LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(1));
             manager.addClaim(140, 50, 30, 20, ChunkClaim.Shape.SQUARE).chunkFuture().join();
         });
     }
@@ -213,6 +237,10 @@ public class ChunkManagerGUITest {
         loadedChunksLabel.setText("Loaded chunks: " + loadedChunks);
     }
 
+    private void updateSavingChunks() {
+        savingChunksLabel.setText("Saving chunks: " + savingChunks);
+    }
+
     ConcurrentLinkedQueue<Runnable> queue = new ConcurrentLinkedQueue<>();
 
     void work() {
@@ -221,12 +249,15 @@ public class ChunkManagerGUITest {
             if (task == null) {
                 mainImageIcon.setImage(mainImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
                 updateImageIcon.setImage(updateImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
+                saveImageIcon.setImage(saveImage.getScaledInstance(800, 800, BufferedImage.SCALE_FAST));
                 updateLoadedChunks();
+                updateSavingChunks();
                 for (var i = 0; i < updateTypes.length; i++) {
                     updateSize(i);
                 }
                 mainImageLabel.repaint();
                 updateImageLabel.repaint();
+                saveImageLabel.repaint();
                 if (submittedAgain) {
                     submittedAgain = false;
                     SwingUtilities.invokeLater(this::work);
@@ -249,6 +280,24 @@ public class ChunkManagerGUITest {
         updateImage.setRGB(x, z, color);
     }
 
+    Long2ObjectMap<Chunk> saving = new Long2ObjectOpenHashMap<>();
+
+    void colorizeSave(Chunk chunk, boolean start, int color) {
+        var x = chunk.getChunkX();
+        var z = chunk.getChunkZ();
+        if (x < 0 || z < 0 || x >= IMG_WIDTH || z >= IMG_HEIGHT) return;
+        offer(() -> {
+            if (start) {
+                savingChunks++;
+                saving.put(CoordConversion.chunkIndex(x, z), chunk);
+            } else {
+                savingChunks--;
+                if (!saving.remove(CoordConversion.chunkIndex(x, z), chunk)) return;
+            }
+            saveImage.setRGB(x, z, color);
+        });
+    }
+
     void offer(Runnable runnable) {
         queue.offer(runnable);
         submit();
@@ -265,16 +314,6 @@ public class ChunkManagerGUITest {
 
     void registerEvents() {
         SingleThreadedManager.callbacks = new InternalCallbacks() {
-            @Override
-            public void onAddClaim(int x, int z, ChunkClaim chunkClaim) {
-                InternalCallbacks.super.onAddClaim(x, z, chunkClaim);
-            }
-
-            @Override
-            public void onRemoveClaim(int x, int z, ChunkClaim chunkClaim) {
-                InternalCallbacks.super.onRemoveClaim(x, z, chunkClaim);
-            }
-
             @Override
             public void onLoadStarted(int x, int z) {
                 colorize(x, z, Color.YELLOW.getRGB());
@@ -327,25 +366,39 @@ public class ChunkManagerGUITest {
                     colorizeUpdate(x, z, 0);
                 });
             }
+
+            @Override
+            public void onSaveStarted(Chunk chunk) {
+                colorizeSave(chunk, true, 0x4F00FF00);
+            }
+
+            @Override
+            public void onSaveComplete(Chunk chunk) {
+                colorizeSave(chunk, false, 0);
+            }
         };
     }
 
     void addMouse() {
+        var keyPressed = new IntOpenHashSet();
+        var factX = 800 / IMG_WIDTH;
+        var factZ = 800 / IMG_HEIGHT;
         var l = new MouseInputAdapter() {
             private final IntSet pressed = new IntOpenHashSet();
-            private ChunkClaim claim = null;
+            private final Int2ObjectMap<ChunkClaim> claims = new Int2ObjectOpenHashMap<>();
 
             @Override
             public void mousePressed(MouseEvent e) {
                 pressed.add(e.getButton());
 
-                if (e.getButton() == MouseEvent.BUTTON2) {
-                    unload();
+                if (keyPressed.contains(KeyEvent.VK_SHIFT)) {
+                    unload(e.getButton());
+                    return;
                 }
 
-                int x = e.getX() - (mainImageLabel.getWidth() - mainImage.getWidth() * 4) / 2;
-                int y = e.getY() - (mainImageLabel.getHeight() - mainImage.getHeight() * 4) / 2;
-                move(x, y);
+                int x = e.getX() - (mainImageLabel.getWidth() - mainImage.getWidth() * factX) / 2;
+                int y = e.getY() - (mainImageLabel.getHeight() - mainImage.getHeight() * factZ) / 2;
+                move(x, y, e.getButton());
             }
 
             @Override
@@ -355,28 +408,44 @@ public class ChunkManagerGUITest {
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                int x = e.getX() - (mainImageLabel.getWidth() - mainImage.getWidth() * 4) / 2;
-                int y = e.getY() - (mainImageLabel.getHeight() - mainImage.getHeight() * 4) / 2;
-                move(x, y);
-            }
-
-            private void move(int x, int z) {
-                x -= 2;
-                z -= 2;
-                x /= 4;
-                z /= 4;
-                if (pressed.contains(MouseEvent.BUTTON1)) {
-                    var claim = instance.getChunkManager().addClaim(x, z, 35, ChunkClaim.Shape.SQUARE);
-                    unload();
-                    this.claim = claim.chunkClaim();
+                int x = e.getX() - (mainImageLabel.getWidth() - mainImage.getWidth() * factX) / 2;
+                int y = e.getY() - (mainImageLabel.getHeight() - mainImage.getHeight() * factZ) / 2;
+                if (keyPressed.contains(KeyEvent.VK_SHIFT)) return;
+                for (var i : pressed) {
+                    move(x, y, i);
                 }
             }
 
-            private void unload() {
+            private void move(int x, int z, int btn) {
+                x -= factX / 2;
+                z -= factZ / 2;
+                x /= factX;
+                z /= factZ;
+                if (pressed.contains(btn)) {
+                    var claim = instance.getChunkManager().addClaim(x, z, 100, ChunkClaim.Shape.CIRCLE);
+                    unload(btn);
+                    this.claims.put(btn, claim.chunkClaim());
+                }
+            }
+
+            private void unload(int btn) {
+                var claim = claims.remove(btn);
                 if (claim == null) return;
                 instance.getChunkManager().removeClaim(claim);
             }
         };
+        var l2 = new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                keyPressed.add(e.getKeyCode());
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                keyPressed.remove(e.getKeyCode());
+            }
+        };
+        frame.addKeyListener(l2);
         mainImageLabel.addMouseListener(l);
         mainImageLabel.addMouseMotionListener(l);
     }

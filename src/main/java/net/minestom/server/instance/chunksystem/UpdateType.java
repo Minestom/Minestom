@@ -25,4 +25,10 @@ enum UpdateType {
      * before any implicit updates. This should make the entire system more snappy to requests.
      */
     REMOVE_CLAIM_EXPLICIT;
+
+    UpdateType propagated() {
+        if (this == LOAD_PROPAGATE || this == ADD_CLAIM_EXPLICIT) return LOAD_PROPAGATE;
+        if (this == UNLOAD_PROPAGATE || this == REMOVE_CLAIM_EXPLICIT) return UNLOAD_PROPAGATE;
+        throw new IllegalStateException();
+    }
 }

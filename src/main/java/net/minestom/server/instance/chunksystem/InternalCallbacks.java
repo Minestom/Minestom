@@ -1,5 +1,7 @@
 package net.minestom.server.instance.chunksystem;
 
+import net.minestom.server.instance.Chunk;
+
 /**
  * Used for testing and visualizing the function of the chunk system
  */
@@ -53,5 +55,11 @@ interface InternalCallbacks {
     }
 
     default void removeUpdate(int x, int z, UpdateType updateType) {
+    }
+
+    default void onSaveStarted(Chunk chunk) {
+    }
+
+    default void onSaveComplete(Chunk chunk) {
     }
 }

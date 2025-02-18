@@ -1,11 +1,13 @@
 package net.minestom.server.instance.chunksystem;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Comparator;
 
 /**
  * {@link PrioritizedUpdate#updateType} should only be used for prioritizing, not to execute different update functionality
  */
-record PrioritizedUpdate(UpdateType updateType, double priority, int x, int z, int radius) {
+record PrioritizedUpdate(@NotNull UpdateType updateType, double priority, int x, int z, @NotNull Origin origin) {
     /**
      * This comparator first compares by update type, then by priority.
      * Update type order is:
@@ -19,12 +21,24 @@ record PrioritizedUpdate(UpdateType updateType, double priority, int x, int z, i
     static final Comparator<PrioritizedUpdate> COMPARATOR = Comparator
             .comparing(PrioritizedUpdate::updateType)
             .thenComparingDouble(PrioritizedUpdate::priority)
-            .thenComparingInt(PrioritizedUpdate::radius)
+            .thenComparingInt(p -> p.origin().x()) // required to use this in a sorted set
+            .thenComparingInt(p -> p.origin().z()) // required to use this in a sorted set
             .thenComparingInt(PrioritizedUpdate::z) // required to use this in a sorted set
             .thenComparingInt(PrioritizedUpdate::x) // required to use this in a sorted set
+            .thenComparingInt(p -> p.origin().claim().hashCode()) // make sure no updates get lost
             .reversed();
-//
-//    public PrioritizedUpdate(UpdateType updateType, double priority, int x, int z) {
-//        this(updateType, priority, x, z, 0, 0, 0);
-//    }
+
+    public PrioritizedUpdate(@NotNull UpdateType updateType, double priority, int x, int z, int claimX, int claimZ, ChunkClaim claim) {
+        this(updateType, priority, x, z, new Origin(claimX, claimZ, claim));
+    }
+
+    record Origin(int x, int z, @NotNull ChunkClaim claim) {
+        @NotNull ChunkClaim.Shape shape() {
+            return claim().shape();
+        }
+
+        double priority() {
+            return claim().priority();
+        }
+    }
 }

@@ -3,7 +3,9 @@ package net.minestom.server.instance.chunksystem;
 import it.unimi.dsi.fastutil.ints.Int2ObjectRBTreeMap;
 import net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -96,7 +98,6 @@ public class ChunkClaimTree {
                 var maxX = treeXEntry.getKey();
                 var widthX = maxX - minX;
                 var radiusX = widthX / 2;
-                var radiusSqX = -1;
                 var centerX = minX + radiusX;
                 var treeZ = treeXEntry.getValue();
                 var nodesTreeZ = treeZ.searchNodes(z);
@@ -106,7 +107,6 @@ public class ChunkClaimTree {
                         var maxZ = treeZEntry.getKey();
                         var widthZ = maxZ - minZ;
                         var radiusZ = widthZ / 2;
-                        var radiusSqZ = -1;
                         var centerZ = minZ + radiusX;
                         var entries = treeZEntry.getValue();
                         for (var entry : entries) {
@@ -135,6 +135,35 @@ public class ChunkClaimTree {
             return true;
         });
         return resultEntries;
+    }
+
+    public @Nullable CompleteEntry findHighestPriorityEntry(@NotNull PriorityDrop priorityDrop, int x, int z) {
+        var entries = this.findEntries(x, z);
+        if (entries.isEmpty()) return null;
+        return findHighestPriorityEntry(entries, priorityDrop, x, z);
+    }
+
+    public @NotNull CompleteEntry findHighestPriorityEntry(@NotNull List<CompleteEntry> entries, @NotNull PriorityDrop priorityDrop, int x, int z) {
+        var comparator = entryPriorityComparator(priorityDrop, x, z);
+        return entries.stream().max(comparator).orElseThrow();
+    }
+
+    /**
+     * Calculates the priority of a given {@code entry} for a chunk at {@code x,z}
+     */
+    public double calculatePriority(@NotNull PriorityDrop priorityDrop, @NotNull CompleteEntry entry, int x, int z) {
+        return this.calculatePriority(priorityDrop, entry.entry().priority, entry.centerX(), entry.centerZ(), x, z);
+    }
+
+    /**
+     * Calculates the priority of a given {@code entry} for a chunk at {@code x,z}
+     */
+    public double calculatePriority(@NotNull PriorityDrop priorityDrop, double priority, int claimX, int claimZ, int x, int z) {
+        return priority - priorityDrop.calculate(claimX, claimZ, x, z);
+    }
+
+    public Comparator<ChunkClaimTree.CompleteEntry> entryPriorityComparator(@NotNull PriorityDrop priorityDrop, int x, int z) {
+        return Comparator.comparingDouble(e -> calculatePriority(priorityDrop, e, x, z));
     }
 
     public record Entries(Int2ObjectRBTreeMap<ArrayList<Entry>> byPriority) implements Iterable<Entry> {
