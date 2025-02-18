@@ -35,7 +35,7 @@ import java.util.concurrent.locks.LockSupport;
 
 @EnvTest
 public class ChunkManagerGUITest {
-    private static final int IMG_WIDTH = 800, IMG_HEIGHT = 800;
+    private static final int IMG_WIDTH = 400, IMG_HEIGHT = 400;
     private static final int RGB_WHITE = 0xFFFFFF;
 
     //    static {
@@ -120,7 +120,7 @@ public class ChunkManagerGUITest {
 
             @Override
             public void saveChunk(@NotNull Chunk chunk) {
-                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(20));
+                LockSupport.parkNanos(TimeUnit.MILLISECONDS.toNanos(1));
             }
         });
         instance.setGenerator(unit -> {
@@ -422,7 +422,7 @@ public class ChunkManagerGUITest {
                 x /= factX;
                 z /= factZ;
                 if (pressed.contains(btn)) {
-                    var claim = instance.getChunkManager().addClaim(x, z, 100, ChunkClaim.Shape.CIRCLE);
+                    var claim = instance.getChunkManager().addClaim(x, z, 32, ChunkClaim.Shape.CIRCLE);
                     unload(btn);
                     this.claims.put(btn, claim.chunkClaim());
                 }
