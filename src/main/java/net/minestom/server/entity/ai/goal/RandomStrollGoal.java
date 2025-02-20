@@ -1,28 +1,25 @@
 package net.minestom.server.entity.ai.goal;
 
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.AIGoal;
+import net.minestom.server.entity.ai.target.RandomNearbyPositionTarget;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class RandomStrollGoal extends GoalSelector {
+public class RandomStrollGoal extends AIGoal {
 
     private static final long DELAY = 2500;
 
     private final int radius;
-    private final List<Vec> closePositions;
-    private final Random random = new Random();
+    private final int maxAttempts = 20;
 
     private long lastStroll;
 
     public RandomStrollGoal(@NotNull EntityCreature entityCreature, int radius) {
-        super(entityCreature);
+        super(entityCreature, List.of(new RandomNearbyPositionTarget(radius)), 0);
         this.radius = radius;
-        this.closePositions = getNearbyBlocks(radius);
     }
 
     @Override
@@ -32,10 +29,11 @@ public class RandomStrollGoal extends GoalSelector {
 
     @Override
     public void start() {
-        int remainingAttempt = closePositions.size();
+        int remainingAttempt = maxAttempts;
         while (remainingAttempt-- > 0) {
-            final int index = random.nextInt(closePositions.size());
-            final Vec position = closePositions.get(index);
+            final Pos position = findTargetPosition();
+            if (position == null)
+                continue;
 
             final var target = entityCreature.getPosition().add(position);
             final boolean result = entityCreature.getNavigator().setPathTo(target);
@@ -61,17 +59,5 @@ public class RandomStrollGoal extends GoalSelector {
 
     public int getRadius() {
         return radius;
-    }
-
-    private static @NotNull List<Vec> getNearbyBlocks(int radius) {
-        List<Vec> blocks = new ArrayList<>();
-        for (int x = -radius; x <= radius; x++) {
-            for (int y = -radius; y <= radius; y++) {
-                for (int z = -radius; z <= radius; z++) {
-                    blocks.add(new Vec(x, y, z));
-                }
-            }
-        }
-        return blocks;
     }
 }

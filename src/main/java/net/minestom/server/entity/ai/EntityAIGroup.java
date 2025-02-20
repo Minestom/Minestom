@@ -1,150 +1,75 @@
 package net.minestom.server.entity.ai;
 
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.UnaryOperator;
 
 /**
- * Represents a group of entity's AI.
- * It may contains {@link GoalSelector goal selectors} and {@link TargetSelector target selectors}.
- * All AI groups of a single entity are independent of each other.
+ * Represents a collection of {@link AIGoal ai goals}.
  */
 public class EntityAIGroup {
 
-    private GoalSelector currentGoalSelector;
-    private final List<GoalSelector> goalSelectors = new GoalSelectorsArrayList();
-    private final List<TargetSelector> targetSelectors = new ArrayList<>();
+    private AIGoal currentAIGoal;
+    private final List<AIGoal> aiGoals = new ArrayList<>();
 
     /**
      * Gets the goal selectors of this group.
      *
-     * @return a modifiable list containing this group goal selectors
+     * @return an unmodifiable list containing this group's goal selectors
      */
     @NotNull
-    public List<GoalSelector> getGoalSelectors() {
-        return this.goalSelectors;
+    public List<AIGoal> getAIGoals() {
+        return Collections.unmodifiableList(aiGoals);
+    }
+
+    public void addAIGoals(@NotNull List<AIGoal> goalSelectors) {
+        this.aiGoals.addAll(goalSelectors);
+        Collections.sort(goalSelectors);
     }
 
     /**
-     * Gets the target selectors of this group.
+     * Gets the currently active goal of this group
      *
-     * @return a modifiable list containing this group target selectors
-     */
-    @NotNull
-    public List<TargetSelector> getTargetSelectors() {
-        return this.targetSelectors;
-    }
-
-    /**
-     * Gets the current goal selector of this group.
-     *
-     * @return the current goal selector of this group, null if not any
+     * @return the current AI goal of this group, null if not any
      */
     @Nullable
-    public GoalSelector getCurrentGoalSelector() {
-        return this.currentGoalSelector;
-    }
-
-    /**
-     * Changes the current goal selector of this group.
-     * <p>
-     * Mostly unsafe since the current goal selector should normally
-     * be chosen during the group tick method.
-     *
-     * @param goalSelector the new goal selector of this group, null to disable it
-     */
-    public void setCurrentGoalSelector(@Nullable GoalSelector goalSelector) {
-        Check.argCondition(
-                goalSelector != null && goalSelector.getAIGroup() != this,
-                "Tried to set goal selector attached to another AI group!"
-        );
-        this.currentGoalSelector = goalSelector;
+    public AIGoal getCurrentAIGoal() {
+        return this.currentAIGoal;
     }
 
     public void tick(long time) {
-        GoalSelector currentGoalSelector = getCurrentGoalSelector();
+        AIGoal currentGoal = getCurrentAIGoal();
 
-        if (currentGoalSelector != null && currentGoalSelector.shouldEnd()) {
-            currentGoalSelector.end();
-            currentGoalSelector = null;
-            setCurrentGoalSelector(null);
-        }
-
-        for (GoalSelector selector : getGoalSelectors()) {
-            if (selector == currentGoalSelector) {
-                break;
-            }
-            if (selector.shouldStart()) {
-                if (currentGoalSelector != null) {
-                    currentGoalSelector.end();
+         if (currentGoal != null) {
+            if (currentGoal.shouldEnd()) {
+                currentGoal.end();
+                this.currentAIGoal = null;
+            } else {
+                currentGoal.tick(time);
+                // Check for any goal interrupts
+                for (var goal : aiGoals) {
+                    if (goal.canInterrupt(currentGoal) && goal.shouldStart()) {
+                        currentGoal.end();
+                        this.currentAIGoal = goal;
+                        goal.start();
+                        break;
+                    }
                 }
-                currentGoalSelector = selector;
-                setCurrentGoalSelector(currentGoalSelector);
-                currentGoalSelector.start();
-                break;
             }
         }
 
-        if (currentGoalSelector != null) {
-            currentGoalSelector.tick(time);
+        if (currentGoal == null) {
+            // We don't have a current goal, pick one with the highest priority
+            for (var goal : aiGoals) {
+                if (goal.shouldStart()) {
+                    this.currentAIGoal = goal;
+                    goal.start();
+                    break;
+                }
+            }
         }
     }
-
-    /**
-     * The purpose of this list is to guarantee that every {@link GoalSelector} added to that group
-     * has a reference to it for some internal interactions. We don't provide developers with
-     * methods like `addGoalSelector` or `removeGoalSelector`: instead we provide them with direct
-     * access to list of goal selectors, so that they could use operations such as `clear`, `set`, `removeIf`, etc.
-     */
-    private class GoalSelectorsArrayList extends ArrayList<GoalSelector> {
-
-        private GoalSelectorsArrayList() {
-        }
-
-        @Override
-        public GoalSelector set(int index, GoalSelector element) {
-            element.setAIGroup(EntityAIGroup.this);
-            return super.set(index, element);
-        }
-
-        @Override
-        public boolean add(GoalSelector element) {
-            element.setAIGroup(EntityAIGroup.this);
-            return super.add(element);
-        }
-
-        @Override
-        public void add(int index, GoalSelector element) {
-            element.setAIGroup(EntityAIGroup.this);
-            super.add(index, element);
-        }
-
-        @Override
-        public boolean addAll(Collection<? extends GoalSelector> c) {
-            c.forEach(goalSelector -> goalSelector.setAIGroup(EntityAIGroup.this));
-            return super.addAll(c);
-        }
-
-        @Override
-        public boolean addAll(int index, Collection<? extends GoalSelector> c) {
-            c.forEach(goalSelector -> goalSelector.setAIGroup(EntityAIGroup.this));
-            return super.addAll(index, c);
-        }
-
-        @Override
-        public void replaceAll(UnaryOperator<GoalSelector> operator) {
-            super.replaceAll(goalSelector -> {
-                goalSelector = operator.apply(goalSelector);
-                goalSelector.setAIGroup(EntityAIGroup.this);
-                return goalSelector;
-            });
-        }
-
-    }
-
 }
