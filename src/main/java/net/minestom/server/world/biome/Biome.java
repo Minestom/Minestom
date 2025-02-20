@@ -37,15 +37,11 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     @NotNull BiomeEffects effects();
 
-    @NotNull Precipitation precipitation();
+    boolean hasPrecipitation();
 
     @NotNull TemperatureModifier temperatureModifier();
 
     @Nullable Registry.BiomeEntry registry();
-
-    enum Precipitation {
-        NONE, RAIN, SNOW;
-    }
 
     enum TemperatureModifier {
         NONE, FROZEN;
@@ -78,7 +74,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
         private float temperature = 0.25f;
         private float downfall = 0.8f;
         private BiomeEffects effects = DEFAULT_EFFECTS;
-        private Precipitation precipitation = Precipitation.RAIN;
+        private boolean hasPrecipitation = false;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
         private Builder() {
@@ -103,8 +99,8 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder precipitation(@NotNull Biome.Precipitation precipitation) {
-            this.precipitation = precipitation;
+        public @NotNull Builder hasPrecipitation(boolean precipitation) {
+            this.hasPrecipitation = precipitation;
             return this;
         }
 
@@ -116,7 +112,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(temperature, downfall, effects, precipitation, temperatureModifier, null);
+            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier, null);
         }
     }
 }
