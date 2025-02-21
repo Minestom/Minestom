@@ -3,12 +3,8 @@ package net.minestom.server.instance.chunksystem;
 import it.unimi.dsi.fastutil.longs.*;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectRBTreeSet;
-import it.unimi.dsi.fastutil.objects.ObjectSortedSet;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
-import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
@@ -174,7 +170,7 @@ class SingleThreadedManager {
     }
 
     void addClaim(int x, int z, ChunkAndClaim chunkAndClaim) {
-        var claim = chunkAndClaim.chunkClaim();
+        var claim = chunkAndClaim.claim();
         this.tree.insert(x, z, claim.radius(), claim.priority(), claim.shape());
 
         var claimedChunk = new ClaimedChunk(x, z, chunkAndClaim.chunkFuture());

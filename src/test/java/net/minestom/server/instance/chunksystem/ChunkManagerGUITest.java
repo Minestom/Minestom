@@ -6,9 +6,6 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
-import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
-import it.unimi.dsi.fastutil.objects.ObjectSet;
-import net.kyori.adventure.key.Keyed;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
@@ -424,7 +421,7 @@ public class ChunkManagerGUITest {
                 if (pressed.contains(btn)) {
                     var claim = instance.getChunkManager().addClaim(x, z, 32, ChunkClaim.Shape.CIRCLE);
                     unload(btn);
-                    this.claims.put(btn, claim.chunkClaim());
+                    this.claims.put(btn, claim.claim());
                 }
             }
 

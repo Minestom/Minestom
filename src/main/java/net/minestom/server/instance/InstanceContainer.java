@@ -249,7 +249,7 @@ public class InstanceContainer extends Instance {
             var newClaim = chunkManager.addClaim(chunkX, chunkZ);
             claim = chunks.putIfAbsent(index, newClaim);
             if (claim != null) {
-                chunkManager.removeClaim(newClaim.chunkClaim());
+                chunkManager.removeClaim(newClaim.claim());
             } else claim = newClaim;
         }
         return claim.chunkFuture();
@@ -262,7 +262,7 @@ public class InstanceContainer extends Instance {
         final int chunkZ = chunk.getChunkZ();
         var claim = chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
         if (claim == null) return;
-        this.chunkManager.removeClaim(claim.chunkClaim());
+        this.chunkManager.removeClaim(claim.claim());
     }
 
     @Override
