@@ -46,6 +46,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -203,6 +204,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     private boolean reducedDebugScreenInformation;
     private boolean hardcore;
+
+    private ChunkClaim chunkClaim = null;
 
     // Abilities
     private boolean flying;
@@ -618,28 +621,26 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            spawnPlayer(instance, spawnPosition, false, false, false, null);
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
+        var chunkAndClaim = instance.getChunkManager().addClaim(spawnPosition.chunkX(), spawnPosition.chunkZ(), this.settings.effectiveViewDistance());
         chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
-                currentInstance == null, dimensionChange, true);
+                currentInstance == null, dimensionChange, true, chunkAndClaim.claim());
 
         // Reset chunk queue state
         needsChunkPositionSync = true;
         targetChunksPerTick = 9f;
         pendingChunkCount = 0f;
 
-        // Ensure that surrounding chunks are loaded
-        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
-            final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
-            if (!future.isDone()) futures.add(future);
-        });
-        if (futures.isEmpty()) {
-            // All chunks are already loaded
+        System.out.println(Thread.currentThread().getName());
+        var start = System.nanoTime();
+
+        if (chunkAndClaim.chunkFuture().isDone()) {
+            // Relevant chunks are already loaded
             runnable.accept(instance);
             return AsyncUtils.VOID_FUTURE;
         }
@@ -665,14 +666,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
         };
 
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
-                .thenRun(() -> {
-                    scheduler.scheduleNextProcess(() -> {
-                        runnable.accept(instance);
-                        future.complete(null);
-                    });
-                    latch.countDown();
-                });
+        future.thenRun(() -> {
+            var time = System.nanoTime() - start;
+            System.out.println("Took: " + java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(time) + "ms");
+        });
+
+        chunkAndClaim.chunkFuture().thenRun(() -> {
+            scheduler.scheduleNextProcess(() -> {
+                runnable.accept(instance);
+                future.complete(null);
+            });
+            latch.countDown();
+        });
         return future;
     }
 
@@ -701,13 +706,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param firstSpawn    true if this is the player first spawn
      * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
      *                      chunks
+     * @param newClaim      the new claim of the player, null if the old claim is still valid (shared instances)
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
-                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
+                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks, @Nullable ChunkClaim newClaim) {
         if (!firstSpawn && !dimensionChange) {
             // Player instance changed, clear current viewable collections
-            if (updateChunks)
+            if (updateChunks) {
                 ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
+            }
         }
 
         if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
