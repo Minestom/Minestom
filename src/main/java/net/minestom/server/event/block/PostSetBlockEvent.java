@@ -10,6 +10,9 @@ import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents after the block was set
+ */
 @SuppressWarnings("unused")
 public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEvent {
 
