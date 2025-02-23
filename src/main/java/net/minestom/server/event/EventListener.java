@@ -23,6 +23,8 @@ public interface EventListener<T extends Event> {
 
     @NotNull Result run(@NotNull T event);
 
+    int priority();
+
     @Contract(pure = true)
     static <T extends Event> EventListener.@NotNull Builder<T> builder(@NotNull Class<T> eventType) {
         return new EventListener.Builder<>(eventType);
@@ -47,11 +49,22 @@ public interface EventListener<T extends Event> {
         private final List<Predicate<T>> filters = new ArrayList<>();
         private boolean ignoreCancelled = true;
         private int expireCount;
+        private int priority;
         private Predicate<T> expireWhen;
         private Consumer<T> handler;
 
         protected Builder(Class<T> eventType) {
             this.eventType = eventType;
+        }
+
+        /**
+         * Adds a filter to the executor of this listener. The executor will only
+         * be called if this condition passes on the given event.
+         */
+        @Contract(value = "_ -> this")
+        public @NotNull EventListener.Builder<T> priority(int priority) {
+            this.priority = priority;
+            return this;
         }
 
         /**
@@ -116,6 +129,8 @@ public interface EventListener<T extends Event> {
             AtomicInteger expirationCount = new AtomicInteger(this.expireCount);
             final boolean hasExpirationCount = expirationCount.get() > 0;
 
+            AtomicInteger priority = new AtomicInteger(this.priority);
+
             final Predicate<T> expireWhen = this.expireWhen;
 
             final var filters = new ArrayList<>(this.filters);
@@ -125,6 +140,9 @@ public interface EventListener<T extends Event> {
                 public @NotNull Class<T> eventType() {
                     return eventType;
                 }
+
+                @Override
+                public int priority() { return priority.get(); }
 
                 @Override
                 public @NotNull Result run(@NotNull T event) {
