@@ -10,6 +10,9 @@ import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents before the block was broken
+ */
 @SuppressWarnings("unused")
 public final class PreBreakBlockEvent implements Event, BlockEvent, CancellableEvent {
 

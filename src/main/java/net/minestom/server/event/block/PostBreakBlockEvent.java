@@ -10,6 +10,9 @@ import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents after the block was broken
+ */
 @SuppressWarnings("unused")
 public final class PostBreakBlockEvent implements Event, BlockEvent, CancellableEvent {
 
