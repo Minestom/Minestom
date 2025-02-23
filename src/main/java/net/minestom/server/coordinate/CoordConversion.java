@@ -60,32 +60,33 @@ public final class CoordConversion {
     // BLOCK INDEX FROM CHUNK
 
     public static int chunkBlockIndex(int x, int y, int z) {
+        // Mask x and z to ensure only the lower 4 bits are used.
         x = globalToSectionRelative(x);
         z = globalToSectionRelative(z);
 
-        int index = x & 0xF; // 4 bits
-        if (y > 0) {
-            index |= (y << 4) & 0x07FFFFF0; // 23 bits (24th bit is always 0 because y is positive)
-        } else {
-            index |= ((-y) << 4) & 0x7FFFFF0; // Make positive and use 23 bits
-            index |= 1 << 27; // Set negative sign at 24th bit
-        }
-        index |= (z << 28) & 0xF0000000; // 4 bits
-        return index;
+        // Bits layout:
+        // bits 0-3: x (4 bits)
+        // bits 4-26: absolute value of y (23 bits)
+        // bit 27: sign bit of y
+        // bits 28-31: z (4 bits)
+        return (z << 28)                          // Z component (shifted to the upper 4 bits)
+                | (y & 0x80000000) >>> 4          // Y sign bit if y was negative
+                | (Math.abs(y) & 0x007FFFFF) << 4 // Y component (23 bits for Y, sign encoded in the 24th)
+                | (x);                            // X component (4 bits for X)
     }
 
     public static int chunkBlockIndexGetX(int index) {
-        return index & 0xF; // 0-4 bits
+        return index & 0xF; // bits 0-3
     }
 
     public static int chunkBlockIndexGetY(int index) {
         int y = (index & 0x07FFFFF0) >>> 4;
-        if (((index >>> 27) & 1) == 1) y = -y; // Sign bit set, invert sign
+        if ((index & 0x08000000) != 0) y = -y; // Sign bit set, invert sign
         return y; // 4-28 bits
     }
 
     public static int chunkBlockIndexGetZ(int index) {
-        return (index >> 28) & 0xF; // 28-32 bits
+        return (index >>> 28) & 0xF; // bits 28-31
     }
 
     public static @NotNull Point chunkBlockIndexGetGlobal(int index, int chunkX, int chunkZ) {

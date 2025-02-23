@@ -167,4 +167,9 @@ public class CoordinateTest {
             }
         }
     }
+
+    @Test
+    public void blockIndexZero() {
+        assertEquals(0, CoordConversion.chunkBlockIndex(0, 0, 0), "Bad default index for zero case! Bad sign bit?");
+    }
 }
