@@ -4,7 +4,6 @@ import net.minestom.codegen.color.DyeColorGenerator;
 import net.minestom.codegen.fluid.FluidGenerator;
 import net.minestom.codegen.particle.ParticleGenerator;
 import net.minestom.codegen.recipe.RecipeTypeGenerator;
-import net.minestom.codegen.sounds.BlockSoundTypesGenerator;
 import net.minestom.codegen.util.GenericEnumGenerator;
 import net.minestom.codegen.worldevent.WorldEventGenerator;
 import org.slf4j.Logger;
@@ -42,8 +41,6 @@ public class Generators {
                 resource("villager_types.json"), outputFolder).generate();
         new WorldEventGenerator("net.minestom.server.worldevent", "WorldEvent",
                 resource("world_events.json"), outputFolder).generate();
-        new BlockSoundTypesGenerator("net.minestom.server.sound", "BlockSoundTypes", "BlockSoundTypeImpl",
-                resource("block_sound_types.json"), outputFolder).generate();
 
         var generator = new CodeGenerator(outputFolder);
 
