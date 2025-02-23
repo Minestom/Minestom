@@ -59,9 +59,16 @@ public class BlockPlacementListener {
 
         final Point cursorPosition = new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ());
 
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            player,
+            cursorPosition,
+            packet.hand()
+        );
+
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, new BlockVec(blockPosition), cursorPosition, blockFace);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock,
+                new BlockVec(blockPosition), cursorPosition, blockFace, source);
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
@@ -164,12 +171,6 @@ public class BlockPlacementListener {
         }
 
         // BlockPlaceEvent check
-        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
-                player,
-                cursorPosition,
-                packet.hand()
-        );
-
         PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace,
                 new BlockVec(placementPosition), cursorPosition, packet.hand(), source);
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);

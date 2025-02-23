@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
+    private final BlockEvent.Source.Player source;
     private final PlayerHand hand;
     private final Block block;
     private final BlockVec blockPosition;
@@ -34,13 +35,14 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     public PlayerBlockInteractEvent(@NotNull Player player, @NotNull PlayerHand hand,
                                     @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull Point cursorPosition,
-                                    @NotNull BlockFace blockFace) {
+                                    @NotNull BlockFace blockFace, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
         this.hand = hand;
         this.block = block;
         this.blockPosition = blockPosition;
         this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
+        this.source = source;
     }
 
     /**
@@ -74,6 +76,16 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    @Override
+    public @NotNull BlockEvent.Source.Player getSource() {
+        return source;
     }
 
     /**

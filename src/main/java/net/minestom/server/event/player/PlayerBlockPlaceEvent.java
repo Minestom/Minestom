@@ -35,7 +35,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     @Deprecated()
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockFace blockFace, @NotNull BlockVec blockPosition,
-                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand, BlockEvent.Source.Player source) {
+                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
         this.block = block;
         this.blockFace = blockFace;
