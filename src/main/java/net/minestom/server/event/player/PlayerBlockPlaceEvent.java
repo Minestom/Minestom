@@ -13,10 +13,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Called when a player tries placing a block.
+ *
+ * @deprecated Use {@link net.minestom.server.event.block.PostSetBlockEvent} or {@link net.minestom.server.event.block.PreSetBlockEvent}
  */
+@Deprecated()
 public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
     private final Player player;
+    private final BlockEvent.Source.Player source;
     private Block block;
     private final BlockFace blockFace;
     private final BlockVec blockPosition;
@@ -28,9 +32,10 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
 
     private boolean cancelled;
 
+    @Deprecated()
     public PlayerBlockPlaceEvent(@NotNull Player player, @NotNull Block block,
                                  @NotNull BlockFace blockFace, @NotNull BlockVec blockPosition,
-                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand) {
+                                 @NotNull Point cursorPosition, @NotNull PlayerHand hand, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
         this.block = block;
         this.blockFace = blockFace;
@@ -39,6 +44,7 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
         this.hand = hand;
         this.consumeBlock = true;
         this.doBlockUpdates = true;
+        this.source = source;
     }
 
     /**
@@ -72,6 +78,16 @@ public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, C
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    @Override
+    public @NotNull BlockEvent.Source.Player getSource() {
+        return source;
     }
 
     public @NotNull Point getCursorPosition() {
