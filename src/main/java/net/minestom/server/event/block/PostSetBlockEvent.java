@@ -38,28 +38,58 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
         this.source = source;
     }
 
+    /**
+     * Gets the block which replaced {@link #getPreviousBlock()}
+     *
+     * @return the result block
+     */
     @Override
     public @NotNull Block getBlock() {
         return newBlock;
     }
 
+    /**
+     * Gets the changed block
+     *
+     * @return the block
+     */
     public @NotNull Block getPreviousBlock() {
         return previousBlock;
     }
 
+    /**
+     * Gets instance where the block was changed
+     *
+     * @return the instance
+     */
     public @NotNull Instance getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the face at which the block was changed
+     *
+     * @return the block face
+     */
     public @Nullable BlockFace getBlockFace() {
         return blockFace;
     }
 
+    /**
+     * Gets the block position.
+     *
+     * @return the block position
+     */
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return position;
     }
 
+    /**
+     * Gets the {@link BlockEventSource}
+     *
+     * @return the BlockEventSource
+     */
     public @NotNull BlockEventSource getSource() {
         return source;
     }

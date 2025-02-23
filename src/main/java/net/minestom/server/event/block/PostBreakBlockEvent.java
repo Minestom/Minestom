@@ -22,11 +22,11 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
     private final BlockEventSource source;
 
     public PostBreakBlockEvent(
-            @NotNull Block previousBlock,
-            @NotNull Instance instance,
-            @Nullable BlockFace face,
-            @NotNull BlockVec position,
-            @NotNull BlockEventSource source
+        @NotNull Block previousBlock,
+        @NotNull Instance instance,
+        @Nullable BlockFace face,
+        @NotNull BlockVec position,
+        @NotNull BlockEventSource source
     ) {
         this.previousBlock = previousBlock;
         this.instance = instance;
@@ -35,28 +35,58 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
         this.source = source;
     }
 
+    /**
+     * Gets the block which replaced {@link #getPreviousBlock()}.
+     *
+     * @return the result block
+     */
     @Override
     public @NotNull Block getBlock() {
         return previousBlock;
     }
 
+    /**
+     * Gets the block that was broken
+     *
+     * @return the block
+     */
     public @NotNull Block getPreviousBlock() {
         return previousBlock;
     }
 
+    /**
+     * Gets instance where the block was broken
+     *
+     * @return the instance
+     */
     public @NotNull Instance getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the face at which the block was broken
+     *
+     * @return the block face
+     */
     public @Nullable BlockFace getBlockFace() {
         return blockFace;
     }
 
+    /**
+     * Gets the block position.
+     *
+     * @return the block position
+     */
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return position;
     }
 
+    /**
+     * Gets the {@link BlockEventSource}
+     *
+     * @return the BlockEventSource
+     */
     public @NotNull BlockEventSource getSource() {
         return source;
     }

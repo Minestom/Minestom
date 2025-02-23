@@ -42,28 +42,58 @@ public final class PreSetBlockEvent implements Event, BlockEvent, CancellableEve
         this.source = source;
     }
 
+    /**
+     * Gets the block which will replace {@link #getPreviousBlock()}
+     *
+     * @return the result block
+     */
     @Override
     public @NotNull Block getBlock() {
         return newBlock;
     }
 
+    /**
+     * Gets the block which will be changed
+     *
+     * @return the block
+     */
     public @NotNull Block getPreviousBlock() {
         return previousBlock;
     }
 
+    /**
+     * Gets instance where the block is being changed
+     *
+     * @return the instance
+     */
     public @NotNull Instance getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the face at which the block is being changed
+     *
+     * @return the block face
+     */
     public @Nullable BlockFace getBlockFace() {
         return blockFace;
     }
 
+    /**
+     * Gets the block position.
+     *
+     * @return the block position
+     */
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return position;
     }
 
+    /**
+     * Gets the {@link BlockEventSource}
+     *
+     * @return the BlockEventSource
+     */
     public @NotNull BlockEventSource getSource() {
         return source;
     }
@@ -73,28 +103,51 @@ public final class PreSetBlockEvent implements Event, BlockEvent, CancellableEve
         return cancelled;
     }
 
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @return true if this placement should do block updates
+     */
     public boolean doBlockUpdates() {
         return doBlockUpdates;
     }
 
+    /**
+     * Should the block be consumed if not cancelled.
+     *
+     * @return true if the block will be consumed, false otherwise
+     */
     public boolean consumesBlock() {
         return doesConsumeBlock;
     }
 
+    /**
+     * Should the block be consumed if not cancelled.
+     *
+     * @param doesConsumeBlock true if the block should be consumer (-1 amount), false otherwise
+     */
     public void setDoesConsumeBlock(boolean doesConsumeBlock) {
         this.doesConsumeBlock = doesConsumeBlock;
     }
 
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @param doBlockUpdates true if this placement should do block updates
+     */
     public void setDoBlockUpdates(boolean doBlockUpdates) {
         this.doBlockUpdates = doBlockUpdates;
+    }
+
+    /**
+     * Changes the block to be placed.
+     *
+     * @param block the new block
+     */
+    public void setBlock(@NotNull Block block) {
+        this.newBlock = block;
     }
 
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
-    }
-
-    public void setBlock(@NotNull Block block) {
-        this.newBlock = block;
     }
 }
