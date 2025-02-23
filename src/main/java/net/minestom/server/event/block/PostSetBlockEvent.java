@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents after the block was set
  */
-@SuppressWarnings("unused")
 public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEvent {
 
     private boolean cancelled = false;

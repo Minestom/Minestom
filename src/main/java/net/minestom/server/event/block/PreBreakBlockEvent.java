@@ -13,7 +13,6 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents before the block was broken
  */
-@SuppressWarnings("unused")
 public final class PreBreakBlockEvent implements Event, BlockEvent, CancellableEvent {
 
     private boolean cancelled = false;
