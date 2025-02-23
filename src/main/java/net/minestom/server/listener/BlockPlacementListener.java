@@ -11,8 +11,10 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.block.BlockEventSource;
+import net.minestom.server.event.block.PostSetBlockEvent;
 import net.minestom.server.event.block.PreSetBlockEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
+import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
@@ -147,6 +149,7 @@ public class BlockPlacementListener {
 
         final ItemBlockState blockState = usedItem.get(ItemComponent.BLOCK_STATE, ItemBlockState.EMPTY);
         final Block placedBlock = blockState.apply(useMaterial.block());
+        final Block previousBlock = instance.getBlock(placementPosition);
 
         Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);
         if (collisionEntity != null) {
@@ -161,24 +164,30 @@ public class BlockPlacementListener {
         }
 
         // BlockPlaceEvent check
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), cursorPosition, packet.hand());
+        playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
+        EventDispatcher.call(playerBlockPlaceEvent);
 
-        BlockEventSource source = new BlockEventSource.Player(
-            player,
-            cursorPosition,
-            packet.hand()
+        BlockEventSource.Player source = new BlockEventSource.Player(
+                player,
+                cursorPosition,
+                packet.hand()
         );
 
         PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
-            placedBlock,
-            instance.getBlock(placementPosition),
+            playerBlockPlaceEvent.getBlock(),
+            previousBlock,
             instance,
             blockFace,
             new BlockVec(placementPosition),
             source
         );
 
-        preSetBlockEvent.setDoBlockUpdates(player.getGameMode() != GameMode.CREATIVE);
+        preSetBlockEvent.setDoBlockUpdates(playerBlockPlaceEvent.shouldDoBlockUpdates());
+        preSetBlockEvent.setDoesConsumeBlock(playerBlockPlaceEvent.doesConsumeBlock());
+
         EventDispatcher.call(preSetBlockEvent);
+
         if (preSetBlockEvent.isCancelled()) {
             refresh(player, chunk);
             return;
@@ -198,6 +207,17 @@ public class BlockPlacementListener {
             // Prevent invisible item on client
             player.getInventory().update();
         }
+
+        PostSetBlockEvent postSetBlockEvent = new PostSetBlockEvent(
+            resultBlock,
+            previousBlock,
+            instance,
+            blockFace,
+            new BlockVec(placementPosition),
+            source
+        );
+
+        EventDispatcher.call(postSetBlockEvent);
     }
 
     private static void refresh(Player player, Chunk chunk) {
