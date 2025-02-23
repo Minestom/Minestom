@@ -37,28 +37,58 @@ public final class PreBreakBlockEvent implements Event, BlockEvent, CancellableE
         this.source = source;
     }
 
+    /**
+     * Gets the block which will replace {@link #getPreviousBlock()}
+     *
+     * @return the result block
+     */
     @Override
     public @NotNull Block getBlock() {
         return newBlock;
     }
 
+    /**
+     * Gets the broken block
+     *
+     * @return the block
+     */
     public @NotNull Block getPreviousBlock() {
         return previousBlock;
     }
 
+    /**
+     * Gets instance where the block is being broken
+     *
+     * @return the instance
+     */
     public @NotNull Instance getInstance() {
         return instance;
     }
 
+    /**
+     * Gets the face at which the block was broken
+     *
+     * @return the block face
+     */
     public @Nullable BlockFace getBlockFace() {
         return blockFace;
     }
 
+    /**
+     * Gets the block position.
+     *
+     * @return the block position
+     */
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return position;
     }
 
+    /**
+     * Gets the {@link BlockEventSource}
+     *
+     * @return the BlockEventSource
+     */
     public @NotNull BlockEventSource getSource() {
         return source;
     }
