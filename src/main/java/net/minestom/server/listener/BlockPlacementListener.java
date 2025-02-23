@@ -10,12 +10,12 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.block.BlockEventSource;
 import net.minestom.server.event.block.PostSetBlockEvent;
 import net.minestom.server.event.block.PreSetBlockEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -168,7 +168,7 @@ public class BlockPlacementListener {
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
 
-        BlockEventSource.Player source = new BlockEventSource.Player(
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
                 player,
                 cursorPosition,
                 packet.hand()

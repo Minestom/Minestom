@@ -27,7 +27,7 @@ public final class PreSetBlockEvent implements Event, BlockEvent, CancellableEve
     private final Instance instance;
     private final BlockFace blockFace;
     private final BlockVec position;
-    private final BlockEventSource source;
+    private final BlockEvent.Source source;
 
     public PreSetBlockEvent(
         @NotNull Block newBlock,
@@ -35,7 +35,7 @@ public final class PreSetBlockEvent implements Event, BlockEvent, CancellableEve
         @NotNull Instance instance,
         @Nullable BlockFace blockFace,
         @NotNull BlockVec position,
-        @NotNull BlockEventSource source
+        @NotNull BlockEvent.Source source
     ) {
         this.newBlock = newBlock;
         this.previousBlock = previousBlock;
@@ -93,11 +93,11 @@ public final class PreSetBlockEvent implements Event, BlockEvent, CancellableEve
     }
 
     /**
-     * Gets the {@link BlockEventSource}
+     * Gets the {@link BlockEvent.Source}
      *
-     * @return the BlockEventSource
+     * @return the Events Source
      */
-    public @NotNull BlockEventSource getSource() {
+    public @NotNull BlockEvent.Source getSource() {
         return source;
     }
 

@@ -23,7 +23,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     private final Instance instance;
     private final BlockFace blockFace;
     private final BlockVec position;
-    private final BlockEventSource source;
+    private final BlockEvent.Source source;
 
     public PostSetBlockEvent(
         @NotNull Block newBlock,
@@ -31,7 +31,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
         @NotNull Instance instance,
         @Nullable BlockFace face,
         @NotNull BlockVec position,
-        @NotNull BlockEventSource source
+        @NotNull BlockEvent.Source source
     ) {
         this.newBlock = newBlock;
         this.previousBlock = previousBlock;
@@ -89,11 +89,11 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     }
 
     /**
-     * Gets the {@link BlockEventSource}
+     * Gets the {@link BlockEvent.Source}
      *
-     * @return the BlockEventSource
+     * @return the Events Source
      */
-    public @NotNull BlockEventSource getSource() {
+    public @NotNull BlockEvent.Source getSource() {
         return source;
     }
 
