@@ -436,6 +436,9 @@ non-sealed class EventNodeImpl<T extends Event> implements EventNode<T> {
          */
         private @Nullable Consumer<E> listenersConsumer(@NotNull ListenerEntry<E> entry) {
             final EventListener<E>[] listenersCopy = entry.listeners.toArray(EventListener[]::new);
+
+            Arrays.sort(listenersCopy, Comparator.comparingInt(EventListener::priority));
+
             final Consumer<E>[] bindingsCopy = entry.bindingConsumers.toArray(Consumer[]::new);
             final boolean listenersEmpty = listenersCopy.length == 0;
             final boolean bindingsEmpty = bindingsCopy.length == 0;
