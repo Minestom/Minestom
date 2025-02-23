@@ -269,14 +269,16 @@ public class InstanceContainer extends Instance {
             return false;
         }
 
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
-        EventDispatcher.call(blockBreakEvent);
-
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
                 player,
                 null,
                 null
         );
+
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR,
+                new BlockVec(blockPosition), blockFace, source);
+        EventDispatcher.call(blockBreakEvent);
+
 
         PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
             blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
