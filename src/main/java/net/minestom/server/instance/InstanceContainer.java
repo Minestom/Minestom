@@ -10,11 +10,10 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.block.BlockEventSource;
-import net.minestom.server.event.block.PreBreakBlockEvent;
-import net.minestom.server.event.block.PreSetBlockEvent;
+import net.minestom.server.event.block.*;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -128,7 +127,6 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-
         if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
     }
 
@@ -151,6 +149,26 @@ public class InstanceContainer extends Instance {
         if (y >= dim.maxY() || y < dim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
             return;
+        }
+
+        BlockEventSource source = new BlockEventSource.Instance(this);
+
+        if(block.isAir()) {
+            PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
+                getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+            );
+
+            EventDispatcher.call(preBreakBlockEvent);
+
+            block = preBreakBlockEvent.getBlock();
+        } else {
+            PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
+                block, getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+            );
+
+            EventDispatcher.call(preSetBlockEvent);
+
+            block = preSetBlockEvent.getBlock();
         }
 
         synchronized (chunk) {
@@ -188,8 +206,6 @@ public class InstanceContainer extends Instance {
                 if (block == null) block = Block.AIR;
             }
 
-
-
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
 
@@ -208,6 +224,21 @@ public class InstanceContainer extends Instance {
                 }
             }
         }
+
+        if(block.isAir()) {
+            PostBreakBlockEvent preBreakBlockEvent = new PostBreakBlockEvent(
+                getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+            );
+
+            EventDispatcher.call(preBreakBlockEvent);
+        } else {
+            PostSetBlockEvent preSetBlockEvent = new PostSetBlockEvent(
+                block, getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+            );
+
+            EventDispatcher.call(preSetBlockEvent);
+        }
+
     }
 
     @Override
@@ -237,15 +268,16 @@ public class InstanceContainer extends Instance {
             return false;
         }
 
-        BlockEventSource source = new BlockEventSource.Player(
-            player,
-            null,
-            null
-        );
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
+        EventDispatcher.call(blockBreakEvent);
 
         PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
-            block, srcInstance, blockFace, new BlockVec(blockPosition), source
-        );
+            blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), new BlockEventSource.Player(
+                player,
+                null,
+                null
+        ));
+
         EventDispatcher.call(preBreakBlockEvent);
         final boolean allowed = !preBreakBlockEvent.isCancelled();
         if (allowed) {
@@ -259,6 +291,16 @@ public class InstanceContainer extends Instance {
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
+
+        PostBreakBlockEvent postBreakBlockEvent = new PostBreakBlockEvent(
+            blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), new BlockEventSource.Player(
+                player,
+                null,
+                null
+        ));
+
+        EventDispatcher.call(postBreakBlockEvent);
+
         return allowed;
     }
 
