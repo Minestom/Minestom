@@ -11,6 +11,12 @@ import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.event.block.PostBreakBlockEvent;
+import net.minestom.server.event.block.PostSetBlockEvent;
+import net.minestom.server.event.block.PreBreakBlockEvent;
+import net.minestom.server.event.block.PreSetBlockEvent;
+import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
@@ -23,11 +29,15 @@ import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeBookCategory;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
 
 public class Main {
+
+    private static final Logger log = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) {
         MinecraftServer.setCompressionThreshold(0);
