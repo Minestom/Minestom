@@ -8,6 +8,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @SuppressWarnings("unused")
 public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEvent {
@@ -25,7 +26,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
         @NotNull Block newBlock,
         @NotNull Block previousBlock,
         @NotNull Instance instance,
-        @NotNull BlockFace face,
+        @Nullable BlockFace face,
         @NotNull BlockVec position,
         @NotNull BlockEventSource source
     ) {
@@ -46,11 +47,11 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
         return previousBlock;
     }
 
-    public Instance getInstance() {
+    public @NotNull Instance getInstance() {
         return instance;
     }
 
-    public BlockFace getBlockFace() {
+    public @Nullable BlockFace getBlockFace() {
         return blockFace;
     }
 
@@ -59,7 +60,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
         return position;
     }
 
-    public BlockEventSource getSource() {
+    public @NotNull BlockEventSource getSource() {
         return source;
     }
 
