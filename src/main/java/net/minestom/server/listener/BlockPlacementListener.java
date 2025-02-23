@@ -164,15 +164,17 @@ public class BlockPlacementListener {
         }
 
         // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), cursorPosition, packet.hand());
-        playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
-        EventDispatcher.call(playerBlockPlaceEvent);
-
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
                 player,
                 cursorPosition,
                 packet.hand()
         );
+
+        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace,
+                new BlockVec(placementPosition), cursorPosition, packet.hand(), source);
+        playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
+        EventDispatcher.call(playerBlockPlaceEvent);
+
 
         PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
             playerBlockPlaceEvent.getBlock(),
