@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Note: Although this extends StaticProtocolObject, it's not actually Registry sent through the protocol, and purely for data organization.
  */
-public sealed interface BlockSoundType extends StaticProtocolObject permits BlockSoundImpl {
+public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundTypes permits BlockSoundImpl {
 
     /**
      * Returns the 'registry' data for the block sound type. Note: Block sound types are not an actual minecraft registry
