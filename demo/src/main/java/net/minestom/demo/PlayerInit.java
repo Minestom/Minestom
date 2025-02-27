@@ -219,6 +219,9 @@ public class PlayerInit {
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 
+            var start = System.nanoTime();
+            while (System.nanoTime() - start < java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(100)) ;
+
             if (unit.absoluteStart().blockY() < 40 && unit.absoluteEnd().blockY() > 40) {
                 unit.modifier().setBlock(unit.absoluteStart().blockX(), 40, unit.absoluteStart().blockZ(), Block.TORCH);
             }
