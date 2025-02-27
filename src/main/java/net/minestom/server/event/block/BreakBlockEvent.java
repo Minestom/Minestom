@@ -11,11 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents after the block was broken
+ * Represents before the block was broken
  */
-public final class PostBreakBlockEvent implements Event, BlockEvent, CancellableEvent {
+public final class BreakBlockEvent implements Event, BlockEvent, CancellableEvent {
 
     private boolean cancelled = false;
+
+    private Block newBlock = Block.AIR;
 
     private final Block previousBlock;
     private final Instance instance;
@@ -23,7 +25,7 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
     private final BlockVec position;
     private final BlockEvent.Source source;
 
-    public PostBreakBlockEvent(
+    public BreakBlockEvent(
         @NotNull Block previousBlock,
         @NotNull Instance instance,
         @Nullable BlockFace face,
@@ -38,17 +40,17 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
     }
 
     /**
-     * Gets the block which replaced {@link #getPreviousBlock()}.
+     * Gets the block which will replace {@link #getPreviousBlock()}
      *
      * @return the result block
      */
     @Override
     public @NotNull Block getBlock() {
-        return previousBlock;
+        return newBlock;
     }
 
     /**
-     * Gets the block that was broken
+     * Gets the broken block
      *
      * @return the block
      */
@@ -57,7 +59,7 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
     }
 
     /**
-     * Gets instance where the block was broken
+     * Gets instance where the block is being broken
      *
      * @return the instance
      */
@@ -101,5 +103,9 @@ public final class PostBreakBlockEvent implements Event, BlockEvent, Cancellable
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
+    }
+
+    public void setBlock(@NotNull Block block) {
+        this.newBlock = block;
     }
 }

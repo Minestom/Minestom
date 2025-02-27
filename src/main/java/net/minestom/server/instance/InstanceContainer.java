@@ -10,10 +10,8 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.block.PostBreakBlockEvent;
-import net.minestom.server.event.block.PostSetBlockEvent;
-import net.minestom.server.event.block.PreBreakBlockEvent;
-import net.minestom.server.event.block.PreSetBlockEvent;
+import net.minestom.server.event.block.BreakBlockEvent;
+import net.minestom.server.event.block.SetBlockEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -153,25 +151,25 @@ public class InstanceContainer extends Instance {
         BlockEvent.Source source = new BlockEvent.Source.Instance(this);
 
         if (block.isAir()) {
-            PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
+            BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
                     getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
-            EventDispatcher.call(preBreakBlockEvent);
+            EventDispatcher.call(breakBlockEvent);
 
-            if (preBreakBlockEvent.isCancelled()) return;
+            if (breakBlockEvent.isCancelled()) return;
 
-            block = preBreakBlockEvent.getBlock();
+            block = breakBlockEvent.getBlock();
         } else {
-            PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
+            SetBlockEvent setBlockEvent = new SetBlockEvent(
                     block, getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
-            EventDispatcher.call(preSetBlockEvent);
+            EventDispatcher.call(setBlockEvent);
 
-            if (preSetBlockEvent.isCancelled()) return;
+            if (setBlockEvent.isCancelled()) return;
 
-            block = preSetBlockEvent.getBlock();
+            block = setBlockEvent.getBlock();
         }
 
         synchronized (chunk) {
@@ -227,21 +225,6 @@ public class InstanceContainer extends Instance {
                 }
             }
         }
-
-        if (block.isAir()) {
-            PostBreakBlockEvent postBreakBlockEvent = new PostBreakBlockEvent(
-                    getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
-            );
-
-            EventDispatcher.call(postBreakBlockEvent);
-        } else {
-            PostSetBlockEvent postSetBlockEvent = new PostSetBlockEvent(
-                    block, getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
-            );
-
-            EventDispatcher.call(postSetBlockEvent);
-        }
-
     }
 
     @Override
@@ -282,14 +265,14 @@ public class InstanceContainer extends Instance {
         EventDispatcher.call(blockBreakEvent);
 
 
-        PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
+        BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
                 blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
 
-        EventDispatcher.call(preBreakBlockEvent);
-        final boolean allowed = !preBreakBlockEvent.isCancelled();
+        EventDispatcher.call(breakBlockEvent);
+        final boolean allowed = !breakBlockEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = preBreakBlockEvent.getBlock();
+            final Block resultBlock = breakBlockEvent.getBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
@@ -298,11 +281,6 @@ public class InstanceContainer extends Instance {
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
-
-        PostBreakBlockEvent postBreakBlockEvent = new PostBreakBlockEvent(
-                blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
-
-        EventDispatcher.call(postBreakBlockEvent);
 
         return allowed;
     }

@@ -11,37 +11,41 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Represents after the block was set
+ * Represents before the block was set
  */
-public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEvent {
+public final class SetBlockEvent implements Event, BlockEvent, CancellableEvent {
 
     private boolean cancelled = false;
 
-    private final Block newBlock;
+    private Block newBlock;
+
+    private boolean doBlockUpdates = true;
+    private boolean doesConsumeBlock = true;
+
     private final Block previousBlock;
     private final Instance instance;
     private final BlockFace blockFace;
     private final BlockVec position;
     private final BlockEvent.Source source;
 
-    public PostSetBlockEvent(
+    public SetBlockEvent(
         @NotNull Block newBlock,
         @NotNull Block previousBlock,
         @NotNull Instance instance,
-        @Nullable BlockFace face,
+        @Nullable BlockFace blockFace,
         @NotNull BlockVec position,
         @NotNull BlockEvent.Source source
     ) {
         this.newBlock = newBlock;
         this.previousBlock = previousBlock;
         this.instance = instance;
-        this.blockFace = face;
+        this.blockFace = blockFace;
         this.position = position;
         this.source = source;
     }
 
     /**
-     * Gets the block which replaced {@link #getPreviousBlock()}
+     * Gets the block which will replace {@link #getPreviousBlock()}
      *
      * @return the result block
      */
@@ -51,7 +55,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     }
 
     /**
-     * Gets the changed block
+     * Gets the block which will be changed
      *
      * @return the block
      */
@@ -60,7 +64,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     }
 
     /**
-     * Gets instance where the block was changed
+     * Gets instance where the block is being changed
      *
      * @return the instance
      */
@@ -69,7 +73,7 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     }
 
     /**
-     * Gets the face at which the block was changed
+     * Gets the face at which the block is being changed
      *
      * @return the block face
      */
@@ -99,6 +103,49 @@ public final class PostSetBlockEvent implements Event, BlockEvent, CancellableEv
     @Override
     public boolean isCancelled() {
         return cancelled;
+    }
+
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @return true if this placement should do block updates
+     */
+    public boolean doBlockUpdates() {
+        return doBlockUpdates;
+    }
+
+    /**
+     * Should the block be consumed if not cancelled.
+     *
+     * @return true if the block will be consumed, false otherwise
+     */
+    public boolean consumesBlock() {
+        return doesConsumeBlock;
+    }
+
+    /**
+     * Should the block be consumed if not cancelled.
+     *
+     * @param doesConsumeBlock true if the block should be consumer (-1 amount), false otherwise
+     */
+    public void setDoesConsumeBlock(boolean doesConsumeBlock) {
+        this.doesConsumeBlock = doesConsumeBlock;
+    }
+
+    /**
+     * Should the place trigger updates (on self and neighbors)
+     * @param doBlockUpdates true if this placement should do block updates
+     */
+    public void setDoBlockUpdates(boolean doBlockUpdates) {
+        this.doBlockUpdates = doBlockUpdates;
+    }
+
+    /**
+     * Changes the block to be placed.
+     *
+     * @param block the new block
+     */
+    public void setBlock(@NotNull Block block) {
+        this.newBlock = block;
     }
 
     @Override

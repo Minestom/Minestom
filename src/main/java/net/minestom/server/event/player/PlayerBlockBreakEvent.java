@@ -2,8 +2,7 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.event.block.PostBreakBlockEvent;
-import net.minestom.server.event.block.PreBreakBlockEvent;
+import net.minestom.server.event.block.BreakBlockEvent;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -12,7 +11,7 @@ import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @deprecated Use {@link PostBreakBlockEvent} or {@link PreBreakBlockEvent}
+ * @deprecated Use {@link PostBreakBlockEvent} or {@link BreakBlockEvent}
  */
 @Deprecated()
 public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
