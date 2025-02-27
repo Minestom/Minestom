@@ -20,6 +20,7 @@ import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
@@ -139,6 +140,10 @@ public final class Registry {
 
     public static GameEventEntry gameEventEntry(String namespace, Properties properties) {
         return new GameEventEntry(namespace, properties, null);
+    }
+
+    public static BlockSoundTypeEntry blockSoundTypeEntry(String namespace, Properties properties) {
+        return new BlockSoundTypeEntry(namespace, properties);
     }
 
     public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
@@ -269,7 +274,8 @@ public final class Registry {
         JUKEBOX_SONGS("jukebox_songs.json"),
         VILLAGER_PROFESSIONS("villager_professions.json"),
         INSTRUMENTS("instruments.json"),
-        INSTRUMENT_TAGS("tags/instrument.json");
+        INSTRUMENT_TAGS("tags/instrument.json"),
+        BLOCK_SOUND_TYPES("block_sound_types.json");
 
         private final String name;
 
@@ -308,6 +314,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
+        private final BlockSoundType blockSoundType;
         private final Shape shape;
         private final boolean redstoneConductor;
         private final boolean signalSource;
@@ -331,6 +338,7 @@ public final class Registry {
             this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
+            this.blockSoundType = BlockSoundType.fromNamespaceId(main.getString("soundType"));
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
@@ -444,6 +452,10 @@ public final class Registry {
 
         public Shape collisionShape() {
             return shape;
+        }
+
+        public @Nullable BlockSoundType getBlockSoundType() {
+            return this.blockSoundType;
         }
 
         @Override
@@ -1033,6 +1045,14 @@ public final class Registry {
                     (float) main.getDouble("range"),
                     GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     custom);
+        }
+    }
+
+    public record BlockSoundTypeEntry(@NotNull NamespaceID namespaceID, float volume, float pitch, SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound, SoundEvent placeSound, SoundEvent stepSound) {
+        public BlockSoundTypeEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace), main.getFloat("volume"),
+                    main.getFloat("pitch"), SoundEvent.fromNamespaceId(main.getString("breakSound")), SoundEvent.fromNamespaceId(main.getString("hitSound")),
+                    SoundEvent.fromNamespaceId(main.getString("fallSound")), SoundEvent.fromNamespaceId(main.getString("placeSound")), SoundEvent.fromNamespaceId(main.getString("stepSound")));
         }
     }
 
