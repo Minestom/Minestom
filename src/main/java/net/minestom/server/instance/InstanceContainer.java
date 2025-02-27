@@ -264,7 +264,6 @@ public class InstanceContainer extends Instance {
                 new BlockVec(blockPosition), blockFace, source);
         EventDispatcher.call(blockBreakEvent);
 
-
         BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
                 blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
 
