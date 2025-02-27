@@ -1,23 +1,25 @@
 package net.minestom.server.entity.ai.goal;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.AIGoal;
 import net.minestom.server.entity.ai.TargetSelector;
+import net.minestom.server.entity.ai.target.ClosestEntityTarget;
 import net.minestom.server.entity.pathfinding.Navigator;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
+import java.util.List;
 
 /**
  * Attacks the entity's target ({@link EntityCreature#getTarget()}) OR the closest entity
  * which can be targeted with the entity {@link TargetSelector}.
  */
-public class MeleeAttackGoal extends GoalSelector {
+public class MeleeAttackGoal extends AIGoal {
 
     private final Cooldown cooldown = new Cooldown(Duration.of(5, TimeUnit.SERVER_TICK));
 
@@ -44,7 +46,7 @@ public class MeleeAttackGoal extends GoalSelector {
      * @param delay          the delay between each attacks
      */
     public MeleeAttackGoal(@NotNull EntityCreature entityCreature, double range, Duration delay) {
-        super(entityCreature);
+        super(entityCreature, List.of(new ClosestEntityTarget(range, e -> true)), 0);
         this.range = range;
         this.delay = delay;
     }
@@ -55,7 +57,7 @@ public class MeleeAttackGoal extends GoalSelector {
 
     @Override
     public boolean shouldStart() {
-        this.cachedTarget = findTarget();
+        this.cachedTarget = findTargetEntity();
         return this.cachedTarget != null;
     }
 
@@ -72,7 +74,7 @@ public class MeleeAttackGoal extends GoalSelector {
             target = this.cachedTarget;
             this.cachedTarget = null;
         } else {
-            target = findTarget();
+            target = findTargetEntity();
         }
 
         this.stop = target == null;
