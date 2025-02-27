@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Called when a player tries placing a block.
  *
- * @deprecated Use {@link net.minestom.server.event.block.PostSetBlockEvent} or {@link SetBlockEvent}
+ * @deprecated Use {@link SetBlockEvent}
  */
 @Deprecated()
 public class PlayerBlockPlaceEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {

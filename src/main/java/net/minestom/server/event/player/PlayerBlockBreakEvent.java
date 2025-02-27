@@ -11,7 +11,7 @@ import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * @deprecated Use {@link PostBreakBlockEvent} or {@link BreakBlockEvent}
+ * @deprecated Use {@link BreakBlockEvent}
  */
 @Deprecated()
 public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
