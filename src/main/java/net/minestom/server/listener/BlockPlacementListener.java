@@ -176,7 +176,6 @@ public class BlockPlacementListener {
         playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
         EventDispatcher.call(playerBlockPlaceEvent);
 
-
         PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
             playerBlockPlaceEvent.getBlock(),
             previousBlock,

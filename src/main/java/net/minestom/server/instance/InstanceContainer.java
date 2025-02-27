@@ -10,7 +10,10 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.block.*;
+import net.minestom.server.event.block.PostBreakBlockEvent;
+import net.minestom.server.event.block.PostSetBlockEvent;
+import net.minestom.server.event.block.PreBreakBlockEvent;
+import net.minestom.server.event.block.PreSetBlockEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
@@ -67,28 +70,23 @@ public class InstanceContainer extends Instance {
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
-
-    // the chunk generator used, can be null
-    private volatile Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
-
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
-
-    // the chunk loader, used when trying to load/save a chunk from another source
-    private IChunkLoader chunkLoader;
-
-    // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad = true;
-
-    // used to supply a new chunk object at a position when requested
-    private ChunkSupplier chunkSupplier;
-
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+    // the chunk generator used, can be null
+    private volatile Generator generator;
+    // the chunk loader, used when trying to load/save a chunk from another source
+    private IChunkLoader chunkLoader;
+    // used to automatically enable the chunk loading or not
+    private boolean autoChunkLoad = true;
+    // used to supply a new chunk object at a position when requested
+    private ChunkSupplier chunkSupplier;
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
@@ -154,20 +152,24 @@ public class InstanceContainer extends Instance {
 
         BlockEvent.Source source = new BlockEvent.Source.Instance(this);
 
-        if(block.isAir()) {
+        if (block.isAir()) {
             PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
-                getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+                    getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
             EventDispatcher.call(preBreakBlockEvent);
 
+            if (preBreakBlockEvent.isCancelled()) return;
+
             block = preBreakBlockEvent.getBlock();
         } else {
             PreSetBlockEvent preSetBlockEvent = new PreSetBlockEvent(
-                block, getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+                    block, getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
             EventDispatcher.call(preSetBlockEvent);
+
+            if (preSetBlockEvent.isCancelled()) return;
 
             block = preSetBlockEvent.getBlock();
         }
@@ -226,18 +228,18 @@ public class InstanceContainer extends Instance {
             }
         }
 
-        if(block.isAir()) {
-            PostBreakBlockEvent preBreakBlockEvent = new PostBreakBlockEvent(
-                getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+        if (block.isAir()) {
+            PostBreakBlockEvent postBreakBlockEvent = new PostBreakBlockEvent(
+                    getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
-            EventDispatcher.call(preBreakBlockEvent);
+            EventDispatcher.call(postBreakBlockEvent);
         } else {
-            PostSetBlockEvent preSetBlockEvent = new PostSetBlockEvent(
-                block, getBlock(x,y,z), srcInstance, null, new BlockVec(x,y,z), source
+            PostSetBlockEvent postSetBlockEvent = new PostSetBlockEvent(
+                    block, getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
             );
 
-            EventDispatcher.call(preSetBlockEvent);
+            EventDispatcher.call(postSetBlockEvent);
         }
 
     }
@@ -281,7 +283,7 @@ public class InstanceContainer extends Instance {
 
 
         PreBreakBlockEvent preBreakBlockEvent = new PreBreakBlockEvent(
-            blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
+                blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
 
         EventDispatcher.call(preBreakBlockEvent);
         final boolean allowed = !preBreakBlockEvent.isCancelled();
@@ -298,7 +300,7 @@ public class InstanceContainer extends Instance {
         }
 
         PostBreakBlockEvent postBreakBlockEvent = new PostBreakBlockEvent(
-            blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
+                blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
 
         EventDispatcher.call(postBreakBlockEvent);
 
@@ -415,8 +417,6 @@ public class InstanceContainer extends Instance {
         }
         return completableFuture;
     }
-
-    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
@@ -535,6 +535,17 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
+    }
+
+    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -549,17 +560,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
-    }
-
-    /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
     }
 
     /**
