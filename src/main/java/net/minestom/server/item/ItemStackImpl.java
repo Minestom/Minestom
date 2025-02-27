@@ -6,21 +6,30 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.item.component.*;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 
-record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
+record ItemStackImpl(Material material, int amount, DataComponentMap components,
+                     TagHandler tagHandler) implements ItemStack {
 
     static ItemStack create(Material material, int amount, DataComponentMap components) {
         if (amount <= 0) return AIR;
-        return new ItemStackImpl(material, amount, components);
+        return new ItemStackImpl(
+                material,
+                amount,
+                components,
+                TagHandler.fromCompound(components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).nbt())
+        );
     }
 
     static ItemStack create(Material material, int amount) {
@@ -61,7 +70,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public @NotNull ItemStack withMaterial(@NotNull Material material) {
-        return new ItemStackImpl(material, amount, components);
+        return new ItemStackImpl(material, amount, components, tagHandler);
     }
 
     @Override
@@ -72,7 +81,11 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public @NotNull <T> ItemStack with(@NotNull DataComponent<T> component, @NotNull T value) {
-        return new ItemStackImpl(material, amount, components.set(component, value));
+        TagHandler tagHandler = this.tagHandler;
+        if (component == ItemComponent.CUSTOM_DATA) {
+            tagHandler = TagHandler.fromCompound(((CustomData) value).nbt());
+        }
+        return new ItemStackImpl(material, amount, components.set(component, value), tagHandler);
     }
 
     @Override
@@ -80,7 +93,24 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // We can be slightly smart here. If the component is not present, this will always be a noop.
         // No need to make a new patch with the removal only for it to be removed again when doing a diff.
         if (get(component) == null) return this;
-        return new ItemStackImpl(material, amount, components.remove(component));
+        return new ItemStackImpl(material, amount, components.remove(component), tagHandler);
+    }
+
+    @Override
+    public @NotNull <T> ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
+        TagHandler tagHandler = this.tagHandler.copy();
+        tagHandler.setTag(tag, value);
+        return new ItemStackImpl(
+                material,
+                amount,
+                components.set(ItemComponent.CUSTOM_DATA, new CustomData(tagHandler.asCompound())),
+                tagHandler
+        );
+    }
+
+    @Override
+    public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
+        return tagHandler.getTag(tag);
     }
 
     @Override
@@ -112,7 +142,12 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
         DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
-        return new ItemStackImpl(material, count, patch);
+        return new ItemStackImpl(
+                material,
+                count,
+                patch,
+                TagHandler.fromCompound(patch.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).nbt())
+        );
     }
 
     static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {

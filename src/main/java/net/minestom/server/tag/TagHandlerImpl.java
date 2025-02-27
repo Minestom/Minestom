@@ -12,6 +12,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.lang.invoke.VarHandle;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.UnaryOperator;
 
 final class TagHandlerImpl implements TagHandler {
@@ -225,6 +226,18 @@ final class TagHandlerImpl implements TagHandler {
         } else {
             return new Entry<>(tag, tag.copyValue(value));
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        TagHandlerImpl that = (TagHandlerImpl) o;
+        return Objects.equals(root.compound(), that.root.compound());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(root.compound());
     }
 
     final class Node implements TagReadable {
