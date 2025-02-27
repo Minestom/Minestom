@@ -31,7 +31,7 @@ jobs:
         if: github.repository_owner == 'Minestom'
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY
         env:
           MINESTOM_VERSION: ${{ steps.vars.outputs.short_commit_hash }}
           MINESTOM_CHANNEL: release

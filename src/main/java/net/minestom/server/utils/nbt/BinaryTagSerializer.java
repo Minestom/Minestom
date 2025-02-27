@@ -201,6 +201,18 @@ public interface BinaryTagSerializer<T> {
         }
     };
 
+    BinaryTagSerializer<Double> DOUBLE = new BinaryTagSerializer<>() {
+        @Override
+        public @NotNull BinaryTag write(@NotNull Double value) {
+            return DoubleBinaryTag.doubleBinaryTag(value);
+        }
+
+        @Override
+        public @NotNull Double read(@NotNull BinaryTag tag) {
+            return tag instanceof NumberBinaryTag numberTag ? numberTag.doubleValue() : 0d;
+        }
+    };
+
     BinaryTagSerializer<String> STRING = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull String value) {
