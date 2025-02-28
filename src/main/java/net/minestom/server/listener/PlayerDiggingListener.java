@@ -14,6 +14,7 @@ import net.minestom.server.event.player.PlayerCancelDiggingEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
 import net.minestom.server.event.player.PlayerStartDiggingEvent;
 import net.minestom.server.event.player.PlayerSwapItemEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -78,8 +79,15 @@ public final class PlayerDiggingListener {
 
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         final boolean instantBreak = breakTicks == 0;
+
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            player,
+            null,
+            null
+        );
+
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace, source);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -90,7 +98,13 @@ public final class PlayerDiggingListener {
     private static DiggingResult cancelDigging(Player player, Instance instance, Point blockPosition) {
         final Block block = instance.getBlock(blockPosition);
 
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            player,
+            null,
+            null
+        );
+
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition), source);
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -102,18 +116,24 @@ public final class PlayerDiggingListener {
             return new DiggingResult(block, false);
         }
 
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            player,
+            null,
+            null
+        );
+
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
         // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
         // If the block is unbreakable, prevent a hacked client from breaking it!
         if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
-            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition));
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition), source);
             EventDispatcher.call(playerCancelDiggingEvent);
             return new DiggingResult(block, false);
         }
         // TODO maybe add a check if the player has spent enough time mining the block.
         //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition));
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition), source);
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
