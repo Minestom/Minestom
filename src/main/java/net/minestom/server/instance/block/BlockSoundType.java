@@ -1,9 +1,9 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,16 +23,17 @@ public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundT
     Registry.BlockSoundTypeEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespaceID();
+    @NotNull
+    default Key key() {
+        return registry().key();
     }
 
-    static @Nullable BlockSoundType fromNamespaceId(@NotNull String namespaceID) {
-        return BlockSoundImpl.getSafe(namespaceID);
+    static @Nullable BlockSoundType fromKey(@NotNull String key) {
+        return BlockSoundImpl.getSafe(key);
     }
 
-    static @Nullable BlockSoundType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable BlockSoundType fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     default float volume() {

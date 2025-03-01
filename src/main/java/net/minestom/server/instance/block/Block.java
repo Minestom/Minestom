@@ -1,5 +1,6 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
@@ -9,7 +10,6 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.*;
 
 import java.util.Collection;
@@ -157,9 +157,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @NotNull Registry.BlockEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
-    }
+    default @NotNull Key key() { return registry().key(); }
 
     @Override
     default int id() {
@@ -194,12 +192,12 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
         return BlockImpl.values();
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull String namespaceID) {
-        return BlockImpl.getSafe(namespaceID);
+    static @Nullable Block fromKey(@NotNull String key) {
+        return BlockImpl.getSafe(key);
     }
 
-    static @Nullable Block fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Block fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Block fromStateId(int stateId) {

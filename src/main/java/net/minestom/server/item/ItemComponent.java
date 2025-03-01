@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
@@ -13,7 +14,6 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -103,14 +103,14 @@ public final class ItemComponent {
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);
-    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromNamespaceId);
+    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromKey);
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return NAMESPACES.get(namespaceId);
+    public static @Nullable DataComponent<?> fromKey(@NotNull String key) {
+        return NAMESPACES.get(key);
     }
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+    public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     public static @Nullable DataComponent<?> fromId(int id) {
@@ -122,7 +122,7 @@ public final class ItemComponent {
     }
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
