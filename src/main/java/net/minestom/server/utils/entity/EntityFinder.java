@@ -283,7 +283,7 @@ public class EntityFinder {
     }
 
     public enum TargetSelector {
-        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF, MINESTOM_USERNAME, MINESTOM_UUID
+        NEAREST_PLAYER, RANDOM_PLAYER, ALL_PLAYERS, ALL_ENTITIES, SELF, MINESTOM_USERNAME, MINESTOM_UUID, NEAREST_ENTITY
     }
 
     public enum EntitySort {
@@ -315,6 +315,12 @@ public class EntityFinder {
             return players.stream()
                     .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
                     .<List<Entity>>map(Collections::singletonList).orElse(List.of());
+        } else if (targetSelector == TargetSelector.NEAREST_ENTITY) {
+            List<Entity> entities = findTarget(instance, TargetSelector.ALL_ENTITIES, startPosition, self);
+
+            return entities.stream()
+                    .min(Comparator.comparingDouble(p -> p.getPosition().distanceSquared(startPosition)))
+                    .map(Collections::singletonList).orElse(List.of());
         } else if (targetSelector == TargetSelector.RANDOM_PLAYER) {
             final int index = ThreadLocalRandom.current().nextInt(players.size());
             final Player player = players.stream().skip(index).findFirst().orElseThrow();

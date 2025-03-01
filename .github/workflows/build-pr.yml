@@ -1,0 +1,43 @@
+name: Build PR
+on: [pull_request]
+jobs:
+  build_pr:
+    name: Build PR
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v3
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+      - name: Build on ${{ matrix.os }}
+        run: ./gradlew test
+  publish:
+    name: Publish PR
+    if: contains(github.event.pull_request.labels.*.name, 'Publish Pull Request') && github.repository_owner == 'Minestom'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - id: vars
+        run: echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
+      - name: Publish Artifacts
+        env:
+          MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
+          MINESTOM_CHANNEL: snapshot
+        run: |
+          ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
+          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY

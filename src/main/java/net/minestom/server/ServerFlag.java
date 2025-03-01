@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public final class ServerFlag {
 
     // Server Behavior
-    public static final Boolean SHUTDOWN_ON_SIGNAL = booleanProperty("minestom.shutdown-on-signal", true);
+    public static final boolean SHUTDOWN_ON_SIGNAL = booleanProperty("minestom.shutdown-on-signal", true);
     public static final int SERVER_TICKS_PER_SECOND = intProperty("minestom.tps", 20);
     public static final int SERVER_MAX_TICK_CATCH_UP = intProperty("minestom.max-tick-catch-up", 5);
     public static final int CHUNK_VIEW_DISTANCE = intProperty("minestom.chunk-view-distance", 8);
@@ -20,7 +20,8 @@ public final class ServerFlag {
     public static final int ENTITY_SYNCHRONIZATION_TICKS = intProperty("minestom.entity-synchronization-ticks", 20);
     public static final int DISPATCHER_THREADS = intProperty("minestom.dispatcher-threads", 1);
     public static final int SEND_LIGHT_AFTER_BLOCK_PLACEMENT_DELAY = intProperty("minestom.send-light-after-block-placement-delay", 100);
-    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000);
+    public static final long LOGIN_PLUGIN_MESSAGE_TIMEOUT = longProperty("minestom.login-plugin-message-timeout", 5_000); // 5s
+    public static final long KNOWN_PACKS_RESPONSE_TIMEOUT = longProperty("minestom.known-packs-response-timeout", 5 * 60_000); // 5m
 
     // Network rate limiting
     public static final int PLAYER_PACKET_PER_TICK = intProperty("minestom.packet-per-tick", 50);
@@ -67,20 +68,18 @@ public final class ServerFlag {
     public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
 
     // Experimental/Unstable
-    public static final boolean REGISTRY_LATE_REGISTER = booleanProperty("minestom.registry.late-register");
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");
 
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
 
-    private ServerFlag() {
-    }
+    private ServerFlag() {}
 
-    private static boolean booleanProperty(String name) {
+    private static boolean booleanProperty(@NotNull String name) {
         return Boolean.getBoolean(name);
     }
 
-    private static boolean booleanProperty(String name, boolean defaultValue) {
+    private static boolean booleanProperty(@NotNull String name, boolean defaultValue) {
         boolean result = defaultValue;
         try {
             final String value = System.getProperty(name);
@@ -99,7 +98,7 @@ public final class ServerFlag {
         return System.getProperty(name);
     }
 
-    private static int intProperty(String name, int defaultValue, int minValue, int maxValue) {
+    private static int intProperty(@NotNull String name, int defaultValue, int minValue, int maxValue) {
         int value = Integer.getInteger(name, defaultValue);
         if (value < minValue || value > maxValue) {
             throw new IllegalArgumentException(String.format(
@@ -114,12 +113,12 @@ public final class ServerFlag {
         return intProperty(name, defaultValue, Integer.MIN_VALUE, Integer.MAX_VALUE);
     }
 
-    private static long longProperty(String name, long defaultValue) {
+    private static long longProperty(@NotNull String name, long defaultValue) {
         return Long.getLong(name, defaultValue);
     }
 
-    private static Float floatProperty(String name, Float defaultValue) {
-        Float result = defaultValue;
+    private static float floatProperty(@NotNull String name, float defaultValue) {
+        float result = defaultValue;
         try {
             final String value = System.getProperty(name);
             if (value != null) result = Float.parseFloat(value);

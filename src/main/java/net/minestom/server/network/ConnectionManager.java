@@ -33,6 +33,8 @@ import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -42,6 +44,8 @@ import java.util.function.Function;
  * Manages the connected clients.
  */
 public final class ConnectionManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConnectionManager.class);
+
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
 
@@ -245,9 +249,11 @@ public final class ConnectionManager {
         if (event.willSendRegistryData()) {
             List<SelectKnownPacksPacket.Entry> knownPacks;
             try {
-                knownPacks = knownPacksFuture.get(5, TimeUnit.SECONDS);
+                knownPacks = knownPacksFuture.get(ServerFlag.KNOWN_PACKS_RESPONSE_TIMEOUT, TimeUnit.MILLISECONDS);
             } catch (InterruptedException | TimeoutException e) {
-                throw new RuntimeException("Client failed to respond to known packs request", e);
+                LOGGER.warn("Player {} failed to respond to known packs query", player.getUsername());
+                player.getPlayerConnection().disconnect();
+                return;
             } catch (ExecutionException e) {
                 throw new RuntimeException("Error receiving known packs", e);
             }
