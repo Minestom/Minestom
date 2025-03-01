@@ -283,7 +283,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType().namespace());
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType().key());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,

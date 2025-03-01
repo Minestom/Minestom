@@ -1,5 +1,6 @@
 package net.minestom.server.utils.nbt;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.text.Component;
@@ -13,7 +14,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
@@ -114,7 +114,7 @@ public interface BinaryTagSerializer<T> {
 
     static <E extends Enum<E> & Keyed> @NotNull BinaryTagSerializer<E> fromEnumKeyed(@NotNull Class<E> enumClass) {
         final E[] values = enumClass.getEnumConstants();
-        final Map<NamespaceID, E> nameMap = Arrays.stream(values).collect(Collectors.toMap(e -> NamespaceID.from(e.key()), Function.identity()));
+        final Map<Key, E> nameMap = Arrays.stream(values).collect(Collectors.toMap(Keyed::key, Function.identity()));
         return new BinaryTagSerializer<>() {
             @Override
             public @NotNull BinaryTag write(@NotNull E value) {
@@ -125,7 +125,7 @@ public interface BinaryTagSerializer<T> {
             public @NotNull E read(@NotNull BinaryTag tag) {
                 if (!(tag instanceof StringBinaryTag string))
                     throw new IllegalArgumentException("Expected string, got " + tag.type());
-                return nameMap.getOrDefault(NamespaceID.from(string.value()), values[0]);
+                return nameMap.getOrDefault(Key.key(string.value()), values[0]);
             }
         };
     }
@@ -639,7 +639,7 @@ public interface BinaryTagSerializer<T> {
                 final String type = compound.getString(key);
                 Check.argCondition(type.isEmpty(), "Missing {0} field: {1}", key, tag);
                 //noinspection unchecked
-                final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) registry.get(NamespaceID.from(type));
+                final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) registry.get(Key.key(type));
                 Check.notNull(serializer, "Unregistered serializer for: {0}", type);
 
                 return serializer.read(context, tag);

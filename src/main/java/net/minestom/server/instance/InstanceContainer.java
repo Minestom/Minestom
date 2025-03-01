@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
@@ -23,10 +24,9 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
-import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
+import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
@@ -91,18 +91,18 @@ public class InstanceContainer extends Instance {
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
-        this(uuid, dimensionType, null, dimensionType.namespace());
+        this(uuid, dimensionType, null, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this(uuid, dimensionType, null, dimensionName);
     }
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
-        this(uuid, dimensionType, loader, dimensionType.namespace());
+        this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull NamespaceID dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
@@ -111,7 +111,7 @@ public class InstanceContainer extends Instance {
             @NotNull UUID uuid,
             @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
-            @NotNull NamespaceID dimensionName
+            @NotNull Key dimensionName
     ) {
         super(dimensionTypeRegistry, uuid, dimensionType, dimensionName);
         setChunkSupplier(DynamicChunk::new);

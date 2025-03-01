@@ -1,9 +1,9 @@
 package net.minestom.server.network.packet.server.common;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ public record CookieStorePacket(
         Check.argCondition(value.length > MAX_VALUE_LENGTH, "Cookie value length too long: {0} > {1}", value.length, MAX_VALUE_LENGTH);
     }
 
-    public CookieStorePacket(@NotNull NamespaceID key, byte[] value) {
+    public CookieStorePacket(@NotNull Key key, byte[] value) {
         this(key.asString(), value);
     }
 }

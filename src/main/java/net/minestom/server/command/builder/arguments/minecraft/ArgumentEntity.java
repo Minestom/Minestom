@@ -214,7 +214,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
             case "type": {
                 final boolean include = !value.startsWith("!");
                 final String entityName = include ? value : value.substring(1);
-                final EntityType entityType = EntityType.fromNamespaceId(entityName);
+                final EntityType entityType = EntityType.fromKey(entityName);
                 if (entityType == null)
                     throw new ArgumentSyntaxException("Invalid entity name", input, INVALID_ARGUMENT_VALUE);
                 entityFinder.setEntity(entityType, include ? EntityFinder.ToggleableType.INCLUDE : EntityFinder.ToggleableType.EXCLUDE);
