@@ -1,9 +1,9 @@
 package net.minestom.server.game;
 
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,15 +26,6 @@ public sealed interface GameEvent extends StaticProtocolObject permits GameEvent
     Registry.GameEventEntry registry();
 
     /**
-     * Gets the namespace ID of this game event.
-     *
-     * @return the namespace ID
-     */
-    @Override
-    @NotNull
-    NamespaceID namespace();
-
-    /**
      * Gets the game events from the registry.
      *
      * @return the game events
@@ -46,21 +37,21 @@ public sealed interface GameEvent extends StaticProtocolObject permits GameEvent
     /**
      * Gets a game event by its namespace ID.
      *
-     * @param namespaceID the namespace ID
+     * @param key the namespace ID
      * @return the game event or null if not found
      */
-    static @Nullable GameEvent fromNamespaceId(@NotNull String namespaceID) {
-        return GameEventImpl.getSafe(namespaceID);
+    static @Nullable GameEvent fromKey(@NotNull String key) {
+        return GameEventImpl.getSafe(key);
     }
 
     /**
      * Gets a game event by its namespace ID.
      *
-     * @param namespaceID the namespace ID
+     * @param key the event key
      * @return the game event or null if not found
      */
-    static @Nullable GameEvent fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable GameEvent fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
 }

@@ -1,8 +1,8 @@
 package net.minestom.server.game;
 
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.Collection;
  * Represents a game event implementation.
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
-record GameEventImpl(Registry.GameEventEntry registry, NamespaceID namespace, int id) implements GameEvent {
+record GameEventImpl(Registry.GameEventEntry registry, Key key, int id) implements GameEvent {
     private static final Registry.Container<GameEvent> CONTAINER = Registry.createStaticContainer(Registry.Resource.GAME_EVENTS, GameEventImpl::createImpl);
 
     /**
@@ -31,7 +31,7 @@ record GameEventImpl(Registry.GameEventEntry registry, NamespaceID namespace, in
      * @param registry the registry
      */
     private GameEventImpl(Registry.GameEventEntry registry) {
-        this(registry, registry.namespace(), registry.main().getInt("id"));
+        this(registry, registry.key(), registry.main().getInt("id"));
     }
 
     /**

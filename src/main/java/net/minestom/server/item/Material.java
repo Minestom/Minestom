@@ -1,11 +1,11 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +26,8 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     @NotNull Registry.MaterialEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -59,12 +59,12 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
         return MaterialImpl.values();
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull String namespaceID) {
-        return MaterialImpl.getSafe(namespaceID);
+    static @Nullable Material fromKey(@NotNull String key) {
+        return MaterialImpl.getSafe(key);
     }
 
-    static @Nullable Material fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Material fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Material fromId(int id) {
