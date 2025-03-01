@@ -8,7 +8,6 @@ import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -27,16 +26,16 @@ import java.util.concurrent.locks.ReentrantLock;
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
-    record KeyImpl<T>(@NotNull NamespaceID namespace) implements Key<T> {
+    record KeyImpl<T>(@NotNull net.kyori.adventure.key.Key key) implements Key<T> {
 
         @Override
         public String toString() {
-            return namespace.asString();
+            return key.asString();
         }
 
         @Override
         public int hashCode() {
-            return namespace.hashCode();
+            return key.hashCode();
         }
 
         @Override
@@ -44,7 +43,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             KeyImpl<?> key = (KeyImpl<?>) obj;
-            return namespace.equals(key.namespace);
+            return this.key.equals(key.key);
         }
     }
 
@@ -53,8 +52,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
     private final List<T> entryById = new CopyOnWriteArrayList<>();
-    private final Map<NamespaceID, T> entryByName = new ConcurrentHashMap<>();
-    private final List<NamespaceID> idByName = new CopyOnWriteArrayList<>();
+    private final Map<net.kyori.adventure.key.Key, T> entryByName = new ConcurrentHashMap<>();
+    private final List<net.kyori.adventure.key.Key> idByName = new CopyOnWriteArrayList<>();
     private final List<DataPack> packById = new CopyOnWriteArrayList<>();
 
     private final String id;
@@ -83,7 +82,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @Nullable T get(@NotNull NamespaceID namespace) {
+    public @Nullable T get(@NotNull net.kyori.adventure.key.Key namespace) {
         return entryByName.get(namespace);
     }
 
@@ -101,7 +100,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @Nullable NamespaceID getName(int id) {
+    public @Nullable net.kyori.adventure.key.Key getName(int id) {
         if (id < 0 || id >= entryById.size())
             return null;
         return idByName.get(id);
@@ -115,7 +114,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public int getId(@NotNull NamespaceID id) {
+    public int getId(@NotNull net.kyori.adventure.key.Key id) {
         return idByName.indexOf(id);
     }
 
@@ -125,7 +124,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull NamespaceID namespaceId, @NotNull T object, @Nullable DataPack pack) {
+    public @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key namespaceId, @NotNull T object, @Nullable DataPack pack) {
         // This check is disabled in tests because we remake server processes over and over.
         // todo: re-enable this check
 //        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
@@ -157,7 +156,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public boolean remove(@NotNull NamespaceID namespaceId) throws UnsupportedOperationException {
+    public boolean remove(@NotNull net.kyori.adventure.key.Key namespaceId) throws UnsupportedOperationException {
         if (!ServerFlag.REGISTRY_UNSAFE_OPS) throw UNSAFE_REMOVE_EXCEPTION;
 
         lock.lock();
