@@ -1,5 +1,6 @@
 package net.minestom.demo.block;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.BinaryTagTypes;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
@@ -11,7 +12,6 @@ import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.tag.TagSerializer;
 import net.minestom.server.tag.TagWritable;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,7 +34,7 @@ public class CampfireHandler implements BlockHandler {
                 CompoundBinaryTag nbtCompound = (CompoundBinaryTag) childTag;
                 int amount = nbtCompound.getByte("Count");
                 String id = nbtCompound.getString("id");
-                Material material = Material.fromNamespaceId(id);
+                Material material = Material.fromKey(id);
                 result.add(ItemStack.of(material, amount));
             });
             return result;
@@ -65,7 +65,7 @@ public class CampfireHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("minestom:test");
+    public @NotNull Key getKey() {
+        return Key.key("minestom:test");
     }
 }

@@ -1,7 +1,7 @@
 package net.minestom.server.statistic;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,12 +13,12 @@ public sealed interface StatisticType extends StaticProtocolObject, StatisticTyp
         return StatisticTypeImpl.values();
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull String namespaceID) {
-        return StatisticTypeImpl.getSafe(namespaceID);
+    static @Nullable StatisticType fromKey(@NotNull String key) {
+        return StatisticTypeImpl.getSafe(key);
     }
 
-    static @Nullable StatisticType fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable StatisticType fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable StatisticType fromId(int id) {

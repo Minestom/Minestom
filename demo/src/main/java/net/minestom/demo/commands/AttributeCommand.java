@@ -84,7 +84,7 @@ public class AttributeCommand extends Command {
     @Nullable
     private Attribute attribute(CommandContext ctx) {
         String namespaceId = ctx.get("attribute");
-        return Attribute.fromNamespaceId(namespaceId);
+        return Attribute.fromKey(namespaceId);
     }
 
     private Component name(Entity entity) {
