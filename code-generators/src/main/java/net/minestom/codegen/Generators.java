@@ -56,7 +56,7 @@ public class Generators {
         generator.generate(resource("feature_flags.json"), "net.minestom.server", "FeatureFlag", "FeatureFlagImpl", "FeatureFlags");
         generator.generate(resource("villager_professions.json"), "net.minestom.server.entity", "VillagerProfession", "VillagerProfessionImpl", "VillagerProfessions");
         generator.generate(resource("game_events.json"), "net.minestom.server.game", "GameEvent", "GameEventImpl", "GameEvents");
-
+        generator.generate(resource("block_sound_types.json"), "net.minestom.server.instance.block", "BlockSoundType", "BlockSoundImpl", "BlockSoundTypes");
 
         // Dynamic registries
         generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
