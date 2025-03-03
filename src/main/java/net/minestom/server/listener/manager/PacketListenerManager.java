@@ -99,6 +99,7 @@ public final class PacketListenerManager {
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
+        setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
     }
 
     /**
