@@ -1,5 +1,6 @@
 package net.minestom.server.inventory.click;
 
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,6 +97,22 @@ public sealed interface Click {
     record OffhandSwap(int slot) implements Click {
     }
 
+    /**
+     * Converts any clicks that are fully within the player inventory into clicks that are considered as being inside
+     * the player inventory. This is useful for making click event APIs much less obfuscated due to how the protocol is
+     * structured.
+     * <br>
+     * Essentially, if the player has an inventory open but clicks inside their own inventory, the packet sent will be
+     * inside the opened inventory but have a slot ID greater than the size of the opened inventory. For cases where
+     * this happens, this function will convert it into a click that's considered inside the player inventory instead,
+     * adjusting the slot ID as necessary. On the returned {@link Window} instance, the boolean field indicates which
+     * inventory the click is in (since it was unambiguous previously, but is not now).
+     *
+     * @param click the click to convert
+     * @param containerSize the size of the opened container, or null if the player inventory is open
+     * @return the (possibly) converted click
+     */
+    @ApiStatus.Internal
     static @NotNull Click.Window toWindow(@NotNull Click click, @Nullable Integer containerSize) {
         return switch (click) {
             // Everything with one dynamic slot
@@ -145,6 +162,16 @@ public sealed interface Click {
         return new Window(false, constructor.apply(slots.stream().map(slot -> slot - containerSize).toList()));
     }
 
+    /**
+     * Converts a click from window-specific context back to "normal" click information.
+     * <br>
+     * This is the inverse of {@link #toWindow(Click, Integer)}; read that for more information
+     *
+     * @param window the click, along with whether or not it was inside the window
+     * @param containerSize the size of the opened container, or null if the player inventory is open
+     * @return the (potentially) converted click information
+     */
+    @ApiStatus.Internal
     static @NotNull Click fromWindow(@NotNull Click.Window window, @Nullable Integer containerSize) {
         return switch (window.click()) {
             // Everything with one dynamic slot
