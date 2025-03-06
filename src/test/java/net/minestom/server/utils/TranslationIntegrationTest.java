@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Locale;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -28,7 +29,8 @@ public class TranslationIntegrationTest {
     @BeforeAll
     static void translator() {
         final var translator = TranslationRegistry.create(Key.key("test.reg"));
-        translator.register("test.key", MinestomAdventure.getDefaultLocale(), new MessageFormat("This is a test message", MinestomAdventure.getDefaultLocale()));
+        // Have to use US as default language because the default ClientSettings are in US :)
+        translator.register("test.key", Locale.US, new MessageFormat("This is a test message", MinestomAdventure.getDefaultLocale()));
 
         GlobalTranslator.translator().addSource(translator);
     }
