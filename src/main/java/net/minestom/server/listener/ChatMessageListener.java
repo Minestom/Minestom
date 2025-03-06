@@ -10,6 +10,7 @@ import net.minestom.server.message.Messenger;
 import net.minestom.server.network.ConnectionManager;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientCommandChatPacket;
+import net.minestom.server.network.packet.client.play.ClientSignedCommandChatPacket;
 
 import java.util.Collection;
 
@@ -18,6 +19,17 @@ public class ChatMessageListener {
     private static final ConnectionManager CONNECTION_MANAGER = MinecraftServer.getConnectionManager();
 
     public static void commandChatListener(ClientCommandChatPacket packet, Player player) {
+        final String command = packet.message();
+        if (Messenger.canReceiveCommand(player)) {
+            COMMAND_MANAGER.execute(player, command);
+        } else {
+            Messenger.sendRejectionMessage(player);
+        }
+    }
+
+    public static void signedCommandChatListener(ClientSignedCommandChatPacket packet, Player player) {
+        // Intentionally do the same thing as commandChatListener. We don't use signed commands, but Geyser
+        // and Gate (the proxy) always send them so this is for compatibility with them.
         final String command = packet.message();
         if (Messenger.canReceiveCommand(player)) {
             COMMAND_MANAGER.execute(player, command);

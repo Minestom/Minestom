@@ -100,6 +100,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
         setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
+        setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
     }
 
     /**
