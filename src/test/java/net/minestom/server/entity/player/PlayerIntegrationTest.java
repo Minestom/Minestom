@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -12,7 +13,6 @@ import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.ClientSettings;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.world.DimensionType;
 import net.minestom.testing.Collector;
 import net.minestom.testing.Env;
@@ -154,7 +154,7 @@ public class PlayerIntegrationTest {
     @Test
     public void refreshPlayerTest(Env env) {
         final int TEST_PERMISSION_LEVEL = 2;
-        final var testDimension = env.process().dimensionType().register(NamespaceID.from("minestom:test_dimension"), DimensionType.builder().build());
+        final var testDimension = env.process().dimensionType().register(Key.key("minestom:test_dimension"), DimensionType.builder().build());
 
         var instance = env.createFlatInstance();
         var instance2 = env.process().instance().createInstanceContainer(testDimension);
@@ -182,14 +182,14 @@ public class PlayerIntegrationTest {
         // Ensure that the player was sent the permission levels
         for (var statusPacket : trackerStatus.collect()) {
             assertEquals(player.getEntityId(), statusPacket.entityId());
-            assertEquals(24 + TEST_PERMISSION_LEVEL, statusPacket.status()); // TODO: Remove magic value of 24
+            assertEquals(EntityStatuses.Player.PERMISSION_LEVEL_2, statusPacket.status());
         }
     }
 
     @Test
     public void deathLocationTest(Env env) {
         String dimensionNamespace = "minestom:test_dimension";
-        final var testDimension = env.process().dimensionType().register(NamespaceID.from(dimensionNamespace), DimensionType.builder().build());
+        final var testDimension = env.process().dimensionType().register(Key.key(dimensionNamespace), DimensionType.builder().build());
 
         var instance = env.process().instance().createInstanceContainer(testDimension);
         var connection = env.createConnection();

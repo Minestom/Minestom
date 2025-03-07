@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
@@ -13,7 +14,6 @@ import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.data.LightData;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,30 +61,30 @@ public class LightingChunk extends DynamicChunk {
         EXTERNAL
     }
 
-    private static final Set<NamespaceID> DIFFUSE_SKY_LIGHT = Set.of(
-            Block.COBWEB.namespace(),
-            Block.ICE.namespace(),
-            Block.HONEY_BLOCK.namespace(),
-            Block.SLIME_BLOCK.namespace(),
-            Block.WATER.namespace(),
-            Block.ACACIA_LEAVES.namespace(),
-            Block.AZALEA_LEAVES.namespace(),
-            Block.BIRCH_LEAVES.namespace(),
-            Block.DARK_OAK_LEAVES.namespace(),
-            Block.FLOWERING_AZALEA_LEAVES.namespace(),
-            Block.JUNGLE_LEAVES.namespace(),
-            Block.CHERRY_LEAVES.namespace(),
-            Block.OAK_LEAVES.namespace(),
-            Block.SPRUCE_LEAVES.namespace(),
-            Block.SPAWNER.namespace(),
-            Block.BEACON.namespace(),
-            Block.END_GATEWAY.namespace(),
-            Block.CHORUS_PLANT.namespace(),
-            Block.CHORUS_FLOWER.namespace(),
-            Block.FROSTED_ICE.namespace(),
-            Block.SEAGRASS.namespace(),
-            Block.TALL_SEAGRASS.namespace(),
-            Block.LAVA.namespace()
+    private static final Set<Key> DIFFUSE_SKY_LIGHT = Set.of(
+            Block.COBWEB.key(),
+            Block.ICE.key(),
+            Block.HONEY_BLOCK.key(),
+            Block.SLIME_BLOCK.key(),
+            Block.WATER.key(),
+            Block.ACACIA_LEAVES.key(),
+            Block.AZALEA_LEAVES.key(),
+            Block.BIRCH_LEAVES.key(),
+            Block.DARK_OAK_LEAVES.key(),
+            Block.FLOWERING_AZALEA_LEAVES.key(),
+            Block.JUNGLE_LEAVES.key(),
+            Block.CHERRY_LEAVES.key(),
+            Block.OAK_LEAVES.key(),
+            Block.SPRUCE_LEAVES.key(),
+            Block.SPAWNER.key(),
+            Block.BEACON.key(),
+            Block.END_GATEWAY.key(),
+            Block.CHORUS_PLANT.key(),
+            Block.CHORUS_FLOWER.key(),
+            Block.FROSTED_ICE.key(),
+            Block.SEAGRASS.key(),
+            Block.TALL_SEAGRASS.key(),
+            Block.LAVA.key()
     );
 
     public void invalidate() {
@@ -100,7 +100,7 @@ public class LightingChunk extends DynamicChunk {
 
     private boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
-        if (DIFFUSE_SKY_LIGHT.contains(block.namespace())) return true;
+        if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
 
         Shape shape = block.registry().collisionShape();
         boolean occludesTop = Block.AIR.registry().collisionShape().isOccluded(shape, BlockFace.TOP);

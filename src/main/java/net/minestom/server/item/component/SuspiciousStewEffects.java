@@ -40,7 +40,7 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
         );
 
         public static final BinaryTagSerializer<Effect> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> new Effect(PotionEffect.fromNamespaceId(tag.getString("id")),
+                tag -> new Effect(PotionEffect.fromKey(tag.getString("id")),
                         tag.getInt("duration", DEFAULT_DURATION)),
                 value -> CompoundBinaryTag.builder()
                         .putString("id", value.id.name())
