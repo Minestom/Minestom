@@ -1,11 +1,11 @@
 package net.minestom.server;
 
 public final class Git {
-    private static final String COMMIT = "&COMMIT";
-    private static final String BRANCH = "&BRANCH";
+    private static final String COMMIT = "{{ COMMIT }}";
+    private static final String BRANCH = "{{ BRANCH }}";
 
-    private static final String GROUP = "&GROUP";
-    private static final String ARTIFACT = "&ARTIFACT";
+    private static final String GROUP = "{{ GROUP }}";
+    private static final String ARTIFACT = "{{ ARTIFACT }}";
 
 
     public static String commit() { return COMMIT; }

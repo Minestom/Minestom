@@ -15,11 +15,13 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
 
     private final AbstractInventory inventory;
     private final Player player;
+    private final boolean fromClient;
     private Inventory newInventory;
 
-    public InventoryCloseEvent(@NotNull AbstractInventory inventory, @NotNull Player player) {
+    public InventoryCloseEvent(@NotNull AbstractInventory inventory, @NotNull Player player, boolean fromClient) {
         this.inventory = inventory;
         this.player = player;
+        this.fromClient = fromClient;
     }
 
     /**
@@ -30,6 +32,15 @@ public class InventoryCloseEvent implements InventoryEvent, PlayerInstanceEvent 
     @NotNull
     public Player getPlayer() {
         return player;
+    }
+
+    /**
+     * Gets whether the client closed the inventory or the server did.
+     *
+     * @return true if the client closed the inventory, false if the server closed the inventory
+     */
+    public boolean isFromClient() {
+        return fromClient;
     }
 
     /**

@@ -110,7 +110,12 @@ public final class Tag implements ProtocolObject, Keyed {
         BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
                 (name, registries) -> Optional.of(DynamicRegistry.Key.of(name))
                         .map(DynamicRegistry.Key::namespace)
-                        .map(registries.biome()::getId));
+                        .map(registries.biome()::getId)),
+        INSTRUMENTS("minecraft:instrument", Registry.Resource.INSTRUMENT_TAGS,
+                (name, registries) -> Optional.of(DynamicRegistry.Key.of(name))
+                        .map(DynamicRegistry.Key::namespace)
+                        .map(registries.instrument()::getId)),
+        ;
 
         private static final BasicType[] VALUES = values();
         private final String identifier;

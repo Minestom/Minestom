@@ -20,6 +20,7 @@ import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
@@ -141,6 +142,10 @@ public final class Registry {
         return new GameEventEntry(namespace, properties, null);
     }
 
+    public static BlockSoundTypeEntry blockSoundTypeEntry(String namespace, Properties properties) {
+        return new BlockSoundTypeEntry(namespace, properties);
+    }
+
     public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
         // 1. Try to load from jar resources
         InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
@@ -153,6 +158,11 @@ public final class Registry {
         // 3. Not found :(
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
         return resourceStream;
+    }
+
+    @ApiStatus.Internal
+    public static InstrumentEntry instrument(String namespace, @NotNull Properties main) {
+        return new InstrumentEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -262,7 +272,10 @@ public final class Registry {
         ENCHANTMENTS("enchantments.snbt"),
         PAINTING_VARIANTS("painting_variants.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
-        VILLAGER_PROFESSIONS("villager_professions.json");
+        VILLAGER_PROFESSIONS("villager_professions.json"),
+        INSTRUMENTS("instruments.json"),
+        INSTRUMENT_TAGS("tags/instrument.json"),
+        BLOCK_SOUND_TYPES("block_sound_types.json");
 
         private final String name;
 
@@ -301,6 +314,7 @@ public final class Registry {
         private final String blockEntity;
         private final int blockEntityId;
         private final Supplier<Material> materialSupplier;
+        private final BlockSoundType blockSoundType;
         private final Shape shape;
         private final boolean redstoneConductor;
         private final boolean signalSource;
@@ -324,6 +338,7 @@ public final class Registry {
             this.requiresTool = main.getBoolean("requiresTool", true);
             this.lightEmission = main.getInt("lightEmission", 0);
             this.replaceable = main.getBoolean("replaceable", false);
+            this.blockSoundType = BlockSoundType.fromNamespaceId(main.getString("soundType"));
             {
                 Properties blockEntity = main.section("blockEntity");
                 if (blockEntity != null) {
@@ -437,6 +452,10 @@ public final class Registry {
 
         public Shape collisionShape() {
             return shape;
+        }
+
+        public @Nullable BlockSoundType getBlockSoundType() {
+            return this.blockSoundType;
         }
 
         @Override
@@ -840,7 +859,6 @@ public final class Registry {
     public record TrimMaterialEntry(@NotNull NamespaceID namespace,
                                     @NotNull String assetName,
                                     @NotNull Material ingredient,
-                                    float itemModelIndex,
                                     @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
@@ -849,7 +867,6 @@ public final class Registry {
                     NamespaceID.from(namespace),
                     main.getString("asset_name"),
                     Objects.requireNonNull(Material.fromNamespaceId(main.getString("ingredient"))),
-                    (float) main.getDouble("item_model_index"),
                     Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
@@ -1016,6 +1033,26 @@ public final class Registry {
                     (float) main.getDouble("length_in_seconds"),
                     main.getInt("comparator_output"),
                     custom);
+        }
+    }
+
+    public record InstrumentEntry(NamespaceID namespace, SoundEvent soundEvent, float useDuration, float range,
+                                  Component description, Properties custom) implements Entry {
+        public InstrumentEntry(String namespace, Properties main, Properties custom) {
+            this(NamespaceID.from(namespace),
+                    SoundEvent.fromNamespaceId(main.getString("sound_event")),
+                    (float) main.getDouble("use_duration"),
+                    (float) main.getDouble("range"),
+                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
+                    custom);
+        }
+    }
+
+    public record BlockSoundTypeEntry(@NotNull NamespaceID namespaceID, float volume, float pitch, SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound, SoundEvent placeSound, SoundEvent stepSound) {
+        public BlockSoundTypeEntry(String namespace, Properties main) {
+            this(NamespaceID.from(namespace), main.getFloat("volume"),
+                    main.getFloat("pitch"), SoundEvent.fromNamespaceId(main.getString("breakSound")), SoundEvent.fromNamespaceId(main.getString("hitSound")),
+                    SoundEvent.fromNamespaceId(main.getString("fallSound")), SoundEvent.fromNamespaceId(main.getString("placeSound")), SoundEvent.fromNamespaceId(main.getString("stepSound")));
         }
     }
 
