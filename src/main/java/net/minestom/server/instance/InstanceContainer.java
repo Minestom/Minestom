@@ -277,7 +277,6 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    @Deprecated
     public @Nullable Chunk getChunk(int chunkX, int chunkZ) {
         return this.chunkManager.getLoadedChunk(chunkX, chunkZ);
     }

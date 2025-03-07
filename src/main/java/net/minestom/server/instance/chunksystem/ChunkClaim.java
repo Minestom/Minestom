@@ -84,13 +84,9 @@ public sealed interface ChunkClaim permits ChunkClaimImpl {
             return (float) dxSq / radiusSqX + (float) dzSq / radiusSqZ <= 1;
         };
         @NotNull Shape SQUARE = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
-            var radiusSqX = radiusX * radiusX;
-            var radiusSqZ = radiusZ * radiusZ;
             var dx = Math.abs(x - ox);
             var dz = Math.abs(z - oz);
-            var dxSq = dx * dx;
-            var dzSq = dz * dz;
-            return dxSq <= radiusSqX && dzSq <= radiusSqZ;
+            return dx <= radiusX && dz <= radiusZ;
         };
         @NotNull Shape DIAMOND = (int radiusX, int radiusZ, int x, int z, int ox, int oz) -> {
             var dx = (float) Math.abs(x - ox);
