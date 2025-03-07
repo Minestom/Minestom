@@ -1,22 +1,33 @@
 package net.minestom.server.entity;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectRBTreeMap;
-import it.unimi.dsi.fastutil.longs.Long2ObjectSortedMap;
-import it.unimi.dsi.fastutil.longs.LongComparator;
+import it.unimi.dsi.fastutil.longs.*;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.player.PlayerChunkLoadEvent;
+import net.minestom.server.event.player.PlayerChunkUnloadEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.network.packet.server.play.ChunkBatchFinishedPacket;
 import net.minestom.server.network.packet.server.play.ChunkBatchStartPacket;
 import net.minestom.server.utils.MathUtils;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.VisibleForTesting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class PlayerChunkQueue {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PlayerChunkQueue.class);
     private final Player player;
     private final ReentrantLock lock = new ReentrantLock();
     // This may seem counterintuitive, but this queue will get replaced quite frequently.
@@ -24,9 +35,10 @@ public class PlayerChunkQueue {
     // entirely. The other option is to remove all elements, change the comparator,
     // then add all elements again, which is arguably worse.
     private Long2ObjectSortedMap<Chunk> chunkQueue = new Long2ObjectRBTreeMap<>(this.compareChunkDistance(0, 0));
-    private boolean needsChunkPositionSync = true;
-    private float targetChunksPerTick = 9f; // Always send 9 chunks immediately
-    private float pendingChunkCount = 0f; // Number of chunks to send on the current tick (ie 0.5 means we cannot send a chunk yet, 1.5 would send a single chunk with a 0.5 remainder)
+    private final LongSet visibleChunks = new LongOpenHashSet();
+    private boolean needsChunkPositionSync;
+    private float targetChunksPerTick;
+    private float pendingChunkCount; // Number of chunks to send on the current tick (ie 0.5 means we cannot send a chunk yet, 1.5 would send a single chunk with a 0.5 remainder)
     private int maxChunkBatchLead = 1; // Maximum number of batches to send before waiting for a reply
     private int chunkBatchLead = 0; // Number of batches sent without a reply
     // The tracked chunk X and Z coordinates. Required for correct sorting behavior
@@ -35,6 +47,29 @@ public class PlayerChunkQueue {
 
     public PlayerChunkQueue(Player player) {
         this.player = player;
+        this.resetState();
+    }
+
+    public void resetState() {
+        this.needsChunkPositionSync = true;
+        this.targetChunksPerTick = 9F; // Always send 9 chunks immediately
+        this.pendingChunkCount = 0F;
+        this.chunkQueue.clear();
+    }
+
+    public boolean playerSeesChunk(int x, int z) {
+        lock.lock();
+        try {
+            return visibleChunks.contains(CoordConversion.chunkIndex(x, z));
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    @ApiStatus.Internal
+    @VisibleForTesting
+    public void addVisible(int x, int z) {
+        visibleChunks.add(CoordConversion.chunkIndex(x, z));
     }
 
     /**
@@ -61,12 +96,16 @@ public class PlayerChunkQueue {
      * <p>
      * May be called from any thread
      *
-     * @return true if a chunk was removed from the queue (canceled), false if there was no such chunk in the queue
+     * @return true if a chunk was removed from the queue (cancelled), false if there was no such chunk in the queue
      */
     public boolean cancelSend(int chunkX, int chunkZ) {
         lock.lock();
         try {
-            return chunkQueue.remove(CoordConversion.chunkIndex(chunkX, chunkZ)) != null;
+            var cancelled = chunkQueue.remove(CoordConversion.chunkIndex(chunkX, chunkZ)) != null;
+            if (visibleChunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ))) {
+                EventDispatcher.call(new PlayerChunkUnloadEvent(player, chunkX, chunkZ));
+            }
+            return cancelled;
         } finally {
             lock.unlock();
         }
@@ -79,11 +118,16 @@ public class PlayerChunkQueue {
      */
     void sendPendingRateLimited() {
         // If we have sent the max # of batches without a reply, do nothing
-        if (chunkBatchLead >= maxChunkBatchLead) return;
+        if (chunkBatchLead >= maxChunkBatchLead) {
+            return;
+        }
 
         // Increment the pending chunk count by the target chunks per tick
         pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerFlag.MAX_CHUNKS_PER_TICK);
-        if (pendingChunkCount < 1) return; // Can't send anything
+        if (pendingChunkCount < 1) {
+            LOGGER.info("Only {} pending chunks (target {})", pendingChunkCount, targetChunksPerTick);
+            return; // Can't send anything
+        }
 
         lock.lock();
 
@@ -92,7 +136,10 @@ public class PlayerChunkQueue {
 
         try {
             // Queue is empty, do nothing
-            if (chunkQueue.isEmpty()) return;
+            if (chunkQueue.isEmpty()) {
+                return;
+            }
+
 
             player.sendPacket(new ChunkBatchStartPacket());
             int batchSize = 0;
@@ -100,6 +147,7 @@ public class PlayerChunkQueue {
                 var chunk = chunkQueue.pollFirstEntry().getValue();
                 if (!chunk.isLoaded()) continue;
                 player.sendPacket(chunk.getFullDataPacket());
+                visibleChunks.add(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
 
                 EventDispatcher.call(new PlayerChunkLoadEvent(player, chunk.getChunkX(), chunk.getChunkZ()));
 
@@ -134,7 +182,7 @@ public class PlayerChunkQueue {
         var currentPos = player.getPosition();
         var chunkX = currentPos.chunkX();
         var chunkZ = currentPos.chunkZ();
-        if (posChunkX == chunkX && posChunkZ == chunkZ) return; // Nothing changed, player didn't move
+        if (posChunkX == chunkX && posChunkZ == chunkZ) return; // Nothing changed, player didn't change chunk
 
         posChunkX = chunkX;
         posChunkZ = chunkZ;
@@ -142,6 +190,7 @@ public class PlayerChunkQueue {
         // This should free the old queue to be garbage collected
         var newQueue = new Long2ObjectRBTreeMap<Chunk>(compareChunkDistance(chunkX, chunkZ));
         newQueue.putAll(chunkQueue);
+        assert newQueue.size() == chunkQueue.size();
         chunkQueue = newQueue;
     }
 
@@ -151,9 +200,28 @@ public class PlayerChunkQueue {
             int chunkAZ = CoordConversion.chunkIndexGetZ(chunkIndexA);
             int chunkBX = CoordConversion.chunkIndexGetX(chunkIndexB);
             int chunkBZ = CoordConversion.chunkIndexGetZ(chunkIndexB);
-            int chunkDistanceA = Math.abs(chunkAX - x) + Math.abs(chunkAZ - z);
-            int chunkDistanceB = Math.abs(chunkBX - x) + Math.abs(chunkBZ - z);
-            return Integer.compare(chunkDistanceA, chunkDistanceB);
+            int diffAX = chunkAX - x;
+            var diffAZ = chunkAZ - z;
+            int diffBX = chunkBX - x;
+            var diffBZ = chunkBZ - z;
+            int chunkDistanceA = diffAX * diffAX + diffAZ * diffAZ;
+            int chunkDistanceB = diffBX * diffBX + diffBZ * diffBZ;
+            var cmp = Integer.compare(chunkDistanceA, chunkDistanceB);
+            if (cmp != 0) return cmp;
+            // We need extra logic, otherwise different chunk keys evaluate to be equal
+            // At this point the chunks should be ordered some arbitrary way, doesn't really matter which way
+
+            // This sorting is kinda like a spiral, but not really.
+            // Seems like a good-looking option
+            if (chunkAX < chunkBX) {
+                //if (chunkAZ < chunkBZ) return -1;
+                //else if (chunkAZ > chunkBZ) return 1;
+                return -1;
+            } else if (chunkAX > chunkBX) {
+                return 1;
+            } else {
+                return Integer.compare(chunkAZ, chunkBZ);
+            }
         };
     }
 }

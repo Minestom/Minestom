@@ -2,6 +2,7 @@ package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.chunksystem.SingleThreadedManager.UpdateResult;
@@ -341,12 +342,21 @@ class UpdateHandler {
         this.chunks.put(chunkIndex, loaded);
         for (var claim : loading.claimsRegisteredForCallback) {
             if (this.singleThreadedManager.hasClaim(claim)) {
-                callbackLoaded(this.singleThreadedManager.claimMap.get(claim), chunk);
                 var data = this.singleThreadedManager.claimMap.get(claim);
+                callbackLoaded(data, chunk);
                 data.finishLoad();
             }
         }
         return true;
+    }
+
+    @Nullable Chunk getLoaded(int x, int z) {
+        var chunkIndex = CoordConversion.chunkIndex(x, z);
+        var state = chunks.get(chunkIndex);
+        if (state instanceof State.Loaded loaded) {
+            return loaded.chunk;
+        }
+        return null;
     }
 
     static final class SaveState {

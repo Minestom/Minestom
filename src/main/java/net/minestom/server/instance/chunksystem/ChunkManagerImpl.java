@@ -15,10 +15,12 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 class ChunkManagerImpl implements ChunkManager {
+    private final Instance instance;
     private final TaskSchedulerThread taskSchedulerThread;
     private int defaultPriority;
 
     public ChunkManagerImpl(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, @NotNull ChunkAccess chunkAccess) {
+        this.instance = instance;
         this.taskSchedulerThread = new TaskSchedulerThread(instance, chunkSupplier, chunkLoader, chunkAccess);
     }
 
@@ -107,6 +109,11 @@ class ChunkManagerImpl implements ChunkManager {
     @Override
     public @NotNull ChunkAndClaim addClaim(int chunkX, int chunkZ, int radius, int priority, @NotNull Shape shape) {
         return addClaim(chunkX, chunkZ, radius, priority, shape, null);
+    }
+
+    @Override
+    public @NotNull Instance getInstance() {
+        return instance;
     }
 
     @Override
