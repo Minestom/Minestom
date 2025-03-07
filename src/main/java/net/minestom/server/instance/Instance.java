@@ -14,10 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ExperienceOrb;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -115,6 +112,8 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     // Adventure
     private final Pointers pointers;
+
+    private EntityFactories entityFactories = EntityFactories.getGlobal();
 
     /**
      * Creates a new instance.
@@ -497,6 +496,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     public void setTimeRate(int timeRate) {
         Check.stateCondition(timeRate < 0, "The time rate cannot be lower than 0");
         this.timeRate = timeRate;
+    }
+
+    /**
+     * Gets the {@link EntityFactories} for this instance.
+     *
+     * @return a {@link EntityFactories} instance
+     */
+    public EntityFactories getEntityFactories() {
+        return this.entityFactories;
+    }
+
+    /**
+     * Changes the {@link EntityFactories} for this instance
+     *
+     * @param entityFactories the new {@link EntityFactories}
+     */
+    public void setEntityFactories(EntityFactories entityFactories) {
+        this.entityFactories = entityFactories;
     }
 
     /**
