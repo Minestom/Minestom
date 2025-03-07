@@ -8,6 +8,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.player.PlayerMoveEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
 import net.minestom.server.message.ChatMessageType;
 import net.minestom.server.network.packet.client.common.ClientSettingsPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerPositionPacket;
@@ -142,6 +143,16 @@ public class PlayerMovementIntegrationTest {
         player.addPacketToQueue(new ClientPlayerPositionPacket(new Vec(160.5, 40, 160.5), true, false));
         player.interpretPacketQueue();
         chunkDataPacketCollector.assertCount(MathUtils.square(viewDistance * 2 + 1));
+    }
+
+    private int countInShape(ChunkClaim.Shape shape, int radius) {
+        int count = 0;
+        for (var x = -radius; x <= radius; x++) {
+            for (var z = -radius; z <= radius; z++) {
+                if (shape.isInRadius(radius, radius, x, z, 0, 0)) count++;
+            }
+        }
+        return count;
     }
 
     @Test

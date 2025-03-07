@@ -294,7 +294,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @see ChunkManager#getLoadedChunk(int, int)
      * @deprecated in favor of {@link ChunkClaim ChunkClaims} and {@link ChunkManager}
      */
-    @Deprecated
     public abstract @Nullable Chunk getChunk(int chunkX, int chunkZ);
 
     /**
