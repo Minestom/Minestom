@@ -20,6 +20,8 @@ import static net.minestom.server.instance.chunksystem.ChunkClaim.Shape;
  * {@code Instance#getChunkManager()}
  */
 public interface ChunkManager {
+    @NotNull Instance getInstance();
+
     /**
      * The default priority for all chunk loads.
      *
@@ -141,6 +143,13 @@ public interface ChunkManager {
      */
     default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, int priority, @NotNull Shape shape) {
         return addClaim(point.chunkX(), point.chunkZ(), radius, priority, shape);
+    }
+
+    /**
+     * @see #addClaim(int, int, int, int, Shape, ClaimCallbacks)
+     */
+    default @NotNull ChunkAndClaim addClaim(@NotNull Point point, int radius, int priority, @NotNull Shape shape, @Nullable ClaimCallbacks callbacks) {
+        return addClaim(point.chunkX(), point.chunkZ(), radius, priority, shape, callbacks);
     }
 
     /**

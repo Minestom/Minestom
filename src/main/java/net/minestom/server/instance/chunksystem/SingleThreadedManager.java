@@ -26,7 +26,9 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.LockSupport;
 import java.util.concurrent.locks.ReentrantLock;
 
 import static net.minestom.server.coordinate.CoordConversion.chunkIndex;
@@ -46,7 +48,6 @@ class SingleThreadedManager {
      * Identity strategy, so we can identify the correct claims and remove them.
      */
     final Object2ObjectMap<ChunkClaim, ClaimData> claimMap = new Object2ObjectOpenHashMap<>();
-    private final ReentrantLock claimsByChunkLock = new ReentrantLock();
     private final Long2ObjectMap<Collection<ClaimData>> claimsByChunk = new Long2ObjectOpenHashMap<>();
 
     /**
@@ -153,12 +154,7 @@ class SingleThreadedManager {
         var claimData = new ClaimData(claim, chunkAndClaim.chunkFuture());
         var chunkIndex = chunkIndex(x, z);
         this.claimMap.put(claim, claimData);
-        this.claimsByChunkLock.lock();
-        try {
-            this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimData);
-        } finally {
-            this.claimsByChunkLock.unlock();
-        }
+        this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimData);
 
         // If the chunk is already loaded, we can complete the future right here.
         // The new claim has been inserted into the map, the chunk may not be unloaded
@@ -180,15 +176,10 @@ class SingleThreadedManager {
         var x = claimedChunk.claim.chunkX();
         var z = claimedChunk.claim.chunkZ();
         var chunkIndex = chunkIndex(x, z);
-        this.claimsByChunkLock.lock();
-        try {
-            var claims = this.claimsByChunk.get(chunkIndex);
-            claims.remove(claimedChunk);
-            if (claims.isEmpty()) {
-                this.claimsByChunk.remove(chunkIndex);
-            }
-        } finally {
-            this.claimsByChunkLock.unlock();
+        var claims = this.claimsByChunk.get(chunkIndex);
+        claims.remove(claimedChunk);
+        if (claims.isEmpty()) {
+            this.claimsByChunk.remove(chunkIndex);
         }
 
         this.tree.delete(x, z, claim.radius(), claim.priority(), claim.shape());
@@ -275,23 +266,16 @@ class SingleThreadedManager {
         }
 
         var chunkIndex = chunkIndex(x, z);
-
+        var claims = this.claimsByChunk.get(chunkIndex);
+        if (claims != null) {
+            for (var claim : claims) {
+                this.taskSchedulerThread.complete(claim.mainChunkFuture, chunk);
+            }
+        }
         // add this scheduler before adding the dispatcher partition to make sure it is executed first
         this.taskTracking.runningTickScheduledCount.incrementAndGet();
         Runnable task = () -> {
             var old = this.loadedChunks.put(chunkIndex, chunk);
-            List<ClaimData> claimsCopy;
-            this.claimsByChunkLock.lock();
-            try {
-                var claims = this.claimsByChunk.get(chunkIndex);
-                // the claims could have been removed by now, the collection could be null
-                claimsCopy = claims == null ? List.of() : List.copyOf(claims);
-            } finally {
-                this.claimsByChunkLock.unlock();
-            }
-            for (var claim : claimsCopy) {
-                claim.mainChunkFuture.complete(chunk);
-            }
             if (old != null) {
                 LOGGER.error("Existing chunk loaded at ({}, {}): {}", x, z, old);
             }
@@ -341,9 +325,8 @@ class SingleThreadedManager {
     }
 
     void completeIfLoaded(int x, int z, ChunkAndClaim chunkAndClaim) {
-        var index = chunkIndex(x, z);
-        var chunk = this.loadedChunks.get(index);
-        if (chunk == null) return;
+        var chunk = this.updateHandler.getLoaded(x, z);
+        if(chunk == null) return;
         this.taskSchedulerThread.complete(chunkAndClaim.chunkFuture(), chunk);
     }
 
