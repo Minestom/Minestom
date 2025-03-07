@@ -70,7 +70,7 @@ public final class TickThread extends MinestomThread {
     private void waitForSignal() {
         // LockSupport.park can spuriously return, so we need to re-check some condition.
         // latch being null is a nice and easy option
-        while (this.latch == null) {
+        while (this.latch == null && !stop) {
             LockSupport.park(this);
         }
     }

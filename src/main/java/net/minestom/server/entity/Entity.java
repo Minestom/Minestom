@@ -66,9 +66,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -335,15 +333,20 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player)
+            if (this instanceof Player player) {
                 player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            }
             else synchronizePosition();
         };
 
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(globalPosition).thenRun(endCallback);
+            var claim = instance.getChunkManager().addClaim(globalPosition);
+            return claim.chunkFuture().thenRun(endCallback).thenRun(() -> {
+                // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                instance.scheduler().scheduleTask(() -> instance.getChunkManager().removeClaim(claim.claim()), TaskSchedule.tick(10), TaskSchedule.stop());
+            });
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
@@ -357,7 +360,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         var chunkAndClaim = instance.getChunkManager().addClaim(targetPosition);
         return chunkAndClaim.chunkFuture()
                 .thenRun(endCallback)
-                .thenRun(() -> instance.getChunkManager().removeClaim(chunkAndClaim.claim()));
+                .thenRun(() -> {
+                    // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                    instance.scheduler().scheduleTask(() -> instance.getChunkManager().removeClaim(chunkAndClaim.claim()), TaskSchedule.tick(10), TaskSchedule.stop());
+                });
     }
 
     /**
@@ -783,10 +789,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load
+     * this is due to chunks needing to load. Can also complete exceptionally in case of cancelled events.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public @NotNull CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
@@ -795,7 +801,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
-        if (event.isCancelled()) return null; // TODO what to return?
+        if (event.isCancelled()) {
+            return CompletableFuture.failedFuture(new CancellationException("AddEntityToInstanceEvent has been cancelled"));
+        }
 
         if (previousInstance != null) removeFromInstance(previousInstance);
 
@@ -805,8 +813,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
-        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
+        // Add a temporary claim to ensure the chunk is loaded
+        var chunkAndClaim = instance.getChunkManager().addClaim(spawnPosition);
+
+        return chunkAndClaim.chunkFuture().thenAccept(chunk -> {
             try {
+                // TODO this should probably be moved at some point to a ticking thread.
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
@@ -817,6 +829,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
+
+                instance.scheduler().scheduleTask(() -> {
+                    // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                    instance.getChunkManager().removeClaim(chunkAndClaim.claim());
+                }, TaskSchedule.tick(10), TaskSchedule.stop());
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -1349,7 +1366,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
+            if (this instanceof Player player) {
+                player.sendChunkUpdates(newChunk);
+            }
             refreshCurrentChunk(newChunk);
         }
     }
