@@ -5,9 +5,11 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called after a chunk being unload to a certain player.
+ * Called when a chunk "unload" is being sent to a player.
  * <p>
- * Could be used to unload the chunk internally in order to save memory.
+ * This event can be called on any thread.
+ * This event will not be called concurrently with {@link PlayerChunkLoadEvent}, so tracking
+ * chunks visible to the player is possible with both events.
  */
 public class PlayerChunkUnloadEvent implements PlayerInstanceEvent {
 
