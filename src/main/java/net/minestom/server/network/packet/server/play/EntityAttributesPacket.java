@@ -5,6 +5,7 @@ import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.server.ServerPacket;
+import net.minestom.server.registry.DynamicRegistry;
 
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +25,7 @@ public record EntityAttributesPacket(int entityId, List<Property> properties) im
         properties = List.copyOf(properties);
     }
 
-    public record Property(Attribute attribute, double value, List<AttributeModifier> modifiers) {
+    public record Property(DynamicRegistry.Key<Attribute> attribute, double value, List<AttributeModifier> modifiers) {
         public static final NetworkBuffer.Type<Property> SERIALIZER = NetworkBufferTemplate.template(
                 Attribute.NETWORK_TYPE, Property::attribute,
                 DOUBLE, Property::value,
@@ -35,7 +36,7 @@ public record EntityAttributesPacket(int entityId, List<Property> properties) im
             modifiers = List.copyOf(modifiers);
         }
 
-        public Property(Attribute attribute, double value, Collection<AttributeModifier> modifiers) {
+        public Property(DynamicRegistry.Key<Attribute> attribute, double value, Collection<AttributeModifier> modifiers) {
             this(attribute, value, List.copyOf(modifiers));
         }
     }
