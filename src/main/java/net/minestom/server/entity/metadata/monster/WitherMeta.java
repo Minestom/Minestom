@@ -7,10 +7,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+
 public class WitherMeta extends MonsterMeta {
-    private Entity centerHead;
-    private Entity leftHead;
-    private Entity rightHead;
+    private WeakReference<Entity> centerHeadRef;
+    private WeakReference<Entity> leftHeadRef;
+    private WeakReference<Entity> rightHeadRef;
 
     public WitherMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -27,11 +29,11 @@ public class WitherMeta extends MonsterMeta {
 
     @Nullable
     public Entity getCenterHead() {
-        return this.centerHead;
+        return unwrap(centerHeadRef);
     }
 
     public void setCenterHead(@Nullable Entity value) {
-        this.centerHead = value;
+        this.centerHeadRef = wrap(value);
         setCenterHeadEntityId(value == null ? 0 : value.getEntityId());
     }
 
@@ -46,11 +48,11 @@ public class WitherMeta extends MonsterMeta {
 
     @Nullable
     public Entity getLeftHead() {
-        return this.leftHead;
+        return unwrap(this.leftHeadRef);
     }
 
     public void setLeftHead(@Nullable Entity value) {
-        this.leftHead = value;
+        this.leftHeadRef = wrap(value);
         setLeftHeadEntityId(value == null ? 0 : value.getEntityId());
     }
 
@@ -65,11 +67,11 @@ public class WitherMeta extends MonsterMeta {
 
     @Nullable
     public Entity getRightHead() {
-        return this.rightHead;
+        return unwrap(this.rightHeadRef);
     }
 
     public void setRightHead(@Nullable Entity value) {
-        this.rightHead = value;
+        this.rightHeadRef = wrap(value);
         setRightHeadEntityId(value == null ? 0 : value.getEntityId());
     }
 
