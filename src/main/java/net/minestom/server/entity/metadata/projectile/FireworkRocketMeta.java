@@ -9,8 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
-    private Entity shooter;
+public class FireworkRocketMeta extends ProjectileEntityMeta {
 
     public FireworkRocketMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -36,14 +35,8 @@ public class FireworkRocketMeta extends EntityMeta implements ProjectileMeta {
     }
 
     @Override
-    @Nullable
-    public Entity getShooter() {
-        return this.shooter;
-    }
-
-    @Override
     public void setShooter(@Nullable Entity value) {
-        this.shooter = value;
+        super.setShooter(value);
         Integer entityID = value == null ? null : value.getEntityId();
         setShooterEntityId(entityID);
     }

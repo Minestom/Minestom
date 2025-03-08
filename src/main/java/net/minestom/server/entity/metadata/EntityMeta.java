@@ -5,6 +5,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -16,7 +17,7 @@ public class EntityMeta {
     protected final MetadataHolder metadata;
 
     public EntityMeta(@Nullable Entity entity, @NotNull MetadataHolder metadata) {
-        this.entityRef = new WeakReference<>(entity);
+        this.entityRef = wrap(entity);
         this.metadata = metadata;
     }
 
@@ -152,10 +153,19 @@ public class EntityMeta {
     }
 
     protected void consumeEntity(Consumer<Entity> consumer) {
-        Entity entity = this.entityRef.get();
+        final var entity = unwrap(this.entityRef);
         if (entity != null) {
             consumer.accept(entity);
         }
     }
 
+    @ApiStatus.Internal
+    protected <E extends Entity> @Nullable WeakReference<@NotNull E> wrap(@Nullable E entity) {
+        return entity == null ? null : new WeakReference<>(entity);
+    }
+
+    @ApiStatus.Internal
+    protected <E extends Entity> @Nullable E unwrap(@Nullable WeakReference<E> entityRef) {
+        return entityRef == null ? null : entityRef.get();
+    }
 }

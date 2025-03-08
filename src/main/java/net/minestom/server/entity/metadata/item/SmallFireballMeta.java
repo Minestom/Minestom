@@ -5,13 +5,13 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
+import net.minestom.server.entity.metadata.projectile.ProjectileEntityMeta;
 import net.minestom.server.entity.metadata.projectile.ProjectileMeta;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SmallFireballMeta extends EntityMeta implements ObjectDataProvider, ProjectileMeta {
-    private Entity shooter;
+public class SmallFireballMeta extends ProjectileEntityMeta implements ObjectDataProvider {
 
     public SmallFireballMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -27,19 +27,10 @@ public class SmallFireballMeta extends EntityMeta implements ObjectDataProvider,
     }
 
     @Override
-    @Nullable
-    public Entity getShooter() {
-        return shooter;
-    }
-
-    @Override
-    public void setShooter(@Nullable Entity shooter) {
-        this.shooter = shooter;
-    }
-
-    @Override
     public int getObjectData() {
-        return this.shooter == null ? 0 : this.shooter.getEntityId();
+        final var shooter = getShooter();
+
+        return shooter == null ? 0 : shooter.getEntityId();
     }
 
     @Override

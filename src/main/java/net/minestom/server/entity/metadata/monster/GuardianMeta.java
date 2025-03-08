@@ -7,8 +7,10 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+
 public class GuardianMeta extends MonsterMeta {
-    private Entity target;
+    private WeakReference<Entity> targetRef;
 
     public GuardianMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -31,12 +33,12 @@ public class GuardianMeta extends MonsterMeta {
         metadata.set(MetadataDef.Guardian.TARGET_EID, value);
     }
 
-    public Entity getTarget() {
-        return this.target;
+    public @Nullable Entity getTarget() {
+        return unwrap(this.targetRef);
     }
 
     public void setTarget(@Nullable Entity target) {
-        this.target = target;
+        this.targetRef = wrap(target);
         setTargetEntityId(target == null ? 0 : target.getEntityId());
     }
 

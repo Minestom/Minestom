@@ -9,9 +9,11 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.ref.WeakReference;
+
 public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
-    private Entity hooked;
-    private Entity owner;
+    private WeakReference<Entity> hookedRef;
+    private WeakReference<Entity> ownerRef;
 
     public FishingHookMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
@@ -28,11 +30,11 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
 
     @Nullable
     public Entity getHookedEntity() {
-        return this.hooked;
+        return unwrap(this.hookedRef);
     }
 
     public void setHookedEntity(@Nullable Entity value) {
-        this.hooked = value;
+        this.hookedRef = wrap(value);
         int entityID = value == null ? 0 : value.getEntityId() + 1;
         setHookedEntityId(entityID);
     }
@@ -47,15 +49,17 @@ public class FishingHookMeta extends EntityMeta implements ObjectDataProvider {
 
     @Nullable
     public Entity getOwnerEntity() {
-        return owner;
+        return unwrap(this.ownerRef);
     }
 
     public void setOwnerEntity(@Nullable Entity value) {
-        this.owner = value;
+        this.ownerRef = wrap(value);
     }
 
     @Override
     public int getObjectData() {
+        final var owner = this.getOwnerEntity();
+
         return owner != null ? owner.getEntityId() : 0;
     }
 
