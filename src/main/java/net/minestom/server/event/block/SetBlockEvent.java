@@ -24,7 +24,6 @@ public final class SetBlockEvent implements Event, BlockEvent, CancellableEvent 
 
     private final Block previousBlock;
     private final Instance instance;
-    private final BlockFace blockFace;
     private final BlockVec position;
     private final BlockEvent.Source source;
 
@@ -32,14 +31,12 @@ public final class SetBlockEvent implements Event, BlockEvent, CancellableEvent 
         @NotNull Block newBlock,
         @NotNull Block previousBlock,
         @NotNull Instance instance,
-        @Nullable BlockFace blockFace,
         @NotNull BlockVec position,
         @NotNull BlockEvent.Source source
     ) {
         this.newBlock = newBlock;
         this.previousBlock = previousBlock;
         this.instance = instance;
-        this.blockFace = blockFace;
         this.position = position;
         this.source = source;
     }
@@ -70,15 +67,6 @@ public final class SetBlockEvent implements Event, BlockEvent, CancellableEvent 
      */
     public @NotNull Instance getInstance() {
         return instance;
-    }
-
-    /**
-     * Gets the face at which the block is being changed
-     *
-     * @return the block face
-     */
-    public @Nullable BlockFace getBlockFace() {
-        return blockFace;
     }
 
     /**

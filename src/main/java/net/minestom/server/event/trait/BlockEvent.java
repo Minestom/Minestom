@@ -5,6 +5,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.Event;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,6 +23,7 @@ public interface BlockEvent extends Event {
 
         record Player(
             @NotNull net.minestom.server.entity.Player player,
+            @Nullable BlockFace blockFace,
             @Nullable Point cursorPosition,
             @Nullable PlayerHand hand
         ) implements Source {}

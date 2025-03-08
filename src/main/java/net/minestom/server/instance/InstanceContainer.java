@@ -152,7 +152,7 @@ public class InstanceContainer extends Instance {
 
         if (block.isAir()) {
             BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
-                    getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
+                    getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
             );
 
             EventDispatcher.call(breakBlockEvent);
@@ -162,7 +162,7 @@ public class InstanceContainer extends Instance {
             block = breakBlockEvent.getBlock();
         } else {
             SetBlockEvent setBlockEvent = new SetBlockEvent(
-                    block, getBlock(x, y, z), srcInstance, null, new BlockVec(x, y, z), source
+                    block, getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
             );
 
             EventDispatcher.call(setBlockEvent);
@@ -256,6 +256,7 @@ public class InstanceContainer extends Instance {
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
                 player,
+                blockFace,
                 null,
                 null
         );
@@ -265,7 +266,7 @@ public class InstanceContainer extends Instance {
         EventDispatcher.call(blockBreakEvent);
 
         BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
-                blockBreakEvent.getResultBlock(), srcInstance, blockFace, new BlockVec(blockPosition), source);
+                blockBreakEvent.getResultBlock(), srcInstance, new BlockVec(blockPosition), source);
 
         EventDispatcher.call(breakBlockEvent);
         final boolean allowed = !breakBlockEvent.isCancelled();

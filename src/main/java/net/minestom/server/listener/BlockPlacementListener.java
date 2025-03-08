@@ -60,6 +60,7 @@ public class BlockPlacementListener {
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
             player,
+            blockFace,
             cursorPosition,
             packet.hand()
         );
@@ -179,7 +180,6 @@ public class BlockPlacementListener {
             playerBlockPlaceEvent.getBlock(),
             previousBlock,
             instance,
-            blockFace,
             new BlockVec(placementPosition),
             source
         );

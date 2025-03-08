@@ -21,20 +21,17 @@ public final class BreakBlockEvent implements Event, BlockEvent, CancellableEven
 
     private final Block previousBlock;
     private final Instance instance;
-    private final BlockFace blockFace;
     private final BlockVec position;
     private final BlockEvent.Source source;
 
     public BreakBlockEvent(
         @NotNull Block previousBlock,
         @NotNull Instance instance,
-        @Nullable BlockFace face,
         @NotNull BlockVec position,
         @NotNull BlockEvent.Source source
     ) {
         this.previousBlock = previousBlock;
         this.instance = instance;
-        this.blockFace = face;
         this.position = position;
         this.source = source;
     }
@@ -65,15 +62,6 @@ public final class BreakBlockEvent implements Event, BlockEvent, CancellableEven
      */
     public @NotNull Instance getInstance() {
         return instance;
-    }
-
-    /**
-     * Gets the face at which the block was broken
-     *
-     * @return the block face
-     */
-    public @Nullable BlockFace getBlockFace() {
-        return blockFace;
     }
 
     /**

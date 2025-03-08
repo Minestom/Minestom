@@ -33,19 +33,20 @@ public final class PlayerDiggingListener {
     public static void playerDiggingListener(ClientPlayerDiggingPacket packet, Player player) {
         final ClientPlayerDiggingPacket.Status status = packet.status();
         final Point blockPosition = packet.blockPosition();
+        final BlockFace blockFace = packet.blockFace();
         final Instance instance = player.getInstance();
         if (instance == null) return;
 
         DiggingResult diggingResult = null;
         if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
+            diggingResult = startDigging(player, instance, blockPosition, blockFace);
         } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
             diggingResult = cancelDigging(player, instance, blockPosition);
         } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
             if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
+            diggingResult = finishDigging(player, instance, blockPosition, blockFace);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
             dropStack(player);
         } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
@@ -82,6 +83,7 @@ public final class PlayerDiggingListener {
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
             player,
+            blockFace,
             null,
             null
         );
@@ -101,6 +103,7 @@ public final class PlayerDiggingListener {
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
             player,
             null,
+            null,
             null
         );
 
@@ -118,6 +121,7 @@ public final class PlayerDiggingListener {
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
             player,
+            blockFace,
             null,
             null
         );
