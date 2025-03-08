@@ -80,6 +80,8 @@ dependencies {
 
     // Testing
     testImplementation(libs.bundles.junit)
+    testImplementation(platform(libs.mockito.bom))
+    testImplementation(libs.bundles.mockito)
     testImplementation(project(":testing"))
 }
 
