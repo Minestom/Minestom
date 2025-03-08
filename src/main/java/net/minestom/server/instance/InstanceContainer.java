@@ -10,9 +10,12 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.block.BreakBlockEvent;
+import net.minestom.server.event.block.SetBlockEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -65,28 +68,23 @@ public class InstanceContainer extends Instance {
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
-
-    // the chunk generator used, can be null
-    private volatile Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
-
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
-
-    // the chunk loader, used when trying to load/save a chunk from another source
-    private IChunkLoader chunkLoader;
-
-    // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad = true;
-
-    // used to supply a new chunk object at a position when requested
-    private ChunkSupplier chunkSupplier;
-
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+    // the chunk generator used, can be null
+    private volatile Generator generator;
+    // the chunk loader, used when trying to load/save a chunk from another source
+    private IChunkLoader chunkLoader;
+    // used to automatically enable the chunk loading or not
+    private boolean autoChunkLoad = true;
+    // used to supply a new chunk object at a position when requested
+    private ChunkSupplier chunkSupplier;
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
@@ -148,6 +146,30 @@ public class InstanceContainer extends Instance {
         if (y >= dim.maxY() || y < dim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
             return;
+        }
+
+        BlockEvent.Source source = new BlockEvent.Source.Instance(this);
+
+        if (block.isAir()) {
+            BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
+                    getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
+            );
+
+            EventDispatcher.call(breakBlockEvent);
+
+            if (breakBlockEvent.isCancelled()) return;
+
+            block = breakBlockEvent.getBlock();
+        } else {
+            SetBlockEvent setBlockEvent = new SetBlockEvent(
+                    block, getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
+            );
+
+            EventDispatcher.call(setBlockEvent);
+
+            if (setBlockEvent.isCancelled()) return;
+
+            block = setBlockEvent.getBlock();
         }
 
         synchronized (chunk) {
@@ -231,12 +253,26 @@ public class InstanceContainer extends Instance {
             chunk.sendChunk(player);
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
+
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+                player,
+                blockFace,
+                null,
+                null
+        );
+
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR,
+                new BlockVec(blockPosition), blockFace, source);
         EventDispatcher.call(blockBreakEvent);
-        final boolean allowed = !blockBreakEvent.isCancelled();
+
+        BreakBlockEvent breakBlockEvent = new BreakBlockEvent(
+                blockBreakEvent.getResultBlock(), srcInstance, new BlockVec(blockPosition), source);
+
+        EventDispatcher.call(breakBlockEvent);
+        final boolean allowed = !breakBlockEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
+            final Block resultBlock = breakBlockEvent.getBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
@@ -245,6 +281,7 @@ public class InstanceContainer extends Instance {
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
+
         return allowed;
     }
 
@@ -358,8 +395,6 @@ public class InstanceContainer extends Instance {
         }
         return completableFuture;
     }
-
-    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
@@ -478,6 +513,17 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
+    }
+
+    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -492,17 +538,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
-    }
-
-    /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
     }
 
     /**
