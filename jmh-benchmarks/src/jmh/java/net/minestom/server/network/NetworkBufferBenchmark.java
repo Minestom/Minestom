@@ -35,7 +35,7 @@ public class NetworkBufferBenchmark {
         buffer.write(NetworkBuffer.VAR_INT, 54);
         buffer.write(NetworkBuffer.VAR_LONG, 54L);
         buffer.write(NetworkBuffer.STRING, "4");
-        if (trim) buffer.trim();
+        if (trim) buffer.trimRight();
     }
 
 

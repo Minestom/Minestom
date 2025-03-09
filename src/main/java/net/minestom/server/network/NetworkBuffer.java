@@ -163,7 +163,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
      * Trims the network buffer from its read index to its write index.
      * This shrinks the buffer to the minimum size required to hold the data in [0, writeIndex - readIndex].
      */
-    void trim();
+    void trimRight();
 
     @Contract(pure = true)
     NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined);

@@ -40,7 +40,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     final @Nullable AutoResize autoResize;
     final @Nullable Registries registries;
 
-    // Read and write buffers, its safe to assume that the only data is [0, readableBytes()] and can be trimmed using #trim
     private long readIndex, writeIndex;
 
     NetworkBufferImpl(@Nullable Arena arena, long capacity, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
@@ -224,16 +223,13 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     @Override
-    public void trim() {
+    public void trimRight() {
         assertDummy();
         assertReadOnly();
         if (readableBytes() == capacity()) return;
 
         final var newCapacity = readableBytes();
-        final var oldSegment = this.segment;
-        this.segment = arena.allocate(newCapacity);
-
-        MemorySegment.copy(oldSegment, 0, this.segment, 0, newCapacity);
+        this.segment = this.segment.asSlice(0, newCapacity);
 
         writeIndex -= readIndex;
         readIndex = 0;
