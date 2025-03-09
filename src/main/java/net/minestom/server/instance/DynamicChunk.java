@@ -261,7 +261,7 @@ public class DynamicChunk extends Chunk {
         synchronized (this) {
             heightmapsNBT = getHeightmapNBT();
 
-            data = NetworkBuffer.makeArray(networkBuffer -> {
+            data = NetworkBuffer.makeArrayConfined(networkBuffer -> {
                 for (Section section : sections) {
                     networkBuffer.write(SHORT, (short) section.blockPalette().count());
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());

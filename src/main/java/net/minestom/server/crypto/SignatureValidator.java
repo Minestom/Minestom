@@ -37,7 +37,7 @@ public interface SignatureValidator {
     boolean validate(byte[] payload, byte[] signature);
 
     default boolean validate(Consumer<NetworkBuffer> payload, byte[] signature) {
-        return validate(NetworkBuffer.makeArray(payload), signature);
+        return validate(NetworkBuffer.makeArrayConfined(payload), signature);
     }
 
     static SignatureValidator from(PublicKey publicKey, KeyUtils.SignatureAlgorithm algorithm) {

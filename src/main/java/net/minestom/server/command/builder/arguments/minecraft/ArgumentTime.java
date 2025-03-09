@@ -71,7 +71,7 @@ public class ArgumentTime extends Argument<Duration> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArray(NetworkBuffer.INT, min);
+        return NetworkBuffer.makeArrayConfined(NetworkBuffer.INT, min);
     }
 
     @Override

@@ -324,6 +324,12 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
     }
 
     static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
+        NetworkBuffer buffer = resizableBuffer(256, registries);
+        writing.accept(buffer);
+        return buffer.read(RAW_BYTES);
+    }
+
+    static byte[] makeArrayConfined(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
         try (NetworkBuffer buffer = resizableBufferConfined(256, registries)) {
             writing.accept(buffer);
             return buffer.read(RAW_BYTES);
@@ -334,12 +340,23 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
         return makeArray(writing, null);
     }
 
+    static byte[] makeArrayConfined(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
+        return makeArrayConfined(writing, null);
+    }
     static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
         return makeArray(buffer -> buffer.write(type, value), registries);
     }
 
+    static <T> byte[] makeArrayConfined(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
+        return makeArrayConfined(buffer -> buffer.write(type, value), registries);
+    }
+
     static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
         return makeArray(type, value, null);
+    }
+
+    static <T> byte[] makeArrayConfined(@NotNull Type<T> type, @NotNull T value) {
+        return makeArrayConfined(type, value, null);
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,

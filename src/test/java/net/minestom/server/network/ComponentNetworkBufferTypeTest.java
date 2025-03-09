@@ -78,7 +78,7 @@ public class ComponentNetworkBufferTypeTest {
     }
 
     private static void assertWriteReadEquality(@NotNull Component comp) {
-        var array = NetworkBuffer.makeArray(buffer -> buffer.write(COMPONENT, comp));
+        var array = NetworkBuffer.makeArrayConfined(buffer -> buffer.write(COMPONENT, comp));
         var buffer = NetworkBuffer.wrap(array, 0, array.length);
         var actual = NBT_READER.deserialize(buffer.read(NBT));
         assertEquals(comp, actual);

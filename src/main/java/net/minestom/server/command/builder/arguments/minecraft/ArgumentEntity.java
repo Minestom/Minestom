@@ -79,7 +79,7 @@ public class ArgumentEntity extends Argument<EntityFinder> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArray(buffer -> {
+        return NetworkBuffer.makeArrayConfined(buffer -> {
             byte mask = 0;
             if (this.isOnlySingleEntity()) {
                 mask |= 0x01;

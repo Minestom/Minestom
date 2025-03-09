@@ -168,7 +168,7 @@ public class PacketWriteReadTest {
     }
 
     private static <T> void testPacket(NetworkBuffer.Type<T> networkType, T packet) {
-        byte[] bytes = NetworkBuffer.makeArray(networkType, packet);
+        byte[] bytes = NetworkBuffer.makeArrayConfined(networkType, packet);
         NetworkBuffer reader = NetworkBuffer.resizableBuffer();
         reader.write(NetworkBuffer.RAW_BYTES, bytes);
         var createdPacket = networkType.read(reader);

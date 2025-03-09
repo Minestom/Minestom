@@ -19,7 +19,7 @@ public class DeclareCommandsPacketTest {
         root.parser = ArgumentParserType.GAME_PROFILE;
         var packet = new DeclareCommandsPacket(List.of(root), 0);
 
-        var array = NetworkBuffer.makeArray(DeclareCommandsPacket.SERIALIZER, packet);
+        var array = NetworkBuffer.makeArrayConfined(DeclareCommandsPacket.SERIALIZER, packet);
         var readPacket = NetworkBuffer.wrap(array, 0, array.length).read(DeclareCommandsPacket.SERIALIZER);
         assertEquals(ArgumentParserType.GAME_PROFILE, readPacket.nodes().getFirst().parser);
     }
