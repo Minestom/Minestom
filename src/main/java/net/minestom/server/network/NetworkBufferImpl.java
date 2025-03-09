@@ -446,6 +446,12 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
+    @Override
+    public void close() {
+        assertDummy();
+        arena.close();
+    }
+
     static final class Builder implements NetworkBuffer.Builder {
 
         private final long initialSize;
@@ -485,7 +491,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     private static Arena arenaOf(boolean confined) {
-        // Unsure if we want to use a global arena instead.
+        // Unsure if we want to use a shared arena instead
         return confined ? Arena.ofConfined() : Arena.ofAuto();
     }
 

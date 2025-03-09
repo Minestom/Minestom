@@ -83,7 +83,8 @@ public class PlayerSocketConnection extends PlayerConnection {
     private int serverPort;
     private int protocolVersion;
 
-    private final NetworkBuffer readBuffer = NetworkBuffer.resizableBuffer(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
+    // Stable Value candidate
+    private NetworkBuffer readBuffer;
     private final MpscUnboundedXaddArrayQueue<SendablePacket> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
@@ -97,6 +98,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         super();
         this.channel = channel;
         this.remoteAddress = remoteAddress;
+    }
+
+    // Required as the constructor thread is different from the read thread.
+    public void initReader() {
+        this.readBuffer = NetworkBuffer.resizableBufferConfined(ServerFlag.POOLED_BUFFER_SIZE, MinecraftServer.process());
     }
 
     public void read(PacketParser<ClientPacket> packetParser) throws IOException {

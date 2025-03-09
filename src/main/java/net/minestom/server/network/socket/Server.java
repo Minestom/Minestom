@@ -94,6 +94,7 @@ public final class Server {
     }
 
     private void playerReadLoop(PlayerSocketConnection connection) {
+        connection.initReader();
         while (!stop) {
             try {
                 // Read & process packets
