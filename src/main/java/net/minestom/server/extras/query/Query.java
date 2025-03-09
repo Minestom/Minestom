@@ -159,7 +159,7 @@ public class Query {
                 CHALLENGE_TOKENS.put(challengeToken, packet.getSocketAddress());
 
                 // send the response
-                final byte[] responseData = NetworkBuffer.makeArrayConfined(response -> {
+                final byte[] responseData = NetworkBuffer.makeArray(response -> {
                     response.write(NetworkBuffer.BYTE, (byte) 9);
                     response.write(NetworkBuffer.INT, sessionID);
                     response.write(NetworkBuffer.STRING_TERMINATED, String.valueOf(challengeToken));
@@ -197,7 +197,7 @@ public class Query {
     }
 
     private static <T> void sendResponse(NetworkBuffer.Type<T> type, @NotNull T queryResponse, int sessionID, @NotNull SocketAddress sender) {
-        final byte[] responseData = NetworkBuffer.makeArrayConfined(buffer -> {
+        final byte[] responseData = NetworkBuffer.makeArray(buffer -> {
             // header
             buffer.write(NetworkBuffer.BYTE, (byte) 0);
             buffer.write(NetworkBuffer.INT, sessionID);

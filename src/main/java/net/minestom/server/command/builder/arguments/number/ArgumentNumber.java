@@ -72,7 +72,7 @@ public class ArgumentNumber<T extends Number> extends Argument<T> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArrayConfined(buffer -> {
+        return NetworkBuffer.makeArray(buffer -> {
             buffer.write(NetworkBuffer.BYTE, getNumberProperties());
             if (this.hasMin())
                 networkType.write(buffer, getMin());

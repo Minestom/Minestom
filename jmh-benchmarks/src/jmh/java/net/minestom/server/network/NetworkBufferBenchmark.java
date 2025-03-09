@@ -5,7 +5,7 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
-@Warmup(iterations = 5, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
+@Warmup(iterations = 8, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 1000, timeUnit = TimeUnit.MILLISECONDS)
 @Fork(3)
 @BenchmarkMode(Mode.AverageTime)
@@ -14,9 +14,6 @@ import java.util.concurrent.TimeUnit;
 public class NetworkBufferBenchmark {
 
     private NetworkBuffer buffer;
-
-    @Param({"true", "false"})
-    private boolean trim;
 
     @Setup()
     public void setup() {
@@ -35,9 +32,12 @@ public class NetworkBufferBenchmark {
         buffer.write(NetworkBuffer.VAR_INT, 54);
         buffer.write(NetworkBuffer.VAR_LONG, 54L);
         buffer.write(NetworkBuffer.STRING, "4");
-        if (trim) buffer.trim();
     }
 
+    @Benchmark
+    public void create(Blackhole blackhole) {
+        blackhole.consume(NetworkBuffer.resizableBuffer(8096));
+    }
 
     @Benchmark
     public void read(Blackhole blackhole) {
@@ -51,7 +51,7 @@ public class NetworkBufferBenchmark {
         blackhole.consume(buffer.read(NetworkBuffer.VAR_INT));
         blackhole.consume(buffer.read(NetworkBuffer.VAR_LONG));
         blackhole.consume(buffer.read(NetworkBuffer.STRING));
-        buffer.readIndex(0);
+        buffer.readIndex(3);
     }
 
     @TearDown

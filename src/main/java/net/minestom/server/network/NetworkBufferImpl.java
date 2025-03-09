@@ -240,13 +240,13 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     @Override
-    public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined) {
+    public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
         assertDummy();
 
         final var newReadIndex = Math.max(readIndex - index, 0);
         final var newWriteIndex = Math.max(writeIndex - index, 0);
 
-        final var newBuffer = new NetworkBufferImpl(arenaOf(confined), length, newReadIndex, newWriteIndex, autoResize, registries);
+        final var newBuffer = new NetworkBufferImpl(Arena.ofAuto(), length, newReadIndex, newWriteIndex, autoResize, registries);
         assert !newBuffer.isDummy() && newBuffer.segment != null : "Dummy active for a newly created buffer";
 
         MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
@@ -465,19 +465,12 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         if (isDummy()) throw new UnsupportedOperationException("Buffer is a dummy buffer");
     }
 
-    @Override
-    public void close() {
-        assertDummy();
-        arena.close();
-    }
-
     static final class Builder implements NetworkBuffer.Builder {
 
         private final long initialSize;
 
         private AutoResize autoResize;
         private Registries registries;
-        private boolean confined;
         public Builder(long initialSize) {
             this.initialSize = initialSize;
         }
@@ -494,24 +487,13 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         }
 
         @Override
-        public NetworkBuffer.@NotNull Builder confined() {
-            confined = true;
-            return this;
-        }
-
-        @Override
         public @NotNull NetworkBuffer build() {
             return new NetworkBufferImpl(
-                    arenaOf(confined), initialSize,
+                    Arena.ofAuto(), initialSize,
                     0, 0,
                     autoResize, registries);
         }
 
-    }
-
-    private static Arena arenaOf(boolean confined) {
-        // Unsure if we want to use a shared arena instead
-        return confined ? Arena.ofConfined() : Arena.ofAuto();
     }
 
     static NetworkBufferImpl dummy(Registries registries) {

@@ -203,12 +203,12 @@ public class NetworkBufferTest {
 
     @Test
     public void makeArray() {
-        assertArrayEquals(new byte[0], NetworkBuffer.makeArrayConfined(buffer -> {
+        assertArrayEquals(new byte[0], NetworkBuffer.makeArray(buffer -> {
         }));
 
-        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArrayConfined(BYTE, (byte) 1));
+        assertArrayEquals(new byte[]{1}, NetworkBuffer.makeArray(BYTE, (byte) 1));
 
-        assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArrayConfined(buffer -> {
+        assertArrayEquals(new byte[]{1, 0, 0, 0, 0, 0, 0, 0, 50}, NetworkBuffer.makeArray(buffer -> {
             buffer.write(BYTE, (byte) 1);
             buffer.write(LONG, 50L);
         }));

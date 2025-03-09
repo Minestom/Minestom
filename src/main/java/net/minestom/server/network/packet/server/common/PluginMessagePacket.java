@@ -23,7 +23,7 @@ public record PluginMessagePacket(String channel,
      * @return the current brand name packet
      */
     public static @NotNull PluginMessagePacket brandPacket(String brandName) {
-        final byte[] data = NetworkBuffer.makeArrayConfined(STRING, brandName);
+        final byte[] data = NetworkBuffer.makeArray(STRING, brandName);
         return new PluginMessagePacket("minecraft:brand", data);
     }
 }

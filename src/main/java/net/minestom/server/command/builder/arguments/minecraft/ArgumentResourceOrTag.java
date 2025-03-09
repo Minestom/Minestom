@@ -40,6 +40,6 @@ public class ArgumentResourceOrTag extends Argument<String> {
 
     @Override
     public byte @Nullable [] nodeProperties() {
-        return NetworkBuffer.makeArrayConfined(NetworkBuffer.STRING, identifier);
+        return NetworkBuffer.makeArray(NetworkBuffer.STRING, identifier);
     }
 }

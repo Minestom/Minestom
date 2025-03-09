@@ -11,7 +11,7 @@ public class ClientPluginMessagePacketTest {
 
     @Test
     void testClientPluginMessagePacket() {
-        var array = NetworkBuffer.makeArrayConfined(
+        var array = NetworkBuffer.makeArray(
                 ClientPluginMessagePacket.SERIALIZER,
                 new ClientPluginMessagePacket("channel", new byte[0]));
 

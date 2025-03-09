@@ -30,7 +30,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.DataFormatException;
 
-public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBufferImpl {
+public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
@@ -166,16 +166,11 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
     void trim();
 
     @Contract(pure = true)
-    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined);
-
-    @Contract(pure = true)
-    default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
-        return copy(index, length, readIndex, writeIndex, false);
-    }
+    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
 
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
-        return copy(index, length, readIndex(), writeIndex(), false);
+        return copy(index, length, readIndex(), writeIndex());
     }
 
     @Contract(pure = true)
@@ -197,12 +192,6 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     @Nullable Registries registries();
-
-    /**
-     * Only closeable if the buffer is confined.
-     */
-    @Override
-    void close();
 
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
@@ -254,16 +243,8 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
         return builder(size).registry(registries).build();
     }
 
-    static @NotNull NetworkBuffer staticBufferConfined(long size, Registries registries) {
-        return builder(size).registry(registries).confined().build();
-    }
-
     static @NotNull NetworkBuffer staticBuffer(long size) {
         return staticBuffer(size, null);
-    }
-
-    static @NotNull NetworkBuffer staticBufferConfined(long size) {
-        return staticBufferConfined(size, null);
     }
 
 
@@ -274,36 +255,16 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
                 .build();
     }
 
-    static @NotNull NetworkBuffer resizableBufferConfined(long initialSize, Registries registries) {
-        return builder(initialSize)
-                .autoResize(AutoResize.DOUBLE)
-                .registry(registries)
-                .confined()
-                .build();
-    }
-
     static @NotNull NetworkBuffer resizableBuffer(int initialSize) {
         return resizableBuffer(initialSize, null);
-    }
-
-    static @NotNull NetworkBuffer resizableBufferConfined(int initialSize) {
-        return resizableBufferConfined(initialSize, null);
     }
 
     static @NotNull NetworkBuffer resizableBuffer(Registries registries) {
         return resizableBuffer(256, registries);
     }
 
-    static @NotNull NetworkBuffer resizableBufferConfined(Registries registries) {
-        return resizableBufferConfined(256, registries);
-    }
-
     static @NotNull NetworkBuffer resizableBuffer() {
         return resizableBuffer(null);
-    }
-
-    static @NotNull NetworkBuffer resizableBufferConfined() {
-        return resizableBufferConfined(null);
     }
 
     static @NotNull NetworkBuffer wrap(byte @NotNull [] bytes, int readIndex, int writeIndex, @Nullable Registries registries) {
@@ -318,8 +279,6 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
         @NotNull Builder autoResize(@Nullable AutoResize autoResize);
 
         @NotNull Builder registry(@Nullable Registries registries);
-
-        @NotNull Builder confined();
 
         @NotNull NetworkBuffer build();
     }
@@ -337,34 +296,16 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
         return buffer.read(RAW_BYTES);
     }
 
-    static byte[] makeArrayConfined(@NotNull Consumer<@NotNull NetworkBuffer> writing, @Nullable Registries registries) {
-        try (NetworkBuffer buffer = resizableBufferConfined(256, registries)) {
-            writing.accept(buffer);
-            return buffer.read(RAW_BYTES);
-        }
-    }
-
     static byte[] makeArray(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
         return makeArray(writing, null);
     }
 
-    static byte[] makeArrayConfined(@NotNull Consumer<@NotNull NetworkBuffer> writing) {
-        return makeArrayConfined(writing, null);
-    }
     static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
         return makeArray(buffer -> buffer.write(type, value), registries);
     }
 
-    static <T> byte[] makeArrayConfined(@NotNull Type<T> type, @NotNull T value, @Nullable Registries registries) {
-        return makeArrayConfined(buffer -> buffer.write(type, value), registries);
-    }
-
     static <T> byte[] makeArray(@NotNull Type<T> type, @NotNull T value) {
         return makeArray(type, value, null);
-    }
-
-    static <T> byte[] makeArrayConfined(@NotNull Type<T> type, @NotNull T value) {
-        return makeArrayConfined(type, value, null);
     }
 
     static void copy(NetworkBuffer srcBuffer, long srcOffset,

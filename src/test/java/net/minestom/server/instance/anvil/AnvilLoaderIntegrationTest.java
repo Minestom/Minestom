@@ -204,12 +204,12 @@ public class AnvilLoaderIntegrationTest {
             Section reloadedSection = reloadedChunk.getSection(section);
 
             // easiest equality check to write is a memory compare on written output
-            var original = NetworkBuffer.makeArrayConfined(buffer -> {
+            var original = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) originalSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, originalSection.blockPalette());
                 buffer.write(Palette.BIOME_SERIALIZER, originalSection.biomePalette());
             });
-            var reloaded = NetworkBuffer.makeArrayConfined(buffer -> {
+            var reloaded = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) reloadedSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, reloadedSection.blockPalette());
                 buffer.write(Palette.BIOME_SERIALIZER, reloadedSection.biomePalette());
