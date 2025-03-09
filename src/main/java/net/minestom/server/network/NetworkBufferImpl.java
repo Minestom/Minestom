@@ -17,7 +17,6 @@ import java.lang.foreign.MemorySegment;
 import java.nio.ByteBuffer;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
@@ -27,9 +26,12 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
     private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
 
+    // Dummy constants
+    private static final long DUMMY_CAPACITY = Long.MAX_VALUE;
+
     // Nullable for dummy buffers.
     private final @Nullable Arena arena;
-    private @Nullable MemorySegment segment;
+    private MemorySegment segment;
 
     // Stable value candidate
     BinaryTagWriter nbtWriter;
@@ -161,7 +163,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     @Override
     public long capacity() {
-        if (isDummy()) return Long.MAX_VALUE;
+        if (isDummy()) return DUMMY_CAPACITY;
         return this.segment.byteSize();
     }
 
@@ -507,7 +509,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         // Dummy buffer with no memory allocated
         // Useful for size calculations
         return new NetworkBufferImpl(
-                null, Long.MAX_VALUE,
+                null, DUMMY_CAPACITY,
                 0, 0,
                 null, registries);
     }

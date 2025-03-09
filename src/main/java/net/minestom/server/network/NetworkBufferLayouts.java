@@ -1,11 +1,6 @@
 package net.minestom.server.network;
 
-import sun.misc.Unsafe;
-
 import java.lang.foreign.ValueLayout;
-import java.lang.reflect.Field;
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
 interface NetworkBufferLayouts {
