@@ -13,6 +13,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -154,10 +155,19 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void compact();
 
-    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
+    void trim();
 
+    @Contract(pure = true)
+    NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined);
+
+    @Contract(pure = true)
+    default NetworkBuffer copy(long index, long length, long readIndex, long writeIndex) {
+        return copy(index, length, readIndex, writeIndex, false);
+    }
+
+    @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
-        return copy(index, length, readIndex(), writeIndex());
+        return copy(index, length, readIndex(), writeIndex(), false);
     }
 
     int readChannel(ReadableByteChannel channel) throws IOException;
@@ -257,6 +267,8 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         @NotNull Builder autoResize(@Nullable AutoResize autoResize);
 
         @NotNull Builder registry(@Nullable Registries registries);
+
+        @NotNull Builder confined();
 
         @NotNull NetworkBuffer build();
     }
