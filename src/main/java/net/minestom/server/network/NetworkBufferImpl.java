@@ -447,6 +447,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         var impl2 = impl(buffer2);
         if (impl1 == impl2) return true;
         if (impl1.capacity() != impl2.capacity()) return false;
+        if (impl1.isDummy() || impl2.isDummy()) return false;
 
         return impl1.segment.mismatch(impl2.segment) == -1;
     }
