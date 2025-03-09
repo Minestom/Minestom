@@ -443,7 +443,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     void assertReadOnly() {
-        if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
+        if (!isDummy() && isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
     void assertDummy() {
