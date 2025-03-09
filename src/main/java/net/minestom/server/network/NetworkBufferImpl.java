@@ -42,13 +42,17 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     private long readIndex, writeIndex;
 
-    NetworkBufferImpl(@Nullable Arena arena, long capacity, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
+    NetworkBufferImpl(@Nullable Arena arena, MemorySegment segment, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
         this.arena = arena;
-        this.segment = arena != null ? arena.allocate(capacity) : null;
+        this.segment = segment;
         this.readIndex = readIndex;
         this.writeIndex = writeIndex;
         this.autoResize = autoResize;
         this.registries = registries;
+    }
+
+    NetworkBufferImpl(@Nullable Arena arena, long capacity, long readIndex, long writeIndex, @Nullable AutoResize autoResize, @Nullable Registries registries) {
+        this(arena, arena != null ? arena.allocate(capacity) : null, readIndex, writeIndex, autoResize, registries);
     }
 
     @Override
@@ -223,13 +227,13 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     @Override
-    public void trimRight() {
+    public void trim() {
         assertDummy();
         assertReadOnly();
         if (readableBytes() == capacity()) return;
 
         final var newCapacity = readableBytes();
-        this.segment = this.segment.asSlice(0, newCapacity);
+        this.segment = this.segment.asSlice(readIndex, newCapacity);
 
         writeIndex -= readIndex;
         readIndex = 0;
@@ -239,12 +243,27 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     public NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined) {
         assertDummy();
 
-        final var newBuffer = new NetworkBufferImpl(arenaOf(confined), length, readIndex, writeIndex, autoResize, registries);
+        final var newReadIndex = Math.max(readIndex - index, 0);
+        final var newWriteIndex = Math.max(writeIndex - index, 0);
+
+        final var newBuffer = new NetworkBufferImpl(arenaOf(confined), length, newReadIndex, newWriteIndex, autoResize, registries);
         assert !newBuffer.isDummy() && newBuffer.segment != null : "Dummy active for a newly created buffer";
 
         MemorySegment.copy(this.segment, index, newBuffer.segment, 0, length);
 
         return newBuffer;
+    }
+
+    @Override
+    public NetworkBuffer slice(long index, long length, long readIndex, long writeIndex) {
+        assertDummy();
+
+        // Shift read and write indexes over.
+        final var newReadIndex = Math.max(readIndex() - readIndex, 0);
+        final var newWriteIndex = Math.max(writeIndex() - writeIndex, 0);
+        final var sliceSegment = this.segment.asSlice(index, length);
+
+        return new NetworkBufferImpl(arena, sliceSegment, newReadIndex, newWriteIndex, autoResize, registries);
     }
 
     @Override

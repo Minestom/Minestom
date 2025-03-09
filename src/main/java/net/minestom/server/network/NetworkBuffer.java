@@ -161,9 +161,9 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
 
     /**
      * Trims the network buffer from its read index to its write index.
-     * This shrinks the buffer to the minimum size required to hold the data in [0, writeIndex - readIndex].
+     * This shrinks the buffer to the minimum size required to hold the data in [readIndex, writeIndex] and will be #{@link #readableBytes()} size.
      */
-    void trimRight();
+    void trim();
 
     @Contract(pure = true)
     NetworkBuffer copy(long index, long length, long readIndex, long writeIndex, boolean confined);
@@ -176,6 +176,14 @@ public sealed interface NetworkBuffer extends AutoCloseable permits NetworkBuffe
     @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex(), false);
+    }
+
+    @Contract(pure = true)
+    NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
+
+    @Contract(pure = true)
+    default NetworkBuffer slice(long index, long length) {
+        return slice(index, length, readIndex(), writeIndex());
     }
 
     int readChannel(ReadableByteChannel channel) throws IOException;
