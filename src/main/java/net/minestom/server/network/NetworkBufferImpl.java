@@ -181,7 +181,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     @Override
     public void ensureWritable(long length) {
-        assertReadOnly();
         if (writableBytes() >= length) return;
         final long newCapacity = newCapacity(length, capacity());
         resize(newCapacity);
@@ -255,7 +254,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     @Override
     public int readChannel(ReadableByteChannel channel) throws IOException {
         assertDummy();
-        assertReadOnly();
         final var buffer = segment.asSlice(writeIndex, writableBytes()).asByteBuffer().order(BYTE_ORDER);
         final int count = channel.read(buffer);
         if (count == -1) throw new EOFException("Disconnected");
@@ -294,7 +292,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var outImpl = impl(output);
         outImpl.assertDummy();
-        outImpl.assertReadOnly();
 
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
@@ -318,7 +315,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
         final var outImpl = impl(output);
         outImpl.assertDummy();
-        outImpl.assertReadOnly();
 
         final ByteBuffer input = segment.asSlice(start, length).asByteBuffer().order(BYTE_ORDER);
         final ByteBuffer outputBuffer = outImpl.segment.asSlice(output.writeIndex(), output.writableBytes()).asByteBuffer().order(BYTE_ORDER);
@@ -353,7 +349,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     // Internal writing methods
     void _putBytes(long index, byte[] value) {
         if (isDummy()) return;
-        assertReadOnly();
         MemorySegment.copy(MemorySegment.ofArray(value), 0, this.segment, index, value.length);
     }
 
@@ -373,7 +368,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     void _putShort(long index, short value) {
         if (isDummy()) return;
-        assertReadOnly();
         segment.set(JAVA_SHORT, index, value);
     }
 
@@ -384,7 +378,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     void _putInt(long index, int value) {
         if (isDummy()) return;
-        assertReadOnly();
         segment.set(JAVA_INT, index, value);
     }
 
@@ -395,8 +388,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     void _putLong(long index, long value) {
         if (isDummy()) return;
-        assertReadOnly();
-
         segment.set(JAVA_LONG, index, value);
     }
 
@@ -407,7 +398,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     void _putFloat(long index, float value) {
         if (isDummy()) return;
-        assertReadOnly();
         segment.set(JAVA_FLOAT, index, value);
     }
 
@@ -418,7 +408,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
 
     void _putDouble(long index, double value) {
         if (isDummy()) return;
-        assertReadOnly();
         segment.set(JAVA_DOUBLE, index, value);
     }
 
@@ -439,7 +428,6 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         var src = impl(srcBuffer);
         var dst = impl(dstBuffer);
         src.assertDummy();
-        dst.assertReadOnly();
         dst.assertDummy();
         MemorySegment.copy(src.segment, srcOffset, dst.segment, dstOffset, length);
     }
@@ -455,7 +443,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
     }
 
     void assertReadOnly() {
-        if (this.segment != null && this.segment.isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
+        if (isReadOnly()) throw new UnsupportedOperationException("Buffer is read-only");
     }
 
     void assertDummy() {
