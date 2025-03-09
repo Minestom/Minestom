@@ -233,7 +233,7 @@ final class NetworkBufferImpl implements NetworkBuffer, NetworkBufferLayouts {
         final var oldSegment = this.segment;
         this.segment = arena.allocate(newCapacity);
 
-        MemorySegment.copy(oldSegment, readIndex, this.segment, 0, newCapacity);
+        MemorySegment.copy(oldSegment, 0, this.segment, 0, newCapacity);
 
         writeIndex -= readIndex;
         readIndex = 0;

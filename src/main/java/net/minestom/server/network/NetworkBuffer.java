@@ -154,14 +154,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     void ensureWritable(long length);
 
     /**
-     * Compact all the data from the readIndex to the write index
+     * Compact all the data from the readIndex to the writing index to zero align.
      * This does not change the buffer capacity.
      */
     void compact();
 
     /**
      * Trims the network buffer from its read index to its write index.
-     * This shrinks the buffer to the minimum size required to hold the data.
+     * This shrinks the buffer to the minimum size required to hold the data in [0, writeIndex - readIndex].
      */
     void trim();
 
