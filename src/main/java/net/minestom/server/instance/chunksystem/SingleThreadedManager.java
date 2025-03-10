@@ -390,7 +390,6 @@ class SingleThreadedManager {
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
         };
         Runnable runChunk = () -> {
-            chunk.sendPacketToViewers(new UnloadChunkPacket(x, z));
             EventDispatcher.call(new InstanceChunkUnloadEvent(this.instance, chunk));
             this.chunkAccess.unload(chunk);
             MinecraftServer.process().dispatcher().deletePartition(chunk);
@@ -474,6 +473,14 @@ class SingleThreadedManager {
         }
     }
 
+    static void executeVirtual(Runnable runnable) {
+        if (ServerFlag.ASYNC_CHUNK_SYSTEM) {
+            Thread.startVirtualThread(runnable);
+        } else {
+            runnable.run();
+        }
+    }
+
     static final class ClaimData {
         final ChunkClaim claim;
         final CompletableFuture<Chunk> mainChunkFuture;
@@ -503,7 +510,7 @@ class SingleThreadedManager {
                     // Start a virtual thread. All load callbacks have finished.
                     // We don't want to give the callback the option of blocking the chunk manager,
                     // so we call it on a virtual thread.
-                    Thread.startVirtualThread(() -> {
+                    executeVirtual(() -> {
                         try {
                             callbacks.allChunksLoaded(claim);
                         } catch (Throwable t) {
