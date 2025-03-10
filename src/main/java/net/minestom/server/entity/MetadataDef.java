@@ -582,8 +582,9 @@ public sealed class MetadataDef {
         public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, 1);
     }
 
-    public static final class PrimedTnt extends Mob {
+    public static final class PrimedTnt extends MetadataDef {
         public static final Entry<Integer> FUSE_TIME = index(0, Metadata::VarInt, 80);
+        public static final Entry<Block> BLOCK_STATE = index(1, Metadata::BlockState, Block.TNT);
     }
 
     public static final class OminousItemSpawner extends MetadataDef {
