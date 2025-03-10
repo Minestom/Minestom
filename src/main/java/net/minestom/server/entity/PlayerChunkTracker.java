@@ -281,6 +281,9 @@ public class PlayerChunkTracker {
         return new Tracked(chunkManager, chunkAndClaim, trackedVisibleChunks);
     }
 
+    /**
+     * @param visibleChunks the chunks that should be visible to the player. These chunks may still be in the chunk (send) queue.
+     */
     public record Tracked(@NotNull ChunkManager chunkManager, @NotNull ChunkAndClaim chunkAndClaim,
                           @NotNull Long2ObjectMap<Chunk> visibleChunks) {
         private void untrack() {
