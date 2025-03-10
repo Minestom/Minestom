@@ -70,8 +70,26 @@ public final class ServerFlag {
     // Experimental/Unstable
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");
+    /**
+     * Valid values:
+     * <ul>
+     *     <li>simple (same as taxicab/manhattan distance, fastest, inaccurate)</li>
+     *     <li>square (fastest, inaccurate)</li>
+     *     <li>hypotenuse-squared (rather cheap, more accurate)</li>
+     *     <li>hypotenuse (expensive, very accurate)</li>
+     * </ul>
+     * <p>
+     *  Defaults to hypotenuse-squared on invalid value
+     */
+    public static final String CHUNK_SYSTEM_PRIORITY_DROP = stringProperty("minestom.chunk-system-priority-drop");
 
     public static boolean INSIDE_TEST = booleanProperty("minestom.inside-test", false);
+    /**
+     * If the async chunk system should be enabled. This is quite useful in tests.
+     * Only fiddle with this if you must, for example, because you want to add a test using async logic.
+     * In most cases, this should be left with the default
+     */
+    public static boolean ASYNC_CHUNK_SYSTEM = booleanProperty("minestom.async-chunk-system", !INSIDE_TEST);
 
     private ServerFlag() {}
 
