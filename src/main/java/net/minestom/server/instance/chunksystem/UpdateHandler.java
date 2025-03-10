@@ -6,7 +6,6 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.chunksystem.SingleThreadedManager.UpdateResult;
-import net.minestom.server.network.packet.server.play.data.ChunkData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -20,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 
 import static net.minestom.server.coordinate.CoordConversion.chunkIndex;
 import static net.minestom.server.instance.chunksystem.SingleThreadedManager.callbacks;
+import static net.minestom.server.instance.chunksystem.SingleThreadedManager.executeVirtual;
 
 /**
  * Logic for update handling.
@@ -120,7 +120,7 @@ class UpdateHandler {
             claimData.startLoad();
             // Start a virtual thread for the callback, so it can't interfere with the
             // chunk manager thread (like blocking operations)
-            Thread.startVirtualThread(() -> {
+            executeVirtual(() -> {
                 try {
                     cb.chunkLoaded(claim, chunk);
                 } catch (Throwable t) {

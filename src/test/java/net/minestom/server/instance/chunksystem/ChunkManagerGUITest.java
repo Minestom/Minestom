@@ -139,7 +139,7 @@ public class ChunkManagerGUITest {
     }
 
     // Enable this test for manual GUI visualization
-//    @Disabled
+    @Disabled
     @Test
     void gui(Env env) {
         ServerFlag.ASYNC_CHUNK_SYSTEM = true;
