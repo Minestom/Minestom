@@ -35,6 +35,7 @@ import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
 import net.minestom.server.entity.vehicle.PlayerInputs;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.entity.EntityTeleportEvent;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
@@ -46,6 +47,8 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.SharedInstance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.chunksystem.ChunkClaim;
+import net.minestom.server.instance.chunksystem.ClaimCallbacks;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
@@ -86,8 +89,10 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.chunk.ChunkUpdateLimitChecker;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.inventory.PlayerInventoryUtils;
+import net.minestom.server.utils.position.PositionUtils;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
 import net.minestom.server.utils.validate.Check;
@@ -140,29 +145,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int dimensionTypeId;
     private GameMode gameMode;
     private WorldPos deathLocation;
+    private final PlayerChunkQueue chunkQueue = new PlayerChunkQueue(this);
+    private final PlayerChunkTracker chunkTracker = new PlayerChunkTracker(this);
 
-    /**
-     * Keeps track of what chunks are sent to the client, this defines the center of the loaded area
-     * in the range of {@link ServerFlag#CHUNK_VIEW_DISTANCE}
-     */
-    private Vec chunksLoadedByClient = Vec.ZERO;
-    private final ReentrantLock chunkQueueLock = new ReentrantLock();
-    private final LongPriorityQueue chunkQueue = new LongArrayPriorityQueue(this::compareChunkDistance);
-    private boolean needsChunkPositionSync = true;
-    private float targetChunksPerTick = 9f; // Always send 9 chunks immediately
-    private float pendingChunkCount = 0f; // Number of chunks to send on the current tick (ie 0.5 means we cannot send a chunk yet, 1.5 would send a single chunk with a 0.5 remainder)
-    private int maxChunkBatchLead = 1; // Maximum number of batches to send before waiting for a reply
-    private int chunkBatchLead = 0; // Number of batches sent without a reply
-
-    final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
-        // Load new chunks
-        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
-    };
-    final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
-        // Unload old chunks
-        sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
-        EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
-    };
+//    final ChunkRange.ChunkConsumer chunkAdder = (chunkX, chunkZ) -> {
+//        // Load new chunks
+//        this.instance.loadOptionalChunk(chunkX, chunkZ).thenAccept(this::sendChunk);
+//    };
+//    final ChunkRange.ChunkConsumer chunkRemover = (chunkX, chunkZ) -> {
+//        // Unload old chunks
+//        sendPacket(new UnloadChunkPacket(chunkX, chunkZ));
+//        EventDispatcher.call(new PlayerChunkUnloadEvent(this, chunkX, chunkZ));
+//    };
 
     private final AtomicInteger teleportId = new AtomicInteger();
     private int receivedTeleportId;
@@ -507,9 +501,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         Pos respawnPosition = respawnEvent.getRespawnPosition();
 
-        // The client unloads chunks when respawning, so resend all chunks next to spawn
-        ChunkRange.chunksInRange(respawnPosition, settings.effectiveViewDistance(), chunkAdder);
-        chunksLoadedByClient = new Vec(respawnPosition.chunkX(), respawnPosition.chunkZ());
+        // Make sure the chunk tracker executes the correct respawn logic
+        chunkTracker.beginRespawn();
+
         // Client also needs all entities resent to them, since those are unloaded as well
         this.instance.getEntityTracker().nearbyEntitiesByChunkRange(respawnPosition, settings.effectiveViewDistance(),
                 EntityTracker.Target.ENTITIES, entity -> {
@@ -518,7 +512,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                         entity.updateNewViewer(this);
                     }
                 });
-        teleport(respawnPosition).thenRun(this::refreshAfterTeleport);
+        teleport(respawnPosition).thenRun(chunkTracker::finishRespawn).thenRun(this::refreshAfterTeleport);
     }
 
     /**
@@ -531,6 +525,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new SetExperiencePacket(exp, level, 0));
         triggerStatus((byte) (EntityStatuses.Player.PERMISSION_LEVEL_0 + permissionLevel)); // Set permission level
         refreshAbilities();
+        chunkTracker.resendAllVisibleChunks();
     }
 
     /**
@@ -582,11 +577,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 }
             }
         }
-        final Pos position = this.position;
-        final int chunkX = position.chunkX();
-        final int chunkZ = position.chunkZ();
         // Clear all viewable chunks
-        ChunkRange.chunksInRange(chunkX, chunkZ, settings.effectiveViewDistance(), chunkRemover);
+        this.chunkTracker.stopTracking();
         // Remove from the tab-list
         PacketSendingUtils.broadcastPlayPacket(getRemovePlayerToList());
 
@@ -612,34 +604,40 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @return a future called once the player instance changed
      */
     @Override
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public @NotNull CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+        var start = System.nanoTime();
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
         if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, false);
+            spawnPlayer(instance, spawnPosition, false, false, null);
             return AsyncUtils.VOID_FUTURE;
         }
         // Must update the player chunks
+        var newTracked = chunkTracker.addClaim(instance, spawnPosition);
+
         chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
-                currentInstance == null, dimensionChange, true);
+                currentInstance == null, dimensionChange, newTracked);
 
         // Reset chunk queue state
-        needsChunkPositionSync = true;
-        targetChunksPerTick = 9f;
-        pendingChunkCount = 0f;
+        chunkQueue.resetState();
 
-        // Ensure that surrounding chunks are loaded
-        List<CompletableFuture<Chunk>> futures = new ArrayList<>();
-        ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), (chunkX, chunkZ) -> {
-            final CompletableFuture<Chunk> future = instance.loadOptionalChunk(chunkX, chunkZ);
-            if (!future.isDone()) futures.add(future);
+        // Wait for 3x3 chunks around spawn position to be loaded. We need to do this to prevent falling through the floor.
+        var future3x3 = new CompletableFuture<Void>();
+        var temporaryClaim = instance.getChunkManager().addClaim(spawnPosition, 1, chunkTracker.getPriority(), ChunkClaim.Shape.SQUARE, new ClaimCallbacks() {
+            @Override
+            public void allChunksLoaded(@NotNull ChunkClaim claim) {
+                future3x3.complete(null);
+            }
         });
-        if (futures.isEmpty()) {
-            // All chunks are already loaded
+
+        future3x3.thenRun(() -> instance.getChunkManager().removeClaim(temporaryClaim.claim()));
+
+        if (future3x3.isDone()) {
+            // Relevant chunks are already loaded
             runnable.accept(instance);
             return AsyncUtils.VOID_FUTURE;
         }
@@ -665,14 +663,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             }
         };
 
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
-                .thenRun(() -> {
-                    scheduler.scheduleNextProcess(() -> {
-                        runnable.accept(instance);
-                        future.complete(null);
-                    });
-                    latch.countDown();
-                });
+        future.thenRun(() -> {
+            var time = System.nanoTime() - start;
+            System.out.println("Joining took: " + java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(time) + "ms");
+        });
+
+        future3x3.thenRun(() -> {
+            scheduler.scheduleNextProcess(() -> {
+                runnable.accept(instance);
+                future.complete(null);
+            });
+            latch.countDown();
+        });
         return future;
     }
 
@@ -691,38 +693,46 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Used to spawn the player once the client has all the required chunks.
+     * Used to spawn the player once the client has the center chunk.
      * <p>
      * Does add the player to {@code instance}, remove all viewable entities and call {@link PlayerSpawnEvent}.
      * <p>
      * UNSAFE: only called with {@link #setInstance(Instance, Pos)}.
      *
-     * @param spawnPosition the position to teleport the player
-     * @param firstSpawn    true if this is the player first spawn
-     * @param updateChunks  true if chunks should be refreshed, false if the new instance shares the same
-     *                      chunks
+     * @param instance        the instance to spawn the player in
+     * @param spawnPosition   the position to teleport the player
+     * @param firstSpawn      true if this is the player first spawn
+     * @param dimensionChange true if dimension changed
+     * @param newTracked      the new tracked object for the ChunkTracker, null if the old claim is still valid (shared instances)
      */
     private void spawnPlayer(@NotNull Instance instance, @NotNull Pos spawnPosition,
-                             boolean firstSpawn, boolean dimensionChange, boolean updateChunks) {
-        if (!firstSpawn && !dimensionChange) {
-            // Player instance changed, clear current viewable collections
-            if (updateChunks)
-                ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkRemover);
+                             boolean firstSpawn, boolean dimensionChange, @Nullable PlayerChunkTracker.Tracked newTracked) {
+        // We have this to prevent unwanted extra updates caused by sendDimension
+        chunkTracker.beginSpawnPlayer();
+
+        if (dimensionChange) {
+            // also sends a respawn packet
+            sendDimension(instance.getDimensionType(), instance.getDimensionName());
         }
 
-        if (dimensionChange) sendDimension(instance.getDimensionType(), instance.getDimensionName());
+        // We join on the future. The chunk should already be loaded, so the future should complete immediately, or at least very quickly.
+        // This also ensures that all threading/visibility guarantees in listeners of EntitySpawnEvent hold. (at least for a player)
+        super.setInstance(instance, spawnPosition).join();
 
-        super.setInstance(instance, spawnPosition);
+        chunkTracker.endSpawnPlayer();
 
-        if (updateChunks) {
+        if (newTracked != null) {
             final int chunkX = spawnPosition.chunkX();
             final int chunkZ = spawnPosition.chunkZ();
-            chunksLoadedByClient = new Vec(chunkX, chunkZ);
+            // sends all unloads/loads for the chunks
+            if (!firstSpawn) {
+                chunkTracker.stopTracking();
+            }
+            chunkTracker.startTracking(newTracked);
+
             chunkUpdateLimitChecker.addToHistory(getChunk());
             sendPacket(new UpdateViewPositionPacket(chunkX, chunkZ));
 
-            // Load the nearby chunks and queue them to be sent to them
-            ChunkRange.chunksInRange(spawnPosition, settings.effectiveViewDistance(), chunkAdder);
             sendPendingChunks(); // Send available first chunk immediately to prevent falling through the floor
         }
 
@@ -747,13 +757,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     @ApiStatus.Internal
     public void onChunkBatchReceived(float newTargetChunksPerTick) {
-//        logger.debug("chunk batch received player={} chunks/tick={} lead={}", username, newTargetChunksPerTick, chunkBatchLead);
-        chunkBatchLead -= 1;
-        targetChunksPerTick = Float.isNaN(newTargetChunksPerTick) ? ServerFlag.MIN_CHUNKS_PER_TICK : MathUtils.clamp(
-                newTargetChunksPerTick * ServerFlag.CHUNKS_PER_TICK_MULTIPLIER, ServerFlag.MIN_CHUNKS_PER_TICK, ServerFlag.MAX_CHUNKS_PER_TICK);
-
-        // Beyond the first batch we can preemptively send up to 10 (matching mojang server)
-        if (maxChunkBatchLead == 1) maxChunkBatchLead = 10;
+        this.chunkQueue.batchReceived(newTargetChunksPerTick);
     }
 
     /**
@@ -762,54 +766,11 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param chunk The chunk to send
      */
     public void sendChunk(@NotNull Chunk chunk) {
-        if (!chunk.isLoaded()) return;
-        chunkQueueLock.lock();
-        try {
-            chunkQueue.enqueue(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()));
-        } finally {
-            chunkQueueLock.unlock();
-        }
+        this.chunkQueue.enqueueChunk(chunk);
     }
 
     private void sendPendingChunks() {
-        // If we have nothing to send or have sent the max # of batches without reply, do nothing
-        if (chunkQueue.isEmpty() || chunkBatchLead >= maxChunkBatchLead) return;
-
-        // Increment the pending chunk count by the target chunks per tick
-        pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerFlag.MAX_CHUNKS_PER_TICK);
-        if (pendingChunkCount < 1) return; // Cant send anything
-
-        chunkQueueLock.lock();
-        try {
-            int batchSize = 0;
-            sendPacket(new ChunkBatchStartPacket());
-            while (!chunkQueue.isEmpty() && pendingChunkCount >= 1f) {
-                long chunkIndex = chunkQueue.dequeueLong();
-                int chunkX = CoordConversion.chunkIndexGetX(chunkIndex), chunkZ = CoordConversion.chunkIndexGetZ(chunkIndex);
-                var chunk = instance.getChunk(chunkX, chunkZ);
-                if (chunk == null || !chunk.isLoaded()) continue;
-
-                sendPacket(chunk.getFullDataPacket());
-                EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
-
-                pendingChunkCount -= 1f;
-                batchSize += 1;
-            }
-            sendPacket(new ChunkBatchFinishedPacket(batchSize));
-            chunkBatchLead += 1;
-//            logger.debug("chunk batch sent player={} chunks={} lead={}", username, batchSize, chunkBatchLead);
-
-            // After sending the first chunk we always send a synchronize position to the client. This is to prevent
-            // cases where the client falls through the floor slightly while loading the first chunk.
-            // In the vanilla server they have an anticheat which teleports the client back if they enter the floor,
-            // but since Minestom does not have an anticheat this provides a similar effect.
-            if (needsChunkPositionSync) {
-                synchronizePositionAfterTeleport(getPosition(), Vec.ZERO, RelativeFlags.NONE, true);
-                needsChunkPositionSync = false;
-            }
-        } finally {
-            chunkQueueLock.unlock();
-        }
+        this.chunkQueue.sendPendingRateLimited();
     }
 
     @Override
@@ -1213,7 +1174,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         getInventory().update();
-        teleport(getPosition());
     }
 
     public void setDeathLocation(@NotNull Pos position) {
@@ -1549,22 +1509,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Check to see if we're in an instance first, as this method is called when first logging in since the client sends the Settings packet during configuration
         if (instance != null) {
             // Load/unload chunks if necessary due to view distance changes
-            if (previousViewDistance < newViewDistance) {
-                // View distance expanded, send chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), newViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > previousViewDistance || Math.abs(chunkZ - position.chunkZ()) > previousViewDistance) {
-                        chunkAdder.accept(chunkX, chunkZ);
-                    }
-                });
-            } else if (previousViewDistance > newViewDistance) {
-                // View distance shrunk, unload chunks
-                ChunkRange.chunksInRange(position.chunkX(), position.chunkZ(), previousViewDistance, (chunkX, chunkZ) -> {
-                    if (Math.abs(chunkX - position.chunkX()) > newViewDistance || Math.abs(chunkZ - position.chunkZ()) > newViewDistance) {
-                        chunkRemover.accept(chunkX, chunkZ);
-                    }
-                });
+            if (previousViewDistance != newViewDistance) {
+                chunkTracker.changePosition();
             }
-            // Else previous and current are equal, do nothing
         }
     }
 
@@ -1817,7 +1764,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     }
 
     /**
-     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, long[], int)}
+     * Used to synchronize player position with viewers on spawn or after {@link Entity#teleport(Pos, Vec, int, boolean)}
      * in properties where a {@link PlayerPositionAndLookPacket} is required
      *
      * @param position      the position used by {@link PlayerPositionAndLookPacket}
@@ -1842,7 +1789,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      */
     @Override
     public void setView(float yaw, float pitch) {
-        teleport(new Pos(0, 0, 0, yaw, pitch), null, RelativeFlags.COORD).join();
+        teleport(new Pos(0, 0, 0, yaw, pitch), Vec.ZERO, RelativeFlags.COORD | RelativeFlags.DELTA_COORD).join();
     }
 
     /**
@@ -2044,6 +1991,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void setFieldViewModifier(float fieldViewModifier) {
         this.fieldViewModifier = fieldViewModifier;
         refreshAbilities();
+    }
+
+    @ApiStatus.Experimental
+    public PlayerChunkQueue getChunkQueue() {
+        return chunkQueue;
+    }
+
+    @ApiStatus.Experimental
+    public PlayerChunkTracker getChunkTracker() {
+        return chunkTracker;
     }
 
     /**
@@ -2293,21 +2250,15 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         if (chunkUpdateLimitChecker.addToHistory(newChunk)) {
             final int newX = newChunk.getChunkX();
             final int newZ = newChunk.getChunkZ();
-            final Vec old = chunksLoadedByClient;
+            chunkTracker.changePosition();
             sendPacket(new UpdateViewPositionPacket(newX, newZ));
-            ChunkRange.chunksInRangeDiffering(newX, newZ, (int) old.x(), (int) old.z(),
-                    settings.effectiveViewDistance(), chunkAdder, chunkRemover);
-            this.chunksLoadedByClient = new Vec(newX, newZ);
         }
     }
 
-    /**
-     * @see #teleport(Pos, long[], int)
-     */
     @Override
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks, int flags) {
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity, int flags, boolean shouldConfirm) {
         chunkUpdateLimitChecker.clearHistory();
-        return super.teleport(position, chunks, flags);
+        return super.teleport(position, velocity, flags, shouldConfirm);
     }
 
     /**
@@ -2323,18 +2274,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public enum FacePoint {
         FEET,
         EYE
-    }
-
-    // Settings enum
-
-    private int compareChunkDistance(long chunkIndexA, long chunkIndexB) {
-        int chunkAX = CoordConversion.chunkIndexGetX(chunkIndexA);
-        int chunkAZ = CoordConversion.chunkIndexGetZ(chunkIndexA);
-        int chunkBX = CoordConversion.chunkIndexGetX(chunkIndexB);
-        int chunkBZ = CoordConversion.chunkIndexGetZ(chunkIndexB);
-        int chunkDistanceA = Math.abs(chunkAX - chunksLoadedByClient.blockX()) + Math.abs(chunkAZ - chunksLoadedByClient.blockZ());
-        int chunkDistanceB = Math.abs(chunkBX - chunksLoadedByClient.blockX()) + Math.abs(chunkBZ - chunksLoadedByClient.blockZ());
-        return Integer.compare(chunkDistanceA, chunkDistanceB);
     }
 
     @SuppressWarnings("unchecked")

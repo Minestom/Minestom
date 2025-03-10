@@ -56,6 +56,9 @@ allprojects {
     tasks.withType<JavaCompile> {
         options.encoding = "UTF-8"
     }
+    tasks.jar {
+        archiveBaseName
+    }
 }
 
 sourceSets {
@@ -96,6 +99,7 @@ dependencies {
     // Testing
     testImplementation(libs.bundles.junit)
     testImplementation(project(":testing"))
+    testRuntimeOnly(libs.slf4j.simple)
 }
 
 tasks {
