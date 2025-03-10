@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.Chunk;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.chunksystem.SingleThreadedManager.UpdateResult;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -357,6 +358,19 @@ class UpdateHandler {
             return loaded.chunk;
         }
         return null;
+    }
+
+    List<Chunk> singleClaimCopyTo(@NotNull UpdateHandler copyTarget, @NotNull Instance copyInstance) {
+        var chunks = new ArrayList<Chunk>();
+        for (var state : this.chunks.values()) {
+            if (!(state instanceof State.Loaded loaded)) continue;
+            var originalChunk = loaded.chunk;
+            var chunk = originalChunk.copy(copyInstance, originalChunk.getChunkX(), originalChunk.getChunkZ());
+            if(!chunk.isLoaded())throw new IllegalStateException("Copied chunk not loaded");
+            chunks.add(chunk);
+            copyTarget.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), new State.Loaded(chunk));
+        }
+        return chunks;
     }
 
     static final class SaveState {

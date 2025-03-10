@@ -125,7 +125,6 @@ public class PlayerChunkQueue {
         // Increment the pending chunk count by the target chunks per tick
         pendingChunkCount = Math.min(pendingChunkCount + targetChunksPerTick, ServerFlag.MAX_CHUNKS_PER_TICK);
         if (pendingChunkCount < 1) {
-            LOGGER.info("Only {} pending chunks (target {})", pendingChunkCount, targetChunksPerTick);
             return; // Can't send anything
         }
 
