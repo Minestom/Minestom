@@ -197,8 +197,8 @@ public final class LightCompute {
         if (content1 == null && content2 == null) return EMPTY_CONTENT;
         if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
 
-        if (content1 == null) return content2;
-        if (content2 == null) return content1;
+        if (content1 == null || content1.length == 0) return content2;
+        if (content2 == null || content2.length == 0) return content1;
 
         if (Arrays.equals(content1, EMPTY_CONTENT) && Arrays.equals(content2, EMPTY_CONTENT)) return EMPTY_CONTENT;
 

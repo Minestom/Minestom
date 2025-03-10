@@ -607,19 +607,21 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var start = System.nanoTime();
         final Instance currentInstance = this.instance;
         Check.argCondition(currentInstance == instance, "Instance should be different than the current one");
+
+        // Must update the player chunks
+        var newTracked = chunkTracker.addClaim(instance, spawnPosition);
+
         if (SharedInstance.areLinked(currentInstance, instance) && spawnPosition.sameChunk(this.position)) {
             // The player already has the good version of all the chunks.
             // We just need to refresh his entity viewing list and add him to the instance
-            spawnPlayer(instance, spawnPosition, false, false, null);
+            spawnPlayer(instance, spawnPosition, false, false, newTracked, true);
             return AsyncUtils.VOID_FUTURE;
         }
-        // Must update the player chunks
-        var newTracked = chunkTracker.addClaim(instance, spawnPosition);
 
         chunkUpdateLimitChecker.clearHistory();
         final boolean dimensionChange = currentInstance != null && !Objects.equals(currentInstance.getDimensionName(), instance.getDimensionName());
         final Consumer<Instance> runnable = (i) -> spawnPlayer(i, spawnPosition,
-                currentInstance == null, dimensionChange, newTracked);
+                currentInstance == null, dimensionChange, newTracked, false);
 
         // Reset chunk queue state
         chunkQueue.resetState();
@@ -705,7 +707,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param newTracked      the new tracked object for the ChunkTracker, null if the old claim is still valid (shared instances)
      */
     private void spawnPlayer(Instance instance, Pos spawnPosition,
-                             boolean firstSpawn, boolean dimensionChange, @Nullable PlayerChunkTracker.Tracked newTracked) {
+                             boolean firstSpawn, boolean dimensionChange, PlayerChunkTracker.Tracked newTracked, boolean sameChunks) {
         // We have this to prevent unwanted extra updates caused by sendDimension
         chunkTracker.beginSpawnPlayer();
 
@@ -720,7 +722,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
         chunkTracker.endSpawnPlayer();
 
-        if (newTracked != null) {
+        if (sameChunks) {
+            // Same chunks implies that the instance was changed, maybe to a copy or a shared instance.
+            chunkTracker.updateInstanceSameChunks(newTracked);
+        } else {
             final int chunkX = spawnPosition.chunkX();
             final int chunkZ = spawnPosition.chunkZ();
             // sends all unloads/loads for the chunks

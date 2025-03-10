@@ -173,7 +173,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public void sendLighting() {
-        if (!isLoaded()) return;
+        if (!isLoaded() || !doneInit) return;
         sendPacketToViewers(partialLightCache);
     }
 
@@ -568,10 +568,5 @@ public class LightingChunk extends DynamicChunk {
         LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return super.isLoaded() && doneInit;
     }
 }

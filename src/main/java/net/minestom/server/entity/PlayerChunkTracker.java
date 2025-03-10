@@ -36,6 +36,7 @@ public class PlayerChunkTracker {
     private @Nullable Tracked tracked;
     private boolean spawningPlayer;
     private volatile int priority = 0;
+    // TODO remove, was used for debugging purposes. Maybe this can also be modified to an assert statement?
     private final AtomicInteger staleCallbackCount = new AtomicInteger();
 
     public PlayerChunkTracker(Player player) {
@@ -94,6 +95,23 @@ public class PlayerChunkTracker {
 
             this.tracked = tracked;
             sendStale();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    /**
+     * Special method to update the instance of the tracked object, but don't send any chunk updates.
+     * Used for shared instances
+     */
+    public void updateInstanceSameChunks(@NotNull Tracked tracked) {
+        lock.lock();
+        try {
+            if (this.tracked == null) {
+                throw new IllegalStateException("Tried to change tracking when nothing was being tracked. This is most likely a logic error.");
+            }
+            this.tracked.untrack();
+            this.tracked = tracked;
         } finally {
             lock.unlock();
         }
