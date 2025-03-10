@@ -293,6 +293,21 @@ class TaskSchedulerThread implements Runnable {
         }
     }
 
+    @NotNull Collection<ChunkAndClaim> singleClaimCopy(TaskSchedulerThread copyTarget, int priority) {
+        this.singleThreadedManagerLock.lock();
+        try {
+            if (!copyTarget.singleThreadedManagerLock.tryLock())
+                throw new IllegalStateException("Copy target must not be in use");
+            try {
+                return this.singleThreadedManager.singleClaimCopy(copyTarget.singleThreadedManager, priority);
+            } finally {
+                copyTarget.singleThreadedManagerLock.unlock();
+            }
+        } finally {
+            this.singleThreadedManagerLock.unlock();
+        }
+    }
+
     public @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ) {
         return this.singleThreadedManager.loadedChunk(chunkX, chunkZ);
     }

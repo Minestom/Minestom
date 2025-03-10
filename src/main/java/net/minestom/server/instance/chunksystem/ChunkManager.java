@@ -1,5 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
@@ -73,9 +74,21 @@ public interface ChunkManager {
      */
     @Nullable Generator getGenerator();
 
+    /**
+     * Gets the current {@link PriorityDrop} function for this {@link ChunkManager}
+     *
+     * @return the priority drop function
+     */
     @ApiStatus.Experimental
     @NotNull PriorityDrop getPriorityDrop();
 
+    /**
+     * Change the current {@link PriorityDrop} function for this {@link ChunkManager}.
+     * The priority drop is used to determine the order in which chunks are loaded.
+     *
+     * @param priorityDrop the new priority drop function
+     * @see PriorityDrop
+     */
     @ApiStatus.Experimental
     void setPriorityDrop(@NotNull PriorityDrop priorityDrop);
 
@@ -107,6 +120,11 @@ public interface ChunkManager {
      */
     @Nullable Chunk getLoadedChunk(int chunkX, int chunkZ);
 
+    /**
+     * Get the currently loaded chunks. This is only ever updated in the instance's tick thread.
+     *
+     * @return the currently loaded chunks
+     */
     @UnmodifiableView
     @NotNull Collection<@NotNull Chunk> getLoadedChunks();
 
@@ -309,6 +327,20 @@ public interface ChunkManager {
      * @return the {@link IChunkLoader} of this chunk manager
      */
     @NotNull IChunkLoader getChunkLoader();
+
+    /**
+     * Copies this {@link ChunkManager} with a claim per loaded chunk.
+     * Every claim will have radius 0 and shape {@link ChunkClaim.Shape#SQUARE SQUARE}.
+     * <p>
+     * The copy will preserve the {@link Generator}, {@link PriorityDrop}, {@link #getDefaultPriority()},
+     * {@link #getChunkSupplier()} and {@link #isAutosaveEnabled()}, but not the {@link IChunkLoader}.
+     * A new {@link IChunkLoader} should be set, if that is required.
+     *
+     * @param targetInstance the instance for the newly copied chunk manager
+     * @return a pair of the copy and claims
+     */
+    @ApiStatus.Experimental
+    @NotNull Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(@NotNull Instance targetInstance);
 
     /**
      * Allows creating a {@link ChunkManager} for any generic instance.

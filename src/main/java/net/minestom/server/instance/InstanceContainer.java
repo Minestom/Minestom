@@ -59,12 +59,12 @@ public class InstanceContainer extends Instance {
 
     private final Long2ObjectSyncMap<ChunkAndClaim> chunks = Long2ObjectSyncMap.hashmap();
 
-    private final ChunkManager chunkManager;
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
 
     // used to automatically enable the chunk loading or not
     private boolean autoChunkLoad = true;
+    private ChunkManager chunkManager;
 
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
@@ -371,19 +371,21 @@ public class InstanceContainer extends Instance {
      * @see #getSrcInstance() to retrieve the "creation source" of the copied instance
      */
     public synchronized InstanceContainer copy() {
-        // TODO
-        throw new UnsupportedOperationException();
-//        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
-//        copiedInstance.srcInstance = this;
-//        copiedInstance.tagHandler = this.tagHandler.copy();
-//        copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
-//        for (Chunk chunk : chunks.values()) {
-//            final int chunkX = chunk.getChunkX();
-//            final int chunkZ = chunk.getChunkZ();
-//            final Chunk copiedChunk = chunk.copy(copiedInstance, chunkX, chunkZ);
-//            copiedInstance.cacheChunk(copiedChunk);
-//        }
-//        return copiedInstance;
+        InstanceContainer copiedInstance = new InstanceContainer(UUID.randomUUID(), getDimensionType());
+        copiedInstance.srcInstance = this;
+        copiedInstance.tagHandler = this.tagHandler.copy();
+        copiedInstance.lastBlockChangeTime = this.lastBlockChangeTime;
+        var pair = chunkManager.singleClaimCopy(copiedInstance);
+        copiedInstance.chunkManager = pair.first();
+
+        // Make sure chunks can be unloaded with #unloadChunk
+        for (var chunkAndClaim : pair.second()) {
+            var chunk = chunkAndClaim.chunkFuture().resultNow();
+            var index = CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ());
+            this.chunks.put(index, chunkAndClaim);
+        }
+
+        return copiedInstance;
     }
 
     /**

@@ -1,5 +1,6 @@
 package net.minestom.server.instance.chunksystem;
 
+import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
@@ -17,11 +18,13 @@ import java.util.concurrent.CompletableFuture;
 class ChunkManagerImpl implements ChunkManager {
     private final Instance instance;
     private final TaskSchedulerThread taskSchedulerThread;
+    private final ChunkAccess chunkAccess;
     private int defaultPriority;
 
     public ChunkManagerImpl(@NotNull Instance instance, @Nullable ChunkSupplier chunkSupplier, @Nullable IChunkLoader chunkLoader, @NotNull ChunkAccess chunkAccess) {
         this.instance = instance;
         this.taskSchedulerThread = new TaskSchedulerThread(instance, chunkSupplier, chunkLoader, chunkAccess);
+        this.chunkAccess = chunkAccess;
     }
 
     @Override
@@ -84,6 +87,22 @@ class ChunkManagerImpl implements ChunkManager {
     @Override
     public @NotNull IChunkLoader getChunkLoader() {
         return this.taskSchedulerThread.getChunkLoader();
+    }
+
+    @Override
+    public @NotNull Pair<ChunkManager, Collection<ChunkAndClaim>> singleClaimCopy(@NotNull Instance targetInstance) {
+        var copy = baseCopy(targetInstance);
+        var claims = this.taskSchedulerThread.singleClaimCopy(copy.taskSchedulerThread, copy.getDefaultPriority());
+        return Pair.of(copy, claims);
+    }
+
+    private ChunkManagerImpl baseCopy(@NotNull Instance targetInstance) {
+        var chunkManager = new ChunkManagerImpl(targetInstance, getChunkSupplier(), null, chunkAccess);
+        chunkManager.setGenerator(getGenerator());
+        chunkManager.setAutosaveEnabled(isAutosaveEnabled());
+        chunkManager.setDefaultPriority(getDefaultPriority());
+        chunkManager.setPriorityDrop(getPriorityDrop());
+        return chunkManager;
     }
 
     @Override

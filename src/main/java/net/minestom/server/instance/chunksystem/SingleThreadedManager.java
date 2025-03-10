@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
@@ -14,7 +15,6 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.generator.Generator;
-import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -26,15 +26,13 @@ import space.vectrix.flare.fastutil.Long2ObjectSyncMap;
 import java.util.*;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.LockSupport;
-import java.util.concurrent.locks.ReentrantLock;
 
 import static net.minestom.server.coordinate.CoordConversion.chunkIndex;
 import static net.minestom.server.instance.chunksystem.TaskSchedulerThread.Task;
 import static net.minestom.server.instance.chunksystem.TaskSchedulerThread.link;
 
+@SuppressWarnings("DuplicatedCode")
 class SingleThreadedManager {
     static InternalCallbacks callbacks = null;
     private static final Logger LOGGER = LoggerFactory.getLogger(SingleThreadedManager.class);
@@ -165,6 +163,37 @@ class SingleThreadedManager {
         if (callbacks != null) {
             callbacks.onAddClaim(x, z, claim);
         }
+    }
+
+    void addCopiedClaim(ChunkAndClaim chunkAndClaim) {
+        var claim = chunkAndClaim.claim();
+        var x = claim.chunkX();
+        var z = claim.chunkZ();
+        this.tree.insert(x, z, claim.radius(), claim.priority(), claim.shape());
+
+        var claimData = new ClaimData(claim, chunkAndClaim.chunkFuture());
+        var chunkIndex = chunkIndex(x, z);
+        this.claimMap.put(claim, claimData);
+        this.claimsByChunk.computeIfAbsent(chunkIndex, c -> new HashSet<>(4)).add(claimData);
+    }
+
+    @NotNull Collection<ChunkAndClaim> singleClaimCopy(@NotNull SingleThreadedManager copyTarget, int priority) {
+        var copiedChunks = this.updateHandler.singleClaimCopyTo(copyTarget.updateHandler, copyTarget.instance);
+        var list = new ArrayList<ChunkAndClaim>();
+        var dispatcher = MinecraftServer.process().dispatcher();
+        for (var chunk : copiedChunks) {
+            var chunkX = chunk.getChunkX();
+            var chunkZ = chunk.getChunkZ();
+            var index = CoordConversion.chunkIndex(chunkX, chunkZ);
+            var claim = new ChunkClaimImpl(chunkX, chunkZ, 0, priority, ChunkClaim.Shape.SQUARE, null);
+            var chunkAndClaim = new ChunkAndClaim(CompletableFuture.completedFuture(chunk), claim);
+            copyTarget.addCopiedClaim(chunkAndClaim);
+            list.add(chunkAndClaim);
+            copyTarget.loadedChunks.put(index, chunk);
+
+            dispatcher.createPartition(chunk);
+        }
+        return List.copyOf(list);
     }
 
     void removeClaim(ChunkClaim claim, CompletableFuture<Void> future) {
@@ -384,7 +413,10 @@ class SingleThreadedManager {
         this.taskTracking.runningTickScheduledCount.addAndGet(2);
         Runnable runInstance = () -> {
             this.instance.getEntityTracker().chunkEntities(chunk.getChunkX(), chunk.getChunkZ(), EntityTracker.Target.ENTITIES).forEach(e -> {
-                if (e instanceof Player p) p.kick("Your chunk was unloaded");
+                if (e instanceof Player p) {
+                    LOGGER.warn("Disconnecting player because of unloaded chunk {}", p.getUsername());
+                    p.kick("Your chunk was unloaded");
+                }
                 else e.remove();
             });
             this.taskTracking.runningTickScheduledCount.decrementAndGet();
