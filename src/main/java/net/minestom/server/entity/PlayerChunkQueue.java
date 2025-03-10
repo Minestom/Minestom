@@ -189,7 +189,9 @@ public class PlayerChunkQueue {
         // Re-add everything to a new queue with a different comparator
         // This should free the old queue to be garbage collected
         var newQueue = new Long2ObjectRBTreeMap<Chunk>(compareChunkDistance(chunkX, chunkZ));
+        // This is quite expensive. I would like a better way to do this.
         newQueue.putAll(chunkQueue);
+        // This assert-statement helps with invalid comparators
         assert newQueue.size() == chunkQueue.size();
         chunkQueue = newQueue;
     }
