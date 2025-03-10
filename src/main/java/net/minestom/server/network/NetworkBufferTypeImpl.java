@@ -893,7 +893,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public String read(@NotNull NetworkBuffer buffer) {
             int utflen = buffer.read(UNSIGNED_SHORT);
             if (buffer.readableBytes() < utflen) throw new IllegalArgumentException("Invalid String size.");
-            byte[] bytearr = buffer.read(RAW_BYTES);
+            byte[] bytearr = buffer.read(FixedRawBytes(utflen));
             final char[] chararr = new char[utflen];
 
             int c, char2, char3;
