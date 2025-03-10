@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
+import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class PrimedTntMeta extends EntityMeta {
@@ -17,6 +18,14 @@ public class PrimedTntMeta extends EntityMeta {
 
     public void setFuseTime(int value) {
         metadata.set(MetadataDef.PrimedTnt.FUSE_TIME, value);
+    }
+
+    public Block getBlockState() {
+        return metadata.get(MetadataDef.PrimedTnt.BLOCK_STATE);
+    }
+
+    public void setBlockState(Block block) {
+        metadata.set(MetadataDef.PrimedTnt.BLOCK_STATE, block);
     }
 
 }
