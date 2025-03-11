@@ -7,6 +7,7 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Interface used to provide block behavior. Set with {@link Block#withHandler(BlockHandler)}.
+ * These are used to be observers to block state, and are called when a block is placed, destroyed, interacted with, touched, and ticked.
  * <p>
  * Implementations are expected to be thread safe.
  */
@@ -108,215 +110,138 @@ public interface BlockHandler {
      */
     @NotNull NamespaceID getNamespaceId();
 
-    /**
-     * Represents an object forwarded to {@link #onPlace(Placement)}.
-     */
-    sealed class Placement permits PlayerPlacement {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    @ApiStatus.Internal
+    sealed interface BlockInfo {
+        @NotNull Block block();
 
-        @ApiStatus.Internal
-        public Placement(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-        }
+        @NotNull Instance instance();
+
+        @NotNull Point blockPosition();
 
         /**
          * Use {@link #block()} instead.
          */
         @Deprecated(forRemoval = true)
-        public @NotNull Block getBlock() {
-            return block;
+        default @NotNull Block getBlock() {
+            return block();
         }
 
         /**
          * Use {@link #instance()} instead.
          */
         @Deprecated(forRemoval = true)
-        public @NotNull Instance getInstance() {
-            return instance;
+        default @NotNull Instance getInstance() {
+            return instance();
         }
 
         /**
          * Use {@link #blockPosition()} instead.
          */
         @Deprecated(forRemoval = true)
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
+        default @NotNull Point getBlockPosition() {
+            return blockPosition();
         }
 
-        public @NotNull Block block() {
-            return block;
-        }
+        sealed interface OfPlayer extends BlockInfo {
+            @NotNull Player player();
 
-        public @NotNull Instance instance() {
-            return instance;
-        }
-
-        public @NotNull Point blockPosition() {
-            return blockPosition;
+            /**
+             * Use {@link #player()} instead.
+             */
+            @Deprecated(forRemoval = true)
+            default @NotNull Player getPlayer() {
+                return player();
+            }
         }
     }
+
     /**
-     * Represents an object forwarded to {@link #onPlace(Placement)} called by a player.
+     * Represents an object forwarded to {@link #onPlace(Placement)}.
      */
-    final class PlayerPlacement extends Placement {
-        private final Player player;
-        private final PlayerHand hand;
-        private final BlockFace blockFace;
-        private final Point cursorPosition;
+    sealed interface Placement extends BlockInfo {
+        /**
+         * Represents an object forwarded to {@link #onPlace(Placement)} by a player.
+         */
+        record OfPlayer(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
+                      @NotNull Player player, @NotNull PlayerHand hand, @NotNull BlockFace blockFace,
+                      @NotNull Point cursorPosition) implements Placement, BlockInfo.OfPlayer, PlayerPlacement {
 
-        @ApiStatus.Internal
-        public PlayerPlacement(Block block, Instance instance, Point blockPosition,
-                               Player player, PlayerHand hand, BlockFace blockFace, Point cursorPosition) {
-            super(block, instance, blockPosition);
-            this.player = player;
-            this.hand = hand;
-            this.blockFace = blockFace;
-            this.cursorPosition = cursorPosition;
+            @ApiStatus.Internal
+            public OfPlayer {
+                Check.notNull(block, "Block cannot be null");
+                Check.notNull(instance, "Instance cannot be null");
+                Check.notNull(blockPosition, "Block position cannot be null");
+                Check.notNull(player, "Player cannot be null");
+                Check.notNull(hand, "Hand cannot be null");
+                Check.notNull(blockFace, "Block face cannot be null");
+                Check.notNull(cursorPosition, "Cursor position cannot be null");
+            }
+        }
+        /**
+         * Represents an object forwarded to {@link #onPlace(Placement)} by an unknown source.
+         * <p>
+         * Used as a fallback when the source of the placement is unknown.
+         */
+        record OfUnknown(@NotNull Block block, @NotNull Instance instance,
+                         @NotNull Point blockPosition) implements Placement {
         }
 
         /**
-         * Use {@link #player()} instead.
+         * Represents your own implementation of {@link Placement}.
+         * <p>
+         * You can use these events by calling {@link net.minestom.server.instance.InstanceContainer#placeBlock(Placement)}
          */
-        @Deprecated(forRemoval = true)
-        public @NotNull Player getPlayer() {
-            return player;
-        }
-
-        /**
-         * Use {@link #hand()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull PlayerHand getHand() {
-            return hand;
-        }
-
-        /**
-         * Use {@link #blockFace()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull BlockFace getBlockFace() {
-            return blockFace;
-        }
-
-        /**
-         * Use {@link #cursorPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public float getCursorX() {
-            return (float) cursorPosition.x();
-        }
-
-        /**
-         * Use {@link #cursorPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public float getCursorY() {
-            return (float) cursorPosition.y();
-        }
-
-        /**
-         * Use {@link #cursorPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public float getCursorZ() {
-            return (float) cursorPosition.z();
-        }
-
-        public @NotNull Player player() {
-            return player;
-        }
-
-        public @NotNull PlayerHand hand() {
-            return hand;
-        }
-
-        public @NotNull BlockFace blockFace() {
-            return blockFace;
-        }
-
-        public @NotNull Point cursorPosition() {
-            return cursorPosition;
-        }
+        @ApiStatus.Experimental
+        non-sealed interface OfCustom extends Placement {}
     }
 
     /**
      * Represents an object forwarded to {@link #onDestroy(Destroy)}.
      */
-    sealed class Destroy permits PlayerDestroy {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
+    sealed interface Destroy extends BlockInfo {
+        /**
+         * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
+         */
+        record OfPlayer(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
+                      @NotNull Player player) implements Destroy, BlockInfo.OfPlayer, PlayerDestroy {
 
-        @ApiStatus.Internal
-        public Destroy(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
+            @ApiStatus.Internal
+            public OfPlayer {
+                Check.notNull(block, "Block cannot be null");
+                Check.notNull(instance, "Instance cannot be null");
+                Check.notNull(blockPosition, "Block position cannot be null");
+                Check.notNull(player, "Player cannot be null");
+            }
         }
 
         /**
-         * Use {@link #block()} instead.
+         * Represents an object forwarded to {@link #onDestroy(Destroy)} by an unknown source.
+         * <p>
+         * Used as a fallback when the source of the destruction is unknown.
          */
-        @Deprecated(forRemoval = true)
-        public @NotNull Block getBlock() {
-            return block;
-        }
+        record OfUnknown(@NotNull Block block, @NotNull Instance instance,
+                         @NotNull Point blockPosition) implements Destroy {
 
+            @ApiStatus.Internal
+            public OfUnknown {
+                Check.notNull(block, "Block cannot be null");
+                Check.notNull(instance, "Instance cannot be null");
+                Check.notNull(blockPosition, "Block position cannot be null");
+            }
+        }
         /**
-         * Use {@link #instance()} instead.
+         * Represents your own implementation of {@link Destroy}.
+         * <p>
+         * You can use these events by calling {@link net.minestom.server.instance.InstanceContainer#breakBlock(Player, Point, BlockFace, boolean, PlayerSupplier)}
+         * or {@link net.minestom.server.instance.InstanceContainer#breakBlock(Destroy, boolean)}
          */
-        @Deprecated(forRemoval = true)
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
+        @ApiStatus.Experimental
+        non-sealed interface OfCustom extends Destroy {}
 
-        /**
-         * Use {@link #blockPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
 
-        public @NotNull Block block() {
-            return block;
-        }
-
-        public @NotNull Instance instance() {
-            return instance;
-        }
-
-        public @NotNull Point blockPosition() {
-            return blockPosition;
-        }
-    }
-
-    /**
-     * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
-     */
-    final class PlayerDestroy extends Destroy {
-        private final Player player;
-
-        @ApiStatus.Internal
-        public PlayerDestroy(Block block, Instance instance, Point blockPosition, Player player) {
-            super(block, instance, blockPosition);
-            this.player = player;
-        }
-
-        public @NotNull Player player() {
-            return player;
-        }
-
-        /**
-         * Use {@link #player()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Player getPlayer() {
-            return player;
+        @FunctionalInterface
+        interface PlayerSupplier {
+            Destroy create(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition, @NotNull Player player);
         }
     }
 
@@ -325,26 +250,16 @@ public interface BlockHandler {
      */
     record Interaction(@NotNull Block block, @NotNull Instance instance, @NotNull BlockFace blockFace,
                        @NotNull Point blockPosition, @NotNull Point cursorPosition,
-                       @NotNull Player player, @NotNull PlayerHand hand) {
+                       @NotNull Player player, @NotNull PlayerHand hand) implements BlockInfo, BlockInfo.OfPlayer {
         @ApiStatus.Internal
         public Interaction {
-
-        }
-
-        /**
-         * Use {@link #block()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        /**
-         * Use {@link #instance()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Instance getInstance() {
-            return instance;
+            Check.notNull(block, "Block cannot be null");
+            Check.notNull(instance, "Instance cannot be null");
+            Check.notNull(blockFace, "Block face cannot be null");
+            Check.notNull(blockPosition, "Block position cannot be null");
+            Check.notNull(cursorPosition, "Cursor position cannot be null");
+            Check.notNull(player, "Player cannot be null");
+            Check.notNull(hand, "Player's hand cannot be null");
         }
 
         /**
@@ -356,27 +271,11 @@ public interface BlockHandler {
         }
 
         /**
-         * Use {@link #blockPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        /**
          * Use {@link #cursorPosition()} instead.
          */
         @Deprecated(forRemoval = true)
         public @NotNull Point getCursorPosition() {
             return cursorPosition;
-        }
-
-        /**
-         * Use {@link #player()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Player getPlayer() {
-            return player;
         }
 
         /**
@@ -392,35 +291,14 @@ public interface BlockHandler {
      * Represents an object forwarded to {@link #onTouch(Touch)}.
      */
     record Touch(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
-                 @NotNull Entity touching) {
+                 @NotNull Entity touching) implements BlockInfo {
 
         @ApiStatus.Internal
         public Touch {
-
-        }
-
-        /**
-         * Use {@link #block()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        /**
-         * Use {@link #instance()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        /**
-         * Use {@link #blockPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
+            Check.notNull(block, "Block cannot be null");
+            Check.notNull(instance, "Instance cannot be null");
+            Check.notNull(blockPosition, "Block position cannot be null");
+            Check.notNull(touching, "Touching entity cannot be null");
         }
 
         /**
@@ -435,35 +313,13 @@ public interface BlockHandler {
     /**
      * Represents an object forwarded to {@link #tick(Tick)}.
      */
-    record Tick(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) {
+    record Tick(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition) implements BlockInfo {
 
         @ApiStatus.Internal
         public Tick {
-
-        }
-
-        /**
-         * Use {@link #block()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        /**
-         * Use {@link #instance()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        /**
-         * Use {@link #blockPosition()} instead.
-         */
-        @Deprecated(forRemoval = true)
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
+            Check.notNull(block, "Block cannot be null");
+            Check.notNull(instance, "Instance cannot be null");
+            Check.notNull(blockPosition, "Block position cannot be null");
         }
     }
 
@@ -475,8 +331,8 @@ public interface BlockHandler {
     record Dummy(@NotNull NamespaceID namespace) implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        public static @NotNull BlockHandler get(@NotNull String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
+        public Dummy {
+            Check.notNull(namespace, "Namespace cannot be null");
         }
 
         private Dummy(@NotNull String name) {
@@ -487,5 +343,78 @@ public interface BlockHandler {
         public @NotNull NamespaceID getNamespaceId() {
             return namespace;
         }
+
+        public static @NotNull BlockHandler get(@NotNull String namespace) {
+            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
+        }
+    }
+
+    // TODO delete these.
+
+    /**
+     * @deprecated Use {@link Placement.OfPlayer} instead.
+     * <p>
+     * Represents an object forwarded to {@link #onPlace(Placement)} called by a player.
+     */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("DeprecatedIsStillUsed") // Used in Placement.OfPlayer
+    sealed interface PlayerPlacement extends Placement, BlockInfo.OfPlayer {
+
+        /**
+         * Use {@link #hand()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        default @NotNull PlayerHand getHand() {
+            return hand();
+        }
+
+        /**
+         * Use {@link #blockFace()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        default @NotNull BlockFace getBlockFace() {
+            return blockFace();
+        }
+
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        default float getCursorX() {
+            return (float) cursorPosition().x();
+        }
+
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        default float getCursorY() {
+            return (float) cursorPosition().y();
+        }
+
+        /**
+         * Use {@link #cursorPosition()} instead.
+         */
+        @Deprecated(forRemoval = true)
+        default float getCursorZ() {
+            return (float) cursorPosition().z();
+        }
+
+        @NotNull PlayerHand hand();
+
+        @NotNull BlockFace blockFace();
+
+        @NotNull Point cursorPosition();
+    }
+
+    /**
+     * @deprecated Use {@link Destroy.OfPlayer} instead.
+     *
+     * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
+     */
+    @Deprecated(forRemoval = true)
+    @SuppressWarnings("DeprecatedIsStillUsed")  // Used in Destroy.OfPlayer
+    sealed interface PlayerDestroy extends Destroy, BlockInfo.OfPlayer {
+
     }
 }

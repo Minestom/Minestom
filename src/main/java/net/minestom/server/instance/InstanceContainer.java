@@ -166,7 +166,7 @@ public class InstanceContainer extends Instance {
             final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
             if (placement != null && blockPlacementRule != null && doBlockUpdates) {
                 BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
+                if (placement instanceof BlockHandler.Placement.OfPlayer pp) {
                     rulePlacement = new BlockPlacementRule.PlacementState(
                             this, block, pp.blockFace(), blockPosition,
                             pp.cursorPosition(),
@@ -217,7 +217,20 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+    public boolean breakBlock(@NotNull BlockHandler.Destroy destroy, boolean doBlockUpdates) {
+        final Point blockPosition = destroy.blockPosition();
+        final Chunk chunk = getChunkAt(blockPosition);
+        if (!isLoaded(chunk)) return false;
+        final Block block = destroy.block();
+        //noinspection ConstantConditions - custom implementations could nullify this.
+        final Block replacementBlock = block == null ? Block.AIR : block;
+        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
+                replacementBlock, null, destroy, doBlockUpdates, 0);
+        return true;
+    }
+
+    @Override
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates, BlockHandler.Destroy.PlayerSupplier destroySupplier) {
         final Chunk chunk = getChunkAt(blockPosition);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -239,7 +252,7 @@ public class InstanceContainer extends Instance {
             // Break or change the broken block based on event result
             final Block resultBlock = blockBreakEvent.getResultBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+                    destroySupplier.create(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),

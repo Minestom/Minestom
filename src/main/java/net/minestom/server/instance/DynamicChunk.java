@@ -117,13 +117,13 @@ public class DynamicChunk extends Chunk {
             // Previous destroy
             var absoluteBlockPosition = new BlockVec(getChunkX() * CHUNK_SIZE_X + sectionRelativeX, y, getChunkZ() * CHUNK_SIZE_Z + sectionRelativeZ);
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.Destroy.OfUnknown(lastCachedBlock, instance, absoluteBlockPosition)));
         }
         if (handler != null) {
             // New placement
             var absoluteBlockPosition = new BlockVec(getChunkX() * CHUNK_SIZE_X + sectionRelativeX, y, getChunkZ() * CHUNK_SIZE_Z + sectionRelativeZ);
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(block, instance, absoluteBlockPosition)));
+                    () -> new BlockHandler.Placement.OfUnknown(block, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
