@@ -1,5 +1,8 @@
 package net.minestom.server.instance.block;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.event.block.BlockChangeEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;

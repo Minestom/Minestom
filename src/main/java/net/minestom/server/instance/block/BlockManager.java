@@ -21,47 +21,52 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
 
-    private final static EventNode<Event> BLOCK_EVENT_NODE = EventNode.type("blockmanager-node", EventFilter.ALL)
-            .setPriority(50);
-
     private final Int2ObjectMap<BlockHandler> blockHandlerMap = new Int2ObjectOpenHashMap<>();
+
+    private final EventNode<Event> BLOCK_EVENT_NODE = EventNode.type("blockmanager-node", EventFilter.ALL)
+            .setPriority(50);
 
     private final Set<NamespaceID> dummyWarning = ConcurrentHashMap.newKeySet();
 
     public BlockManager(GlobalEventHandler eventHandler) {
-//        eventHandler.addChild(BLOCK_EVENT_NODE);
-//
-//        BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
-//            BlockHandler handler;
-//
-//            //Block is air, assume that it is a destruction event
-//            if(event.getBlock() == Block.AIR) {
-//                handler = event.getPreviousBlock().handler();
-//                if(handler == null)
-//                    handler = blockHandlerMap.get(event.getPreviousBlock().id());
-//            } else {
-//                handler = event.getBlock().handler();
-//                if(handler == null)
-//                    handler = blockHandlerMap.get(event.getBlock().id());
-//            }
-//
-//            if(handler == null) { return; }
-//
-//            handler.onBlockChange(event);
-//        });
-//
-//        BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
-//            BlockHandler handler;
-//
-//            handler = event.getBlock().handler();
-//
-//            if(handler == null)
-//                handler = blockHandlerMap.get(event.getBlock().id());
-//
-//            if(handler == null) { return; }
-//
-//            handler.onInteract(event);
-//        });
+        //TODO: Figure out how to fix github actions errors in a non stupid way.
+        eventHandler.addChild(BLOCK_EVENT_NODE);
+
+        BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
+            BlockHandler handler;
+
+            //Block is air, assume that it is a destruction event
+            if (event.getBlock() == Block.AIR) {
+                handler = event.getPreviousBlock().handler();
+                if (handler == null)
+                    handler = blockHandlerMap.get(event.getPreviousBlock().id());
+            } else {
+                handler = event.getBlock().handler();
+                if (handler == null)
+                    handler = blockHandlerMap.get(event.getBlock().id());
+            }
+
+            if (handler == null) {
+                return;
+            }
+
+            handler.onBlockChange(event);
+        });
+
+        BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
+            BlockHandler handler;
+
+            handler = event.getBlock().handler();
+
+            if (handler == null)
+                handler = blockHandlerMap.get(event.getBlock().id());
+
+            if (handler == null) {
+                return;
+            }
+
+            handler.onInteract(event);
+        });
     }
 
     public void registerHandler(int id, @NotNull BlockHandler blockHandler) {
