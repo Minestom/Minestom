@@ -78,4 +78,19 @@ public class InstanceBlockIntegrationTest {
         instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
     }
+
+    @Test
+    public void handlerPresentUpdate(Env env) {
+        AtomicReference<Block> currentBlock = new AtomicReference<>();
+        env.process().block().registerHandler(Block.SUSPICIOUS_GRAVEL, SuspiciousGravelBlockHandler.INSTANCE);
+
+        SuspiciousGravelBlockHandler.blockAtomicReference = currentBlock;
+
+        var instance = env.createFlatInstance();
+        var theBlock = Block.SUSPICIOUS_GRAVEL.withHandler(SuspiciousGravelBlockHandler.INSTANCE);
+        instance.setBlock(0, 50, 0, theBlock);
+        instance.setBlock(1, 50, 0, theBlock);
+
+        assertEquals(theBlock, currentBlock.get());
+    }
 }
