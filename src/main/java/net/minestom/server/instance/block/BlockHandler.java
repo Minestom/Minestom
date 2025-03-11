@@ -26,7 +26,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface BlockHandler {
     public static final int DEFAULT_UPDATE_RANGE = 10;
 
-
     /**
      * Called when a block has been placed.
      */
@@ -90,15 +89,13 @@ public interface BlockHandler {
     }
 
     /**
-     * Gets the id of this handler.
+     * Gets the id (Block) of this handler.
      * <p>
      * Used to write the block entity in the anvil world format.
      *
      * @return the namespace id of this handler
      */
-    default @NotNull NamespaceID getNamespaceId() {
-        return NamespaceID.from("dummy");
-    }
+    @NotNull Block getBlock();
 
     final class Touch {
         private final Block block;
@@ -137,21 +134,21 @@ public interface BlockHandler {
      */
     @ApiStatus.Internal
     final class Dummy implements BlockHandler {
-        private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
+        private static final Map<Block, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
 
-        public static @NotNull BlockHandler get(String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
+        public static @NotNull BlockHandler get(Block block) {
+            return DUMMY_CACHE.computeIfAbsent(block, Dummy::new);
         }
 
-        private final NamespaceID namespace;
+        private final Block block;
 
-        private Dummy(String name) {
-            namespace = NamespaceID.from(name);
+        private Dummy(Block block) {
+            this.block = block;
         }
 
         @Override
-        public @NotNull NamespaceID getNamespaceId() {
-            return namespace;
+        public @NotNull Block getBlock() {
+            return block;
         }
     }
 }

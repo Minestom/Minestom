@@ -79,12 +79,12 @@ public final class BlockManager {
     public @NotNull BlockHandler getHandlerOrDummy(@NotNull Block block) {
         BlockHandler handler = getHandler(block);
         if (handler == null) {
-            if (dummyWarning.add(block.key())) {
+            if (dummyWarning.add(block.namespace())) {
                 LOGGER.warn("""
                         Block {} does not have any corresponding handler, default to dummy.
                         You may want to register a handler for this key to prevent any data loss.""", block.namespace());
             }
-            handler = BlockHandler.Dummy.get(block.namespace().toString());
+            handler = BlockHandler.Dummy.get(block);
         }
         return handler;
     }
