@@ -14,6 +14,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.thread.Acquirable;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,40 +30,47 @@ import java.util.stream.Stream;
  * Class that allows to instantiate entities with projectile-like physics handling.
  */
 public class EntityProjectile extends Entity {
-
-    private final Entity shooter;
     private boolean wasStuck;
 
     public EntityProjectile(@Nullable Entity shooter, @NotNull EntityType entityType) {
         super(entityType);
-        this.shooter = shooter;
-        setup();
+        setup(shooter);
     }
 
-    private void setup() {
+    private void setup(Entity shooter) {
         super.hasPhysics = false;
-        if (getEntityMeta() instanceof ProjectileMeta) {
-            ((ProjectileMeta) getEntityMeta()).setShooter(this.shooter);
+        if (getEntityMeta() instanceof ProjectileMeta projectileMeta) {
+            projectileMeta.setShooter(shooter);
         }
     }
 
     @Nullable
     public Entity getShooter() {
-        return this.shooter;
+        if (getEntityMeta() instanceof ProjectileMeta projectileMeta) {
+            return projectileMeta.getShooter();
+        }
+        return null;
     }
 
     public void shoot(Point to, double power, double spread) {
-        final EntityShootEvent shootEvent = new EntityShootEvent(this.shooter, this, to, power, spread);
+        final Entity shooter = getShooter();
+        Check.notNull(shooter, "The shooter of the projectile cannot be null");
+
+        final EntityShootEvent shootEvent = new EntityShootEvent(shooter, this, to, power, spread);
         EventDispatcher.call(shootEvent);
         if (shootEvent.isCancelled()) {
             remove();
             return;
         }
-        final Pos from = this.shooter.getPosition().add(0D, this.shooter.getEyeHeight(), 0D);
+        final Pos from = shooter.getPosition().add(0D, shooter.getEyeHeight(), 0D);
         shoot(from, to, shootEvent.getPower(), shootEvent.getSpread());
     }
 
-    private void shoot(@NotNull Point from, @NotNull Point to, double power, double spread) {
+    /**
+     * Use #shoot(Point, double, double) instead if you have a shooter.
+     */
+    @ApiStatus.Experimental
+    public void shoot(@NotNull Point from, @NotNull Point to, double power, double spread) {
         double dx = to.x() - from.x();
         double dy = to.y() - from.y();
         double dz = to.z() - from.z();
@@ -176,8 +184,11 @@ public class EntityProjectile extends Entity {
               We won't check collisions with a shooter for first ticks of arrow's life, because it spawns in him
               and will immediately deal damage.
              */
-            if (aliveTicks < 3 && shooter != null) {
-                victimsStream = victimsStream.filter(entity -> entity != shooter);
+            if (aliveTicks < 3) {
+                final var shooter = getShooter();
+                if (shooter != null) {
+                    victimsStream = victimsStream.filter(entity -> entity != shooter);
+                }
             }
             final Optional<LivingEntity> victimOptional = victimsStream.findAny();
             if (victimOptional.isPresent()) {
