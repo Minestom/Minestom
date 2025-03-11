@@ -24,6 +24,7 @@ import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
+import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
@@ -370,6 +371,8 @@ public class InstanceContainer extends Instance {
         return completableFuture;
     }
 
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
@@ -487,17 +490,6 @@ public class InstanceContainer extends Instance {
     }
 
     /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
-    }
-
-    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -512,6 +504,17 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
+    }
+
+    /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
     }
 
     /**

@@ -168,13 +168,12 @@ public class BlockPlacementListener {
         // BlockPlaceEvent check
         BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
             placedBlock,
-            previousBlock,
+            instance.getBlock(placementPosition),
             instance,
             new BlockVec(placementPosition),
             source
         );
 
-        blockChangeEvent.setDoBlockUpdates(true);
         blockChangeEvent.setDoesConsumeBlock(player.getGameMode() != GameMode.CREATIVE);
 
         EventDispatcher.call(blockChangeEvent);

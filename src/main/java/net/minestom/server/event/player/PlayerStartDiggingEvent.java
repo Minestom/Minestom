@@ -24,15 +24,17 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
     private final Block block;
     private final BlockVec blockPosition;
     private final BlockFace blockFace;
+    private final BlockEvent.Source.Player source;
 
     private boolean cancelled;
 
     public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
-                                   @NotNull BlockFace blockFace) {
+                                   @NotNull BlockFace blockFace, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
         this.block = block;
         this.blockPosition = blockPosition;
         this.blockFace = blockFace;
+        this.source = source;
     }
 
     /**
@@ -62,6 +64,15 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      */
     public @NotNull BlockFace getBlockFace() {
         return blockFace;
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    public @NotNull BlockEvent.Source getSource() {
+        return source;
     }
 
     @Override

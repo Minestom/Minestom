@@ -23,6 +23,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
     private final BlockVec blockPosition;
     private final Point cursorPosition;
     private final BlockFace blockFace;
+    private final BlockEvent.Source.Player source;
 
     /**
      * Does this interaction block the normal item use?
@@ -34,13 +35,14 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     public PlayerBlockInteractEvent(@NotNull Player player, @NotNull PlayerHand hand,
                                     @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull Point cursorPosition,
-                                    @NotNull BlockFace blockFace) {
+                                    @NotNull BlockFace blockFace, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
         this.hand = hand;
         this.block = block;
         this.blockPosition = blockPosition;
         this.cursorPosition = cursorPosition;
         this.blockFace = blockFace;
+        this.source = source;
     }
 
     /**
@@ -98,6 +100,15 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      */
     public @NotNull BlockFace getBlockFace() {
         return blockFace;
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    public @NotNull BlockEvent.Source getSource() {
+        return source;
     }
 
     @Override

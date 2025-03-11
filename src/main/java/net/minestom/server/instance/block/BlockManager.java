@@ -57,9 +57,9 @@ public final class BlockManager {
             if (dummyWarning.add(block.key())) {
                 LOGGER.warn("""
                         Block {} does not have any corresponding handler, default to dummy.
-                        You may want to register a handler for this key to prevent any data loss.""", block.key());
+                        You may want to register a handler for this key to prevent any data loss.""", block.namespace());
             }
-            handler = BlockHandler.Dummy.get(block.key());
+            handler = BlockHandler.Dummy.get(block.namespace().toString());
         }
         return handler;
     }
