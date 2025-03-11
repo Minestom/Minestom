@@ -29,39 +29,39 @@ public final class BlockManager {
     private final Set<NamespaceID> dummyWarning = ConcurrentHashMap.newKeySet();
 
     public BlockManager(GlobalEventHandler eventHandler) {
-        eventHandler.addChild(BLOCK_EVENT_NODE);
-
-        BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
-            BlockHandler handler;
-
-            //Block is air, assume that it is a destruction event
-            if(event.getBlock() == Block.AIR) {
-                handler = event.getPreviousBlock().handler();
-                if(handler == null)
-                    handler = blockHandlerMap.get(event.getPreviousBlock().id());
-            } else {
-                handler = event.getBlock().handler();
-                if(handler == null)
-                    handler = blockHandlerMap.get(event.getBlock().id());
-            }
-
-            if(handler == null) { return; }
-
-            handler.onBlockChange(event);
-        });
-
-        BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
-            BlockHandler handler;
-
-            handler = event.getBlock().handler();
-
-            if(handler == null)
-                handler = blockHandlerMap.get(event.getBlock().id());
-
-            if(handler == null) { return; }
-
-            handler.onInteract(event);
-        });
+//        eventHandler.addChild(BLOCK_EVENT_NODE);
+//
+//        BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
+//            BlockHandler handler;
+//
+//            //Block is air, assume that it is a destruction event
+//            if(event.getBlock() == Block.AIR) {
+//                handler = event.getPreviousBlock().handler();
+//                if(handler == null)
+//                    handler = blockHandlerMap.get(event.getPreviousBlock().id());
+//            } else {
+//                handler = event.getBlock().handler();
+//                if(handler == null)
+//                    handler = blockHandlerMap.get(event.getBlock().id());
+//            }
+//
+//            if(handler == null) { return; }
+//
+//            handler.onBlockChange(event);
+//        });
+//
+//        BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
+//            BlockHandler handler;
+//
+//            handler = event.getBlock().handler();
+//
+//            if(handler == null)
+//                handler = blockHandlerMap.get(event.getBlock().id());
+//
+//            if(handler == null) { return; }
+//
+//            handler.onInteract(event);
+//        });
     }
 
     public void registerHandler(int id, @NotNull BlockHandler blockHandler) {

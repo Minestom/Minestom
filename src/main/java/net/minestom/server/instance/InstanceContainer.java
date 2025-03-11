@@ -124,7 +124,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockVec(x,y,z), block, null, null, null, null, doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new Vec(x,y,z), block, null, null, null, null, doBlockUpdates, 0);
     }
 
     /**
