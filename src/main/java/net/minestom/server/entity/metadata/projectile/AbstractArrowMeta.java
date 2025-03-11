@@ -35,4 +35,12 @@ public class AbstractArrowMeta extends EntityMeta {
         metadata.set(MetadataDef.AbstractArrow.PIERCING_LEVEL, value);
     }
 
+    public boolean isInGround() {
+        return metadata.get(MetadataDef.AbstractArrow.IN_GROUND);
+    }
+
+    public void setInGround(boolean value) {
+        metadata.set(MetadataDef.AbstractArrow.IN_GROUND, value);
+    }
+
 }
