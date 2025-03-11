@@ -1,22 +1,25 @@
 package net.minestom.demo.block;
 
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.event.block.BlockChangeEvent;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 
 public class TestBlockHandler implements BlockHandler {
     public static final BlockHandler INSTANCE = new TestBlockHandler();
 
     @Override
-    public void onPlace(@NotNull BlockChangeEvent event) {
-        System.out.println(event);
+    public void onBlockChange(@NotNull BlockChangeEvent event) {
+//        System.out.println("onBlockChange " + event.getBlock());
     }
 
     @Override
-    public void onDestroy(@NotNull BlockChangeEvent event) {
-        System.out.println(event);
+    public Block onNeighborUpdate(@NotNull Block neighbor, @NotNull Instance instance, @NotNull Point point, @NotNull BlockFace fromFace) {
+//        System.out.println("onNeighborUpdate " + neighbor);
+        return neighbor;
     }
 
     @Override

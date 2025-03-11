@@ -14,6 +14,7 @@ import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
@@ -34,7 +35,7 @@ public class Main {
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
-        blockManager.registerHandler(TestBlockHandler.INSTANCE.getBlock(), TestBlockHandler.INSTANCE);
+        blockManager.registerHandler(Block.STONE, TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());

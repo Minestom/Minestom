@@ -104,20 +104,19 @@ public class BlockPlacementListener {
 
 
         // Get the newly placed block position
-        //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
-        var blockHandler = BLOCK_MANAGER.getHandler(interactedBlock);
-        if (!interactedBlock.isAir() && (blockHandler == null || !blockHandler.isReplaceable(
-                interactedBlock, blockFace, cursorPosition, useMaterial))) {
+        var blockHandler = BLOCK_MANAGER.getHandlerOrDummy(interactedBlock);
+        if (!interactedBlock.isAir() && !blockHandler.isSelfReplaceable(
+                interactedBlock, blockFace, cursorPosition, useMaterial)) {
             // If the block is not replaceable, try to place next to it.
             final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
             final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
             final int offsetZ = blockFace == BlockFace.NORTH ? -1 : blockFace == BlockFace.SOUTH ? 1 : 0;
             placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
             var placementBlock = instance.getBlock(placementPosition);
-            var placementRule = BLOCK_MANAGER.getHandler(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isReplaceable(
-                    placementBlock, blockFace, cursorPosition, useMaterial))) {
+            var placementHandler = BLOCK_MANAGER.getHandlerOrDummy(placementBlock);
+            if (!placementBlock.registry().isReplaceable() && !placementHandler.isSelfReplaceable(
+                    placementBlock, blockFace, cursorPosition, useMaterial)) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;
             }
@@ -165,41 +164,24 @@ public class BlockPlacementListener {
             return;
         }
 
-        // BlockPlaceEvent check
-        BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
-            placedBlock,
-            instance.getBlock(placementPosition),
-            instance,
-            new BlockVec(placementPosition),
-            source
-        );
-
-        blockChangeEvent.setDoesConsumeBlock(player.getGameMode() != GameMode.CREATIVE);
-
-        EventDispatcher.call(blockChangeEvent);
-
-        if (blockChangeEvent.isCancelled()) {
-            refresh(player, chunk);
-            return;
-        }
-
-        // Place the block
-        Block resultBlock = blockChangeEvent.getBlock();
-        instance.placeBlock(
-                blockPosition,
-                resultBlock, hand, blockFace, player,
+        BlockChangeEvent.Result result = instance.placeBlock(
+                placementPosition,
+                placedBlock, hand, blockFace, player,
                 cursorPosition,
-                blockChangeEvent.doBlockUpdates()
+                true
         );
-        player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
-        // Block consuming
-        if (blockChangeEvent.consumesBlock()) {
-            // Consume the block in the player's hand
-            final ItemStack newUsedItem = usedItem.consume(1);
-            player.setItemInHand(hand, newUsedItem);
-        } else {
-            // Prevent invisible item on client
-            player.getInventory().update();
+
+        if(result.success()) {
+            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
+            // Block consuming
+            if (result.doesConsumeBlock()) {
+                // Consume the block in the player's hand
+                final ItemStack newUsedItem = usedItem.consume(1);
+                player.setItemInHand(hand, newUsedItem);
+            } else {
+                // Prevent invisible item on client
+                player.getInventory().update();
+            }
         }
     }
 

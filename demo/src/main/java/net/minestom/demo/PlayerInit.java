@@ -22,6 +22,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
@@ -42,6 +43,7 @@ import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +217,7 @@ public class PlayerInit {
         InstanceManager instanceManager = MinecraftServer.getInstanceManager();
 
         InstanceContainer instanceContainer = instanceManager.createInstanceContainer();
+        instanceContainer.setChunkLoader(new AnvilLoader(Paths.get("").toAbsolutePath() + "/build/world"));
         instanceContainer.setGenerator(unit -> {
             unit.modifier().fillHeight(0, 40, Block.STONE);
 

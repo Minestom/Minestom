@@ -4,9 +4,9 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
+import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
@@ -34,25 +34,25 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(Point blockPosition,
-                              @NotNull Block block,
-                              @Nullable PlayerHand playerHand,
-                              @Nullable BlockFace blockFace,
-                              @Nullable Player player,
-                              @Nullable Vec cursorPosition,
-                              boolean doBlockUpdates) {
+    public BlockChangeEvent.Result placeBlock(@NotNull Point blockPosition,
+                                              @NotNull Block block,
+                                              @Nullable PlayerHand playerHand,
+                                              @Nullable BlockFace blockFace,
+                                              @Nullable Player player,
+                                              @Nullable Vec cursorPosition,
+                                              boolean doBlockUpdates) {
         return this.instanceContainer.placeBlock(
                blockPosition, block, playerHand, blockFace, player, cursorPosition, doBlockUpdates
         );
     }
 
     @Override
-    public boolean breakBlock(@NotNull Point blockPosition,
-                              @NotNull Player player,
-                              @Nullable PlayerHand playerHand,
-                              @Nullable BlockFace blockFace,
-                              @Nullable Vec cursorPosition,
-                              boolean doBlockUpdates) {
+    public BlockChangeEvent.Result breakBlock(@NotNull Point blockPosition,
+                                              @NotNull Player player,
+                                              @Nullable PlayerHand playerHand,
+                                              @Nullable BlockFace blockFace,
+                                              @Nullable Vec cursorPosition,
+                                              boolean doBlockUpdates) {
         return this.instanceContainer.breakBlock(
                 blockPosition, player, playerHand, blockFace, cursorPosition, doBlockUpdates
         );

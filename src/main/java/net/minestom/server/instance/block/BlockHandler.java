@@ -3,13 +3,11 @@ package net.minestom.server.instance.block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.item.Material;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,17 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Implementations are expected to be thread safe.
  */
 public interface BlockHandler {
-    public static final int DEFAULT_UPDATE_RANGE = 10;
 
     /**
-     * Called when a block has been placed.
+     * Called when a block has been modified.
      */
-    default void onPlace(@NotNull BlockChangeEvent event) { }
-
-    /**
-     * Called when a block has been destroyed or replaced.
-     */
-    default void onDestroy(@NotNull BlockChangeEvent event) { }
+    default void onBlockChange(@NotNull BlockChangeEvent event) { }
 
     /**
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
@@ -44,24 +36,6 @@ public interface BlockHandler {
         return true;
     }
 
-    default Block onNeighborUpdate(@NotNull Block neighbor,
-                                  @NotNull Instance instance,
-                                  @NotNull Point point,
-                                  @NotNull BlockFace fromFace) {
-        return neighbor;
-    }
-
-    default boolean isReplaceable(@NotNull Block block,
-                                 @NotNull BlockFace blockFace,
-                                 @NotNull Point cursorPosition,
-                                 @NotNull Material material) {
-        return false;
-    }
-
-    default void tick(@NotNull Block block,
-                      @NotNull Instance instance,
-                      @NotNull Point position) { }
-
     /**
      * Defines custom behaviour for entities touching this block.
      */
@@ -69,6 +43,24 @@ public interface BlockHandler {
                          @NotNull Instance instance,
                          @NotNull Vec position,
                          @NotNull Entity entity) { }
+
+    default Block onNeighborUpdate(@NotNull Block neighbor,
+                                  @NotNull Instance instance,
+                                  @NotNull Point point,
+                                  @NotNull BlockFace fromFace) {
+        return neighbor;
+    }
+
+    default boolean isSelfReplaceable(@NotNull Block block,
+                                      @NotNull BlockFace blockFace,
+                                      @NotNull Point cursorPosition,
+                                      @NotNull Material material) {
+        return false;
+    }
+
+    default void tick(@NotNull Block block,
+                      @NotNull Instance instance,
+                      @NotNull Point position) { }
 
     default boolean isTickable() {
         return false;
@@ -89,44 +81,13 @@ public interface BlockHandler {
     }
 
     /**
-     * Gets the id (Block) of this handler.
+     * Gets the id of this handler.
      * <p>
      * Used to write the block entity in the anvil world format.
      *
      * @return the namespace id of this handler
      */
     @NotNull Block getBlock();
-
-    final class Touch {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-        private final Entity touching;
-
-        @ApiStatus.Internal
-        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-            this.touching = touching;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Entity getTouching() {
-            return touching;
-        }
-    }
 
     /**
      * Handler used for loaded blocks with unknown key

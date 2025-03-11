@@ -2,16 +2,13 @@ package net.minestom.server.instance.block;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.kyori.adventure.key.Key;
-import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
-import net.minestom.server.event.trait.BlockEvent;
+import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,7 +26,7 @@ public final class BlockManager {
 
     private final Int2ObjectMap<BlockHandler> blockHandlerMap = new Int2ObjectOpenHashMap<>();
 
-    private final Set<Key> dummyWarning = ConcurrentHashMap.newKeySet();
+    private final Set<NamespaceID> dummyWarning = ConcurrentHashMap.newKeySet();
 
     public BlockManager(GlobalEventHandler eventHandler) {
         eventHandler.addChild(BLOCK_EVENT_NODE);
@@ -37,18 +34,20 @@ public final class BlockManager {
         BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
             BlockHandler handler;
 
-            handler = event.getBlock().handler();
-
-            if(handler == null)
-                handler = blockHandlerMap.get(event.getBlock().id());
+            //Block is air, assume that it is a destruction event
+            if(event.getBlock() == Block.AIR) {
+                handler = event.getPreviousBlock().handler();
+                if(handler == null)
+                    handler = blockHandlerMap.get(event.getPreviousBlock().id());
+            } else {
+                handler = event.getBlock().handler();
+                if(handler == null)
+                    handler = blockHandlerMap.get(event.getBlock().id());
+            }
 
             if(handler == null) { return; }
 
-            if(event.getBlock() == Block.AIR) {
-                handler.onDestroy(event);
-            } else {
-                handler.onPlace(event);
-            }
+            handler.onBlockChange(event);
         });
 
         BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
@@ -59,6 +58,8 @@ public final class BlockManager {
             if(handler == null)
                 handler = blockHandlerMap.get(event.getBlock().id());
 
+            if(handler == null) { return; }
+
             handler.onInteract(event);
         });
     }
@@ -68,7 +69,7 @@ public final class BlockManager {
     }
 
     public void registerHandler(@NotNull Block block, @NotNull BlockHandler blockHandler) {
-        registerHandler(block.stateId(), blockHandler);
+        registerHandler(block.id(), blockHandler);
     }
 
     public @Nullable BlockHandler getHandler(@NotNull Block block) {

@@ -7,6 +7,7 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents before the block was set
@@ -136,4 +137,20 @@ public final class BlockChangeEvent implements Event, BlockEvent, CancellableEve
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
+
+    public record Result(
+            boolean success,
+            boolean doBlockUpdates,
+            boolean doesConsumeBlock,
+            @Nullable Block previousBlock,
+            @Nullable Block newBlock,
+            @Nullable Instance instance,
+            @Nullable BlockVec position,
+            @Nullable BlockEvent.Source source
+    ) {
+        public Result(boolean success) {
+            this(success, false, false, null, null, null, null, null);
+        }
+    }
+
 }

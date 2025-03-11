@@ -203,7 +203,7 @@ public final class PlayerDiggingListener {
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(blockPosition, player, null, blockFace, null, true);
+        final boolean success = instance.breakBlock(blockPosition, player, null, blockFace, null, true).success();
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {

@@ -37,8 +37,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -79,8 +79,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -122,8 +122,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -173,8 +173,8 @@ public class EntityBlockTouchTickIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 

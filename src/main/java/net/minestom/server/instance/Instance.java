@@ -20,11 +20,11 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.network.packet.server.ServerPacket;
@@ -183,13 +183,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
 
-    public abstract boolean placeBlock(@NotNull Point blockPosition,
-                                       @NotNull Block block,
-                                       @Nullable PlayerHand playerHand,
-                                       @Nullable BlockFace blockFace,
-                                       @Nullable Player player,
-                                       @Nullable Vec cursorPosition,
-                                       boolean doBlockUpdates);
+    public abstract BlockChangeEvent.Result placeBlock(@NotNull Point blockPosition,
+                                                       @NotNull Block block,
+                                                       @Nullable PlayerHand playerHand,
+                                                       @Nullable BlockFace blockFace,
+                                                       @Nullable Player player,
+                                                       @Nullable Vec cursorPosition,
+                                                       boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.block.BlockChangeEvent}
@@ -199,12 +199,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
-    public abstract boolean breakBlock(@NotNull Point blockPosition,
-                                       @NotNull Player player,
-                                       @Nullable PlayerHand playerHand,
-                                       @Nullable BlockFace blockFace,
-                                       @Nullable Vec cursorPosition,
-                                       boolean doBlockUpdates);
+    public abstract BlockChangeEvent.Result breakBlock(@NotNull Point blockPosition,
+                                                       @NotNull Player player,
+                                                       @Nullable PlayerHand playerHand,
+                                                       @Nullable BlockFace blockFace,
+                                                       @Nullable Vec cursorPosition,
+                                                       boolean doBlockUpdates);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
