@@ -161,28 +161,32 @@ public class InstanceContainer extends Instance {
             }
             this.currentlyChangingBlocks.put(blockPosition, block);
 
-            final BlockEvent.Source source;
+            //Avoid expensive computation of getBlock if there is no listener.
+            //TODO find a better solution to getting the block directly.
+            if(EventDispatcher.getHandle(BlockChangeEvent.class).hasListener()) {
+                final BlockEvent.Source source;
 
-            if(player != null) {
-                 source = new BlockEvent.Source.Player(
-                         player,
-                         blockFace,
-                         cursorPosition,
-                         playerHand
-                 );
-            } else {
-                source = new BlockEvent.Source.Instance(this);
+                if(player != null) {
+                    source = new BlockEvent.Source.Player(
+                            player,
+                            blockFace,
+                            cursorPosition,
+                            playerHand
+                    );
+                } else {
+                    source = new BlockEvent.Source.Instance(this);
+                }
+
+                BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
+                        block, getBlock(blockPosition), srcInstance, new BlockVec(blockPosition), source
+                );
+
+                EventDispatcher.call(blockChangeEvent);
+
+                if (blockChangeEvent.isCancelled()) return false;
+
+                block = blockChangeEvent.getBlock();
             }
-
-            BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
-                    block, getBlock(blockPosition), srcInstance, new BlockVec(blockPosition), source
-            );
-
-            EventDispatcher.call(blockChangeEvent);
-
-            if (blockChangeEvent.isCancelled()) return false;
-
-            block = blockChangeEvent.getBlock();
             // Set the block
             chunk.setBlock(blockPosition, block);
             // Refresh neighbors since a new block has been placed
