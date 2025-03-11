@@ -8,7 +8,10 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
@@ -70,9 +73,7 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
         if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
@@ -99,33 +100,16 @@ public class DynamicChunk extends Chunk {
         final int index = CoordConversion.chunkBlockIndex(x, y, z);
         // Handler
         final BlockHandler handler = block.handler();
-        final Block lastCachedBlock;
         if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            lastCachedBlock = this.entries.put(index, block);
+            this.entries.put(index, block);
         } else {
-            lastCachedBlock = this.entries.remove(index);
+            this.entries.remove(index);
         }
         // Block tick
         if (handler != null && handler.isTickable()) {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
-        }
-
-        // Update block handlers
-        var blockPosition = new Vec(x, y, z);
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
-        }
-        if (handler != null) {
-            // New placement
-
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
-            handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
         }
 
         // UpdateHeightMaps
@@ -189,7 +173,7 @@ public class DynamicChunk extends Chunk {
             final BlockHandler handler = block.handler();
             if (handler == null) return;
             final Point blockPosition = CoordConversion.chunkBlockIndexGetGlobal(index, chunkX, chunkZ);
-            handler.tick(new BlockHandler.Tick(block, instance, blockPosition));
+            handler.tick(block, instance, blockPosition);
         });
     }
 

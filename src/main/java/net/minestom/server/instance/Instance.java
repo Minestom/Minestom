@@ -14,10 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ExperienceOrb;
-import net.minestom.server.entity.Player;
+import net.minestom.server.entity.*;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -185,38 +182,28 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
 
-    @ApiStatus.Internal
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
-        return placeBlock(placement, true);
-    }
-
-    @ApiStatus.Internal
-    public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates);
-
-    /**
-     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
-     * and send particle packets
-     *
-     * @param player        the {@link Player} who break the block
-     * @param blockPosition the position of the broken block
-     * @return true if the block has been broken, false if it has been cancelled
-     */
-    @ApiStatus.Internal
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
-        return breakBlock(player, blockPosition, blockFace, true);
-    }
+    public abstract boolean placeBlock(int x, int y, int z,
+                                       @NotNull Block block,
+                                       @Nullable PlayerHand playerHand,
+                                       @Nullable BlockFace blockFace,
+                                       @Nullable Player player,
+                                       @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                       boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
      * and send particle packets
      *
      * @param player         the {@link Player} who break the block
-     * @param blockPosition  the position of the broken block
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
-    @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
+    public abstract boolean breakBlock(int x, int y, int z,
+                                       @NotNull Player player,
+                                       @Nullable PlayerHand playerHand,
+                                       @Nullable BlockFace blockFace,
+                                       @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                       boolean doBlockUpdates);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.

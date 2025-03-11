@@ -14,6 +14,8 @@ import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.async.AsyncUtils;
+import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -256,7 +258,7 @@ public class AnvilLoader implements IChunkLoader {
                 if (!properties.isEmpty()) block = block.withProperties(properties);
 
                 // Handler
-                final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block.name());
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandler(block);
                 if (handler != null) block = block.withHandler(handler);
 
                 convertedPalette[i] = block;
@@ -287,7 +289,7 @@ public class AnvilLoader implements IChunkLoader {
 
             // Load the block handler if the id is present
             if (blockEntity.get("id") instanceof StringBinaryTag blockEntityId) {
-                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(blockEntityId.value());
+                final BlockHandler handler = MinecraftServer.getBlockManager().getHandlerOrDummy(Block.fromNamespaceId(blockEntityId.value()));
                 block = block.withHandler(handler);
             }
 

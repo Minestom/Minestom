@@ -9,21 +9,21 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
-import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
-import net.minestom.server.network.packet.server.play.EffectPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.NamespaceID;
@@ -126,7 +126,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, null, null, null, null, doBlockUpdates, 0);
     }
 
     /**
@@ -140,14 +140,20 @@ public class InstanceContainer extends Instance {
      * @param z     the block Z
      * @param block the block to place
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
-                                              boolean doBlockUpdates, int updateDistance) {
-        if (chunk.isReadOnly()) return;
+    private synchronized boolean UNSAFE_setBlock(@NotNull Chunk chunk,
+                                              int x, int y, int z,
+                                              @NotNull Block block,
+                                              @Nullable PlayerHand playerHand,
+                                              @Nullable BlockFace blockFace,
+                                              @Nullable Player player,
+                                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                              boolean doBlockUpdates,
+                                              int updateDistance) {
+        if (chunk.isReadOnly()) return false;
         final DimensionType dim = getCachedDimensionType();
         if (y >= dim.maxY() || y < dim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
-            return;
+            return false;
         }
 
         synchronized (chunk) {
@@ -157,37 +163,37 @@ public class InstanceContainer extends Instance {
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
-                return;
+                return false;
             }
             this.currentlyChangingBlocks.put(blockPosition, block);
 
-            // Change id based on neighbors
-            final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
-            if (placement != null && blockPlacementRule != null && doBlockUpdates) {
-                BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
-                    );
-                } else {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, null, blockPosition,
-                            null, null, null,
-                            false
-                    );
-                }
+            final BlockEvent.Source source;
 
-                block = blockPlacementRule.blockPlace(rulePlacement);
-                if (block == null) block = Block.AIR;
+            if(player != null) {
+                Vec cursor = (cursorX != null && cursorY != null && cursorZ != null) ?
+                        new Vec(cursorX, cursorY, cursorZ) : null;
+
+                 source = new BlockEvent.Source.Player(
+                         player,
+                         blockFace,
+                         cursor,
+                         playerHand
+                 );
+            } else {
+                source = new BlockEvent.Source.Instance(this);
             }
 
-            // Set the block
-            chunk.setBlock(x, y, z, block, placement, destroy);
+            BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
+                    block, getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
+            );
 
+            EventDispatcher.call(blockChangeEvent);
+
+            if (blockChangeEvent.isCancelled()) return false;
+
+            block = blockChangeEvent.getBlock();
+            // Set the block
+            chunk.setBlock(x, y, z, block);
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
                 executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
@@ -201,51 +207,56 @@ public class InstanceContainer extends Instance {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
+
+                if(player != null && block == Block.AIR) {
+                    // Send the block break effect packet
+                    PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
+                            new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
+                            // Prevent the block breaker to play the particles and sound two times
+                            (viewer) -> !viewer.equals(player));
+                }
             }
         }
-    }
 
-    @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        final Point blockPosition = placement.getBlockPosition();
-        final Chunk chunk = getChunkAt(blockPosition);
-        if (!isLoaded(chunk)) return false;
-        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null, doBlockUpdates, 0);
         return true;
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        final Chunk chunk = getChunkAt(blockPosition);
+    public boolean placeBlock(int x, int y, int z,
+                              @NotNull Block block,
+                              @Nullable PlayerHand playerHand,
+                              @Nullable BlockFace blockFace,
+                              @Nullable Player player,
+                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(x,z);
+        if (!isLoaded(chunk)) return false;
+
+        return UNSAFE_setBlock(chunk, x, y, z,
+                block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates, 0);
+    }
+
+    @Override
+    public boolean breakBlock(int x, int y, int z,
+                              @NotNull Player player,
+                              @Nullable PlayerHand playerHand,
+                              @Nullable BlockFace blockFace,
+                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(x, z);
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
-        final Block block = getBlock(blockPosition);
-        final int x = blockPosition.blockX();
-        final int y = blockPosition.blockY();
-        final int z = blockPosition.blockZ();
+        final Block block = getBlock(x, y, z);
         if (block.isAir()) {
             // The player probably have a wrong version of this chunk section, send it
             chunk.sendChunk(player);
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
-        EventDispatcher.call(blockBreakEvent);
-        final boolean allowed = !blockBreakEvent.isCancelled();
-        if (allowed) {
-            // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
-            UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
-            // Send the block break effect packet
-            PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
-                    new EffectPacket(2001 /*Block break + block break sound*/, blockPosition, block.stateId(), false),
-                    // Prevent the block breaker to play the particles and sound two times
-                    (viewer) -> !viewer.equals(player));
-        }
-        return allowed;
+
+        return UNSAFE_setBlock(chunk, x, y, z,
+                block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates, 0);
     }
 
     @Override
@@ -358,8 +369,6 @@ public class InstanceContainer extends Instance {
         }
         return completableFuture;
     }
-
-    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
@@ -478,6 +487,17 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
+    }
+
+    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -492,17 +512,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
-    }
-
-    /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
     }
 
     /**
@@ -670,22 +679,24 @@ public class InstanceContainer extends Instance {
             final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
             if (neighborBlock == null || neighborBlock.isAir())
                 continue;
-            final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
+            final BlockHandler blockHandler = MinecraftServer.getBlockManager().getHandler(neighborBlock);
+            if (blockHandler == null)
                 continue;
 
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-            final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
+            //TODO: make to event driven
+            final Block newNeighborBlock = blockHandler.onNeighborUpdate(
+                    neighborBlock,
                     this,
                     neighborPosition,
-                    neighborBlock,
                     updateFace.getOppositeFace()
-            ));
+            );
+
             if (neighborBlock != newNeighborBlock) {
                 final Chunk chunk = getChunkAt(neighborPosition);
                 if (!isLoaded(chunk)) continue;
                 UNSAFE_setBlock(chunk, neighborPosition.blockX(), neighborPosition.blockY(), neighborPosition.blockZ(), newNeighborBlock,
-                        null, null, true, updateDistance + 1);
+                        null, null, null, null, null ,null, true, updateDistance + 1);
             }
         }
     }

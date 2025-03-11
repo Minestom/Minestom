@@ -1,7 +1,6 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.CancellableEvent;
@@ -10,9 +9,13 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @deprecated Use {@link net.minestom.server.event.block.BlockChangeEvent}
+ */
+@Deprecated()
 public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
-
     private final Player player;
+    private final BlockEvent.Source.Player source;
     private final Block block;
     private Block resultBlock;
     private final BlockVec blockPosition;
@@ -20,15 +23,17 @@ public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, C
 
     private boolean cancelled;
 
+    @Deprecated()
     public PlayerBlockBreakEvent(@NotNull Player player,
                                  @NotNull Block block, @NotNull Block resultBlock, @NotNull BlockVec blockPosition,
-                                 @NotNull BlockFace blockFace) {
+                                 @NotNull BlockFace blockFace, @NotNull BlockEvent.Source.Player source) {
         this.player = player;
 
         this.block = block;
         this.resultBlock = resultBlock;
         this.blockPosition = blockPosition;
         this.blockFace = blockFace;
+        this.source = source;
     }
 
     /**
@@ -76,6 +81,16 @@ public class PlayerBlockBreakEvent implements PlayerInstanceEvent, BlockEvent, C
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return blockPosition;
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    @Override
+    public @NotNull BlockEvent.Source.Player getSource() {
+        return source;
     }
 
     @Override

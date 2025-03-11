@@ -9,7 +9,6 @@ import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.listener.manager.PacketListenerManager;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.network.ConnectionManager;
@@ -29,6 +28,7 @@ import java.net.SocketAddress;
 
 @ApiStatus.NonExtendable
 public interface ServerProcess extends Registries, Snapshotable {
+
     /**
      * Handles incoming connections/players.
      */

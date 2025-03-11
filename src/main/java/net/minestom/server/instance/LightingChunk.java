@@ -1,5 +1,6 @@
 package net.minestom.server.instance;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
@@ -153,10 +154,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
-        super.setBlock(x, y, z, block, placement, destroy);
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        super.setBlock(x, y, z, block);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change

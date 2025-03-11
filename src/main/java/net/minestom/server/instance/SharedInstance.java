@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -32,13 +33,28 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        return instanceContainer.placeBlock(placement, doBlockUpdates);
+    public boolean placeBlock(int x, int y, int z,
+                              @NotNull Block block,
+                              @Nullable PlayerHand playerHand,
+                              @Nullable BlockFace blockFace,
+                              @Nullable Player player,
+                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              boolean doBlockUpdates) {
+        return this.instanceContainer.placeBlock(
+                x, y, z, block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates
+        );
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
+    public boolean breakBlock(int x, int y, int z,
+                              @NotNull Player player,
+                              @Nullable PlayerHand playerHand,
+                              @Nullable BlockFace blockFace,
+                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              boolean doBlockUpdates) {
+        return this.instanceContainer.breakBlock(
+                x, y, z, player, playerHand, blockFace, cursorX, cursorY, cursorZ, doBlockUpdates
+        );
     }
 
     @Override
