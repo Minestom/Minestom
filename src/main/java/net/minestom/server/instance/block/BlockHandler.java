@@ -10,6 +10,7 @@ import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.Collection;
 import java.util.List;
@@ -112,6 +113,7 @@ public interface BlockHandler {
 
     @ApiStatus.Internal
     sealed interface BlockInfo {
+        @SuppressWarnings("NullableProblems")
         @NotNull Block block();
 
         @NotNull Instance instance();
@@ -203,7 +205,7 @@ public interface BlockHandler {
          * Represents an object forwarded to {@link #onDestroy(Destroy)} by a player.
          */
         record OfPlayer(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition,
-                      @NotNull Player player) implements Destroy, BlockInfo.OfPlayer, PlayerDestroy {
+                      @NotNull Player player, @NotNull BlockFace blockFace) implements Destroy, BlockInfo.OfPlayer, PlayerDestroy {
 
             @ApiStatus.Internal
             public OfPlayer {
@@ -211,6 +213,7 @@ public interface BlockHandler {
                 Check.notNull(instance, "Instance cannot be null");
                 Check.notNull(blockPosition, "Block position cannot be null");
                 Check.notNull(player, "Player cannot be null");
+                Check.notNull(blockFace, "Block face cannot be null");
             }
         }
 
@@ -236,12 +239,15 @@ public interface BlockHandler {
          * or {@link net.minestom.server.instance.InstanceContainer#breakBlock(Destroy, boolean)}
          */
         @ApiStatus.Experimental
-        non-sealed interface OfCustom extends Destroy {}
+        non-sealed interface OfCustom extends Destroy {
+            @Override
+            @UnknownNullability Block block();
+        }
 
 
         @FunctionalInterface
         interface PlayerSupplier {
-            Destroy create(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition, @NotNull Player player);
+            Destroy create(@NotNull Block block, @NotNull Instance instance, @NotNull Point blockPosition, @NotNull Player player, @NotNull BlockFace blockFace);
         }
     }
 

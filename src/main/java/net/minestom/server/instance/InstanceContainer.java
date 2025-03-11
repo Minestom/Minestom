@@ -221,9 +221,14 @@ public class InstanceContainer extends Instance {
         final Point blockPosition = destroy.blockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
         if (!isLoaded(chunk)) return false;
-        final Block block = destroy.block();
-        //noinspection ConstantConditions - custom implementations could nullify this.
-        final Block replacementBlock = block == null ? Block.AIR : block;
+        // Check replacement block for custom implementations.
+        final Block replacementBlock;
+        if (destroy instanceof BlockHandler.Destroy.OfCustom customDestroy) {
+            final var block = customDestroy.block();
+            replacementBlock = block != null ? block : Block.AIR;
+        } else {
+            replacementBlock = destroy.block(); // Always not null in default implementations.
+        }
         UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
                 replacementBlock, null, destroy, doBlockUpdates, 0);
         return true;
