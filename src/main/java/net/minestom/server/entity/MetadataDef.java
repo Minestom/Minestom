@@ -123,6 +123,7 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_CRITICAL = bitMask(0, (byte) 0x01, false);
         public static final Entry<Boolean> IS_NO_CLIP = bitMask(0, (byte) 0x02, false);
         public static final Entry<Byte> PIERCING_LEVEL = index(1, Metadata::Byte, (byte) 0);
+        public static final Entry<Boolean> IN_GROUND = index(2, Metadata::Boolean, false);
     }
 
     public static final class Arrow extends AbstractArrow {
