@@ -1,6 +1,7 @@
 package net.minestom.server.instance.generator;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.block.Block;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -19,7 +20,7 @@ public class GeneratorForkConsumerIntegrationTest {
     @Test
     public void empty(Env env) {
         var manager = env.process().instance();
-        var instance = manager.createInstanceContainer();
+        InstanceContainer instance = manager.createInstanceContainer();
         AtomicReference<Exception> failed = new AtomicReference<>();
         instance.setGenerator(unit -> {
             try {
