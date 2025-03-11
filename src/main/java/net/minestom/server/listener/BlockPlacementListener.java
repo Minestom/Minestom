@@ -53,7 +53,7 @@ public class BlockPlacementListener {
         final ItemStack usedItem = player.getItemInHand(hand);
         final Block interactedBlock = instance.getBlock(blockPosition);
 
-        final Point cursorPosition = new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ());
+        final Vec cursorPosition = new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ());
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
             player,
@@ -186,9 +186,9 @@ public class BlockPlacementListener {
         // Place the block
         Block resultBlock = blockChangeEvent.getBlock();
         instance.placeBlock(
-                blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
+                blockPosition,
                 resultBlock, hand, blockFace, player,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ(),
+                cursorPosition,
                 blockChangeEvent.doBlockUpdates()
         );
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));

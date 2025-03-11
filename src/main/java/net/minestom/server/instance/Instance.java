@@ -14,6 +14,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.PacketGroupingAudience;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -182,27 +183,27 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
 
-    public abstract boolean placeBlock(int x, int y, int z,
+    public abstract boolean placeBlock(@NotNull Point blockPosition,
                                        @NotNull Block block,
                                        @Nullable PlayerHand playerHand,
                                        @Nullable BlockFace blockFace,
                                        @Nullable Player player,
-                                       @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                       @Nullable Vec cursorPosition,
                                        boolean doBlockUpdates);
 
     /**
-     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
+     * Does call {@link net.minestom.server.event.block.BlockChangeEvent}
      * and send particle packets
      *
      * @param player         the {@link Player} who break the block
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
-    public abstract boolean breakBlock(int x, int y, int z,
+    public abstract boolean breakBlock(@NotNull Point blockPosition,
                                        @NotNull Player player,
                                        @Nullable PlayerHand playerHand,
                                        @Nullable BlockFace blockFace,
-                                       @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                       @Nullable Vec cursorPosition,
                                        boolean doBlockUpdates);
 
     /**

@@ -3,10 +3,7 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
@@ -127,7 +124,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, null, null, null, null, doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockVec(x,y,z), block, null, null, null, null, doBlockUpdates, 0);
     }
 
     /**
@@ -136,31 +133,27 @@ public class InstanceContainer extends Instance {
      * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
      *
      * @param chunk the {@link Chunk} which should be loaded
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
      * @param block the block to place
      */
     private synchronized boolean UNSAFE_setBlock(@NotNull Chunk chunk,
-                                              int x, int y, int z,
+                                              Point blockPosition,
                                               @NotNull Block block,
                                               @Nullable PlayerHand playerHand,
                                               @Nullable BlockFace blockFace,
                                               @Nullable Player player,
-                                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                                              @Nullable Vec cursorPosition,
                                               boolean doBlockUpdates,
                                               int updateDistance) {
         if (chunk.isReadOnly()) return false;
         final DimensionType dim = getCachedDimensionType();
-        if (y >= dim.maxY() || y < dim.minY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
+        if (blockPosition.blockY() >= dim.maxY() || blockPosition.blockY() < dim.minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), blockPosition.blockY());
             return false;
         }
 
         synchronized (chunk) {
             // Refresh the last block change time
             this.lastBlockChangeTime = System.currentTimeMillis();
-            final Vec blockPosition = new Vec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
@@ -171,13 +164,10 @@ public class InstanceContainer extends Instance {
             final BlockEvent.Source source;
 
             if(player != null) {
-                Vec cursor = (cursorX != null && cursorY != null && cursorZ != null) ?
-                        new Vec(cursorX, cursorY, cursorZ) : null;
-
                  source = new BlockEvent.Source.Player(
                          player,
                          blockFace,
-                         cursor,
+                         cursorPosition,
                          playerHand
                  );
             } else {
@@ -185,7 +175,7 @@ public class InstanceContainer extends Instance {
             }
 
             BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
-                    block, getBlock(x, y, z), srcInstance, new BlockVec(x, y, z), source
+                    block, getBlock(blockPosition), srcInstance, new BlockVec(blockPosition), source
             );
 
             EventDispatcher.call(blockChangeEvent);
@@ -194,7 +184,7 @@ public class InstanceContainer extends Instance {
 
             block = blockChangeEvent.getBlock();
             // Set the block
-            chunk.setBlock(x, y, z, block);
+            chunk.setBlock(blockPosition, block);
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
                 executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
@@ -223,41 +213,41 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(int x, int y, int z,
+    public boolean placeBlock(@NotNull Point blockPosition,
                               @NotNull Block block,
                               @Nullable PlayerHand playerHand,
                               @Nullable BlockFace blockFace,
                               @Nullable Player player,
-                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              @Nullable Vec cursorPosition,
                               boolean doBlockUpdates) {
-        final Chunk chunk = getChunkAt(x,z);
+        final Chunk chunk = getChunkAt(blockPosition.blockX(), blockPosition.blockZ());
         if (!isLoaded(chunk)) return false;
 
-        return UNSAFE_setBlock(chunk, x, y, z,
-                block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates, 0);
+        return UNSAFE_setBlock(chunk, blockPosition,
+                block, playerHand, blockFace, player, cursorPosition, doBlockUpdates, 0);
     }
 
     @Override
-    public boolean breakBlock(int x, int y, int z,
+    public boolean breakBlock(@NotNull Point blockPosition,
                               @NotNull Player player,
                               @Nullable PlayerHand playerHand,
                               @Nullable BlockFace blockFace,
-                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              @Nullable Vec cursorPosition,
                               boolean doBlockUpdates) {
-        final Chunk chunk = getChunkAt(x, z);
+        final Chunk chunk = getChunkAt(blockPosition.blockX(), blockPosition.blockZ());
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
-        final Block block = getBlock(x, y, z);
+        final Block block = getBlock(blockPosition);
         if (block.isAir()) {
             // The player probably have a wrong version of this chunk section, send it
             chunk.sendChunk(player);
             return false;
         }
 
-        return UNSAFE_setBlock(chunk, x, y, z,
-                block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates, 0);
+        return UNSAFE_setBlock(chunk, blockPosition,
+                block, playerHand, blockFace, player,cursorPosition, doBlockUpdates, 0);
     }
 
     @Override
@@ -698,8 +688,8 @@ public class InstanceContainer extends Instance {
             if (neighborBlock != newNeighborBlock) {
                 final Chunk chunk = getChunkAt(neighborPosition);
                 if (!isLoaded(chunk)) continue;
-                UNSAFE_setBlock(chunk, neighborPosition.blockX(), neighborPosition.blockY(), neighborPosition.blockZ(), newNeighborBlock,
-                        null, null, null, null, null ,null, true, updateDistance + 1);
+                UNSAFE_setBlock(chunk, neighborPosition, newNeighborBlock,
+                        null, null, null, null, true, updateDistance + 1);
             }
         }
     }

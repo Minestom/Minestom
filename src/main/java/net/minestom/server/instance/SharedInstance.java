@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
@@ -33,27 +34,27 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(int x, int y, int z,
+    public boolean placeBlock(Point blockPosition,
                               @NotNull Block block,
                               @Nullable PlayerHand playerHand,
                               @Nullable BlockFace blockFace,
                               @Nullable Player player,
-                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              @Nullable Vec cursorPosition,
                               boolean doBlockUpdates) {
         return this.instanceContainer.placeBlock(
-                x, y, z, block, playerHand, blockFace, player, cursorX, cursorY, cursorZ, doBlockUpdates
+               blockPosition, block, playerHand, blockFace, player, cursorPosition, doBlockUpdates
         );
     }
 
     @Override
-    public boolean breakBlock(int x, int y, int z,
+    public boolean breakBlock(@NotNull Point blockPosition,
                               @NotNull Player player,
                               @Nullable PlayerHand playerHand,
                               @Nullable BlockFace blockFace,
-                              @Nullable Float cursorX, @Nullable Float cursorY, @Nullable Float cursorZ,
+                              @Nullable Vec cursorPosition,
                               boolean doBlockUpdates) {
         return this.instanceContainer.breakBlock(
-                x, y, z, player, playerHand, blockFace, cursorX, cursorY, cursorZ, doBlockUpdates
+                blockPosition, player, playerHand, blockFace, cursorPosition, doBlockUpdates
         );
     }
 

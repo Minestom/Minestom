@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.block.BlockChangeEvent;
@@ -64,10 +65,11 @@ public interface BlockHandler {
 
     /**
      * Defines custom behaviour for entities touching this block.
-     *
-     * @param touch the contact details
      */
-    default void onTouch(@NotNull Touch touch) {}
+    default void onTouch(@NotNull Block block,
+                         @NotNull Instance instance,
+                         @NotNull Vec position,
+                         @NotNull Entity entity) { }
 
     default boolean isTickable() {
         return false;

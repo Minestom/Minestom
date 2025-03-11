@@ -4,10 +4,13 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.Event;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.block.BlockChangeEvent;
+import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.trait.BlockEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -21,9 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public final class BlockManager {
     private final static Logger LOGGER = LoggerFactory.getLogger(BlockManager.class);
 
-    private final static EventNode<BlockEvent> BLOCK_EVENT_NODE = EventNode.type("blockmanager-node", EventFilter.BLOCK)
+    private final static EventNode<Event> BLOCK_EVENT_NODE = EventNode.type("blockmanager-node", EventFilter.ALL)
             .setPriority(50);
-
 
     private final Int2ObjectMap<BlockHandler> blockHandlerMap = new Int2ObjectOpenHashMap<>();
 
@@ -33,7 +35,31 @@ public final class BlockManager {
         eventHandler.addChild(BLOCK_EVENT_NODE);
 
         BLOCK_EVENT_NODE.addListener(BlockChangeEvent.class, event -> {
-            blockHandlerMap.get(event.getBlock().id());
+            BlockHandler handler;
+
+            handler = event.getBlock().handler();
+
+            if(handler == null)
+                handler = blockHandlerMap.get(event.getBlock().id());
+
+            if(handler == null) { return; }
+
+            if(event.getBlock() == Block.AIR) {
+                handler.onDestroy(event);
+            } else {
+                handler.onPlace(event);
+            }
+        });
+
+        BLOCK_EVENT_NODE.addListener(PlayerBlockInteractEvent.class, event -> {
+            BlockHandler handler;
+
+            handler = event.getBlock().handler();
+
+            if(handler == null)
+                handler = blockHandlerMap.get(event.getBlock().id());
+
+            handler.onInteract(event);
         });
     }
 
@@ -46,8 +72,7 @@ public final class BlockManager {
     }
 
     public @Nullable BlockHandler getHandler(@NotNull Block block) {
-        final var handler = blockHandlerMap.get(block.id());
-        return handler != null ? handler : null;
+        return blockHandlerMap.get(block.id());
     }
 
     @ApiStatus.Internal
