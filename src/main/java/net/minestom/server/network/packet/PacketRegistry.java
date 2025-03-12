@@ -31,6 +31,8 @@ public interface PacketRegistry<T> {
         return packetInfo(packet.getClass());
     }
 
+    @NotNull String stateName();
+
     PacketInfo<T> packetInfo(int packetId);
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
@@ -49,6 +51,11 @@ public interface PacketRegistry<T> {
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull String stateName() {
+            return "CLIENT_HANDSHAKE";
+        }
     }
 
     final class ClientStatus extends Client {
@@ -57,6 +64,11 @@ public interface PacketRegistry<T> {
                     entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "CLIENT_STATUS";
         }
     }
 
@@ -69,6 +81,11 @@ public interface PacketRegistry<T> {
                     entry(ClientLoginAcknowledgedPacket.class, ClientLoginAcknowledgedPacket.SERIALIZER),
                     entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "CLIENT_LOGIN";
         }
     }
 
@@ -84,6 +101,11 @@ public interface PacketRegistry<T> {
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
                     entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "CLIENT_CONFIGURATION";
         }
     }
 
@@ -154,6 +176,11 @@ public interface PacketRegistry<T> {
                     entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull String stateName() {
+            return "CLIENT_PLAY";
+        }
     }
 
     sealed class Server extends PacketRegistryTemplate<ServerPacket> {
@@ -169,6 +196,11 @@ public interface PacketRegistry<T> {
                     // Empty
             );
         }
+
+        @Override
+        public @NotNull String stateName() {
+            return "SERVER_HANDSHAKE";
+        }
     }
 
     final class ServerStatus extends Server {
@@ -177,6 +209,11 @@ public interface PacketRegistry<T> {
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
                     entry(PingResponsePacket.class, PingResponsePacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "SERVER_STATUS";
         }
     }
 
@@ -190,6 +227,11 @@ public interface PacketRegistry<T> {
                     entry(LoginPluginRequestPacket.class, LoginPluginRequestPacket.SERIALIZER),
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "SERVER_LOGIN";
         }
     }
 
@@ -214,6 +256,11 @@ public interface PacketRegistry<T> {
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "SERVER_CONFIGURATION";
         }
     }
 
@@ -353,6 +400,11 @@ public interface PacketRegistry<T> {
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull String stateName() {
+            return "SERVER_PLAY";
+        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -366,7 +418,7 @@ public interface PacketRegistry<T> {
                         return (PacketInfo<T>) info;
                     }
                 }
-                throw new IllegalStateException("Packet type " + type + " isn't registered!");
+                throw new IllegalStateException("Packet type " + type + " isn't registered for state " + stateName() + "!");
             }
         };
 
@@ -394,6 +446,11 @@ public interface PacketRegistry<T> {
         @Override
         public PacketInfo<T> packetInfo(@NotNull Class<?> packetClass) {
             return packetIds.get(packetClass);
+        }
+
+        @Override
+        public @NotNull String stateName() {
+            return "UNKNOWN";
         }
 
         @Override
