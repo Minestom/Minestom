@@ -13,12 +13,12 @@ public class TestBlockHandler implements BlockHandler {
 
     @Override
     public void onBlockChange(@NotNull BlockChangeEvent event) {
-//        System.out.println("onBlockChange " + event.getBlock());
+        System.out.println("onBlockChange " + event.getBlock());
     }
 
     @Override
-    public Block onNeighborUpdate(@NotNull Block neighbor, @NotNull Instance instance, @NotNull Point point, @NotNull BlockFace fromFace) {
-//        System.out.println("onNeighborUpdate " + neighbor);
+    public Block onNeighborUpdate(@NotNull Block neighbor, @NotNull Point neighborPosition, @NotNull Instance instance, @NotNull BlockFace fromFace) {
+        System.out.println("onNeighborUpdate " + neighbor);
         return neighbor;
     }
 

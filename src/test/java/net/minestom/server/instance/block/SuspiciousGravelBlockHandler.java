@@ -28,8 +28,8 @@ public class SuspiciousGravelBlockHandler implements BlockHandler {
     }
 
     @Override
-    public Block onNeighborUpdate(@NotNull Block neighbor, @NotNull Instance instance, @NotNull Point point, @NotNull BlockFace fromFace) {
-        Pos pos = new Pos(point.x(), point.y(), point.z());
+    public Block onNeighborUpdate(@NotNull Block neighbor, @NotNull Point neighborPosition, @NotNull Instance instance, @NotNull BlockFace fromFace) {
+        Pos pos = new Pos(neighborPosition.x(), neighborPosition.y(), neighborPosition.z());
         Block currentBlock = instance.getBlock(pos.relative(fromFace));
         blockAtomicReference.set(currentBlock);
         return neighbor;

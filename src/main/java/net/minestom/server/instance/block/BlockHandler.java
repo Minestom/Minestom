@@ -44,9 +44,14 @@ public interface BlockHandler {
                          @NotNull Vec position,
                          @NotNull Entity entity) { }
 
+    /**
+     * Defines how to change a neighboring block when it is updated.
+     *
+     * @return The modified neighbor block.
+     */
     default Block onNeighborUpdate(@NotNull Block neighbor,
+                                   @NotNull Point neighborPosition,
                                   @NotNull Instance instance,
-                                  @NotNull Point point,
                                   @NotNull BlockFace fromFace) {
         return neighbor;
     }

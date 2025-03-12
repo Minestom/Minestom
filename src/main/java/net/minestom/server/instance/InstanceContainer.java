@@ -696,8 +696,8 @@ public class InstanceContainer extends Instance {
             
             final Block newNeighborBlock = blockHandler.onNeighborUpdate(
                     neighborBlock,
-                    this,
                     neighborPosition,
+                    this,
                     updateFace.getOppositeFace()
             );
 
