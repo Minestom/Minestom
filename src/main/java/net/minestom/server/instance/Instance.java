@@ -185,13 +185,39 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public abstract void setBlock(int x, int y, int z, @NotNull Block block, boolean doBlockUpdates);
 
-    @ApiStatus.Internal
+    @ApiStatus.Experimental
     public boolean placeBlock(@NotNull BlockHandler.Placement placement) {
         return placeBlock(placement, true);
     }
 
-    @ApiStatus.Internal
+    @ApiStatus.Experimental
     public abstract boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates);
+
+
+    /**
+     * Uses a place block event to destroy a block at a specific position.
+     * Useful if you have a destruction event that you want to replace the block at this position with.
+     * <p>
+     * Does block updates by default.
+     *
+     * @param destroy The object used to destroy the block and replace if {@link BlockHandler.Destroy#block()} is non-null; otherwise air
+     * @return true
+     */
+    @ApiStatus.Experimental
+    public boolean breakBlock(@NotNull BlockHandler.Destroy destroy) {
+        return breakBlock(destroy, true);
+    }
+
+    /**
+     * Uses a place block event to destroy a block at a specific position.
+     * Useful if you have a destruction event that you want to replace the block at this position with.
+     *
+     * @param destroy The object used to destroy the block and replace if {@link BlockHandler.Destroy#block()} is non-null; otherwise air
+     * @param doBlockUpdates true to do block updates, false otherwise
+     * @return true
+     */
+    @ApiStatus.Experimental
+    public abstract boolean breakBlock(@NotNull BlockHandler.Destroy destroy, boolean doBlockUpdates);
 
     /**
      * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
@@ -201,7 +227,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param blockPosition the position of the broken block
      * @return true if the block has been broken, false if it has been cancelled
      */
-    @ApiStatus.Internal
+    @ApiStatus.Experimental
     public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace) {
         return breakBlock(player, blockPosition, blockFace, true);
     }
@@ -215,8 +241,24 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      * @param doBlockUpdates true to do block updates, false otherwise
      * @return true if the block has been broken, false if it has been cancelled
      */
-    @ApiStatus.Internal
-    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates);
+    @ApiStatus.Experimental
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
+        return breakBlock(player, blockPosition, blockFace, doBlockUpdates, BlockHandler.Destroy.OfPlayer::new);
+    };
+
+
+    /**
+     * Does call {@link net.minestom.server.event.player.PlayerBlockBreakEvent}
+     * and send particle packets
+     *
+     * @param player         the {@link Player} who break the block
+     * @param blockPosition  the position of the broken block
+     * @param doBlockUpdates true to do block updates, false otherwise
+     * @param destroyerSupplier the supplier of the destroyer, used for custom block breaking
+     * @return true if the block has been broken, false if it has been cancelled
+     */
+    @ApiStatus.Experimental
+    public abstract boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates, BlockHandler.Destroy.PlayerSupplier destroyerSupplier);
 
     /**
      * Forces the generation of a {@link Chunk}, even if no file and {@link Generator} are defined.
