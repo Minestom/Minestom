@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -31,9 +32,12 @@ public interface PacketRegistry<T> {
         return packetInfo(packet.getClass());
     }
 
-    @NotNull String stateName();
-
     PacketInfo<T> packetInfo(int packetId);
+
+    @NotNull
+    ConnectionState state();
+
+    @NotNull ConnectionSide side();
 
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
@@ -42,6 +46,11 @@ public interface PacketRegistry<T> {
         @SafeVarargs
         Client(Entry<? extends ClientPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public @NotNull ConnectionSide side() {
+            return ConnectionSide.CLIENT;
         }
     }
 
@@ -53,8 +62,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "CLIENT_HANDSHAKE";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
         }
     }
 
@@ -67,8 +76,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "CLIENT_STATUS";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -84,8 +93,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "CLIENT_LOGIN";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.LOGIN;
         }
     }
 
@@ -104,8 +113,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "CLIENT_CONFIGURATION";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -178,8 +187,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "CLIENT_PLAY";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.PLAY;
         }
     }
 
@@ -187,6 +196,11 @@ public interface PacketRegistry<T> {
         @SafeVarargs
         Server(Entry<? extends ServerPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public @NotNull ConnectionSide side() {
+            return ConnectionSide.SERVER;
         }
     }
 
@@ -198,8 +212,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "SERVER_HANDSHAKE";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
         }
     }
 
@@ -212,8 +226,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "SERVER_STATUS";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -230,8 +244,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "SERVER_LOGIN";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.LOGIN;
         }
     }
 
@@ -259,8 +273,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "SERVER_CONFIGURATION";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -402,8 +416,8 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "SERVER_PLAY";
+        public @NotNull ConnectionState state() {
+            return ConnectionState.PLAY;
         }
     }
 
@@ -418,7 +432,7 @@ public interface PacketRegistry<T> {
                         return (PacketInfo<T>) info;
                     }
                 }
-                throw new IllegalStateException("Packet type " + type + " isn't registered for state " + stateName() + "!");
+                throw new IllegalStateException("Packet type " + type + " isn't registered for state " + side().name() + "_" + state().name() + "!");
             }
         };
 
@@ -449,17 +463,22 @@ public interface PacketRegistry<T> {
         }
 
         @Override
-        public @NotNull String stateName() {
-            return "UNKNOWN";
-        }
-
-        @Override
         public PacketInfo<T> packetInfo(int packetId) {
             final PacketInfo<T> info;
             if (packetId < 0 || packetId >= suppliers.length || (info = (PacketInfo<T>) suppliers[packetId]) == null) {
                 throw new IllegalStateException("Packet id 0x" + Integer.toHexString(packetId) + " isn't registered!");
             }
             return info;
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.STATUS;
+        }
+
+        @Override
+        public @NotNull ConnectionSide side() {
+            return ConnectionSide.SERVER;
         }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
@@ -469,5 +488,10 @@ public interface PacketRegistry<T> {
         static <T> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
             return new Entry<>((Class) type, reader);
         }
+    }
+
+    enum ConnectionSide {
+        CLIENT,
+        SERVER
     }
 }
