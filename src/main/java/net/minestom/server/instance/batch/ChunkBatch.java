@@ -108,6 +108,7 @@ public class ChunkBatch implements Batch<ChunkCallback> {
             LOGGER.warn("Unable to apply ChunkBatch to unloaded chunk ({}, {}) in {}.",
                     chunkX, chunkZ, instance.getUuid());
             return null;
+
         }
         return apply(instance, chunk, callback);
     }

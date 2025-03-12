@@ -36,8 +36,8 @@ public class BlockClientNbtTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 

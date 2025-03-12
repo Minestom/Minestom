@@ -15,24 +15,22 @@ import org.jetbrains.annotations.NotNull;
  * can be used to forbid the {@link Player} from mining it.
  * <p>
  * Be aware that cancelling this event does not necessary prevent the player from breaking the block
- * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
+ * (could be because of high latency or a modified client) so cancelling {@link net.minestom.server.event.block.BlockChangeEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
 public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
-    private final Player player;
     private final Block block;
     private final BlockVec blockPosition;
-    private final BlockFace blockFace;
+    private final BlockEvent.Source.Player source;
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
-                                   @NotNull BlockFace blockFace) {
-        this.player = player;
+    public PlayerStartDiggingEvent(@NotNull Block block, @NotNull BlockVec blockPosition,
+                                   @NotNull BlockEvent.Source.Player source) {
         this.block = block;
         this.blockPosition = blockPosition;
-        this.blockFace = blockFace;
+        this.source = source;
     }
 
     /**
@@ -61,7 +59,16 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block face
      */
     public @NotNull BlockFace getBlockFace() {
-        return blockFace;
+        return source.blockFace();
+    }
+
+    /**
+     * Gets the {@link BlockEvent.Source}
+     *
+     * @return the Events Source
+     */
+    public @NotNull BlockEvent.Source getSource() {
+        return source;
     }
 
     @Override
@@ -76,6 +83,6 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
 
     @Override
     public @NotNull Player getPlayer() {
-        return player;
+        return source.player();
     }
 }

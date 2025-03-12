@@ -646,7 +646,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         Vec blockPos = new Vec(x, y, z);
                         Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
                         if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
-                            handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
+                            handler.onTouch(block, instance, new Vec(x, y, z), this);
                         }
                     }
                 }

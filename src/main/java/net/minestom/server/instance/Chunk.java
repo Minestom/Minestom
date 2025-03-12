@@ -7,7 +7,9 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.heightmap.Heightmap;
@@ -89,14 +91,8 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param z     the block Z
      * @param block the block to place
      */
-    @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
-        setBlock(x, y, z, block, null, null);
-    }
 
-    protected abstract void setBlock(int x, int y, int z, @NotNull Block block,
-                                     @Nullable BlockHandler.Placement placement,
-                                     @Nullable BlockHandler.Destroy destroy);
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
     public abstract @NotNull List<Section> getSections();
 

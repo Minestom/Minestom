@@ -63,8 +63,8 @@ public class InstanceBlockPacketIntegrationTest {
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minecraft:sign");
+            public @NotNull Block getBlock() {
+                return Block.OAK_SIGN;
             }
         };
 

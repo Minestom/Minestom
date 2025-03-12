@@ -1,5 +1,6 @@
 package net.minestom.server.collision;
 
+import net.minestom.server.instance.Instance;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import net.minestom.server.coordinate.Point;
@@ -28,13 +29,16 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block,
+                                @NotNull Instance instance,
+                                @NotNull Vec position,
+                                @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -67,13 +71,16 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block,
+                                @NotNull Instance instance,
+                                @NotNull Vec position,
+                                @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -107,13 +114,16 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block,
+                                @NotNull Instance instance,
+                                @NotNull Vec position,
+                                @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
@@ -155,13 +165,16 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block,
+                                @NotNull Instance instance,
+                                @NotNull Vec position,
+                                @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
-            public @NotNull NamespaceID getNamespaceId() {
-                return NamespaceID.from("minestom:test");
+            public @NotNull Block getBlock() {
+                return Block.STONE;
             }
         };
 
