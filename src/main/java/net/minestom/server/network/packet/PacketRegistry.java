@@ -42,7 +42,7 @@ public interface PacketRegistry<T> {
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
-    sealed class Client extends PacketRegistryTemplate<ClientPacket> {
+    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
         @SafeVarargs
         Client(Entry<? extends ClientPacket>... suppliers) {
             super(suppliers);
@@ -190,7 +190,7 @@ public interface PacketRegistry<T> {
         }
     }
 
-    sealed class Server extends PacketRegistryTemplate<ServerPacket> {
+    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
         @SafeVarargs
         Server(Entry<? extends ServerPacket>... suppliers) {
             super(suppliers);
@@ -420,7 +420,7 @@ public interface PacketRegistry<T> {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
+    abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
         private final PacketInfo<? extends T>[] suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
@@ -469,15 +469,7 @@ public interface PacketRegistry<T> {
             return info;
         }
 
-        @Override
-        public @NotNull ConnectionState state() {
-            return ConnectionState.STATUS;
-        }
 
-        @Override
-        public @NotNull ConnectionSide side() {
-            return ConnectionSide.SERVER;
-        }
 
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
         }
