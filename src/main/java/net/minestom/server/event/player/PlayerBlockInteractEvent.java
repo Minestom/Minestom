@@ -17,12 +17,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
-    private final Player player;
-    private final PlayerHand hand;
     private final Block block;
     private final BlockVec blockPosition;
-    private final Point cursorPosition;
-    private final BlockFace blockFace;
     private final BlockEvent.Source.Player source;
 
     /**
@@ -33,15 +29,10 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     private boolean cancelled;
 
-    public PlayerBlockInteractEvent(@NotNull Player player, @NotNull PlayerHand hand,
-                                    @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull Point cursorPosition,
-                                    @NotNull BlockFace blockFace, @NotNull BlockEvent.Source.Player source) {
-        this.player = player;
-        this.hand = hand;
+    public PlayerBlockInteractEvent(@NotNull Block block, @NotNull BlockVec blockPosition,
+                                    @NotNull BlockEvent.Source.Player source) {
         this.block = block;
         this.blockPosition = blockPosition;
-        this.cursorPosition = cursorPosition;
-        this.blockFace = blockFace;
         this.source = source;
     }
 
@@ -82,7 +73,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      * Gets the cursor position of the interacted block
      * @return the cursor position of the interaction
      */
-    public @NotNull Point getCursorPosition() { return cursorPosition; }
+    public @NotNull Point getCursorPosition() { return source.cursorPosition(); }
 
     /**
      * Gets the hand used for the interaction.
@@ -90,7 +81,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      * @return the hand used
      */
     public @NotNull PlayerHand getHand() {
-        return hand;
+        return source.hand();
     }
 
     /**
@@ -99,7 +90,7 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
      * @return the block face
      */
     public @NotNull BlockFace getBlockFace() {
-        return blockFace;
+        return source.blockFace();
     }
 
     /**
@@ -123,6 +114,6 @@ public class PlayerBlockInteractEvent implements PlayerInstanceEvent, BlockEvent
 
     @Override
     public @NotNull Player getPlayer() {
-        return player;
+        return source.player();
     }
 }

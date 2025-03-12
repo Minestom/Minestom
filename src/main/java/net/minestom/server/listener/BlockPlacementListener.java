@@ -56,6 +56,7 @@ public class BlockPlacementListener {
         final Vec cursorPosition = new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ());
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            instance,
             player,
             blockFace,
             cursorPosition,
@@ -64,8 +65,11 @@ public class BlockPlacementListener {
 
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock,
-                new BlockVec(blockPosition), cursorPosition, blockFace, source);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(
+                interactedBlock,
+                new BlockVec(blockPosition),
+                source
+        );
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
@@ -171,10 +175,10 @@ public class BlockPlacementListener {
                 true
         );
 
-        if(result.success()) {
+        if(result instanceof BlockChangeEvent.Result.Success) {
             player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
             // Block consuming
-            if (result.doesConsumeBlock()) {
+            if (((BlockChangeEvent.Result.Success) result).doesConsumeBlock()) {
                 // Consume the block in the player's hand
                 final ItemStack newUsedItem = usedItem.consume(1);
                 player.setItemInHand(hand, newUsedItem);

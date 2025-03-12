@@ -144,11 +144,11 @@ public class InstanceContainer extends Instance {
                                               @Nullable Vec cursorPosition,
                                               boolean doBlockUpdates,
                                               int updateDistance) {
-        if (chunk.isReadOnly()) return new BlockChangeEvent.Result(false);
+        if (chunk.isReadOnly()) return new BlockChangeEvent.Result.Fail();
         final DimensionType dim = getCachedDimensionType();
         if (blockPosition.blockY() >= dim.maxY() || blockPosition.blockY() < dim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), blockPosition.blockY());
-            return new BlockChangeEvent.Result(false);
+            return new BlockChangeEvent.Result.Fail();
         }
 
         final BlockChangeEvent.Result result;
@@ -159,16 +159,16 @@ public class InstanceContainer extends Instance {
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
                 // This can happen with nether portals which break the entire frame when a portal block is broken
-                return new BlockChangeEvent.Result(false);
+                return new BlockChangeEvent.Result.Fail();
             }
             this.currentlyChangingBlocks.put(blockPosition, block);
 
             final BlockEvent.Source source = (player != null)
-                    ? new BlockEvent.Source.Player(player, blockFace, cursorPosition, playerHand)
+                    ? new BlockEvent.Source.Player(this, player, blockFace, cursorPosition, playerHand)
                     : new BlockEvent.Source.Instance(this);
 
             BlockChangeEvent blockChangeEvent = new BlockChangeEvent(
-                    block, getBlock(blockPosition), srcInstance, new BlockVec(blockPosition), source
+                    block, getBlock(blockPosition), new BlockVec(blockPosition), source
             );
 
             blockChangeEvent.setDoBlockUpdates(doBlockUpdates);
@@ -184,16 +184,16 @@ public class InstanceContainer extends Instance {
                     player.getInventory().update();
                     chunk.sendChunk(player);
                 }
-                return new BlockChangeEvent.Result(false);
+                return new BlockChangeEvent.Result.Fail();
             }
 
             block = blockChangeEvent.getBlock();
             doBlockUpdates = blockChangeEvent.doBlockUpdates();
 
-            result = new BlockChangeEvent.Result(
+            result = new BlockChangeEvent.Result.Success(
                     true,
                     doBlockUpdates,
-                    blockChangeEvent.consumesBlock(),
+                    blockChangeEvent.doesConsumeBlock(),
                     blockChangeEvent.getPreviousBlock(),
                     block,
                     blockChangeEvent.getInstance(),
@@ -237,7 +237,7 @@ public class InstanceContainer extends Instance {
                                               @Nullable Vec cursorPosition,
                                               boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition.blockX(), blockPosition.blockZ());
-        if (!isLoaded(chunk)) return new BlockChangeEvent.Result(false);
+        if (!isLoaded(chunk)) return new BlockChangeEvent.Result.Fail();
 
         return UNSAFE_setBlock(chunk, blockPosition,
                 block, playerHand, blockFace, player, cursorPosition, doBlockUpdates, 0);
@@ -252,14 +252,14 @@ public class InstanceContainer extends Instance {
                                               boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(blockPosition.blockX(), blockPosition.blockZ());
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
-        if (chunk.isReadOnly()) return new BlockChangeEvent.Result(false);
-        if (!isLoaded(chunk)) return new BlockChangeEvent.Result(false);
+        if (chunk.isReadOnly()) return new BlockChangeEvent.Result.Fail();
+        if (!isLoaded(chunk)) return new BlockChangeEvent.Result.Fail();
 
         final Block block = getBlock(blockPosition);
         if (block.isAir()) {
             // The player probably have a wrong version of this chunk section, send it
             chunk.sendChunk(player);
-            return new BlockChangeEvent.Result(false);
+            return new BlockChangeEvent.Result.Fail();
         }
 
         return UNSAFE_setBlock(chunk, blockPosition,

@@ -9,6 +9,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.block.BlockChangeEvent;
 import net.minestom.server.event.item.PlayerCancelItemUseEvent;
 import net.minestom.server.event.player.PlayerCancelDiggingEvent;
 import net.minestom.server.event.player.PlayerFinishDiggingEvent;
@@ -82,6 +83,7 @@ public final class PlayerDiggingListener {
         final boolean instantBreak = breakTicks == 0;
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            instance,
             player,
             blockFace,
             null,
@@ -89,7 +91,7 @@ public final class PlayerDiggingListener {
         );
 
         if (!instantBreak) {
-            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(player, block, new BlockVec(blockPosition), blockFace, source);
+            PlayerStartDiggingEvent playerStartDiggingEvent = new PlayerStartDiggingEvent(block, new BlockVec(blockPosition), source);
             EventDispatcher.call(playerStartDiggingEvent);
             return new DiggingResult(block, !playerStartDiggingEvent.isCancelled());
         }
@@ -101,13 +103,14 @@ public final class PlayerDiggingListener {
         final Block block = instance.getBlock(blockPosition);
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            instance,
             player,
             null,
             null,
             null
         );
 
-        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition), source);
+        PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(block, new BlockVec(blockPosition), source);
         EventDispatcher.call(playerCancelDiggingEvent);
         return new DiggingResult(block, true);
     }
@@ -120,6 +123,7 @@ public final class PlayerDiggingListener {
         }
 
         BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+            instance,
             player,
             blockFace,
             null,
@@ -130,14 +134,14 @@ public final class PlayerDiggingListener {
         // Realistically shouldn't happen, but a hacked client can send any packet, also illegal ones
         // If the block is unbreakable, prevent a hacked client from breaking it!
         if (breakTicks == BlockBreakCalculation.UNBREAKABLE) {
-            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(player, block, new BlockVec(blockPosition), source);
+            PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(block, new BlockVec(blockPosition), source);
             EventDispatcher.call(playerCancelDiggingEvent);
             return new DiggingResult(block, false);
         }
         // TODO maybe add a check if the player has spent enough time mining the block.
         //   a hacked client could send START_DIGGING and FINISH_DIGGING to instamine any block
 
-        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(player, block, new BlockVec(blockPosition), source);
+        PlayerFinishDiggingEvent playerFinishDiggingEvent = new PlayerFinishDiggingEvent(block, new BlockVec(blockPosition), source);
         EventDispatcher.call(playerFinishDiggingEvent);
 
         return breakBlock(instance, player, blockPosition, playerFinishDiggingEvent.getBlock(), blockFace);
@@ -203,7 +207,7 @@ public final class PlayerDiggingListener {
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(blockPosition, player, null, blockFace, null, true).success();
+        final boolean success = instance.breakBlock(blockPosition, player, null, blockFace, null, true) instanceof BlockChangeEvent.Result.Success;
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {

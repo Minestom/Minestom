@@ -20,20 +20,17 @@ public final class BlockChangeEvent implements Event, BlockEvent, CancellableEve
     private boolean doesConsumeBlock = true;
 
     private final Block previousBlock;
-    private final Instance instance;
     private final BlockVec position;
     private final BlockEvent.Source source;
 
     public BlockChangeEvent(
         @NotNull Block newBlock,
         @NotNull Block previousBlock,
-        @NotNull Instance instance,
         @NotNull BlockVec position,
         @NotNull BlockEvent.Source source
     ) {
         this.newBlock = newBlock;
         this.previousBlock = previousBlock;
-        this.instance = instance;
         this.position = position;
         this.source = source;
     }
@@ -63,7 +60,7 @@ public final class BlockChangeEvent implements Event, BlockEvent, CancellableEve
      * @return the instance
      */
     public @NotNull Instance getInstance() {
-        return instance;
+        return getSource().getInstance();
     }
 
     /**
@@ -103,8 +100,17 @@ public final class BlockChangeEvent implements Event, BlockEvent, CancellableEve
      *
      * @return true if the block will be consumed, false otherwise
      */
-    public boolean consumesBlock() {
+    public boolean doesConsumeBlock() {
         return doesConsumeBlock;
+    }
+
+    /**
+     * If the event has been triggered by a player breaking a block
+     *
+     * @return true if the event is from a player breaking a block
+     */
+    public boolean isBlockBreak() {
+        return getBlock().isAir() && getSource() instanceof BlockEvent.Source.Player;
     }
 
     /**
@@ -138,19 +144,18 @@ public final class BlockChangeEvent implements Event, BlockEvent, CancellableEve
         this.cancelled = cancel;
     }
 
-    public record Result(
-            boolean success,
-            boolean doBlockUpdates,
-            boolean doesConsumeBlock,
-            @Nullable Block previousBlock,
-            @Nullable Block newBlock,
-            @Nullable Instance instance,
-            @Nullable BlockVec position,
-            @Nullable BlockEvent.Source source
-    ) {
-        public Result(boolean success) {
-            this(success, false, false, null, null, null, null, null);
-        }
+    sealed public interface Result {
+        record Fail() implements Result {  }
+        record Success(
+          boolean success,
+          boolean doBlockUpdates,
+          boolean doesConsumeBlock,
+          @Nullable Block previousBlock,
+          @Nullable Block newBlock,
+          @Nullable Instance instance,
+          @Nullable BlockVec position,
+          @Nullable BlockEvent.Source source
+        ) implements Result { }
     }
 
 }

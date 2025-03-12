@@ -12,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
  * Called when a {@link Player} successfully finishes digging a block
  */
 public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent {
-    private final Player player;
     private @NotNull Block block;
     private final BlockVec blockPosition;
     private final BlockEvent.Source.Player source;
 
-    public PlayerFinishDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull BlockEvent.Source.Player source) {
-        this.player = player;
+    public PlayerFinishDiggingEvent( @NotNull Block block, @NotNull BlockVec blockPosition, @NotNull BlockEvent.Source.Player source) {
         this.block = block;
         this.blockPosition = blockPosition;
         this.source = source;
@@ -29,7 +27,7 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
      * <p>
      * This has somewhat odd behavior;
      * If you set it from a previously solid block to a non-solid block
-     * then cancel the respective {@link PlayerBlockBreakEvent}
+     * then cancel the respective {@link net.minestom.server.event.block.BlockChangeEvent}
      * it will allow the player to phase through the block and into the floor
      * (only if the player is standing on top of the block)
      *
@@ -70,6 +68,6 @@ public class PlayerFinishDiggingEvent implements PlayerInstanceEvent, BlockEvent
 
     @Override
     public @NotNull Player getPlayer() {
-        return player;
+        return source.player();
     }
 }
