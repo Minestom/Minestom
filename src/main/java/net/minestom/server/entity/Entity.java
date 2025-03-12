@@ -1840,7 +1840,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     protected void updateTouchBoundingBox(boolean force) {
         if (force || !isFastTouch()) {
-            this.touchBoundingBox = getBoundingBox().grow(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
+            this.touchBoundingBox = getBoundingBox().grow(2 * Vec.EPSILON, 2* Vec.EPSILON, 2* Vec.EPSILON);
         } else if (touchBoundingBox != null) {
             this.touchBoundingBox = null;
         }
