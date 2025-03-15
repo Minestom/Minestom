@@ -225,9 +225,9 @@ public interface BinaryTagSerializer<T> {
         }
     };
 
-    BinaryTagSerializer<NamespaceID> NAMESPACE = STRING.map(
-            NamespaceID::from,
-            NamespaceID::asString
+    BinaryTagSerializer<Key> KEY = STRING.map(
+            Key::key,
+            Key::asString
     );
 
     BinaryTagSerializer<CompoundBinaryTag> COMPOUND = new BinaryTagSerializer<>() {
