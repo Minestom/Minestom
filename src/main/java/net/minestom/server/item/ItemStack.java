@@ -118,6 +118,9 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @Contract(pure = true)
     int amount();
 
+    @Contract(pure = true)
+    @NotNull DataComponentMap componentPatch();
+
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack with(@NotNull Consumer<@NotNull Builder> consumer);
 
