@@ -11,7 +11,7 @@ import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
- * Represents a custom effect in {@link net.minestom.server.item.ItemComponent#POTION_CONTENTS}.
+ * Represents a custom effect in {@link net.minestom.server.component.DataComponent#POTION_CONTENTS}.
  */
 public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings settings) {
 

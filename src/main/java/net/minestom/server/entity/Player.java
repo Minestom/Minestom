@@ -29,6 +29,7 @@ import net.minestom.server.adventure.AdventurePacketConvertor;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -49,7 +50,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
@@ -1001,7 +1001,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         String title = PlainTextComponentSerializer.plainText().serialize(book.title());
         String author = PlainTextComponentSerializer.plainText().serialize(book.author());
         final ItemStack writtenBook = ItemStack.builder(Material.WRITTEN_BOOK)
-                .set(ItemComponent.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
+                .set(DataComponents.WRITTEN_BOOK_CONTENT, new WrittenBookContent(title, author, 0, book.pages(), false))
                 .build();
 
         // Set book in offhand
@@ -1100,7 +1100,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public boolean isEating() {
         if (!isUsingItem()) return false;
         final ItemStack itemStack = getItemInHand(itemUseHand);
-        return itemStack.has(ItemComponent.FOOD) || itemStack.material() == Material.POTION;
+        return itemStack.has(DataComponents.FOOD) || itemStack.material() == Material.POTION;
     }
 
     /**

@@ -459,6 +459,10 @@ interface SoundEvents {
 
     SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get("minecraft:item.bundle.remove_one");
 
+    SoundEvent BLOCK_CACTUS_FLOWER_BREAK = BuiltinSoundEvent.get("minecraft:block.cactus_flower.break");
+
+    SoundEvent BLOCK_CACTUS_FLOWER_PLACE = BuiltinSoundEvent.get("minecraft:block.cactus_flower.place");
+
     SoundEvent BLOCK_CAKE_ADD_CANDLE = BuiltinSoundEvent.get("minecraft:block.cake.add_candle");
 
     SoundEvent BLOCK_CALCITE_BREAK = BuiltinSoundEvent.get("minecraft:block.calcite.break");
@@ -817,6 +821,8 @@ interface SoundEvents {
 
     SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get("minecraft:item.crossbow.shoot");
 
+    SoundEvent BLOCK_DEADBUSH_IDLE = BuiltinSoundEvent.get("minecraft:block.deadbush.idle");
+
     SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get("minecraft:block.decorated_pot.break");
 
     SoundEvent BLOCK_DECORATED_POT_FALL = BuiltinSoundEvent.get("minecraft:block.decorated_pot.fall");
@@ -1066,6 +1072,8 @@ interface SoundEvents {
     SoundEvent BLOCK_FENCE_GATE_OPEN = BuiltinSoundEvent.get("minecraft:block.fence_gate.open");
 
     SoundEvent ITEM_FIRECHARGE_USE = BuiltinSoundEvent.get("minecraft:item.firecharge.use");
+
+    SoundEvent BLOCK_FIREFLY_BUSH_IDLE = BuiltinSoundEvent.get("minecraft:block.firefly_bush.idle");
 
     SoundEvent ENTITY_FIREWORK_ROCKET_BLAST = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.blast");
 
@@ -1545,6 +1553,16 @@ interface SoundEvents {
 
     SoundEvent ITEM_INK_SAC_USE = BuiltinSoundEvent.get("minecraft:item.ink_sac.use");
 
+    SoundEvent BLOCK_IRON_BREAK = BuiltinSoundEvent.get("minecraft:block.iron.break");
+
+    SoundEvent BLOCK_IRON_STEP = BuiltinSoundEvent.get("minecraft:block.iron.step");
+
+    SoundEvent BLOCK_IRON_PLACE = BuiltinSoundEvent.get("minecraft:block.iron.place");
+
+    SoundEvent BLOCK_IRON_HIT = BuiltinSoundEvent.get("minecraft:block.iron.hit");
+
+    SoundEvent BLOCK_IRON_FALL = BuiltinSoundEvent.get("minecraft:block.iron.fall");
+
     SoundEvent BLOCK_IRON_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.iron_door.close");
 
     SoundEvent BLOCK_IRON_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.iron_door.open");
@@ -1608,6 +1626,16 @@ interface SoundEvents {
     SoundEvent BLOCK_LAVA_EXTINGUISH = BuiltinSoundEvent.get("minecraft:block.lava.extinguish");
 
     SoundEvent BLOCK_LAVA_POP = BuiltinSoundEvent.get("minecraft:block.lava.pop");
+
+    SoundEvent BLOCK_LEAF_LITTER_BREAK = BuiltinSoundEvent.get("minecraft:block.leaf_litter.break");
+
+    SoundEvent BLOCK_LEAF_LITTER_STEP = BuiltinSoundEvent.get("minecraft:block.leaf_litter.step");
+
+    SoundEvent BLOCK_LEAF_LITTER_PLACE = BuiltinSoundEvent.get("minecraft:block.leaf_litter.place");
+
+    SoundEvent BLOCK_LEAF_LITTER_HIT = BuiltinSoundEvent.get("minecraft:block.leaf_litter.hit");
+
+    SoundEvent BLOCK_LEAF_LITTER_FALL = BuiltinSoundEvent.get("minecraft:block.leaf_litter.fall");
 
     SoundEvent ENTITY_LEASH_KNOT_BREAK = BuiltinSoundEvent.get("minecraft:entity.leash_knot.break");
 
@@ -2437,6 +2465,10 @@ interface SoundEvents {
 
     SoundEvent BLOCK_SAND_STEP = BuiltinSoundEvent.get("minecraft:block.sand.step");
 
+    SoundEvent BLOCK_SAND_IDLE = BuiltinSoundEvent.get("minecraft:block.sand.idle");
+
+    SoundEvent BLOCK_SAND_WIND = BuiltinSoundEvent.get("minecraft:block.sand.wind");
+
     SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get("minecraft:block.scaffolding.break");
 
     SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get("minecraft:block.scaffolding.fall");
@@ -3189,23 +3221,93 @@ interface SoundEvents {
 
     SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get("minecraft:item.wolf_armor.repair");
 
+    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get("minecraft:entity.wolf.shake");
+
+    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get("minecraft:entity.wolf.step");
+
     SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf.ambient");
 
     SoundEvent ENTITY_WOLF_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf.death");
 
     SoundEvent ENTITY_WOLF_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf.growl");
 
-    SoundEvent ENTITY_WOLF_HOWL = BuiltinSoundEvent.get("minecraft:entity.wolf.howl");
-
     SoundEvent ENTITY_WOLF_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf.hurt");
 
     SoundEvent ENTITY_WOLF_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf.pant");
 
-    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get("minecraft:entity.wolf.shake");
-
-    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get("minecraft:entity.wolf.step");
-
     SoundEvent ENTITY_WOLF_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf.whine");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.ambient");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.death");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.growl");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.hurt");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.pant");
+
+    SoundEvent ENTITY_WOLF_PUGLIN_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_puglin.whine");
+
+    SoundEvent ENTITY_WOLF_SAD_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.ambient");
+
+    SoundEvent ENTITY_WOLF_SAD_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.death");
+
+    SoundEvent ENTITY_WOLF_SAD_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.growl");
+
+    SoundEvent ENTITY_WOLF_SAD_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.hurt");
+
+    SoundEvent ENTITY_WOLF_SAD_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.pant");
+
+    SoundEvent ENTITY_WOLF_SAD_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_sad.whine");
+
+    SoundEvent ENTITY_WOLF_ANGRY_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.ambient");
+
+    SoundEvent ENTITY_WOLF_ANGRY_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.death");
+
+    SoundEvent ENTITY_WOLF_ANGRY_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.growl");
+
+    SoundEvent ENTITY_WOLF_ANGRY_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.hurt");
+
+    SoundEvent ENTITY_WOLF_ANGRY_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.pant");
+
+    SoundEvent ENTITY_WOLF_ANGRY_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_angry.whine");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.ambient");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.death");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.growl");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.hurt");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.pant");
+
+    SoundEvent ENTITY_WOLF_GRUMPY_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_grumpy.whine");
+
+    SoundEvent ENTITY_WOLF_BIG_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_big.ambient");
+
+    SoundEvent ENTITY_WOLF_BIG_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_big.death");
+
+    SoundEvent ENTITY_WOLF_BIG_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_big.growl");
+
+    SoundEvent ENTITY_WOLF_BIG_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_big.hurt");
+
+    SoundEvent ENTITY_WOLF_BIG_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_big.pant");
+
+    SoundEvent ENTITY_WOLF_BIG_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_big.whine");
+
+    SoundEvent ENTITY_WOLF_CUTE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.ambient");
+
+    SoundEvent ENTITY_WOLF_CUTE_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.death");
+
+    SoundEvent ENTITY_WOLF_CUTE_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.growl");
+
+    SoundEvent ENTITY_WOLF_CUTE_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.hurt");
+
+    SoundEvent ENTITY_WOLF_CUTE_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.pant");
+
+    SoundEvent ENTITY_WOLF_CUTE_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf_cute.whine");
 
     SoundEvent BLOCK_WOODEN_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.wooden_door.close");
 
