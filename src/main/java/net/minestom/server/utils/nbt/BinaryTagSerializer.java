@@ -12,7 +12,6 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
@@ -316,7 +315,7 @@ public interface BinaryTagSerializer<T> {
         }
     };
 
-    static <T extends ProtocolObject> @NotNull BinaryTagSerializer<DynamicRegistry.Key<T>> registryKey(@NotNull Function<Registries, DynamicRegistry<T>> registrySelector) {
+    static <T> @NotNull BinaryTagSerializer<DynamicRegistry.Key<T>> registryKey(@NotNull Function<Registries, DynamicRegistry<T>> registrySelector) {
         return new BinaryTagSerializer<>() {
             @Override
             public @NotNull BinaryTag write(@NotNull Context context, DynamicRegistry.@NotNull Key<T> value) {

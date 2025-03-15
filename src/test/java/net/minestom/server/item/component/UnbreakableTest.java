@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 public class UnbreakableTest extends AbstractItemComponentTest<Unbreakable> {
     @Override
     protected @NotNull DataComponent<Unbreakable> component() {

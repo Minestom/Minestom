@@ -1,6 +1,12 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -37,8 +43,6 @@ public interface Registries {
 
     @NotNull DynamicRegistry<BannerPattern> bannerPattern();
 
-    @NotNull DynamicRegistry<WolfVariant> wolfVariant();
-
     @NotNull DynamicRegistry<Enchantment> enchantment();
 
     @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant();
@@ -47,12 +51,19 @@ public interface Registries {
 
     @NotNull DynamicRegistry<Instrument> instrument();
 
-//                minecraft:root/minecraft:cat_variant: Registry must be non-empty: minecraft:cat_variant
-//                minecraft:root/minecraft:chicken_variant: Registry must be non-empty: minecraft:chicken_variant
-//                minecraft:root/minecraft:cow_variant: Registry must be non-empty: minecraft:cow_variant
-//                minecraft:root/minecraft:frog_variant: Registry must be non-empty: minecraft:frog_variant
-//                minecraft:root/minecraft:pig_variant: Registry must be non-empty: minecraft:pig_variant
-//                minecraft:root/minecraft:wolf_sound_variant: Registry must be non-empty: minecraft:wolf_sound_variant
+    @NotNull DynamicRegistry<WolfVariant> wolfVariant();
+
+    @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant();
+
+    @NotNull DynamicRegistry<CatVariant> catVariant();
+
+    @NotNull DynamicRegistry<ChickenVariant> chickenVariant();
+
+    @NotNull DynamicRegistry<CowVariant> cowVariant();
+
+    @NotNull DynamicRegistry<FrogVariant> frogVariant();
+
+    @NotNull DynamicRegistry<PigVariant> pigVariant();
 
     // The following are _not_ sent to the client.
 
