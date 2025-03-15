@@ -104,7 +104,7 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     RESOURCE_KEY(Key.key("minecraft:resource_key")),
 
-    RESOURCE_SELECTOR(NamespaceID.from("minecraft:resource_selector")),
+    RESOURCE_SELECTOR(Key.key("minecraft:resource_selector")),
 
     TEMPLATE_MIRROR(Key.key("minecraft:template_mirror")),
 

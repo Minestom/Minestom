@@ -26,10 +26,10 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
     NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT
             .transform(DataComponent::fromId, DataComponent::id);
     BinaryTagSerializer<DataComponent<?>> NBT_TYPE = BinaryTagSerializer.STRING
-            .map(DataComponent::fromNamespaceId, DataComponent::name);
+            .map(DataComponent::fromKey, DataComponent::name);
 
     NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(DataComponent::fromId);
-    BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(DataComponent::fromId, DataComponent::fromNamespaceId);
+    BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(DataComponent::fromId, DataComponent::fromKey);
 
     /**
      * Represents any type which can hold data components. Represents a finalized view of a component, that is to say
@@ -56,12 +56,12 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
     @NotNull T read(@NotNull NetworkBuffer reader);
     void write(@NotNull NetworkBuffer writer, @NotNull T value);
 
-    static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return DataComponentImpl.NAMESPACES.get(namespaceId);
+    static @Nullable DataComponent<?> fromKey(@NotNull String key) {
+        return DataComponentImpl.NAMESPACES.get(key);
     }
 
-    static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+    static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable DataComponent<?> fromId(int id) {
