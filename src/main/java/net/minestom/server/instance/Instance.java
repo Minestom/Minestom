@@ -16,7 +16,6 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -657,19 +656,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         return entityTracker.entities().stream()
                 .filter(EntityCreature.class::isInstance)
                 .map(entity -> (EntityCreature) entity)
-                .collect(Collectors.toUnmodifiableSet());
-    }
-
-    /**
-     * Gets the experience orbs in the instance.
-     *
-     * @return an unmodifiable {@link Set} containing all the experience orbs in the instance
-     */
-    @Deprecated
-    public @NotNull Set<@NotNull ExperienceOrb> getExperienceOrbs() {
-        return entityTracker.entities().stream()
-                .filter(ExperienceOrb.class::isInstance)
-                .map(entity -> (ExperienceOrb) entity)
                 .collect(Collectors.toUnmodifiableSet());
     }
 

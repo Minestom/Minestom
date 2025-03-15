@@ -38,7 +38,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryCloseEvent;
 import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
-import net.minestom.server.event.item.PickupExperienceEvent;
 import net.minestom.server.event.item.PlayerFinishItemUseEvent;
 import net.minestom.server.event.player.*;
 import net.minestom.server.instance.Chunk;
@@ -385,22 +384,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPendingChunks();
 
         super.update(time); // Super update (item pickup/fire management)
-
-        // Experience orb pickup
-        if (experiencePickupCooldown.isReady(time)) {
-            experiencePickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, .5, 0);
-            this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
-                    EntityTracker.Target.EXPERIENCE_ORBS, experienceOrb -> {
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, experienceOrb)) {
-                            PickupExperienceEvent pickupExperienceEvent = new PickupExperienceEvent(this, experienceOrb);
-                            EventDispatcher.callCancellable(pickupExperienceEvent, () -> {
-                                short experienceCount = pickupExperienceEvent.getExperienceCount(); // TODO give to player
-                                experienceOrb.remove();
-                            });
-                        }
-                    });
-        }
 
         // Eating animation
         if (isUsingItem()) {
