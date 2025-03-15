@@ -4,11 +4,10 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.packet.server.play.AdvancementsPacket;
-
-import java.util.List;
-
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 /**
  * Represents a toast which can be sent to the player using {@link net.minestom.server.entity.Player#sendNotification(Notification)}.
@@ -44,7 +43,8 @@ public record Notification(@NotNull Component title, @NotNull FrameType frameTyp
                 false,
                 List.of(mapping),
                 List.of(),
-                List.of(progressMapping));
+                List.of(progressMapping),
+                true);
     }
 
     @ApiStatus.Internal
@@ -53,6 +53,7 @@ public record Notification(@NotNull Component title, @NotNull FrameType frameTyp
                 false,
                 List.of(),
                 List.of(IDENTIFIER),
-                List.of());
+                List.of(),
+                true);
     }
 }

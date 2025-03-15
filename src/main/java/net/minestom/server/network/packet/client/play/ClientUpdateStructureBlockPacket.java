@@ -8,12 +8,14 @@ import net.minestom.server.utils.Rotation;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ClientUpdateStructureBlockPacket(Point location, Action action,
-                                               Mode mode, String name,
-                                               Point offset, Point size,
-                                               Mirror mirror, Rotation rotation,
-                                               String metadata, float integrity,
-                                               long seed, byte flags) implements ClientPacket {
+public record ClientUpdateStructureBlockPacket(
+        Point location, Action action,
+        Mode mode, String name,
+        Point offset, Point size,
+        Mirror mirror, Rotation rotation,
+        String metadata, float integrity,
+        long seed, byte flags
+) implements ClientPacket {
 
     public static final NetworkBuffer.Type<ClientUpdateStructureBlockPacket> SERIALIZER = NetworkBufferTemplate.template(
             BLOCK_POSITION, ClientUpdateStructureBlockPacket::location,
@@ -38,6 +40,7 @@ public record ClientUpdateStructureBlockPacket(Point location, Action action,
      * Requires the player to be in creative and have a permission level higher than 2.
      */
     public static final byte SHOW_BOUNDING_BOX = 0x4;
+    public static final byte STRICT = 0x8;
 
     /**
      * Update action, <code>UPDATE_DATA</code> indicates nothing special.

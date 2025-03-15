@@ -320,7 +320,7 @@ public class Advancement {
      */
     protected AdvancementsPacket getUpdatePacket() {
         return new AdvancementsPacket(false, List.of(toMapping()),
-                List.of(), List.of(toProgressMapping()));
+                List.of(), List.of(toProgressMapping()), true);
     }
 
     /**
