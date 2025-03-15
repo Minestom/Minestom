@@ -17,7 +17,6 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.entity.EntitySpawnType;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -110,11 +109,6 @@ public final class Registry {
     @ApiStatus.Internal
     public static BannerPatternEntry bannerPattern(String namespace, @NotNull Properties main) {
         return new BannerPatternEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static WolfVariantEntry wolfVariant(String namespace, @NotNull Properties main) {
-        return new WolfVariantEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -694,7 +688,7 @@ public final class Registry {
         private final String translationKey;
         private final double drag;
         private final double acceleration;
-        private final EntitySpawnType spawnType;
+        private final boolean isLiving;
         private final double width;
         private final double height;
         private final double eyeHeight;
@@ -710,7 +704,8 @@ public final class Registry {
             this.translationKey = main.getString("translationKey");
             this.drag = main.getDouble("drag", 0.02);
             this.acceleration = main.getDouble("acceleration", 0.08);
-            this.spawnType = EntitySpawnType.valueOf(main.getString("packetType").toUpperCase(Locale.ROOT));
+            final String packetType = main.getString("packetType").toUpperCase(Locale.ROOT);
+            this.isLiving = "LIVING".equals(packetType) || "PLAYER".equals(packetType);
             this.fireImmune = main.getBoolean("fireImmune", false);
             this.clientTrackingRange = main.getInt("clientTrackingRange");
 
@@ -754,8 +749,16 @@ public final class Registry {
             return acceleration;
         }
 
-        public @NotNull EntitySpawnType spawnType() {
-            return spawnType;
+        public double horizontalAirResistance() {
+            return isLiving ? 0.91 : 0.98;
+        }
+
+        public double verticalAirResistance() {
+            return 1 - drag();
+        }
+
+        public boolean shouldSendAttributes() {
+            return isLiving;
         }
 
         public double width() {
@@ -931,28 +934,6 @@ public final class Registry {
                     Key.key(main.getString("asset_id")),
                     main.getString("translation_key"),
                     custom);
-        }
-    }
-
-    public record WolfVariantEntry(Key key, Key wildTexture, Key tameTexture,
-                                   Key angryTexture, List<String> biomes, Properties custom) implements Entry {
-        public WolfVariantEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    Key.key(main.getString("wild_texture")),
-                    Key.key(main.getString("tame_texture")),
-                    Key.key(main.getString("angry_texture")),
-                    readBiomesList(main.asMap().get("biomes")),
-                    custom);
-        }
-
-        private static @NotNull List<String> readBiomesList(Object biomes) {
-            if (biomes instanceof List<?> list) {
-                return list.stream().map(Object::toString).collect(Collectors.toList());
-            } else if (biomes instanceof String single) {
-                return List.of(single);
-            } else {
-                throw new IllegalArgumentException("invalid biomes entry: " + biomes);
-            }
         }
     }
 
