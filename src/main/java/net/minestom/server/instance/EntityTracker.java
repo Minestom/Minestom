@@ -3,7 +3,6 @@ package net.minestom.server.instance;
 import net.minestom.server.Viewable;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.ExperienceOrb;
 import net.minestom.server.entity.ItemEntity;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
@@ -107,9 +106,8 @@ public sealed interface EntityTracker permits EntityTrackerImpl {
         Target<Entity> ENTITIES = create(Entity.class);
         Target<Player> PLAYERS = create(Player.class);
         Target<ItemEntity> ITEMS = create(ItemEntity.class);
-        Target<ExperienceOrb> EXPERIENCE_ORBS = create(ExperienceOrb.class);
 
-        List<EntityTracker.Target<? extends Entity>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS, EntityTracker.Target.EXPERIENCE_ORBS);
+        List<EntityTracker.Target<? extends Entity>> TARGETS = List.of(EntityTracker.Target.ENTITIES, EntityTracker.Target.PLAYERS, EntityTracker.Target.ITEMS);
 
         Class<E> type();
 
