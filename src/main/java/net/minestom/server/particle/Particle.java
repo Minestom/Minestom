@@ -461,7 +461,8 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record Trail(@NotNull Key key, int id, @NotNull Point target, @NotNull RGBLike color, int duration) implements Particle {
+    record Trail(@NotNull Key key, int id, @NotNull Point target, @NotNull RGBLike color,
+                 int duration) implements Particle {
 
         public @NotNull Trail withProperties(@NotNull Point target, @NotNull RGBLike color, int duration) {
             return new Trail(key(), id(), target, color, duration);
@@ -532,20 +533,20 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record TintedLeaves(@NotNull NamespaceID namespace, int id, @NotNull AlphaColor color) implements Particle {
+    record TintedLeaves(@NotNull Key key, int id, @NotNull AlphaColor color) implements Particle {
         @Contract(pure = true)
         public @NotNull TintedLeaves withColor(@NotNull AlphaColor color) {
-            return new TintedLeaves(namespace(), id(), color);
+            return new TintedLeaves(key(), id(), color);
         }
 
         @Contract(pure = true)
         public @NotNull TintedLeaves withColor(@NotNull RGBLike color) {
-            return new TintedLeaves(namespace(), id(), new AlphaColor(1, color));
+            return new TintedLeaves(key(), id(), new AlphaColor(1, color));
         }
 
         @Contract(pure = true)
         public @NotNull TintedLeaves withColor(int alpha, @NotNull RGBLike color) {
-            return new TintedLeaves(namespace(), id(), new AlphaColor(alpha, color));
+            return new TintedLeaves(key(), id(), new AlphaColor(alpha, color));
         }
 
         @Override
@@ -561,7 +562,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("color", AlphaColor.NBT_TYPE.write(color))
                     .build();
         }

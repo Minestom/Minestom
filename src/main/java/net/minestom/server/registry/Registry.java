@@ -872,8 +872,8 @@ public final class Registry {
                                    Properties custom) implements Entry {
         public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
             this(
-                    NamespaceID.from(namespace),
-                    NamespaceID.from(main.getString("asset_id")),
+                    Key.key(namespace),
+                    Key.key(main.getString("asset_id")),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
                     main.getBoolean("decal"),
                     custom
