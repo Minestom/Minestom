@@ -28,6 +28,9 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
     BinaryTagSerializer<DataComponent<?>> NBT_TYPE = BinaryTagSerializer.STRING
             .map(DataComponent::fromKey, DataComponent::name);
 
+    NetworkBuffer.Type<DataComponentMap> MAP_NETWORK_TYPE = DataComponentMap.networkType(DataComponent::fromId);
+    BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.nbtType(DataComponent::fromId, DataComponent::fromKey);
+
     NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(DataComponent::fromId);
     BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(DataComponent::fromId, DataComponent::fromKey);
 

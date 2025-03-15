@@ -788,7 +788,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 var chunk = instance.getChunk(chunkX, chunkZ);
                 if (chunk == null || !chunk.isLoaded()) continue;
 
-//                sendPacket(chunk.getFullDataPacket());
+                sendPacket(chunk.getFullDataPacket());
                 EventDispatcher.call(new PlayerChunkLoadEvent(this, chunkX, chunkZ));
 
                 pendingChunkCount -= 1f;
@@ -1411,7 +1411,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * and send data to his new viewers.
      */
     protected void refreshAfterTeleport() {
-        sendPacketsToViewers(getEntityType().registry().spawnType().getSpawnPacket(this));
+        sendPacketsToViewers(getSpawnPacket());
 
         // Update for viewers
         sendPacketToViewersAndSelf(getVelocityPacket());
@@ -2227,7 +2227,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param connection the connection to show the player to
      */
     protected void showPlayer(@NotNull PlayerConnection connection) {
-        connection.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        connection.sendPacket(getSpawnPacket());
         connection.sendPacket(getVelocityPacket());
         connection.sendPacket(getMetadataPacket());
         connection.sendPacket(getEquipmentsPacket());
