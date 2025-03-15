@@ -9,6 +9,7 @@ import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.color.AlphaColor;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
@@ -30,7 +31,6 @@ import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -111,8 +111,8 @@ public class PlayerInit {
                 player.setPermissionLevel(4);
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
-                        .set(ItemComponent.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-                        .set(ItemComponent.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
+                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
+                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
                         .build();
                 player.getInventory().addItemStack(itemStack);
 
@@ -128,7 +128,7 @@ public class PlayerInit {
 
                 // TODO(1.21.2): Handle bundle slot selection
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
+                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
                                 ItemStack.of(Material.RABBIT_FOOT, 5)
                         ))
@@ -177,10 +177,10 @@ public class PlayerInit {
             .addListener(PlayerBeginItemUseEvent.class, event -> {
                 final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
-                final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
+                final boolean hasProjectile = !itemStack.get(DataComponents.CHARGED_PROJECTILES, List.of()).isEmpty();
                 if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
                     // "shoot" the arrow
-                    player.setItemInHand(event.getHand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
                     return;
@@ -195,7 +195,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
-                    player.setItemInHand(event.getHand(), itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
                     return;
                 }
             })
@@ -264,7 +264,7 @@ public class PlayerInit {
     public static ItemStack getFoodItem(int consumeTicks) {
         return ItemStack.builder(Material.IRON_NUGGET)
                 .amount(64)
-                .set(ItemComponent.CONSUMABLE, new Consumable(
+                .set(DataComponents.CONSUMABLE, new Consumable(
                         (float) consumeTicks / 20,
                         ItemAnimation.EAT,
                         SoundEvent.BLOCK_CHAIN_STEP,

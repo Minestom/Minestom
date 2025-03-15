@@ -1,7 +1,7 @@
 package net.minestom.server.network.packet.server.play;
 
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -38,14 +38,14 @@ public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemSta
         final var components = new ArrayList<Component>();
 
         list.forEach(itemStack -> {
-            components.addAll(itemStack.get(ItemComponent.LORE, List.of()));
+            components.addAll(itemStack.get(DataComponents.LORE, List.of()));
 
-            final var customName = itemStack.get(ItemComponent.CUSTOM_NAME);
+            final var customName = itemStack.get(DataComponents.CUSTOM_NAME);
             if (customName != null) {
                 components.add(customName);
             }
 
-            final var itemName = itemStack.get(ItemComponent.ITEM_NAME);
+            final var itemName = itemStack.get(DataComponents.ITEM_NAME);
             if (itemName != null) {
                 components.add(itemName);
             }
@@ -65,14 +65,14 @@ public record WindowItemsPacket(int windowId, int stateId, @NotNull List<ItemSta
                 this.windowId,
                 this.stateId,
                 this.items.stream().map(stack -> stack
-                                .with(ItemComponent.ITEM_NAME, operator)
-                                .with(ItemComponent.CUSTOM_NAME, operator)
-                                .with(ItemComponent.LORE, loreOperator))
+                                .with(DataComponents.ITEM_NAME, operator)
+                                .with(DataComponents.CUSTOM_NAME, operator)
+                                .with(DataComponents.LORE, loreOperator))
                         .toList(),
                 this.carriedItem
-                        .with(ItemComponent.ITEM_NAME, operator)
-                        .with(ItemComponent.CUSTOM_NAME, operator)
-                        .with(ItemComponent.LORE, loreOperator)
+                        .with(DataComponents.ITEM_NAME, operator)
+                        .with(DataComponents.CUSTOM_NAME, operator)
+                        .with(DataComponents.LORE, loreOperator)
         );
     }
 }

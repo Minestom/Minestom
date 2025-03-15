@@ -1,7 +1,7 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
@@ -37,7 +37,7 @@ public interface Registries {
 
     @NotNull DynamicRegistry<BannerPattern> bannerPattern();
 
-    @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant();
+    @NotNull DynamicRegistry<WolfVariant> wolfVariant();
 
     @NotNull DynamicRegistry<Enchantment> enchantment();
 
@@ -46,6 +46,13 @@ public interface Registries {
     @NotNull DynamicRegistry<JukeboxSong> jukeboxSong();
 
     @NotNull DynamicRegistry<Instrument> instrument();
+
+//                minecraft:root/minecraft:cat_variant: Registry must be non-empty: minecraft:cat_variant
+//                minecraft:root/minecraft:chicken_variant: Registry must be non-empty: minecraft:chicken_variant
+//                minecraft:root/minecraft:cow_variant: Registry must be non-empty: minecraft:cow_variant
+//                minecraft:root/minecraft:frog_variant: Registry must be non-empty: minecraft:frog_variant
+//                minecraft:root/minecraft:pig_variant: Registry must be non-empty: minecraft:pig_variant
+//                minecraft:root/minecraft:wolf_sound_variant: Registry must be non-empty: minecraft:wolf_sound_variant
 
     // The following are _not_ sent to the client.
 
