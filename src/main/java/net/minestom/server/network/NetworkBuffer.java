@@ -65,7 +65,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    static <T extends ProtocolObject> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
+    static <T> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
         return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
     }
 

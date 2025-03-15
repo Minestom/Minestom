@@ -9,7 +9,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
@@ -833,7 +832,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record RegistryTypeType<T extends ProtocolObject>(
+    record RegistryTypeType<T>(
             @NotNull Function<Registries, DynamicRegistry<T>> selector,
             boolean holder
     ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {

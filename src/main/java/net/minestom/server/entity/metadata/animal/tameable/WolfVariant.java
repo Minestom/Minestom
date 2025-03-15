@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
-public sealed interface WolfVariant extends ProtocolObject, WolfVariants permits WolfVariantImpl {
+public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, true);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<WolfVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
 
