@@ -16,18 +16,21 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
 
-import static net.minestom.server.network.NetworkBuffer.*;
-
-public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping> advancementMappings,
-                                 @NotNull List<String> identifiersToRemove,
-                                 @NotNull List<ProgressMapping> progressMappings) implements ServerPacket.Play, ServerPacket.ComponentHolding {
+public record AdvancementsPacket(
+        boolean reset,
+        @NotNull List<AdvancementMapping> advancementMappings,
+        @NotNull List<String> identifiersToRemove,
+        @NotNull List<ProgressMapping> progressMappings,
+        boolean showAdvancements
+) implements ServerPacket.Play, ServerPacket.ComponentHolding {
     public static final int MAX_ADVANCEMENTS = Short.MAX_VALUE;
 
     public static final NetworkBuffer.Type<AdvancementsPacket> SERIALIZER = NetworkBufferTemplate.template(
-            BOOLEAN, AdvancementsPacket::reset,
+            NetworkBuffer.BOOLEAN, AdvancementsPacket::reset,
             AdvancementMapping.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementsPacket::advancementMappings,
-            STRING.list(MAX_ADVANCEMENTS), AdvancementsPacket::identifiersToRemove,
+            NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), AdvancementsPacket::identifiersToRemove,
             ProgressMapping.SERIALIZER.list(MAX_ADVANCEMENTS), AdvancementsPacket::progressMappings,
+            NetworkBuffer.BOOLEAN, AdvancementsPacket::showAdvancements,
             AdvancementsPacket::new
     );
 
@@ -58,7 +61,8 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
                 this.reset,
                 this.advancementMappings.stream().map(mapping -> mapping.copyWithOperator(operator)).toList(),
                 this.identifiersToRemove,
-                this.progressMappings
+                this.progressMappings,
+                this.showAdvancements
         );
     }
 
@@ -68,7 +72,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
     public record AdvancementMapping(@NotNull String key,
                                      @NotNull Advancement value) implements ComponentHolder<AdvancementMapping> {
         public static final NetworkBuffer.Type<AdvancementMapping> SERIALIZER = NetworkBufferTemplate.template(
-                STRING, AdvancementMapping::key,
+                NetworkBuffer.STRING, AdvancementMapping::key,
                 Advancement.SERIALIZER, AdvancementMapping::value,
                 AdvancementMapping::new
         );
@@ -92,10 +96,10 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
         }
 
         public static final NetworkBuffer.Type<Advancement> SERIALIZER = NetworkBufferTemplate.template(
-                STRING.optional(), Advancement::parentIdentifier,
+                NetworkBuffer.STRING.optional(), Advancement::parentIdentifier,
                 DisplayData.SERIALIZER.optional(), Advancement::displayData,
                 Requirement.SERIALIZER.list(MAX_ADVANCEMENTS), Advancement::requirements,
-                BOOLEAN, Advancement::sendTelemetryData,
+                NetworkBuffer.BOOLEAN, Advancement::sendTelemetryData,
                 Advancement::new
         );
 
@@ -112,7 +116,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record Requirement(@NotNull List<String> requirements) {
         public static final NetworkBuffer.Type<Requirement> SERIALIZER = NetworkBufferTemplate.template(
-                STRING.list(MAX_ADVANCEMENTS), Requirement::requirements,
+                NetworkBuffer.STRING.list(MAX_ADVANCEMENTS), Requirement::requirements,
                 Requirement::new
         );
 
@@ -126,32 +130,32 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
                               int flags, @Nullable String backgroundTexture,
                               float x, float y) implements ComponentHolder<DisplayData> {
 
-        public static final NetworkBuffer.Type<DisplayData> SERIALIZER = new Type<>() {
+        public static final NetworkBuffer.Type<DisplayData> SERIALIZER = new NetworkBuffer.Type<>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, DisplayData value) {
-                buffer.write(COMPONENT, value.title);
-                buffer.write(COMPONENT, value.description);
+                buffer.write(NetworkBuffer.COMPONENT, value.title);
+                buffer.write(NetworkBuffer.COMPONENT, value.description);
                 buffer.write(ItemStack.NETWORK_TYPE, value.icon);
                 buffer.write(NetworkBuffer.Enum(FrameType.class), value.frameType);
-                buffer.write(INT, value.flags);
+                buffer.write(NetworkBuffer.INT, value.flags);
                 if ((value.flags & 0x1) != 0) {
                     assert value.backgroundTexture != null;
-                    buffer.write(STRING, value.backgroundTexture);
+                    buffer.write(NetworkBuffer.STRING, value.backgroundTexture);
                 }
-                buffer.write(FLOAT, value.x);
-                buffer.write(FLOAT, value.y);
+                buffer.write(NetworkBuffer.FLOAT, value.x);
+                buffer.write(NetworkBuffer.FLOAT, value.y);
             }
 
             @Override
             public DisplayData read(@NotNull NetworkBuffer buffer) {
-                var title = buffer.read(COMPONENT);
-                var description = buffer.read(COMPONENT);
+                var title = buffer.read(NetworkBuffer.COMPONENT);
+                var description = buffer.read(NetworkBuffer.COMPONENT);
                 var icon = buffer.read(ItemStack.NETWORK_TYPE);
-                var frameType = FrameType.values()[buffer.read(VAR_INT)];
-                var flags = buffer.read(INT);
-                var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(STRING) : null;
-                var x = buffer.read(FLOAT);
-                var y = buffer.read(FLOAT);
+                var frameType = FrameType.values()[buffer.read(NetworkBuffer.VAR_INT)];
+                var flags = buffer.read(NetworkBuffer.INT);
+                var backgroundTexture = (flags & 0x1) != 0 ? buffer.read(NetworkBuffer.STRING) : null;
+                var x = buffer.read(NetworkBuffer.FLOAT);
+                var y = buffer.read(NetworkBuffer.FLOAT);
                 return new DisplayData(title, description,
                         icon, frameType,
                         flags, backgroundTexture,
@@ -172,7 +176,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record ProgressMapping(@NotNull String key, @NotNull AdvancementProgress progress) {
         public static final NetworkBuffer.Type<ProgressMapping> SERIALIZER = NetworkBufferTemplate.template(
-                STRING, ProgressMapping::key,
+                NetworkBuffer.STRING, ProgressMapping::key,
                 AdvancementProgress.SERIALIZER, ProgressMapping::progress,
                 ProgressMapping::new
         );
@@ -191,7 +195,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record Criteria(@NotNull String criterionIdentifier, @NotNull CriterionProgress criterionProgress) {
         public static final NetworkBuffer.Type<Criteria> SERIALIZER = NetworkBufferTemplate.template(
-                STRING, Criteria::criterionIdentifier,
+                NetworkBuffer.STRING, Criteria::criterionIdentifier,
                 CriterionProgress.SERIALIZER, Criteria::criterionProgress,
                 Criteria::new
         );
@@ -199,7 +203,7 @@ public record AdvancementsPacket(boolean reset, @NotNull List<AdvancementMapping
 
     public record CriterionProgress(@Nullable Long dateOfAchieving) {
         public static final NetworkBuffer.Type<CriterionProgress> SERIALIZER = NetworkBufferTemplate.template(
-                LONG.optional(), CriterionProgress::dateOfAchieving,
+                NetworkBuffer.LONG.optional(), CriterionProgress::dateOfAchieving,
                 CriterionProgress::new
         );
     }

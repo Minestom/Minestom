@@ -2,6 +2,7 @@ package net.minestom.server.instance.heightmap;
 
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,6 +10,17 @@ import static net.minestom.server.instance.Chunk.CHUNK_SIZE_X;
 import static net.minestom.server.instance.Chunk.CHUNK_SIZE_Z;
 
 public abstract class Heightmap {
+    public enum Type {
+        WORLD_SURFACE_WG,
+        WORLD_SURFACE,
+        OCEAN_FLOOR_WG,
+        OCEAN_FLOOR,
+        MOTION_BLOCKING,
+        MOTION_BLOCKING_NO_LEAVES;
+
+        public static final NetworkBuffer.Type<Type> NETWORK_TYPE = NetworkBuffer.Enum(Type.class);
+    }
+
     private final short[] heights = new short[CHUNK_SIZE_X * CHUNK_SIZE_Z];
     private final Chunk chunk;
     private final int minHeight;
@@ -19,9 +31,9 @@ public abstract class Heightmap {
         minHeight = chunk.getInstance().getCachedDimensionType().minY() - 1;
     }
 
-    protected abstract boolean checkBlock(@NotNull Block block);
+    public abstract @NotNull Type type();
 
-    public abstract String NBTName();
+    protected abstract boolean checkBlock(@NotNull Block block);
 
     public void refresh(int x, int y, int z, Block block) {
         if (checkBlock(block)) {

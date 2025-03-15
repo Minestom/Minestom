@@ -55,7 +55,7 @@ public class ItemComponentReadWriteTest {
         }
 
         assertAll(componentEntries.stream().map(entry -> () -> {
-            var component = DataComponents.fromKey(entry.getKey());
+            var component = DataComponent.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
             //noinspection unchecked
             readWriteTestImpl((DataComponent<Object>) component, entry.getValue());
@@ -70,7 +70,7 @@ public class ItemComponentReadWriteTest {
 
             // Need to rewrite because adventure formats slightly different from vanilla.
             var expected = nbt;
-            assertEquals(expected, actual, () -> "\n--- " + component.name() +" (NBT) ---\n" +
+            assertEquals(expected, actual, () -> "\n--- " + component.name() + " (NBT) ---\n" +
                     "EXP: " + TagStringIOExt.writeTag(expected) + "\n" +
                     "ACT: " + TagStringIOExt.writeTag(actual));
 
@@ -80,7 +80,7 @@ public class ItemComponentReadWriteTest {
                     component.write(buffer, value);
                     var comp2 = component.read(buffer);
                     var expected2 = component.write(CONTEXT, comp2);
-                    assertEquals(expected2, actual, () -> "\n--- " + component.name() +" (NETWORK) ---\n" +
+                    assertEquals(expected2, actual, () -> "\n--- " + component.name() + " (NETWORK) ---\n" +
                             "EXP: " + TagStringIOExt.writeTag(expected2) + "\n" +
                             "ACT: " + TagStringIOExt.writeTag(actual));
                 } catch (UnsupportedOperationException ignored) {
