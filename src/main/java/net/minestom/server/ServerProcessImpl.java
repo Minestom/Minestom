@@ -6,6 +6,12 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.EventDispatcher;
@@ -73,11 +79,17 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<TrimMaterial> trimMaterial;
     private final DynamicRegistry<TrimPattern> trimPattern;
     private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<WolfVariant> wolfVariant;
     private final DynamicRegistry<Enchantment> enchantment;
     private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
     private final DynamicRegistry<Instrument> instrument;
+    private final DynamicRegistry<WolfVariant> wolfVariant;
+    private final DynamicRegistry<WolfSoundVariant> wolfSoundVariant;
+    private final DynamicRegistry<CatVariant> catVariant;
+    private final DynamicRegistry<ChickenVariant> chickenVariant;
+    private final DynamicRegistry<CowVariant> cowVariant;
+    private final DynamicRegistry<FrogVariant> frogVariant;
+    private final DynamicRegistry<PigVariant> pigVariant;
 
     private final ConnectionManager connection;
     private final PacketListenerManager packetListener;
@@ -119,11 +131,17 @@ final class ServerProcessImpl implements ServerProcess {
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
         this.trimPattern = TrimPattern.createDefaultRegistry();
         this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.wolfVariant = WolfVariant.createDefaultRegistry();
         this.enchantment = Enchantment.createDefaultRegistry(this);
         this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
         this.instrument = Instrument.createDefaultRegistry();
+        this.wolfVariant = WolfVariant.createDefaultRegistry();
+        this.wolfSoundVariant = WolfSoundVariant.createDefaultRegistry();
+        this.catVariant = CatVariant.createDefaultRegistry();
+        this.chickenVariant = ChickenVariant.createDefaultRegistry();
+        this.cowVariant = CowVariant.createDefaultRegistry();
+        this.frogVariant = FrogVariant.createDefaultRegistry();
+        this.pigVariant = PigVariant.createDefaultRegistry();
 
         this.connection = new ConnectionManager();
         this.packetListener = new PacketListenerManager();
@@ -172,11 +190,6 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
-        return wolfVariant;
-    }
-
-    @Override
     public @NotNull DynamicRegistry<Enchantment> enchantment() {
         return enchantment;
     }
@@ -194,6 +207,41 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull DynamicRegistry<Instrument> instrument() {
         return instrument;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
+        return wolfVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+        return wolfSoundVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CatVariant> catVariant() {
+        return catVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
+        return chickenVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
+        return cowVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
+        return frogVariant;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
+        return pigVariant;
     }
 
     @Override
