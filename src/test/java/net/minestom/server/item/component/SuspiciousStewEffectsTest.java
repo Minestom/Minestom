@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +17,7 @@ public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<Suspici
 
     @Override
     protected @NotNull DataComponent<SuspiciousStewEffects> component() {
-        return ItemComponent.SUSPICIOUS_STEW_EFFECTS;
+        return DataComponents.SUSPICIOUS_STEW_EFFECTS;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<Suspici
 
     @Test
     void nbtReadDefaultDuration() throws Exception {
-        var value = ItemComponent.SUSPICIOUS_STEW_EFFECTS.read(BinaryTagSerializer.Context.EMPTY, TagStringIOExt.readTag("""
+        var value = DataComponents.SUSPICIOUS_STEW_EFFECTS.read(BinaryTagSerializer.Context.EMPTY, TagStringIOExt.readTag("""
                 [{"id": "minecraft:strength"}]
                 """));
         var expected = new SuspiciousStewEffects(new SuspiciousStewEffects.Effect(PotionEffect.STRENGTH, 160));

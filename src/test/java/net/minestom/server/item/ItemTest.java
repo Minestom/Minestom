@@ -31,7 +31,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponents.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -41,7 +41,7 @@ public class ItemTest {
         }
 
         ItemStack finalItem = item;
-        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(ItemComponent.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
+        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
         assertEquals(item.amount(), 5, "Items with different amount should not be equals");
@@ -56,7 +56,7 @@ public class ItemTest {
 
         // Should have the exact same components as the material prototype
         var prototype = Material.DIAMOND_SWORD.registry().prototype();
-        for (DataComponent<?> component : ItemComponent.values()) {
+        for (DataComponent<?> component : DataComponents.values()) {
             var proto = prototype.get(component);
             if (proto == null) {
                 assertFalse(item.has(component), "Item should not have component " + component);
@@ -66,7 +66,7 @@ public class ItemTest {
         }
 
         ItemStack finalItem = item;
-        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(ItemComponent.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
+        assertThrows(UnsupportedOperationException.class, () -> finalItem.get(DataComponents.LORE).add(Component.text("Hey!")), "Lore list cannot be modified directly");
 
         item = item.withAmount(5);
         assertEquals(item.amount(), 5, "Items with different amount should not be equals");
@@ -82,7 +82,7 @@ public class ItemTest {
 
         assertTrue(item1.isSimilar(item2));
         assertTrue(item1.withAmount(5).isSimilar(item2.withAmount(2)));
-        assertFalse(item1.isSimilar(item2.with(ItemComponent.CUSTOM_NAME, Component.text("Hey!"))));
+        assertFalse(item1.isSimilar(item2.with(DataComponents.CUSTOM_NAME, Component.text("Hey!"))));
     }
 
     @Test
@@ -97,16 +97,16 @@ public class ItemTest {
     public void testBuilderReuse() {
         var builder = ItemStack.builder(Material.DIAMOND);
         var item1 = builder.build();
-        var item2 = builder.set(ItemComponent.CUSTOM_NAME, Component.text("Name")).build();
-        assertNull(item1.get(ItemComponent.CUSTOM_NAME));
-        assertNotNull(item2.get(ItemComponent.CUSTOM_NAME));
+        var item2 = builder.set(DataComponents.CUSTOM_NAME, Component.text("Name")).build();
+        assertNull(item1.get(DataComponents.CUSTOM_NAME));
+        assertNotNull(item2.get(DataComponents.CUSTOM_NAME));
         assertNotEquals(item1, item2, "Item builder should be reusable");
     }
 
     @Test
     public void materialUpdate() {
         var item1 = ItemStack.builder(Material.DIAMOND)
-                .amount(5).set(ItemComponent.CUSTOM_NAME, Component.text("Name"))
+                .amount(5).set(DataComponents.CUSTOM_NAME, Component.text("Name"))
                 .build();
         var item2 = item1.withMaterial(Material.GOLD_INGOT);
 
@@ -139,9 +139,9 @@ public class ItemTest {
 
     static ItemStack createItem() {
         return ItemStack.builder(Material.STONE)
-                .set(ItemComponent.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
-                .set(ItemComponent.LORE, List.of(Component.text("Line 1"), Component.text("Line 2")))
-                .set(ItemComponent.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10), false))
+                .set(DataComponents.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
+                .set(DataComponents.LORE, List.of(Component.text("Line 1"), Component.text("Line 2")))
+                .set(DataComponents.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10), false))
                 .build();
     }
 }

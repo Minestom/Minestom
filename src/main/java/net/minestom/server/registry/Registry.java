@@ -22,7 +22,6 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
@@ -651,7 +650,7 @@ public final class Registry {
                     DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
-                        DataComponent<Object> component = (DataComponent<Object>) ItemComponent.fromKey(entry.getKey());
+                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
@@ -771,9 +770,13 @@ public final class Registry {
             return eyeHeight;
         }
 
-        public boolean fireImmune() { return fireImmune; }
+        public boolean fireImmune() {
+            return fireImmune;
+        }
 
-        public int clientTrackingRange() { return clientTrackingRange; }
+        public int clientTrackingRange() {
+            return clientTrackingRange;
+        }
 
         /**
          *
@@ -858,7 +861,6 @@ public final class Registry {
 
     public record TrimMaterialEntry(@NotNull Key key,
                                     @NotNull String assetName,
-                                    @NotNull Material ingredient,
                                     @NotNull Map<String, String> overrideArmorMaterials,
                                     @NotNull Component description,
                                     Properties custom) implements Entry {
@@ -866,7 +868,6 @@ public final class Registry {
             this(
                     Key.key(namespace),
                     main.getString("asset_name"),
-                    Objects.requireNonNull(Material.fromKey(main.getString("ingredient"))),
                     Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
                             .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
@@ -877,15 +878,13 @@ public final class Registry {
 
     public record TrimPatternEntry(@NotNull Key key,
                                    @NotNull Key assetID,
-                                   @NotNull Material template,
                                    @NotNull Component description,
                                    boolean decal,
                                    Properties custom) implements Entry {
         public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
             this(
-                    Key.key(namespace),
-                    Key.key(main.getString("asset_id")),
-                    Objects.requireNonNull(Material.fromKey(main.getString("template_item"))),
+                    NamespaceID.from(namespace),
+                    NamespaceID.from(main.getString("asset_id")),
                     JSONComponentSerializer.json().deserialize(main.section("description").toString()),
                     main.getBoolean("decal"),
                     custom
@@ -925,7 +924,8 @@ public final class Registry {
         }
     }
 
-    public record BannerPatternEntry(Key key, Key assetId, String translationKey, Properties custom) implements Entry {
+    public record BannerPatternEntry(Key key, Key assetId, String translationKey,
+                                     Properties custom) implements Entry {
         public BannerPatternEntry(String namespace, Properties main, Properties custom) {
             this(Key.key(namespace),
                     Key.key(main.getString("asset_id")),
@@ -934,7 +934,8 @@ public final class Registry {
         }
     }
 
-    public record WolfVariantEntry(Key key, Key wildTexture, Key tameTexture, Key angryTexture, List<String> biomes, Properties custom) implements Entry {
+    public record WolfVariantEntry(Key key, Key wildTexture, Key tameTexture,
+                                   Key angryTexture, List<String> biomes, Properties custom) implements Entry {
         public WolfVariantEntry(String namespace, Properties main, Properties custom) {
             this(Key.key(namespace),
                     Key.key(main.getString("wild_texture")),
@@ -1014,7 +1015,8 @@ public final class Registry {
         }
     }
 
-    public record PaintingVariantEntry(Key key, Key assetId, int width, int height, Properties custom) implements Entry {
+    public record PaintingVariantEntry(Key key, Key assetId, int width, int height,
+                                       Properties custom) implements Entry {
         public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
             this(Key.key(namespace),
                     Key.key(main.getString("asset_id")),
@@ -1048,7 +1050,9 @@ public final class Registry {
         }
     }
 
-    public record BlockSoundTypeEntry(@NotNull Key key, float volume, float pitch, SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound, SoundEvent placeSound, SoundEvent stepSound) {
+    public record BlockSoundTypeEntry(@NotNull Key key, float volume, float pitch,
+                                      SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound,
+                                      SoundEvent placeSound, SoundEvent stepSound) {
         public BlockSoundTypeEntry(String namespace, Properties main) {
             this(Key.key(namespace), main.getFloat("volume"),
                     main.getFloat("pitch"), SoundEvent.fromKey(main.getString("breakSound")), SoundEvent.fromKey(main.getString("hitSound")),

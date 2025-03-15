@@ -74,6 +74,8 @@ interface Particles {
 
     Particle PALE_OAK_LEAVES = ParticleImpl.get("minecraft:pale_oak_leaves");
 
+    Particle.TintedLeaves TINTED_LEAVES = (Particle.TintedLeaves) ParticleImpl.get("minecraft:tinted_leaves");
+
     Particle SCULK_SOUL = ParticleImpl.get("minecraft:sculk_soul");
 
     Particle.SculkCharge SCULK_CHARGE = (Particle.SculkCharge) ParticleImpl.get("minecraft:sculk_charge");
@@ -227,4 +229,6 @@ interface Particles {
     Particle TRIAL_OMEN = ParticleImpl.get("minecraft:trial_omen");
 
     Particle.BlockCrumble BLOCK_CRUMBLE = (Particle.BlockCrumble) ParticleImpl.get("minecraft:block_crumble");
+
+    Particle FIREFLY = ParticleImpl.get("minecraft:firefly");
 }

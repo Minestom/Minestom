@@ -1,11 +1,11 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
 import net.minestom.server.entity.attribute.AttributeOperation;
-import net.minestom.server.item.ItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Map;
 public class ItemAttributeTest extends AbstractItemComponentTest<AttributeList> {
     @Override
     protected @NotNull DataComponent<AttributeList> component() {
-        return ItemComponent.ATTRIBUTE_MODIFIERS;
+        return DataComponents.ATTRIBUTE_MODIFIERS;
     }
 
     @Override

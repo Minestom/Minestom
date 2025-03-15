@@ -137,6 +137,8 @@ interface BlockSoundTypes {
 
     BlockSoundType SPORE_BLOSSOM = BlockSoundImpl.get("minecraft:spore_blossom");
 
+    BlockSoundType CACTUS_FLOWER = BlockSoundImpl.get("minecraft:cactus_flower");
+
     BlockSoundType AZALEA = BlockSoundImpl.get("minecraft:azalea");
 
     BlockSoundType FLOWERING_AZALEA = BlockSoundImpl.get("minecraft:flowering_azalea");
@@ -144,6 +146,8 @@ interface BlockSoundTypes {
     BlockSoundType MOSS_CARPET = BlockSoundImpl.get("minecraft:moss_carpet");
 
     BlockSoundType PINK_PETALS = BlockSoundImpl.get("minecraft:pink_petals");
+
+    BlockSoundType LEAF_LITTER = BlockSoundImpl.get("minecraft:leaf_litter");
 
     BlockSoundType MOSS = BlockSoundImpl.get("minecraft:moss");
 
@@ -238,4 +242,6 @@ interface BlockSoundTypes {
     BlockSoundType RESIN = BlockSoundImpl.get("minecraft:resin");
 
     BlockSoundType RESIN_BRICKS = BlockSoundImpl.get("minecraft:resin_bricks");
+
+    BlockSoundType IRON = BlockSoundImpl.get("minecraft:iron");
 }
