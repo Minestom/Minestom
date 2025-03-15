@@ -45,6 +45,11 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
+    public @NotNull DataComponentMap componentPatch() {
+        return this.components;
+    }
+
+    @Override
     public <T> @Nullable T get(@NotNull DataComponent<T> component) {
         return components.get(material.prototype(), component);
     }
