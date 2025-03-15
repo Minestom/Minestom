@@ -2,11 +2,10 @@ package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.other.ExperienceOrbMeta;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
-import net.minestom.server.network.packet.server.play.SpawnExperienceOrbPacket;
 
+// TODO(1.21.5): Remove this entirely its useless
 public enum EntitySpawnType {
     BASE {
         @Override
@@ -29,34 +28,13 @@ public enum EntitySpawnType {
     EXPERIENCE_ORB {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
-            final short expCount = (short) (entity.getEntityMeta() instanceof ExperienceOrbMeta experienceOrbMeta ?
-                    experienceOrbMeta.getCount() : 0);
-            return new SpawnExperienceOrbPacket(entity.getEntityId(), entity.getPosition(), expCount);
+            return EntitySpawnType.basicEntity(entity);
         }
     },
     PAINTING {
         @Override
         public ServerPacket getSpawnPacket(Entity entity) {
             return EntitySpawnType.basicEntity(entity);
-           /* int motive = 0;
-            Point position = Vec.ZERO;
-            byte direction = 0;
-            if (entity.getEntityMeta() instanceof PaintingMeta paintingMeta) {
-                motive = paintingMeta.getMotive().ordinal();
-                position = new Vec(
-                        Math.max(0, (paintingMeta.getMotive().getWidth() >> 1) - 1),
-                        paintingMeta.getMotive().getHeight() >> 1,
-                        0
-                );
-                direction = switch (paintingMeta.getDirection()) {
-                    case SOUTH -> 0;
-                    case WEST -> 1;
-                    case NORTH -> 2;
-                    case EAST -> 3;
-                    default -> 0;
-                };
-            }
-            return new SpawnPaintingPacket(entity.getEntityId(), entity.getUuid(), motive, position, direction);*/
         }
     };
 
