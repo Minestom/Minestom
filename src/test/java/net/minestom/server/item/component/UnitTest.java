@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.NotNull;
@@ -19,11 +19,9 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     // This is not a test, but it creates a compile error if the component type is changed away from Unit,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<Unit>> UNIT_COMPONENTS = List.of(
-            ItemComponent.HIDE_ADDITIONAL_TOOLTIP,
-            ItemComponent.HIDE_TOOLTIP,
-            ItemComponent.CREATIVE_SLOT_LOCK,
-            ItemComponent.INTANGIBLE_PROJECTILE,
-            ItemComponent.GLIDER
+            DataComponents.CREATIVE_SLOT_LOCK,
+            DataComponents.INTANGIBLE_PROJECTILE,
+            DataComponents.GLIDER
     );
 
     static {
@@ -45,7 +43,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     @Test
     public void ensureUnitComponentsPresent() {
         var fails = new ArrayList<String>();
-        for (var component : ItemComponent.values()) {
+        for (var component : DataComponents.values()) {
             if (!component.isSynced()) continue;
 
             // Try to write as a Unit and if it fails we can ignore that type

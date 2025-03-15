@@ -3,10 +3,15 @@ package net.minestom.server.component;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.NamespaceID;
+import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 record DataComponentImpl<T>(
         int id,
@@ -14,6 +19,15 @@ record DataComponentImpl<T>(
         @Nullable NetworkBuffer.Type<T> network,
         @Nullable BinaryTagSerializer<T> nbt
 ) implements DataComponent<T> {
+    static final Map<String, DataComponent<?>> NAMESPACES = new HashMap<>(32);
+    static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
+
+    static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
+        NAMESPACES.put(impl.name(), impl);
+        IDS.set(impl.id(), impl);
+        return impl;
+    }
 
     @Override
     public boolean isSynced() {

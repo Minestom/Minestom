@@ -11,7 +11,7 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
@@ -70,7 +70,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             reader.consume('[');
             do {
                 final Key componentId = reader.readKey();
-                final DataComponent<?> component = ItemComponent.fromKey(componentId);
+                final DataComponent<?> component = DataComponent.fromKey(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
 
@@ -94,10 +94,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
                 throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
 
             final CompoundBinaryTag customData = CompoundBinaryTag.builder()
-                    .put(components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).nbt())
+                    .put(components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).nbt())
                     .put(compound)
                     .build();
-            components.set(ItemComponent.CUSTOM_DATA, new CustomData(customData));
+            components.set(DataComponents.CUSTOM_DATA, new CustomData(customData));
         }
 
         if (reader.hasMore())

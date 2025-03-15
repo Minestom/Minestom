@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -10,7 +10,7 @@ import java.util.Map;
 public class MapPostProcessingTest extends AbstractItemComponentTest<MapPostProcessing> {
     @Override
     protected @NotNull DataComponent<MapPostProcessing> component() {
-        return ItemComponent.MAP_POST_PROCESSING;
+        return DataComponents.MAP_POST_PROCESSING;
     }
 
     @Override

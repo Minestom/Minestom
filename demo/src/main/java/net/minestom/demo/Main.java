@@ -11,12 +11,12 @@ import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
@@ -122,7 +122,7 @@ public class Main {
                 RecipeBookCategory.CRAFTING_MISC,
                 List.of(Material.DIRT),
                 ItemStack.builder(Material.GOLD_BLOCK)
-                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .set(DataComponents.CUSTOM_NAME, Component.text("abc"))
                         .build()
         ));
 

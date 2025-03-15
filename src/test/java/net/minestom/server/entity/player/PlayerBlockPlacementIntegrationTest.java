@@ -1,5 +1,6 @@
 package net.minestom.server.entity.player;
 
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.PlayerHand;
@@ -8,7 +9,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.instance.block.predicate.PropertiesPredicate;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -36,7 +36,7 @@ public class PlayerBlockPlacementIntegrationTest {
         instance.setBlock(2, 41, 0, baseBlock);
 
         player.setGameMode(GameMode.ADVENTURE);
-        player.setItemInMainHand(ItemStack.builder(Material.WHITE_WOOL).set(ItemComponent.CAN_PLACE_ON, canPlaceOn).build());
+        player.setItemInMainHand(ItemStack.builder(Material.WHITE_WOOL).set(DataComponents.CAN_PLACE_ON, canPlaceOn).build());
 
         var packet = new ClientPlayerBlockPlacementPacket(
                 PlayerHand.MAIN, new Pos(2, 41, 0), BlockFace.WEST,

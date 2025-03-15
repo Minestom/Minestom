@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class DyedItemColorTest extends AbstractItemComponentTest<DyedItemColor> 
 
     @Override
     protected @NotNull DataComponent<DyedItemColor> component() {
-        return ItemComponent.DYED_COLOR;
+        return DataComponents.DYED_COLOR;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DyedItemColorTest extends AbstractItemComponentTest<DyedItemColor> 
 
     @Test
     void alternativeSyntax() {
-        var value = ItemComponent.DYED_COLOR.read(BinaryTagSerializer.Context.EMPTY, IntBinaryTag.intBinaryTag(16777045));
+        var value = DataComponents.DYED_COLOR.read(BinaryTagSerializer.Context.EMPTY, IntBinaryTag.intBinaryTag(16777045));
         assertEquals(new DyedItemColor(16777045), value);
     }
 }

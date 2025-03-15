@@ -7,7 +7,7 @@ import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
@@ -144,8 +144,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<WolfMeta.Variant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfMeta.Variant> value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfMeta.Variant.NETWORK_TYPE);
+    public static Entry<DynamicRegistry.Key<WolfVariant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfVariant.NETWORK_TYPE);
     }
 
     public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {

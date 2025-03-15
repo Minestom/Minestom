@@ -5,7 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class ColorTest extends AbstractItemComponentTest<RGBLike> {
     // This is not a test, but it creates a compile error if the component type is changed away from Integer,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<RGBLike>> SHARED_COMPONENTS = List.of(
-           ItemComponent.MAP_COLOR
+           DataComponents.MAP_COLOR
     );
 
     @Override
@@ -37,7 +37,7 @@ public class ColorTest extends AbstractItemComponentTest<RGBLike> {
 
     @Test
     void namedTextColor() {
-        var tag = ItemComponent.MAP_COLOR.write(BinaryTagSerializer.Context.EMPTY, NamedTextColor.YELLOW);
+        var tag = DataComponents.MAP_COLOR.write(BinaryTagSerializer.Context.EMPTY, NamedTextColor.YELLOW);
         assertEquals(IntBinaryTag.intBinaryTag(16777045), tag);
     }
 }

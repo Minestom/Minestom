@@ -225,6 +225,11 @@ public interface BinaryTagSerializer<T> {
         }
     };
 
+    BinaryTagSerializer<NamespaceID> NAMESPACE = STRING.map(
+            NamespaceID::from,
+            NamespaceID::asString
+    );
+
     BinaryTagSerializer<CompoundBinaryTag> COMPOUND = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull CompoundBinaryTag value) {
@@ -739,6 +744,29 @@ public interface BinaryTagSerializer<T> {
                 for (BinaryTag element : listBinaryTag)
                     list.add(BinaryTagSerializer.this.read(context, element));
                 return List.copyOf(list);
+            }
+        };
+    }
+
+    default BinaryTagSerializer<Set<T>> set() {
+        return new BinaryTagSerializer<>() {
+            @Override
+            public @NotNull BinaryTag write(@NotNull Context context, @NotNull Set<T> value) {
+                ListBinaryTag.Builder<BinaryTag> builder = ListBinaryTag.builder();
+                for (T t : value) {
+                    BinaryTag entry = BinaryTagSerializer.this.write(context, t);
+                    if (entry != null) builder.add(entry);
+                }
+                return builder.build();
+            }
+
+            @Override
+            public @NotNull Set<T> read(@NotNull Context context, @NotNull BinaryTag tag) {
+                if (!(tag instanceof ListBinaryTag listBinaryTag)) return Set.of();
+                Set<T> list = new HashSet<>();
+                for (BinaryTag element : listBinaryTag)
+                    list.add(BinaryTagSerializer.this.read(context, element));
+                return Set.copyOf(list);
             }
         };
     }

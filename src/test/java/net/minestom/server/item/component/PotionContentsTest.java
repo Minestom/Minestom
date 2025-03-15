@@ -3,7 +3,7 @@ package net.minestom.server.item.component;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.color.Color;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
@@ -20,7 +20,7 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
 
     @Override
     protected @NotNull DataComponent<PotionContents> component() {
-        return ItemComponent.POTION_CONTENTS;
+        return DataComponents.POTION_CONTENTS;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
 
     @Test
     void alternativeNbtSyntax() {
-        var value = ItemComponent.POTION_CONTENTS.read(BinaryTagSerializer.Context.EMPTY, StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
+        var value = DataComponents.POTION_CONTENTS.read(BinaryTagSerializer.Context.EMPTY, StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
         var expected = new PotionContents(PotionType.STRONG_SWIFTNESS, null, List.of(), null);
         assertEquals(expected, value);
     }

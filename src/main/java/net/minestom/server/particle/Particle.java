@@ -25,7 +25,7 @@ import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 public sealed interface Particle extends StaticProtocolObject, Particles permits Particle.Block, Particle.BlockMarker,
         Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.EntityEffect, Particle.FallingDust,
         Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.Vibration, Particle.Trail,
-        Particle.BlockCrumble {
+        Particle.BlockCrumble, Particle.TintedLeaves {
 
     @NotNull NetworkBuffer.Type<Particle> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -528,6 +528,41 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             return CompoundBinaryTag.builder()
                     .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
+                    .build();
+        }
+    }
+
+    record TintedLeaves(@NotNull NamespaceID namespace, int id, @NotNull AlphaColor color) implements Particle {
+        @Contract(pure = true)
+        public @NotNull TintedLeaves withColor(@NotNull AlphaColor color) {
+            return new TintedLeaves(namespace(), id(), color);
+        }
+
+        @Contract(pure = true)
+        public @NotNull TintedLeaves withColor(@NotNull RGBLike color) {
+            return new TintedLeaves(namespace(), id(), new AlphaColor(1, color));
+        }
+
+        @Contract(pure = true)
+        public @NotNull TintedLeaves withColor(int alpha, @NotNull RGBLike color) {
+            return new TintedLeaves(namespace(), id(), new AlphaColor(alpha, color));
+        }
+
+        @Override
+        public @NotNull TintedLeaves readData(@NotNull NetworkBuffer reader) {
+            return withColor(reader.read(AlphaColor.NETWORK_TYPE));
+        }
+
+        @Override
+        public void writeData(@NotNull NetworkBuffer writer) {
+            writer.write(AlphaColor.NETWORK_TYPE, color);
+        }
+
+        @Override
+        public @NotNull CompoundBinaryTag toNbt() {
+            return CompoundBinaryTag.builder()
+                    .putString("type", namespace.asString())
+                    .put("color", AlphaColor.NBT_TYPE.write(color))
                     .build();
         }
     }

@@ -205,6 +205,14 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
             return list(Integer.MAX_VALUE);
         }
 
+        default @NotNull Type<Set<T>> set(int maxSize) {
+            return new NetworkBufferTypeImpl.SetType<>(this, maxSize);
+        }
+
+        default @NotNull Type<Set<T>> set() {
+            return set(Integer.MAX_VALUE);
+        }
+
         default @NotNull Type<T> optional() {
             return new NetworkBufferTypeImpl.OptionalType<>(this);
         }

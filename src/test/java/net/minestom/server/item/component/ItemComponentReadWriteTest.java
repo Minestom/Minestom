@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -56,7 +55,7 @@ public class ItemComponentReadWriteTest {
         }
 
         assertAll(componentEntries.stream().map(entry -> () -> {
-            var component = ItemComponent.fromKey(entry.getKey());
+            var component = DataComponents.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
             //noinspection unchecked
             readWriteTestImpl((DataComponent<Object>) component, entry.getValue());

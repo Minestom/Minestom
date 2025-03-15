@@ -787,6 +787,28 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record SetType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Set<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Set<T> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return Set.of(values);
+        }
+    }
+
     record UnionType<K, T>(
             @NotNull Type<K> keyType, @NotNull Function<T, K> keyFunc,
             @NotNull Function<K, NetworkBuffer.Type<T>> serializers

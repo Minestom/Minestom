@@ -10,16 +10,26 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 /**
  * A common type to represent all forms of component in the game. Each group of component types has its own declaration
- * file (see {@link net.minestom.server.item.ItemComponent} for example).
+ * file (see {@link net.minestom.server.component.DataComponent} for example).
  *
  * @param <T> The value type of the component
  *
- * @see net.minestom.server.item.ItemComponent
+ * @see net.minestom.server.component.DataComponent
  * @see EffectComponent
  */
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
+
+    NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT
+            .transform(DataComponent::fromId, DataComponent::id);
+    BinaryTagSerializer<DataComponent<?>> NBT_TYPE = BinaryTagSerializer.STRING
+            .map(DataComponent::fromNamespaceId, DataComponent::name);
+
+    NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(DataComponent::fromId);
+    BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(DataComponent::fromId, DataComponent::fromNamespaceId);
 
     /**
      * Represents any type which can hold data components. Represents a finalized view of a component, that is to say
@@ -45,6 +55,22 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
 
     @NotNull T read(@NotNull NetworkBuffer reader);
     void write(@NotNull NetworkBuffer writer, @NotNull T value);
+
+    static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
+        return DataComponentImpl.NAMESPACES.get(namespaceId);
+    }
+
+    static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
+        return fromNamespaceId(namespaceId.asString());
+    }
+
+    static @Nullable DataComponent<?> fromId(int id) {
+        return DataComponentImpl.IDS.get(id);
+    }
+
+    static @NotNull Collection<DataComponent<?>> values() {
+        return DataComponentImpl.NAMESPACES.values();
+    }
 
     @ApiStatus.Internal
     static <T> DataComponent<T> createHeadless(

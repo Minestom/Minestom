@@ -6,7 +6,7 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
@@ -73,7 +73,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<TrimMaterial> trimMaterial;
     private final DynamicRegistry<TrimPattern> trimPattern;
     private final DynamicRegistry<BannerPattern> bannerPattern;
-    private final DynamicRegistry<WolfMeta.Variant> wolfVariant;
+    private final DynamicRegistry<WolfVariant> wolfVariant;
     private final DynamicRegistry<Enchantment> enchantment;
     private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
@@ -119,7 +119,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.trimMaterial = TrimMaterial.createDefaultRegistry();
         this.trimPattern = TrimPattern.createDefaultRegistry();
         this.bannerPattern = BannerPattern.createDefaultRegistry();
-        this.wolfVariant = WolfMeta.Variant.createDefaultRegistry();
+        this.wolfVariant = WolfVariant.createDefaultRegistry();
         this.enchantment = Enchantment.createDefaultRegistry(this);
         this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
@@ -172,7 +172,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<WolfMeta.Variant> wolfVariant() {
+    public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
         return wolfVariant;
     }
 

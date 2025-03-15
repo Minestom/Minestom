@@ -10,6 +10,7 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.CustomModelData;
 import net.minestom.server.network.NetworkBuffer;
@@ -50,7 +51,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
             buffer.write(NetworkBuffer.VAR_INT, value.amount());
             buffer.write(NetworkBuffer.VAR_INT, value.material().id());
-            buffer.write(ItemComponent.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components());
+            buffer.write(DataComponent.PATCH_NETWORK_TYPE, ((ItemStackImpl) value).components());
         }
 
         @Override
@@ -58,7 +59,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             int amount = buffer.read(NetworkBuffer.VAR_INT);
             if (amount <= 0) return ItemStack.AIR;
             Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
-            DataComponentMap components = buffer.read(ItemComponent.PATCH_NETWORK_TYPE);
+            DataComponentMap components = buffer.read(DataComponent.PATCH_NETWORK_TYPE);
             return ItemStackImpl.create(material, amount, components);
         }
     };
@@ -168,7 +169,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * <p>Removes the given component from this item. This will explicitly remove the component from the item, as opposed
      * to reverting back to the default.</p>
      *
-     * <p>For example, if {@link ItemComponent#FOOD} is applied to an apple, and then this method is called,
+     * <p>For example, if {@link DataComponents#FOOD} is applied to an apple, and then this method is called,
      * the resulting itemstack will not be a food item at all, as opposed to returning to the default apple
      * food type. Likewise, if this method is called on a default apple, it will no longer be a food item.</p>
      *
@@ -180,32 +181,32 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withCustomName(@NotNull Component customName) {
-        return with(ItemComponent.CUSTOM_NAME, customName);
+        return with(DataComponents.CUSTOM_NAME, customName);
     }
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withLore(@NotNull Component... lore) {
-        return with(ItemComponent.LORE, List.of(lore));
+        return with(DataComponents.LORE, List.of(lore));
     }
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withLore(@NotNull List<Component> lore) {
-        return with(ItemComponent.LORE, lore);
+        return with(DataComponents.LORE, lore);
     }
 
     @Contract(value = "_, -> new", pure = true)
     default @NotNull ItemStack withItemModel(@NotNull String model) {
-        return with(ItemComponent.ITEM_MODEL, model);
+        return with(DataComponents.ITEM_MODEL, model);
     }
 
     @Contract(value = "_, _, _, _ -> new", pure = true)
     default @NotNull ItemStack withCustomModelData(@NotNull List<Float> floats, @NotNull List<Boolean> flags, @NotNull List<String> strings, @NotNull List<RGBLike> colors) {
-        return with(ItemComponent.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
+        return with(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
     }
 
     @Contract(value = "_ -> new", pure = true)
     default @NotNull ItemStack withGlowing(boolean glowing) {
-        return with(ItemComponent.ENCHANTMENT_GLINT_OVERRIDE, glowing);
+        return with(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, glowing);
     }
 
     @Contract(value = "-> new", pure = true)
@@ -215,23 +216,23 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     @Contract(pure = true)
     default int maxStackSize() {
-        return get(ItemComponent.MAX_STACK_SIZE, 64);
+        return get(DataComponents.MAX_STACK_SIZE, 64);
     }
 
     @Contract(value = "_ -> new", pure = true)
     default @NotNull ItemStack withMaxStackSize(int maxStackSize) {
-        return with(ItemComponent.MAX_STACK_SIZE, maxStackSize);
+        return with(DataComponents.MAX_STACK_SIZE, maxStackSize);
     }
 
     @Contract(value = "_, _ -> new", pure = true)
     default <T> @NotNull ItemStack withTag(@NotNull Tag<T> tag, @Nullable T value) {
-        return with(ItemComponent.CUSTOM_DATA, get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
+        return with(DataComponents.CUSTOM_DATA, get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
     }
 
     @Override
     @Contract(pure = true)
     default <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
+        return get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).getTag(tag);
     }
 
     @Contract(value = "_, -> new", pure = true)
@@ -273,19 +274,19 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     // because it conflicts with DataComponent.Holder.
 
     static @NotNull Collection<Component> textComponents(@NotNull ItemStack itemStack) {
-        final var components = new ArrayList<>(itemStack.get(ItemComponent.LORE, List.of()));
-        final var displayName = itemStack.get(ItemComponent.CUSTOM_NAME);
+        final var components = new ArrayList<>(itemStack.get(DataComponents.LORE, List.of()));
+        final var displayName = itemStack.get(DataComponents.CUSTOM_NAME);
         if (displayName != null) components.add(displayName);
-        final var itemName = itemStack.get(ItemComponent.ITEM_NAME);
+        final var itemName = itemStack.get(DataComponents.ITEM_NAME);
         if (itemName != null) components.add(itemName);
         return List.copyOf(components);
     }
 
     static @NotNull ItemStack copyWithOperator(@NotNull ItemStack itemStack, @NotNull UnaryOperator<Component> operator) {
         return itemStack
-                .with(ItemComponent.CUSTOM_NAME, operator)
-                .with(ItemComponent.ITEM_NAME, operator)
-                .with(ItemComponent.LORE, (UnaryOperator<List<Component>>) lines -> {
+                .with(DataComponents.CUSTOM_NAME, operator)
+                .with(DataComponents.ITEM_NAME, operator)
+                .with(DataComponents.LORE, (UnaryOperator<List<Component>>) lines -> {
                     final var translatedComponents = new ArrayList<Component>();
                     lines.forEach(component -> translatedComponents.add(operator.apply(component)));
                     return translatedComponents;
@@ -312,41 +313,41 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         @NotNull Builder remove(@NotNull DataComponent<?> component);
 
         default @NotNull Builder customName(@NotNull Component customName) {
-            return set(ItemComponent.CUSTOM_NAME, customName);
+            return set(DataComponents.CUSTOM_NAME, customName);
         }
 
         default @NotNull Builder lore(@NotNull Component... lore) {
-            return set(ItemComponent.LORE, List.of(lore));
+            return set(DataComponents.LORE, List.of(lore));
         }
 
         default @NotNull Builder lore(@NotNull List<Component> lore) {
-            return set(ItemComponent.LORE, lore);
+            return set(DataComponents.LORE, lore);
         }
 
         default @NotNull Builder itemModel(@NotNull String model) {
-            return set(ItemComponent.ITEM_MODEL, model);
+            return set(DataComponents.ITEM_MODEL, model);
         }
 
         default @NotNull Builder customModelData(@NotNull List<Float> floats, @NotNull List<Boolean> flags, @NotNull List<String> strings, @NotNull List<RGBLike> colors) {
-            return set(ItemComponent.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
+            return set(DataComponents.CUSTOM_MODEL_DATA, new CustomModelData(floats, flags, strings, colors));
         }
 
         default @NotNull Builder glowing() {
-            return set(ItemComponent.ENCHANTMENT_GLINT_OVERRIDE, true);
+            return set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true);
         }
 
         default @NotNull Builder glowing(boolean glowing) {
-            return set(ItemComponent.ENCHANTMENT_GLINT_OVERRIDE, glowing);
+            return set(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, glowing);
         }
 
         default @NotNull Builder maxStackSize(int maxStackSize) {
-            return set(ItemComponent.MAX_STACK_SIZE, maxStackSize);
+            return set(DataComponents.MAX_STACK_SIZE, maxStackSize);
         }
 
         /**
          * <p>Sets all available tooltip hide flags. The result should be an item with only name and lore.</p>
          *
-         * <p>One notable behavior here is that {@link ItemComponent#ATTRIBUTE_MODIFIERS} will be added if it is not
+         * <p>One notable behavior here is that {@link DataComponents#ATTRIBUTE_MODIFIERS} will be added if it is not
          * present. This is because armor flags in tooltips use attribute modifiers show flag to display or not, but
          * are not actually based on the attribute modifiers component.</p>
          */

@@ -2,6 +2,7 @@ package net.minestom.server.item;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
@@ -52,7 +53,7 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     }
 
     default int maxStackSize() {
-        return prototype().get(ItemComponent.MAX_STACK_SIZE, 64);
+        return prototype().get(DataComponents.MAX_STACK_SIZE, 64);
     }
 
     static @NotNull Collection<@NotNull Material> values() {

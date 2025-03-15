@@ -14,10 +14,10 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.ArgumentEnum;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
@@ -164,9 +164,9 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(DataComponents.REPAIR_COST, 5).with(DataComponents.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
                 "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 
