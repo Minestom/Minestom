@@ -267,11 +267,17 @@ public final class ConnectionManager {
             player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.bannerPattern().registryDataPacket(registries, excludeVanilla));
-            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.enchantment().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.paintingVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.jukeboxSong().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.instrument().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.wolfVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.wolfSoundVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.catVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.chickenVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.cowVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
 
             player.sendPacket(getDefaultTags(registries));
         }
@@ -317,7 +323,7 @@ public final class ConnectionManager {
         for (final Player playPlayer : playPlayers)
             playPlayer.kick(SHUTDOWN_TEXT);
         this.playPlayers.clear();
-        
+
         this.keepAlivePlayers.clear();
         this.connectionPlayerMap.clear();
     }
