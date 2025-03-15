@@ -2,6 +2,7 @@ package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.CollisionUtils;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -20,8 +21,6 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.inventory.PlayerInventory;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -92,7 +91,7 @@ public class BlockPlacementListener {
             canPlaceBlock = false; // Spectators can't place blocks
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             //Check if the block can be placed on the block
-            BlockPredicates placePredicate = usedItem.get(ItemComponent.CAN_PLACE_ON, BlockPredicates.NEVER);
+            BlockPredicates placePredicate = usedItem.get(DataComponents.CAN_PLACE_ON, BlockPredicates.NEVER);
             canPlaceBlock = placePredicate.test(interactedBlock);
         }
 
@@ -145,7 +144,7 @@ public class BlockPlacementListener {
             return;
         }
 
-        final ItemBlockState blockState = usedItem.get(ItemComponent.BLOCK_STATE, ItemBlockState.EMPTY);
+        final ItemBlockState blockState = usedItem.get(DataComponents.BLOCK_STATE, ItemBlockState.EMPTY);
         final Block placedBlock = blockState.apply(useMaterial.block());
 
         Entity collisionEntity = CollisionUtils.canPlaceBlockAt(instance, placementPosition, placedBlock);

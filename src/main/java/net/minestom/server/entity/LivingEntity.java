@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
@@ -22,7 +23,6 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
@@ -164,7 +164,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @ApiStatus.Internal
     public void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
-        AttributeList oldAttributes = oldItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        AttributeList oldAttributes = oldItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Remove old attributes
         if (oldAttributes != null) {
             for (AttributeList.Modifier modifier : oldAttributes.modifiers()) {
@@ -175,7 +175,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
         }
-        AttributeList newAttributes = newItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        AttributeList newAttributes = newItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Add new attributes
         if (newAttributes != null) {
             for (AttributeList.Modifier modifier : newAttributes.modifiers()) {

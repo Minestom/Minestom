@@ -2,7 +2,6 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
@@ -20,11 +19,10 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
     static @NotNull TrimPattern create(
             @NotNull Key assetId,
-            @NotNull Material template,
             @NotNull Component description,
             boolean decal
     ) {
-        return new TrimPatternImpl(assetId, template, description, decal, null);
+        return new TrimPatternImpl(assetId, description, decal, null);
     }
 
     static @NotNull Builder builder() {
@@ -46,8 +44,6 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
     @NotNull Key assetId();
 
-    @NotNull Material template();
-
     @NotNull Component description();
 
     boolean isDecal();
@@ -57,7 +53,6 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
     final class Builder {
         private Key assetId;
-        private Material template;
         private Component description;
         private boolean decal;
 
@@ -76,12 +71,6 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder template(@NotNull Material template) {
-            this.template = template;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder description(@NotNull Component description) {
             this.description = description;
             return this;
@@ -95,7 +84,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(pure = true)
         public @NotNull TrimPattern build() {
-            return new TrimPatternImpl(assetId, template, description, decal, null);
+            return new TrimPatternImpl(assetId, description, decal, null);
         }
     }
 }

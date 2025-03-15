@@ -5,7 +5,7 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
@@ -278,7 +278,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.bannerPattern();
     }
 
-    public static @NotNull DynamicRegistry<WolfMeta.Variant> getWolfVariantRegistry() {
+    public static @NotNull DynamicRegistry<WolfVariant> getWolfVariantRegistry() {
         return serverProcess.wolfVariant();
     }
 

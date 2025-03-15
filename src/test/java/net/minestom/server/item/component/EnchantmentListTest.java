@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.testing.Env;
@@ -18,8 +18,8 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
     // This is not a test, but it creates a compile error if the component type is changed away from Unit,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<EnchantmentList>> SHARED_COMPONENTS = List.of(
-            ItemComponent.ENCHANTMENTS,
-            ItemComponent.STORED_ENCHANTMENTS
+            DataComponents.ENCHANTMENTS,
+            DataComponents.STORED_ENCHANTMENTS
     );
 
     @Override

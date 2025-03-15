@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.IntBinaryTag;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ItemRarityTest extends AbstractItemComponentTest<ItemRarity> {
     @Override
     protected @NotNull DataComponent<ItemRarity> component() {
-        return ItemComponent.RARITY;
+        return DataComponents.RARITY;
     }
 
     @Override
