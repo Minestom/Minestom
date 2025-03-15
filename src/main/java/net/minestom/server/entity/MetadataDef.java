@@ -94,6 +94,10 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> ALIGN_RIGHT = bitMask(4, (byte) 0x10, false);
     }
 
+    public static final class ExperienceOrb extends MetadataDef {
+        public static final Entry<Integer> VALUE = index(0, Metadata::VarInt, 0);
+    }
+
     public static final class ThrownItemProjectile extends MetadataDef {
         public static final Entry<ItemStack> ITEM = index(0, Metadata::ItemStack, ItemStack.AIR);
     }

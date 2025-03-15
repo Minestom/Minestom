@@ -7,7 +7,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
@@ -73,6 +72,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
     Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
+    Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
     Type<Point> VECTOR3B = new NetworkBufferTypeImpl.Vector3BType();
     Type<float[]> QUATERNION = new NetworkBufferTypeImpl.QuaternionType();
 

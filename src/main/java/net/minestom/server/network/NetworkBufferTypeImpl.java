@@ -591,6 +591,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record Vector3IType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(VAR_INT, (int) value.x());
+            buffer.write(VAR_INT, (int) value.y());
+            buffer.write(VAR_INT, (int) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final int x = buffer.read(VAR_INT);
+            final int y = buffer.read(VAR_INT);
+            final int z = buffer.read(VAR_INT);
+            return new Vec(x, y, z);
+        }
+    }
+
     record Vector3BType() implements NetworkBufferTypeImpl<Point> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Point value) {
