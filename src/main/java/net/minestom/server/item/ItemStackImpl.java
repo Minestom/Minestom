@@ -4,9 +4,9 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.*;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
@@ -39,7 +39,9 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
         // their different patches.
         // It is worth noting that the client would handle both cases perfectly fine.
-        components = DataComponentMap.diff(material.prototype(), components);
+        if (components != DataComponentMap.EMPTY) {
+            components = DataComponentMap.diff(material.prototype(), components);
+        }
     }
 
     @Override
@@ -111,7 +113,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         int count = tag.getInt("count", 1);
 
         BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
+        DataComponentMap patch = DataComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
         return new ItemStackImpl(material, count, patch);
     }
 
@@ -121,7 +123,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         tag.putInt("count", itemStack.amount());
 
         BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
+        CompoundBinaryTag components = (CompoundBinaryTag) DataComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
         if (components.size() > 0) tag.put("components", components);
 
         return tag.build();
@@ -170,30 +172,33 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public <T> ItemStack.@NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
-            components.set(ItemComponent.CUSTOM_DATA, components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
+            components.set(DataComponents.CUSTOM_DATA, components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
             return this;
         }
 
         @Override
         public ItemStack.@NotNull Builder hideExtraTooltip() {
-            AttributeList attributeModifiers = components.get(ItemComponent.ATTRIBUTE_MODIFIERS);
-            components.set(ItemComponent.ATTRIBUTE_MODIFIERS, attributeModifiers == null
+            AttributeList attributeModifiers = components.get(DataComponents.ATTRIBUTE_MODIFIERS);
+            components.set(DataComponents.ATTRIBUTE_MODIFIERS, attributeModifiers == null
                     ? new AttributeList(List.of(), false) : attributeModifiers.withTooltip(false));
-            Unbreakable unbreakable = components.get(ItemComponent.UNBREAKABLE);
-            if (unbreakable != null) components.set(ItemComponent.UNBREAKABLE, new Unbreakable(false));
-            ArmorTrim armorTrim = components.get(ItemComponent.TRIM);
-            if (armorTrim != null) components.set(ItemComponent.TRIM, armorTrim.withTooltip(false));
-            BlockPredicates canBreak = components.get(ItemComponent.CAN_BREAK);
-            if (canBreak != null) components.set(ItemComponent.CAN_BREAK, canBreak.withTooltip(false));
-            BlockPredicates canPlaceOn = components.get(ItemComponent.CAN_PLACE_ON);
-            if (canPlaceOn != null) components.set(ItemComponent.CAN_PLACE_ON, canPlaceOn.withTooltip(false));
-            DyedItemColor dyedColor = components.get(ItemComponent.DYED_COLOR);
-            if (dyedColor != null) components.set(ItemComponent.DYED_COLOR, dyedColor.withTooltip(false));
-            EnchantmentList enchantments = components.get(ItemComponent.ENCHANTMENTS);
-            if (enchantments != null) components.set(ItemComponent.ENCHANTMENTS, enchantments.withTooltip(false));
-            JukeboxPlayable jukeboxPlayable = components.get(ItemComponent.JUKEBOX_PLAYABLE);
-            if (jukeboxPlayable != null) components.set(ItemComponent.JUKEBOX_PLAYABLE, jukeboxPlayable.withTooltip(false));
-            return set(ItemComponent.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+            Unbreakable unbreakable = components.get(DataComponents.UNBREAKABLE);
+            if (unbreakable != null) components.set(DataComponents.UNBREAKABLE, new Unbreakable(false));
+            ArmorTrim armorTrim = components.get(DataComponents.TRIM);
+            if (armorTrim != null) components.set(DataComponents.TRIM, armorTrim.withTooltip(false));
+            BlockPredicates canBreak = components.get(DataComponents.CAN_BREAK);
+            if (canBreak != null) components.set(DataComponents.CAN_BREAK, canBreak.withTooltip(false));
+            BlockPredicates canPlaceOn = components.get(DataComponents.CAN_PLACE_ON);
+            if (canPlaceOn != null) components.set(DataComponents.CAN_PLACE_ON, canPlaceOn.withTooltip(false));
+            DyedItemColor dyedColor = components.get(DataComponents.DYED_COLOR);
+            if (dyedColor != null) components.set(DataComponents.DYED_COLOR, dyedColor.withTooltip(false));
+            EnchantmentList enchantments = components.get(DataComponents.ENCHANTMENTS);
+            if (enchantments != null) components.set(DataComponents.ENCHANTMENTS, enchantments.withTooltip(false));
+            JukeboxPlayable jukeboxPlayable = components.get(DataComponents.JUKEBOX_PLAYABLE);
+            if (jukeboxPlayable != null)
+                components.set(DataComponents.JUKEBOX_PLAYABLE, jukeboxPlayable.withTooltip(false));
+//            return set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+            // TODO(1.21.5)
+            throw new RuntimeException("todo");
         }
 
         @Override

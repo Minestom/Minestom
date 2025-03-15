@@ -22,14 +22,10 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
 
     static @NotNull TrimMaterial create(
             @NotNull String assetName,
-            @NotNull Material ingredient,
             @NotNull Map<String, String> overrideArmorMaterials,
             @NotNull Component description
     ) {
-        return new TrimMaterialImpl(
-                assetName, ingredient,
-                overrideArmorMaterials, description, null
-        );
+        return new TrimMaterialImpl(assetName, overrideArmorMaterials, description, null);
     }
 
     static @NotNull Builder builder() {
@@ -50,8 +46,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     }
 
     @NotNull String assetName();
-
-    @NotNull Material ingredient();
 
     @NotNull Map<String, String> overrideArmorMaterials();
 
@@ -79,12 +73,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder ingredient(@NotNull Material ingredient) {
-            this.ingredient = ingredient;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder overrideArmorMaterials(@NotNull Map<String, String> overrideArmorMaterials) {
             this.overrideArmorMaterials.putAll(overrideArmorMaterials);
             return this;
@@ -105,7 +93,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
         @Contract(pure = true)
         public @NotNull TrimMaterial build() {
             return new TrimMaterialImpl(
-                    assetName, ingredient,
+                    assetName,
                     overrideArmorMaterials,
                     description, null
             );

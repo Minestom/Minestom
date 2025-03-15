@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
@@ -9,7 +10,6 @@ import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
@@ -26,7 +26,7 @@ public class UseItemListener {
         final PlayerHand hand = packet.hand();
         final ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
-        final Consumable consumable = itemStack.get(ItemComponent.CONSUMABLE);
+        final Consumable consumable = itemStack.get(DataComponents.CONSUMABLE);
 
         // The following item animations and use item times come from vanilla.
         // These items do not yet use components, but hopefully they will in the future
@@ -91,7 +91,7 @@ public class UseItemListener {
         }
 
         // If the item was not usable, we can try to do an equipment swap with it.
-        final Equippable equippable = itemStack.get(ItemComponent.EQUIPPABLE);
+        final Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
         if (equippable != null && equippable.swappable() && equippable.slot() != EquipmentSlot.BODY) {
             final ItemStack currentlyEquipped = player.getEquipment(equippable.slot());
             player.setEquipment(equippable.slot(), itemStack);
@@ -100,7 +100,7 @@ public class UseItemListener {
     }
 
     private static int getInstrumentTime(@NotNull ItemStack itemStack) {
-        final DynamicRegistry.Key<Instrument> instrumentName = itemStack.get(ItemComponent.INSTRUMENT);
+        final DynamicRegistry.Key<Instrument> instrumentName = itemStack.get(DataComponents.INSTRUMENT);
         if (instrumentName == null) return 0;
 
         final Instrument instrument = MinecraftServer.getInstrumentRegistry().get(instrumentName);

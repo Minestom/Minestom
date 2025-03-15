@@ -2,9 +2,9 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
 
     @Override
     protected @NotNull DataComponent<BlockPredicates> component() {
-        return ItemComponent.CAN_PLACE_ON; // CAN_BREAK is the same thing
+        return DataComponents.CAN_PLACE_ON; // CAN_BREAK is the same thing
     }
 
     @Override
@@ -36,7 +36,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
     @Test
     public void testSingleBlockNbtInput() throws IOException {
         var tag = TagStringIOExt.readTag("{blocks:'minecraft:stone'}");
-        var component = ItemComponent.CAN_PLACE_ON.read(BinaryTagSerializer.Context.EMPTY, tag);
+        var component = DataComponents.CAN_PLACE_ON.read(BinaryTagSerializer.Context.EMPTY, tag);
         var expected = new BlockPredicates(new BlockPredicate(Block.STONE));
         assertEquals(expected, component);
     }

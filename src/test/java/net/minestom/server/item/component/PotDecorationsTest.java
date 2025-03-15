@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 public class PotDecorationsTest extends AbstractItemComponentTest<PotDecorations> {
     @Override
     protected @NotNull DataComponent<PotDecorations> component() {
-        return ItemComponent.POT_DECORATIONS;
+        return DataComponents.POT_DECORATIONS;
     }
 
     @Override

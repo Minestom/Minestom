@@ -3,7 +3,7 @@ package net.minestom.server.network;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +12,6 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
@@ -441,7 +440,7 @@ public class NetworkBufferTest {
     public void item() {
         assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.AIR);
         assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.STONE, 1));
-        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(ItemComponent.DAMAGE, 1));
+        assertBufferType(ItemStack.NETWORK_TYPE, ItemStack.of(Material.DIAMOND_AXE, 1).with(DataComponents.DAMAGE, 1));
     }
 
     @Test
