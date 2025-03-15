@@ -171,11 +171,11 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
-        if (heightmapsNBT.get(motionBlockingHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(motionBlockingHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             motionBlockingHeightmap().loadFrom(array.value());
         }
 
-        if (heightmapsNBT.get(worldSurfaceHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(worldSurfaceHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             worldSurfaceHeightmap().loadFrom(array.value());
         }
     }
@@ -257,9 +257,9 @@ public class DynamicChunk extends Chunk {
 
     private @NotNull ChunkDataPacket createChunkPacket() {
         final byte[] data;
-        final CompoundBinaryTag heightmapsNBT;
+        final Map<Heightmap.Type, long[]> heightmaps;
         synchronized (this) {
-            heightmapsNBT = getHeightmapNBT();
+            heightmaps = getHeightmaps();
 
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
@@ -271,7 +271,7 @@ public class DynamicChunk extends Chunk {
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, data, entries),
+                new ChunkData(heightmaps, data, entries),
                 createLightData(true)
         );
     }
@@ -313,12 +313,12 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected CompoundBinaryTag getHeightmapNBT() {
+    protected Map<Heightmap.Type, long[]> getHeightmaps() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        return CompoundBinaryTag.builder()
-                .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
-                .putLongArray(worldSurface.NBTName(), worldSurface.getNBT())
-                .build();
+        return Map.of(
+                motionBlocking.type(), motionBlocking.getNBT(),
+                worldSurface.type(), worldSurface.getNBT()
+        );
     }
 
     private void calculateFullHeightmap() {

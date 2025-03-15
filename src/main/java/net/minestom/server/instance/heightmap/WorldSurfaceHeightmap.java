@@ -15,7 +15,7 @@ public class WorldSurfaceHeightmap extends Heightmap {
     }
 
     @Override
-    public String NBTName() {
-        return "WORLD_SURFACE";
+    public @NotNull Type type() {
+        return Type.WORLD_SURFACE;
     }
 }
