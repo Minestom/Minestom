@@ -1,10 +1,10 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import net.minestom.server.utils.validate.Check;
@@ -35,7 +35,7 @@ public sealed interface WolfVariant extends ProtocolObject, WolfVariants permits
         return new WolfVariantImpl(assets);
     }
 
-    static @NotNull WolfVariant create(@NotNull NamespaceID wild, @NotNull NamespaceID tame, @NotNull NamespaceID angry) {
+    static @NotNull WolfVariant create(@NotNull Key wild, @NotNull Key tame, @NotNull Key angry) {
         return new WolfVariantImpl(new Assets(wild, tame, angry));
     }
 
@@ -45,11 +45,11 @@ public sealed interface WolfVariant extends ProtocolObject, WolfVariants permits
 
     @NotNull Assets assets();
 
-    record Assets(@NotNull NamespaceID wild, @NotNull NamespaceID tame, @NotNull NamespaceID angry) {
+    record Assets(@NotNull Key wild, @NotNull Key tame, @NotNull Key angry) {
         public static final BinaryTagSerializer<Assets> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-                "wild", BinaryTagSerializer.NAMESPACE, Assets::wild,
-                "tame", BinaryTagSerializer.NAMESPACE, Assets::tame,
-                "angry", BinaryTagSerializer.NAMESPACE, Assets::angry,
+                "wild", BinaryTagSerializer.KEY, Assets::wild,
+                "tame", BinaryTagSerializer.KEY, Assets::tame,
+                "angry", BinaryTagSerializer.KEY, Assets::angry,
                 Assets::new);
 
         public Assets {
@@ -62,24 +62,24 @@ public sealed interface WolfVariant extends ProtocolObject, WolfVariants permits
 
     final class Builder {
         private Assets assets;
-        private NamespaceID wildAsset;
-        private NamespaceID tameAsset;
-        private NamespaceID angryAsset;
+        private Key wildAsset;
+        private Key tameAsset;
+        private Key angryAsset;
 
         private Builder() {
         }
 
-        public @NotNull Builder wildAsset(@NotNull NamespaceID wildAsset) {
+        public @NotNull Builder wildAsset(@NotNull Key wildAsset) {
             this.wildAsset = wildAsset;
             return this;
         }
 
-        public @NotNull Builder tameAsset(@NotNull NamespaceID tameAsset) {
+        public @NotNull Builder tameAsset(@NotNull Key tameAsset) {
             this.tameAsset = tameAsset;
             return this;
         }
 
-        public @NotNull Builder angryAsset(@NotNull NamespaceID angryAsset) {
+        public @NotNull Builder angryAsset(@NotNull Key angryAsset) {
             this.angryAsset = angryAsset;
             return this;
         }
