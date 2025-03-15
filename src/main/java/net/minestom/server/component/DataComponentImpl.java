@@ -3,7 +3,6 @@ package net.minestom.server.component;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -23,7 +22,7 @@ record DataComponentImpl<T>(
     static final ObjectArray<DataComponent<?>> IDS = ObjectArray.singleThread(32);
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
