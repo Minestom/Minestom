@@ -1,14 +1,10 @@
 package net.minestom.demo;
 
-import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.advancements.FrameType;
-import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.color.AlphaColor;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -25,15 +21,11 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
@@ -109,12 +101,12 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-                ItemStack itemStack = ItemStack.builder(Material.STONE)
-                        .amount(64)
-                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
-                        .build();
-                player.getInventory().addItemStack(itemStack);
+//                ItemStack itemStack = ItemStack.builder(Material.STONE)
+//                        .amount(64)
+//                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
+//                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
+//                        .build();
+//                player.getInventory().addItemStack(itemStack);
 
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"
@@ -127,30 +119,30 @@ public class PlayerInit {
                 ));
 
                 // TODO(1.21.2): Handle bundle slot selection
-                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
-                                ItemStack.of(Material.DIAMOND, 5),
-                                ItemStack.of(Material.RABBIT_FOOT, 5)
-                        ))
-                        .build();
-                player.getInventory().addItemStack(bundle);
-
-                PlayerInventory inventory = event.getPlayer().getInventory();
-                inventory.addItemStack(getFoodItem(20));
-                inventory.addItemStack(getFoodItem(10000));
-                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
-
-                if (event.isFirstSpawn()) {
-                    event.getPlayer().sendNotification(new Notification(
-                            Component.text("Welcome!"),
-                            FrameType.TASK,
-                            Material.IRON_SWORD
-                    ));
-
-                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
-
-                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
-                }
+//                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
+//                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
+//                                ItemStack.of(Material.DIAMOND, 5),
+//                                ItemStack.of(Material.RABBIT_FOOT, 5)
+//                        ))
+//                        .build();
+//                player.getInventory().addItemStack(bundle);
+//
+//                PlayerInventory inventory = event.getPlayer().getInventory();
+//                inventory.addItemStack(getFoodItem(20));
+//                inventory.addItemStack(getFoodItem(10000));
+//                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
+//
+//                if (event.isFirstSpawn()) {
+//                    event.getPlayer().sendNotification(new Notification(
+//                            Component.text("Welcome!"),
+//                            FrameType.TASK,
+//                            Material.IRON_SWORD
+//                    ));
+//
+//                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+//
+//                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
+//                }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
