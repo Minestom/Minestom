@@ -134,7 +134,48 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         }
     }
 
-    record PatchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) implements NetworkBuffer.Type<DataComponentMap> {
+    record NetworkType(
+            @NotNull IntFunction<DataComponent<?>> idToType
+    ) implements NetworkBuffer.Type<DataComponentMap> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
+            final DataComponentMapImpl patch = (DataComponentMapImpl) value;
+            int added = 0;
+            for (Object o : patch.components.values()) {
+                if (o != null) added++;
+            }
+
+            buffer.write(NetworkBuffer.VAR_INT, added);
+            for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
+                if (entry.getValue() == null) return;
+
+                buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
+                assert type != null;
+                type.write(buffer, entry.getValue());
+            }
+        }
+
+        @Override
+        public DataComponentMap read(@NotNull NetworkBuffer buffer) {
+            int added = buffer.read(NetworkBuffer.VAR_INT);
+            Check.stateCondition(added > 256, "Item component map too large: {0}", added);
+            Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added);
+            for (int i = 0; i < added; i++) {
+                int id = buffer.read(NetworkBuffer.VAR_INT);
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
+                Check.notNull(type, "Unknown component: {0}", id);
+                patch.put(type.id(), type.read(buffer));
+            }
+            return new DataComponentMapImpl(patch);
+        }
+    }
+
+    record PatchNetworkType(
+            @NotNull IntFunction<DataComponent<?>> idToType
+    ) implements NetworkBuffer.Type<DataComponentMap> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
             final DataComponentMapImpl patch = (DataComponentMapImpl) value;
@@ -181,6 +222,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
             return new DataComponentMapImpl(patch);
         }
     }
+
     record NbtType(
             @NotNull IntFunction<DataComponent<?>> idToType,
             @NotNull Function<String, DataComponent<?>> nameToType,
