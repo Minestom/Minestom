@@ -46,6 +46,7 @@ final class ParticleImpl {
             case "minecraft:entity_effect" -> new Particle.EntityEffect(key, id, AlphaColor.WHITE);
             case "minecraft:trail" -> new Particle.Trail(key, id, Vec.ZERO, Color.WHITE, 0);
             case "minecraft:block_crumble" -> new Particle.BlockCrumble(key, id, Block.STONE);
+            case "minecraft:tinted_leaves" -> new Particle.TintedLeaves(namespace, id, AlphaColor.WHITE);
             default -> new Particle.Simple(key, id);
         };
     }
