@@ -13,6 +13,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
+import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
@@ -34,6 +35,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -187,11 +189,13 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
+        final Registry.EntityEntry registry = entityType.registry();
         setBoundingBox(entityType.registry().boundingBox());
 
-        EntitySpawnType type = entityType.registry().spawnType();
-        this.aerodynamics = new Aerodynamics(entityType.registry().acceleration(),
-                type == EntitySpawnType.LIVING || type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
+        this.aerodynamics = new Aerodynamics(
+                registry.acceleration(),
+                registry.horizontalAirResistance(),
+                registry.verticalAirResistance());
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -346,7 +350,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player) player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            if (this instanceof Player player)
+                player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
             else synchronizePosition();
         };
 
@@ -478,7 +483,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      */
     @ApiStatus.Internal
     public void updateNewViewer(@NotNull Player player) {
-        player.sendPacket(getEntityType().registry().spawnType().getSpawnPacket(this));
+        player.sendPacket(getSpawnPacket());
         if (hasVelocity()) player.sendPacket(getVelocityPacket());
         player.sendPacket(this.getMetadataPacket());
         // Passengers
@@ -547,9 +552,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.entityType = entityType;
         this.metadata = new MetadataHolder(this);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
-        EntitySpawnType type = entityType.registry().spawnType();
-        this.aerodynamics = aerodynamics.withAirResistance(type == EntitySpawnType.LIVING ||
-                type == EntitySpawnType.PLAYER ? 0.91 : 0.98, 1 - entityType.registry().drag());
+
+        final Registry.EntityEntry registry = entityType.registry();
+        this.aerodynamics = aerodynamics.withAirResistance(
+                registry.horizontalAirResistance(),
+                registry.verticalAirResistance());
+
         updateCollisions();
         Set<Player> viewers = new HashSet<>(getViewers());
         getViewers().forEach(this::updateOldViewer);
@@ -1542,6 +1550,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
     protected @NotNull Vec getVelocityForPacket() {
         return this.velocity.mul(8000f / ServerFlag.SERVER_TICKS_PER_SECOND);
+    }
+
+    protected @NotNull SpawnEntityPacket getSpawnPacket() {
+        int data = 0;
+        short velocityX = 0, velocityZ = 0, velocityY = 0;
+        if (getEntityMeta() instanceof ObjectDataProvider objectDataProvider) {
+            data = objectDataProvider.getObjectData();
+            if (objectDataProvider.requiresVelocityPacketAtSpawn()) {
+                final var velocity = getVelocityForPacket();
+                velocityX = (short) velocity.x();
+                velocityY = (short) velocity.y();
+                velocityZ = (short) velocity.z();
+            }
+        }
+        final Pos position = getPosition();
+        return new SpawnEntityPacket(getEntityId(), getUuid(), getEntityType().id(),
+                position, position.yaw(), data, velocityX, velocityY, velocityZ);
     }
 
     protected @NotNull EntityVelocityPacket getVelocityPacket() {

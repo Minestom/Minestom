@@ -29,6 +29,12 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
     }
 
+    @ApiStatus.Internal
+    static @NotNull NetworkBuffer.Type<DataComponentMap> networkType(
+            @NotNull IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.NetworkType(idToType);
+    }
+
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
