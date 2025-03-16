@@ -3,6 +3,8 @@ package net.minestom.server.entity.metadata.water.fish;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -14,24 +16,34 @@ public class SalmonMeta extends AbstractFishMeta {
         super(entity, metadata);
     }
 
-    public @NotNull Variant getVariant() {
-        return Variant.BY_ID.getOrDefault(metadata.get(MetadataDef.Salmon.VARIANT), Variant.MEDIUM);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
+     */
+    public @NotNull SalmonMeta.Size getSize() {
+        return Size.BY_ID.getOrDefault(metadata.get(MetadataDef.Salmon.SIZE), Size.MEDIUM);
     }
 
-    public void setVariant(@NotNull Variant variant) {
-        metadata.set(MetadataDef.Salmon.VARIANT, variant.id());
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
+     */
+    public void setSize(@NotNull SalmonMeta.Size size) {
+        metadata.set(MetadataDef.Salmon.SIZE, size.id());
     }
 
-    public enum Variant {
+    public enum Size {
         SMALL("small"),
         MEDIUM("medium"),
         LARGE("large");
 
-        private static final Map<String, Variant> BY_ID = Arrays.stream(values())
-                .collect(Collectors.toMap(Variant::id, (variant) -> variant));
+        public static final NetworkBuffer.Type<Size> NETWORK_TYPE = NetworkBuffer.Enum(Size.class);
+        public static final BinaryTagSerializer<Size> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Size.class);
+
+        private static final Map<String, Size> BY_ID = Arrays.stream(values())
+                .collect(Collectors.toMap(Size::id, (size) -> size));
 
         private final String id;
-        Variant(@NotNull String id) {
+
+        Size(@NotNull String id) {
             this.id = id;
         }
 
