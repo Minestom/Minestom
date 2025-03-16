@@ -3,6 +3,8 @@ package net.minestom.server.entity.metadata.animal.tameable;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class ParrotMeta extends TameableAnimalMeta {
@@ -10,11 +12,16 @@ public class ParrotMeta extends TameableAnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Color getColor() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PARROT_VARIANT} instead.
+     */
+    public @NotNull Color getColor() {
         return Color.VALUES[metadata.get(MetadataDef.Parrot.VARIANT)];
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PARROT_VARIANT} instead.
+     */
     public void setColor(@NotNull Color value) {
         metadata.set(MetadataDef.Parrot.VARIANT, value.ordinal());
     }
@@ -25,6 +32,9 @@ public class ParrotMeta extends TameableAnimalMeta {
         GREEN,
         YELLOW_BLUE,
         GREY;
+
+        public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
+        public static final BinaryTagSerializer<Color> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Color.class);
 
         private final static Color[] VALUES = values();
     }
