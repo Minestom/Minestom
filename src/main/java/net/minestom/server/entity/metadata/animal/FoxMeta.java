@@ -3,6 +3,8 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,13 +15,19 @@ public class FoxMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Type getType() {
-        return Type.VALUES[metadata.get(MetadataDef.Fox.TYPE)];
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
+     */
+    public @NotNull FoxMeta.Variant getVariant() {
+        return Variant.VALUES[metadata.get(MetadataDef.Fox.VARIANT)];
     }
 
-    public void setType(@NotNull Type type) {
-        metadata.set(MetadataDef.Fox.TYPE, type.ordinal());
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
+     */
+    public void setVariant(@NotNull FoxMeta.Variant variant) {
+        metadata.set(MetadataDef.Fox.VARIANT, variant.ordinal());
     }
 
     public boolean isSitting() {
@@ -96,11 +104,14 @@ public class FoxMeta extends AnimalMeta {
         metadata.set(MetadataDef.Fox.SECOND_UUID, value);
     }
 
-    public enum Type {
+    public enum Variant {
         RED,
         SNOW;
 
-        private final static Type[] VALUES = values();
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final BinaryTagSerializer<Variant> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Variant.class);
+
+        private final static Variant[] VALUES = values();
     }
 
 }
