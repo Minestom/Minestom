@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CatVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::catVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CatVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::catVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<CatVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::catVariant);
 
     BinaryTagSerializer<CatVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(

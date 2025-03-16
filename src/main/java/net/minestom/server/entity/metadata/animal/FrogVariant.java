@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface FrogVariant extends FrogVariants permits FrogVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<FrogVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::frogVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<FrogVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::frogVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<FrogVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::frogVariant);
 
     BinaryTagSerializer<FrogVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
