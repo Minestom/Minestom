@@ -4,16 +4,14 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
+import net.minestom.server.coordinate.*;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceBlockChangeEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
-import net.minestom.server.event.player.PlayerBlockBreakEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
@@ -232,12 +230,21 @@ public class InstanceContainer extends Instance {
             chunk.sendChunk(player);
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
-        EventDispatcher.call(blockBreakEvent);
-        final boolean allowed = !blockBreakEvent.isCancelled();
+
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+                this,
+                player,
+                blockFace,
+                player.getPosition().direction(),
+                player.getItemUseHand()
+        );
+
+        InstanceBlockChangeEvent instanceBlockChangeEvent = new InstanceBlockChangeEvent(source, block, new BlockVec(blockPosition));
+        EventDispatcher.call(instanceBlockChangeEvent);
+        final boolean allowed = !instanceBlockChangeEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
+            final Block resultBlock = instanceBlockChangeEvent.getBlock();
             UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
                     new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
             // Send the block break effect packet

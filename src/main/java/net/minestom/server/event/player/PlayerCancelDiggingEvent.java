@@ -1,7 +1,6 @@
 package net.minestom.server.event.player;
 
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
@@ -12,12 +11,12 @@ import org.jetbrains.annotations.NotNull;
  * Called when a {@link Player} stops digging a block before it is broken
  */
 public class PlayerCancelDiggingEvent implements PlayerInstanceEvent, BlockEvent {
-    private final Player player;
+    private final Source.Player source;
     private final Block block;
     private final BlockVec blockPosition;
 
-    public PlayerCancelDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition) {
-        this.player = player;
+    public PlayerCancelDiggingEvent(@NotNull Source.Player source, @NotNull Block block, @NotNull BlockVec blockPosition) {
+        this.source = source;
         this.block = block;
         this.blockPosition = blockPosition;
     }
@@ -43,7 +42,12 @@ public class PlayerCancelDiggingEvent implements PlayerInstanceEvent, BlockEvent
     }
 
     @Override
+    public @NotNull Source getSource() {
+        return source;
+    }
+
+    @Override
     public @NotNull Player getPlayer() {
-        return player;
+        return source.player();
     }
 }

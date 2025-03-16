@@ -11,9 +11,10 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.instance.InstanceBlockChangeEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
-import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
@@ -56,9 +57,17 @@ public class BlockPlacementListener {
 
         final Point cursorPosition = new Vec(packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ());
 
+        final BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+                instance,
+                player,
+                blockFace,
+                cursorPosition,
+                hand
+        );
+
         // Interact at block
         // FIXME: onUseOnBlock
-        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(player, hand, interactedBlock, new BlockVec(blockPosition), cursorPosition, blockFace);
+        PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(source, interactedBlock, new BlockVec(blockPosition));
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
         if (!playerBlockInteractEvent.isCancelled()) {
@@ -159,22 +168,28 @@ public class BlockPlacementListener {
             return;
         }
 
-        // BlockPlaceEvent check
-        PlayerBlockPlaceEvent playerBlockPlaceEvent = new PlayerBlockPlaceEvent(player, placedBlock, blockFace, new BlockVec(placementPosition), cursorPosition, packet.hand());
-        playerBlockPlaceEvent.consumeBlock(player.getGameMode() != GameMode.CREATIVE);
-        EventDispatcher.call(playerBlockPlaceEvent);
-        if (playerBlockPlaceEvent.isCancelled()) {
+        // BlockChangeEvent check
+
+        InstanceBlockChangeEvent instanceBlockChangeEvent = new InstanceBlockChangeEvent(
+                source,
+                placedBlock,
+                new BlockVec(placementPosition)
+        );
+
+        instanceBlockChangeEvent.doesConsumeItem(player.getGameMode() != GameMode.CREATIVE);
+        EventDispatcher.call(instanceBlockChangeEvent);
+        if (instanceBlockChangeEvent.isCancelled()) {
             refresh(player, chunk);
             return;
         }
 
         // Place the block
-        Block resultBlock = playerBlockPlaceEvent.getBlock();
+        Block resultBlock = instanceBlockChangeEvent.getBlock();
         instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), playerBlockPlaceEvent.shouldDoBlockUpdates());
+                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), instanceBlockChangeEvent.doBlockUpdates());
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         // Block consuming
-        if (playerBlockPlaceEvent.doesConsumeBlock()) {
+        if (instanceBlockChangeEvent.doBlockUpdates()) {
             // Consume the block in the player's hand
             final ItemStack newUsedItem = usedItem.consume(1);
             player.setItemInHand(hand, newUsedItem);
