@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CowVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::cowVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CowVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::cowVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<CowVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::cowVariant);
 
     BinaryTagSerializer<CowVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(

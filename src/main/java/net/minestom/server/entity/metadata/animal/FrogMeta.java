@@ -12,10 +12,16 @@ public class FrogMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    public Variant getVariant() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
+     */
+    public @NotNull Variant getVariant() {
         return metadata.get(MetadataDef.Frog.VARIANT);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
+     */
     public void setVariant(@NotNull Variant value) {
         metadata.set(MetadataDef.Frog.VARIANT, value);
     }

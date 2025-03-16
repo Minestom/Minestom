@@ -43,7 +43,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     @Test
     public void ensureUnitComponentsPresent() {
         var fails = new ArrayList<String>();
-        for (var component : DataComponents.values()) {
+        for (var component : DataComponent.values()) {
             if (!component.isSynced()) continue;
 
             // Try to write as a Unit and if it fails we can ignore that type

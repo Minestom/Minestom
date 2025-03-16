@@ -28,10 +28,16 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
         super(entity, metadata);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
+     */
     public @NotNull DynamicRegistry.Key<Variant> getVariant() {
         return metadata.get(MetadataDef.Painting.VARIANT);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
+     */
     public void setVariant(@NotNull DynamicRegistry.Key<Variant> value) {
         metadata.set(MetadataDef.Painting.VARIANT, value);
     }

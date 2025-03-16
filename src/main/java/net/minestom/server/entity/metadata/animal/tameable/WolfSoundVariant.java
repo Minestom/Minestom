@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfSoundVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfSoundVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfSoundVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfSoundVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfSoundVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<WolfSoundVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfSoundVariant);
 
     BinaryTagSerializer<WolfSoundVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(

@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.golem;
 
+import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
@@ -7,6 +8,8 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 
 public class ShulkerMeta extends AbstractGolemMeta {
+    private static final DyeColor[] DYE_VALUES = DyeColor.values();
+
     public ShulkerMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
@@ -27,12 +30,18 @@ public class ShulkerMeta extends AbstractGolemMeta {
         metadata.set(MetadataDef.Shulker.SHIELD_HEIGHT, value);
     }
 
-    public byte getColor() {
-        return metadata.get(MetadataDef.Shulker.COLOR);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
+     */
+    public @NotNull DyeColor getColor() {
+        return DYE_VALUES[metadata.get(MetadataDef.Shulker.COLOR)];
     }
 
-    public void setColor(byte value) {
-        metadata.set(MetadataDef.Shulker.COLOR, value);
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
+     */
+    public void setColor(@NotNull DyeColor value) {
+        metadata.set(MetadataDef.Shulker.COLOR, (byte) value.ordinal());
     }
 
 }

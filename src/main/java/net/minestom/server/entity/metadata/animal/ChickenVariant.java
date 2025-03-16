@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface ChickenVariant extends ChickenVariants permits ChickenVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::chickenVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::chickenVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<ChickenVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::chickenVariant);
 
     BinaryTagSerializer<ChickenVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(

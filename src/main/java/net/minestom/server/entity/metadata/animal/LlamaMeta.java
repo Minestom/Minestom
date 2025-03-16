@@ -3,6 +3,8 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class LlamaMeta extends ChestedHorseMeta {
@@ -26,10 +28,16 @@ public class LlamaMeta extends ChestedHorseMeta {
         metadata.set(MetadataDef.Llama.CARPET_COLOR, value);
     }
 
-    public Variant getVariant() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
+     */
+    public @NotNull Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
+     */
     public void setVariant(Variant value) {
         metadata.set(MetadataDef.Llama.VARIANT, value.ordinal());
     }
@@ -39,6 +47,9 @@ public class LlamaMeta extends ChestedHorseMeta {
         WHITE,
         BROWN,
         GRAY;
+
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final BinaryTagSerializer<Variant> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Variant.class);
 
         private final static Variant[] VALUES = values();
     }

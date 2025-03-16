@@ -3,6 +3,7 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class PigMeta extends AnimalMeta {
@@ -24,6 +25,20 @@ public class PigMeta extends AnimalMeta {
 
     public void setTimeToBoost(int value) {
         metadata.set(MetadataDef.Pig.BOOST_TIME, value);
+    }
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
+     */
+    public @NotNull DynamicRegistry.Key<PigVariant> getVariant() {
+        return metadata.get(MetadataDef.Pig.VARIANT);
+    }
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
+     */
+    public void setVariant(@NotNull DynamicRegistry.Key<PigVariant> value) {
+        metadata.set(MetadataDef.Pig.VARIANT, value);
     }
 
 }
