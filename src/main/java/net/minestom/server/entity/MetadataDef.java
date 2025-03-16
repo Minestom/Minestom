@@ -5,10 +5,9 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
-import net.minestom.server.entity.metadata.animal.SnifferMeta;
+import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.Block;
@@ -281,7 +280,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Salmon extends AbstractFish {
-        public static final Entry<String> VARIANT = index(0, Metadata::String, "");
+        public static final Entry<String> SIZE = index(0, Metadata::String, "");
     }
 
     public static final class TropicalFish extends AbstractFish {
@@ -345,7 +344,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Fox extends AgeableMob {
-        public static final Entry<Integer> TYPE = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
         public static final Entry<Byte> FOX_FLAGS = index(1, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SITTING = bitMask(1, (byte) 0x01, false);
         public static final Entry<Boolean> IS_CROUCHING = bitMask(1, (byte) 0x04, false);
@@ -380,9 +379,18 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_ON_BACK = bitMask(5, (byte) 0x10, false);
     }
 
+    public static final class Chicken extends AgeableMob {
+        public static final Entry<DynamicRegistry.Key<ChickenVariant>> VARIANT = index(0, Metadata::ChickenVariant, ChickenVariant.TEMPERATE);
+    }
+
+    public static final class Cow extends AgeableMob {
+        public static final Entry<DynamicRegistry.Key<CowVariant>> VARIANT = index(0, Metadata::CowVariant, CowVariant.TEMPERATE);
+    }
+
     public static final class Pig extends AgeableMob {
         public static final Entry<Boolean> HAS_SADDLE = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> BOOST_TIME = index(1, Metadata::VarInt, 0);
+        public static final Entry<DynamicRegistry.Key<PigVariant>> VARIANT = index(2, Metadata::PigVariant, PigVariant.TEMPERATE);
     }
 
     public static final class Rabbit extends AgeableMob {
@@ -390,12 +398,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Turtle extends AgeableMob {
-        public static final Entry<Point> HOME_POS = index(0, Metadata::BlockPosition, Vec.ZERO);
         public static final Entry<Boolean> HAS_EGG = index(1, Metadata::Boolean, false);
         public static final Entry<Boolean> IS_LAYING_EGG = index(2, Metadata::Boolean, false);
-        public static final Entry<Point> TRAVEL_POS = index(3, Metadata::BlockPosition, Vec.ZERO);
-        public static final Entry<Boolean> IS_GOING_HOME = index(4, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_TRAVELING = index(5, Metadata::Boolean, false);
     }
 
     public static final class PolarBear extends AgeableMob {
@@ -403,7 +407,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Mooshroom extends AgeableMob {
-        public static final Entry<String> VARIANT = index(0, Metadata::String, "red");
+        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
     }
 
     public static final class Hoglin extends AgeableMob {
@@ -447,6 +451,7 @@ public sealed class MetadataDef {
         public static final Entry<Integer> COLLAR_COLOR = index(1, Metadata::VarInt, 14);
         public static final Entry<Integer> ANGER_TIME = index(2, Metadata::VarInt, 0);
         public static final Entry<DynamicRegistry.Key<WolfVariant>> VARIANT = index(3, Metadata::WolfVariant, WolfVariant.PALE);
+        public static final Entry<DynamicRegistry.Key<WolfSoundVariant>> SOUND_VARIANT = index(4, Metadata::WolfSoundVariant, WolfSoundVariant.CLASSIC);
     }
 
     public static final class Parrot extends TameableAnimal {

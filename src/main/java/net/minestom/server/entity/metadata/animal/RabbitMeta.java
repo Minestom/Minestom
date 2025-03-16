@@ -3,6 +3,8 @@ package net.minestom.server.entity.metadata.animal;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class RabbitMeta extends AnimalMeta {
@@ -10,21 +12,26 @@ public class RabbitMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Type getType() {
-        int id = metadata.get(MetadataDef.Rabbit.TYPE);
-        if (id == 99) {
-            return Type.KILLER_BUNNY;
-        }
-        return Type.VALUES[id];
-    }
-
-    public void setType(@NotNull Type value) {
-        int id = value == Type.KILLER_BUNNY ? 99 : value.ordinal();
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
+     */
+    public void setVariant(@NotNull RabbitMeta.Variant variant) {
+        int id = variant == Variant.KILLER_BUNNY ? 99 : variant.ordinal();
         metadata.set(MetadataDef.Rabbit.TYPE, id);
     }
 
-    public enum Type {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
+     */
+    public @NotNull RabbitMeta.Variant getVariant() {
+        int id = metadata.get(MetadataDef.Rabbit.TYPE);
+        if (id == 99) {
+            return Variant.KILLER_BUNNY;
+        }
+        return Variant.VALUES[id];
+    }
+
+    public enum Variant {
         BROWN,
         WHITE,
         BLACK,
@@ -33,7 +40,10 @@ public class RabbitMeta extends AnimalMeta {
         SALT_AND_PEPPER,
         KILLER_BUNNY;
 
-        private final static Type[] VALUES = values();
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final BinaryTagSerializer<Variant> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Variant.class);
+
+        private final static Variant[] VALUES = values();
     }
 
 }

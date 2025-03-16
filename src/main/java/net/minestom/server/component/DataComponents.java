@@ -1,11 +1,20 @@
 package net.minestom.server.component;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.color.DyeColor;
+import net.minestom.server.entity.VillagerType;
+import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.ParrotMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.water.AxolotlMeta;
+import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
+import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -14,6 +23,7 @@ import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
+import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagTemplate;
@@ -58,8 +68,7 @@ public class DataComponents {
     public static final DataComponent<Unit> GLIDER = register("glider", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<String> TOOLTIP_STYLE = register("tooltip_style", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
     public static final DataComponent<DeathProtection> DEATH_PROTECTION = register("death_protection", DeathProtection.NETWORK_TYPE, DeathProtection.NBT_TYPE);
-    // TODO(1.21.5)
-    public static final DataComponent<Unit> BLOCKS_ATTACKS = register("blocks_attacks", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
+    public static final DataComponent<BlocksAttacks> BLOCKS_ATTACKS = register("blocks_attacks", BlocksAttacks.NETWORK_TYPE, BlocksAttacks.NBT_TYPE);
     public static final DataComponent<EnchantmentList> STORED_ENCHANTMENTS = register("stored_enchantments", EnchantmentList.NETWORK_TYPE, EnchantmentList.NBT_TYPE);
     public static final DataComponent<DyedItemColor> DYED_COLOR = register("dyed_color", DyedItemColor.NETWORK_TYPE, DyedItemColor.NBT_TYPE);
     public static final DataComponent<RGBLike> MAP_COLOR = register("map_color", Color.NETWORK_TYPE, Color.NBT_TYPE);
@@ -79,8 +88,7 @@ public class DataComponents {
     public static final DataComponent<CustomData> BUCKET_ENTITY_DATA = register("bucket_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<CustomData> BLOCK_ENTITY_DATA = register("block_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<DynamicRegistry.Key<Instrument>> INSTRUMENT = register("instrument", Instrument.NETWORK_TYPE, Instrument.NBT_TYPE);
-    // TODO(1.21.5)
-    public static final DataComponent<Unit> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
+    public static final DataComponent<ProvidesTrimMaterial> PROVIDES_TRIM_MATERIAL = register("provides_trim_material", ProvidesTrimMaterial.NETWORK_TYPE, ProvidesTrimMaterial.NBT_TYPE);
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     public static final DataComponent<JukeboxPlayable> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxPlayable.NETWORK_TYPE, JukeboxPlayable.NBT_TYPE);
     public static final DataComponent<String> PROVIDES_BANNER_PATTERNS = register("provides_banner_patterns", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
@@ -99,32 +107,32 @@ public class DataComponents {
     // Lock is an item predicate which we do not support, but can be user-represented as a compound tag (an empty tag would match everything).
     public static final DataComponent<CompoundBinaryTag> LOCK = register("lock", null, BinaryTagSerializer.COMPOUND);
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
-    // TODO(1.21.5) ALL BELOW
-    public static final DataComponent<Unit> BREAK_SOUND = register("break_sound", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
-    public static final DataComponent<Unit> VILLAGER_VARIANT = register("villager/variant", null, null);
-    public static final DataComponent<Unit> WOLF_VARIANT = register("wolf/variant", null, null);
-    public static final DataComponent<Unit> WOLF_SOUND_VARIANT = register("wolf/sound_variant", null, null);
-    public static final DataComponent<Unit> WOLF_COLLAR = register("wolf/collar", null, null);
-    public static final DataComponent<Unit> FOX_VARIANT = register("fox/variant", null, null);
-    public static final DataComponent<Unit> SALMON_SIZE = register("salmon/size", null, null);
-    public static final DataComponent<Unit> PARROT_VARIANT = register("parrot/variant", null, null);
-    public static final DataComponent<Unit> TROPICAL_FISH_PATTERN = register("tropical_fish/pattern", null, null);
-    public static final DataComponent<Unit> TROPICAL_FISH_BASE_COLOR = register("tropical_fish/base_color", null, null);
-    public static final DataComponent<Unit> TROPICAL_FISH_PATTERN_COLOR = register("tropical_fish/pattern_color", null, null);
-    public static final DataComponent<Unit> MOOSHROOM_VARIANT = register("mooshroom/variant", null, null);
-    public static final DataComponent<Unit> RABBIT_VARIANT = register("rabbit/variant", null, null);
-    public static final DataComponent<Unit> PIG_VARIANT = register("pig/variant", null, null);
-    public static final DataComponent<Unit> COW_VARIANT = register("cow/variant", null, null);
+    public static final DataComponent<SoundEvent> BREAK_SOUND = register("break_sound", SoundEvent.NETWORK_TYPE, SoundEvent.NBT_TYPE);
+    public static final DataComponent<VillagerType> VILLAGER_VARIANT = register("villager/variant", VillagerType.NETWORK_TYPE, VillagerType.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<WolfVariant>> WOLF_VARIANT = register("wolf/variant", WolfVariant.NETWORK_TYPE, WolfVariant.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<WolfSoundVariant>> WOLF_SOUND_VARIANT = register("wolf/sound_variant", WolfSoundVariant.NETWORK_TYPE, WolfSoundVariant.NBT_TYPE);
+    public static final DataComponent<DyeColor> WOLF_COLLAR = register("wolf/collar", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    public static final DataComponent<FoxMeta.Variant> FOX_VARIANT = register("fox/variant", FoxMeta.Variant.NETWORK_TYPE, FoxMeta.Variant.NBT_TYPE);
+    public static final DataComponent<SalmonMeta.Size> SALMON_SIZE = register("salmon/size", SalmonMeta.Size.NETWORK_TYPE, SalmonMeta.Size.NBT_TYPE);
+    public static final DataComponent<ParrotMeta.Color> PARROT_VARIANT = register("parrot/variant", ParrotMeta.Color.NETWORK_TYPE, ParrotMeta.Color.NBT_TYPE);
+    public static final DataComponent<TropicalFishMeta.Pattern> TROPICAL_FISH_PATTERN = register("tropical_fish/pattern", TropicalFishMeta.Pattern.NETWORK_TYPE, TropicalFishMeta.Pattern.NBT_TYPE);
+    public static final DataComponent<DyeColor> TROPICAL_FISH_BASE_COLOR = register("tropical_fish/base_color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    public static final DataComponent<DyeColor> TROPICAL_FISH_PATTERN_COLOR = register("tropical_fish/pattern_color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    public static final DataComponent<MooshroomMeta.Variant> MOOSHROOM_VARIANT = register("mooshroom/variant", MooshroomMeta.Variant.NETWORK_TYPE, MooshroomMeta.Variant.NBT_TYPE);
+    public static final DataComponent<RabbitMeta.Variant> RABBIT_VARIANT = register("rabbit/variant", RabbitMeta.Variant.NETWORK_TYPE, RabbitMeta.Variant.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<PigVariant>> PIG_VARIANT = register("pig/variant", PigVariant.NETWORK_TYPE, PigVariant.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<CowVariant>> COW_VARIANT = register("cow/variant", CowVariant.NETWORK_TYPE, CowVariant.NBT_TYPE);
+    // TODO(1.21.5)
     public static final DataComponent<Unit> CHICKEN_VARIANT = register("chicken/variant", null, null);
-    public static final DataComponent<Unit> FROG_VARIANT = register("frog/variant", null, null);
-    public static final DataComponent<Unit> HORSE_VARIANT = register("horse/variant", null, null);
-    public static final DataComponent<Unit> PAINTING_VARIANT = register("painting/variant", null, null);
-    public static final DataComponent<Unit> LLAMA_VARIANT = register("llama/variant", null, null);
-    public static final DataComponent<Unit> AXOLOTL_VARIANT = register("axolotl/variant", null, null);
-    public static final DataComponent<Unit> CAT_VARIANT = register("cat/variant", null, null);
-    public static final DataComponent<Unit> CAT_COLLAR = register("cat/collar", null, null);
-    public static final DataComponent<Unit> SHEEP_COLOR = register("sheep/color", null, null);
-    public static final DataComponent<Unit> SHULKER_COLOR = register("shulker/color", null, null);
+    public static final DataComponent<DynamicRegistry.Key<FrogVariant>> FROG_VARIANT = register("frog/variant", FrogVariant.NETWORK_TYPE, FrogVariant.NBT_TYPE);
+    public static final DataComponent<HorseMeta.Color> HORSE_VARIANT = register("horse/variant", HorseMeta.Color.NETWORK_TYPE, HorseMeta.Color.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<PaintingMeta.Variant>> PAINTING_VARIANT = register("painting/variant", PaintingMeta.Variant.NETWORK_TYPE, PaintingMeta.Variant.NBT_TYPE);
+    public static final DataComponent<LlamaMeta.Variant> LLAMA_VARIANT = register("llama/variant", LlamaMeta.Variant.NETWORK_TYPE, LlamaMeta.Variant.NBT_TYPE);
+    public static final DataComponent<AxolotlMeta.Variant> AXOLOTL_VARIANT = register("axolotl/variant", AxolotlMeta.Variant.NETWORK_TYPE, AxolotlMeta.Variant.NBT_TYPE);
+    public static final DataComponent<DynamicRegistry.Key<CatVariant>> CAT_VARIANT = register("cat/variant", CatVariant.NETWORK_TYPE, CatVariant.NBT_TYPE);
+    public static final DataComponent<DyeColor> CAT_COLLAR = register("cat/collar", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    public static final DataComponent<DyeColor> SHEEP_COLOR = register("sheep/color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
+    public static final DataComponent<DyeColor> SHULKER_COLOR = register("shulker/color", DyeColor.NETWORK_TYPE, DyeColor.NBT_TYPE);
 
     // There are some components that are serialized to nbt as an object containing a single field, for now we just inline them here.
     private static <T> @NotNull BinaryTagSerializer<T> wrapObject(@NotNull String fieldName, @NotNull BinaryTagSerializer<T> serializer) {

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<PigVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::pigVariant, true);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<PigVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::pigVariant, false);
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<PigVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::pigVariant);
 
     BinaryTagSerializer<PigVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(

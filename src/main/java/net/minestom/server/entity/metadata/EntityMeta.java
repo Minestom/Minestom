@@ -101,11 +101,17 @@ public class EntityMeta {
         metadata.set(MetadataDef.AIR_TICKS, value);
     }
 
-    @Nullable
-    public Component getCustomName() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
+    public @Nullable Component getCustomName() {
         return metadata.get(MetadataDef.CUSTOM_NAME);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
     public void setCustomName(@Nullable Component value) {
         metadata.set(MetadataDef.CUSTOM_NAME, value);
     }
