@@ -432,7 +432,7 @@ public interface PacketRegistry<T> {
                         return (PacketInfo<T>) info;
                     }
                 }
-                throw new IllegalStateException("Packet type " + type + " isn't registered for state " + side().name() + "_" + state().name() + "!");
+                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
             }
         };
 
