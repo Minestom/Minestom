@@ -40,7 +40,9 @@ public sealed interface DataComponent<T> extends StaticProtocolObject permits Da
      * will always represent the merged view.
      */
     interface Holder {
-        boolean has(@NotNull DataComponent<?> component);
+        default boolean has(@NotNull DataComponent<?> component) {
+            return get(component) != null;
+        }
 
         <T> @Nullable T get(@NotNull DataComponent<T> component);
 
