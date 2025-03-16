@@ -1,6 +1,12 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.entity.metadata.animal.ChickenVariant;
+import net.minestom.server.entity.metadata.animal.CowVariant;
+import net.minestom.server.entity.metadata.animal.FrogVariant;
+import net.minestom.server.entity.metadata.animal.PigVariant;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -31,6 +37,12 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<PaintingMeta.Variant> paintingVariant = null;
     public DynamicRegistry<JukeboxSong> jukeboxSong = null;
     public DynamicRegistry<Instrument> instrument = null;
+    public DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
+    public DynamicRegistry<CatVariant> catVariant = null;
+    public DynamicRegistry<ChickenVariant> chickenVariant = null;
+    public DynamicRegistry<CowVariant> cowVariant = null;
+    public DynamicRegistry<FrogVariant> frogVariant = null;
+    public DynamicRegistry<PigVariant> pigVariant = null;
     public DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
     public DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects = null;
@@ -82,6 +94,36 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<WolfVariant> wolfVariant() {
         return Objects.requireNonNull(wolfVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<WolfSoundVariant> wolfSoundVariant() {
+        return Objects.requireNonNull(wolfSoundVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CatVariant> catVariant() {
+        return Objects.requireNonNull(catVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<ChickenVariant> chickenVariant() {
+        return Objects.requireNonNull(chickenVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<CowVariant> cowVariant() {
+        return Objects.requireNonNull(cowVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<FrogVariant> frogVariant() {
+        return Objects.requireNonNull(frogVariant);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<PigVariant> pigVariant() {
+        return Objects.requireNonNull(pigVariant);
     }
 
     @Override
