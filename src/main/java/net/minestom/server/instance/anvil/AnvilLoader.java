@@ -134,23 +134,32 @@ public class AnvilLoader implements IChunkLoader {
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
         final int regionX = CoordConversion.chunkToRegion(chunkX);
         final int regionZ = CoordConversion.chunkToRegion(chunkZ);
-        return alreadyLoaded.computeIfAbsent(RegionFile.getFileName(regionX, regionZ), n -> {
-            final Path regionPath = this.regionPath.resolve(n);
-            if (!Files.exists(regionPath)) {
-                return null;
-            }
-            perRegionLoadedChunksLock.lock();
-            try {
-                Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
-                assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
-                return new RegionFile(regionPath);
-            } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                return null;
-            } finally {
-                perRegionLoadedChunksLock.unlock();
-            }
-        });
+        final String fileName = RegionFile.getFileName(regionX, regionZ);
+
+        final RegionFile loadedFile = alreadyLoaded.get(fileName);
+
+        if (loadedFile != null) return loadedFile;
+
+        perRegionLoadedChunksLock.lock();
+        try {
+            return alreadyLoaded.computeIfAbsent(fileName, n -> {
+                final Path regionPath = this.regionPath.resolve(n);
+                if (!Files.exists(regionPath)) {
+                    return null;
+                }
+
+                try {
+                    Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
+                    assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
+                    return new RegionFile(regionPath);
+                } catch (IOException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    return null;
+                }
+            });
+        } finally {
+            perRegionLoadedChunksLock.unlock();
+        }
     }
 
     private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
