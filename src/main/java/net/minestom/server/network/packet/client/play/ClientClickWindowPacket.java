@@ -6,13 +6,13 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.network.packet.client.ClientPacket;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, @NotNull ClickType clickType,
-                                      @NotNull List<ChangedSlot> changedSlots,
+                                      @NotNull Map<Short, ItemStack> changedSlots,
                                       @NotNull ItemStack clickedItem) implements ClientPacket {
     public static final int MAX_CHANGED_SLOTS = 128;
 
@@ -22,19 +22,12 @@ public record ClientClickWindowPacket(int windowId, int stateId,
             SHORT, ClientClickWindowPacket::slot,
             BYTE, ClientClickWindowPacket::button,
             Enum(ClickType.class), ClientClickWindowPacket::clickType,
-            ChangedSlot.SERIALIZER.list(MAX_CHANGED_SLOTS), ClientClickWindowPacket::changedSlots,
+            SHORT.mapValue(ItemStack.NETWORK_TYPE, MAX_CHANGED_SLOTS), ClientClickWindowPacket::changedSlots,
             ItemStack.NETWORK_TYPE, ClientClickWindowPacket::clickedItem,
             ClientClickWindowPacket::new);
 
     public ClientClickWindowPacket {
-        changedSlots = List.copyOf(changedSlots);
-    }
-
-    public record ChangedSlot(short slot, @NotNull ItemStack item) {
-        public static final NetworkBuffer.Type<ChangedSlot> SERIALIZER = NetworkBufferTemplate.template(
-                SHORT, ChangedSlot::slot,
-                ItemStack.NETWORK_TYPE, ChangedSlot::item,
-                ChangedSlot::new);
+        changedSlots = Map.copyOf(changedSlots);
     }
 
     public enum ClickType {

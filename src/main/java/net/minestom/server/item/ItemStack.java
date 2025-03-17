@@ -296,6 +296,12 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
                 });
     }
 
+    sealed interface Hash permits ItemStackHashImpl.Air, ItemStackHashImpl.Item {
+        @NotNull Hash AIR = new ItemStackHashImpl.Air();
+
+        @NotNull NetworkBuffer.Type<Hash> NETWORK_TYPE = ItemStackHashImpl.NETWORK_TYPE;
+    }
+
     sealed interface Builder permits ItemStackImpl.Builder {
 
         @Contract(value = "_ -> this")
