@@ -15,9 +15,10 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @EnvTest
 public class HeldClickIntegrationTest {
@@ -185,7 +186,7 @@ public class HeldClickIntegrationTest {
             }
         }
         player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) target,
-                ClientClickWindowPacket.ClickType.SWAP, List.of(), ItemStack.AIR));
+                ClientClickWindowPacket.ClickType.SWAP, Map.of(), ItemStack.AIR));
         player.interpretPacketQueue();
     }
 }
