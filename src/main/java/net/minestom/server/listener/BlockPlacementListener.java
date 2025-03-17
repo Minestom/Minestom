@@ -29,6 +29,7 @@ import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
+import net.minestom.server.registry.Registry.BlockEntry;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
@@ -101,8 +102,10 @@ public class BlockPlacementListener {
         //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
         var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.registry().isReplaceable() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
-                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, useMaterial)))) {
+        BlockEntry interactedBlockEntry = interactedBlock.registry();
+		if ((!interactedBlockEntry.isReplaceable() || interactedBlockEntry.material() == useMaterial)
+				&& (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
+						new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, useMaterial)))) {
             // If the block is not replaceable, try to place next to it.
             final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
             final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
