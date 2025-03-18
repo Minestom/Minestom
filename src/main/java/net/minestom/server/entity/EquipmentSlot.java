@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -28,10 +28,10 @@ public enum EquipmentSlot {
     private static final Map<Integer, EquipmentSlot> BY_LEGACY_PROTOCOL_ID = Arrays.stream(values())
             .collect(Collectors.toMap(EquipmentSlot::protocolId, slot -> slot));
 
-    public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(
-            BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
-    public static final BinaryTagSerializer<EquipmentSlot> NBT_TYPE = BinaryTagSerializer.STRING.map(
-            BY_NBT_NAME::get, EquipmentSlot::nbtName);
+    public static final NetworkBuffer.Type<EquipmentSlot> NETWORK_TYPE = NetworkBuffer.VAR_INT
+            .transform(BY_PROTOCOL_ID::get, EquipmentSlot::protocolId);
+    public static final Codec<EquipmentSlot> CODEC = Codec.STRING
+            .transform(BY_NBT_NAME::get, EquipmentSlot::nbtName);
 
     public static @NotNull List<@NotNull EquipmentSlot> armors() {
         return ARMORS;

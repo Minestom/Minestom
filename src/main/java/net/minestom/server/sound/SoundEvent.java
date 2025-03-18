@@ -6,6 +6,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
 import net.kyori.adventure.sound.Sound;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -44,6 +45,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
             return new CustomSoundEvent(key, buffer.read(NetworkBuffer.FLOAT.optional()));
         }
     };
+    @NotNull Codec<SoundEvent> CODEC = null; // TODO(1.21.5)
     @NotNull BinaryTagSerializer<SoundEvent> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull SoundEvent value) {

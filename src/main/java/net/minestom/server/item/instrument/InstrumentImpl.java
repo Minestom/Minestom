@@ -1,12 +1,12 @@
 package net.minestom.server.item.instrument;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,15 +24,13 @@ public record InstrumentImpl(
             NetworkBuffer.FLOAT, Instrument::useDuration,
             NetworkBuffer.FLOAT, Instrument::range,
             NetworkBuffer.COMPONENT, Instrument::description,
-            InstrumentImpl::new
-    );
-    static final BinaryTagSerializer<Instrument> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "sound_event", SoundEvent.NBT_TYPE, Instrument::soundEvent,
-            "use_duration", BinaryTagSerializer.FLOAT, Instrument::useDuration,
-            "range", BinaryTagSerializer.FLOAT, Instrument::range,
-            "description", BinaryTagSerializer.NBT_COMPONENT, Instrument::description,
-            InstrumentImpl::new
-    );
+            InstrumentImpl::new);
+    static final Codec<Instrument> REGISTRY_NBT_TYPE = StructCodec.struct(
+            "sound_event", SoundEvent.CODEC, Instrument::soundEvent,
+            "use_duration", Codec.FLOAT, Instrument::useDuration,
+            "range", Codec.FLOAT, Instrument::range,
+            "description", Codec.COMPONENT, Instrument::description,
+            InstrumentImpl::new);
 
     @SuppressWarnings("ConstantValue") // The builder can violate the nullability constraints
     public InstrumentImpl {

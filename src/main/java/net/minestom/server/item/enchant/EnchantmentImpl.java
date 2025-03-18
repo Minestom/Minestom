@@ -33,9 +33,9 @@ record EnchantmentImpl(
         @Nullable Registry.EnchantmentEntry registry
 ) implements Enchantment {
 
-    private static final BinaryTagSerializer<ObjectSet<Enchantment>> ENCHANTMENT_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ENCHANTMENTS);
-    private static final BinaryTagSerializer<ObjectSet<Material>> MATERIAL_OBJECT_SET_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.ITEMS);
-    private static final BinaryTagSerializer<List<EquipmentSlotGroup>> SLOTS_NBT_TYPE = EquipmentSlotGroup.NBT_TYPE.list();
+    private static final BinaryTagSerializer<ObjectSet<Enchantment>> ENCHANTMENT_OBJECT_SET_NBT_TYPE = ObjectSet.codec(Tag.BasicType.ENCHANTMENTS);
+    private static final BinaryTagSerializer<ObjectSet<Material>> MATERIAL_OBJECT_SET_NBT_TYPE = ObjectSet.codec(Tag.BasicType.ITEMS);
+    private static final BinaryTagSerializer<List<EquipmentSlotGroup>> SLOTS_NBT_TYPE = EquipmentSlotGroup.CODEC.list();
     static final BinaryTagSerializer<Enchantment> REGISTRY_NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull Context context, @NotNull Enchantment value) {
@@ -70,7 +70,7 @@ record EnchantmentImpl(
                     SLOTS_NBT_TYPE.read(context, tag.get("slots")),
                     tag.get("effects") instanceof CompoundBinaryTag effects ? EffectComponent.MAP_NBT_TYPE.read(context, effects) : DataComponentMap.EMPTY,
                     null
-                );
+            );
         }
     };
 

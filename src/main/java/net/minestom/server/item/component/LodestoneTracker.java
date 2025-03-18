@@ -1,6 +1,8 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -14,18 +16,11 @@ public record LodestoneTracker(@Nullable WorldPos target, boolean tracked) {
     public static final NetworkBuffer.Type<LodestoneTracker> NETWORK_TYPE = NetworkBufferTemplate.template(
             WorldPos.NETWORK_TYPE.optional(), LodestoneTracker::target,
             NetworkBuffer.BOOLEAN, LodestoneTracker::tracked,
-            LodestoneTracker::new
-    );
-
-    public static final BinaryTagSerializer<LodestoneTracker> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new LodestoneTracker(
-                    WorldPos.NBT_TYPE.read(tag.get("target")),
-                    tag.getBoolean("tracked")),
-            value -> CompoundBinaryTag.builder()
-                    .put("target", WorldPos.NBT_TYPE.write(value.target))
-                    .putBoolean("tracked", value.tracked)
-                    .build()
-    );
+            LodestoneTracker::new);
+    public static final Codec<LodestoneTracker> CODEC = StructCodec.struct(
+            "target", WorldPos.CODEC.optional(), LodestoneTracker::target,
+            "tracked", Codec.BOOLEAN.optional(true), LodestoneTracker::tracked,
+            LodestoneTracker::new);
 
     public LodestoneTracker(@NotNull String dimension, @NotNull Point blockPosition, boolean tracked) {
         this(new WorldPos(dimension, blockPosition), tracked);
