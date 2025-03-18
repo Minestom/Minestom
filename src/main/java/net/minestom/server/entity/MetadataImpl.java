@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -53,7 +53,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos
-        EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingMeta.Variant.KEBAB));
+        EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
         EMPTY_VALUES.set(TYPE_ARMADILLO_STATE, ArmadilloState(ArmadilloMeta.State.IDLE));
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));

@@ -1,11 +1,11 @@
 package net.minestom.server.entity.metadata.water.fish;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.color.DyeColor;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class TropicalFishMeta extends AbstractFishMeta {
@@ -76,7 +76,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
         CLAYFISH(true, 5);
 
         public static final NetworkBuffer.Type<Pattern> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Pattern::fromId, Pattern::id);
-        public static final BinaryTagSerializer<Pattern> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Pattern.class);
+        public static final Codec<Pattern> CODEC = Codec.Enum(Pattern.class);
 
         private final static Pattern[] VALUES = values();
 

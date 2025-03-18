@@ -1,13 +1,13 @@
 package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +18,7 @@ import java.util.Map;
 
 public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimMaterial, true);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimMaterial>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimMaterial);
+    @NotNull Codec<DynamicRegistry.Key<TrimMaterial>> CODEC = Codec.RegistryKey(Registries::trimMaterial); // TODO(1.21.5) should be a holder
 
     static @NotNull TrimMaterial create(
             @NotNull String assetName,
