@@ -13,7 +13,7 @@ import net.minestom.server.entity.metadata.animal.PigVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -80,7 +80,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<TrimPattern> trimPattern;
     private final DynamicRegistry<BannerPattern> bannerPattern;
     private final DynamicRegistry<Enchantment> enchantment;
-    private final DynamicRegistry<PaintingMeta.Variant> paintingVariant;
+    private final DynamicRegistry<PaintingVariant> paintingVariant;
     private final DynamicRegistry<JukeboxSong> jukeboxSong;
     private final DynamicRegistry<Instrument> instrument;
     private final DynamicRegistry<WolfVariant> wolfVariant;
@@ -132,7 +132,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.trimPattern = TrimPattern.createDefaultRegistry();
         this.bannerPattern = BannerPattern.createDefaultRegistry();
         this.enchantment = Enchantment.createDefaultRegistry(this);
-        this.paintingVariant = PaintingMeta.Variant.createDefaultRegistry();
+        this.paintingVariant = PaintingVariant.createDefaultRegistry();
         this.jukeboxSong = JukeboxSong.createDefaultRegistry();
         this.instrument = Instrument.createDefaultRegistry();
         this.wolfVariant = WolfVariant.createDefaultRegistry();
@@ -195,7 +195,7 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
+    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
         return paintingVariant;
     }
 

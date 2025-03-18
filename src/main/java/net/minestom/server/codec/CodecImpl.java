@@ -1,6 +1,8 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -177,6 +179,27 @@ final class CodecImpl {
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
             return null;
+        }
+    }
+
+    record BlockPositionImpl() implements Codec<Point> {
+        @Override
+        public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<int[]> intArrayResult = coder.getIntArray(value);
+            if (!(intArrayResult instanceof Result.Ok(int[] intArray)))
+                return intArrayResult.cast();
+            if (intArray.length != 3)
+                return new Result.Error<>("Invalid length for Point, expected 3 but got " + intArray.length);
+            return new Result.Ok<>(new Vec(intArray[0], intArray[1], intArray[2]));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Point value) {
+            return new Result.Ok<>(coder.createIntArray(new int[]{
+                    (int) value.x(),
+                    (int) value.y(),
+                    (int) value.z()
+            }));
         }
     }
 

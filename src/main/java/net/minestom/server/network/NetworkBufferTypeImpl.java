@@ -5,6 +5,7 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -725,7 +726,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TypedNbtType<T>(@NotNull BinaryTagSerializer<T> nbtType) implements NetworkBufferTypeImpl<T> {
+    record TypedNbtType<T>(@NotNull Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, T value) {
             final Registries registries = impl(buffer).registries;
