@@ -1,5 +1,6 @@
 package net.minestom.server.codec;
 
+import net.kyori.adventure.text.Component;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,6 +86,97 @@ final class CodecImpl {
                 encodedList.add(encodedItem);
             }
             return new Result.Ok<>(coder.createList(encodedList));
+        }
+    }
+
+    record UnionImpl<T, R>(@NotNull String keyField, @NotNull Codec<T> keyCodec,
+                           @NotNull Function<T, Codec<R>> serializers,
+                           @NotNull Function<R, T> keyFunc) implements Codec<R> {
+        @Override
+        public @NotNull <D> Result<R> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<D> discriminantResult = coder.getValue(value, keyField);
+            if (!(discriminantResult instanceof Result.Ok(D discriminant)))
+                return discriminantResult.cast();
+            if (discriminant == null) return new Result.Error<>("null");
+
+            final Result<T> keyResult = keyCodec.decode(coder, discriminant);
+            if (!(keyResult instanceof Result.Ok(T key)))
+                return keyResult.cast();
+
+            return serializers.apply(key).decode(coder, value);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable R value) {
+            if (value == null) return new Result.Error<>("null");
+
+            final T key = keyFunc.apply(value);
+            var serializer = serializers.apply(key);
+            if (serializer == null) return new Result.Error<>("no union value: " + key);
+
+            final Result<D> keyResult = keyCodec.encode(coder, key);
+            if (!(keyResult instanceof Result.Ok(D keyValue)))
+                return keyResult.cast();
+            if (keyValue == null) return new Result.Error<>("null");
+
+            final Result<D> serializedResult = serializer.encode(coder, value);
+            if (!(serializedResult instanceof Result.Ok(D serializedValue)))
+                return serializedResult.cast();
+            if (serializedValue == null) return new Result.Error<>("null");
+
+            return coder.putValue(serializedValue, keyField, keyValue);
+        }
+    }
+
+    static final class RecursiveImpl<T> implements Codec<T> {
+        private final Codec<T> delegate;
+
+        public RecursiveImpl(@NotNull Function<Codec<T>, Codec<T>> self) {
+            this.delegate = self.apply(this);
+        }
+
+        @Override
+        public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            return delegate.decode(coder, value);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            return delegate.encode(coder, value);
+        }
+    }
+
+    record OrElseImpl<T>(@NotNull Codec<T> primary, @NotNull Codec<T> secondary) implements Codec<T> {
+        @Override
+        public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<T> primaryResult = primary.decode(coder, value);
+            if (primaryResult instanceof Result.Ok<T> primaryOk)
+                return primaryOk;
+
+            // Primary did not work, try secondary
+            final Result<T> secondaryResult = secondary.decode(coder, value);
+            if (secondaryResult instanceof Result.Ok<T> secondaryOk)
+                return secondaryOk;
+
+            // Secondary did not work either, return error from primary.
+            return primaryResult;
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            return primary.encode(coder, value);
+        }
+    }
+
+    record ComponentImpl() implements Codec<Component> {
+        @Override
+        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> initCoder, @NotNull D value) {
+            return null;
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
+            return null;
         }
     }
 

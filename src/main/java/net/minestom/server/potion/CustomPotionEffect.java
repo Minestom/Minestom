@@ -1,17 +1,19 @@
 package net.minestom.server.potion;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
 
 import static net.minestom.server.network.NetworkBuffer.BOOLEAN;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 
 /**
- * Represents a custom effect in {@link net.minestom.server.component.DataComponent#POTION_CONTENTS}.
+ * Represents a custom effect in {@link net.minestom.server.component.DataComponents#POTION_CONTENTS}.
  */
 public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings settings) {
 
@@ -20,16 +22,11 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
             Settings.NETWORK_TYPE, CustomPotionEffect::settings,
             CustomPotionEffect::new
     );
-
-    public static final BinaryTagSerializer<CustomPotionEffect> NBT_TYPE = BinaryTagSerializer.lazy(() -> BinaryTagSerializer.COMPOUND.map(
-            tag -> new CustomPotionEffect(
-                    PotionEffect.fromKey(tag.getString("id")),
-                    Settings.NBT_TYPE.read(tag)),
-            value -> CompoundBinaryTag.builder()
-                    .putString("id", value.id.name())
-                    .put((CompoundBinaryTag) Settings.NBT_TYPE.write(value.settings))
-                    .build()
-    ));
+    // TODO(1.21.5) does this have to be lazy?
+    public static final Codec<CustomPotionEffect> CODEC = StructCodec.struct(
+            "id", PotionEffect.CODEC, CustomPotionEffect::id,
+            "settings", Settings.CODEC, CustomPotionEffect::settings,
+            CustomPotionEffect::new);
 
     public CustomPotionEffect(@NotNull PotionEffect id, int amplifier, int duration, boolean isAmbient, boolean showParticles, boolean showIcon) {
         this(id, new Settings(amplifier, duration, isAmbient, showParticles, showIcon, null));
@@ -83,33 +80,26 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
                 );
             }
         };
-
-        public static final BinaryTagSerializer<Settings> NBT_TYPE = BinaryTagSerializer.recursive(self -> BinaryTagSerializer.COMPOUND.map(
-                tag -> {
-                    byte amplifier = tag.getByte("amplifier");
-                    int duration = tag.getInt("duration");
-                    boolean ambient = tag.getBoolean("ambient", false);
-                    boolean showParticles = tag.getBoolean("show_particles", true);
-                    boolean showIcon = tag.getBoolean("show_icon", showParticles);
-                    Settings hiddenEffect = null;
-                    if (tag.get("hidden_effect") instanceof CompoundBinaryTag hiddenEffectTag) {
-                        hiddenEffect = self.read(hiddenEffectTag);
-                    }
-                    return new Settings(amplifier, duration, ambient, showParticles, showIcon, hiddenEffect);
-                },
-                value -> {
-                    CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-                    if (value.amplifier != 0) builder.putByte("amplifier", (byte) value.amplifier);
-                    builder.putInt("duration", value.duration);
-                    if (value.isAmbient) builder.putBoolean("ambient", true);
-                    if (!value.showParticles) builder.putBoolean("show_particles", false);
-                    builder.putBoolean("show_icon", value.showIcon);
-                    if (value.hiddenEffect != null) {
-                        builder.put("hidden_effect", self.write(value.hiddenEffect));
-                    }
-                    return builder.build();
-                }
+        public static final Codec<Settings> CODEC = Codec.Recursive(self -> StructCodec.struct(
+                "amplifier", Codec.INT, Settings::amplifier,
+                "duration", Codec.INT, Settings::duration,
+                "ambient", Codec.BOOLEAN.optional(false), Settings::isAmbient,
+                "show_particles", Codec.BOOLEAN.optional(true), Settings::showParticles,
+                "show_icon", Codec.BOOLEAN.optional(), Settings::showIcon,
+                "hidden_effect", self.optional(), Settings::hiddenEffect,
+                Settings::withOptionalIcon
         ));
+
+        // Exists because showIcon needs to default to the value of showParticles which we can't do inline.
+        private static @NotNull Settings withOptionalIcon(
+                int amplifier, int duration,
+                boolean isAmbient, boolean showParticles,
+                @Nullable Boolean showIcon,
+                @Nullable Settings hiddenEffect
+        ) {
+            return new Settings(amplifier, duration, isAmbient, showParticles,
+                    Objects.requireNonNullElse(showIcon, showParticles), hiddenEffect);
+        }
 
     }
 
