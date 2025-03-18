@@ -1,38 +1,27 @@
 package net.minestom.server.entity.attribute;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Represent an attribute modifier.
  */
 public record AttributeModifier(@NotNull Key id, double amount, @NotNull AttributeOperation operation) {
-    public static final NetworkBuffer.Type<AttributeModifier> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, AttributeModifier value) {
-            buffer.write(NetworkBuffer.STRING, value.id.asString());
-            buffer.write(NetworkBuffer.DOUBLE, value.amount);
-            buffer.write(AttributeOperation.NETWORK_TYPE, value.operation);
-        }
-
-        @Override
-        public AttributeModifier read(@NotNull NetworkBuffer buffer) {
-            return new AttributeModifier(Key.key(buffer.read(NetworkBuffer.STRING)),
-                    buffer.read(NetworkBuffer.DOUBLE), buffer.read(AttributeOperation.NETWORK_TYPE));
-        }
-    };
-    public static final BinaryTagSerializer<AttributeModifier> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> new AttributeModifier(Key.key(tag.getString("id")), tag.getDouble("amount"),
-                    AttributeOperation.NBT_TYPE.read(tag.get("operation"))),
-            value -> CompoundBinaryTag.builder()
-                    .putString("id", value.id.asString())
-                    .putDouble("amount", value.amount)
-                    .put("operation", AttributeOperation.NBT_TYPE.write(value.operation))
-                    .build()
-    );
+    public static final NetworkBuffer.Type<AttributeModifier> NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.KEY, AttributeModifier::id,
+            NetworkBuffer.DOUBLE, AttributeModifier::amount,
+            AttributeOperation.NETWORK_TYPE, AttributeModifier::operation,
+            AttributeModifier::new);
+    public static final Codec<AttributeModifier> CODEC = StructCodec.struct(
+            "id", Codec.KEY, AttributeModifier::id,
+            "amount", Codec.DOUBLE, AttributeModifier::amount,
+            "operation", AttributeOperation.CODEC, AttributeModifier::operation,
+            AttributeModifier::new);
 
     /**
      * Creates a new modifier with a random id.
@@ -41,7 +30,7 @@ public record AttributeModifier(@NotNull Key id, double amount, @NotNull Attribu
      * @param amount    the value of this modifier
      * @param operation the operation to apply this modifier with
      */
-    public AttributeModifier(@NotNull String id, double amount, @NotNull AttributeOperation operation) {
+    public AttributeModifier(@NotNull @KeyPattern String id, double amount, @NotNull AttributeOperation operation) {
         this(Key.key(id), amount, operation);
     }
 

@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
@@ -11,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfSoundVariantImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfSoundVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfSoundVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<WolfSoundVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfSoundVariant);
+    @NotNull Codec<DynamicRegistry.Key<WolfSoundVariant>> CODEC = Codec.RegistryKey(Registries::wolfSoundVariant);
 
     BinaryTagSerializer<WolfSoundVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
             "ambient_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::ambientSound,

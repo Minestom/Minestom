@@ -1,21 +1,21 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface FrogVariant extends FrogVariants permits FrogVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<FrogVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::frogVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<FrogVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::frogVariant);
-
-    BinaryTagSerializer<FrogVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "asset_id", BinaryTagSerializer.KEY, FrogVariant::assetId,
+    Codec<FrogVariant> REGISTRY_CODEC = StructCodec.struct(
+            "asset_id", Codec.KEY, FrogVariant::assetId,
             FrogVariantImpl::new);
+
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<FrogVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::frogVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<FrogVariant>> CODEC = Codec.RegistryKey(Registries::frogVariant);
 
     /**
      * Creates a new instance of the "minecraft:frog_variant" registry containing the vanilla contents.
