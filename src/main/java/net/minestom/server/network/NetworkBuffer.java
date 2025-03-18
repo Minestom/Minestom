@@ -1,8 +1,10 @@
 package net.minestom.server.network;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
@@ -44,6 +46,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Long> VAR_LONG = new NetworkBufferTypeImpl.VarLongType();
     Type<byte[]> RAW_BYTES = new NetworkBufferTypeImpl.RawBytesType(-1);
     Type<String> STRING = new NetworkBufferTypeImpl.StringType();
+    Type<Key> KEY = STRING.transform(Key::key, Key::asString);
     Type<String> STRING_TERMINATED = new NetworkBufferTypeImpl.StringTerminatedType();
     Type<String> STRING_IO_UTF8 = new NetworkBufferTypeImpl.IOUTF8StringType();
     Type<BinaryTag> NBT = new NetworkBufferTypeImpl.NbtType();
@@ -106,7 +109,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.LazyType<>(supplier);
     }
 
-    static <T> @NotNull Type<T> TypedNBT(@NotNull BinaryTagSerializer<T> serializer) {
+    static <T> @NotNull Type<T> TypedNBT(@NotNull Codec<T> serializer) {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 

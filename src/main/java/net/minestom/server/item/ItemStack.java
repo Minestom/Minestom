@@ -8,6 +8,7 @@ import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
@@ -70,6 +71,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     });
+    @NotNull Codec<ItemStack> CODEC = null; // TODO
     @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
 
     /**
