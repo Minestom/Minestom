@@ -175,7 +175,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
                     .putString("type", key.asString())
-                    .put("color", Color.NBT_TYPE.write(color))
+                    .put("color", Color.CODEC.write(color))
                     .putFloat("scale", scale)
                     .build();
         }
@@ -223,8 +223,8 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             return CompoundBinaryTag.builder()
                     .putString("type", key.asString())
                     .putFloat("scale", scale)
-                    .put("from_color", Color.NBT_TYPE.write(color))
-                    .put("to_color", Color.NBT_TYPE.write(transitionColor))
+                    .put("from_color", Color.CODEC.write(color))
+                    .put("to_color", Color.CODEC.write(transitionColor))
                     .build();
         }
     }
@@ -497,7 +497,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             return CompoundBinaryTag.builder()
                     .putString("type", key.asString())
                     .put("target", BinaryTagSerializer.VECTOR3D.write(target))
-                    .put("color", Color.NBT_TYPE.write(color))
+                    .put("color", Color.CODEC.write(color))
                     .build();
         }
 

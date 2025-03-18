@@ -51,11 +51,19 @@ public interface Transcoder<D> {
 
     @NotNull Result<List<D>> getList(@NotNull D value);
 
+    @NotNull Result<Integer> listSize(@NotNull D value);
+
+    @NotNull Result<D> getIndex(@NotNull D value, int index);
+
     @NotNull D createList(@NotNull List<D> value);
+
+    @NotNull ListBuilder<D> createList(int expectedSize);
 
     boolean hasValue(@NotNull D value, @NotNull String key);
 
     @NotNull Result<D> getValue(@NotNull D value, @NotNull String key);
+
+    @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value);
 
     @NotNull MapBuilder<D> createMap();
 
@@ -119,8 +127,10 @@ public interface Transcoder<D> {
         return createList(list);
     }
 
-    interface ListBuilder {
+    interface ListBuilder<D> {
+        void add(D value);
 
+        D build();
     }
 
     interface MapBuilder<D> {
