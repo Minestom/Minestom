@@ -5,10 +5,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public interface TranscoderProxy<D> extends Transcoder<D> {
-    
+
     @NotNull Transcoder<D> delegate();
-    
-    @Override 
+
+    @Override
     default @NotNull D createNull() {
         return delegate().createNull();
     }
@@ -113,7 +113,7 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
         return delegate().getValue(value, key);
     }
 
-    @Override 
+    @Override
     default @NotNull MapBuilder<D> createMap() {
         return delegate().createMap();
     }

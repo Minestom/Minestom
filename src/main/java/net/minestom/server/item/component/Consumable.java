@@ -32,7 +32,7 @@ public record Consumable(
             "animation", ItemAnimation.NBT_TYPE.optional(ItemAnimation.EAT), Consumable::animation,
             "sound", SoundEvent.NBT_TYPE.optional(SoundEvent.ENTITY_GENERIC_EAT), Consumable::sound,
             "has_consume_particles", BinaryTagSerializer.BOOLEAN.optional(true), Consumable::hasConsumeParticles,
-            "on_consume_effects", ConsumeEffect.NBT_TYPE.list().optional(List.of()), Consumable::effects,
+            "on_consume_effects", ConsumeEffect.CODEC.list().optional(List.of()), Consumable::effects,
             Consumable::new);
 
     public int consumeTicks() {

@@ -1,9 +1,9 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 
 public record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
@@ -13,9 +13,9 @@ public record Weapon(int itemDamagePerAttack, float disableBlockingForSeconds) {
             NetworkBuffer.VAR_INT, Weapon::itemDamagePerAttack,
             NetworkBuffer.FLOAT, Weapon::disableBlockingForSeconds,
             Weapon::new);
-    public static final BinaryTagSerializer<Weapon> NBT_TYPE = BinaryTagTemplate.object(
-            "item_damage_per_attack", BinaryTagSerializer.INT.optional(1), Weapon::itemDamagePerAttack,
-            "disable_blocking_for_seconds", BinaryTagSerializer.FLOAT.optional(0f), Weapon::disableBlockingForSeconds,
+    public static final Codec<Weapon> CODEC = StructCodec.struct(
+            "item_damage_per_attack", Codec.INT.optional(1), Weapon::itemDamagePerAttack,
+            "disable_blocking_for_seconds", Codec.FLOAT.optional(0f), Weapon::disableBlockingForSeconds,
             Weapon::new);
 
     public Weapon(int itemDamagePerAttack) {
