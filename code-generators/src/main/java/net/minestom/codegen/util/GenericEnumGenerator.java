@@ -66,8 +66,8 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
 
         ClassName networkBufferCN = ClassName.get("net.minestom.server.network", "NetworkBuffer");
         ParameterizedTypeName networkBufferTypeCN = ParameterizedTypeName.get(networkBufferCN.nestedClass("Type"), entryCN);
-        ClassName binaryTagSerializerRawCN = ClassName.get("net.minestom.server.utils.nbt", "BinaryTagSerializer");
-        ParameterizedTypeName binaryTagSerializerCN = ParameterizedTypeName.get(binaryTagSerializerRawCN, entryCN);
+        ClassName codecRawCN = ClassName.get("net.minestom.server.codec", "Codec");
+        ParameterizedTypeName codecCN = ParameterizedTypeName.get(codecRawCN, entryCN);
 
         // Fields
         entryEnum.addFields(
@@ -75,8 +75,8 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, entryCN)
                                 .build(),
-                        FieldSpec.builder(binaryTagSerializerCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.fromEnumKeyed($T.class)", binaryTagSerializerRawCN, entryCN)
+                        FieldSpec.builder(codecCN, "CODEC", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$T.Enum($T.class)", codecRawCN, entryCN)
                                 .build(),
                         FieldSpec.builder(keyCN, "key", Modifier.PRIVATE, Modifier.FINAL).build()
                 )

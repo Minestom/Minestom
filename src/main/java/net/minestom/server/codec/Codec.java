@@ -1,5 +1,6 @@
 package net.minestom.server.codec;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
@@ -7,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 
 /**
@@ -38,11 +40,25 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<String> STRING = new PrimitiveImpl<>(Transcoder::createString, Transcoder::getString);
 
+    @NotNull Codec<Key> KEY = STRING.transform(Key::key, Key::asString);
+
     @NotNull Codec<byte[]> BYTE_ARRAY = new PrimitiveImpl<>(Transcoder::createByteArray, Transcoder::getByteArray);
 
     @NotNull Codec<int[]> INT_ARRAY = new PrimitiveImpl<>(Transcoder::createIntArray, Transcoder::getIntArray);
 
     @NotNull Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
+
+    static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
+        // TODO: this needs to handle exceptions better, and support non-enum named things.
+        return STRING.transform(
+                value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
+                value -> value.name().toLowerCase(Locale.ROOT)
+        );
+    }
+
+    static <T> @NotNull Codec<T> Recursive(@NotNull Function<Codec<T>, Codec<T>> func) {
+        return new CodecImpl.RecursiveImpl<>(func);
+    }
 
     default @NotNull Codec<@Nullable T> optional() {
         return new CodecImpl.OptionalImpl<>(this, null);
@@ -62,6 +78,18 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     default @NotNull Codec<List<T>> list() {
         return list(Integer.MAX_VALUE);
+    }
+
+    default <R> Codec<R> unionType(@NotNull Function<T, Codec<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        return unionType("type", serializers, keyFunc);
+    }
+
+    default <R> Codec<R> unionType(@NotNull String keyField, @NotNull Function<T, Codec<R>> serializers, @NotNull Function<R, T> keyFunc) {
+        return new CodecImpl.UnionImpl<>(keyField, Codec.this, serializers, keyFunc);
+    }
+
+    default Codec<T> orElse(@NotNull Codec<T> other) {
+        return new CodecImpl.OrElseImpl<>(this, other);
     }
 
 }

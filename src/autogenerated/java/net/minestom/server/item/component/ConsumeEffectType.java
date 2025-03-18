@@ -1,9 +1,9 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,7 +22,7 @@ enum ConsumeEffectType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<ConsumeEffectType> NETWORK_TYPE = NetworkBuffer.Enum(ConsumeEffectType.class);
 
-    public static final BinaryTagSerializer<ConsumeEffectType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(ConsumeEffectType.class);
+    public static final Codec<ConsumeEffectType> CODEC = Codec.Enum(ConsumeEffectType.class);
 
     private final Key key;
 

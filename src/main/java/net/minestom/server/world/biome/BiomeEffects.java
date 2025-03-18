@@ -30,12 +30,12 @@ public record BiomeEffects(
         @Nullable Float musicVolume
 ) {
     public static final BinaryTagSerializer<BiomeEffects> NBT_TYPE = BinaryTagTemplate.object(
-            "fog_color", Color.NBT_TYPE, BiomeEffects::fogColor,
-            "sky_color", Color.NBT_TYPE, BiomeEffects::skyColor,
-            "water_color", Color.NBT_TYPE, BiomeEffects::waterColor,
-            "water_fog_color", Color.NBT_TYPE, BiomeEffects::waterFogColor,
-            "foliage_color", Color.NBT_TYPE.optional(), BiomeEffects::foliageColor,
-            "grass_color", Color.NBT_TYPE.optional(), BiomeEffects::grassColor,
+            "fog_color", Color.CODEC, BiomeEffects::fogColor,
+            "sky_color", Color.CODEC, BiomeEffects::skyColor,
+            "water_color", Color.CODEC, BiomeEffects::waterColor,
+            "water_fog_color", Color.CODEC, BiomeEffects::waterFogColor,
+            "foliage_color", Color.CODEC.optional(), BiomeEffects::foliageColor,
+            "grass_color", Color.CODEC.optional(), BiomeEffects::grassColor,
             "grass_color_modifier", GrassColorModifier.NBT_TYPE.optional(GrassColorModifier.NONE), BiomeEffects::grassColorModifier,
             "particle", Particle.NBT_TYPE.optional(), BiomeEffects::biomeParticle,
             "ambient_sound", SoundEvent.NBT_TYPE.optional(), BiomeEffects::ambientSound,

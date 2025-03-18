@@ -1,10 +1,8 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public record ProvidesTrimMaterial(@NotNull Key key) {
@@ -24,15 +22,5 @@ public record ProvidesTrimMaterial(@NotNull Key key) {
             return new ProvidesTrimMaterial(Key.key(buffer.read(NetworkBuffer.STRING)));
         }
     };
-    public static final BinaryTagSerializer<ProvidesTrimMaterial> NBT_TYPE = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull ProvidesTrimMaterial value) {
-            return StringBinaryTag.stringBinaryTag(value.key.asString());
-        }
-
-        @Override
-        public @NotNull ProvidesTrimMaterial read(@NotNull Context context, @NotNull BinaryTag tag) {
-            return new ProvidesTrimMaterial(Key.key(((StringBinaryTag) tag).value()));
-        }
-    };
+    public static final Codec<ProvidesTrimMaterial> CODEC = Codec.KEY.transform(ProvidesTrimMaterial::new, ProvidesTrimMaterial::key);
 }

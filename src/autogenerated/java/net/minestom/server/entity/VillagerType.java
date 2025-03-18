@@ -1,9 +1,9 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,7 +26,7 @@ public enum VillagerType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<VillagerType> NETWORK_TYPE = NetworkBuffer.Enum(VillagerType.class);
 
-    public static final BinaryTagSerializer<VillagerType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(VillagerType.class);
+    public static final Codec<VillagerType> CODEC = Codec.Enum(VillagerType.class);
 
     private final Key key;
 

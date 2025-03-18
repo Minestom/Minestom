@@ -1,9 +1,9 @@
 package net.minestom.server.recipe.display;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,7 +28,7 @@ public enum SlotDisplayType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<SlotDisplayType> NETWORK_TYPE = NetworkBuffer.Enum(SlotDisplayType.class);
 
-    public static final BinaryTagSerializer<SlotDisplayType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(SlotDisplayType.class);
+    public static final Codec<SlotDisplayType> CODEC = Codec.Enum(SlotDisplayType.class);
 
     private final Key key;
 

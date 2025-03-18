@@ -24,6 +24,6 @@ public record CustomModelData(
             "floats", BinaryTagSerializer.FLOAT.list().optional(List.of()), CustomModelData::floats,
             "flags", BinaryTagSerializer.BOOLEAN.list().optional(List.of()), CustomModelData::flags,
             "strings", BinaryTagSerializer.STRING.list().optional(List.of()), CustomModelData::strings,
-            "colors", Color.NBT_TYPE.list().optional(List.of()), CustomModelData::colors,
+            "colors", Color.CODEC.list().optional(List.of()), CustomModelData::colors,
             CustomModelData::new);
 }

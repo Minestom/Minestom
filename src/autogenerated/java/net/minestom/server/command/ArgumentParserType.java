@@ -1,9 +1,9 @@
 package net.minestom.server.command;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -122,7 +122,7 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<ArgumentParserType> NETWORK_TYPE = NetworkBuffer.Enum(ArgumentParserType.class);
 
-    public static final BinaryTagSerializer<ArgumentParserType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(ArgumentParserType.class);
+    public static final Codec<ArgumentParserType> CODEC = Codec.Enum(ArgumentParserType.class);
 
     private final Key key;
 

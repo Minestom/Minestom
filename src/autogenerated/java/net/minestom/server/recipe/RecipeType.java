@@ -1,9 +1,9 @@
 package net.minestom.server.recipe;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,7 +26,7 @@ public enum RecipeType implements StaticProtocolObject {
 
     public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.Enum(RecipeType.class);
 
-    public static final BinaryTagSerializer<RecipeType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(RecipeType.class);
+    public static final Codec<RecipeType> CODEC = Codec.Enum(RecipeType.class);
 
     private final Key key;
 

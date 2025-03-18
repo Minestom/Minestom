@@ -1,5 +1,6 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -17,7 +18,7 @@ import java.util.List;
 public sealed interface ConsumeEffect {
     NetworkBuffer.Type<ConsumeEffect> NETWORK_TYPE = ConsumeEffectType.NETWORK_TYPE
             .unionType(ConsumeEffect::networkType, ConsumeEffect::consumeEffectToType);
-    BinaryTagSerializer<ConsumeEffect> NBT_TYPE = ConsumeEffectType.NBT_TYPE
+    Codec<ConsumeEffect> CODEC = ConsumeEffectType.CODEC
             .unionType(ConsumeEffect::nbtType, ConsumeEffect::consumeEffectToType);
 
     record ApplyEffects(@NotNull List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
@@ -59,7 +60,8 @@ public sealed interface ConsumeEffect {
         public static final BinaryTagSerializer<ClearAllEffects> NBT_TYPE = BinaryTagSerializer.UNIT
                 .map(ignored -> INSTANCE, ignored -> null);
 
-        private ClearAllEffects() {}
+        private ClearAllEffects() {
+        }
     }
 
     record TeleportRandomly(float diameter) implements ConsumeEffect {
