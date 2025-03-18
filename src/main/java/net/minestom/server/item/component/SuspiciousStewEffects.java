@@ -1,10 +1,10 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
     public static final SuspiciousStewEffects EMPTY = new SuspiciousStewEffects(List.of());
 
     public static final NetworkBuffer.Type<SuspiciousStewEffects> NETWORK_TYPE = Effect.NETWORK_TYPE.list(Short.MAX_VALUE).transform(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
-    public static final BinaryTagSerializer<SuspiciousStewEffects> NBT_TYPE = Effect.NBT_TYPE.list().map(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
+    public static final Codec<SuspiciousStewEffects> CODEC = Effect.CODEC.list().transform(SuspiciousStewEffects::new, SuspiciousStewEffects::effects);
 
     public SuspiciousStewEffects {
         effects = List.copyOf(effects);
@@ -38,15 +38,10 @@ public record SuspiciousStewEffects(@NotNull List<Effect> effects) {
                 NetworkBuffer.VAR_INT, Effect::durationTicks,
                 Effect::new
         );
-
-        public static final BinaryTagSerializer<Effect> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> new Effect(PotionEffect.fromKey(tag.getString("id")),
-                        tag.getInt("duration", DEFAULT_DURATION)),
-                value -> CompoundBinaryTag.builder()
-                        .putString("id", value.id.name())
-                        .putInt("duration", value.durationTicks)
-                        .build()
-        );
+        public static final Codec<Effect> CODEC = StructCodec.struct(
+                "id", PotionEffect.CODEC, Effect::id,
+                "duration", Codec.INT.optional(DEFAULT_DURATION), Effect::durationTicks,
+                Effect::new);
 
         public Effect(@NotNull PotionEffect id) {
             this(id, DEFAULT_DURATION);
