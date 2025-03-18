@@ -6,7 +6,7 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.gamedata.tags.TagManager;
@@ -286,7 +286,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.enchantment();
     }
 
-    public static @NotNull DynamicRegistry<PaintingMeta.Variant> getPaintingVariantRegistry() {
+    public static @NotNull DynamicRegistry<PaintingVariant> getPaintingVariantRegistry() {
         return serverProcess.paintingVariant();
     }
 

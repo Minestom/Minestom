@@ -3,6 +3,8 @@ package net.minestom.server.instance.block.predicate;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -22,18 +24,18 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
             NetworkBuffer.STRING.mapValue(ValuePredicate.NETWORK_TYPE), PropertiesPredicate::properties,
             PropertiesPredicate::new
     );
-    public static final BinaryTagSerializer<PropertiesPredicate> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
+    public static final Codec<PropertiesPredicate> CODEC = BinaryTagSerializer.COMPOUND.map(
             tag -> {
                 Map<String, ValuePredicate> properties = new HashMap<>();
                 for (Map.Entry<String, ? extends BinaryTag> entry : tag) {
-                    properties.put(entry.getKey(), ValuePredicate.NBT_TYPE.read(entry.getValue()));
+                    properties.put(entry.getKey(), ValuePredicate.CODEC.read(entry.getValue()));
                 }
                 return new PropertiesPredicate(properties);
             },
             value -> {
                 CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
                 for (Map.Entry<String, ValuePredicate> entry : value.properties.entrySet()) {
-                    builder.put(entry.getKey(), ValuePredicate.NBT_TYPE.write(entry.getValue()));
+                    builder.put(entry.getKey(), ValuePredicate.CODEC.write(entry.getValue()));
                 }
                 return builder.build();
             }
@@ -62,7 +64,7 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
         record Exact(@Nullable String value) implements ValuePredicate {
 
             public static final NetworkBuffer.Type<Exact> NETWORK_TYPE = NetworkBuffer.STRING.transform(Exact::new, Exact::value);
-            public static final BinaryTagSerializer<Exact> NBT_TYPE = BinaryTagSerializer.STRING.map(Exact::new, Exact::value);
+            public static final Codec<Exact> CODEC = Codec.STRING.transform(Exact::new, Exact::value);
 
             @Override
             public boolean test(@Nullable String prop) {
@@ -84,20 +86,11 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
             public static final NetworkBuffer.Type<Range> NETWORK_TYPE = NetworkBufferTemplate.template(
                     STRING.optional(), Range::min,
                     STRING.optional(), Range::max,
-                    Range::new
-            );
-
-            public static final BinaryTagSerializer<Range> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                    tag -> new Range(
-                            tag.get("min") instanceof StringBinaryTag string ? string.value() : null,
-                            tag.get("max") instanceof StringBinaryTag string ? string.value() : null),
-                    value -> {
-                        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-                        if (value.min != null) builder.putString("min", value.min);
-                        if (value.max != null) builder.putString("max", value.max);
-                        return builder.build();
-                    }
-            );
+                    Range::new);
+            public static final Codec<Range> CODEC = StructCodec.struct(
+                    "min", Codec.STRING.optional(), Range::min,
+                    "max", Codec.STRING.optional(), Range::max,
+                    Range::new);
 
             @Override
             public boolean test(@Nullable String prop) {
@@ -135,21 +128,21 @@ public record PropertiesPredicate(@NotNull Map<String, ValuePredicate> propertie
                 return buffer.read(NetworkBuffer.BOOLEAN) ? buffer.read(Exact.NETWORK_TYPE) : buffer.read(Range.NETWORK_TYPE);
             }
         };
-        BinaryTagSerializer<ValuePredicate> NBT_TYPE = new BinaryTagSerializer<>() {
+        Codec<ValuePredicate> CODEC = new BinaryTagSerializer<>() {
             @Override
             public @NotNull BinaryTag write(@NotNull ValuePredicate value) {
                 return switch (value) {
-                    case Exact exact -> Exact.NBT_TYPE.write(exact);
-                    case Range range -> Range.NBT_TYPE.write(range);
+                    case Exact exact -> Exact.CODEC.write(exact);
+                    case Range range -> Range.CODEC.write(range);
                 };
             }
 
             @Override
             public @NotNull ValuePredicate read(@NotNull BinaryTag tag) {
                 if (tag instanceof StringBinaryTag) {
-                    return Exact.NBT_TYPE.read(tag);
+                    return Exact.CODEC.read(tag);
                 } else {
-                    return Range.NBT_TYPE.read(tag);
+                    return Range.CODEC.read(tag);
                 }
             }
         };
