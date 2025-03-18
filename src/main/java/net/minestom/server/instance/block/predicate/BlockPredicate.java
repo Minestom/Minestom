@@ -2,6 +2,7 @@ package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
@@ -53,6 +54,8 @@ public record BlockPredicate(
             NBT_COMPOUND.optional(), BlockPredicate::nbt,
             BlockPredicate::new
     );
+    // TODO(1.21.5): this also has a new field to match components.
+    public static final Codec<BlockPredicate> CODEC;
 
     public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override

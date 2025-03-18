@@ -1,21 +1,21 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CatVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::catVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<CatVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::catVariant);
-
-    BinaryTagSerializer<CatVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "asset_id", BinaryTagSerializer.KEY, CatVariant::assetId,
+    Codec<CatVariant> REGISTRY_CODEC = StructCodec.struct(
+            "asset_id", Codec.KEY, CatVariant::assetId,
             CatVariantImpl::new);
+
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CatVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::catVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<CatVariant>> NBT_TYPE = Codec.RegistryKey(Registries::catVariant);
 
     /**
      * Creates a new instance of the "minecraft:cat_variant" registry containing the vanilla contents.

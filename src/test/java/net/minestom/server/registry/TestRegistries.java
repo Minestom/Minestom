@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.animal.PigVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
@@ -34,7 +34,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<BannerPattern> bannerPattern = null;
     public DynamicRegistry<WolfVariant> wolfVariant = null;
     public DynamicRegistry<Enchantment> enchantment = null;
-    public DynamicRegistry<PaintingMeta.Variant> paintingVariant = null;
+    public DynamicRegistry<PaintingVariant> paintingVariant = null;
     public DynamicRegistry<JukeboxSong> jukeboxSong = null;
     public DynamicRegistry<Instrument> instrument = null;
     public DynamicRegistry<WolfSoundVariant> wolfSoundVariant = null;
@@ -132,7 +132,7 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant() {
+    public @NotNull DynamicRegistry<PaintingVariant> paintingVariant() {
         return Objects.requireNonNull(paintingVariant);
     }
 

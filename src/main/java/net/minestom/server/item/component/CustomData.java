@@ -1,6 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -23,7 +24,8 @@ public record CustomData(@NotNull CompoundBinaryTag nbt) implements TagReadable 
         }
     };
 
-    public static final BinaryTagSerializer<CustomData> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(CustomData::new, CustomData::nbt);
+    public static final Codec<CustomData> CODEC = null; // TODO(1.21.5)
+    // BinaryTagSerializer.COMPOUND.map(CustomData::new, CustomData::nbt);
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {

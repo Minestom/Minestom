@@ -1,11 +1,11 @@
 package net.minestom.server.world.biome;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     enum TemperatureModifier {
         NONE, FROZEN;
 
-        public static final BinaryTagSerializer<TemperatureModifier> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(TemperatureModifier.class);
+        public static final Codec<TemperatureModifier> CODEC = Codec.Enum(TemperatureModifier.class);
     }
 
     interface Setter {
