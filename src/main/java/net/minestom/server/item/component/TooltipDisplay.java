@@ -1,10 +1,10 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
@@ -17,9 +17,9 @@ public record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenCo
             NetworkBuffer.BOOLEAN, TooltipDisplay::hideTooltip,
             DataComponent.NETWORK_TYPE.set(Short.MAX_VALUE), TooltipDisplay::hiddenComponents,
             TooltipDisplay::new);
-    public static final BinaryTagSerializer<TooltipDisplay> NBT_TYPE = BinaryTagTemplate.object(
-            "hide_tooltip", BinaryTagSerializer.BOOLEAN, TooltipDisplay::hideTooltip,
-            "hidden_components", DataComponent.NBT_TYPE.set(), TooltipDisplay::hiddenComponents,
+    public static final Codec<TooltipDisplay> CODEC = StructCodec.struct(
+            "hide_tooltip", Codec.BOOLEAN, TooltipDisplay::hideTooltip,
+            "hidden_components", DataComponent.CODEC.set(Short.MAX_VALUE), TooltipDisplay::hiddenComponents,
             TooltipDisplay::new);
 
     public @NotNull TooltipDisplay withHideTooltip(boolean hide) {

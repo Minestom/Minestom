@@ -1,13 +1,13 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,14 +31,14 @@ public record BlocksAttacks(
             SoundEvent.NETWORK_TYPE, BlocksAttacks::blockSound,
             SoundEvent.NETWORK_TYPE, BlocksAttacks::disableSound,
             BlocksAttacks::new);
-    public static final BinaryTagSerializer<BlocksAttacks> NBT_TYPE = BinaryTagTemplate.object(
-            "block_delay_seconds", BinaryTagSerializer.FLOAT.optional(0f), BlocksAttacks::blockDelaySeconds,
-            "disable_cooldown_scale", BinaryTagSerializer.FLOAT.optional(1f), BlocksAttacks::disableCooldownScale,
-            "damage_reductions", DamageReduction.NBT_TYPE.list().optional(List.of(DamageReduction.DEFAULT)), BlocksAttacks::damageReductions,
-            "item_damage", ItemDamageFunction.NBT_TYPE.optional(ItemDamageFunction.DEFAULT), BlocksAttacks::itemDamage,
-            "bypassed_by", ObjectSet.<EntityType>nbtType(Tag.BasicType.ENTITY_TYPES).optional(), BlocksAttacks::bypassedBy,
-            "block_sound", SoundEvent.NBT_TYPE.optional(), BlocksAttacks::blockSound,
-            "disabled_sound", SoundEvent.NBT_TYPE.optional(), BlocksAttacks::disableSound,
+    public static final Codec<BlocksAttacks> NBT_TYPE = StructCodec.struct(
+            "block_delay_seconds", Codec.FLOAT.optional(0f), BlocksAttacks::blockDelaySeconds,
+            "disable_cooldown_scale", Codec.FLOAT.optional(1f), BlocksAttacks::disableCooldownScale,
+            "damage_reductions", DamageReduction.CODEC.list().optional(List.of(DamageReduction.DEFAULT)), BlocksAttacks::damageReductions,
+            "item_damage", ItemDamageFunction.CODEC.optional(ItemDamageFunction.DEFAULT), BlocksAttacks::itemDamage,
+            "bypassed_by", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), BlocksAttacks::bypassedBy,
+            "block_sound", SoundEvent.CODEC.optional(), BlocksAttacks::blockSound,
+            "disabled_sound", SoundEvent.CODEC.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);
 
     public record ItemDamageFunction(float threshold, float base, float factor) {
@@ -49,10 +49,10 @@ public record BlocksAttacks(
                 NetworkBuffer.FLOAT, ItemDamageFunction::base,
                 NetworkBuffer.FLOAT, ItemDamageFunction::factor,
                 ItemDamageFunction::new);
-        public static final BinaryTagSerializer<ItemDamageFunction> NBT_TYPE = BinaryTagTemplate.object(
-                "threshold", BinaryTagSerializer.FLOAT, ItemDamageFunction::threshold,
-                "base", BinaryTagSerializer.FLOAT, ItemDamageFunction::base,
-                "factor", BinaryTagSerializer.FLOAT, ItemDamageFunction::factor,
+        public static final Codec<ItemDamageFunction> CODEC = StructCodec.struct(
+                "threshold", Codec.FLOAT, ItemDamageFunction::threshold,
+                "base", Codec.FLOAT, ItemDamageFunction::base,
+                "factor", Codec.FLOAT, ItemDamageFunction::factor,
                 ItemDamageFunction::new);
     }
 
@@ -69,11 +69,11 @@ public record BlocksAttacks(
                 NetworkBuffer.FLOAT, DamageReduction::base,
                 NetworkBuffer.FLOAT, DamageReduction::factor,
                 DamageReduction::new);
-        public static final BinaryTagSerializer<DamageReduction> NBT_TYPE = BinaryTagTemplate.object(
-                "horizontal_blocking_angle", BinaryTagSerializer.FLOAT.optional(90f), DamageReduction::horizontalBlockingAngle,
-                "type", ObjectSet.<EntityType>nbtType(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
-                "base", BinaryTagSerializer.FLOAT, DamageReduction::base,
-                "factor", BinaryTagSerializer.FLOAT, DamageReduction::factor,
+        public static final Codec<DamageReduction> CODEC = StructCodec.struct(
+                "horizontal_blocking_angle", Codec.FLOAT.optional(90f), DamageReduction::horizontalBlockingAngle,
+                "type", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
+                "base", Codec.FLOAT, DamageReduction::base,
+                "factor", Codec.FLOAT, DamageReduction::factor,
                 DamageReduction::new);
 
     }

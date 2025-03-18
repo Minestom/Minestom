@@ -2,6 +2,7 @@ package net.minestom.server.component;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.item.enchant.EffectComponent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -23,10 +24,8 @@ import java.util.Collection;
  */
 public sealed interface DataComponent<T> extends StaticProtocolObject permits DataComponentImpl {
 
-    NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT
-            .transform(DataComponent::fromId, DataComponent::id);
-    BinaryTagSerializer<DataComponent<?>> NBT_TYPE = BinaryTagSerializer.STRING
-            .map(DataComponent::fromKey, DataComponent::name);
+    NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(DataComponent::fromId, DataComponent::id);
+    Codec<DataComponent<?>> CODEC = Codec.STRING.transform(DataComponent::fromKey, DataComponent::name);
 
     NetworkBuffer.Type<DataComponentMap> MAP_NETWORK_TYPE = DataComponentMap.networkType(DataComponent::fromId);
     BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.nbtType(DataComponent::fromId, DataComponent::fromKey);

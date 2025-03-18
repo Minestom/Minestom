@@ -1,10 +1,10 @@
 package net.minestom.server.entity.metadata.water.fish;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -36,7 +36,7 @@ public class SalmonMeta extends AbstractFishMeta {
         LARGE("large");
 
         public static final NetworkBuffer.Type<Size> NETWORK_TYPE = NetworkBuffer.Enum(Size.class);
-        public static final BinaryTagSerializer<Size> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Size.class);
+        public static final Codec<Size> CODEC = Codec.Enum(Size.class);
 
         private static final Map<String, Size> BY_ID = Arrays.stream(values())
                 .collect(Collectors.toMap(Size::id, (size) -> size));

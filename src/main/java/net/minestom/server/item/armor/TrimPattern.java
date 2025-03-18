@@ -2,12 +2,12 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimPattern, true);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
+    @NotNull Codec<DynamicRegistry.Key<TrimPattern>> CODEC = Codec.RegistryKey(Registries::trimPattern); // TODO(1.21.5) should be a holder
 
     static @NotNull TrimPattern create(
             @NotNull Key assetId,

@@ -8,7 +8,7 @@ import net.minestom.server.entity.metadata.animal.PigVariant;
 import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
 import net.minestom.server.item.armor.TrimMaterial;
@@ -45,7 +45,7 @@ public interface Registries {
 
     @NotNull DynamicRegistry<Enchantment> enchantment();
 
-    @NotNull DynamicRegistry<PaintingMeta.Variant> paintingVariant();
+    @NotNull DynamicRegistry<PaintingVariant> paintingVariant();
 
     @NotNull DynamicRegistry<JukeboxSong> jukeboxSong();
 
@@ -74,5 +74,10 @@ public interface Registries {
     @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects();
 
     @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects();
+
+    @FunctionalInterface
+    interface Selector<T> {
+        @NotNull DynamicRegistry<T> select(@NotNull Registries registries);
+    }
 
 }

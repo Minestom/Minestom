@@ -1,14 +1,18 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -48,6 +52,14 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
 
+    @NotNull Codec<UUID> UUID = null; // TODO(1.21.5)
+
+    @NotNull Codec<Component> COMPONENT = null; // TODO(1.21.5)
+
+    @NotNull Codec<Style> COMPONENT_STYLE = null; // TODO(1.21.5)
+
+    @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
+
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
         // TODO: this needs to handle exceptions better, and support non-enum named things.
         return STRING.transform(
@@ -58,6 +70,10 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     static <T> @NotNull Codec<T> Recursive(@NotNull Function<Codec<T>, Codec<T>> func) {
         return new CodecImpl.RecursiveImpl<>(func);
+    }
+
+    static <T> @NotNull Codec<DynamicRegistry.Key<T>> RegistryKey(@NotNull Registries.Selector<T> selector) {
+        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
     }
 
     default @NotNull Codec<@Nullable T> optional() {
@@ -78,6 +94,26 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     default @NotNull Codec<List<T>> list() {
         return list(Integer.MAX_VALUE);
+    }
+
+    default @NotNull Codec<List<T>> listOrSingle(int maxSize) {
+        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+    }
+
+    default @NotNull Codec<Set<T>> set(int maxSize) {
+        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+    }
+
+    default @NotNull Codec<Set<T>> set() {
+        return set(Integer.MAX_VALUE);
+    }
+
+    default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec, int maxSize) {
+        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+    }
+
+    default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec) {
+        return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
     default <R> Codec<R> unionType(@NotNull Function<T, Codec<R>> serializers, @NotNull Function<R, T> keyFunc) {

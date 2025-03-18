@@ -1,13 +1,13 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +18,7 @@ import java.util.Collection;
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
     NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(MaterialImpl::getId, Material::id);
-    BinaryTagSerializer<Material> NBT_TYPE = BinaryTagSerializer.STRING.map(MaterialImpl::getSafe, Material::name);
+    Codec<Material> CODEC = Codec.STRING.transform(MaterialImpl::getSafe, Material::name);
 
     /**
      * Returns the raw registry data for the material.

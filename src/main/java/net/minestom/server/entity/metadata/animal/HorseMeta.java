@@ -1,10 +1,10 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 public class HorseMeta extends AbstractHorseMeta {
@@ -87,7 +87,7 @@ public class HorseMeta extends AbstractHorseMeta {
         DARK_BROWN;
 
         public static final NetworkBuffer.Type<Color> NETWORK_TYPE = NetworkBuffer.Enum(Color.class);
-        public static final BinaryTagSerializer<Color> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Color.class);
+        public static final Codec<Color> NBT_TYPE = Codec.Enum(Color.class);
 
         private final static Color[] VALUES = values();
     }

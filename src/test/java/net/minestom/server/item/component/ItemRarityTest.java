@@ -26,7 +26,7 @@ public class ItemRarityTest extends AbstractItemComponentTest<ItemRarity> {
 
     @Test
     void testReadFromNbtInt() {
-        var value = ItemRarity.NBT_TYPE.read(IntBinaryTag.intBinaryTag(2));
+        var value = ItemRarity.CODEC.read(IntBinaryTag.intBinaryTag(2));
         assertEquals(ItemRarity.RARE, value);
     }
 }

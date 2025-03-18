@@ -1,5 +1,7 @@
 package net.minestom.server.item.enchant;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
@@ -11,7 +13,7 @@ import java.util.List;
 
 public non-sealed interface LocationEffect extends Enchantment.Effect {
 
-    @NotNull BinaryTagSerializer<LocationEffect> NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
+    @NotNull Codec<LocationEffect> CODEC = BinaryTagSerializer.registryTaggedUnion(
             Registries::enchantmentLocationEffects, LocationEffect::nbtType, "type");
 
     @ApiStatus.Internal
@@ -34,11 +36,11 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
         return registry;
     }
 
-    @NotNull BinaryTagSerializer<? extends LocationEffect> nbtType();
+    @NotNull Codec<? extends LocationEffect> codec();
 
     record AllOf(@NotNull List<LocationEffect> effect) implements LocationEffect {
-        public static final BinaryTagSerializer<AllOf> NBT_TYPE = BinaryTagSerializer.object(
-                "effects", LocationEffect.NBT_TYPE.list(), AllOf::effect,
+        public static final Codec<AllOf> CODEC = StructCodec.struct(
+                "effects", LocationEffect.CODEC.list(), AllOf::effect,
                 AllOf::new
         );
 
@@ -47,8 +49,8 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<AllOf> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<AllOf> codec() {
+            return CODEC;
         }
     }
 

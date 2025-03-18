@@ -2,6 +2,7 @@ package net.minestom.server.item.enchant;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EquipmentSlotGroup;
@@ -17,7 +18,7 @@ import java.util.List;
 
 public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<Enchantment>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::enchantment);
+    @NotNull Codec<DynamicRegistry.Key<Enchantment>> CODEC = Codec.RegistryKey(Registries::enchantment);
 
     static @NotNull Builder builder() {
         return new Builder();
@@ -66,7 +67,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
         DAMAGING_ENTITY,
         VICTIM;
 
-        public static final BinaryTagSerializer<Target> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Target.class);
+        public static final Codec<Target> CODEC = Codec.Enum(Target.class);
     }
 
     sealed interface Effect permits AttributeEffect, ConditionalEffect, DamageImmunityEffect, EntityEffect, LocationEffect, TargetedConditionalEffect, ValueEffect {

@@ -1,5 +1,7 @@
 package net.minestom.server.item.enchant;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
@@ -11,26 +13,28 @@ import java.util.List;
 
 public non-sealed interface ValueEffect extends Enchantment.Effect {
 
-    @NotNull BinaryTagSerializer<ValueEffect> NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentValueEffects, ValueEffect::nbtType, "type");
+    @NotNull Codec<ValueEffect> CODEC = BinaryTagSerializer.registryTaggedUnion(
+            Registries::enchantmentValueEffects, ValueEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> createDefaultRegistry() {
         final DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
-        registry.register("add", Add.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("multiply", Multiply.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("remove_binomial", RemoveBinomial.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("set", Set.NBT_TYPE, DataPack.MINECRAFT_CORE);
+        registry.register("add", Add.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("multiply", Multiply.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("remove_binomial", RemoveBinomial.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("set", Set.CODEC, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
     float apply(float base, int level);
 
-    @NotNull BinaryTagSerializer<? extends ValueEffect> nbtType();
+    @NotNull Codec<? extends ValueEffect> codec();
 
     record Add(@NotNull LevelBasedValue value) implements ValueEffect {
-        public static final BinaryTagSerializer<Add> NBT_TYPE = BinaryTagSerializer.object("value", LevelBasedValue.NBT_TYPE, Add::value, Add::new);
+        public static final Codec<Add> CODEC = StructCodec.struct(
+                "value", LevelBasedValue.CODEC, Add::value,
+                Add::new);
 
         @Override
         public float apply(float base, int level) {
@@ -38,13 +42,15 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Add> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<Add> codec() {
+            return CODEC;
         }
     }
 
     record AllOf(@NotNull List<ValueEffect> effects) implements ValueEffect {
-        public static final BinaryTagSerializer<AllOf> NBT_TYPE = BinaryTagSerializer.object("effects", ValueEffect.NBT_TYPE.list(), AllOf::effects, AllOf::new);
+        public static final Codec<AllOf> CODEC = StructCodec.struct(
+                "effects", ValueEffect.CODEC.list(), AllOf::effects,
+                AllOf::new);
 
         public AllOf {
             effects = List.copyOf(effects);
@@ -58,13 +64,15 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<AllOf> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<AllOf> codec() {
+            return CODEC;
         }
     }
 
     record Multiply(@NotNull LevelBasedValue factor) implements ValueEffect {
-        public static final BinaryTagSerializer<Multiply> NBT_TYPE = BinaryTagSerializer.object("factor", LevelBasedValue.NBT_TYPE, Multiply::factor, Multiply::new);
+        public static final Codec<Multiply> CODEC = StructCodec.struct(
+                "factor", LevelBasedValue.CODEC, Multiply::factor,
+                Multiply::new);
 
         @Override
         public float apply(float base, int level) {
@@ -72,13 +80,15 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Multiply> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<Multiply> codec() {
+            return CODEC;
         }
     }
 
     record RemoveBinomial(@NotNull LevelBasedValue chance) implements ValueEffect {
-        public static final BinaryTagSerializer<RemoveBinomial> NBT_TYPE = BinaryTagSerializer.object("chance", LevelBasedValue.NBT_TYPE, RemoveBinomial::chance, RemoveBinomial::new);
+        public static final Codec<RemoveBinomial> CODEC = StructCodec.struct(
+                "chance", LevelBasedValue.CODEC, RemoveBinomial::chance,
+                RemoveBinomial::new);
 
         @Override
         public float apply(float base, int level) {
@@ -86,13 +96,13 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<RemoveBinomial> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<RemoveBinomial> codec() {
+            return CODEC;
         }
     }
 
     record Set(@NotNull LevelBasedValue value) implements ValueEffect {
-        public static final BinaryTagSerializer<Set> NBT_TYPE = BinaryTagSerializer.object("value", LevelBasedValue.NBT_TYPE, Set::value, Set::new);
+        public static final Codec<Set> CODEC = StructCodec.struct("value", LevelBasedValue.CODEC, Set::value, Set::new);
 
         @Override
         public float apply(float base, int level) {
@@ -100,8 +110,8 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Set> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<Set> codec() {
+            return CODEC;
         }
     }
 

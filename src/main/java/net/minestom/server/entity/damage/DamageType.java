@@ -1,17 +1,17 @@
 package net.minestom.server.entity.damage;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
 
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<DamageType>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::damageType);
+    @NotNull Codec<DynamicRegistry.Key<DamageType>> CODEC = Codec.RegistryKey(Registries::damageType);
 
     static @NotNull DamageType create(
             float exhaustion,

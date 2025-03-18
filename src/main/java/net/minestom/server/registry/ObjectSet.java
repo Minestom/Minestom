@@ -1,9 +1,9 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -32,7 +32,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return new ObjectSetImpl.NetworkType<>(tagType);
     }
 
-    static <T extends ProtocolObject> @NotNull BinaryTagSerializer<ObjectSet<T>> nbtType(@NotNull Tag.BasicType tagType) {
+    static <T extends ProtocolObject> @NotNull Codec<ObjectSet<T>> codec(@NotNull Tag.BasicType tagType) {
         return new ObjectSetImpl.NbtType<>(tagType);
     }
 

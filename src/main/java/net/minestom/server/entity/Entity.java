@@ -23,6 +23,7 @@ import net.minestom.server.entity.metadata.animal.tameable.*;
 import net.minestom.server.entity.metadata.golem.ShulkerMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
 import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.water.AxolotlMeta;
 import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
@@ -373,7 +374,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 case HorseMeta horse when component == DataComponents.HORSE_VARIANT ->
                         horse.setVariant((HorseMeta.Variant) value);
                 case PaintingMeta painting when component == DataComponents.PAINTING_VARIANT ->
-                        painting.setVariant((DynamicRegistry.Key<PaintingMeta.Variant>) value);
+                        painting.setVariant((DynamicRegistry.Key<PaintingVariant>) value);
                 case LlamaMeta llama when component == DataComponents.LLAMA_VARIANT ->
                         llama.setVariant((LlamaMeta.Variant) value);
                 case AxolotlMeta axolotl when component == DataComponents.AXOLOTL_VARIANT ->
@@ -384,7 +385,8 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 case SheepMeta sheep when component == DataComponents.SHEEP_COLOR -> sheep.setColor((DyeColor) value);
                 case ShulkerMeta shulker when component == DataComponents.SHULKER_COLOR ->
                         shulker.setColor((DyeColor) value);
-                default -> {}
+                default -> {
+                }
             }
     }
 

@@ -1,12 +1,11 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -14,12 +13,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Objects;
 
 public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<WolfVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
-
-    BinaryTagSerializer<WolfVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "assets", Assets.REGISTRY_NBT_TYPE, WolfVariant::assets,
+    Codec<WolfVariant> REGISTRY_CODEC = StructCodec.struct(
+            "assets", Assets.CODEC, WolfVariant::assets,
             WolfVariantImpl::new);
+
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<WolfVariant>> CODEC = Codec.RegistryKey(Registries::wolfVariant);
 
     /**
      * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
@@ -46,10 +45,10 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
     @NotNull Assets assets();
 
     record Assets(@NotNull Key wild, @NotNull Key tame, @NotNull Key angry) {
-        public static final BinaryTagSerializer<Assets> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-                "wild", BinaryTagSerializer.KEY, Assets::wild,
-                "tame", BinaryTagSerializer.KEY, Assets::tame,
-                "angry", BinaryTagSerializer.KEY, Assets::angry,
+        public static final Codec<Assets> CODEC = StructCodec.struct(
+                "wild", Codec.KEY, Assets::wild,
+                "tame", Codec.KEY, Assets::tame,
+                "angry", Codec.KEY, Assets::angry,
                 Assets::new);
 
         public Assets {

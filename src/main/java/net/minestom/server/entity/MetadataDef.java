@@ -9,7 +9,7 @@ import net.minestom.server.entity.metadata.animal.*;
 import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
@@ -194,7 +194,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Painting extends MetadataDef {
-        public static final Entry<DynamicRegistry.Key<PaintingMeta.Variant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingMeta.Variant.KEBAB);
+        public static final Entry<DynamicRegistry.Key<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingVariant.KEBAB);
     }
 
     public static final class ItemEntity extends MetadataDef {

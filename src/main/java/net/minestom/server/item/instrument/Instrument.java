@@ -2,13 +2,15 @@ package net.minestom.server.item.instrument;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -16,7 +18,20 @@ import org.jetbrains.annotations.Nullable;
 public sealed interface Instrument extends ProtocolObject, Instruments permits InstrumentImpl {
 
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Instrument>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::instrument, true);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<Instrument>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::instrument);
+    @NotNull Codec<DynamicRegistry.Key<Instrument>> CODEC = Codec.RegistryKey(Registries::instrument);
+
+    NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+            SoundEvent.NETWORK_TYPE, Instrument::soundEvent,
+            NetworkBuffer.FLOAT, Instrument::useDuration,
+            NetworkBuffer.FLOAT, Instrument::range,
+            NetworkBuffer.COMPONENT, Instrument::description,
+            InstrumentImpl::new);
+    Codec<Instrument> REGISTRY_CODEC = StructCodec.struct(
+            "sound_event", SoundEvent.CODEC, Instrument::soundEvent,
+            "use_duration", Codec.FLOAT, Instrument::useDuration,
+            "range", Codec.FLOAT, Instrument::range,
+            "description", Codec.COMPONENT, Instrument::description,
+            InstrumentImpl::new);
 
     static @NotNull Instrument create(
             @NotNull SoundEvent soundEvent,

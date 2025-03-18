@@ -1,22 +1,22 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CowVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::cowVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<CowVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::cowVariant);
-
-    BinaryTagSerializer<CowVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "model", Model.NBT_TYPE.optional(Model.NORMAL), CowVariant::model,
-            "asset_id", BinaryTagSerializer.KEY, CowVariant::assetId,
+    @NotNull Codec<CowVariant> REGISTRY_NBT_TYPE = StructCodec.struct(
+            "model", Model.CODEC.optional(Model.NORMAL), CowVariant::model,
+            "asset_id", Codec.KEY, CowVariant::assetId,
             CowVariantImpl::new);
+
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CowVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::cowVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<CowVariant>> CODEC = Codec.RegistryKey(Registries::cowVariant);
 
     /**
      * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
@@ -41,6 +41,6 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
         COLD,
         WARM;
 
-        public static final BinaryTagSerializer<Model> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Model.class);
+        public static final Codec<Model> CODEC = Codec.Enum(Model.class);
     }
 }

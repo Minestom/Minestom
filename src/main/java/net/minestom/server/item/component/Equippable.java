@@ -1,5 +1,7 @@
 package net.minestom.server.item.component;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.gamedata.tags.Tag;
@@ -7,8 +9,6 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,15 +32,15 @@ public record Equippable(
             NetworkBuffer.BOOLEAN, Equippable::swappable,
             NetworkBuffer.BOOLEAN, Equippable::damageOnHurt,
             Equippable::new);
-    public static final BinaryTagSerializer<Equippable> NBT_TYPE = BinaryTagTemplate.object(
-            "slot", EquipmentSlot.NBT_TYPE, Equippable::slot,
-            "equip_sound", SoundEvent.NBT_TYPE.optional(SoundEvent.ITEM_ARMOR_EQUIP_GENERIC), Equippable::equipSound,
-            "asset_id", BinaryTagSerializer.STRING.optional(), Equippable::assetId,
-            "camera_overlay", BinaryTagSerializer.STRING.optional(), Equippable::cameraOverlay,
-            "allowed_entities", ObjectSet.<EntityType>nbtType(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
-            "dispensable", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::dispensable,
-            "swappable", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::swappable,
-            "damage_on_hurt", BinaryTagSerializer.BOOLEAN.optional(true), Equippable::damageOnHurt,
+    public static final Codec<Equippable> CODEC = StructCodec.struct(
+            "slot", EquipmentSlot.CODEC, Equippable::slot,
+            "equip_sound", SoundEvent.CODEC.optional(SoundEvent.ITEM_ARMOR_EQUIP_GENERIC), Equippable::equipSound,
+            "asset_id", Codec.STRING.optional(), Equippable::assetId,
+            "camera_overlay", Codec.STRING.optional(), Equippable::cameraOverlay,
+            "allowed_entities", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
+            "dispensable", Codec.BOOLEAN.optional(true), Equippable::dispensable,
+            "swappable", Codec.BOOLEAN.optional(true), Equippable::swappable,
+            "damage_on_hurt", Codec.BOOLEAN.optional(true), Equippable::damageOnHurt,
             Equippable::new);
 
     public @NotNull Equippable withSlot(@NotNull EquipmentSlot slot) {
