@@ -41,8 +41,8 @@ public interface BlockEvent extends Event {
         record Player(@NotNull net.minestom.server.instance.Instance instance,
                       @NotNull net.minestom.server.entity.Player player,
                       @Nullable BlockFace blockFace,
-                      @Nullable Point cursorPosition,
-                      @Nullable PlayerHand playerHand) implements Source {
+                      @NotNull Point cursorPosition,
+                      @NotNull PlayerHand playerHand) implements Source {
             @Override
             public @NotNull Source.Player asPlayer() {
                 return this;

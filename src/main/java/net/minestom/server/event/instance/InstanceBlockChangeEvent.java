@@ -10,11 +10,11 @@ import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 
 public class InstanceBlockChangeEvent implements Event, BlockEvent, CancellableEvent, InstanceEvent {
-
     private final BlockEvent.Source source;
     private final BlockVec position;
 
     private Block newBlock;
+    private final Block previousBlock;
 
     private boolean cancelled = false;
     private boolean doBlockUpdates = true;
@@ -22,9 +22,11 @@ public class InstanceBlockChangeEvent implements Event, BlockEvent, CancellableE
 
     public InstanceBlockChangeEvent(@NotNull BlockEvent.Source source,
                                     @NotNull Block newBlock,
+                                    @NotNull Block previousBlock,
                                     @NotNull BlockVec position) {
         this.source = source;
         this.newBlock = newBlock;
+        this.previousBlock = previousBlock;
         this.position = position;
     }
 
@@ -43,6 +45,10 @@ public class InstanceBlockChangeEvent implements Event, BlockEvent, CancellableE
         return newBlock;
     }
 
+    public @NotNull Block getPreviousBlock() {
+        return previousBlock;
+    }
+
     @Override
     public @NotNull BlockVec getBlockPosition() {
         return position;
@@ -55,6 +61,10 @@ public class InstanceBlockChangeEvent implements Event, BlockEvent, CancellableE
 
     public boolean fromPlayer() {
         return source instanceof Source.Player;
+    }
+
+    public boolean isBlockBreak() {
+        return getBlock().isAir();
     }
 
     public boolean doBlockUpdates() {

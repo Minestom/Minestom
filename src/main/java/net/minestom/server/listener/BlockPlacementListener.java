@@ -11,7 +11,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
-import net.minestom.server.event.instance.InstanceBlockChangeEvent;
 import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.event.trait.BlockEvent;
@@ -19,9 +18,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -70,12 +67,6 @@ public class BlockPlacementListener {
         PlayerBlockInteractEvent playerBlockInteractEvent = new PlayerBlockInteractEvent(source, interactedBlock, new BlockVec(blockPosition));
         EventDispatcher.call(playerBlockInteractEvent);
         boolean blockUse = playerBlockInteractEvent.isBlockingItemUse();
-        if (!playerBlockInteractEvent.isCancelled()) {
-            final var handler = interactedBlock.handler();
-            if (handler != null) {
-                blockUse |= !handler.onInteract(new BlockHandler.Interaction(interactedBlock, instance, blockFace, blockPosition, cursorPosition, player, hand));
-            }
-        }
         if (blockUse) {
             // If the usage was blocked then the world is already up-to-date (from the prior handlers),
             // So ack the change with the current world state.
@@ -109,8 +100,7 @@ public class BlockPlacementListener {
         //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
         var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
-                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, useMaterial)))) {
+        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(interactedBlock, blockFace, cursorPosition, useMaterial))) {
             // If the block is not replaceable, try to place next to it.
             final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
             final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
@@ -119,8 +109,7 @@ public class BlockPlacementListener {
 
             var placementBlock = instance.getBlock(placementPosition);
             var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(
-                    new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, useMaterial)))) {
+            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(placementBlock, blockFace, cursorPosition, useMaterial))) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;
             }
@@ -168,35 +157,8 @@ public class BlockPlacementListener {
             return;
         }
 
-        // BlockChangeEvent check
-
-        InstanceBlockChangeEvent instanceBlockChangeEvent = new InstanceBlockChangeEvent(
-                source,
-                placedBlock,
-                new BlockVec(placementPosition)
-        );
-
-        instanceBlockChangeEvent.doesConsumeItem(player.getGameMode() != GameMode.CREATIVE);
-        EventDispatcher.call(instanceBlockChangeEvent);
-        if (instanceBlockChangeEvent.isCancelled()) {
-            refresh(player, chunk);
-            return;
-        }
-
-        // Place the block
-        Block resultBlock = instanceBlockChangeEvent.getBlock();
-        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), instanceBlockChangeEvent.doBlockUpdates());
+        instance.placeBlock(source, placedBlock, placementPosition);
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
-        // Block consuming
-        if (instanceBlockChangeEvent.doBlockUpdates()) {
-            // Consume the block in the player's hand
-            final ItemStack newUsedItem = usedItem.consume(1);
-            player.setItemInHand(hand, newUsedItem);
-        } else {
-            // Prevent invisible item on client
-            player.getInventory().update();
-        }
     }
 
     private static void refresh(Player player, Chunk chunk) {

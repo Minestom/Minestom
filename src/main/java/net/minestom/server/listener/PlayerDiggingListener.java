@@ -82,7 +82,7 @@ public final class PlayerDiggingListener {
                 player,
                 blockFace,
                 player.getPosition().direction(),
-                player.getItemUseHand()
+                player.getItemUseHand() // Should never be null (?)
         );
 
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
@@ -104,7 +104,7 @@ public final class PlayerDiggingListener {
                 player,
                 null, //TODO: Cant tell if the listener always sends face information, if so should update to reflect this.
                 player.getPosition().direction(),
-                player.getItemUseHand()
+                player.getItemUseHand() // Should never be null (?)
         );
 
         PlayerCancelDiggingEvent playerCancelDiggingEvent = new PlayerCancelDiggingEvent(source, block, new BlockVec(blockPosition));
@@ -124,7 +124,7 @@ public final class PlayerDiggingListener {
                 player,
                 blockFace,
                 player.getPosition().direction(),
-                player.getItemUseHand()
+                player.getItemUseHand() // Should never be null (?)
         );
 
         final int breakTicks = BlockBreakCalculation.breakTicks(block, player);
@@ -204,7 +204,16 @@ public final class PlayerDiggingListener {
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(player, blockPosition, blockFace);
+
+        BlockEvent.Source.Player source = new BlockEvent.Source.Player(
+                instance,
+                player,
+                blockFace,
+                player.getPosition().direction(),
+                player.getItemUseHand() // Should never be null (?)
+        );
+
+        final boolean success = instance.breakBlock(source, blockPosition);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {

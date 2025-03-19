@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityType;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.testing.Env;
@@ -27,9 +28,10 @@ public class EntityBlockTouchTickIntegrationTest {
 
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
+
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block, @NotNull Instance instance, @NotNull Point position, @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
@@ -67,8 +69,8 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block, @NotNull Instance instance, @NotNull Point position, @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
@@ -107,8 +109,8 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block, @NotNull Instance instance, @NotNull Point position, @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override
@@ -155,8 +157,8 @@ public class EntityBlockTouchTickIntegrationTest {
         Set<Point> positions = new HashSet<>();
         var handler = new BlockHandler() {
             @Override
-            public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+            public void onTouch(@NotNull Block block, @NotNull Instance instance, @NotNull Point position, @NotNull Entity entity) {
+                assertTrue(positions.add(position));
             }
 
             @Override

@@ -147,11 +147,11 @@ final class ServerProcessImpl implements ServerProcess {
         this.packetListener = new PacketListenerManager();
         this.packetParser = PacketVanilla.CLIENT_PACKET_PARSER;
         this.instance = new InstanceManager(this);
-        this.block = new BlockManager();
         this.command = new CommandManager();
         this.recipe = new RecipeManager();
         this.team = new TeamManager();
         this.eventHandler = new GlobalEventHandler();
+        this.block = new BlockManager(eventHandler);
         this.scheduler = new SchedulerManager();
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();

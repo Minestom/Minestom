@@ -3,6 +3,11 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
+import net.minestom.server.event.Event;
+import net.minestom.server.event.EventNode;
+import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.instance.InstanceBlockChangeEvent;
+import net.minestom.server.event.player.PlayerBlockInteractEvent;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -24,6 +29,32 @@ public final class BlockManager {
     private final Int2ObjectMap<BlockPlacementRule> placementRuleMap = new Int2ObjectOpenHashMap<>();
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
+
+    private final EventNode<Event> handlerNode = EventNode.all("handler-node").setPriority(50);
+
+    public BlockManager(GlobalEventHandler globalEventHandler) {
+        globalEventHandler.addChild(handlerNode);
+
+        handlerNode.addListener(InstanceBlockChangeEvent.class, event -> {
+            Block block = event.getBlock() == Block.AIR ? event.getPreviousBlock() : event.getBlock();
+            BlockHandler handler = block.handler();
+
+            if (handler == null) {
+                handler = getHandler(block.key().toString());
+            }
+
+            if (handler != null) {
+                handler.onBlockChange(event);
+            }
+        });
+
+        handlerNode.addListener(PlayerBlockInteractEvent.class, event -> {
+            BlockHandler handler = event.getBlock().handler();
+            if (handler == null) handler = getHandler(event.getBlock().key().toString());
+
+            if (handler != null) handler.onInteract(event);
+        });
+    }
 
     public void registerHandler(@NotNull String namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
         blockHandlerMap.put(namespace, handlerSupplier);

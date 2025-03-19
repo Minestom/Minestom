@@ -1,9 +1,13 @@
 package net.minestom.server.instance;
 
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.ItemStack;
 import net.minestom.server.tag.Tag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -83,18 +87,19 @@ public class InstanceBlockIntegrationTest {
     @Test
     public void handlerPresentInPlacementRuleUpdate(Env env) {
 
-        AtomicReference<Block> currentBlock = new AtomicReference<>();
+        AtomicReference<Block> currentBlockAtomic = new AtomicReference<>();
         env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getKey(), () -> SuspiciousGravelBlockHandler.INSTANCE);
         env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
+
             @Override
-            public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
+            public @NotNull Block blockPlace(Block.@NotNull Getter instance, @NotNull Block block, @Nullable BlockFace blockFace, @NotNull Point placePosition, @Nullable Point cursorPosition, @Nullable Pos playerPosition, @Nullable ItemStack usedItemStack, boolean isPlayerShifting) {
                 return block;
             }
 
             @Override
-            public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
-                currentBlock.set(updateState.currentBlock());
-                return super.blockUpdate(updateState);
+            public @NotNull Block blockUpdate(Block.@NotNull Getter instance, @NotNull Point blockPosition, @NotNull Block currentBlock, @NotNull BlockFace fromFace) {
+                currentBlockAtomic.set(currentBlock);
+                return super.blockUpdate(instance, blockPosition, currentBlock, fromFace);
             }
         });
 
@@ -103,6 +108,6 @@ public class InstanceBlockIntegrationTest {
         instance.setBlock(0, 50, 0, theBlock);
         instance.setBlock(1, 50, 0, theBlock);
 
-        assertEquals(theBlock, currentBlock.get());
+        assertEquals(theBlock, currentBlockAtomic.get());
     }
 }
