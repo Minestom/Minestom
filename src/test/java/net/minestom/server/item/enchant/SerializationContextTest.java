@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.registry.TestRegistries;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -18,7 +19,7 @@ class SerializationContextTest {
         var registry = ValueEffect.createDefaultRegistry();
         var context = new BinaryTagSerializer.ContextWithRegistries(new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
-        var result = ValueEffect.NBT_TYPE.write(context, new ValueEffect.Add(new LevelBasedValue.Constant(1)));
+        var result = ValueEffect.CODEC.write(context, new ValueEffect.Add(new LevelBasedValue.Constant(1)));
         assertEqualsSNBT("""
                 {"type":"minecraft:add","value":1f}
                 """, result);
@@ -30,7 +31,7 @@ class SerializationContextTest {
         registry.register("minestom:my_effect", MyEffect.NBT_TYPE); // NOT registered to MINECRAFT_CORE
         var context = new BinaryTagSerializer.ContextWithRegistries(new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
-        var result = ValueEffect.NBT_TYPE.write(context, new MyEffect());
+        var result = ValueEffect.CODEC.write(context, new MyEffect());
         assertNull(result);
     }
 
@@ -40,7 +41,7 @@ class SerializationContextTest {
         registry.register("minestom:my_effect", MyEffect.NBT_TYPE); // NOT registered to MINECRAFT_CORE
         var context = new BinaryTagSerializer.ContextWithRegistries(new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
 
-        var result = ValueEffect.NBT_TYPE.list().write(context, List.of(
+        var result = ValueEffect.CODEC.list().write(context, List.of(
                 new ValueEffect.Add(new LevelBasedValue.Constant(1)),
                 new MyEffect()
         ));
@@ -53,37 +54,41 @@ class SerializationContextTest {
     void testValueEffectSerializationCompoundCustom() {
         var levelBasedValueRegistry = LevelBasedValue.createDefaultRegistry();
         var valueEffectRegistry = ValueEffect.createDefaultRegistry();
-        levelBasedValueRegistry.register("minestom:my_level_based_value", MyLevelBasedValue.NBT_TYPE); // NOT registered to MINECRAFT_CORE
+        levelBasedValueRegistry.register("minestom:my_level_based_value", MyLevelBasedValue.CODEC); // NOT registered to MINECRAFT_CORE
         var context = new BinaryTagSerializer.ContextWithRegistries(new TestRegistries(r -> {
             r.enchantmentLevelBasedValues = levelBasedValueRegistry;
             r.enchantmentValueEffects = valueEffectRegistry;
         }), true);
 
-        var result = ValueEffect.NBT_TYPE.write(context, new ValueEffect.Add(new MyLevelBasedValue()));
+        var result = ValueEffect.CODEC.write(context, new ValueEffect.Add(new MyLevelBasedValue()));
         assertNull(result); // Should get nothing because MyLevelBasedValue is missing and that would create an invalid Add
     }
 
     static class MyLevelBasedValue implements LevelBasedValue {
-        public static final BinaryTagSerializer<MyLevelBasedValue> NBT_TYPE = BinaryTagSerializer.UNIT.map(v -> new MyLevelBasedValue(), v -> Unit.INSTANCE);
+        public static final Codec<MyLevelBasedValue> CODEC = Codec.UNIT.transform(v -> new MyLevelBasedValue(), v -> Unit.INSTANCE);
+
         @Override
         public float calc(int level) {
             return 0;
         }
+
         @Override
-        public @NotNull BinaryTagSerializer<MyLevelBasedValue> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<MyLevelBasedValue> codec() {
+            return CODEC;
         }
     }
 
     static class MyEffect implements ValueEffect {
-        public static final BinaryTagSerializer<MyEffect> NBT_TYPE = BinaryTagSerializer.UNIT.map(v -> new MyEffect(), v -> Unit.INSTANCE);
+        public static final Codec<MyEffect> CODEC = Codec.UNIT.transform(v -> new MyEffect(), v -> Unit.INSTANCE);
+
         @Override
         public float apply(float base, int level) {
             return 0;
         }
+
         @Override
-        public @NotNull BinaryTagSerializer<MyEffect> nbtType() {
-            return NBT_TYPE;
+        public @NotNull Codec<MyEffect> codec() {
+            return CODEC;
         }
     }
 

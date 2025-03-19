@@ -1,7 +1,7 @@
 package net.minestom.server.entity;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -27,8 +27,8 @@ public enum EquipmentSlotGroup implements Predicate<EquipmentSlot> {
             .collect(Collectors.toMap(EquipmentSlotGroup::nbtName, Function.identity()));
 
     public static final NetworkBuffer.Type<EquipmentSlotGroup> NETWORK_TYPE = NetworkBuffer.Enum(EquipmentSlotGroup.class);
-    public static final BinaryTagSerializer<EquipmentSlotGroup> NBT_TYPE = BinaryTagSerializer.STRING
-            .map(BY_NBT_NAME::get, EquipmentSlotGroup::nbtName);
+    public static final Codec<EquipmentSlotGroup> CODEC = Codec.STRING
+            .transform(BY_NBT_NAME::get, EquipmentSlotGroup::nbtName);
 
     private final String nbtName;
     private final List<EquipmentSlot> equipmentSlots;

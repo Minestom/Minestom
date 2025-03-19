@@ -1,22 +1,22 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface ChickenVariant extends ChickenVariants permits ChickenVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::chickenVariant, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<ChickenVariant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::chickenVariant);
-
-    BinaryTagSerializer<ChickenVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "model", Model.NBT_TYPE.optional(Model.NORMAL), ChickenVariant::model,
-            "asset_id", BinaryTagSerializer.KEY, ChickenVariant::assetId,
+    Codec<ChickenVariant> REGISTRY_CODEC = StructCodec.struct(
+            "model", Model.CODEC.optional(Model.NORMAL), ChickenVariant::model,
+            "asset_id", Codec.KEY, ChickenVariant::assetId,
             ChickenVariantImpl::new);
+
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::chickenVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<ChickenVariant>> NBT_TYPE = Codec.RegistryKey(Registries::chickenVariant);
 
     /**
      * Creates a new instance of the "minecraft:chicken_variant" registry containing the vanilla contents.
@@ -40,6 +40,6 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
         NORMAL,
         COLD;
 
-        public static final BinaryTagSerializer<Model> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Model.class);
+        public static final Codec<Model> CODEC = Codec.Enum(Model.class);
     }
 }

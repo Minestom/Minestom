@@ -2,6 +2,7 @@ package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
@@ -53,13 +54,15 @@ public record BlockPredicate(
             NBT_COMPOUND.optional(), BlockPredicate::nbt,
             BlockPredicate::new
     );
+    // TODO(1.21.5): this also has a new field to match components.
+    public static final Codec<BlockPredicate> CODEC;
 
     public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull BlockPredicate value) {
             CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
             if (value.blocks != null)
-                builder.put("blocks", BlockTypeFilter.NBT_TYPE.write(value.blocks));
+                builder.put("blocks", BlockTypeFilter.CODEC.write(value.blocks));
             if (value.state != null)
                 builder.put("state", PropertiesPredicate.NBT_TYPE.write(value.state));
             if (value.nbt != null)
@@ -74,7 +77,7 @@ public record BlockPredicate(
             BinaryTag entry;
             BlockTypeFilter blocks = null;
             if ((entry = compound.get("blocks")) != null)
-                blocks = BlockTypeFilter.NBT_TYPE.read(entry);
+                blocks = BlockTypeFilter.CODEC.read(entry);
             PropertiesPredicate state = null;
             if ((entry = compound.get("state")) != null)
                 state = PropertiesPredicate.NBT_TYPE.read(entry);
