@@ -2,13 +2,14 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.coordinate.*;
+import net.minestom.server.coordinate.BlockVec;
+import net.minestom.server.coordinate.CoordConversion;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceBlockChangeEvent;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
@@ -21,7 +22,6 @@ import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
-import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
@@ -127,7 +127,8 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, block, new BlockVec(x,y,z), new BlockEvent.Source.Instance(this), doBlockUpdates, 0);
+        if (isLoaded(chunk))
+            UNSAFE_setBlock(chunk, block, new BlockVec(x, y, z), new BlockEvent.Source.Instance(this), doBlockUpdates, 0);
     }
 
     /**
@@ -167,7 +168,7 @@ public class InstanceContainer extends Instance {
                 if (block == null) block = Block.AIR;
             }
 
-            // Cal block change event
+            // Call block change event
             InstanceBlockChangeEvent event = new InstanceBlockChangeEvent(source, block, getBlock(blockPosition), new BlockVec(blockPosition));
             event.doBlockUpdates(doBlockUpdates);
 
@@ -653,31 +654,42 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the position of the modified block
      */
     private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+        // Create a chunk cache for efficient block retrieval
         ChunkCache cache = new ChunkCache(this, null, null);
+
+        // Retrieve dimension type only once to avoid redundant method calls
+        var dimensionType = getCachedDimensionType();
+        int minY = dimensionType.minY();
+        int maxY = dimensionType.height();
+
+        // Iterate over each block face to check neighboring blocks
         for (var updateFace : BLOCK_UPDATE_FACES) {
             var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
-                continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
-            if (neighborBlock == null || neighborBlock.isAir())
-                continue;
-            final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
-                continue;
+            int neighborX = blockPosition.blockX() + direction.normalX();
+            int neighborY = blockPosition.blockY() + direction.normalY();
+            int neighborZ = blockPosition.blockZ() + direction.normalZ();
 
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-            final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(
-                    this,
-                    neighborPosition,
-                    neighborBlock,
-                    updateFace.getOppositeFace()
-            );
+            // Ensure the neighbor is within valid height range
+            if (neighborY < minY || neighborY > maxY) continue;
+
+            // Retrieve the neighboring block
+            Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            if (neighborBlock.isAir()) continue; // Skip air blocks
+
+            // Retrieve the block placement rule
+            BlockPlacementRule rule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
+            if (rule == null || updateDistance >= rule.maxUpdateDistance()) continue;
+
+            // Determine the updated state of the neighbor block
+            Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
+            Block newNeighborBlock = rule.blockUpdate(this, neighborPosition, neighborBlock, updateFace.getOppositeFace());
+
+            // If block state changes, apply the update
             if (neighborBlock != newNeighborBlock) {
-                final Chunk chunk = getChunkAt(neighborPosition);
-                if (!isLoaded(chunk)) continue;
+                Chunk chunk = getChunkAt(neighborPosition);
+                if (!isLoaded(chunk)) continue; // Ensure chunk is loaded before modification
+
+                // Update the block with the new state and propagate updates
                 UNSAFE_setBlock(chunk, newNeighborBlock, neighborPosition, new BlockEvent.Source.Instance(this), true, updateDistance + 1);
             }
         }

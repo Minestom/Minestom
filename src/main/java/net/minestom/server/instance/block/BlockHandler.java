@@ -23,21 +23,48 @@ import java.util.concurrent.ConcurrentHashMap;
 public interface BlockHandler {
 
     /**
-     * Called when a block has been changed.
+     * Called when a block in the instance changes.
+     *
+     * @param event The block change event.
      */
     default void onBlockChange(@NotNull InstanceBlockChangeEvent event) {}
 
+    /**
+     * Called when a player interacts with a block.
+     *
+     * @param event The player block interaction event.
+     */
     default void onInteract(@NotNull PlayerBlockInteractEvent event) {}
 
+    /**
+     * Called when an entity touches a block.
+     *
+     * @param block    The block being touched.
+     * @param instance The instance where the block is located.
+     * @param position The position of the block.
+     * @param entity   The entity touching the block.
+     */
     default void onTouch(@NotNull Block block,
                          @NotNull Instance instance,
                          @NotNull Point position,
                          @NotNull Entity entity) {}
 
+    /**
+     * Called every tick if {@link BlockHandler#isTickable()} is true.
+     *
+     * @param block    The block being ticked.
+     * @param instance The instance where the block is located.
+     * @param position The position of the block.
+     */
     default void tick(@NotNull Block block,
                       @NotNull Instance instance,
                       @NotNull Point position) {}
 
+    /**
+     * Determines whether the block should receive tick updates.
+     *
+     * @return True if the block is tickable, false otherwise.
+     */
     default boolean isTickable() {
         return false;
     }
