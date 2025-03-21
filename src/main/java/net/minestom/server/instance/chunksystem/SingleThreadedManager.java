@@ -15,6 +15,7 @@ import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.instance.IChunkLoader;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.generator.Generator;
+import net.minestom.server.timer.TaskSchedule;
 import net.minestom.server.utils.chunk.ChunkSupplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -320,7 +321,7 @@ class SingleThreadedManager {
         if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
             task.run();
         } else {
-            chunk.getScheduler().scheduleNextProcess(task);
+            chunk.getScheduler().scheduleTask(task, TaskSchedule.tick(10), TaskSchedule.stop());
         }
     }
 

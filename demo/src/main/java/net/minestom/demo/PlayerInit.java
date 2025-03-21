@@ -278,6 +278,7 @@ public class PlayerInit {
         instanceContainer.setChunkSupplier(LightingChunk::new);
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
+        instanceContainer.getChunkManager().addClaim(0, 0, 10);
 
         var instance2 = instanceManager.createInstanceContainer();
         instance2.setGenerator(unit -> {
@@ -292,6 +293,7 @@ public class PlayerInit {
         instance2.setChunkSupplier(LightingChunk::new);
         instance2.setTimeRate(0);
         instance2.setTime(12000);
+        instance2.getChunkManager().addClaim(0, 0, 10);
 
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
