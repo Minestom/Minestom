@@ -57,7 +57,7 @@ public sealed interface PaintingVariant extends PaintingVariants permits Paintin
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<PaintingVariant> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:painting_variant", PaintingVariantImpl.REGISTRY_NBT_TYPE, Registry.Resource.PAINTING_VARIANTS,
+                "minecraft:painting_variant", REGISTRY_CODEC, Registry.Resource.PAINTING_VARIANTS,
                 (namespace, props) -> new PaintingVariantImpl(Registry.paintingVariant(namespace, props)),
                 Comparator.naturalOrder()
         );

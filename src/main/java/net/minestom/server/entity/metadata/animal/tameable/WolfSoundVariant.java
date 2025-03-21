@@ -1,12 +1,11 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,13 +13,13 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfSoundVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfSoundVariant, false);
     @NotNull Codec<DynamicRegistry.Key<WolfSoundVariant>> CODEC = Codec.RegistryKey(Registries::wolfSoundVariant);
 
-    BinaryTagSerializer<WolfSoundVariant> REGISTRY_NBT_TYPE = BinaryTagTemplate.object(
-            "ambient_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::ambientSound,
-            "death_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::deathSound,
-            "growl_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::growlSound,
-            "hurt_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::hurtSound,
-            "pant_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::pantSound,
-            "whine_sound", SoundEvent.NBT_TYPE, WolfSoundVariant::whineSound,
+    Codec<WolfSoundVariant> REGISTRY_CODEC = StructCodec.struct(
+            "ambient_sound", SoundEvent.CODEC, WolfSoundVariant::ambientSound,
+            "death_sound", SoundEvent.CODEC, WolfSoundVariant::deathSound,
+            "growl_sound", SoundEvent.CODEC, WolfSoundVariant::growlSound,
+            "hurt_sound", SoundEvent.CODEC, WolfSoundVariant::hurtSound,
+            "pant_sound", SoundEvent.CODEC, WolfSoundVariant::pantSound,
+            "whine_sound", SoundEvent.CODEC, WolfSoundVariant::whineSound,
             WolfSoundVariantImpl::new);
 
     /**
