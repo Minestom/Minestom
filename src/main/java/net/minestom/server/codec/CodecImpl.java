@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Function;
 
 final class CodecImpl {
@@ -170,9 +171,35 @@ final class CodecImpl {
         }
     }
 
+    record UUIDImpl() implements Codec<UUID> {
+        @Override
+        public @NotNull <D> Result<UUID> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<int[]> uuidResult = coder.getIntArray(value);
+
+            if (uuidResult instanceof Result.Ok<int[]>(int[] ints) && ints.length == 4) {
+                return new Result.Ok<>(new UUID(
+                        ((long) ints[0] << 32) | (ints[1] & 0xFFFFFFFFL),
+                        ((long) ints[2] << 32) | (ints[3] & 0xFFFFFFFFL)
+                ));
+            }
+
+            return new Result.Error<>("Invalid UUID value or length: " + value);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable UUID value) {
+            if (value == null) return new Result.Error<>("Cannot encode a null UUID");
+
+            return new Result.Ok<>(coder.createIntArray(new int[]{
+                    (int) (value.getMostSignificantBits() >>> 32), (int) value.getMostSignificantBits(),
+                    (int) (value.getLeastSignificantBits() >>> 32), (int) value.getLeastSignificantBits()
+            }));
+        }
+    }
+
     record ComponentImpl() implements Codec<Component> {
         @Override
-        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> initCoder, @NotNull D value) {
+        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             return null;
         }
 
