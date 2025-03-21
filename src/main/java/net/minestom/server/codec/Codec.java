@@ -52,7 +52,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
 
-    @NotNull Codec<UUID> UUID_CODEC = new CodecImpl.UUIDImpl();
+    @NotNull Codec<UUID> UUID = new CodecImpl.UUIDImpl();
 
     @NotNull Codec<Component> COMPONENT = null; // TODO(1.21.5)
 
