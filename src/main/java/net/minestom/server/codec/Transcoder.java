@@ -107,6 +107,26 @@ public interface Transcoder<D> {
         return new Result.Ok<>(intArray);
     }
 
+    default @NotNull D createDoubleArray(double[] value) {
+        final List<D> list = new ArrayList<>(value.length);
+        for (double i : value) list.add(createDouble(i));
+        return createList(list);
+    }
+
+    default @NotNull Result<double[]> getDoubleArray(@NotNull D value) {
+        final Result<List<D>> listResult = getList(value);
+        if (!(listResult instanceof Result.Ok(List<D> list)))
+            return listResult.cast();
+        final double[] doubleArray = new double[list.size()];
+        for (int i = 0; i < list.size(); i++) {
+            final Result<Double> doubleResult = getDouble(list.get(i));
+            if (!(doubleResult instanceof Result.Ok(Double doubleValue)))
+                return doubleResult.cast();
+            doubleArray[i] = doubleValue;
+        }
+        return new Result.Ok<>(doubleArray);
+    }
+
     default @NotNull D createIntArray(int[] value) {
         final List<D> list = new ArrayList<>(value.length);
         for (int i : value) list.add(createInt(i));

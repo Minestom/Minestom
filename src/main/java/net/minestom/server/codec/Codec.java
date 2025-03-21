@@ -52,6 +52,8 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
 
+    @NotNull Codec<double[]> DOUBLE_ARRAY = new PrimitiveImpl<>(Transcoder::createDoubleArray, Transcoder::getDoubleArray);
+
     @NotNull Codec<UUID> UUID = new CodecImpl.UUIDImpl();
 
     @NotNull Codec<Component> COMPONENT = null; // TODO(1.21.5)
@@ -60,7 +62,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
-    @NotNull Codec<Point> VECTOR3D = null; // TODO(1.21.5)
+    @NotNull Codec<Point> VECTOR3D = new CodecImpl.Vector3DImpl(); 
 
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
         return STRING.transform(

@@ -295,6 +295,28 @@ final class CodecImpl {
         }
     }
 
+    record Vector3DImpl() implements Codec<Point> {
+
+        @Override
+        public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<double[]> doubleArrayResult = coder.getDoubleArray(value);
+            if (!(doubleArrayResult instanceof Result.Ok(double[] doubleArray)))
+                return doubleArrayResult.cast();
+            if (doubleArray.length != 3)
+                return new Result.Error<>("Invalid length for Point, expected 3 but got " + doubleArray.length);
+            return new Result.Ok<>(new Vec(doubleArray[0], doubleArray[1], doubleArray[2]));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Point value) {
+            return new Result.Ok<>(coder.createDoubleArray(new double[]{
+                    value.x(),
+                    value.y(),
+                    value.z()
+            }));
+        }
+    }
+
     record BlockPositionImpl() implements Codec<Point> {
         @Override
         public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
