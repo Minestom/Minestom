@@ -2,12 +2,11 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -17,8 +16,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimMaterial>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimMaterial, true);
-    @NotNull Codec<DynamicRegistry.Key<TrimMaterial>> CODEC = Codec.RegistryKey(Registries::trimMaterial); // TODO(1.21.5) should be a holder
+    @NotNull NetworkBuffer.Type<TrimMaterial> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.STRING, TrimMaterial::assetName,
+            NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING), TrimMaterial::overrideArmorMaterials,
+            NetworkBuffer.COMPONENT, TrimMaterial::description,
+            TrimMaterial::create);
+    @NotNull Codec<TrimMaterial> REGISTRY_CODEC = StructCodec.struct(
+            "asset_name", Codec.STRING, TrimMaterial::assetName,
+            "override_armor_materials", Codec.STRING.mapValue(Codec.STRING), TrimMaterial::overrideArmorMaterials,
+            "description", Codec.COMPONENT, TrimMaterial::description,
+            TrimMaterial::create);
+
+    @NotNull NetworkBuffer.Type<Holder<TrimMaterial>> NETWORK_TYPE = Holder.networkType(Registries::trimMaterial, REGISTRY_NETWORK_TYPE);
+    @NotNull Codec<Holder<TrimMaterial>> CODEC = Holder.codec(Registries::trimMaterial, REGISTRY_CODEC);
 
     static @NotNull TrimMaterial create(
             @NotNull String assetName,
@@ -40,7 +50,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:trim_material", TrimMaterialImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_MATERIALS,
+                "minecraft:trim_material", REGISTRY_CODEC, Registry.Resource.TRIM_MATERIALS,
                 (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
         );
     }

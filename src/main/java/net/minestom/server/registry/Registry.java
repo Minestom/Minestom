@@ -12,6 +12,8 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
@@ -26,7 +28,6 @@ import net.minestom.server.item.component.Equippable;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.collection.ObjectArray;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -626,7 +627,7 @@ public final class Registry {
         public @NotNull DataComponentMap prototype() {
             if (prototype == null) {
                 try {
-                    BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
+                    final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
                     DataComponentMap.Builder builder = DataComponentMap.builder();
                     for (Map.Entry<String, Object> entry : main.section("components")) {
                         //noinspection unchecked
@@ -634,7 +635,12 @@ public final class Registry {
                         Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
 
                         BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                        builder.set(component, component.read(context, tag));
+                        final Result<Object> result = component.decode(coder, tag);
+                        switch (result) {
+                            case Result.Ok(Object ok) -> builder.set(component, ok);
+                            case Result.Error(String message) ->
+                                    throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
+                        }
                     }
                     this.prototype = builder.build();
                 } catch (IOException e) {

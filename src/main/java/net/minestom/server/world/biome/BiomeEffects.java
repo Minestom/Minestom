@@ -2,7 +2,9 @@ package net.minestom.server.world.biome;
 
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.Color;
 import net.minestom.server.sound.Music;
 import net.minestom.server.sound.SoundEvent;
@@ -27,7 +29,7 @@ public record BiomeEffects(
         @Nullable List<WeightedMusic> music,
         @Nullable Float musicVolume
 ) {
-    public static final Codec<BiomeEffects> NBT_TYPE = StructCodec.struct(
+    public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
             "fog_color", Color.CODEC, BiomeEffects::fogColor,
             "sky_color", Color.CODEC, BiomeEffects::skyColor,
             "water_color", Color.CODEC, BiomeEffects::waterColor,
@@ -50,16 +52,10 @@ public record BiomeEffects(
     }
 
     public record Particle(float probability, net.minestom.server.particle.Particle particle) {
-        public static final Codec<Particle> CODEC = null; // TODO(1.21.5)
-//        public static final BinaryTagSerializer<Particle> NBT_TYPE = new BinaryTagSerializer<>() {
-//            @Override
-//            public @NotNull BinaryTag write(@NotNull Context context, @NotNull BiomeEffects.Particle value) {
-//                return CompoundBinaryTag.builder()
-//                        .putFloat("probability", value.probability())
-//                        .put("options", value.particle().toNbt())
-//                        .build();
-//            }
-//        };
+        public static final Codec<Particle> CODEC = StructCodec.struct(
+                "probability", Codec.FLOAT, Particle::probability,
+                "options", net.minestom.server.particle.Particle.CODEC, Particle::particle,
+                Particle::new);
     }
 
     public record MoodSound(
