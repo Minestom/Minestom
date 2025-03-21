@@ -1,14 +1,9 @@
 package net.minestom.server.world.biome;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.Color;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Locale;
 
 record BiomeImpl(
         float temperature,
@@ -20,23 +15,6 @@ record BiomeImpl(
 ) implements Biome {
     // https://minecraft.wiki/w/Rain
     private final static double SNOW_TEMPERATURE = 0.15;
-
-    static final BinaryTagSerializer<Biome> REGISTRY_NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            tag -> {
-                throw new UnsupportedOperationException("Biome is read-only");
-            },
-            biome -> {
-                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder()
-                        .putFloat("temperature", biome.temperature())
-                        .putFloat("downfall", biome.downfall())
-                        .putBoolean("has_precipitation", biome.hasPrecipitation());
-                if (biome.temperatureModifier() != TemperatureModifier.NONE)
-                    builder.putString("temperature_modifier", biome.temperatureModifier().name().toLowerCase(Locale.ROOT));
-                return builder
-                        .put("effects", BiomeEffects.NBT_TYPE.write(biome.effects()))
-                        .build();
-            }
-    );
 
     BiomeImpl(Registry.BiomeEntry entry) {
         this(entry.temperature(), entry.downfall(), getBuilder(entry).build(),

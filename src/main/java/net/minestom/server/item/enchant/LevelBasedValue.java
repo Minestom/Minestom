@@ -35,8 +35,8 @@ public interface LevelBasedValue {
     };
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+    static @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> createDefaultRegistry() {
+        final DynamicRegistry<Codec<? extends LevelBasedValue>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         // Note that constant is omitted from the registry, it has serialization handled out of band above.
         registry.register("linear", Linear.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("clamped", Clamped.CODEC, DataPack.MINECRAFT_CORE);
