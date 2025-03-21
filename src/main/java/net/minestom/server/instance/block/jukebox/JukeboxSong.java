@@ -52,7 +52,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:jukebox_song", JukeboxSongImpl.REGISTRY_NBT_TYPE, Registry.Resource.JUKEBOX_SONGS,
+                "minecraft:jukebox_song", REGISTRY_CODEC, Registry.Resource.JUKEBOX_SONGS,
                 (namespace, props) -> new JukeboxSongImpl(Registry.jukeboxSong(namespace, props))
         );
     }

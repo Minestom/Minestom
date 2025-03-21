@@ -3,6 +3,9 @@ package net.minestom.server.particle;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.AlphaColor;
 import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Point;
@@ -41,6 +44,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             return particle.readData(buffer);
         }
     };
+    @NotNull Codec<Particle> CODEC = new Codec<>() {
+        @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            return new Result.Error<>("particles cannot be decoded");
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Particle value) {
+            if (value == null) return new Result.Error<>("null");
+            return value.encode(coder);
+        }
+    };
 
     static @NotNull Collection<@NotNull Particle> values() {
         return ParticleImpl.values();
@@ -62,9 +77,10 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     void writeData(@NotNull NetworkBuffer writer);
 
-    @NotNull CompoundBinaryTag toNbt();
+    <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder);
 
     record Simple(@NotNull Key key, int id) implements Particle {
+
         @Override
         public @NotNull Particle readData(@NotNull NetworkBuffer reader) {
             return this;
@@ -75,10 +91,10 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .build());
         }
     }
 
@@ -104,11 +120,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putString("block_state", BlockUtils.toString(block))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .build());
         }
     }
 
@@ -134,13 +150,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putString("block_state", BlockUtils.toString(block))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .build());
         }
-
     }
 
     record Dust(@NotNull Key key, int id, @NotNull RGBLike color, float scale) implements Particle {
@@ -172,12 +187,15 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .put("color", Color.CODEC.write(color))
-                    .putFloat("scale", scale)
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> colorResult = Color.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("color", colorData)
+                    .put("scale", coder.createFloat(scale))
+                    .build());
         }
     }
 
@@ -219,13 +237,19 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putFloat("scale", scale)
-                    .put("from_color", Color.CODEC.write(color))
-                    .put("to_color", Color.CODEC.write(transitionColor))
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> fromColorResult = Color.CODEC.encode(coder, color);
+            if (!(fromColorResult instanceof Result.Ok(D fromColorData)))
+                return fromColorResult.cast();
+            final Result<D> toColorResult = Color.CODEC.encode(coder, transitionColor);
+            if (!(toColorResult instanceof Result.Ok(D toColorData)))
+                return toColorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("from_color", fromColorData)
+                    .put("to_color", toColorData)
+                    .put("scale", coder.createFloat(scale))
+                    .build());
         }
     }
 
@@ -251,13 +275,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putString("block_state", BlockUtils.toString(block))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .build());
         }
-
     }
 
     record FallingDust(@NotNull Key key, int id,
@@ -282,13 +305,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putString("block_state", BlockUtils.toString(block))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .build());
         }
-
     }
 
     record Item(@NotNull Key key, int id, @NotNull ItemStack item) implements Particle {
@@ -309,11 +331,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .put("item", item.toItemNBT())
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> itemResult = ItemStack.CODEC.encode(coder, item);
+            if (!(itemResult instanceof Result.Ok(D itemData)))
+                return itemResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("item", itemData)
+                    .build());
         }
     }
 
@@ -345,11 +370,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .put("color", AlphaColor.CODEC.write(color))
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("color", colorData)
+                    .build());
         }
     }
 
@@ -368,15 +396,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(NetworkBuffer.FLOAT, roll);
-
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putFloat("roll", roll)
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("roll", coder.createFloat(roll))
+                    .build());
         }
     }
 
@@ -398,11 +425,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putInt("delay", delay)
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("delay", coder.createInt(delay))
+                    .build());
         }
     }
 
@@ -448,12 +475,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
                 writer.write(NetworkBuffer.FLOAT, sourceEntityEyeHeight);
                 writer.write(NetworkBuffer.VAR_INT, travelTicks);
             }
-
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            throw new UnsupportedOperationException("Vibration particle cannot be serialized to NBT");
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Error<>("Vibration particle cannot be serialized to NBT");
         }
 
         public enum SourceType {
@@ -493,14 +519,19 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .put("target", BinaryTagSerializer.VECTOR3D.write(target))
-                    .put("color", Color.CODEC.write(color))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> colorResult = Color.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            final Result<D> targetResult = Codec.VECTOR3D.encode(coder, target);
+            if (!(targetResult instanceof Result.Ok(D targetData)))
+                return targetResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("target", targetData)
+                    .put("color", colorData)
+                    .build());
         }
-
     }
 
     record BlockCrumble(@NotNull Key key, int id,
@@ -525,11 +556,11 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .putString("block_state", BlockUtils.toString(block))
-                    .build();
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .build());
         }
     }
 
@@ -560,11 +591,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public @NotNull CompoundBinaryTag toNbt() {
-            return CompoundBinaryTag.builder()
-                    .putString("type", key.asString())
-                    .put("color", AlphaColor.CODEC.write(color))
-                    .build();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("color", colorData)
+                    .build());
         }
     }
 

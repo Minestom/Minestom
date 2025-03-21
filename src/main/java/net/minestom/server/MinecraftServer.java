@@ -3,6 +3,7 @@ package net.minestom.server;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -33,7 +34,6 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
@@ -298,19 +298,19 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.instrument();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public static @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return process().enchantmentLevelBasedValues();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public static @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects() {
         return process().enchantmentValueEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public static @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects() {
         return process().enchantmentEntityEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public static @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects() {
         return process().enchantmentLocationEffects();
     }
 
