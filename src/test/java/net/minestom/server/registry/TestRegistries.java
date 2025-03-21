@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -16,7 +17,6 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +43,10 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<CowVariant> cowVariant = null;
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects = null;
-    public DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
+    public DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects = null;
+    public DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects = null;
+    public DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects = null;
 
     public TestRegistries() {
 
@@ -147,22 +147,22 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return Objects.requireNonNull(enchantmentLevelBasedValues);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects() {
         return Objects.requireNonNull(enchantmentValueEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects() {
         return Objects.requireNonNull(enchantmentEntityEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
     }
 }
