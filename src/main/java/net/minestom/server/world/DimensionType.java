@@ -1,5 +1,7 @@
 package net.minestom.server.world;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
@@ -16,6 +18,38 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
 
+    @NotNull Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
+            "ultrawarm", Codec.BOOLEAN, DimensionType::ultrawarm,
+            "natural", Codec.BOOLEAN, DimensionType::natural,
+            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
+            "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
+            "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
+            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
+            "fixed_time", Codec.LONG.optional(), DimensionType::fixedTime,
+            "piglin_safe", Codec.BOOLEAN, DimensionType::piglinSafe,
+            "bed_works", Codec.BOOLEAN, DimensionType::bedWorks,
+            "respawn_anchor_works", Codec.BOOLEAN, DimensionType::respawnAnchorWorks,
+            "has_raids", Codec.BOOLEAN, DimensionType::hasRaids,
+            "logical_height", Codec.INT, DimensionType::logicalHeight,
+            "min_y", Codec.INT, DimensionType::minY,
+            "height", Codec.INT, DimensionType::height,
+            "infiniburn", Codec.STRING, DimensionType::infiniburn,
+            "effects", Codec.STRING, DimensionType::effects,
+            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
+            "monster_spawn_light_level", Codec.INT, DimensionType::monsterSpawnLightLevel,
+            DimensionType::create);
+
+    static @NotNull DimensionType create(
+            boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
+            float ambientLight, @Nullable Long fixedTime, boolean piglinSafe, boolean bedWorks, boolean respawnAnchorWorks,
+            boolean hasRaids, int logicalHeight, int minY, int height, @NotNull String infiniburn, @NotNull String effects,
+            int monsterSpawnBlockLightLimit, int monsterSpawnLightLevel
+    ) {
+        return new DimensionTypeImpl(ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
+                fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
+                infiniburn, effects, monsterSpawnBlockLightLimit, monsterSpawnLightLevel, null);
+    }
+
     static @NotNull Builder builder() {
         return new Builder();
     }
@@ -28,7 +62,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
+                "minecraft:dimension_type", REGISTRY_CODEC, Registry.Resource.DIMENSION_TYPES,
                 (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
         );
     }
@@ -68,6 +102,10 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     @NotNull String infiniburn();
 
     @NotNull String effects();
+
+    int monsterSpawnBlockLightLimit();
+
+    int monsterSpawnLightLevel();
 
     default int totalHeight() {
         return minY() + height();
@@ -196,7 +234,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                    infiniburn, effects, null
+                    infiniburn, effects, 0, 0, null
             );
         }
     }

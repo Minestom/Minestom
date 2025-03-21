@@ -6,8 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.UUID;
 import java.util.function.Function;
 
@@ -57,17 +56,18 @@ final class CodecImpl {
         }
     }
 
-    // TODO: do we want to do a mutable list builder & coder.getItem?
     record ListImpl<T>(@NotNull Codec<T> inner, int maxSize) implements Codec<List<T>> {
         @Override
         public @NotNull <D> Result<List<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Result<List<D>> result = coder.getList(value);
-            if (!(result instanceof Result.Ok(List<D> list)))
-                return result.cast();
-            if (list.size() > maxSize)
-                return new Result.Error<>("List size exceeds maximum allowed size: " + maxSize);
-            final List<T> decodedList = new ArrayList<>();
-            for (D item : list) {
+            final Result<Integer> sizeResult = coder.listSize(value);
+            if (!(sizeResult instanceof Result.Ok(Integer size)))
+                return sizeResult.cast();
+            if (size > maxSize) return new Result.Error<>("List size exceeds maximum allowed size: " + maxSize);
+            final List<T> decodedList = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                final Result<D> itemResult = coder.getIndex(value, i);
+                if (!(itemResult instanceof Result.Ok(D item)))
+                    return itemResult.cast();
                 Result<T> decodedItem = inner.decode(coder, item);
                 if (!(decodedItem instanceof Result.Ok(T valueItem)))
                     return decodedItem.cast();
@@ -81,14 +81,100 @@ final class CodecImpl {
             if (value == null) return new Result.Error<>("null");
             if (value.size() > maxSize)
                 throw new IllegalArgumentException("List size exceeds maximum allowed size: " + maxSize);
-            List<D> encodedList = new ArrayList<>(value.size());
+            Transcoder.ListBuilder<D> encodedList = coder.createList(value.size());
             for (T item : value) {
                 final Result<D> itemResult = inner.encode(coder, item);
                 if (!(itemResult instanceof Result.Ok(D encodedItem)))
                     return itemResult.cast();
                 encodedList.add(encodedItem);
             }
-            return new Result.Ok<>(coder.createList(encodedList));
+            return new Result.Ok<>(encodedList.build());
+        }
+    }
+
+    record SetImpl<T>(@NotNull Codec<T> inner, int maxSize) implements Codec<Set<T>> {
+        @Override
+        public @NotNull <D> Result<Set<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Integer> sizeResult = coder.listSize(value);
+            if (!(sizeResult instanceof Result.Ok(Integer size)))
+                return sizeResult.cast();
+            if (size > maxSize) return new Result.Error<>("List size exceeds maximum allowed size: " + maxSize);
+            final List<T> decodedList = new ArrayList<>(size);
+            for (int i = 0; i < size; i++) {
+                final Result<D> itemResult = coder.getIndex(value, i);
+                if (!(itemResult instanceof Result.Ok(D item)))
+                    return itemResult.cast();
+                Result<T> decodedItem = inner.decode(coder, item);
+                if (!(decodedItem instanceof Result.Ok(T valueItem)))
+                    return decodedItem.cast();
+                decodedList.add(valueItem);
+            }
+            return new Result.Ok<>(Set.copyOf(decodedList));
+        }
+
+        @Override
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Set<T> value) {
+            if (value == null) return new Result.Error<>("null");
+            if (value.size() > maxSize)
+                throw new IllegalArgumentException("List size exceeds maximum allowed size: " + maxSize);
+            Transcoder.ListBuilder<D> encodedList = coder.createList(value.size());
+            for (T item : value) {
+                final Result<D> itemResult = inner.encode(coder, item);
+                if (!(itemResult instanceof Result.Ok(D encodedItem)))
+                    return itemResult.cast();
+                encodedList.add(encodedItem);
+            }
+            return new Result.Ok<>(encodedList.build());
+        }
+    }
+
+    record MapImpl<K, V>(@NotNull Codec<K> keyCodec, @NotNull Codec<V> valueCodec, int maxSize) implements Codec<Map<K, V>> {
+        @Override
+        public @NotNull <D> Result<Map<K, V>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Collection<Map.Entry<String, D>>> entriesResult = coder.getMapEntries(value);
+            if (!(entriesResult instanceof Result.Ok(Collection<Map.Entry<String, D>> entries)))
+                return entriesResult.cast();
+            if (entries.size() > maxSize) return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
+            if (entries.isEmpty()) return new Result.Ok<>(Map.of());
+
+            final Map<K, V> decodedMap = new HashMap<>(entries.size());
+            for (final Map.Entry<String, D> entry : entries) {
+                final Result<D> keyDResult = coder.getValue(value, entry.getKey());
+                if (!(keyDResult instanceof Result.Ok(D keyD)))
+                    return keyDResult.cast();
+                final Result<K> keyResult = keyCodec.decode(coder, keyD);
+                if (!(keyResult instanceof Result.Ok(K decodedKey)))
+                    return keyResult.cast();
+                final Result<V> valueResult = valueCodec.decode(coder, entry.getValue());
+                if (!(valueResult instanceof Result.Ok(V decodedValue)))
+                    return valueResult.cast();
+                decodedMap.put(decodedKey, decodedValue);
+            }
+            return new Result.Ok<>(decodedMap);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Map<K, V> value) {
+            if (value == null) return new Result.Error<>("null");
+            if (value.size() > maxSize)
+                return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
+            if (value.isEmpty()) return new Result.Ok<>(coder.createMap().build());
+
+            final Transcoder.MapBuilder<D> map = coder.createMap();
+            for (final Map.Entry<K, V> entry : value.entrySet()) {
+                final Result<D> keyResult = keyCodec.encode(coder, entry.getKey());
+                if (!(keyResult instanceof Result.Ok(D encodedKey)))
+                    return keyResult.cast();
+                final Result<String> keyStringResult = coder.getString(encodedKey);
+                if (!(keyStringResult instanceof Result.Ok(String keyString)))
+                    return keyStringResult.cast();
+                final Result<D> valueResult = valueCodec.encode(coder, entry.getValue());
+                if (!(valueResult instanceof Result.Ok(D encodedValue)))
+                    return valueResult.cast();
+                map.put(keyString, encodedValue);
+            }
+
+            return new Result.Ok<>(map.build());
         }
     }
 

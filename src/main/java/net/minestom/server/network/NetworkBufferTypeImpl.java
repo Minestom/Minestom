@@ -6,14 +6,16 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -731,15 +733,22 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         public void write(@NotNull NetworkBuffer buffer, T value) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            buffer.write(NBT, nbtType.write(new BinaryTagSerializer.ContextWithRegistries(registries), value));
+            final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
+            switch (result) {
+                case Result.Ok(BinaryTag tag) -> buffer.write(NBT, tag);
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            }
         }
 
         @Override
         public T read(@NotNull NetworkBuffer buffer) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            final BinaryTag tag = buffer.read(NBT);
-            return nbtType.read(new BinaryTagSerializer.ContextWithRegistries(registries), tag);
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
+            return switch (result) {
+                case Result.Ok(T value) -> value;
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            };
         }
     }
 

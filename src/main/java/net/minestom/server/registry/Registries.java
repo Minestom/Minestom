@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -16,7 +17,6 @@ import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.enchant.*;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -67,13 +67,13 @@ public interface Registries {
 
     // The following are _not_ sent to the client.
 
-    @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues();
+    @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues();
 
-    @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects();
+    @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects();
 
-    @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects();
+    @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects();
 
-    @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects();
+    @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects();
 
     @FunctionalInterface
     interface Selector<T> {

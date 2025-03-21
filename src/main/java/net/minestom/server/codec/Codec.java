@@ -60,12 +60,12 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
+    @NotNull Codec<Point> VECTOR3D = null; // TODO(1.21.5)
+
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
-        // TODO: this needs to handle exceptions better, and support non-enum named things.
         return STRING.transform(
                 value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
-                value -> value.name().toLowerCase(Locale.ROOT)
-        );
+                value -> value.name().toLowerCase(Locale.ROOT));
     }
 
     static <T> @NotNull Codec<T> Recursive(@NotNull Function<Codec<T>, Codec<T>> func) {
@@ -97,11 +97,12 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }
 
     default @NotNull Codec<List<T>> listOrSingle(int maxSize) {
-        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+        return Codec.this.list(maxSize).orElse(Codec.this.transform(
+                List::of, list -> list.isEmpty() ? null : list.getFirst()));
     }
 
     default @NotNull Codec<Set<T>> set(int maxSize) {
-        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+        return new CodecImpl.SetImpl<>(Codec.this, maxSize);
     }
 
     default @NotNull Codec<Set<T>> set() {
@@ -109,7 +110,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }
 
     default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec, int maxSize) {
-        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+        return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
     }
 
     default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec) {

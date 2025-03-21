@@ -1,5 +1,7 @@
 package net.minestom.server.message;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
@@ -8,6 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
+
+    @NotNull Codec<ChatType> REGISTRY_CODEC = StructCodec.struct(
+            "chat", ChatTypeDecoration.CODEC, ChatType::chat,
+            "narration", ChatTypeDecoration.CODEC, ChatType::narration,
+            ChatType::create);
 
     static @NotNull ChatType create(
             @NotNull ChatTypeDecoration chat,
@@ -29,7 +36,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
+                "minecraft:chat_type", REGISTRY_CODEC, Registry.Resource.CHAT_TYPES,
                 (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
         );
     }

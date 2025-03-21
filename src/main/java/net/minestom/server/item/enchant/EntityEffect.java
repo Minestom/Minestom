@@ -23,8 +23,8 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             Registries::enchantmentEntityEffects, EntityEffect::nbtType, "type");
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+    static @NotNull DynamicRegistry<Codec<? extends EntityEffect>> createDefaultRegistry() {
+        final DynamicRegistry<Codec<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("apply_mob_effect", ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("change_item_damage", ChangeItemDamage.CODEC, DataPack.MINECRAFT_CORE);

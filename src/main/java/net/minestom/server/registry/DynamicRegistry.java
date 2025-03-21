@@ -1,10 +1,10 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -63,9 +63,8 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
-        return new DynamicRegistryImpl<>(id, nbtType);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec) {
+        return new DynamicRegistryImpl<>(id, codec);
     }
 
     /**
@@ -75,9 +74,9 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull String id, @NotNull Codec<T> codec,
             @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, nbtType, resource, loader, null);
+        return create(id, codec, resource, loader, null);
     }
 
     /**
@@ -87,10 +86,10 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull String id, @NotNull Codec<T> codec,
             @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
             @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
+        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, codec);
         DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
         return registry;
     }
@@ -102,9 +101,9 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
+            @NotNull String id, @NotNull Codec<T> codec,
             @NotNull Registries registries, @NotNull Registry.Resource resource) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
         DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
         return registry;
     }

@@ -54,7 +54,7 @@ public class EffectComponent {
     public static final DataComponent<Unit> PREVENT_ARMOR_CHANGE = register("prevent_armor_change", Codec.UNIT);
     public static final DataComponent<ValueEffect> TRIDENT_SPIN_ATTACK_STRENGTH = register("trident_spin_attack_strength", ValueEffect.CODEC);
 
-    public static final BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.nbtType(EffectComponent::fromId, EffectComponent::fromNamespaceId);
+    public static final BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.codec(EffectComponent::fromId, EffectComponent::fromNamespaceId);
 
     public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
         return NAMESPACES.get(namespaceId);

@@ -30,7 +30,7 @@ interface WolfSoundVariants {
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfSoundVariant> createDefaultRegistry() {
-        final DynamicRegistry<WolfSoundVariant> registry = DynamicRegistry.create("minecraft:wolf_sound_variant", WolfSoundVariant.REGISTRY_NBT_TYPE);
+        final DynamicRegistry<WolfSoundVariant> registry = DynamicRegistry.create("minecraft:wolf_sound_variant", WolfSoundVariant.REGISTRY_CODEC);
         RegistryHelper.registerNbt(registry, "minecraft:sad", "{ambient_sound:\"minecraft:entity.wolf_sad.ambient\",hurt_sound:\"minecraft:entity.wolf_sad.hurt\",whine_sound:\"minecraft:entity.wolf_sad.whine\",death_sound:\"minecraft:entity.wolf_sad.death\",growl_sound:\"minecraft:entity.wolf_sad.growl\",pant_sound:\"minecraft:entity.wolf_sad.pant\"}");
         RegistryHelper.registerNbt(registry, "minecraft:puglin", "{ambient_sound:\"minecraft:entity.wolf_puglin.ambient\",hurt_sound:\"minecraft:entity.wolf_puglin.hurt\",whine_sound:\"minecraft:entity.wolf_puglin.whine\",death_sound:\"minecraft:entity.wolf_puglin.death\",growl_sound:\"minecraft:entity.wolf_puglin.growl\",pant_sound:\"minecraft:entity.wolf_puglin.pant\"}");
         RegistryHelper.registerNbt(registry, "minecraft:cute", "{ambient_sound:\"minecraft:entity.wolf_cute.ambient\",hurt_sound:\"minecraft:entity.wolf_cute.hurt\",whine_sound:\"minecraft:entity.wolf_cute.whine\",death_sound:\"minecraft:entity.wolf_cute.death\",growl_sound:\"minecraft:entity.wolf_cute.growl\",pant_sound:\"minecraft:entity.wolf_cute.pant\"}");

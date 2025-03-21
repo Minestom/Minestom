@@ -117,4 +117,24 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     default @NotNull MapBuilder<D> createMap() {
         return delegate().createMap();
     }
+
+    @Override
+    default @NotNull Result<Integer> listSize(@NotNull D value) {
+        return delegate().listSize(value);
+    }
+
+    @Override
+    default @NotNull Result<D> getIndex(@NotNull D value, int index) {
+        return delegate().getIndex(value, index);
+    }
+
+    @Override
+    default @NotNull ListBuilder<D> createList(int expectedSize) {
+        return delegate().createList(expectedSize);
+    }
+
+    @Override
+    default @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value) {
+        return delegate().putValue(map, key, value);
+    }
 }
