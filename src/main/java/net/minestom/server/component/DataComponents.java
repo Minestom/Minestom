@@ -141,7 +141,7 @@ public class DataComponents {
     public static final DataComponent<DyeColor> SHEEP_COLOR = register("sheep/color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);
     public static final DataComponent<DyeColor> SHULKER_COLOR = register("shulker/color", DyeColor.NETWORK_TYPE, DyeColor.CODEC);
 
-    // There are some components that are serialized to nbt as an object containing a single field, for now we just inline them here.
+    // There are some components that are serialized to codec as an object containing a single field, for now we just inline them here.
     private static <T> @NotNull Codec<T> wrapObject(@NotNull String fieldName, @NotNull Codec<T> serializer) {
         return StructCodec.struct(fieldName, serializer, t -> t, t -> t);
     }

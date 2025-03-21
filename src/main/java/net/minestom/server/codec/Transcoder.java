@@ -6,7 +6,9 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @ApiStatus.Experimental
 public interface Transcoder<D> {
@@ -61,10 +63,14 @@ public interface Transcoder<D> {
 
     boolean hasValue(@NotNull D value, @NotNull String key);
 
+    // TODO(1.21.5): this should instead return a MapLike or something that allows iteration and getting keys
+    @NotNull Result<Collection<Map.Entry<String, D>>> getMapEntries(@NotNull D value);
+
     @NotNull Result<D> getValue(@NotNull D value, @NotNull String key);
 
     @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value);
 
+    // TODO(1.21.5): there are a few places we use an empty map, could save a few cycles and have a dedicated function for empties.
     @NotNull MapBuilder<D> createMap();
 
     default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
@@ -134,7 +140,7 @@ public interface Transcoder<D> {
     }
 
     interface MapBuilder<D> {
-        void put(@NotNull String key, D value);
+        @NotNull MapBuilder<D> put(@NotNull String key, D value);
 
         D build();
     }
