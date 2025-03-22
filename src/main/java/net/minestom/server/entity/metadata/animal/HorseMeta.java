@@ -15,6 +15,7 @@ public class HorseMeta extends AbstractHorseMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull Variant getVariant() {
         return getVariantFromID(metadata.get(MetadataDef.Horse.VARIANT));
     }
@@ -22,7 +23,8 @@ public class HorseMeta extends AbstractHorseMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#HORSE_VARIANT} instead.
      */
-    public void setVariant(Variant variant) {
+    @Deprecated
+    public void setVariant(@NotNull Variant variant) {
         metadata.set(MetadataDef.Horse.VARIANT, getVariantID(variant.marking, variant.color));
     }
 

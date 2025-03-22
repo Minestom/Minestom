@@ -2,7 +2,9 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 public interface TranscoderProxy<D> extends Transcoder<D> {
 
@@ -116,6 +118,16 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     @Override
     default @NotNull MapBuilder<D> createMap() {
         return delegate().createMap();
+    }
+
+    @Override
+    default @NotNull Result<D> mergeToMap(@NotNull List<D> maps) {
+        return delegate().mergeToMap(maps);
+    }
+
+    @Override
+    default @NotNull Result<Collection<Map.Entry<String, D>>> getMapEntries(@NotNull D value) {
+        return delegate().getMapEntries(value);
     }
 
     @Override

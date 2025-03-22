@@ -15,6 +15,7 @@ public class RabbitMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull RabbitMeta.Variant variant) {
         int id = variant == Variant.KILLER_BUNNY ? 99 : variant.ordinal();
         metadata.set(MetadataDef.Rabbit.TYPE, id);
@@ -23,6 +24,7 @@ public class RabbitMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#RABBIT_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull RabbitMeta.Variant getVariant() {
         int id = metadata.get(MetadataDef.Rabbit.TYPE);
         if (id == 99) {

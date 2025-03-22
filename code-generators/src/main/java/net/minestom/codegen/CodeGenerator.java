@@ -1,8 +1,9 @@
 package net.minestom.codegen;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
-import net.kyori.adventure.nbt.*;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -165,18 +166,14 @@ public class CodeGenerator {
                 .addAnnotation(ClassName.get("org.jetbrains.annotations", "ApiStatus", "Internal"))
                 .addJavadoc("Creates a new instance of the $S registry containing the vanilla contents.\n\n@see net.minestom.server.MinecraftServer to get an existing instance of the registry", registryName);
 
-        createRegistryMethod.addStatement("final $T registry = $T.create($S, $T.REGISTRY_NBT_TYPE)",
+        createRegistryMethod.addStatement("final $T registry = $T.create($S, $T.REGISTRY_CODEC)",
                 ParameterizedTypeName.get(registryClass, typeClass),
                 registryClass, registryName, typeClass);
 
         for (var entry : json.entrySet()) {
-            try {
-                createRegistryMethod.addStatement("$T.registerNbt(registry, $S, $S)",
-                        ClassName.get("net.minestom.server.registry", "RegistryHelper"),
-                        entry.getKey(), TagStringIO.get().asString((CompoundBinaryTag) jsonToNbt(entry.getValue())));
-            } catch (IOException e) {
-                LOGGER.error("Failed to convert JSON to NBT for entry: " + entry.getKey(), e);
-            }
+            createRegistryMethod.addStatement("$T.register(registry, $S, $S)",
+                    ClassName.get("net.minestom.server.registry", "RegistryHelper"),
+                    entry.getKey(), entry.getValue().toString());
         }
 
         createRegistryMethod.addStatement("return registry");
@@ -189,38 +186,6 @@ public class CodeGenerator {
                         .skipJavaLangImports(true)
                         .build()),
                 outputFolder);
-    }
-
-    private @NotNull BinaryTag jsonToNbt(@NotNull JsonElement element) {
-        return switch (element) {
-            case JsonObject object -> {
-                var builder = CompoundBinaryTag.builder();
-                for (var entry : object.entrySet())
-                    builder.put(entry.getKey(), jsonToNbt(entry.getValue()));
-                yield builder.build();
-            }
-            case JsonArray array -> {
-                if (array.isEmpty()) {
-                    yield ListBinaryTag.empty();
-                }
-                var list = new java.util.ArrayList<BinaryTag>();
-                for (var item : array)
-                    list.add(jsonToNbt(item));
-                yield ListBinaryTag.listBinaryTag(list.getFirst().type(), list);
-            }
-            case JsonPrimitive primitive -> {
-                if (primitive.isString()) {
-                    yield StringBinaryTag.stringBinaryTag(primitive.getAsString());
-                } else if (primitive.isNumber()) {
-                    yield DoubleBinaryTag.doubleBinaryTag(primitive.getAsDouble());
-                } else if (primitive.isBoolean()) {
-                    yield ByteBinaryTag.byteBinaryTag(primitive.getAsBoolean() ? (byte) 1 : (byte) 0);
-                }
-                throw new IllegalArgumentException("Unsupported JSON primitive type: " + primitive);
-            }
-            case JsonNull jsonNull -> throw new IllegalArgumentException("Null JSON element");
-            default -> throw new IllegalArgumentException("Unsupported JSON element type: " + element.getClass());
-        };
     }
 
     private void writeFiles(@NotNull List<JavaFile> fileList, File outputFolder) {

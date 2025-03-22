@@ -29,7 +29,7 @@ public sealed interface DataComponent<T> extends StaticProtocolObject, Codec<T> 
     @NotNull Codec<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.codec(DataComponent::fromId, DataComponent::fromKey);
 
     @NotNull NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(DataComponent::fromId);
-    @NotNull Codec<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchCodec(DataComponent::fromId, DataComponent::fromKey);
+    @NotNull Codec<DataComponentMap> PATCH_CODEC = DataComponentMap.patchCodec(DataComponent::fromId, DataComponent::fromKey);
 
     /**
      * Represents any type which can hold data components. Represents a finalized view of a component, that is to say
