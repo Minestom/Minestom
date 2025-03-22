@@ -112,6 +112,7 @@ public class EntityMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
+    @Deprecated
     public void setCustomName(@Nullable Component value) {
         metadata.set(MetadataDef.CUSTOM_NAME, value);
     }

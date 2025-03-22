@@ -31,6 +31,7 @@ public class LlamaMeta extends ChestedHorseMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Llama.VARIANT)];
     }
@@ -38,6 +39,7 @@ public class LlamaMeta extends ChestedHorseMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#LLAMA_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(Variant value) {
         metadata.set(MetadataDef.Llama.VARIANT, value.ordinal());
     }

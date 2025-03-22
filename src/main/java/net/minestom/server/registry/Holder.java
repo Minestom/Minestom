@@ -150,10 +150,10 @@ public sealed interface Holder<T> {
         return new Codec<>() {
             @Override
             public @NotNull <D> Result<Lazy<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-                final Result<Lazy<T>> holderResult = holderCodec.decode(coder, value).map(Lazy::new);
+                final Result<Lazy<T>> holderResult = holderCodec.decode(coder, value).mapResult(Lazy::new);
                 if (holderResult instanceof Result.Ok<Lazy<T>> ok) return ok;
 
-                final Result<Lazy<T>> referenceResult = Codec.KEY.decode(coder, value).map(Lazy::new);
+                final Result<Lazy<T>> referenceResult = Codec.KEY.decode(coder, value).mapResult(Lazy::new);
                 if (referenceResult instanceof Result.Ok<Lazy<T>> ok) return ok;
 
                 // Return the original error since thats what we prioritize here
