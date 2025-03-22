@@ -1,5 +1,6 @@
 package net.minestom.server.listener;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.BlockVec;
@@ -18,6 +19,7 @@ import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -25,12 +27,13 @@ import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockChangePacket;
-import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.chunk.ChunkUtils;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
 public class BlockPlacementListener {
+
+    private final static BlockManager blockManager = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
@@ -94,8 +97,7 @@ public class BlockPlacementListener {
 
         // Get the newly placed block position
         Point placementPosition = blockPosition;
-        Registry.BlockEntry interactedBlockEntry = interactedBlock.registry();
-        if (!interactedBlock.isAir() && (!interactedBlockEntry.isReplaceable() || interactedBlockEntry.material() == useMaterial)) {
+        if (!interactedBlock.isAir() && interactedBlock.canBeReplacedBy(useMaterial, blockFace, cursorPosition)) {
             // If the block is not replaceable, try to place next to it.
             final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
             final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
@@ -103,7 +105,7 @@ public class BlockPlacementListener {
             placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
             var placementBlock = instance.getBlock(placementPosition);
-            if (!placementBlock.registry().isReplaceable()) {
+            if (!placementBlock.canBeReplacedBy(useMaterial, blockFace, cursorPosition)) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;
             }

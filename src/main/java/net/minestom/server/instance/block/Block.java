@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
+import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
@@ -156,6 +157,11 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @Contract(pure = true)
     @NotNull Registry.BlockEntry registry();
 
+    @Contract(pure = true)
+    boolean canBeReplacedBy(@NotNull Material useMaterial,
+                            @NotNull BlockFace blockFace,
+                            @NotNull Point cursorPosition);
+
     @Override
     default @NotNull Key key() { return registry().key(); }
 
@@ -209,7 +215,14 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     @FunctionalInterface
+    interface ReplacementRule {
+        boolean canReplace(@NotNull BlockFace blockFace,
+                           @NotNull Point cursorPosition,
+                           @NotNull Material useMaterial);
+    }
+    @FunctionalInterface
     interface Comparator extends BiPredicate<Block, Block> {
+
         Comparator IDENTITY = (b1, b2) -> b1 == b2;
 
         Comparator ID = (b1, b2) -> b1.id() == b2.id();

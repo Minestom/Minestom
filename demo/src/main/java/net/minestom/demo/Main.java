@@ -14,6 +14,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -34,6 +35,9 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
+
+        blockManager.registerReplacementRule(Block.STONE, (blockFace, cursorPosition, useMaterial)
+                -> useMaterial == Material.DIAMOND_BLOCK);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());
