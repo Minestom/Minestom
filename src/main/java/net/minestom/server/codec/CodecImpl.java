@@ -374,18 +374,6 @@ final class CodecImpl {
             }));
         }
     }
-  
-    record ComponentImpl() implements Codec<Component> {
-        @Override
-        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return null;
-        }
-
-        @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
-            return null;
-        }
-    }
 
     record Vector3DImpl() implements Codec<Point> {
 
