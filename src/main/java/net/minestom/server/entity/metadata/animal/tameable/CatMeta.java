@@ -17,6 +17,7 @@ public class CatMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull CatMeta.Variant getVariant() {
         return metadata.get(MetadataDef.Cat.VARIANT);
     }
@@ -24,6 +25,7 @@ public class CatMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull CatMeta.Variant value) {
         metadata.set(MetadataDef.Cat.VARIANT, value);
     }
@@ -47,6 +49,7 @@ public class CatMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_COLLAR} instead.
      */
+    @Deprecated
     public @NotNull DyeColor getCollarColor() {
         return DYE_VALUES[metadata.get(MetadataDef.Cat.COLLAR_COLOR)];
     }
@@ -54,6 +57,7 @@ public class CatMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_COLLAR} instead.
      */
+    @Deprecated
     public void setCollarColor(@NotNull DyeColor value) {
         metadata.set(MetadataDef.Cat.COLLAR_COLOR, value.ordinal());
     }

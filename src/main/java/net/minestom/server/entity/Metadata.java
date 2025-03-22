@@ -13,6 +13,7 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -167,7 +168,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<PaintingVariant>> PaintingVariant(@NotNull DynamicRegistry.Key<PaintingVariant> value) {
+    public static Entry<Holder<PaintingVariant>> PaintingVariant(@NotNull Holder<PaintingVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
 
