@@ -23,37 +23,6 @@ import java.util.function.Function;
 @ApiStatus.Internal
 public interface BinaryTagSerializer<T> {
 
-    static <T extends BinaryTag> @NotNull BinaryTagSerializer<T> coerced(@NotNull BinaryTagType<T> type) {
-        return new BinaryTagSerializer<>() {
-            @Override
-            public @NotNull BinaryTag write(@NotNull Context context, @NotNull T value) {
-                return value;
-            }
-
-            @Override
-            public @NotNull T read(@NotNull Context context, @NotNull BinaryTag tag) {
-                if (tag.type() == type) {
-                    //noinspection unchecked
-                    return (T) tag;
-                }
-
-                if (tag instanceof StringBinaryTag string) {
-                    try {
-                        tag = TagStringIOExt.readTag(string.value());
-                        if (tag.type() == type) {
-                            //noinspection unchecked
-                            return (T) tag;
-                        }
-                    } catch (IOException e) {
-                        // Ignored, we'll throw a more useful exception below
-                    }
-                }
-
-                throw new IllegalArgumentException("Expected " + type + " but got " + tag);
-            }
-        };
-    }
-
     BinaryTagSerializer<CompoundBinaryTag> COMPOUND = new BinaryTagSerializer<>() {
         @Override
         public @NotNull BinaryTag write(@NotNull CompoundBinaryTag value) {
@@ -65,64 +34,6 @@ public interface BinaryTagSerializer<T> {
             return tag instanceof CompoundBinaryTag compoundBinaryTag ? compoundBinaryTag : CompoundBinaryTag.empty();
         }
     };
-    BinaryTagSerializer<CompoundBinaryTag> COMPOUND_COERCED = coerced(BinaryTagTypes.COMPOUND);
-
-    BinaryTagSerializer<Component> NBT_COMPONENT = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull Component value) {
-            return NbtComponentSerializer.nbt().serialize(value);
-        }
-
-        @Override
-        public @NotNull Component read(@NotNull BinaryTag tag) {
-            return NbtComponentSerializer.nbt().deserialize(tag);
-        }
-    };
-
-    static <T> @NotNull BinaryTagSerializer<T> registryTaggedUnion(
-            @NotNull Function<Registries, DynamicRegistry<BinaryTagSerializer<? extends T>>> registrySelector,
-            @NotNull Function<T, BinaryTagSerializer<? extends T>> serializerGetter,
-            @NotNull String key
-    ) {
-        return new BinaryTagSerializer<>() {
-            @Override
-            public @NotNull BinaryTag write(@NotNull Context context, @NotNull T value) {
-                final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
-                final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
-
-                //noinspection unchecked
-                final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) serializerGetter.apply(value);
-                final DynamicRegistry.Key<BinaryTagSerializer<? extends T>> type = registry.getKey(serializer);
-                Check.notNull(type, "Unregistered serializer for: {0}", value);
-                if (context.forClient() && registry.getPack(type) != DataPack.MINECRAFT_CORE)
-                    return null;
-
-                final BinaryTag result = serializer.write(context, value);
-                if (result == null) return null;
-                if (!(result instanceof CompoundBinaryTag resultCompound))
-                    throw new IllegalArgumentException("Expected compound tag for tagged union");
-
-                return CompoundBinaryTag.builder().put(resultCompound).putString(key, type.name()).build();
-            }
-
-            @Override
-            public @NotNull T read(@NotNull Context context, @NotNull BinaryTag tag) {
-                final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
-                final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
-
-                if (!(tag instanceof CompoundBinaryTag compound))
-                    throw new IllegalArgumentException("Expected compound tag for tagged union");
-
-                final String type = compound.getString(key);
-                Check.argCondition(type.isEmpty(), "Missing {0} field: {1}", key, tag);
-                //noinspection unchecked
-                final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) registry.get(Key.key(type));
-                Check.notNull(serializer, "Unregistered serializer for: {0}", type);
-
-                return serializer.read(context, tag);
-            }
-        };
-    }
 
     interface Context {
         Context EMPTY = new Context() {

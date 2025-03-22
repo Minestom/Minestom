@@ -15,6 +15,7 @@ public class ParrotMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PARROT_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull Color getColor() {
         return Color.VALUES[metadata.get(MetadataDef.Parrot.VARIANT)];
     }
@@ -22,6 +23,7 @@ public class ParrotMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PARROT_VARIANT} instead.
      */
+    @Deprecated
     public void setColor(@NotNull Color value) {
         metadata.set(MetadataDef.Parrot.VARIANT, value.ordinal());
     }
