@@ -22,10 +22,10 @@ interface CowVariants {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CowVariant> createDefaultRegistry() {
-        final DynamicRegistry<CowVariant> registry = DynamicRegistry.create("minecraft:cow_variant", CowVariant.REGISTRY_NBT_TYPE);
-        RegistryHelper.registerNbt(registry, "minecraft:warm", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_warm_variant_farm_animals\"}}],model:\"warm\",asset_id:\"minecraft:entity/cow/warm_cow\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:cold", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_cold_variant_farm_animals\"}}],model:\"cold\",asset_id:\"minecraft:entity/cow/cold_cow\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:temperate", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cow/temperate_cow\"}");
+        final DynamicRegistry<CowVariant> registry = DynamicRegistry.create("minecraft:cow_variant", CowVariant.REGISTRY_CODEC);
+        RegistryHelper.register(registry, "minecraft:warm", "{\"asset_id\":\"minecraft:entity/cow/warm_cow\",\"model\":\"warm\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_warm_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:cold", "{\"asset_id\":\"minecraft:entity/cow/cold_cow\",\"model\":\"cold\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_cold_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:temperate", "{\"asset_id\":\"minecraft:entity/cow/temperate_cow\",\"spawn_conditions\":[{\"priority\":0}]}");
         return registry;
     }
 }
