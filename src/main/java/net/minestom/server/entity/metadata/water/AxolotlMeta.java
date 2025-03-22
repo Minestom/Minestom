@@ -16,6 +16,7 @@ public class AxolotlMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#AXOLOTL_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Axolotl.VARIANT)];
     }
@@ -23,6 +24,7 @@ public class AxolotlMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#AXOLOTL_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(Variant variant) {
         metadata.set(MetadataDef.Axolotl.VARIANT, variant.ordinal());
     }

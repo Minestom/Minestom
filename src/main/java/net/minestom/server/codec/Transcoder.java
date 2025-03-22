@@ -73,6 +73,8 @@ public interface Transcoder<D> {
     // TODO(1.21.5): there are a few places we use an empty map, could save a few cycles and have a dedicated function for empties.
     @NotNull MapBuilder<D> createMap();
 
+    @NotNull Result<D> mergeToMap(@NotNull List<D> maps);
+
     default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
         final Result<List<D>> listResult = getList(value);
         if (!(listResult instanceof Result.Ok(List<D> list)))

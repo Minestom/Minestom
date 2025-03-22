@@ -33,6 +33,7 @@ public class ShulkerMeta extends AbstractGolemMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
      */
+    @Deprecated
     public @NotNull DyeColor getColor() {
         return DYE_VALUES[metadata.get(MetadataDef.Shulker.COLOR)];
     }
@@ -40,6 +41,7 @@ public class ShulkerMeta extends AbstractGolemMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHULKER_COLOR} instead.
      */
+    @Deprecated
     public void setColor(@NotNull DyeColor value) {
         metadata.set(MetadataDef.Shulker.COLOR, (byte) value.ordinal());
     }

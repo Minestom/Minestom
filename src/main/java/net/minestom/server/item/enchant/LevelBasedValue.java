@@ -1,36 +1,37 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.NumberBinaryTag;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-import static net.kyori.adventure.nbt.FloatBinaryTag.floatBinaryTag;
-
 public interface LevelBasedValue {
 
-    @NotNull BinaryTagSerializer<LevelBasedValue> TAGGED_CODEC = BinaryTagSerializer.registryTaggedUnion(
+    @NotNull Codec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentLevelBasedValues, LevelBasedValue::codec, "type");
-    @NotNull Codec<LevelBasedValue> CODEC = new BinaryTagSerializer<>() {
+    @NotNull Codec<LevelBasedValue> CODEC = new Codec<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull Context context, @NotNull LevelBasedValue value) {
-            if (value instanceof Constant constant) return floatBinaryTag(constant.value);
-            return TAGGED_CODEC.write(context, value);
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable LevelBasedValue value) {
+            if (value instanceof Constant(float constantValue))
+                return new Result.Ok<>(coder.createFloat(constantValue));
+            return TAGGED_CODEC.encode(coder, value);
         }
 
         @Override
-        public @NotNull LevelBasedValue read(@NotNull Context context, @NotNull BinaryTag tag) {
-            if (tag instanceof NumberBinaryTag number) return new Constant(number.floatValue());
-            return TAGGED_CODEC.read(context, tag);
+        public @NotNull <D> Result<LevelBasedValue> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Float> numberResult = coder.getFloat(value);
+            if (numberResult instanceof Result.Ok(Float number))
+                return new Result.Ok<>(new Constant(number));
+            return TAGGED_CODEC.decode(coder, value);
         }
     };
 

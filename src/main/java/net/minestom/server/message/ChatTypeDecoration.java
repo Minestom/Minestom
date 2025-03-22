@@ -2,6 +2,7 @@ package net.minestom.server.message;
 
 import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.ComponentCodecs;
 import net.minestom.server.codec.StructCodec;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,7 +16,7 @@ public record ChatTypeDecoration(
     public static final Codec<ChatTypeDecoration> CODEC = StructCodec.struct(
             "translation_key", Codec.STRING, ChatTypeDecoration::translationKey,
             "parameters", Parameter.CODEC.list().optional(List.of()), ChatTypeDecoration::parameters,
-            "style", Codec.COMPONENT_STYLE.optional(Style.empty()), ChatTypeDecoration::style,
+            "style", ComponentCodecs.STYLE.optional(Style.empty()), ChatTypeDecoration::style,
             ChatTypeDecoration::new);
 
     public enum Parameter {

@@ -5,7 +5,6 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 public non-sealed interface ValueEffect extends Enchantment.Effect {
 
-    @NotNull Codec<ValueEffect> CODEC = BinaryTagSerializer.registryTaggedUnion(
+    @NotNull Codec<ValueEffect> CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentValueEffects, ValueEffect::codec, "type");
 
     @ApiStatus.Internal
