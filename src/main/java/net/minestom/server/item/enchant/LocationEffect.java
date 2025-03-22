@@ -5,7 +5,6 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,8 +12,8 @@ import java.util.List;
 
 public non-sealed interface LocationEffect extends Enchantment.Effect {
 
-    @NotNull Codec<LocationEffect> CODEC = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentLocationEffects, LocationEffect::nbtType, "type");
+    @NotNull Codec<LocationEffect> CODEC = Codec.RegistryTaggedUnion(
+            Registries::enchantmentLocationEffects, LocationEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Codec<? extends LocationEffect>> createDefaultRegistry() {

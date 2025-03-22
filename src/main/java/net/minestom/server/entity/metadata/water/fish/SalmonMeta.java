@@ -19,6 +19,7 @@ public class SalmonMeta extends AbstractFishMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
      */
+    @Deprecated
     public @NotNull SalmonMeta.Size getSize() {
         return Size.BY_ID.getOrDefault(metadata.get(MetadataDef.Salmon.SIZE), Size.MEDIUM);
     }
@@ -26,6 +27,7 @@ public class SalmonMeta extends AbstractFishMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SALMON_SIZE} instead.
      */
+    @Deprecated
     public void setSize(@NotNull SalmonMeta.Size size) {
         metadata.set(MetadataDef.Salmon.SIZE, size.id());
     }

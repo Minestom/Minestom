@@ -1,19 +1,20 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.item.component.*;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
@@ -102,36 +103,14 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
     @Override
     public @NotNull CompoundBinaryTag toItemNBT() {
-        return (CompoundBinaryTag) NBT_TYPE.write(this);
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 
     @Override
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack.Builder builder() {
         return new Builder(material, amount, components.toPatchBuilder());
-    }
-
-    static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
-        String id = tag.getString("id");
-        Material material = Material.fromKey(id);
-        Check.notNull(material, "Unknown material: {0}", id);
-        int count = tag.getInt("count", 1);
-
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        DataComponentMap patch = DataComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
-        return new ItemStackImpl(material, count, patch);
-    }
-
-    static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {
-        CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
-        tag.putString("id", itemStack.material().name());
-        tag.putInt("count", itemStack.amount());
-
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        CompoundBinaryTag components = (CompoundBinaryTag) DataComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
-        if (components.size() > 0) tag.put("components", components);
-
-        return tag.build();
     }
 
     static final class Builder implements ItemStack.Builder {

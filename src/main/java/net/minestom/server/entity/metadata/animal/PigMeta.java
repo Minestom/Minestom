@@ -30,6 +30,7 @@ public class PigMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull DynamicRegistry.Key<PigVariant> getVariant() {
         return metadata.get(MetadataDef.Pig.VARIANT);
     }
@@ -37,6 +38,7 @@ public class PigMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PIG_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull DynamicRegistry.Key<PigVariant> value) {
         metadata.set(MetadataDef.Pig.VARIANT, value);
     }

@@ -33,7 +33,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
     }
 
     static <T extends ProtocolObject> @NotNull Codec<ObjectSet<T>> codec(@NotNull Tag.BasicType tagType) {
-        return new ObjectSetImpl.NbtType<>(tagType);
+        return new ObjectSetImpl.CodecImpl<>(tagType);
     }
 
     /**

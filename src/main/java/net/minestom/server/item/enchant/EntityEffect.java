@@ -10,7 +10,6 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,8 +18,8 @@ import java.util.List;
 
 public non-sealed interface EntityEffect extends Enchantment.Effect {
 
-    @NotNull Codec<EntityEffect> CODEC = BinaryTagSerializer.registryTaggedUnion(
-            Registries::enchantmentEntityEffects, EntityEffect::nbtType, "type");
+    @NotNull Codec<EntityEffect> CODEC = Codec.RegistryTaggedUnion(
+            Registries::enchantmentEntityEffects, EntityEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Codec<? extends EntityEffect>> createDefaultRegistry() {
@@ -113,7 +112,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             CompoundBinaryTag content
             //todo
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<Explode> CODEC = BinaryTagSerializer.COMPOUND.map(Explode::new, Explode::content);
+        public static final Codec<Explode> CODEC = Codec.NBT_COMPOUND.transform(Explode::new, Explode::content);
 
         @Override
         public @NotNull Codec<Explode> codec() {
@@ -139,7 +138,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
 //            Object volume, // "A Float Provider between 0.00001 and 10.0 specifying the volume of the sound"
 //            Object pitch // "A Float Provider between 0.00001 and 2.0 specifying the pitch of the sound"
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<PlaySound> CODEC = BinaryTagSerializer.COMPOUND.map(PlaySound::new, PlaySound::content);
+        public static final Codec<PlaySound> CODEC = Codec.NBT_COMPOUND.transform(PlaySound::new, PlaySound::content);
 
         @Override
         public @NotNull Codec<PlaySound> codec() {
@@ -153,7 +152,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
 //            @NotNull Point offset,
 //            @Nullable Object predicate // "A World-generation style Block Predicate to used to determine if the block should be replaced"
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<ReplaceBlock> CODEC = BinaryTagSerializer.COMPOUND.map(ReplaceBlock::new, ReplaceBlock::content);
+        public static final Codec<ReplaceBlock> CODEC = Codec.NBT_COMPOUND.transform(ReplaceBlock::new, ReplaceBlock::content);
 
         @Override
         public @NotNull Codec<ReplaceBlock> codec() {
@@ -165,7 +164,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             CompoundBinaryTag content
             // todo
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<ReplaceDisc> CODEC = BinaryTagSerializer.COMPOUND.map(ReplaceDisc::new, ReplaceDisc::content);
+        public static final Codec<ReplaceDisc> CODEC = Codec.NBT_COMPOUND.transform(ReplaceDisc::new, ReplaceDisc::content);
 
         @Override
         public @NotNull Codec<ReplaceDisc> codec() {
@@ -190,7 +189,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             CompoundBinaryTag content
             //todo
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<SetBlockProperties> CODEC = BinaryTagSerializer.COMPOUND.map(SetBlockProperties::new, SetBlockProperties::content);
+        public static final Codec<SetBlockProperties> CODEC = Codec.NBT_COMPOUND.transform(SetBlockProperties::new, SetBlockProperties::content);
 
         @Override
         public @NotNull Codec<SetBlockProperties> codec() {
@@ -202,7 +201,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             CompoundBinaryTag content
             //todo
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<SpawnParticles> CODEC = BinaryTagSerializer.COMPOUND.map(SpawnParticles::new, SpawnParticles::content);
+        public static final Codec<SpawnParticles> CODEC = Codec.NBT_COMPOUND.transform(SpawnParticles::new, SpawnParticles::content);
 
         @Override
         public @NotNull Codec<SpawnParticles> codec() {
@@ -214,7 +213,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             CompoundBinaryTag content
             //todo
     ) implements EntityEffect, LocationEffect {
-        public static final Codec<SummonEntity> CODEC = BinaryTagSerializer.COMPOUND.map(SummonEntity::new, SummonEntity::content);
+        public static final Codec<SummonEntity> CODEC = Codec.NBT_COMPOUND.transform(SummonEntity::new, SummonEntity::content);
 
         @Override
         public @NotNull Codec<SummonEntity> codec() {

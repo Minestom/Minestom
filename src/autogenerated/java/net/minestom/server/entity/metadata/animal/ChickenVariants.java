@@ -22,10 +22,10 @@ interface ChickenVariants {
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        final DynamicRegistry<ChickenVariant> registry = DynamicRegistry.create("minecraft:chicken_variant", ChickenVariant.REGISTRY_NBT_TYPE);
-        RegistryHelper.registerNbt(registry, "minecraft:warm", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_warm_variant_farm_animals\"}}],asset_id:\"minecraft:entity/chicken/warm_chicken\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:cold", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_cold_variant_farm_animals\"}}],model:\"cold\",asset_id:\"minecraft:entity/chicken/cold_chicken\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:temperate", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/chicken/temperate_chicken\"}");
+        final DynamicRegistry<ChickenVariant> registry = DynamicRegistry.create("minecraft:chicken_variant", ChickenVariant.REGISTRY_CODEC);
+        RegistryHelper.register(registry, "minecraft:warm", "{\"asset_id\":\"minecraft:entity/chicken/warm_chicken\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_warm_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:cold", "{\"asset_id\":\"minecraft:entity/chicken/cold_chicken\",\"model\":\"cold\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_cold_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:temperate", "{\"asset_id\":\"minecraft:entity/chicken/temperate_chicken\",\"spawn_conditions\":[{\"priority\":0}]}");
         return registry;
     }
 }

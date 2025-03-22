@@ -10,7 +10,6 @@ import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,16 +28,16 @@ public class EffectComponent {
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> SMASH_DAMAGE_PER_FALLEN_BLOCK = register("smash_damage_per_fallen_block", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> KNOCKBACK = register("knockback", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> ARMOR_EFFECTIVENESS = register("armor_effectiveness", ConditionalEffect.codec(ValueEffect.CODEC).list());
-    public static final DataComponent<List<TargetedConditionalEffect<EntityEffect>>> POST_ATTACK = register("post_attack", TargetedConditionalEffect.nbtType(EntityEffect.NBT_TYPE).list());
-    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> HIT_BLOCK = register("hit_block", ConditionalEffect.codec(EntityEffect.NBT_TYPE).list());
+    public static final DataComponent<List<TargetedConditionalEffect<EntityEffect>>> POST_ATTACK = register("post_attack", TargetedConditionalEffect.nbtType(EntityEffect.CODEC).list());
+    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> HIT_BLOCK = register("hit_block", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> ITEM_DAMAGE = register("item_damage", ConditionalEffect.codec(ValueEffect.CODEC).list());
-    public static final DataComponent<List<AttributeEffect>> ATTRIBUTES = register("attributes", AttributeEffect.NBT_TYPE.list());
+    public static final DataComponent<List<AttributeEffect>> ATTRIBUTES = register("attributes", AttributeEffect.CODEC.list());
     public static final DataComponent<List<TargetedConditionalEffect<ValueEffect>>> EQUIPMENT_DROPS = register("equipment_drops", TargetedConditionalEffect.nbtType(ValueEffect.CODEC).list());
-    public static final DataComponent<List<ConditionalEffect<LocationEffect>>> LOCATION_CHANGED = register("location_changed", ConditionalEffect.codec(LocationEffect.NBT_TYPE).list());
-    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> TICK = register("tick", ConditionalEffect.codec(EntityEffect.NBT_TYPE).list());
+    public static final DataComponent<List<ConditionalEffect<LocationEffect>>> LOCATION_CHANGED = register("location_changed", ConditionalEffect.codec(LocationEffect.CODEC).list());
+    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> TICK = register("tick", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> AMMO_USE = register("ammo_use", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> PROJECTILE_PIERCING = register("projectile_piercing", ConditionalEffect.codec(ValueEffect.CODEC).list());
-    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> PROJECTILE_SPAWNED = register("projectile_spawned", ConditionalEffect.codec(EntityEffect.NBT_TYPE).list());
+    public static final DataComponent<List<ConditionalEffect<EntityEffect>>> PROJECTILE_SPAWNED = register("projectile_spawned", ConditionalEffect.codec(EntityEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> PROJECTILE_SPREAD = register("projectile_spread", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> PROJECTILE_COUNT = register("projectile_count", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> TRIDENT_RETURN_ACCELERATION = register("trident_return_acceleration", ConditionalEffect.codec(ValueEffect.CODEC).list());
@@ -54,7 +53,7 @@ public class EffectComponent {
     public static final DataComponent<Unit> PREVENT_ARMOR_CHANGE = register("prevent_armor_change", Codec.UNIT);
     public static final DataComponent<ValueEffect> TRIDENT_SPIN_ATTACK_STRENGTH = register("trident_spin_attack_strength", ValueEffect.CODEC);
 
-    public static final BinaryTagSerializer<DataComponentMap> MAP_NBT_TYPE = DataComponentMap.codec(EffectComponent::fromId, EffectComponent::fromNamespaceId);
+    public static final Codec<DataComponentMap> CODEC = DataComponentMap.codec(EffectComponent::fromId, EffectComponent::fromNamespaceId);
 
     public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
         return NAMESPACES.get(namespaceId);

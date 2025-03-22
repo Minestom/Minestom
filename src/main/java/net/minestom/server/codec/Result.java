@@ -14,7 +14,11 @@ public sealed interface Result<T> {
     record Error<T>(@NotNull String message) implements Result<T> {
     }
 
-    default <S> Result<S> map(Function<T, S> mapper) {
+    default <S> Result<S> map(Function<T, Result<S>> mapper) {
+        return this instanceof Ok<T>(T value) ? mapper.apply(value) : cast();
+    }
+
+    default <S> Result<S> mapResult(Function<T, S> mapper) {
         return this instanceof Ok<T>(T value) ? new Ok<>(mapper.apply(value)) : cast();
     }
 
@@ -25,6 +29,12 @@ public sealed interface Result<T> {
     default T orElse(T other) {
         return this instanceof Ok<T>(T value)
                 ? value : other;
+    }
+
+    default T orElseThrow(@NotNull String message) {
+        if (this instanceof Ok<T>(T value))
+            return value;
+        throw new IllegalArgumentException(message + ": " + ((Error<T>) this).message());
     }
 
     default <S> Result<S> cast() {

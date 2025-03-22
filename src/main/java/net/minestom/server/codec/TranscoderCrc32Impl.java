@@ -5,10 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.StandardCharsets;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.zip.CRC32;
 
 final class TranscoderCrc32Impl implements Transcoder<Integer> {
@@ -99,6 +96,10 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
         return hasher.putByte(TAG_LIST_END).hash();
     }
 
+    @Override public @NotNull ListBuilder<Integer> createList(int expectedSize) {
+        return null;
+    }
+
     @Override
     public @NotNull MapBuilder<Integer> createMap() {
         final HashMap<Integer, Integer> map = new HashMap<>();
@@ -119,6 +120,18 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
                 return hasher.putByte(TAG_MAP_END).hash();
             }
         };
+    }
+
+    @Override
+    public @NotNull Result<Integer> mergeToMap(@NotNull List<Integer> maps) {
+        // TODO(1.21.5): this cannot work, need to figure out alternative.
+        //  we cannot create a map from 3 pre-serialized maps.
+        throw new UnsupportedOperationException("cannot mergeToMap in a CRC32 transcoder map");
+    }
+
+    @Override
+    public @NotNull Result<Integer> putValue(@NotNull Integer map, @NotNull String key, @NotNull Integer value) {
+        throw new UnsupportedOperationException("cannot put value in a CRC32 transcoder map");
     }
 
     @Override
@@ -189,8 +202,23 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
     }
 
     @Override
+    public @NotNull Result<Integer> listSize(@NotNull Integer value) {
+        return writeOnly();
+    }
+
+    @Override
+    public @NotNull Result<Integer> getIndex(@NotNull Integer value, int index) {
+        return writeOnly();
+    }
+
+    @Override
     public boolean hasValue(@NotNull Integer value, @NotNull String key) {
         return false;
+    }
+
+    @Override
+    public @NotNull Result<Collection<Map.Entry<String, Integer>>> getMapEntries(@NotNull Integer value) {
+        return writeOnly();
     }
 
     @Override

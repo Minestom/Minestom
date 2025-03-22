@@ -1,16 +1,32 @@
 package net.minestom.server.codec;
 
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.UUID;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 final class CodecImpl {
+
+    record RawValueImpl<D>(@NotNull Transcoder<D> coder, @NotNull D value) implements Codec.RawValue {
+
+        @Override
+        public @NotNull <D1> Result<D1> convertTo(@NotNull Transcoder<D1> coder) {
+            return null;
+        }
+    }
+
 
     interface PrimitiveEncoder<T> {
         <D> @NotNull D encode(@NotNull Transcoder<D> coder, @NotNull T value);
@@ -128,13 +144,15 @@ final class CodecImpl {
         }
     }
 
-    record MapImpl<K, V>(@NotNull Codec<K> keyCodec, @NotNull Codec<V> valueCodec, int maxSize) implements Codec<Map<K, V>> {
+    record MapImpl<K, V>(@NotNull Codec<K> keyCodec, @NotNull Codec<V> valueCodec,
+                         int maxSize) implements Codec<Map<K, V>> {
         @Override
         public @NotNull <D> Result<Map<K, V>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             final Result<Collection<Map.Entry<String, D>>> entriesResult = coder.getMapEntries(value);
             if (!(entriesResult instanceof Result.Ok(Collection<Map.Entry<String, D>> entries)))
                 return entriesResult.cast();
-            if (entries.size() > maxSize) return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
+            if (entries.size() > maxSize)
+                return new Result.Error<>("Map size exceeds maximum allowed size: " + maxSize);
             if (entries.isEmpty()) return new Result.Ok<>(Map.of());
 
             final Map<K, V> decodedMap = new HashMap<>(entries.size());
@@ -217,6 +235,49 @@ final class CodecImpl {
         }
     }
 
+    record RegistryTaggedUnion<T>(
+            @NotNull Registries.Selector<Codec<? extends T>> registrySelector,
+            @NotNull Function<T, Codec<? extends T>> serializerGetter,
+            @NotNull String key
+    ) implements Codec<T> {
+        @Override
+        public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
+            final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
+
+            if (!(tag instanceof CompoundBinaryTag compound))
+                throw new IllegalArgumentException("Expected compound tag for tagged union");
+
+            final String type = compound.getString(key);
+            Check.argCondition(type.isEmpty(), "Missing {0} field: {1}", key, tag);
+            //noinspection unchecked
+            final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) registry.get(Key.key(type));
+            Check.notNull(serializer, "Unregistered serializer for: {0}", type);
+
+            return serializer.read(context, tag);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
+            final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
+
+            //noinspection unchecked
+            final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) serializerGetter.apply(value);
+            final DynamicRegistry.Key<BinaryTagSerializer<? extends T>> type = registry.getKey(serializer);
+            Check.notNull(type, "Unregistered serializer for: {0}", value);
+            if (context.forClient() && registry.getPack(type) != DataPack.MINECRAFT_CORE)
+                return null;
+
+            final BinaryTag result = serializer.write(context, value);
+            if (result == null) return null;
+            if (!(result instanceof CompoundBinaryTag resultCompound))
+                throw new IllegalArgumentException("Expected compound tag for tagged union");
+
+            return CompoundBinaryTag.builder().put(resultCompound).putString(key, type.name()).build();
+        }
+    }
+
     static final class RecursiveImpl<T> implements Codec<T> {
         private final Codec<T> delegate;
 
@@ -231,6 +292,27 @@ final class CodecImpl {
 
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            return delegate.encode(coder, value);
+        }
+    }
+
+    static final class ForwardRefImpl<T> implements Codec<T> {
+        private final Supplier<Codec<T>> delegateFunc;
+        private Codec<T> delegate;
+
+        ForwardRefImpl(Supplier<Codec<T>> delegateFunc) {
+            this.delegateFunc = delegateFunc;
+        }
+
+        @Override
+        public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            if (delegate == null) delegate = delegateFunc.get();
+            return delegate.decode(coder, value);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
+            if (delegate == null) delegate = delegateFunc.get();
             return delegate.encode(coder, value);
         }
     }
@@ -253,7 +335,17 @@ final class CodecImpl {
 
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
-            return primary.encode(coder, value);
+            final Result<D> primaryResult = primary.encode(coder, value);
+            if (primaryResult instanceof Result.Ok<D> primaryOk)
+                return primaryOk;
+
+            // Primary did not work, try secondary
+            final Result<D> secondaryResult = secondary.encode(coder, value);
+            if (secondaryResult instanceof Result.Ok<D> secondaryOk)
+                return secondaryOk;
+
+            // Secondary did not work either, return error from primary.
+            return primaryResult;
         }
     }
 
@@ -283,18 +375,6 @@ final class CodecImpl {
         }
     }
 
-    record ComponentImpl() implements Codec<Component> {
-        @Override
-        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return null;
-        }
-
-        @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
-            return null;
-        }
-    }
-
     record BlockPositionImpl() implements Codec<Point> {
         @Override
         public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
@@ -313,6 +393,27 @@ final class CodecImpl {
                     (int) value.y(),
                     (int) value.z()
             }));
+        }
+    }
+
+    /**
+     * @deprecated Remove once adventure is updated to have change_page be an int.
+     */
+    @Deprecated
+    record IntAsStringImpl() implements Codec<String> {
+        @Override
+        public @NotNull <D> Result<String> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            return coder.getInt(value).mapResult(String::valueOf);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable String value) {
+            if (value == null) return new Result.Error<>("null");
+            try {
+                return new Result.Ok<>(coder.createInt(Integer.parseInt(value)));
+            } catch (NumberFormatException ignored) {
+                return new Result.Error<>("not an integer: " + value);
+            }
         }
     }
 

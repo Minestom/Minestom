@@ -1,20 +1,16 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.BinaryTagTypes;
-import net.kyori.adventure.nbt.ListBinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
-import static net.kyori.adventure.nbt.StringBinaryTag.stringBinaryTag;
 
 sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
 
@@ -91,52 +87,46 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record NbtType<T extends ProtocolObject>(
+    record CodecImpl<T extends ProtocolObject>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements BinaryTagSerializer<ObjectSet<T>> {
+    ) implements Codec<ObjectSet<T>> {
+        private static final Codec<Entries<?>> ENTRIES_CODEC = Codec.KEY.list()
+                .transform(Entries::new, Entries::entries);
 
         @Override
-        public @NotNull ObjectSet<T> read(@NotNull BinaryTag tag) {
-            return switch (tag) {
-                case null -> ObjectSet.empty(); // Needs to be here, otherwise Enchantments registry will nullpointer on startup. TODO: FIX
-                case ListBinaryTag list -> {
-                    if (list.isEmpty()) yield ObjectSet.empty();
+        public @NotNull <D> Result<ObjectSet<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Entries<?>> entriesResult = ENTRIES_CODEC.decode(coder, value);
+            if (entriesResult instanceof Result.Ok(Entries<?> entries)) {
+                //noinspection unchecked
+                return new Result.Ok<>((ObjectSet<T>) entries);
+            }
 
-                    final List<Key> entries = new ArrayList<>(list.size());
-                    for (BinaryTag entryTag : list) {
-                        if (!(entryTag instanceof StringBinaryTag stringTag))
-                            throw new IllegalArgumentException("Invalid entry type: " + entryTag.type());
-                        entries.add(Key.key(stringTag.value()));
-                    }
-                    yield new Entries<>(entries);
-                }
-                case StringBinaryTag string -> {
-                    // Could be a tag or a block name depending if it starts with a #
-                    final String value = string.value();
-                    if (value.startsWith("#")) {
-                        yield new Tag<>(tagType(), value.substring(1));
-                    } else {
-                        yield new Entries<>(List.of(Key.key(value)));
-                    }
-                }
-                default -> throw new IllegalArgumentException("Invalid tag type: " + tag.type());
-            };
+            final Result<String> stringResult = coder.getString(value);
+            if (!(stringResult instanceof Result.Ok(String string))) {
+                return stringResult.cast();
+            }
+
+            // Could be a tag or a block name depending if it starts with a #
+            return new Result.Ok<>(string.startsWith("#")
+                    ? new Tag<>(tagType(), string.substring(1))
+                    : new Entries<>(List.of(Key.key(string))));
         }
 
         @Override
-        public @NotNull BinaryTag write(@NotNull ObjectSet<T> value) {
-            return switch (value) {
-                case Empty<T> empty -> ListBinaryTag.empty();
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet<T> value) {
+            if (value == null) return new Result.Error<>("null");
+            return new Result.Ok<>(switch (value) {
+                case Empty<T> empty -> coder.createList(List.of());
                 case Entries<T> entries -> {
                     if (entries.entries.size() == 1)
-                        yield stringBinaryTag(entries.entries.stream().findFirst().get().asString());
-                    ListBinaryTag.Builder<StringBinaryTag> builder = ListBinaryTag.builder(BinaryTagTypes.STRING);
+                        yield coder.createString(entries.entries.stream().findFirst().get().asString());
+                    final Transcoder.ListBuilder<D> list = coder.createList(entries.entries.size());
                     for (Key entry : entries.entries)
-                        builder.add(stringBinaryTag(entry.asString()));
-                    yield builder.build();
+                        list.add(coder.createString(entry.asString()));
+                    yield list.build();
                 }
-                case Tag<T> tag -> stringBinaryTag("#" + tag.name());
-            };
+                case Tag<T> tag -> coder.createString("#" + tag.name());
+            });
         }
     }
 

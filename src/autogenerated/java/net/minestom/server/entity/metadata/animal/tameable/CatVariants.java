@@ -38,18 +38,18 @@ interface CatVariants {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatVariant> createDefaultRegistry() {
-        final DynamicRegistry<CatVariant> registry = DynamicRegistry.create("minecraft:cat_variant", CatVariant.REGISTRY_NBT_TYPE);
-        RegistryHelper.registerNbt(registry, "minecraft:black", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/black\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:all_black", "{spawn_conditions:[{priority:1.0d,condition:{structures:\"#minecraft:cats_spawn_as_black\",type:\"minecraft:structure\"}},{priority:0.0d,condition:{type:\"minecraft:moon_brightness\",range:{min:0.9d}}}],asset_id:\"minecraft:entity/cat/all_black\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:calico", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/calico\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:jellie", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/jellie\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:tabby", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/tabby\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:ragdoll", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/ragdoll\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:siamese", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/siamese\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:persian", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/persian\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:british_shorthair", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/british_shorthair\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:red", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/red\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:white", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/cat/white\"}");
+        final DynamicRegistry<CatVariant> registry = DynamicRegistry.create("minecraft:cat_variant", CatVariant.REGISTRY_CODEC);
+        RegistryHelper.register(registry, "minecraft:black", "{\"asset_id\":\"minecraft:entity/cat/black\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:all_black", "{\"asset_id\":\"minecraft:entity/cat/all_black\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:structure\",\"structures\":\"#minecraft:cats_spawn_as_black\"},\"priority\":1},{\"condition\":{\"type\":\"minecraft:moon_brightness\",\"range\":{\"min\":0.9}},\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:calico", "{\"asset_id\":\"minecraft:entity/cat/calico\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:jellie", "{\"asset_id\":\"minecraft:entity/cat/jellie\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:tabby", "{\"asset_id\":\"minecraft:entity/cat/tabby\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:ragdoll", "{\"asset_id\":\"minecraft:entity/cat/ragdoll\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:siamese", "{\"asset_id\":\"minecraft:entity/cat/siamese\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:persian", "{\"asset_id\":\"minecraft:entity/cat/persian\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:british_shorthair", "{\"asset_id\":\"minecraft:entity/cat/british_shorthair\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:red", "{\"asset_id\":\"minecraft:entity/cat/red\",\"spawn_conditions\":[{\"priority\":0}]}");
+        RegistryHelper.register(registry, "minecraft:white", "{\"asset_id\":\"minecraft:entity/cat/white\",\"spawn_conditions\":[{\"priority\":0}]}");
         return registry;
     }
 }

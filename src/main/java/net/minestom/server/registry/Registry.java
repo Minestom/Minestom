@@ -123,11 +123,6 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static PaintingVariantEntry paintingVariant(String namespace, @NotNull Properties main) {
-        return new PaintingVariantEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
     public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
         return new JukeboxSongEntry(namespace, main, null);
     }
@@ -264,7 +259,6 @@ public final class Registry {
         WOLF_VARIANTS("wolf_variants.json"),
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.snbt"),
-        PAINTING_VARIANTS("painting_variants.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
         VILLAGER_PROFESSIONS("villager_professions.json"),
         INSTRUMENTS("instruments.json"),
@@ -999,17 +993,6 @@ public final class Registry {
     public record EnchantmentEntry(Key key, String raw, Properties custom) implements Entry {
         public EnchantmentEntry(String namespace, Properties main, Properties custom) {
             this(Key.key(namespace), main.getString("raw"), custom);
-        }
-    }
-
-    public record PaintingVariantEntry(Key key, Key assetId, int width, int height,
-                                       Properties custom) implements Entry {
-        public PaintingVariantEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    Key.key(main.getString("asset_id")),
-                    main.getInt("width"),
-                    main.getInt("height"),
-                    custom);
         }
     }
 

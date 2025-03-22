@@ -19,6 +19,7 @@ public class FoxMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull FoxMeta.Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Fox.VARIANT)];
     }
@@ -26,6 +27,7 @@ public class FoxMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull FoxMeta.Variant variant) {
         metadata.set(MetadataDef.Fox.VARIANT, variant.ordinal());
     }

@@ -14,6 +14,7 @@ public class CowMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#COW_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull DynamicRegistry.Key<CowVariant> getVariant() {
         return metadata.get(MetadataDef.Cow.VARIANT);
     }
@@ -21,6 +22,7 @@ public class CowMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#COW_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull DynamicRegistry.Key<CowVariant> variant) {
         metadata.set(MetadataDef.Cow.VARIANT, variant);
     }

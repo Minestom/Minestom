@@ -48,6 +48,7 @@ import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
@@ -374,7 +375,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 case HorseMeta horse when component == DataComponents.HORSE_VARIANT ->
                         horse.setVariant((HorseMeta.Variant) value);
                 case PaintingMeta painting when component == DataComponents.PAINTING_VARIANT ->
-                        painting.setVariant((DynamicRegistry.Key<PaintingVariant>) value);
+                        painting.setVariant((Holder<PaintingVariant>) value);
                 case LlamaMeta llama when component == DataComponents.LLAMA_VARIANT ->
                         llama.setVariant((LlamaMeta.Variant) value);
                 case AxolotlMeta axolotl when component == DataComponents.AXOLOTL_VARIANT ->

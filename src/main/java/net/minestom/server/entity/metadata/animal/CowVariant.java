@@ -10,7 +10,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
-    @NotNull Codec<CowVariant> REGISTRY_NBT_TYPE = StructCodec.struct(
+    @NotNull Codec<CowVariant> REGISTRY_CODEC = StructCodec.struct(
             "model", Model.CODEC.optional(Model.NORMAL), CowVariant::model,
             "asset_id", Codec.KEY, CowVariant::assetId,
             CowVariantImpl::new);

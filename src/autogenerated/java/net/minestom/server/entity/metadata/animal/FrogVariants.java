@@ -22,10 +22,10 @@ interface FrogVariants {
      */
     @ApiStatus.Internal
     static DynamicRegistry<FrogVariant> createDefaultRegistry() {
-        final DynamicRegistry<FrogVariant> registry = DynamicRegistry.create("minecraft:frog_variant", FrogVariant.REGISTRY_NBT_TYPE);
-        RegistryHelper.registerNbt(registry, "minecraft:warm", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_warm_variant_frogs\"}}],asset_id:\"minecraft:entity/frog/warm_frog\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:cold", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_cold_variant_frogs\"}}],asset_id:\"minecraft:entity/frog/cold_frog\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:temperate", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/frog/temperate_frog\"}");
+        final DynamicRegistry<FrogVariant> registry = DynamicRegistry.create("minecraft:frog_variant", FrogVariant.REGISTRY_CODEC);
+        RegistryHelper.register(registry, "minecraft:warm", "{\"asset_id\":\"minecraft:entity/frog/warm_frog\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_warm_variant_frogs\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:cold", "{\"asset_id\":\"minecraft:entity/frog/cold_frog\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_cold_variant_frogs\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:temperate", "{\"asset_id\":\"minecraft:entity/frog/temperate_frog\",\"spawn_conditions\":[{\"priority\":0}]}");
         return registry;
     }
 }

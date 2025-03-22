@@ -16,6 +16,7 @@ public class SheepMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
      */
+    @Deprecated
     public @NotNull DyeColor getColor() {
         return DYE_VALUES[metadata.get(MetadataDef.Sheep.COLOR_ID)];
     }
@@ -23,6 +24,7 @@ public class SheepMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#SHEEP_COLOR} instead.
      */
+    @Deprecated
     public void setColor(@NotNull DyeColor color) {
         metadata.set(MetadataDef.Sheep.COLOR_ID, (byte) color.ordinal());
     }

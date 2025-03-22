@@ -67,7 +67,7 @@ public class Generators {
         generator.generateKeys(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatterns");
         generator.generateKeys(resource("banner_patterns.json"), "net.minestom.server.instance.block.banner", "BannerPattern", "BannerPatterns");
         generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "Enchantments");
-        generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingMeta.Variant", "PaintingVariants");
+        generator.generateKeysAndRegistry(resource("painting_variants.json"), "minecraft:painting_variant", "net.minestom.server.entity.metadata.other", "PaintingVariant");
         generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
         generator.generateKeys(resource("instruments.json"), "net.minestom.server.item.instrument", "Instrument", "Instruments");
         generator.generateKeysAndRegistry(resource("wolf_variants.json"), "minecraft:wolf_variant", "net.minestom.server.entity.metadata.animal.tameable", "WolfVariant");
