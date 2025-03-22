@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
@@ -9,16 +10,18 @@ import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.item.component.CustomModelData;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.Unit;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -71,8 +74,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     });
-    @NotNull Codec<ItemStack> CODEC = null; // TODO
-    @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
+    @NotNull Codec<ItemStack> CODEC = StructCodec.struct(
+            "id", Material.CODEC, ItemStack::material,
+            "count", Codec.INT.optional(1), ItemStack::amount,
+            "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), ItemStack::componentPatch,
+            ItemStack::of);
 
     /**
      * Constant AIR item. Should be used instead of 'null'.
@@ -110,8 +116,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
      * @param nbtCompound The nbt representation of the item
      */
     static @NotNull ItemStack fromItemNBT(@NotNull CompoundBinaryTag nbtCompound) {
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        return NBT_TYPE.read(context, nbtCompound);
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return CODEC.decode(coder, nbtCompound).orElseThrow("Invalid NBT for ItemStack");
     }
 
     @Contract(pure = true)
@@ -268,7 +274,7 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
         try {
-            BinaryTagHolder tagHolder = BinaryTagHolder.encode((CompoundBinaryTag) NBT_TYPE.write(this), MinestomAdventure.NBT_CODEC);
+            BinaryTagHolder tagHolder = BinaryTagHolder.encode(this.toItemNBT(), MinestomAdventure.NBT_CODEC);
             return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
         } catch (IOException e) {
             throw new RuntimeException("failed to encode itemstack nbt", e);

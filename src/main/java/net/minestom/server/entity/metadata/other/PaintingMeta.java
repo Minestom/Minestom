@@ -5,7 +5,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,14 +19,16 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
      */
-    public @NotNull DynamicRegistry.Key<PaintingVariant> getVariant() {
+    @Deprecated
+    public @NotNull Holder<PaintingVariant> getVariant() {
         return metadata.get(MetadataDef.Painting.VARIANT);
     }
 
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
      */
-    public void setVariant(@NotNull DynamicRegistry.Key<PaintingVariant> value) {
+    @Deprecated
+    public void setVariant(@NotNull Holder<PaintingVariant> value) {
         metadata.set(MetadataDef.Painting.VARIANT, value);
     }
 

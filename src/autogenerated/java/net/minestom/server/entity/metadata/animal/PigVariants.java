@@ -23,9 +23,9 @@ interface PigVariants {
     @ApiStatus.Internal
     static DynamicRegistry<PigVariant> createDefaultRegistry() {
         final DynamicRegistry<PigVariant> registry = DynamicRegistry.create("minecraft:pig_variant", PigVariant.REGISTRY_CODEC);
-        RegistryHelper.registerNbt(registry, "minecraft:warm", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_warm_variant_farm_animals\"}}],asset_id:\"minecraft:entity/pig/warm_pig\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:cold", "{spawn_conditions:[{priority:1.0d,condition:{type:\"minecraft:biome\",biomes:\"#minecraft:spawns_cold_variant_farm_animals\"}}],model:\"cold\",asset_id:\"minecraft:entity/pig/cold_pig\"}");
-        RegistryHelper.registerNbt(registry, "minecraft:temperate", "{spawn_conditions:[{priority:0.0d}],asset_id:\"minecraft:entity/pig/temperate_pig\"}");
+        RegistryHelper.register(registry, "minecraft:warm", "{\"asset_id\":\"minecraft:entity/pig/warm_pig\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_warm_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:cold", "{\"asset_id\":\"minecraft:entity/pig/cold_pig\",\"model\":\"cold\",\"spawn_conditions\":[{\"condition\":{\"type\":\"minecraft:biome\",\"biomes\":\"#minecraft:spawns_cold_variant_farm_animals\"},\"priority\":1}]}");
+        RegistryHelper.register(registry, "minecraft:temperate", "{\"asset_id\":\"minecraft:entity/pig/temperate_pig\",\"spawn_conditions\":[{\"priority\":0}]}");
         return registry;
     }
 }
