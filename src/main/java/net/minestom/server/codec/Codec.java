@@ -1,8 +1,9 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.BinaryTag;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * <p>A {@link Codec} represents a combined {@link Encoder} and {@link Decoder} for a value.</p>
@@ -25,6 +27,16 @@ import java.util.function.Function;
  */
 @ApiStatus.Experimental
 public interface Codec<T> extends Encoder<T>, Decoder<T> {
+
+    sealed interface RawValue permits CodecImpl.RawValueImpl {
+        static <D> @NotNull RawValue of(@NotNull Transcoder<D> coder, @NotNull D value) {
+            return new CodecImpl.RawValueImpl<>(coder, value);
+        }
+
+        <D> @NotNull Result<D> convertTo(@NotNull Transcoder<D> coder);
+    }
+
+    @NotNull Codec<RawValue> RAW_VALUE = null; // TODO(1.21.5)
 
     @NotNull Codec<Unit> UNIT = StructCodec.struct(() -> Unit.INSTANCE);
 
@@ -54,13 +66,15 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<UUID> UUID = new CodecImpl.UUIDImpl();
 
-    @NotNull Codec<Component> COMPONENT = null; // TODO(1.21.5)
-
-    @NotNull Codec<Style> COMPONENT_STYLE = null; // TODO(1.21.5)
+    @NotNull Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
     @NotNull Codec<Point> VECTOR3D = null; // TODO(1.21.5)
+
+    @NotNull Codec<BinaryTag> NBT = null; // TODO(1.21.5)
+
+    @NotNull Codec<CompoundBinaryTag> NBT_COMPOUND = null; // TODO(1.21.5)
 
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
         return STRING.transform(
@@ -72,8 +86,20 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return new CodecImpl.RecursiveImpl<>(func);
     }
 
+    static <T> @NotNull Codec<T> ForwardRef(@NotNull Supplier<Codec<T>> func) {
+        return new CodecImpl.ForwardRefImpl<>(func);
+    }
+
     static <T> @NotNull Codec<DynamicRegistry.Key<T>> RegistryKey(@NotNull Registries.Selector<T> selector) {
         throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+    }
+
+    static <T> @NotNull Codec<T> RegistryTaggedUnion(
+            @NotNull Registries.Selector<Codec<? extends T>> registrySelector,
+            @NotNull Function<T, Codec<? extends T>> serializerGetter,
+            @NotNull String key
+    ) {
+        return new CodecImpl.RegistryTaggedUnion<>(registrySelector, serializerGetter, key);
     }
 
     default @NotNull Codec<@Nullable T> optional() {

@@ -24,6 +24,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_COLLAR} instead.
      */
+    @Deprecated
     public @NotNull DyeColor getCollarColor() {
         return DyeColor.values()[metadata.get(MetadataDef.Wolf.COLLAR_COLOR)];
     }
@@ -31,6 +32,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_COLLAR} instead.
      */
+    @Deprecated
     public void setCollarColor(@NotNull DyeColor value) {
         metadata.set(MetadataDef.Wolf.COLLAR_COLOR, value.ordinal());
     }
@@ -46,6 +48,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull DynamicRegistry.Key<WolfVariant> getVariant() {
         return metadata.get(MetadataDef.Wolf.VARIANT);
     }
@@ -53,6 +56,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull DynamicRegistry.Key<WolfVariant> value) {
         metadata.set(MetadataDef.Wolf.VARIANT, value);
     }
@@ -60,6 +64,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull DynamicRegistry.Key<WolfSoundVariant> getSoundVariant() {
         return metadata.get(MetadataDef.Wolf.SOUND_VARIANT);
     }
@@ -67,6 +72,7 @@ public class WolfMeta extends TameableAnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
      */
+    @Deprecated
     public void setSoundVariant(@NotNull DynamicRegistry.Key<WolfSoundVariant> value) {
         metadata.set(MetadataDef.Wolf.SOUND_VARIANT, value);
     }

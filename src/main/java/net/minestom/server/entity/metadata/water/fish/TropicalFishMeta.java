@@ -16,6 +16,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
      */
+    @Deprecated
     public @NotNull Variant getVariant() {
         return Variant.fromPackedId(metadata.get(MetadataDef.TropicalFish.VARIANT));
     }
@@ -23,6 +24,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull Variant variant) {
         metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }

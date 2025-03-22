@@ -15,6 +15,7 @@ public class MooshroomMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#MOOSHROOM_VARIANT} instead.
      */
+    @Deprecated
     public @NotNull Variant getVariant() {
         return Variant.VALUES[metadata.get(MetadataDef.Mooshroom.VARIANT)];
     }
@@ -22,6 +23,7 @@ public class MooshroomMeta extends AnimalMeta {
     /**
      * @deprecated use {@link net.minestom.server.component.DataComponents#MOOSHROOM_VARIANT} instead.
      */
+    @Deprecated
     public void setVariant(@NotNull Variant value) {
         metadata.set(MetadataDef.Mooshroom.VARIANT, value.ordinal());
     }
