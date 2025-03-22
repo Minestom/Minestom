@@ -36,8 +36,8 @@ public class Main {
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
-        blockManager.registerReplacementRule(Block.STONE, (blockFace, cursorPosition, useMaterial)
-                -> useMaterial == Material.DIAMOND_BLOCK);
+        blockManager.registerBlockReplacementRule(Block.STONE,
+                (blockFace, cursorPosition, useMaterial) -> useMaterial == Material.DIAMOND_BLOCK);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());

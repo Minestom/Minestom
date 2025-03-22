@@ -1,11 +1,8 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.kyori.adventure.key.Key;
-import net.minestom.server.coordinate.Point;
-import net.minestom.server.item.Material;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +20,7 @@ public final class BlockManager {
     // Namespace -> handler supplier
     private final Map<String, Supplier<BlockHandler>> blockHandlerMap = new ConcurrentHashMap<>();
 
-    private final Int2ObjectMap<Block.ReplacementRule> blockReplacementMap = new Int2ObjectOpenHashMap<>();
+    private final Int2ObjectMap<BlockReplacementRule> blockReplacementMap = new Int2ObjectOpenHashMap<>();
 
     private final Set<String> dummyWarning = ConcurrentHashMap.newKeySet(); // Prevent warning spam
 
@@ -54,13 +51,13 @@ public final class BlockManager {
         return handler;
     }
 
-    public synchronized void registerReplacementRule(@NotNull Block block, @NotNull Block.ReplacementRule blockReplacement) {
+    public synchronized void registerBlockReplacementRule(@NotNull Block block, @NotNull BlockReplacementRule blockReplacement) {
         final int id = block.id();
         Check.argCondition(id < 0, "Block ID must be >= 0, got: " + id);
         blockReplacementMap.put(id, blockReplacement);
     }
 
-    public @Nullable Block.ReplacementRule getReplacementRule(@NotNull Block block) {
+    public @Nullable BlockReplacementRule getReplacementRule(@NotNull Block block) {
         return blockReplacementMap.getOrDefault(block.id(), null);
     }
 }

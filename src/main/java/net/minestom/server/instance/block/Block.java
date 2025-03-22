@@ -215,12 +215,6 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     @FunctionalInterface
-    interface ReplacementRule {
-        boolean canReplace(@NotNull BlockFace blockFace,
-                           @NotNull Point cursorPosition,
-                           @NotNull Material useMaterial);
-    }
-    @FunctionalInterface
     interface Comparator extends BiPredicate<Block, Block> {
 
         Comparator IDENTITY = (b1, b2) -> b1 == b2;

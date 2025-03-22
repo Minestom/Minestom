@@ -1,6 +1,5 @@
 package net.minestom.server.instance.block;
 
-import it.unimi.dsi.fastutil.Function;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
@@ -215,7 +214,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     public boolean canBeReplacedBy(@NotNull Material useMaterial,
                                    @NotNull BlockFace blockFace,
                                    @NotNull Point cursorPosition) {
-        final ReplacementRule replacementRule = blockManager.getReplacementRule(this);
+        final BlockReplacementRule replacementRule = blockManager.getReplacementRule(this);
         if (replacementRule == null) return registry().isReplaceable();
         return replacementRule.canReplace(blockFace, cursorPosition, useMaterial);
     }
