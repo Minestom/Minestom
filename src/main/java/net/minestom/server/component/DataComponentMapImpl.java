@@ -5,12 +5,15 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
+import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -66,6 +69,15 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
         Int2ObjectMap<Object> newComponents = new Int2ObjectArrayMap<>(components);
         newComponents.put(component.id(), null);
         return new DataComponentMapImpl(newComponents);
+    }
+
+    @Override
+    public @NotNull Set<Map.Entry<DataComponent<?>, Object>> entrySet() {
+        if (components.isEmpty()) return Set.of();
+        final HashSet<Map.Entry<DataComponent<?>, Object>> entries = new HashSet<>();
+        for (var entry : components.int2ObjectEntrySet())
+            entries.add(Map.entry(DataComponent.fromId(entry.getIntKey()), entry.getValue()));
+        return entries;
     }
 
     @Override
@@ -136,7 +148,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
 
     record NetworkTypeImpl(
             @NotNull IntFunction<DataComponent<?>> idToType,
-            boolean isPatch
+            boolean isPatch, boolean isTrusted
     ) implements NetworkBuffer.Type<DataComponentMap> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
@@ -157,7 +169,13 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
                 //noinspection unchecked
                 DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
                 assert type != null;
-                type.write(buffer, entry.getValue());
+                if (isTrusted) {
+                    type.write(buffer, entry.getValue());
+                } else {
+                    // Need to length prefix it, so write to another buffer first then copy.
+                    final byte[] componentData = NetworkBuffer.makeArray(b -> type.write(b, entry.getValue()), buffer.registries());
+                    buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
+                }
             }
             if (isPatch) {
                 for (Int2ObjectMap.Entry<Object> entry : patch.components.int2ObjectEntrySet()) {
@@ -179,7 +197,13 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
                 //noinspection unchecked
                 DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
                 Check.notNull(type, "Unknown component: {0}", id);
-                patch.put(type.id(), type.read(buffer));
+                if (isTrusted) {
+                    patch.put(type.id(), type.read(buffer));
+                } else {
+                    final byte[] array = buffer.read(NetworkBuffer.BYTE_ARRAY);
+                    final NetworkBuffer tempBuffer = NetworkBuffer.wrap(array, 0, array.length);
+                    patch.put(type.id(), type.read(tempBuffer));
+                }
             }
             for (int i = 0; i < removed; i++) {
                 int id = buffer.read(NetworkBuffer.VAR_INT);
@@ -196,26 +220,26 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     ) implements Codec<DataComponentMap> {
         @Override
         public @NotNull <D> Result<DataComponentMap> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final var entriesResult = coder.getMapEntries(value);
-            if (!(entriesResult instanceof Result.Ok(var entries)))
-                return entriesResult.cast();
-            if (entries.isEmpty()) return new Result.Ok<>(EMPTY);
+            final Result<MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(var map)))
+                return mapResult.cast();
+            if (map.isEmpty()) return new Result.Ok<>(EMPTY);
 
-            Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(entries.size());
-            for (Map.Entry<String, D> entry : entries) {
-                String key = entry.getKey();
+            final Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(map.size());
+            for (String key : map.keys()) {
                 boolean remove = false;
                 if (!key.isEmpty() && key.charAt(0) == REMOVAL_PREFIX) {
                     key = key.substring(1);
                     remove = true;
                 }
-                DataComponent<?> type = this.nameToType.apply(key);
-                Check.notNull(type, "Unknown item component: {0}", key);
+                final DataComponent<?> type = this.nameToType.apply(key);
+                if (type == null) return new Result.Error<>("unknown data component: " + key);
+
                 if (remove) {
                     if (isPatch) patch.put(type.id(), null);
                     // Removing a component in an absolute (non-patch) builder is a noop because it is not yet present.
                 } else {
-                    switch (type.decode(coder, entry.getValue())) {
+                    switch (map.getValue(key).map(v -> type.decode(coder, v))) {
                         case Result.Ok(Object componentData) -> patch.put(type.id(), componentData);
                         case Result.Error<?>(String message) -> {
                             return new Result.Error<>(type.name() + ": " + message);

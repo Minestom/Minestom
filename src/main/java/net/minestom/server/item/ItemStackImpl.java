@@ -8,6 +8,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.validate.Check;
@@ -18,6 +19,31 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
+
+    static @NotNull NetworkBuffer.Type<ItemStack> networkType(@NotNull NetworkBuffer.Type<DataComponentMap> componentPatchType) {
+        return new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+                if (value.isAir()) {
+                    buffer.write(NetworkBuffer.VAR_INT, 0);
+                    return;
+                }
+
+                buffer.write(NetworkBuffer.VAR_INT, value.amount());
+                buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+                buffer.write(componentPatchType, ((ItemStackImpl) value).components());
+            }
+
+            @Override
+            public ItemStack read(@NotNull NetworkBuffer buffer) {
+                int amount = buffer.read(NetworkBuffer.VAR_INT);
+                if (amount <= 0) return ItemStack.AIR;
+                Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+                DataComponentMap components = buffer.read(componentPatchType);
+                return ItemStackImpl.create(material, amount, components);
+            }
+        };
+    }
 
     static ItemStack create(Material material, int amount, DataComponentMap components) {
         if (amount <= 0) return AIR;
