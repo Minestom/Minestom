@@ -18,8 +18,8 @@ public record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenCo
             DataComponent.NETWORK_TYPE.set(Short.MAX_VALUE), TooltipDisplay::hiddenComponents,
             TooltipDisplay::new);
     public static final Codec<TooltipDisplay> CODEC = StructCodec.struct(
-            "hide_tooltip", Codec.BOOLEAN, TooltipDisplay::hideTooltip,
-            "hidden_components", DataComponent.CODEC.set(Short.MAX_VALUE), TooltipDisplay::hiddenComponents,
+            "hide_tooltip", Codec.BOOLEAN.optional(false), TooltipDisplay::hideTooltip,
+            "hidden_components", DataComponent.CODEC.set(Short.MAX_VALUE).optional(Set.of()), TooltipDisplay::hiddenComponents,
             TooltipDisplay::new);
 
     public @NotNull TooltipDisplay withHideTooltip(boolean hide) {

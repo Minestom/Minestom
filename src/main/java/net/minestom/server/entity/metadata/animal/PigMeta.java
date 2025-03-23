@@ -1,10 +1,13 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PigMeta extends AnimalMeta {
     public PigMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -41,6 +44,22 @@ public class PigMeta extends AnimalMeta {
     @Deprecated
     public void setVariant(@NotNull DynamicRegistry.Key<PigVariant> value) {
         metadata.set(MetadataDef.Pig.VARIANT, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.PIG_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.PIG_VARIANT)
+            setVariant((DynamicRegistry.Key<PigVariant>) value);
+        else super.set(component, value);
     }
 
 }
