@@ -43,7 +43,7 @@ public class StructCodecTest {
                 "name", Codec.STRING, TheObject::name,
                 TheObject::new);
         var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
-        assertError("No such key: name", result);
+        assertError("name: No such key: name", result);
     }
 
     @Test
@@ -68,6 +68,27 @@ public class StructCodecTest {
                 TheObject::new);
         var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
         assertEquals(new TheObject("defaultValue"), assertOk(result));
+    }
+
+    @Test
+    void inlineField() {
+        record InnerObject(String value) {
+        }
+        record TheObject(String name, InnerObject inner) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING, TheObject::name,
+                StructCodec.INLINE, StructCodec.struct(
+                        "value", Codec.STRING, InnerObject::value,
+                        InnerObject::new
+                ), TheObject::inner,
+                TheObject::new);
+        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{name: \"test\", value: \"innerValue\"}"));
+        assertEquals(new TheObject("test", new InnerObject("innerValue")), assertOk(result));
+
+        var encodeResult = codec.encode(TranscoderNbtImpl.INSTANCE, new TheObject("test", new InnerObject("innerValue")));
+        assertEquals(snbt("{name: \"test\", value: \"innerValue\"}"), assertOk(encodeResult));
     }
 
     private @NotNull BinaryTag snbt(@NotNull String snbt) {

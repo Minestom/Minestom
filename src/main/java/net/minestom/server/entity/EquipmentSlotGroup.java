@@ -21,7 +21,8 @@ public enum EquipmentSlotGroup implements Predicate<EquipmentSlot> {
     CHEST("chest", EquipmentSlot.CHESTPLATE),
     HEAD("head", EquipmentSlot.HELMET),
     ARMOR("armor", EquipmentSlot.CHESTPLATE, EquipmentSlot.LEGGINGS, EquipmentSlot.BOOTS, EquipmentSlot.HELMET),
-    BODY("body", EquipmentSlot.BODY);
+    BODY("body", EquipmentSlot.BODY),
+    SADDLE("saddle", EquipmentSlot.SADDLE);
 
     private static final Map<String, EquipmentSlotGroup> BY_NBT_NAME = Arrays.stream(values())
             .collect(Collectors.toMap(EquipmentSlotGroup::nbtName, Function.identity()));

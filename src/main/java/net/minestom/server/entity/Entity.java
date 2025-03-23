@@ -8,7 +8,6 @@ import net.kyori.adventure.text.event.HoverEvent.ShowEntity;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.minestom.server.*;
 import net.minestom.server.collision.*;
-import net.minestom.server.color.DyeColor;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.CoordConversion;
@@ -18,15 +17,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.entity.metadata.animal.*;
-import net.minestom.server.entity.metadata.animal.tameable.*;
-import net.minestom.server.entity.metadata.golem.ShulkerMeta;
 import net.minestom.server.entity.metadata.other.ArmorStandMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
-import net.minestom.server.entity.metadata.other.PaintingVariant;
-import net.minestom.server.entity.metadata.water.AxolotlMeta;
-import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
-import net.minestom.server.entity.metadata.water.fish.TropicalFishMeta;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
@@ -47,8 +38,6 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
@@ -295,100 +284,17 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return this.entityMeta;
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"}) @Override
+    @SuppressWarnings("unchecked") @Override
     public <T> @Nullable T get(@NotNull DataComponent<T> component) {
-        // As long as this function exists (eg not proper support for components), make sure to update
-        // the associated #set function below with the same change.
-        final EntityMeta meta = getEntityMeta();
-        return (T) switch (meta) {
-            case EntityMeta entity when component == DataComponents.CUSTOM_NAME -> entity.getCustomName();
-            case EntityMeta entity when component == DataComponents.CUSTOM_DATA -> tagHandler.asCompound();
-            // TODO(1.21.5) villager variant
-            case WolfMeta wolf when component == DataComponents.WOLF_VARIANT -> wolf.getVariant();
-            case WolfMeta wolf when component == DataComponents.WOLF_SOUND_VARIANT -> wolf.getSoundVariant();
-            case WolfMeta wolf when component == DataComponents.WOLF_COLLAR -> wolf.getCollarColor();
-            case FoxMeta fox when component == DataComponents.FOX_VARIANT -> fox.getVariant();
-            case SalmonMeta salmon when component == DataComponents.SALMON_SIZE -> salmon.getSize();
-            case ParrotMeta parrot when component == DataComponents.PARROT_VARIANT -> parrot.getColor();
-            case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_PATTERN ->
-                    tropicalFish.getVariant().pattern();
-            case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_BASE_COLOR ->
-                    tropicalFish.getVariant().bodyColor();
-            case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_PATTERN_COLOR ->
-                    tropicalFish.getVariant().patternColor();
-            case MooshroomMeta mooshroom when component == DataComponents.MOOSHROOM_VARIANT -> mooshroom.getVariant();
-            case RabbitMeta rabbit when component == DataComponents.RABBIT_VARIANT -> rabbit.getVariant();
-            case PigMeta pig when component == DataComponents.PIG_VARIANT -> pig.getVariant();
-            case CowMeta cow when component == DataComponents.COW_VARIANT -> cow.getVariant();
-            // TODO(1.21.5) chicken variant
-            case FrogMeta frog when component == DataComponents.FROG_VARIANT -> frog.getVariant();
-            case HorseMeta horse when component == DataComponents.HORSE_VARIANT -> horse.getVariant();
-            case PaintingMeta painting when component == DataComponents.PAINTING_VARIANT -> painting.getVariant();
-            case LlamaMeta llama when component == DataComponents.LLAMA_VARIANT -> llama.getVariant();
-            case AxolotlMeta axolotl when component == DataComponents.AXOLOTL_VARIANT -> axolotl.getVariant();
-            case CatMeta cat when component == DataComponents.CAT_VARIANT -> cat.getVariant();
-            case CatMeta cat when component == DataComponents.CAT_COLLAR -> cat.getCollarColor();
-            case SheepMeta sheep when component == DataComponents.SHEEP_COLOR -> sheep.getColor();
-            case ShulkerMeta shulker when component == DataComponents.SHULKER_COLOR -> shulker.getColor();
-            default -> null;
-        };
+        if (component == DataComponents.CUSTOM_DATA)
+            return (T) tagHandler.asCompound();
+        return EntityMeta.getComponent(getEntityMeta(), component);
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"})
     public <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
-        final EntityMeta meta = getEntityMeta();
-        if (component == DataComponents.CUSTOM_NAME)
-            meta.setCustomName((Component) value);
-        else if (component == DataComponents.CUSTOM_DATA)
+        if (component == DataComponents.CUSTOM_DATA)
             tagHandler.updateContent((CompoundBinaryTag) value);
-        else switch (meta) {
-                // TODO(1.21.5) villager variant
-                case WolfMeta wolf when component == DataComponents.WOLF_VARIANT ->
-                        wolf.setVariant((DynamicRegistry.Key<WolfVariant>) value);
-                case WolfMeta wolf when component == DataComponents.WOLF_SOUND_VARIANT ->
-                        wolf.setSoundVariant((DynamicRegistry.Key<WolfSoundVariant>) value);
-                case WolfMeta wolf when component == DataComponents.WOLF_COLLAR ->
-                        wolf.setCollarColor((DyeColor) value);
-                case FoxMeta fox when component == DataComponents.FOX_VARIANT ->
-                        fox.setVariant((FoxMeta.Variant) value);
-                case SalmonMeta salmon when component == DataComponents.SALMON_SIZE ->
-                        salmon.setSize((SalmonMeta.Size) value);
-                case ParrotMeta parrot when component == DataComponents.PARROT_VARIANT ->
-                        parrot.setColor((ParrotMeta.Color) value);
-                case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_PATTERN ->
-                        tropicalFish.setVariant(tropicalFish.getVariant().withPattern((TropicalFishMeta.Pattern) value));
-                case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_BASE_COLOR ->
-                        tropicalFish.setVariant(tropicalFish.getVariant().withBodyColor((DyeColor) value));
-                case TropicalFishMeta tropicalFish when component == DataComponents.TROPICAL_FISH_PATTERN_COLOR ->
-                        tropicalFish.setVariant(tropicalFish.getVariant().withPatternColor((DyeColor) value));
-                case MooshroomMeta mooshroom when component == DataComponents.MOOSHROOM_VARIANT ->
-                        mooshroom.setVariant((MooshroomMeta.Variant) value);
-                case RabbitMeta rabbit when component == DataComponents.RABBIT_VARIANT ->
-                        rabbit.setVariant((RabbitMeta.Variant) value);
-                case PigMeta pig when component == DataComponents.PIG_VARIANT ->
-                        pig.setVariant((DynamicRegistry.Key<PigVariant>) value);
-                case CowMeta cow when component == DataComponents.COW_VARIANT ->
-                        cow.setVariant((DynamicRegistry.Key<CowVariant>) value);
-                // TODO(1.21.5) chicken variant
-                case FrogMeta frog when component == DataComponents.FROG_VARIANT ->
-                        frog.setVariant((FrogMeta.Variant) value);
-                case HorseMeta horse when component == DataComponents.HORSE_VARIANT ->
-                        horse.setVariant((HorseMeta.Variant) value);
-                case PaintingMeta painting when component == DataComponents.PAINTING_VARIANT ->
-                        painting.setVariant((Holder<PaintingVariant>) value);
-                case LlamaMeta llama when component == DataComponents.LLAMA_VARIANT ->
-                        llama.setVariant((LlamaMeta.Variant) value);
-                case AxolotlMeta axolotl when component == DataComponents.AXOLOTL_VARIANT ->
-                        axolotl.setVariant((AxolotlMeta.Variant) value);
-                case CatMeta cat when component == DataComponents.CAT_VARIANT ->
-                        cat.setVariant((CatMeta.Variant) value);
-                case CatMeta cat when component == DataComponents.CAT_COLLAR -> cat.setCollarColor((DyeColor) value);
-                case SheepMeta sheep when component == DataComponents.SHEEP_COLOR -> sheep.setColor((DyeColor) value);
-                case ShulkerMeta shulker when component == DataComponents.SHULKER_COLOR ->
-                        shulker.setColor((DyeColor) value);
-                default -> {
-                }
-            }
+        else EntityMeta.setComponent(getEntityMeta(), component, value);
     }
 
     /**
@@ -1303,7 +1209,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Gets the entity custom name.
      *
      * @return the custom name of the entity, null if there is not
+     *
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
+    @Deprecated
     public @Nullable Component getCustomName() {
         return this.entityMeta.getCustomName();
     }
@@ -1312,7 +1221,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * Changes the entity custom name.
      *
      * @param customName the custom name of the entity, null to remove it
+     *
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
      */
+    @Deprecated
     public void setCustomName(@Nullable Component customName) {
         this.entityMeta.setCustomName(customName);
     }
