@@ -3,6 +3,7 @@ package net.minestom.server.codec;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -115,30 +116,22 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     public @NotNull Result<List<JsonElement>> getList(@NotNull JsonElement value) {
         if (!(value instanceof JsonArray array)) return new Result.Error<>("Not a list: " + value);
         if (array.isEmpty()) return new Result.Ok<>(List.of());
-        return new Result.Ok<>(array.asList());
+        return new Result.Ok<>(new AbstractList<>() {
+            @Override
+            public JsonElement get(int index) {
+                return array.get(index);
+            }
+
+            @Override
+            public int size() {
+                return array.size();
+            }
+        });
     }
 
     @Override
-    public @NotNull Result<Integer> listSize(@NotNull JsonElement value) {
-        if (!(value instanceof JsonArray array))
-            return new Result.Error<>("Not a list: " + value);
-        return new Result.Ok<>(array.size());
-    }
-
-    @Override
-    public @NotNull Result<JsonElement> getIndex(@NotNull JsonElement value, int index) {
-        if (!(value instanceof JsonArray array))
-            return new Result.Error<>("Not a list: " + value);
-        if (index < 0 || index >= array.size())
-            return new Result.Error<>("Index out of bounds for " + array.size() + ": " + index);
-        return new Result.Ok<>(array.get(index));
-    }
-
-    @Override
-    public @NotNull JsonElement createList(@NotNull List<JsonElement> value) {
-        final JsonArray array = new JsonArray(value.size());
-        for (JsonElement element : value) array.add(element);
-        return array;
+    public @NotNull JsonElement emptyList() {
+        return new JsonArray();
     }
 
     @Override
@@ -159,43 +152,15 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public boolean hasValue(@NotNull JsonElement value, @NotNull String key) {
-        if (!(value instanceof JsonObject object)) return false;
-        return object.has(key);
-    }
-
-    @Override
-    public @NotNull Result<Collection<Map.Entry<String, JsonElement>>> getMapEntries(@NotNull JsonElement value) {
-        if (!(value instanceof JsonObject object))
-            return new Result.Error<>("Not an object: " + value);
-        return new Result.Ok<>(object.entrySet());
-    }
-
-    @Override
-    public @NotNull Result<JsonElement> getValue(@NotNull JsonElement value, @NotNull String key) {
-        if (!(value instanceof JsonObject object))
-            return new Result.Error<>("Not an object: " + value);
-        final JsonElement element = object.get(key);
-        if (element == null) return new Result.Error<>("No such key: " + key);
-        return new Result.Ok<>(element);
-    }
-
-    @Override
-    public @NotNull Result<JsonElement> putValue(@NotNull JsonElement map, @NotNull String key, @NotNull JsonElement value) {
-        if (!(value instanceof JsonObject object))
-            return new Result.Error<>("Not an object: " + value);
-        final JsonObject copy = new JsonObject();
-        for (final Map.Entry<String, JsonElement> entry : copy.entrySet())
-            copy.add(entry.getKey(), entry.getValue());
-        copy.add(key, value);
-        return new Result.Ok<>(copy);
-    }
-
-    @Override
     public @NotNull Result<MapLike<JsonElement>> getMap(@NotNull JsonElement value) {
         if (!(value instanceof JsonObject object))
             return new Result.Error<>("Not an object: " + value);
         return new Result.Ok<>(new MapLike<>() {
+            @Override
+            public @NotNull Collection<String> keys() {
+                return object.keySet();
+            }
+
             @Override
             public boolean hasValue(@NotNull String key) {
                 return object.has(key);
@@ -207,13 +172,28 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                 if (element == null) return new Result.Error<>("No such key: " + key);
                 return new Result.Ok<>(element);
             }
+
+            @Override
+            public int size() {
+                return object.size();
+            }
         });
+    }
+
+    @Override
+    public @NotNull JsonElement emptyMap() {
+        return new JsonObject();
     }
 
     @Override
     public @NotNull MapBuilder<JsonElement> createMap() {
         final JsonObject object = new JsonObject();
         return new MapBuilder<>() {
+            @Override
+            public @NotNull MapBuilder<JsonElement> put(@NotNull JsonElement key, JsonElement value) {
+                return put(key.getAsString(), value);
+            }
+
             @Override
             public @NotNull MapBuilder<JsonElement> put(@NotNull String key, JsonElement value) {
                 if (value != JsonNull.INSTANCE)
@@ -229,18 +209,6 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
-    public @NotNull Result<JsonElement> mergeToMap(@NotNull List<JsonElement> maps) {
-        final JsonObject object = new JsonObject();
-        for (JsonElement element : maps) {
-            if (!(element instanceof JsonObject objectElement))
-                return new Result.Error<>("Not an object: " + element);
-            for (final Map.Entry<String, JsonElement> entry : objectElement.entrySet())
-                object.add(entry.getKey(), entry.getValue());
-        }
-        return new Result.Ok<>(object);
-    }
-
-    @Override
     public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull JsonElement value) {
         return switch (value) {
             case JsonObject object -> {
@@ -248,7 +216,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                 for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
                     final String key = entry.getKey();
                     switch (convertTo(coder, entry.getValue())) {
-                        case Result.Ok(O data) -> mapBuilder.put(key, data);
+                        case Result.Ok(O data) -> mapBuilder.put(coder.createString(key), data);
                         case Result.Error(String message) -> {
                             yield new Result.Error<>(key + ": " + message);
                         }

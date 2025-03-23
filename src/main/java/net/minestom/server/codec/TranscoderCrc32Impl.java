@@ -4,16 +4,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.charset.StandardCharsets;
-import java.util.*;
-import java.util.zip.CRC32;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.zip.CRC32C;
 
 final class TranscoderCrc32Impl implements Transcoder<Integer> {
     static final TranscoderCrc32Impl INSTANCE = new TranscoderCrc32Impl();
 
-    private static final Comparator<Map.Entry<Integer, Integer>> KEY_COMPARATOR = Map.Entry.comparingByKey(Integer::compare);
-    private static final Comparator<Map.Entry<Integer, Integer>> VALUE_COMPARATOR = Map.Entry.comparingByValue(Integer::compare);
-    private static final Comparator<Map.Entry<Integer, Integer>> COMPARATOR = KEY_COMPARATOR.thenComparing(VALUE_COMPARATOR);
+    private static final Comparator<Map.Entry<Integer, Integer>> KEY_COMPARATOR = Map.Entry.comparingByKey(Comparator.comparingLong(Integer::toUnsignedLong));
+    private static final Comparator<Map.Entry<Integer, Integer>> VALUE_COMPARATOR = Map.Entry.comparingByValue(Comparator.comparingLong(Integer::toUnsignedLong));
+    private static final Comparator<Map.Entry<Integer, Integer>> MAP_COMPARATOR = KEY_COMPARATOR.thenComparing(VALUE_COMPARATOR);
 
     private static final byte TAG_EMPTY = 1;
     private static final byte TAG_MAP_START = 2;
@@ -73,31 +75,47 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
 
     @Override
     public @NotNull Integer createFloat(float value) {
-        return new Hasher().putFloat(TAG_FLOAT).putFloat(value).hash();
+        return new Hasher().putByte(TAG_FLOAT).putFloat(value).hash();
     }
 
     @Override
     public @NotNull Integer createDouble(double value) {
-        return new Hasher().putDouble(TAG_DOUBLE).putDouble(value).hash();
+        return new Hasher().putByte(TAG_DOUBLE).putDouble(value).hash();
     }
 
     @Override
     public @NotNull Integer createString(@NotNull String value) {
         return new Hasher().putByte(TAG_STRING)
                 .putInt(value.length())
-                .putBytes(value.getBytes(StandardCharsets.UTF_8)).hash();
+                .putChars(value)
+                .hash();
     }
 
     @Override
-    public @NotNull Integer createList(@NotNull List<Integer> value) {
-        if (value.isEmpty()) return EMPTY_LIST;
-        final Hasher hasher = new Hasher().putByte(TAG_LIST_START);
-        for (final Integer item : value) hasher.putInt(item);
-        return hasher.putByte(TAG_LIST_END).hash();
+    public @NotNull Integer emptyList() {
+        return EMPTY_LIST;
     }
 
-    @Override public @NotNull ListBuilder<Integer> createList(int expectedSize) {
-        return null;
+    @Override
+    public @NotNull ListBuilder<Integer> createList(int expectedSize) {
+        final Hasher hasher = new Hasher().putByte(TAG_LIST_START);
+        return new ListBuilder<>() {
+            @Override
+            public @NotNull ListBuilder<Integer> add(Integer value) {
+                hasher.putIntBytes(value);
+                return this;
+            }
+
+            @Override
+            public Integer build() {
+                return hasher.putByte(TAG_LIST_END).hash();
+            }
+        };
+    }
+
+    @Override
+    public @NotNull Integer emptyMap() {
+        return EMPTY_MAP;
     }
 
     @Override
@@ -105,35 +123,28 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
         final HashMap<Integer, Integer> map = new HashMap<>();
         return new MapBuilder<>() {
             @Override
-            public @NotNull MapBuilder<Integer> put(@NotNull String key, Integer value) {
+            public @NotNull MapBuilder<Integer> put(@NotNull Integer key, Integer value) {
                 if (value != EMPTY)
-                    map.put(createString(key), value);
+                    map.put(key, value);
                 return this;
+            }
+
+            @Override
+            public @NotNull MapBuilder<Integer> put(@NotNull String key, Integer value) {
+                return put(createString(key), value);
             }
 
             @Override
             public Integer build() {
                 if (map.isEmpty()) return EMPTY_MAP;
                 final Hasher hasher = new Hasher().putByte(TAG_MAP_START);
-                map.entrySet().stream().sorted(COMPARATOR).forEach(entry -> {
-                    hasher.putInt(entry.getKey());
-                    hasher.putInt(entry.getValue());
+                map.entrySet().stream().sorted(MAP_COMPARATOR).forEach(entry -> {
+                    hasher.putIntBytes(entry.getKey());
+                    hasher.putIntBytes(entry.getValue());
                 });
                 return hasher.putByte(TAG_MAP_END).hash();
             }
         };
-    }
-
-    @Override
-    public @NotNull Result<Integer> mergeToMap(@NotNull List<Integer> maps) {
-        // TODO(1.21.5): this cannot work, need to figure out alternative.
-        //  we cannot create a map from 3 pre-hashed maps.
-        throw new UnsupportedOperationException("cannot mergeToMap in a CRC32 transcoder map");
-    }
-
-    @Override
-    public @NotNull Result<Integer> putValue(@NotNull Integer map, @NotNull String key, @NotNull Integer value) {
-        throw new UnsupportedOperationException("cannot put value in a CRC32 transcoder map");
     }
 
     @Override
@@ -219,31 +230,6 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
     }
 
     @Override
-    public @NotNull Result<Integer> listSize(@NotNull Integer value) {
-        return writeOnly();
-    }
-
-    @Override
-    public @NotNull Result<Integer> getIndex(@NotNull Integer value, int index) {
-        return writeOnly();
-    }
-
-    @Override
-    public boolean hasValue(@NotNull Integer value, @NotNull String key) {
-        return false;
-    }
-
-    @Override
-    public @NotNull Result<Collection<Map.Entry<String, Integer>>> getMapEntries(@NotNull Integer value) {
-        return writeOnly();
-    }
-
-    @Override
-    public @NotNull Result<Integer> getValue(@NotNull Integer value, @NotNull String key) {
-        return writeOnly();
-    }
-
-    @Override
     public @NotNull Result<MapLike<Integer>> getMap(@NotNull Integer value) {
         return writeOnly();
     }
@@ -259,21 +245,19 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
 
 
     // Loosely based on the Hasher implementation from Guava, licensed under the Apache 2.0 license.
-    private record Hasher(@NotNull CRC32 crc32, @NotNull ByteBuffer buffer) {
+    private record Hasher(@NotNull CRC32C crc32, @NotNull ByteBuffer buffer) {
         public Hasher() {
-            this(new CRC32(), ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN));
+            this(new CRC32C(), ByteBuffer.allocate(8).order(ByteOrder.LITTLE_ENDIAN));
         }
 
         private @NotNull Hasher update(int bytes) {
-            buffer.limit(bytes);
-            crc32.update(buffer);
+            crc32.update(buffer.array(), 0, bytes);
             buffer.position(0);
-            buffer.limit(8);
             return this;
         }
 
         public @NotNull Hasher putByte(byte b) {
-            crc32.update(new byte[]{b});
+            crc32.update(b);
             return this;
         }
 
@@ -287,19 +271,37 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
             return update(Integer.BYTES);
         }
 
+        public @NotNull Hasher putIntBytes(int i) {
+            putByte((byte) i);
+            putByte((byte) (i >> 8));
+            putByte((byte) (i >> 16));
+            putByte((byte) (i >> 24));
+            return this;
+        }
+
         public @NotNull Hasher putLong(long l) {
             buffer.putLong(l);
             return update(Long.BYTES);
         }
 
         public @NotNull Hasher putFloat(float f) {
-            buffer.putFloat(f);
-            return update(Float.BYTES);
+            return putInt(Float.floatToRawIntBits(f));
         }
 
         public @NotNull Hasher putDouble(double d) {
-            buffer.putDouble(d);
-            return update(Double.BYTES);
+            return putLong(Double.doubleToRawLongBits(d));
+        }
+
+        public @NotNull Hasher putChar(char c) {
+            this.putByte((byte) c);
+            this.putByte((byte) (c >>> 8));
+            return this;
+        }
+
+        public @NotNull Hasher putChars(@NotNull String string) {
+            for (int i = 0; i < string.length(); ++i)
+                this.putChar(string.charAt(i));
+            return this;
         }
 
         public @NotNull Hasher putBytes(byte[] bytes) {

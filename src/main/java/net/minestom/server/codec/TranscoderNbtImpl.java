@@ -3,7 +3,7 @@ package net.minestom.server.codec;
 import net.kyori.adventure.nbt.*;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -118,29 +118,22 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     public @NotNull Result<List<BinaryTag>> getList(@NotNull BinaryTag value) {
         if (!(value instanceof ListBinaryTag listTag))
             return new Result.Error<>("Not a list: " + value);
-        return new Result.Ok<>(listTag.stream().toList());
+        return new Result.Ok<>(new AbstractList<>() {
+            @Override
+            public BinaryTag get(int index) {
+                return listTag.get(index);
+            }
+
+            @Override
+            public int size() {
+                return listTag.size();
+            }
+        });
     }
 
     @Override
-    public @NotNull Result<Integer> listSize(@NotNull BinaryTag value) {
-        if (!(value instanceof ListBinaryTag list))
-            return new Result.Error<>("Not a list: " + value);
-        return new Result.Ok<>(list.size());
-    }
-
-    @Override
-    public @NotNull Result<BinaryTag> getIndex(@NotNull BinaryTag value, int index) {
-        if (!(value instanceof ListBinaryTag list))
-            return new Result.Error<>("Not a list: " + value);
-        if (index < 0 || index >= list.size())
-            return new Result.Error<>("Index out of bounds: " + index);
-        return new Result.Ok<>(list.get(index));
-    }
-
-    @Override
-    public @NotNull BinaryTag createList(@NotNull List<BinaryTag> value) {
-        if (value.isEmpty()) return ListBinaryTag.empty();
-        return ListBinaryTag.from(value);
+    public @NotNull BinaryTag emptyList() {
+        return ListBinaryTag.empty();
     }
 
     @Override
@@ -161,44 +154,15 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
-    public boolean hasValue(@NotNull BinaryTag value, @NotNull String key) {
-        if (!(value instanceof CompoundBinaryTag compoundTag))
-            return false;
-        return compoundTag.get(key) != null;
-    }
-
-    @Override
-    public @NotNull Result<Collection<Map.Entry<String, BinaryTag>>> getMapEntries(@NotNull BinaryTag value) {
-        if (!(value instanceof CompoundBinaryTag compoundTag))
-            return new Result.Error<>("Not a compound: " + value);
-        final List<Map.Entry<String, BinaryTag>> list = new ArrayList<>();
-        for (Map.Entry<String, ? extends BinaryTag> entry : compoundTag)
-            //noinspection unchecked
-            list.add((Map.Entry<String, BinaryTag>) entry);
-        return new Result.Ok<>(list);
-    }
-
-    @Override
-    public @NotNull Result<BinaryTag> getValue(@NotNull BinaryTag value, @NotNull String key) {
-        if (!(value instanceof CompoundBinaryTag compoundTag))
-            return new Result.Error<>("Not a compound: " + value);
-        final BinaryTag tag = compoundTag.get(key);
-        if (tag == null) return new Result.Error<>("No such key: " + key);
-        return new Result.Ok<>(tag);
-    }
-
-    @Override
-    public @NotNull Result<BinaryTag> putValue(@NotNull BinaryTag map, @NotNull String key, @NotNull BinaryTag value) {
-        if (!(value instanceof CompoundBinaryTag compoundTag))
-            return new Result.Error<>("Not a compound: " + value);
-        return new Result.Ok<>(compoundTag.put(key, value));
-    }
-
-    @Override
     public @NotNull Result<MapLike<BinaryTag>> getMap(@NotNull BinaryTag value) {
         if (!(value instanceof CompoundBinaryTag compoundTag))
             return new Result.Error<>("Not a compound: " + value);
         return new Result.Ok<>(new MapLike<>() {
+            @Override
+            public @NotNull Collection<String> keys() {
+                return compoundTag.keySet();
+            }
+
             @Override
             public boolean hasValue(@NotNull String key) {
                 return compoundTag.get(key) != null;
@@ -210,13 +174,30 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
                 if (tag == null) return new Result.Error<>("No such key: " + key);
                 return new Result.Ok<>(tag);
             }
+
+            @Override
+            public int size() {
+                return compoundTag.size();
+            }
         });
+    }
+
+    @Override
+    public @NotNull BinaryTag emptyMap() {
+        return CompoundBinaryTag.empty();
     }
 
     @Override
     public @NotNull MapBuilder<BinaryTag> createMap() {
         final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
         return new MapBuilder<>() {
+            @Override
+            public @NotNull MapBuilder<BinaryTag> put(@NotNull BinaryTag key, BinaryTag value) {
+                if (!(value instanceof EndBinaryTag) && key instanceof StringBinaryTag string)
+                    builder.put(string.value(), value);
+                return this;
+            }
+
             @Override
             public @NotNull MapBuilder<BinaryTag> put(@NotNull String key, BinaryTag value) {
                 if (!(value instanceof EndBinaryTag))
@@ -229,17 +210,6 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
                 return builder.build();
             }
         };
-    }
-
-    @Override
-    public @NotNull Result<BinaryTag> mergeToMap(@NotNull List<BinaryTag> maps) {
-        final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-        for (BinaryTag map : maps) {
-            if (!(map instanceof CompoundBinaryTag compoundTag))
-                return new Result.Error<>("Not a compound: " + map);
-            builder.put(compoundTag);
-        }
-        return new Result.Ok<>(builder.build());
     }
 
     @Override
@@ -306,7 +276,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
                 final MapBuilder<O> map = coder.createMap();
                 for (Map.Entry<String, ? extends BinaryTag> entry : compoundTag) {
                     switch (convertTo(coder, entry.getValue())) {
-                        case Result.Ok<O> ok -> map.put(entry.getKey(), ok.value());
+                        case Result.Ok<O> ok -> map.put(coder.createString(entry.getKey()), ok.value());
                         case Result.Error<O> error -> {
                             yield new Result.Error<>(entry.getKey() + ": " + error);
                         }

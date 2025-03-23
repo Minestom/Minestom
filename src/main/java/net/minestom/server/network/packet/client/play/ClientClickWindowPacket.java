@@ -12,8 +12,8 @@ import static net.minestom.server.network.NetworkBuffer.*;
 
 public record ClientClickWindowPacket(int windowId, int stateId,
                                       short slot, byte button, @NotNull ClickType clickType,
-                                      @NotNull Map<Short, ItemStack> changedSlots,
-                                      @NotNull ItemStack clickedItem) implements ClientPacket {
+                                      @NotNull Map<Short, ItemStack.Hash> changedSlots,
+                                      @NotNull ItemStack.Hash clickedItem) implements ClientPacket {
     public static final int MAX_CHANGED_SLOTS = 128;
 
     public static final NetworkBuffer.Type<ClientClickWindowPacket> SERIALIZER = NetworkBufferTemplate.template(
@@ -22,8 +22,8 @@ public record ClientClickWindowPacket(int windowId, int stateId,
             SHORT, ClientClickWindowPacket::slot,
             BYTE, ClientClickWindowPacket::button,
             Enum(ClickType.class), ClientClickWindowPacket::clickType,
-            SHORT.mapValue(ItemStack.NETWORK_TYPE, MAX_CHANGED_SLOTS), ClientClickWindowPacket::changedSlots,
-            ItemStack.NETWORK_TYPE, ClientClickWindowPacket::clickedItem,
+            SHORT.mapValue(ItemStack.Hash.NETWORK_TYPE, MAX_CHANGED_SLOTS), ClientClickWindowPacket::changedSlots,
+            ItemStack.Hash.NETWORK_TYPE, ClientClickWindowPacket::clickedItem,
             ClientClickWindowPacket::new);
 
     public ClientClickWindowPacket {
