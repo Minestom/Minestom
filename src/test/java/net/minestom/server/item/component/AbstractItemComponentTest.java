@@ -1,9 +1,10 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
+import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -34,14 +36,14 @@ public abstract class AbstractItemComponentTest<T> {
     @ParameterizedTest(name = "{0}")
     @MethodSource("directReadWriteMethodSource")
     public void directReadWriteTest(String testName, @NotNull T entry, Env env) {
-        var context = new BinaryTagSerializer.ContextWithRegistries(env.process());
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, env.process());
         if (component().isSerialized()) {
-            var written1 = component().write(context, entry);
+            var written1 = assertOk(component().encode(coder, entry));
 
-            var read = component().read(context, written1);
+            var read = assertOk(component().decode(coder, written1));
             assertEquals(entry, read);
 
-            var written2 = component().write(context, read);
+            var written2 = assertOk(component().encode(coder, read));
             assertEquals(written1, written2);
         }
 

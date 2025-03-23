@@ -1,16 +1,17 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<SuspiciousStewEffects> {
@@ -34,9 +35,9 @@ public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<Suspici
 
     @Test
     void nbtReadDefaultDuration() throws Exception {
-        var value = DataComponents.SUSPICIOUS_STEW_EFFECTS.read(BinaryTagSerializer.Context.EMPTY, TagStringIOExt.readTag("""
+        var value = assertOk(DataComponents.SUSPICIOUS_STEW_EFFECTS.decode(Transcoder.NBT, TagStringIOExt.readTag("""
                 [{"id": "minecraft:strength"}]
-                """));
+                """)));
         var expected = new SuspiciousStewEffects(new SuspiciousStewEffects.Effect(PotionEffect.STRENGTH, 160));
         assertEquals(expected, value);
     }

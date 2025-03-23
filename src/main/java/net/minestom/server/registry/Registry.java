@@ -119,11 +119,6 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static EnchantmentEntry enchantment(String namespace, @NotNull Properties main) {
-        return new EnchantmentEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
     public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
         return new JukeboxSongEntry(namespace, main, null);
     }
@@ -259,7 +254,7 @@ public final class Registry {
         BANNER_PATTERNS("banner_patterns.json"),
         WOLF_VARIANTS("wolf_variants.json"),
         CHAT_TYPES("chat_types.json"),
-        ENCHANTMENTS("enchantments.snbt"),
+        ENCHANTMENTS("enchantments.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
         VILLAGER_PROFESSIONS("villager_professions.json"),
         INSTRUMENTS("instruments.json"),
@@ -977,12 +972,6 @@ public final class Registry {
             return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
         }
 
-    }
-
-    public record EnchantmentEntry(Key key, String raw, Properties custom) implements Entry {
-        public EnchantmentEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace), main.getString("raw"), custom);
-        }
     }
 
     public record JukeboxSongEntry(Key key, SoundEvent soundEvent, Component description,
