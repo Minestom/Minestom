@@ -11,7 +11,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int damagePerBlock) {
+public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int damagePerBlock,
+                   boolean canDestroyBlocksInCreative) {
     public static final float DEFAULT_MINING_SPEED = 1.0f;
     public static final int DEFAULT_DAMAGE_PER_BLOCK = 1;
 
@@ -19,11 +20,13 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
             Rule.NETWORK_TYPE.list(Short.MAX_VALUE), Tool::rules,
             NetworkBuffer.FLOAT, Tool::defaultMiningSpeed,
             NetworkBuffer.VAR_INT, Tool::damagePerBlock,
+            NetworkBuffer.BOOLEAN, Tool::canDestroyBlocksInCreative,
             Tool::new);
     public static final Codec<Tool> CODEC = StructCodec.struct(
             "rules", Rule.CODEC.list(), Tool::rules,
             "default_mining_speed", Codec.FLOAT.optional(DEFAULT_MINING_SPEED), Tool::defaultMiningSpeed,
             "damage_per_block", Codec.INT.optional(DEFAULT_DAMAGE_PER_BLOCK), Tool::damagePerBlock,
+            "can_destroy_blocks_in_creative", Codec.BOOLEAN.optional(true), Tool::canDestroyBlocksInCreative,
             Tool::new);
 
     public record Rule(@NotNull BlockTypeFilter blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {

@@ -1,11 +1,14 @@
 package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -30,6 +33,21 @@ public class SalmonMeta extends AbstractFishMeta {
     @Deprecated
     public void setSize(@NotNull SalmonMeta.Size size) {
         metadata.set(MetadataDef.Salmon.SIZE, size.id());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.SALMON_SIZE)
+            return (T) getSize();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.SALMON_SIZE)
+            setSize((SalmonMeta.Size) value);
+        else super.set(component, value);
     }
 
     public enum Size {

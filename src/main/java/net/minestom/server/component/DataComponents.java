@@ -66,7 +66,8 @@ public class DataComponents {
     public static final DataComponent<Weapon> WEAPON = register("weapon", Weapon.NETWORK_TYPE, Weapon.CODEC);
     public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", Codec.INT));
     public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.CODEC);
-    public static final DataComponent<ObjectSet<Material>> REPAIRABLE = register("repairable", ObjectSet.networkType(Tag.BasicType.ITEMS),
+    public static final DataComponent<ObjectSet<Material>> REPAIRABLE = register("repairable",
+            ObjectSet.networkType(Tag.BasicType.ITEMS),
             wrapObject("items", ObjectSet.codec(Tag.BasicType.ITEMS)));
     public static final DataComponent<Unit> GLIDER = register("glider", NetworkBuffer.UNIT, Codec.UNIT);
     public static final DataComponent<String> TOOLTIP_STYLE = register("tooltip_style", NetworkBuffer.STRING, Codec.STRING);
@@ -129,8 +130,7 @@ public class DataComponents {
     public static final DataComponent<RabbitMeta.Variant> RABBIT_VARIANT = register("rabbit/variant", RabbitMeta.Variant.NETWORK_TYPE, RabbitMeta.Variant.CODEC);
     public static final DataComponent<DynamicRegistry.Key<PigVariant>> PIG_VARIANT = register("pig/variant", PigVariant.NETWORK_TYPE, PigVariant.CODEC);
     public static final DataComponent<DynamicRegistry.Key<CowVariant>> COW_VARIANT = register("cow/variant", CowVariant.NETWORK_TYPE, CowVariant.CODEC);
-    // TODO(1.21.5)
-    public static final DataComponent<Unit> CHICKEN_VARIANT = register("chicken/variant", null, null);
+    public static final DataComponent<DynamicRegistry.Key<ChickenVariant>> CHICKEN_VARIANT = register("chicken/variant", ChickenVariant.NETWORK_TYPE, ChickenVariant.CODEC);
     public static final DataComponent<DynamicRegistry.Key<FrogVariant>> FROG_VARIANT = register("frog/variant", FrogVariant.NETWORK_TYPE, FrogVariant.CODEC);
     public static final DataComponent<HorseMeta.Color> HORSE_VARIANT = register("horse/variant", HorseMeta.Color.NETWORK_TYPE, HorseMeta.Color.NBT_TYPE);
     public static final DataComponent<Holder<PaintingVariant>> PAINTING_VARIANT = register("painting/variant", PaintingVariant.NETWORK_TYPE, PaintingVariant.CODEC);

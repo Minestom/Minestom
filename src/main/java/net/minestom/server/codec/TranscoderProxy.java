@@ -6,7 +6,27 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Proxies all transcoder calls to the given delegate. Exists to allow passing context into
+ * codec implementations by creating {@link Transcoder} subclasses.
+ *
+ * <p>Note: TranscoderProxy has some special handling assuming that <i>all</i> calls are forwarded.
+ * If that is not the case, you should inherit from Transcoder itself and NOT TranscoderProxy.</p>
+ *
+ * @param <D> the type of the delegate transcoder
+ */
 public interface TranscoderProxy<D> extends Transcoder<D> {
+    /**
+     * Recursively extracts the delegate from a {@link TranscoderProxy}.
+     *
+     * @param transcoder The transcoder (possibly proxy) to extract
+     * @return The delegate transcoder
+     */
+    static @NotNull Transcoder<?> extractDelegate(@NotNull Transcoder<?> transcoder) {
+        if (transcoder instanceof TranscoderProxy<?> proxy)
+            return extractDelegate(proxy.delegate());
+        return transcoder;
+    }
 
     @NotNull Transcoder<D> delegate();
 
@@ -96,6 +116,36 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     }
 
     @Override
+    default @NotNull D createByteArray(byte[] value) {
+        return delegate().createByteArray(value);
+    }
+
+    @Override
+    default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
+        return delegate().getByteArray(value);
+    }
+
+    @Override
+    default @NotNull D createIntArray(int[] value) {
+        return delegate().createIntArray(value);
+    }
+
+    @Override
+    default @NotNull Result<int[]> getIntArray(@NotNull D value) {
+        return delegate().getIntArray(value);
+    }
+
+    @Override
+    default @NotNull D createLongArray(long[] value) {
+        return delegate().createLongArray(value);
+    }
+
+    @Override
+    default @NotNull Result<long[]> getLongArray(@NotNull D value) {
+        return delegate().getLongArray(value);
+    }
+
+    @Override
     default @NotNull Result<List<D>> getList(@NotNull D value) {
         return delegate().getList(value);
     }
@@ -111,8 +161,18 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     }
 
     @Override
+    default @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value) {
+        return delegate().putValue(map, key, value);
+    }
+
+    @Override
     default @NotNull Result<D> getValue(@NotNull D value, @NotNull String key) {
         return delegate().getValue(value, key);
+    }
+
+    @Override
+    default @NotNull Result<MapLike<D>> getMap(@NotNull D value) {
+        return delegate().getMap(value);
     }
 
     @Override
@@ -146,7 +206,7 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     }
 
     @Override
-    default @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value) {
-        return delegate().putValue(map, key, value);
+    default @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull D value) {
+        return delegate().convertTo(coder, value);
     }
 }

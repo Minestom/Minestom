@@ -42,35 +42,36 @@ public final class ComponentCodecs {
 
     public static final Codec<ShadowColor> SHADOW_COLOR = Codec.INT.transform(ShadowColor::shadowColor, ShadowColor::value);
 
-    public static final Codec<TextDecoration.State> TEXT_DECORATION_STATE = Codec.BOOLEAN.optional()
-            .transform(TextDecoration.State::byBoolean, state -> switch (state) {
-                case NOT_SET -> null;
-                case FALSE -> false;
-                case TRUE -> true;
-            });
+    private static final @Nullable Boolean stateToBool(@NotNull TextDecoration.State state) {
+        return switch (state) {
+            case NOT_SET -> null;
+            case FALSE -> false;
+            case TRUE -> true;
+        };
+    }
 
     public static final Codec<ClickEvent> CLICK_EVENT = Codec.Enum(ClickEvent.Action.class)
             .unionType(ComponentCodecs::clickEventCodec, ClickEvent::action);
-    private static final Codec<ClickEvent> CLICK_EVENT_OPEN_URL = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_OPEN_URL = StructCodec.struct(
             "url", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
-    private static final Codec<ClickEvent> CLICK_EVENT_OPEN_FILE = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_OPEN_FILE = StructCodec.struct(
             "path", Codec.STRING, ClickEvent::value,
             ClickEvent::openFile);
-    private static final Codec<ClickEvent> CLICK_EVENT_RUN_COMMAND = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_RUN_COMMAND = StructCodec.struct(
             "command", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
-    private static final Codec<ClickEvent> CLICK_EVENT_SUGGEST_COMMAND = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_SUGGEST_COMMAND = StructCodec.struct(
             "command", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
-    private static final Codec<ClickEvent> CLICK_EVENT_CHANGE_PAGE = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_CHANGE_PAGE = StructCodec.struct(
             "url", new CodecImpl.IntAsStringImpl(), ClickEvent::value,
             ClickEvent::openUrl);
-    private static final Codec<ClickEvent> CLICK_EVENT_COPY_TO_CLIPBOARD = StructCodec.struct(
+    private static final StructCodec<ClickEvent> CLICK_EVENT_COPY_TO_CLIPBOARD = StructCodec.struct(
             "value", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
 
-    private static Codec<ClickEvent> clickEventCodec(@NotNull ClickEvent.Action action) {
+    private static StructCodec<ClickEvent> clickEventCodec(@NotNull ClickEvent.Action action) {
         return switch (action) {
             case OPEN_URL -> CLICK_EVENT_OPEN_URL;
             case OPEN_FILE -> CLICK_EVENT_OPEN_FILE;
@@ -84,13 +85,13 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType(ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
-    private static final Codec<HoverEvent<?>> SHOW_TEXT = StructCodec.struct(
+    private static final StructCodec<HoverEvent<?>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, hoverEvent -> (Component) hoverEvent.value(),
             HoverEvent::showText);
-    private static final Codec<HoverEvent<?>> SHOW_ITEM = null; // TODO(1.21.5)
-    private static final Codec<HoverEvent<?>> SHOW_ENTITY = null; // TODO(1.21.5)
+    private static final StructCodec<HoverEvent<?>> SHOW_ITEM = null; // TODO(1.21.5)
+    private static final StructCodec<HoverEvent<?>> SHOW_ENTITY = null; // TODO(1.21.5)
 
-    private static Codec<HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
+    private static StructCodec<HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
         if (action == HoverEvent.Action.SHOW_TEXT) return SHOW_TEXT;
         if (action == HoverEvent.Action.SHOW_ITEM) return SHOW_ITEM;
         if (action == HoverEvent.Action.SHOW_ENTITY) return SHOW_ENTITY;
@@ -100,11 +101,11 @@ public final class ComponentCodecs {
     public static final Codec<Style> STYLE = StructCodec.struct(
             "color", TEXT_COLOR.optional(), Style::color,
             "shadow_color", SHADOW_COLOR.optional(), Style::shadowColor,
-            "bold", TEXT_DECORATION_STATE, s -> s.decoration(TextDecoration.BOLD),
-            "italic", TEXT_DECORATION_STATE, s -> s.decoration(TextDecoration.ITALIC),
-            "underlined", TEXT_DECORATION_STATE, s -> s.decoration(TextDecoration.UNDERLINED),
-            "strikethrough", TEXT_DECORATION_STATE, s -> s.decoration(TextDecoration.STRIKETHROUGH),
-            "obfuscated", TEXT_DECORATION_STATE, s -> s.decoration(TextDecoration.OBFUSCATED),
+            "bold", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.BOLD)),
+            "italic", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.ITALIC)),
+            "underlined", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.UNDERLINED)),
+            "strikethrough", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.STRIKETHROUGH)),
+            "obfuscated", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.OBFUSCATED)),
             "click_event", CLICK_EVENT.optional(), Style::clickEvent,
             "hover_event", HOVER_EVENT.optional(), Style::hoverEvent,
             "insertion", Codec.STRING.optional(), Style::insertion,
@@ -112,11 +113,11 @@ public final class ComponentCodecs {
             (color, shadowColor, bold, italic, underlined, strikethrough, obfuscated, clickEvent, hoverEvent, insertion, font) -> Style.style()
                     .color(color)
                     .shadowColor(shadowColor)
-                    .decoration(TextDecoration.BOLD, bold)
-                    .decoration(TextDecoration.ITALIC, italic)
-                    .decoration(TextDecoration.UNDERLINED, underlined)
-                    .decoration(TextDecoration.STRIKETHROUGH, strikethrough)
-                    .decoration(TextDecoration.OBFUSCATED, obfuscated)
+                    .decoration(TextDecoration.BOLD, TextDecoration.State.byBoolean(bold))
+                    .decoration(TextDecoration.ITALIC, TextDecoration.State.byBoolean(italic))
+                    .decoration(TextDecoration.UNDERLINED, TextDecoration.State.byBoolean(underlined))
+                    .decoration(TextDecoration.STRIKETHROUGH, TextDecoration.State.byBoolean(strikethrough))
+                    .decoration(TextDecoration.OBFUSCATED, TextDecoration.State.byBoolean(obfuscated))
                     .clickEvent(clickEvent)
                     .hoverEvent(hoverEvent)
                     .insertion(insertion)

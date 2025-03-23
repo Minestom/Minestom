@@ -1,5 +1,9 @@
 package net.minestom.server.recipe;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -36,9 +40,11 @@ public enum RecipeBookCategory implements StaticProtocolObject {
 
     CAMPFIRE(Key.key("minecraft:campfire"));
 
+    private static final Map<Key, RecipeBookCategory> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(RecipeBookCategory::key, Function.identity()));
+
     public static final NetworkBuffer.Type<RecipeBookCategory> NETWORK_TYPE = NetworkBuffer.Enum(RecipeBookCategory.class);
 
-    public static final Codec<RecipeBookCategory> CODEC = Codec.Enum(RecipeBookCategory.class);
+    public static final Codec<RecipeBookCategory> CODEC = Codec.KEY.transform(BY_KEY::get, RecipeBookCategory::key);
 
     private final Key key;
 

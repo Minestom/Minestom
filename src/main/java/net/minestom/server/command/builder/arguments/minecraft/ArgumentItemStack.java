@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
@@ -53,7 +54,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     /**
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
-    @Deprecated
+    @SuppressWarnings("unchecked") @Deprecated
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
@@ -78,9 +79,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
                 reader.consume('=');
 
-                final BinaryTag nbt = reader.readTag();
-                //noinspection unchecked
-                components.set((DataComponent<Object>) component, component.decode(coder, nbt));
+                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
+                components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
 
                 if (reader.peek() != ']')
                     reader.consume(',');

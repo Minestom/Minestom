@@ -8,6 +8,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
+import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
@@ -15,7 +16,6 @@ import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -112,13 +112,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_PARTICLE_LIST, particles, Particle.NETWORK_TYPE.list(Short.MAX_VALUE));
     }
 
-    public static Entry<int[]> VillagerData(int[] data) {
-        Check.argCondition(data.length != 3, "Villager data array must have a length of 3");
-        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, NetworkBuffer.VILLAGER_DATA);
-    }
-
-    public static Entry<int[]> VillagerData(int villagerType, int villagerProfession, int level) {
-        return VillagerData(new int[]{villagerType, villagerProfession, level});
+    public static Entry<VillagerMeta.VillagerData> VillagerData(@NotNull VillagerMeta.VillagerData data) {
+        return new MetadataImpl.EntryImpl<>(TYPE_VILLAGERDATA, data, VillagerMeta.VillagerData.NETWORK_TYPE);
     }
 
     public static Entry<Integer> OptVarInt(@Nullable Integer value) {

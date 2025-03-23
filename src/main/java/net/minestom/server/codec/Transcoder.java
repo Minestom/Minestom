@@ -51,6 +51,7 @@ public interface Transcoder<D> {
 
     @NotNull D createString(@NotNull String value);
 
+    // TODO(1.21.5) swap for a ListLike that allows querying indices
     @NotNull Result<List<D>> getList(@NotNull D value);
 
     @NotNull Result<Integer> listSize(@NotNull D value);
@@ -61,14 +62,20 @@ public interface Transcoder<D> {
 
     @NotNull ListBuilder<D> createList(int expectedSize);
 
+    @Deprecated
     boolean hasValue(@NotNull D value, @NotNull String key);
 
     // TODO(1.21.5): this should instead return a MapLike or something that allows iteration and getting keys
+    @Deprecated
     @NotNull Result<Collection<Map.Entry<String, D>>> getMapEntries(@NotNull D value);
 
+    @Deprecated
     @NotNull Result<D> getValue(@NotNull D value, @NotNull String key);
 
+    @Deprecated
     @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value);
+
+    @NotNull Result<MapLike<D>> getMap(@NotNull D value);
 
     // TODO(1.21.5): there are a few places we use an empty map, could save a few cycles and have a dedicated function for empties.
     @NotNull MapBuilder<D> createMap();
@@ -135,10 +142,18 @@ public interface Transcoder<D> {
         return createList(list);
     }
 
+    <O> @NotNull Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull D value);
+
     interface ListBuilder<D> {
-        void add(D value);
+        @NotNull ListBuilder<D> add(D value);
 
         D build();
+    }
+
+    interface MapLike<D> {
+        boolean hasValue(@NotNull String key);
+
+        @NotNull Result<D> getValue(@NotNull String key);
     }
 
     interface MapBuilder<D> {

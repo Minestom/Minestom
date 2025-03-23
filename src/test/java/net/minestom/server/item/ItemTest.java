@@ -142,7 +142,7 @@ public class ItemTest {
         return ItemStack.builder(Material.STONE)
                 .set(DataComponents.CUSTOM_NAME, Component.text("Display name!", NamedTextColor.GREEN))
                 .set(DataComponents.LORE, List.of(Component.text("Line 1"), Component.text("Line 2")))
-                .set(DataComponents.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10), false))
+                .set(DataComponents.ENCHANTMENTS, new EnchantmentList(Map.of(Enchantment.EFFICIENCY, 10)))
                 .build();
     }
 }

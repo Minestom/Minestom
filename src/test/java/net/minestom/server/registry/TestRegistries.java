@@ -1,6 +1,6 @@
 package net.minestom.server.registry;
 
-import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -43,10 +43,10 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<CowVariant> cowVariant = null;
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
-    public DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects = null;
-    public DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects = null;
-    public DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects = null;
+    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
+    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
+    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
+    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
 
     public TestRegistries() {
 
@@ -147,22 +147,22 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return Objects.requireNonNull(enchantmentLevelBasedValues);
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return Objects.requireNonNull(enchantmentValueEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return Objects.requireNonNull(enchantmentEntityEffects);
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return Objects.requireNonNull(enchantmentLocationEffects);
     }
 }

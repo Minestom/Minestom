@@ -1,10 +1,11 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.enchant.Enchantment;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.testing.Env;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Map;
 
+import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentList> {
@@ -31,8 +33,8 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
     protected @NotNull List<Map.Entry<String, EnchantmentList>> directReadWriteEntries() {
         return List.of(
                 Map.entry("empty", EnchantmentList.EMPTY),
-                Map.entry("single entry", new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1), true)),
-                Map.entry("multi entry", new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2), false))
+                Map.entry("single entry", new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1))),
+                Map.entry("multi entry", new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2)))
         );
     }
 
@@ -44,8 +46,8 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
                     "punch": 2,
                 }
                 """);
-        var context = new BinaryTagSerializer.ContextWithRegistries(env.process());
-        var value = component().read(context, tag);
-        assertEquals(new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2), true), value);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, env.process());
+        var value = assertOk(component().decode(coder, tag));
+        assertEquals(new EnchantmentList(Map.of(Enchantment.SHARPNESS, 1, Enchantment.PUNCH, 2)), value);
     }
 }

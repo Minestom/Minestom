@@ -14,8 +14,12 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class GenericEnumGenerator extends MinestomCodeGenerator {
@@ -72,11 +76,14 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
         // Fields
         entryEnum.addFields(
                 List.of(
+                        FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(Map.class), keyCN, entryCN), "BY_KEY", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$T.stream(values()).collect($T.toMap($T::key, $T.identity()))", Arrays.class, Collectors.class, entryCN, Function.class)
+                                .build(),
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, entryCN)
                                 .build(),
                         FieldSpec.builder(codecCN, "CODEC", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.Enum($T.class)", codecRawCN, entryCN)
+                                .initializer("$T.KEY.transform(BY_KEY::get, $T::key)", codecRawCN, entryCN)
                                 .build(),
                         FieldSpec.builder(keyCN, "key", Modifier.PRIVATE, Modifier.FINAL).build()
                 )

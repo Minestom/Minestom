@@ -3,7 +3,10 @@ package net.minestom.server.codec;
 import net.kyori.adventure.nbt.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     static final TranscoderNbtImpl INSTANCE = new TranscoderNbtImpl();
@@ -119,9 +122,42 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
+    public @NotNull Result<Integer> listSize(@NotNull BinaryTag value) {
+        if (!(value instanceof ListBinaryTag list))
+            return new Result.Error<>("Not a list: " + value);
+        return new Result.Ok<>(list.size());
+    }
+
+    @Override
+    public @NotNull Result<BinaryTag> getIndex(@NotNull BinaryTag value, int index) {
+        if (!(value instanceof ListBinaryTag list))
+            return new Result.Error<>("Not a list: " + value);
+        if (index < 0 || index >= list.size())
+            return new Result.Error<>("Index out of bounds: " + index);
+        return new Result.Ok<>(list.get(index));
+    }
+
+    @Override
     public @NotNull BinaryTag createList(@NotNull List<BinaryTag> value) {
         if (value.isEmpty()) return ListBinaryTag.empty();
         return ListBinaryTag.from(value);
+    }
+
+    @Override
+    public @NotNull ListBuilder<BinaryTag> createList(int expectedSize) {
+        final ListBinaryTag.Builder<BinaryTag> builder = ListBinaryTag.builder();
+        return new ListBuilder<>() {
+            @Override
+            public @NotNull ListBuilder<BinaryTag> add(BinaryTag value) {
+                builder.add(value);
+                return this;
+            }
+
+            @Override
+            public BinaryTag build() {
+                return builder.build();
+            }
+        };
     }
 
     @Override
@@ -129,6 +165,17 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
         if (!(value instanceof CompoundBinaryTag compoundTag))
             return false;
         return compoundTag.get(key) != null;
+    }
+
+    @Override
+    public @NotNull Result<Collection<Map.Entry<String, BinaryTag>>> getMapEntries(@NotNull BinaryTag value) {
+        if (!(value instanceof CompoundBinaryTag compoundTag))
+            return new Result.Error<>("Not a compound: " + value);
+        final List<Map.Entry<String, BinaryTag>> list = new ArrayList<>();
+        for (Map.Entry<String, ? extends BinaryTag> entry : compoundTag)
+            //noinspection unchecked
+            list.add((Map.Entry<String, BinaryTag>) entry);
+        return new Result.Ok<>(list);
     }
 
     @Override
@@ -141,12 +188,40 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     }
 
     @Override
+    public @NotNull Result<BinaryTag> putValue(@NotNull BinaryTag map, @NotNull String key, @NotNull BinaryTag value) {
+        if (!(value instanceof CompoundBinaryTag compoundTag))
+            return new Result.Error<>("Not a compound: " + value);
+        return new Result.Ok<>(compoundTag.put(key, value));
+    }
+
+    @Override
+    public @NotNull Result<MapLike<BinaryTag>> getMap(@NotNull BinaryTag value) {
+        if (!(value instanceof CompoundBinaryTag compoundTag))
+            return new Result.Error<>("Not a compound: " + value);
+        return new Result.Ok<>(new MapLike<>() {
+            @Override
+            public boolean hasValue(@NotNull String key) {
+                return compoundTag.get(key) != null;
+            }
+
+            @Override
+            public @NotNull Result<BinaryTag> getValue(@NotNull String key) {
+                final BinaryTag tag = compoundTag.get(key);
+                if (tag == null) return new Result.Error<>("No such key: " + key);
+                return new Result.Ok<>(tag);
+            }
+        });
+    }
+
+    @Override
     public @NotNull MapBuilder<BinaryTag> createMap() {
         final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
         return new MapBuilder<>() {
             @Override
-            public void put(@NotNull String key, BinaryTag value) {
-                builder.put(key, value);
+            public @NotNull MapBuilder<BinaryTag> put(@NotNull String key, BinaryTag value) {
+                if (!(value instanceof EndBinaryTag))
+                    builder.put(key, value);
+                return this;
             }
 
             @Override
@@ -154,6 +229,17 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
                 return builder.build();
             }
         };
+    }
+
+    @Override
+    public @NotNull Result<BinaryTag> mergeToMap(@NotNull List<BinaryTag> maps) {
+        final CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+        for (BinaryTag map : maps) {
+            if (!(map instanceof CompoundBinaryTag compoundTag))
+                return new Result.Error<>("Not a compound: " + map);
+            builder.put(compoundTag);
+        }
+        return new Result.Ok<>(builder.build());
     }
 
     @Override
@@ -190,5 +276,47 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
     @Override
     public @NotNull BinaryTag createLongArray(long[] value) {
         return LongArrayBinaryTag.longArrayBinaryTag(value);
+    }
+
+    @Override
+    public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull BinaryTag value) {
+        return switch (value) {
+            case EndBinaryTag ignored -> new Result.Ok<>(coder.createNull());
+            case ByteBinaryTag byteTag -> new Result.Ok<>(coder.createByte(byteTag.byteValue()));
+            case ShortBinaryTag shortTag -> new Result.Ok<>(coder.createShort(shortTag.shortValue()));
+            case IntBinaryTag intTag -> new Result.Ok<>(coder.createInt(intTag.intValue()));
+            case LongBinaryTag longTag -> new Result.Ok<>(coder.createLong(longTag.longValue()));
+            case FloatBinaryTag floatTag -> new Result.Ok<>(coder.createFloat(floatTag.floatValue()));
+            case DoubleBinaryTag doubleTag -> new Result.Ok<>(coder.createDouble(doubleTag.doubleValue()));
+            case ByteArrayBinaryTag byteArrayTag -> new Result.Ok<>(coder.createByteArray(byteArrayTag.value()));
+            case StringBinaryTag stringTag -> new Result.Ok<>(coder.createString(stringTag.value()));
+            case ListBinaryTag listTag -> {
+                final ListBuilder<O> list = coder.createList(listTag.size());
+                for (int i = 0; i < listTag.size(); i++) {
+                    switch (convertTo(coder, listTag.get(i))) {
+                        case Result.Ok<O> ok -> list.add(ok.value());
+                        case Result.Error<O> error -> {
+                            yield new Result.Error<>(i + ": " + error);
+                        }
+                    }
+                }
+                yield new Result.Ok<>(list.build());
+            }
+            case CompoundBinaryTag compoundTag -> {
+                final MapBuilder<O> map = coder.createMap();
+                for (Map.Entry<String, ? extends BinaryTag> entry : compoundTag) {
+                    switch (convertTo(coder, entry.getValue())) {
+                        case Result.Ok<O> ok -> map.put(entry.getKey(), ok.value());
+                        case Result.Error<O> error -> {
+                            yield new Result.Error<>(entry.getKey() + ": " + error);
+                        }
+                    }
+                }
+                yield new Result.Ok<>(map.build());
+            }
+            case IntArrayBinaryTag intArrayTag -> new Result.Ok<>(coder.createIntArray(intArrayTag.value()));
+            case LongArrayBinaryTag longArrayTag -> new Result.Ok<>(coder.createLongArray(longArrayTag.value()));
+            default -> new Result.Error<>("Unsupported type: " + value);
+        };
     }
 }

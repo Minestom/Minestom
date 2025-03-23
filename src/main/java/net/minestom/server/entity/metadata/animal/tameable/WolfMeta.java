@@ -1,12 +1,14 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class WolfMeta extends TameableAnimalMeta {
     public WolfMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -77,4 +79,27 @@ public class WolfMeta extends TameableAnimalMeta {
         metadata.set(MetadataDef.Wolf.SOUND_VARIANT, value);
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.WOLF_VARIANT)
+            return (T) getVariant();
+        if (component == DataComponents.WOLF_SOUND_VARIANT)
+            return (T) getSoundVariant();
+        if (component == DataComponents.WOLF_COLLAR)
+            return (T) getCollarColor();
+        return super.get(component);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.WOLF_VARIANT)
+            setVariant((DynamicRegistry.Key<WolfVariant>) value);
+        else if (component == DataComponents.WOLF_SOUND_VARIANT)
+            setSoundVariant((DynamicRegistry.Key<WolfSoundVariant>) value);
+        else if (component == DataComponents.WOLF_COLLAR)
+            setCollarColor((DyeColor) value);
+        else super.set(component, value);
+    }
 }

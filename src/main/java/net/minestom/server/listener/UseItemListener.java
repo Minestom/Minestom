@@ -2,7 +2,6 @@ package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
@@ -92,7 +91,7 @@ public class UseItemListener {
 
         // If the item was not usable, we can try to do an equipment swap with it.
         final Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
-        if (equippable != null && equippable.swappable() && equippable.slot() != EquipmentSlot.BODY) {
+        if (equippable != null && equippable.swappable() && equippable.slot().armorSlot() > 0) {
             final ItemStack currentlyEquipped = player.getEquipment(equippable.slot());
             player.setEquipment(equippable.slot(), itemStack);
             player.setItemInHand(hand, currentlyEquipped);

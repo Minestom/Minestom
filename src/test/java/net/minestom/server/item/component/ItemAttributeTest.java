@@ -25,7 +25,7 @@ public class ItemAttributeTest extends AbstractItemComponentTest<AttributeList> 
                 Map.entry("multiple", new AttributeList(List.of(
                         new AttributeList.Modifier(Attribute.MAX_HEALTH, new AttributeModifier("minestom:health_test", 5, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.MAIN_HAND),
                         new AttributeList.Modifier(Attribute.ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test", 3, AttributeOperation.ADD_VALUE), EquipmentSlotGroup.ANY),
-                        new AttributeList.Modifier(Attribute.ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test_1", 1.4, AttributeOperation.MULTIPLY_BASE), EquipmentSlotGroup.CHEST)
+                        new AttributeList.Modifier(Attribute.ATTACK_DAMAGE, new AttributeModifier("minestom:attack_test_1", 1.4, AttributeOperation.ADD_MULTIPLIED_BASE), EquipmentSlotGroup.CHEST)
 
                 )))
         );

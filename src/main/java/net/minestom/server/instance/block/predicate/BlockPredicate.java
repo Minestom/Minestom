@@ -1,14 +1,13 @@
 package net.minestom.server.instance.block.predicate;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.block.BlockUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -55,38 +54,39 @@ public record BlockPredicate(
             BlockPredicate::new
     );
     // TODO(1.21.5): this also has a new field to match components.
-    public static final Codec<BlockPredicate> CODEC;
+    public static final Codec<BlockPredicate> CODEC = Codec.UNIT
+            .transform(ignored -> NONE, ignored -> Unit.INSTANCE);
 
-    public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull BlockPredicate value) {
-            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-            if (value.blocks != null)
-                builder.put("blocks", BlockTypeFilter.CODEC.write(value.blocks));
-            if (value.state != null)
-                builder.put("state", PropertiesPredicate.NBT_TYPE.write(value.state));
-            if (value.nbt != null)
-                builder.put("nbt", value.nbt);
-            return builder.build();
-        }
-
-        @Override
-        public @NotNull BlockPredicate read(@NotNull BinaryTag tag) {
-            if (!(tag instanceof CompoundBinaryTag compound)) return BlockPredicate.ALL;
-
-            BinaryTag entry;
-            BlockTypeFilter blocks = null;
-            if ((entry = compound.get("blocks")) != null)
-                blocks = BlockTypeFilter.CODEC.read(entry);
-            PropertiesPredicate state = null;
-            if ((entry = compound.get("state")) != null)
-                state = PropertiesPredicate.NBT_TYPE.read(entry);
-            CompoundBinaryTag nbt = null;
-            if ((entry = compound.get("nbt")) != null)
-                nbt = BinaryTagSerializer.COMPOUND_COERCED.read(entry);
-            return new BlockPredicate(blocks, state, nbt);
-        }
-    };
+//    public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
+//        @Override
+//        public @NotNull BinaryTag write(@NotNull BlockPredicate value) {
+//            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
+//            if (value.blocks != null)
+//                builder.put("blocks", BlockTypeFilter.CODEC.write(value.blocks));
+//            if (value.state != null)
+//                builder.put("state", PropertiesPredicate.NBT_TYPE.write(value.state));
+//            if (value.nbt != null)
+//                builder.put("nbt", value.nbt);
+//            return builder.build();
+//        }
+//
+//        @Override
+//        public @NotNull BlockPredicate read(@NotNull BinaryTag tag) {
+//            if (!(tag instanceof CompoundBinaryTag compound)) return BlockPredicate.ALL;
+//
+//            BinaryTag entry;
+//            BlockTypeFilter blocks = null;
+//            if ((entry = compound.get("blocks")) != null)
+//                blocks = BlockTypeFilter.CODEC.read(entry);
+//            PropertiesPredicate state = null;
+//            if ((entry = compound.get("state")) != null)
+//                state = PropertiesPredicate.NBT_TYPE.read(entry);
+//            CompoundBinaryTag nbt = null;
+//            if ((entry = compound.get("nbt")) != null)
+//                nbt = BinaryTagSerializer.COMPOUND_COERCED.read(entry);
+//            return new BlockPredicate(blocks, state, nbt);
+//        }
+//    };
 
     public BlockPredicate(@NotNull BlockTypeFilter blocks) {
         this(blocks, null, null);

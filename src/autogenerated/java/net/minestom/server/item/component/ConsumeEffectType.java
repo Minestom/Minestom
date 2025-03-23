@@ -1,5 +1,9 @@
 package net.minestom.server.item.component;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -20,9 +24,11 @@ enum ConsumeEffectType implements StaticProtocolObject {
 
     PLAY_SOUND(Key.key("minecraft:play_sound"));
 
+    private static final Map<Key, ConsumeEffectType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(ConsumeEffectType::key, Function.identity()));
+
     public static final NetworkBuffer.Type<ConsumeEffectType> NETWORK_TYPE = NetworkBuffer.Enum(ConsumeEffectType.class);
 
-    public static final Codec<ConsumeEffectType> CODEC = Codec.Enum(ConsumeEffectType.class);
+    public static final Codec<ConsumeEffectType> CODEC = Codec.KEY.transform(BY_KEY::get, ConsumeEffectType::key);
 
     private final Key key;
 

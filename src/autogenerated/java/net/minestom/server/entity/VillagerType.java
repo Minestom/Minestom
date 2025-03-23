@@ -1,5 +1,9 @@
 package net.minestom.server.entity;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -24,9 +28,11 @@ public enum VillagerType implements StaticProtocolObject {
 
     TAIGA(Key.key("minecraft:taiga"));
 
+    private static final Map<Key, VillagerType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(VillagerType::key, Function.identity()));
+
     public static final NetworkBuffer.Type<VillagerType> NETWORK_TYPE = NetworkBuffer.Enum(VillagerType.class);
 
-    public static final Codec<VillagerType> CODEC = Codec.Enum(VillagerType.class);
+    public static final Codec<VillagerType> CODEC = Codec.KEY.transform(BY_KEY::get, VillagerType::key);
 
     private final Key key;
 

@@ -1,5 +1,7 @@
 package net.minestom.server.entity.metadata.other;
 
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
@@ -8,6 +10,7 @@ import net.minestom.server.entity.metadata.ObjectDataProvider;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     private Orientation orientation = null;
@@ -56,6 +59,22 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     @Override
     public boolean requiresVelocityPacketAtSpawn() {
         return false;
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.PAINTING_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.PAINTING_VARIANT)
+            setVariant((Holder<PaintingVariant>) value);
+        else super.set(component, value);
     }
 
     public enum Orientation {

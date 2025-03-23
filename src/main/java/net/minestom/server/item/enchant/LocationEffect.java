@@ -12,12 +12,12 @@ import java.util.List;
 
 public non-sealed interface LocationEffect extends Enchantment.Effect {
 
-    @NotNull Codec<LocationEffect> CODEC = Codec.RegistryTaggedUnion(
+    @NotNull StructCodec<LocationEffect> CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentLocationEffects, LocationEffect::codec, "type");
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Codec<? extends LocationEffect>> createDefaultRegistry() {
-        final DynamicRegistry<Codec<? extends LocationEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+    static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> createDefaultRegistry() {
+        final DynamicRegistry<StructCodec<? extends LocationEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
         registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("apply_mob_effect", EntityEffect.ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("attribute", AttributeEffect.CODEC, DataPack.MINECRAFT_CORE);
@@ -35,10 +35,10 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
         return registry;
     }
 
-    @NotNull Codec<? extends LocationEffect> codec();
+    @NotNull StructCodec<? extends LocationEffect> codec();
 
     record AllOf(@NotNull List<LocationEffect> effect) implements LocationEffect {
-        public static final Codec<AllOf> CODEC = StructCodec.struct(
+        public static final StructCodec<AllOf> CODEC = StructCodec.struct(
                 "effects", LocationEffect.CODEC.list(), AllOf::effect,
                 AllOf::new
         );
@@ -48,7 +48,7 @@ public non-sealed interface LocationEffect extends Enchantment.Effect {
         }
 
         @Override
-        public @NotNull Codec<AllOf> codec() {
+        public @NotNull StructCodec<AllOf> codec() {
             return CODEC;
         }
     }

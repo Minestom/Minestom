@@ -20,12 +20,10 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
     public static final NetworkBuffer.Type<CustomPotionEffect> NETWORK_TYPE = NetworkBufferTemplate.template(
             PotionEffect.NETWORK_TYPE, CustomPotionEffect::id,
             Settings.NETWORK_TYPE, CustomPotionEffect::settings,
-            CustomPotionEffect::new
-    );
-    // TODO(1.21.5) does this have to be lazy?
+            CustomPotionEffect::new);
     public static final Codec<CustomPotionEffect> CODEC = StructCodec.struct(
             "id", PotionEffect.CODEC, CustomPotionEffect::id,
-            "settings", Settings.CODEC, CustomPotionEffect::settings,
+            StructCodec.INLINE, Settings.CODEC, CustomPotionEffect::settings,
             CustomPotionEffect::new);
 
     public CustomPotionEffect(@NotNull PotionEffect id, int amplifier, int duration, boolean isAmbient, boolean showParticles, boolean showIcon) {
@@ -81,8 +79,8 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
             }
         };
         public static final Codec<Settings> CODEC = Codec.Recursive(self -> StructCodec.struct(
-                "amplifier", Codec.INT, Settings::amplifier,
-                "duration", Codec.INT, Settings::duration,
+                "amplifier", Codec.BYTE.optional((byte) 0), s -> (byte) s.amplifier,
+                "duration", Codec.INT.optional(0), Settings::duration,
                 "ambient", Codec.BOOLEAN.optional(false), Settings::isAmbient,
                 "show_particles", Codec.BOOLEAN.optional(true), Settings::showParticles,
                 "show_icon", Codec.BOOLEAN.optional(), Settings::showIcon,
@@ -92,7 +90,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
 
         // Exists because showIcon needs to default to the value of showParticles which we can't do inline.
         private static @NotNull Settings withOptionalIcon(
-                int amplifier, int duration,
+                byte amplifier, int duration,
                 boolean isAmbient, boolean showParticles,
                 @Nullable Boolean showIcon,
                 @Nullable Settings hiddenEffect

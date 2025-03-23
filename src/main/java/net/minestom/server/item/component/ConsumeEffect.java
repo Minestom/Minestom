@@ -9,6 +9,7 @@ import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,8 +18,8 @@ import java.util.List;
 public sealed interface ConsumeEffect {
     NetworkBuffer.Type<ConsumeEffect> NETWORK_TYPE = ConsumeEffectType.NETWORK_TYPE
             .unionType(ConsumeEffect::networkType, ConsumeEffect::consumeEffectToType);
-    Codec<ConsumeEffect> CODEC = ConsumeEffectType.CODEC
-            .unionType(ConsumeEffect::nbtType, ConsumeEffect::consumeEffectToType);
+    StructCodec<ConsumeEffect> CODEC = ConsumeEffectType.CODEC
+            .unionType(ConsumeEffect::codec, ConsumeEffect::consumeEffectToType);
 
     record ApplyEffects(@NotNull List<CustomPotionEffect> effects, float probability) implements ConsumeEffect {
         private static final int MAX_EFFECTS = 256;
@@ -27,7 +28,7 @@ public sealed interface ConsumeEffect {
                 CustomPotionEffect.NETWORK_TYPE.list(MAX_EFFECTS), ApplyEffects::effects,
                 NetworkBuffer.FLOAT, ApplyEffects::probability,
                 ApplyEffects::new);
-        public static final Codec<ApplyEffects> CODEC = StructCodec.struct(
+        public static final StructCodec<ApplyEffects> CODEC = StructCodec.struct(
                 "effects", CustomPotionEffect.CODEC.list(), ApplyEffects::effects,
                 "probability", Codec.FLOAT.optional(1f), ApplyEffects::probability,
                 ApplyEffects::new);
@@ -46,7 +47,7 @@ public sealed interface ConsumeEffect {
         public static final NetworkBuffer.Type<RemoveEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
                 ObjectSet.networkType(Tag.BasicType.POTION_EFFECTS), RemoveEffects::effects,
                 RemoveEffects::new);
-        public static final Codec<RemoveEffects> CODEC = StructCodec.struct(
+        public static final StructCodec<RemoveEffects> CODEC = StructCodec.struct(
                 "effects", ObjectSet.codec(Tag.BasicType.POTION_EFFECTS), RemoveEffects::effects,
                 RemoveEffects::new);
     }
@@ -55,9 +56,8 @@ public sealed interface ConsumeEffect {
         public static final ClearAllEffects INSTANCE = new ClearAllEffects();
 
         public static final NetworkBuffer.Type<ClearAllEffects> NETWORK_TYPE = NetworkBuffer.UNIT
-                .transform(buffer -> INSTANCE, ignored -> null);
-        public static final Codec<ClearAllEffects> CODEC = Codec.UNIT
-                .transform(ignored -> INSTANCE, ignored -> null);
+                .transform(buffer -> INSTANCE, ignored -> Unit.INSTANCE);
+        public static final StructCodec<ClearAllEffects> CODEC = StructCodec.struct(() -> INSTANCE);
 
         private ClearAllEffects() {
         }
@@ -69,7 +69,7 @@ public sealed interface ConsumeEffect {
         public static final NetworkBuffer.Type<TeleportRandomly> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.FLOAT, TeleportRandomly::diameter,
                 TeleportRandomly::new);
-        public static final Codec<TeleportRandomly> CODEC = StructCodec.struct(
+        public static final StructCodec<TeleportRandomly> CODEC = StructCodec.struct(
                 "diameter", Codec.FLOAT.optional(DEFAULT_DIAMETER), TeleportRandomly::diameter,
                 TeleportRandomly::new);
 
@@ -82,7 +82,7 @@ public sealed interface ConsumeEffect {
         public static final NetworkBuffer.Type<PlaySound> NETWORK_TYPE = NetworkBufferTemplate.template(
                 SoundEvent.NETWORK_TYPE, PlaySound::sound,
                 PlaySound::new);
-        public static final Codec<PlaySound> CODEC = StructCodec.struct(
+        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
                 "sound", SoundEvent.CODEC, PlaySound::sound,
                 PlaySound::new);
     }
@@ -99,8 +99,8 @@ public sealed interface ConsumeEffect {
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static Codec<ConsumeEffect> nbtType(@NotNull ConsumeEffectType type) {
-        return (Codec) switch (type) {
+    private static StructCodec<ConsumeEffect> codec(@NotNull ConsumeEffectType type) {
+        return (StructCodec) switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.CODEC;
             case REMOVE_EFFECTS -> RemoveEffects.CODEC;
             case CLEAR_ALL_EFFECTS -> ClearAllEffects.CODEC;

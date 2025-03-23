@@ -1,19 +1,20 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.StringBinaryTag;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.Color;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Map;
 
+import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class PotionContentsTest extends AbstractItemComponentTest<PotionContents> {
@@ -32,7 +33,7 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
                 Map.entry("custom effect", new PotionContents(new CustomPotionEffect(PotionEffect.INVISIBILITY, (byte) 2, 10, true, false, true))),
                 Map.entry("custom effect recursive", new PotionContents(new CustomPotionEffect(PotionEffect.INVISIBILITY, new CustomPotionEffect.Settings(
                         (byte) 2, 10, true, false, true, new CustomPotionEffect.Settings(
-                                (byte) 2, 10, true, false, true, null))))),
+                        (byte) 2, 10, true, false, true, null))))),
                 Map.entry("custom effect", new PotionContents(List.of(
                         new CustomPotionEffect(PotionEffect.INVISIBILITY, (byte) 2, 10, true, false, true),
                         new CustomPotionEffect(PotionEffect.STRENGTH, (byte) 3, 10000, false, true, false)
@@ -42,7 +43,8 @@ public class PotionContentsTest extends AbstractItemComponentTest<PotionContents
 
     @Test
     void alternativeNbtSyntax() {
-        var value = DataComponents.POTION_CONTENTS.read(BinaryTagSerializer.Context.EMPTY, StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness"));
+        var value = assertOk(DataComponents.POTION_CONTENTS.decode(Transcoder.NBT,
+                StringBinaryTag.stringBinaryTag("minecraft:strong_swiftness")));
         var expected = new PotionContents(PotionType.STRONG_SWIFTNESS, null, List.of(), null);
         assertEquals(expected, value);
     }

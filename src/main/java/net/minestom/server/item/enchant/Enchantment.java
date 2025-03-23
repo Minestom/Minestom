@@ -22,16 +22,16 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
             "description", Codec.COMPONENT, Enchantment::description,
-            "exclusive_set", ObjectSet.codec(Tag.BasicType.ENCHANTMENTS), Enchantment::exclusiveSet,
+            "exclusive_set", ObjectSet.<Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
             "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
-            "primary_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::primaryItems,
+            "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
             "weight", Codec.INT, Enchantment::weight,
             "max_level", Codec.INT, Enchantment::maxLevel,
             "min_cost", Cost.CODEC, Enchantment::minCost,
             "max_cost", Cost.CODEC, Enchantment::maxCost,
             "anvil_cost", Codec.INT, Enchantment::anvilCost,
             "slots", EquipmentSlotGroup.CODEC.list(), Enchantment::slots,
-            "effects", EffectComponent.CODEC, Enchantment::effects,
+            "effects", EffectComponent.CODEC.optional(DataComponentMap.EMPTY), Enchantment::effects,
             EnchantmentImpl::new);
 
     static @NotNull Builder builder() {
@@ -46,8 +46,8 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.create(
-                "minecraft:enchantment", REGISTRY_CODEC
-                // registries, Registry.Resource.ENCHANTMENTS // TODO(1.21.5)
+                "minecraft:enchantment", REGISTRY_CODEC,
+                registries, Registry.Resource.ENCHANTMENTS
         );
     }
 
@@ -57,7 +57,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull ObjectSet<Material> supportedItems();
 
-    @NotNull ObjectSet<Material> primaryItems();
+    @Nullable ObjectSet<Material> primaryItems();
 
     int weight();
 
@@ -72,9 +72,6 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     @NotNull List<EquipmentSlotGroup> slots();
 
     @NotNull DataComponentMap effects();
-
-    @Override
-    @Nullable Registry.EnchantmentEntry registry();
 
     enum Target {
         ATTACKER,
@@ -190,7 +187,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return new EnchantmentImpl(
                     description, exclusiveSet, supportedItems,
                     primaryItems, weight, maxLevel, minCost, maxCost,
-                    anvilCost, slots, effects.build(), null
+                    anvilCost, slots, effects.build()
             );
         }
     }

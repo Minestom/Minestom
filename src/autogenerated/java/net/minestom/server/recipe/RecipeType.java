@@ -1,5 +1,9 @@
 package net.minestom.server.recipe;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -24,9 +28,11 @@ public enum RecipeType implements StaticProtocolObject {
 
     SMITHING(Key.key("minecraft:smithing"));
 
+    private static final Map<Key, RecipeType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(RecipeType::key, Function.identity()));
+
     public static final NetworkBuffer.Type<RecipeType> NETWORK_TYPE = NetworkBuffer.Enum(RecipeType.class);
 
-    public static final Codec<RecipeType> CODEC = Codec.Enum(RecipeType.class);
+    public static final Codec<RecipeType> CODEC = Codec.KEY.transform(BY_KEY::get, RecipeType::key);
 
     private final Key key;
 

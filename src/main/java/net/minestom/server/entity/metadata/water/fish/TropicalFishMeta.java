@@ -2,11 +2,14 @@ package net.minestom.server.entity.metadata.water.fish;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TropicalFishMeta extends AbstractFishMeta {
     public TropicalFishMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -29,7 +32,30 @@ public class TropicalFishMeta extends AbstractFishMeta {
         metadata.set(MetadataDef.TropicalFish.VARIANT, variant.packedId());
     }
 
-    public record Variant(@NotNull Pattern pattern, @NotNull DyeColor bodyColor, @NotNull DyeColor patternColor) {
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.TROPICAL_FISH_PATTERN)
+            return (T) getVariant().pattern();
+        if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
+            return (T) getVariant().baseColor();
+        if (component == DataComponents.TROPICAL_FISH_PATTERN_COLOR)
+            return (T) getVariant().patternColor();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.TROPICAL_FISH_PATTERN)
+            setVariant(getVariant().withPattern((Pattern) value));
+        else if (component == DataComponents.TROPICAL_FISH_BASE_COLOR)
+            setVariant(getVariant().withBodyColor((DyeColor) value));
+        else if (component == DataComponents.TROPICAL_FISH_PATTERN_COLOR)
+            setVariant(getVariant().withPatternColor((DyeColor) value));
+        else super.set(component, value);
+    }
+
+    public record Variant(@NotNull Pattern pattern, @NotNull DyeColor baseColor, @NotNull DyeColor patternColor) {
         public static final Variant DEFAULT = new Variant(Pattern.KOB, DyeColor.WHITE, DyeColor.WHITE);
 
         public static @NotNull Variant fromPackedId(int packedId) {
@@ -46,12 +72,12 @@ public class TropicalFishMeta extends AbstractFishMeta {
 
         public int packedId() {
             return (patternColor.ordinal() << 24)
-                    | (bodyColor.ordinal() << 16)
+                    | (baseColor.ordinal() << 16)
                     | pattern.id();
         }
 
         public @NotNull Variant withPattern(@NotNull Pattern newPattern) {
-            return new Variant(newPattern, this.bodyColor, this.patternColor);
+            return new Variant(newPattern, this.baseColor, this.patternColor);
         }
 
         public @NotNull Variant withBodyColor(@NotNull DyeColor newBodyColor) {
@@ -59,7 +85,7 @@ public class TropicalFishMeta extends AbstractFishMeta {
         }
 
         public @NotNull Variant withPatternColor(@NotNull DyeColor newPatternColor) {
-            return new Variant(this.pattern, this.bodyColor, newPatternColor);
+            return new Variant(this.pattern, this.baseColor, newPatternColor);
         }
     }
 
