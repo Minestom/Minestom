@@ -2,6 +2,7 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -31,10 +32,17 @@ public sealed interface Result<T> {
                 ? value : other;
     }
 
-    default T orElseThrow(@NotNull String message) {
-        if (this instanceof Ok<T>(T value))
-            return value;
-        throw new IllegalArgumentException(message + ": " + ((Error<T>) this).message());
+    default T orElseThrow() {
+        return orElseThrow(null);
+    }
+
+    default T orElseThrow(@Nullable String message) {
+        return switch (this) {
+            case Ok<T>(T value) -> value;
+            case Error<T>(String errorMessage) -> throw new IllegalArgumentException(
+                    message != null ? String.format("%s: %s", message, errorMessage) : errorMessage
+            );
+        };
     }
 
     default <S> Result<S> cast() {

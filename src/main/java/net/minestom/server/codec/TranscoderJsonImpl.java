@@ -3,7 +3,9 @@ package net.minestom.server.codec;
 import com.google.gson.*;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     public static final TranscoderJsonImpl INSTANCE = new TranscoderJsonImpl();
@@ -117,6 +119,22 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
+    public @NotNull Result<Integer> listSize(@NotNull JsonElement value) {
+        if (!(value instanceof JsonArray array))
+            return new Result.Error<>("Not a list: " + value);
+        return new Result.Ok<>(array.size());
+    }
+
+    @Override
+    public @NotNull Result<JsonElement> getIndex(@NotNull JsonElement value, int index) {
+        if (!(value instanceof JsonArray array))
+            return new Result.Error<>("Not a list: " + value);
+        if (index < 0 || index >= array.size())
+            return new Result.Error<>("Index out of bounds for " + array.size() + ": " + index);
+        return new Result.Ok<>(array.get(index));
+    }
+
+    @Override
     public @NotNull JsonElement createList(@NotNull List<JsonElement> value) {
         final JsonArray array = new JsonArray(value.size());
         for (JsonElement element : value) array.add(element);
@@ -124,9 +142,33 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
+    public @NotNull ListBuilder<JsonElement> createList(int expectedSize) {
+        final JsonArray list = new JsonArray(expectedSize);
+        return new ListBuilder<>() {
+            @Override
+            public @NotNull ListBuilder<JsonElement> add(JsonElement value) {
+                list.add(value);
+                return this;
+            }
+
+            @Override
+            public JsonElement build() {
+                return list;
+            }
+        };
+    }
+
+    @Override
     public boolean hasValue(@NotNull JsonElement value, @NotNull String key) {
         if (!(value instanceof JsonObject object)) return false;
         return object.has(key);
+    }
+
+    @Override
+    public @NotNull Result<Collection<Map.Entry<String, JsonElement>>> getMapEntries(@NotNull JsonElement value) {
+        if (!(value instanceof JsonObject object))
+            return new Result.Error<>("Not an object: " + value);
+        return new Result.Ok<>(object.entrySet());
     }
 
     @Override
@@ -139,18 +181,102 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
     }
 
     @Override
+    public @NotNull Result<JsonElement> putValue(@NotNull JsonElement map, @NotNull String key, @NotNull JsonElement value) {
+        if (!(value instanceof JsonObject object))
+            return new Result.Error<>("Not an object: " + value);
+        final JsonObject copy = new JsonObject();
+        for (final Map.Entry<String, JsonElement> entry : copy.entrySet())
+            copy.add(entry.getKey(), entry.getValue());
+        copy.add(key, value);
+        return new Result.Ok<>(copy);
+    }
+
+    @Override
+    public @NotNull Result<MapLike<JsonElement>> getMap(@NotNull JsonElement value) {
+        if (!(value instanceof JsonObject object))
+            return new Result.Error<>("Not an object: " + value);
+        return new Result.Ok<>(new MapLike<>() {
+            @Override
+            public boolean hasValue(@NotNull String key) {
+                return object.has(key);
+            }
+
+            @Override
+            public @NotNull Result<JsonElement> getValue(@NotNull String key) {
+                final JsonElement element = object.get(key);
+                if (element == null) return new Result.Error<>("No such key: " + key);
+                return new Result.Ok<>(element);
+            }
+        });
+    }
+
+    @Override
     public @NotNull MapBuilder<JsonElement> createMap() {
         final JsonObject object = new JsonObject();
         return new MapBuilder<>() {
             @Override
-            public void put(@NotNull String key, JsonElement value) {
-                object.add(key, value);
+            public @NotNull MapBuilder<JsonElement> put(@NotNull String key, JsonElement value) {
+                if (value != JsonNull.INSTANCE)
+                    object.add(key, value);
+                return this;
             }
 
             @Override
             public JsonElement build() {
                 return object;
             }
+        };
+    }
+
+    @Override
+    public @NotNull Result<JsonElement> mergeToMap(@NotNull List<JsonElement> maps) {
+        final JsonObject object = new JsonObject();
+        for (JsonElement element : maps) {
+            if (!(element instanceof JsonObject objectElement))
+                return new Result.Error<>("Not an object: " + element);
+            for (final Map.Entry<String, JsonElement> entry : objectElement.entrySet())
+                object.add(entry.getKey(), entry.getValue());
+        }
+        return new Result.Ok<>(object);
+    }
+
+    @Override
+    public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull JsonElement value) {
+        return switch (value) {
+            case JsonObject object -> {
+                final MapBuilder<O> mapBuilder = coder.createMap();
+                for (final Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                    final String key = entry.getKey();
+                    switch (convertTo(coder, entry.getValue())) {
+                        case Result.Ok(O data) -> mapBuilder.put(key, data);
+                        case Result.Error(String message) -> {
+                            yield new Result.Error<>(key + ": " + message);
+                        }
+                    }
+                }
+                yield new Result.Ok<>(mapBuilder.build());
+            }
+            case JsonArray array -> {
+                // TODO(1.21.5) empty list call on coder
+                final ListBuilder<O> listBuilder = coder.createList(array.size());
+                for (int i = 0; i < array.size(); i++) {
+                    switch (convertTo(coder, array.get(i))) {
+                        case Result.Ok(O data) -> listBuilder.add(data);
+                        case Result.Error(String message) -> {
+                            yield new Result.Error<>(i + ": " + message);
+                        }
+                    }
+                }
+                yield new Result.Ok<>(listBuilder.build());
+            }
+            case JsonPrimitive primitive when primitive.isBoolean() ->
+                    new Result.Ok<>(coder.createBoolean(primitive.getAsBoolean()));
+            case JsonPrimitive primitive when primitive.isNumber() ->
+                    new Result.Ok<>(coder.createDouble(primitive.getAsDouble()));
+            case JsonPrimitive primitive when primitive.isString() ->
+                    new Result.Ok<>(coder.createString(primitive.getAsString()));
+            case JsonNull jsonNull -> new Result.Ok<>(coder.createNull());
+            default -> new Result.Error<>("Unknown JSON type: " + value);
         };
     }
 }

@@ -10,6 +10,7 @@ import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
+import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
@@ -463,7 +464,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Villager extends AbstractVillager {
-        public static final Entry<int[]> VARIANT = index(0, Metadata::VillagerData, new int[]{0, 0, 0});
+        public static final Entry<VillagerMeta.VillagerData> VARIANT = index(0, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
     }
 
     public static final class IronGolem extends Mob {
@@ -567,7 +568,7 @@ public sealed class MetadataDef {
 
     public static final class ZombieVillager extends Mob {
         public static final Entry<Boolean> IS_CONVERTING = index(0, Metadata::Boolean, false);
-        public static final Entry<int[]> VILLAGER_DATA = index(1, Metadata::VillagerData, new int[]{0, 0, 0});
+        public static final Entry<VillagerMeta.VillagerData> VILLAGER_DATA = index(1, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
     }
 
     public static final class Enderman extends Mob {
