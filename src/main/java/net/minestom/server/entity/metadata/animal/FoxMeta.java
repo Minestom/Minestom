@@ -1,6 +1,8 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
@@ -104,6 +106,21 @@ public class FoxMeta extends AnimalMeta {
 
     public void setSecondUUID(@Nullable UUID value) {
         metadata.set(MetadataDef.Fox.SECOND_UUID, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.FOX_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.FOX_VARIANT)
+            setVariant((FoxMeta.Variant) value);
+        else super.set(component, value);
     }
 
     public enum Variant {

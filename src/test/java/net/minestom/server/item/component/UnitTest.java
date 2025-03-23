@@ -21,7 +21,8 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
     private static final List<DataComponent<Unit>> UNIT_COMPONENTS = List.of(
             DataComponents.CREATIVE_SLOT_LOCK,
             DataComponents.INTANGIBLE_PROJECTILE,
-            DataComponents.GLIDER
+            DataComponents.GLIDER,
+            DataComponents.UNBREAKABLE
     );
 
     static {
@@ -50,7 +51,7 @@ public class UnitTest extends AbstractItemComponentTest<Unit> {
             try {
                 //noinspection unchecked
                 ((DataComponent<Unit>) component).write(NetworkBuffer.resizableBuffer(MinecraftServer.process()), Unit.INSTANCE);
-            } catch (ClassCastException ignored) {
+            } catch (ClassCastException | IllegalArgumentException ignored) {
                 continue;
             }
 

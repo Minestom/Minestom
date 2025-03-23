@@ -1,5 +1,9 @@
 package net.minestom.server.recipe.display;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
@@ -26,9 +30,11 @@ public enum SlotDisplayType implements StaticProtocolObject {
 
     COMPOSITE(Key.key("minecraft:composite"));
 
+    private static final Map<Key, SlotDisplayType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(SlotDisplayType::key, Function.identity()));
+
     public static final NetworkBuffer.Type<SlotDisplayType> NETWORK_TYPE = NetworkBuffer.Enum(SlotDisplayType.class);
 
-    public static final Codec<SlotDisplayType> CODEC = Codec.Enum(SlotDisplayType.class);
+    public static final Codec<SlotDisplayType> CODEC = Codec.KEY.transform(BY_KEY::get, SlotDisplayType::key);
 
     private final Key key;
 

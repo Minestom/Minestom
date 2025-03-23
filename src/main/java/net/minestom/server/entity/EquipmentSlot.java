@@ -18,7 +18,8 @@ public enum EquipmentSlot {
     LEGGINGS(2, 3, "legs", true, LEGGINGS_SLOT),
     CHESTPLATE(3, 4, "chest", true, CHESTPLATE_SLOT),
     HELMET(4, 5, "head", true, HELMET_SLOT),
-    BODY(6, 6, "body", false, -1);
+    BODY(6, 6, "body", false, -1),
+    SADDLE(7, 7, "saddle", false, -1);
 
     private static final List<EquipmentSlot> ARMORS = List.of(BOOTS, LEGGINGS, CHESTPLATE, HELMET);
     private static final Map<String, EquipmentSlot> BY_NBT_NAME = Arrays.stream(values())

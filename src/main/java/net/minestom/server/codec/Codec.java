@@ -8,6 +8,7 @@ import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +37,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         <D> @NotNull Result<D> convertTo(@NotNull Transcoder<D> coder);
     }
 
-    @NotNull Codec<RawValue> RAW_VALUE = null; // TODO(1.21.5)
+    @NotNull Codec<RawValue> RAW_VALUE = new CodecImpl.RawValueCodecImpl();
 
     @NotNull Codec<Unit> UNIT = StructCodec.struct(() -> Unit.INSTANCE);
 
@@ -63,10 +64,10 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     @NotNull Codec<int[]> INT_ARRAY = new PrimitiveImpl<>(Transcoder::createIntArray, Transcoder::getIntArray);
 
     @NotNull Codec<long[]> LONG_ARRAY = new PrimitiveImpl<>(Transcoder::createLongArray, Transcoder::getLongArray);
-
+    
     @NotNull Codec<double[]> DOUBLE_ARRAY = new PrimitiveImpl<>(Transcoder::createDoubleArray, Transcoder::getDoubleArray);
-
-    @NotNull Codec<UUID> UUID = new CodecImpl.UUIDImpl();
+    
+    @NotNull Codec<UUID> UUID = Codec.INT_ARRAY.transform(UUIDUtils::intArrayToUuid, UUIDUtils::uuidToIntArray);
 
     @NotNull Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
 
@@ -74,9 +75,15 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<Point> VECTOR3D = new CodecImpl.Vector3DImpl(); 
 
-    @NotNull Codec<BinaryTag> NBT = null; // TODO(1.21.5)
+    @NotNull Codec<BinaryTag> NBT = RAW_VALUE.transform(
+            value -> value.convertTo(Transcoder.NBT).orElseThrow(),
+            value -> RawValue.of(Transcoder.NBT, value));
 
-    @NotNull Codec<CompoundBinaryTag> NBT_COMPOUND = null; // TODO(1.21.5)
+    @NotNull Codec<CompoundBinaryTag> NBT_COMPOUND = NBT.transform(value -> {
+        if (!(value instanceof CompoundBinaryTag compound))
+            throw new IllegalArgumentException("Not a compound: " + value);
+        return compound;
+    }, compound -> compound);
 
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
         return STRING.transform(
@@ -85,7 +92,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }
 
     static <T> @NotNull Codec<T> Recursive(@NotNull Function<Codec<T>, Codec<T>> func) {
-        return new CodecImpl.RecursiveImpl<>(func);
+        return new CodecImpl.RecursiveImpl<>(func).delegate;
     }
 
     static <T> @NotNull Codec<T> ForwardRef(@NotNull Supplier<Codec<T>> func) {
@@ -93,15 +100,15 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }
 
     static <T> @NotNull Codec<DynamicRegistry.Key<T>> RegistryKey(@NotNull Registries.Selector<T> selector) {
-        throw new UnsupportedOperationException("todo"); // TODO(1.21.5)
+        return new CodecImpl.RegistryKeyImpl<>(selector);
     }
 
-    static <T> @NotNull Codec<T> RegistryTaggedUnion(
-            @NotNull Registries.Selector<Codec<? extends T>> registrySelector,
-            @NotNull Function<T, Codec<? extends T>> serializerGetter,
+    static <T> @NotNull StructCodec<T> RegistryTaggedUnion(
+            @NotNull Registries.Selector<StructCodec<? extends T>> registrySelector,
+            @NotNull Function<T, StructCodec<? extends T>> serializerGetter,
             @NotNull String key
     ) {
-        return new CodecImpl.RegistryTaggedUnion<>(registrySelector, serializerGetter, key);
+        return new CodecImpl.RegistryTaggedUnionImpl<>(registrySelector, serializerGetter, key);
     }
 
     default @NotNull Codec<@Nullable T> optional() {
@@ -145,11 +152,11 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
-    default <R> Codec<R> unionType(@NotNull Function<T, Codec<R>> serializers, @NotNull Function<R, T> keyFunc) {
+    default <R> StructCodec<R> unionType(@NotNull Function<T, StructCodec<R>> serializers, @NotNull Function<R, T> keyFunc) {
         return unionType("type", serializers, keyFunc);
     }
 
-    default <R> Codec<R> unionType(@NotNull String keyField, @NotNull Function<T, Codec<R>> serializers, @NotNull Function<R, T> keyFunc) {
+    default <R> StructCodec<R> unionType(@NotNull String keyField, @NotNull Function<T, StructCodec<R>> serializers, @NotNull Function<R, T> keyFunc) {
         return new CodecImpl.UnionImpl<>(keyField, Codec.this, serializers, keyFunc);
     }
 
