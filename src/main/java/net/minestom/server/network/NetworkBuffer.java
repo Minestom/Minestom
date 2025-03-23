@@ -66,12 +66,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Instant> INSTANT_MS = LONG.transform(Instant::ofEpochMilli, Instant::toEpochMilli);
     Type<PublicKey> PUBLIC_KEY = BYTE_ARRAY.transform(KeyUtils::publicRSAKeyFrom, PublicKey::getEncoded);
 
-    static <T> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
-        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
-    }
-
-    // METADATA
-    Type<int[]> VILLAGER_DATA = new NetworkBufferTypeImpl.VillagerDataType();
     Type<Point> VECTOR3 = new NetworkBufferTypeImpl.Vector3Type();
     Type<Point> VECTOR3D = new NetworkBufferTypeImpl.Vector3DType();
     Type<Point> VECTOR3I = new NetworkBufferTypeImpl.Vector3IType();
@@ -84,6 +78,10 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     Type<Direction> DIRECTION = Enum(Direction.class);
     Type<EntityPose> POSE = Enum(EntityPose.class);
+
+    static <T> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
+        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
+    }
 
     // Combinators
 

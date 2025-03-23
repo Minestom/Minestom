@@ -10,6 +10,7 @@ import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
@@ -74,11 +75,31 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         Check.argCondition(itemStack.amount() == 0 || itemStack.isAir(), "ItemStack cannot be empty");
         return itemStack;
     });
-    @NotNull Codec<ItemStack> CODEC = StructCodec.struct(
-            "id", Material.CODEC, ItemStack::material,
-            "count", Codec.INT.optional(1), ItemStack::amount,
-            "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), ItemStack::componentPatch,
-            ItemStack::of);
+    @NotNull Codec<ItemStack> CODEC = new StructCodec<>() {
+        // These exist because Mojang optionally decodes count (ie missing will default to 1),
+        // but when encoding they always include the 1. We want to preserve this behavior and
+        // since its currently a one off we can just do it here in a gross way.
+        private static final StructCodec<ItemStack> DECODER = StructCodec.struct(
+                "id", Material.CODEC, ItemStack::material,
+                "count", Codec.INT.optional(1), ItemStack::amount,
+                "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), ItemStack::componentPatch,
+                ItemStack::of);
+        private static final StructCodec<ItemStack> ENCODER = StructCodec.struct(
+                "id", Material.CODEC, ItemStack::material,
+                "count", Codec.INT, ItemStack::amount,
+                "components", DataComponent.PATCH_CODEC.optional(DataComponentMap.EMPTY), ItemStack::componentPatch,
+                ItemStack::of);
+
+        @Override
+        public @NotNull <D> Result<ItemStack> decodeFromMap(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            return DECODER.decodeFromMap(coder, map);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull ItemStack value, Transcoder.@NotNull MapBuilder<D> map) {
+            return ENCODER.encodeToMap(coder, value, map);
+        }
+    };
 
     /**
      * Constant AIR item. Should be used instead of 'null'.

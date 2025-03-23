@@ -13,6 +13,6 @@ public record DeathProtection(@NotNull List<ConsumeEffect> deathEffects) {
             ConsumeEffect.NETWORK_TYPE.list(256), DeathProtection::deathEffects,
             DeathProtection::new);
     public static final Codec<DeathProtection> CODEC = StructCodec.struct(
-            "death_effects", ConsumeEffect.CODEC.list(), DeathProtection::deathEffects,
+            "death_effects", ConsumeEffect.CODEC.list().optional(List.of()), DeathProtection::deathEffects,
             DeathProtection::new);
 }

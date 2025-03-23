@@ -1,12 +1,10 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EquipmentSlotGroup;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeModifier;
-import net.minestom.server.entity.attribute.AttributeOperation;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -34,33 +32,9 @@ public record AttributeList(@NotNull List<Modifier> modifiers) {
                 Modifier::new);
         public static final Codec<Modifier> CODEC = StructCodec.struct(
                 "type", Attribute.CODEC, Modifier::attribute,
-                "id", Codec.KEY, Modifier::id,
-                "amount", Codec.DOUBLE, Modifier::amount,
-                "operation", AttributeOperation.CODEC, Modifier::operation,
+                StructCodec.INLINE, AttributeModifier.CODEC, Modifier::modifier,
                 "slot", EquipmentSlotGroup.CODEC.optional(EquipmentSlotGroup.ANY), Modifier::slot,
                 Modifier::new);
-
-        public Modifier(
-                @NotNull Attribute attribute,
-                @NotNull Key id,
-                double amount,
-                @NotNull AttributeOperation operation,
-                @NotNull EquipmentSlotGroup slot
-        ) {
-            this(attribute, new AttributeModifier(id, amount, operation), slot);
-        }
-
-        public @NotNull Key id() {
-            return modifier.id();
-        }
-
-        public double amount() {
-            return modifier.amount();
-        }
-
-        public @NotNull AttributeOperation operation() {
-            return modifier.operation();
-        }
     }
 
     public AttributeList {
