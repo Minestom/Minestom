@@ -2,9 +2,7 @@ package net.minestom.server.codec;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Proxies all transcoder calls to the given delegate. Exists to allow passing context into
@@ -151,26 +149,6 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     }
 
     @Override
-    default @NotNull D createList(@NotNull List<D> value) {
-        return delegate().createList(value);
-    }
-
-    @Override
-    default boolean hasValue(@NotNull D value, @NotNull String key) {
-        return delegate().hasValue(value, key);
-    }
-
-    @Override
-    default @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value) {
-        return delegate().putValue(map, key, value);
-    }
-
-    @Override
-    default @NotNull Result<D> getValue(@NotNull D value, @NotNull String key) {
-        return delegate().getValue(value, key);
-    }
-
-    @Override
     default @NotNull Result<MapLike<D>> getMap(@NotNull D value) {
         return delegate().getMap(value);
     }
@@ -178,26 +156,6 @@ public interface TranscoderProxy<D> extends Transcoder<D> {
     @Override
     default @NotNull MapBuilder<D> createMap() {
         return delegate().createMap();
-    }
-
-    @Override
-    default @NotNull Result<D> mergeToMap(@NotNull List<D> maps) {
-        return delegate().mergeToMap(maps);
-    }
-
-    @Override
-    default @NotNull Result<Collection<Map.Entry<String, D>>> getMapEntries(@NotNull D value) {
-        return delegate().getMapEntries(value);
-    }
-
-    @Override
-    default @NotNull Result<Integer> listSize(@NotNull D value) {
-        return delegate().listSize(value);
-    }
-
-    @Override
-    default @NotNull Result<D> getIndex(@NotNull D value, int index) {
-        return delegate().getIndex(value, index);
     }
 
     @Override

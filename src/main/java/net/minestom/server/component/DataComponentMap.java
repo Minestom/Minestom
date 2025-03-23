@@ -8,6 +8,8 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -32,7 +34,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
     @ApiStatus.Internal
     static @NotNull NetworkBuffer.Type<DataComponentMap> networkType(
             @NotNull IntFunction<DataComponent<?>> idToType) {
-        return new DataComponentMapImpl.NetworkTypeImpl(idToType, false);
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, false, true);
     }
 
     /**
@@ -50,8 +52,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
-        return new DataComponentMapImpl.NetworkTypeImpl(idToType, true);
+    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType, boolean trusted) {
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, true, trusted);
     }
 
     /**
@@ -130,6 +132,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
 
+    @NotNull Set<Map.Entry<DataComponent<?>, Object>> entrySet();
+
     @NotNull Builder toBuilder();
 
     @NotNull PatchBuilder toPatchBuilder();
@@ -143,7 +147,6 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         }
 
         @NotNull DataComponentMap build();
-
     }
 
     sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
@@ -157,7 +160,6 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
 
         @NotNull DataComponentMap build();
-
     }
 
 }

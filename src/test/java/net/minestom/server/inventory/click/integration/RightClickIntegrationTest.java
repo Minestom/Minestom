@@ -188,7 +188,7 @@ public class RightClickIntegrationTest {
             }
         }
         player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 1,
-                ClientClickWindowPacket.ClickType.PICKUP, Map.of(), ItemStack.AIR));
+                ClientClickWindowPacket.ClickType.PICKUP, Map.of(), ItemStack.Hash.AIR));
         player.interpretPacketQueue();
     }
 }

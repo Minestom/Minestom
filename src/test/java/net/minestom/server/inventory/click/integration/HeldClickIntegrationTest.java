@@ -186,7 +186,7 @@ public class HeldClickIntegrationTest {
             }
         }
         player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) target,
-                ClientClickWindowPacket.ClickType.SWAP, Map.of(), ItemStack.AIR));
+                ClientClickWindowPacket.ClickType.SWAP, Map.of(), ItemStack.Hash.AIR));
         player.interpretPacketQueue();
     }
 }

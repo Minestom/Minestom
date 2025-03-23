@@ -5,10 +5,8 @@ import net.kyori.adventure.nbt.BinaryTag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 @ApiStatus.Experimental
 public interface Transcoder<D> {
@@ -51,36 +49,21 @@ public interface Transcoder<D> {
 
     @NotNull D createString(@NotNull String value);
 
-    // TODO(1.21.5) swap for a ListLike that allows querying indices
     @NotNull Result<List<D>> getList(@NotNull D value);
 
-    @NotNull Result<Integer> listSize(@NotNull D value);
-
-    @NotNull Result<D> getIndex(@NotNull D value, int index);
-
-    @NotNull D createList(@NotNull List<D> value);
+    default @NotNull D emptyList() {
+        return createList(0).build();
+    }
 
     @NotNull ListBuilder<D> createList(int expectedSize);
 
-    @Deprecated
-    boolean hasValue(@NotNull D value, @NotNull String key);
-
-    // TODO(1.21.5): this should instead return a MapLike or something that allows iteration and getting keys
-    @Deprecated
-    @NotNull Result<Collection<Map.Entry<String, D>>> getMapEntries(@NotNull D value);
-
-    @Deprecated
-    @NotNull Result<D> getValue(@NotNull D value, @NotNull String key);
-
-    @Deprecated
-    @NotNull Result<D> putValue(@NotNull D map, @NotNull String key, @NotNull D value);
-
     @NotNull Result<MapLike<D>> getMap(@NotNull D value);
 
-    // TODO(1.21.5): there are a few places we use an empty map, could save a few cycles and have a dedicated function for empties.
-    @NotNull MapBuilder<D> createMap();
+    default @NotNull D emptyMap() {
+        return createMap().build();
+    }
 
-    @NotNull Result<D> mergeToMap(@NotNull List<D> maps);
+    @NotNull MapBuilder<D> createMap();
 
     default @NotNull Result<byte[]> getByteArray(@NotNull D value) {
         final Result<List<D>> listResult = getList(value);
@@ -97,9 +80,9 @@ public interface Transcoder<D> {
     }
 
     default @NotNull D createByteArray(byte[] value) {
-        final List<D> list = new ArrayList<>(value.length);
+        final ListBuilder<D> list = createList(value.length);
         for (byte b : value) list.add(createByte(b));
-        return createList(list);
+        return list.build();
     }
 
     default @NotNull Result<int[]> getIntArray(@NotNull D value) {
@@ -117,9 +100,9 @@ public interface Transcoder<D> {
     }
 
     default @NotNull D createIntArray(int[] value) {
-        final List<D> list = new ArrayList<>(value.length);
+        final ListBuilder<D> list = createList(value.length);
         for (int i : value) list.add(createInt(i));
-        return createList(list);
+        return list.build();
     }
 
     default @NotNull Result<long[]> getLongArray(@NotNull D value) {
@@ -137,9 +120,9 @@ public interface Transcoder<D> {
     }
 
     default @NotNull D createLongArray(long[] value) {
-        final List<D> list = new ArrayList<>(value.length);
+        final ListBuilder<D> list = createList(value.length);
         for (long l : value) list.add(createLong(l));
-        return createList(list);
+        return list.build();
     }
 
     <O> @NotNull Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull D value);
@@ -151,12 +134,25 @@ public interface Transcoder<D> {
     }
 
     interface MapLike<D> {
+
+        @NotNull Collection<String> keys();
+
         boolean hasValue(@NotNull String key);
 
         @NotNull Result<D> getValue(@NotNull String key);
+
+        default int size() {
+            return keys().size();
+        }
+
+        default boolean isEmpty() {
+            return size() == 0;
+        }
     }
 
     interface MapBuilder<D> {
+        @NotNull MapBuilder<D> put(@NotNull D key, D value);
+
         @NotNull MapBuilder<D> put(@NotNull String key, D value);
 
         D build();
