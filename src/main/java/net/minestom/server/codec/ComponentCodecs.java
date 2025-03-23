@@ -4,6 +4,8 @@ import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
+import net.minestom.server.codec.Transcoder.MapBuilder;
+import net.minestom.server.codec.Transcoder.MapLike;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -98,7 +100,7 @@ public final class ComponentCodecs {
         throw new IllegalStateException("Unknown hover event action: " + action);
     }
 
-    public static final Codec<Style> STYLE = StructCodec.struct(
+    public static final StructCodec<Style> STYLE = StructCodec.struct(
             "color", TEXT_COLOR.optional(), Style::color,
             "shadow_color", SHADOW_COLOR.optional(), Style::shadowColor,
             "bold", Codec.BOOLEAN.optional(), s -> stateToBool(s.decoration(TextDecoration.BOLD)),
@@ -125,113 +127,126 @@ public final class ComponentCodecs {
                     .build()
     );
 
-    private static final Codec<TextComponent> TEXT_CONTENT = StructCodec.struct(
+    private static final StructCodec<TextComponent> TEXT_CONTENT = StructCodec.struct(
             "text", Codec.STRING, TextComponent::content,
             Component::text);
-    private static final Codec<TranslatableComponent> TRANSLATABLE_CONTENT = StructCodec.struct(
+    private static final StructCodec<TranslatableComponent> TRANSLATABLE_CONTENT = StructCodec.struct(
             "translate", Codec.STRING, TranslatableComponent::key,
             "fallback", Codec.STRING.optional(), TranslatableComponent::fallback,
             "with", COMPONENT_FORWARD.list().optional(List.of()), TranslatableComponent::args,
             Component::translatable);
-    private static final Codec<ScoreComponent> SCORE_INNER_CONTENT = StructCodec.struct(
+    private static final StructCodec<ScoreComponent> SCORE_INNER_CONTENT = StructCodec.struct(
             "name", Codec.STRING, ScoreComponent::name,
             "objective", Codec.STRING, ScoreComponent::objective,
             Component::score);
-    private static final Codec<ScoreComponent> SCORE_CONTENT = StructCodec.struct(
+    private static final StructCodec<ScoreComponent> SCORE_CONTENT = StructCodec.struct(
             "score", SCORE_INNER_CONTENT, component -> component,
             component -> component);
-    private static final Codec<SelectorComponent> SELECTOR_CONTENT = StructCodec.struct(
+    private static final StructCodec<SelectorComponent> SELECTOR_CONTENT = StructCodec.struct(
             "selector", Codec.STRING, SelectorComponent::pattern,
             "separator", COMPONENT_FORWARD.optional(), SelectorComponent::separator,
             Component::selector);
-    private static final Codec<KeybindComponent> KEYBIND_CONTENT = StructCodec.struct(
+    private static final StructCodec<KeybindComponent> KEYBIND_CONTENT = StructCodec.struct(
             "keybind", Codec.STRING, component -> component.keybind(),
             Component::keybind);
-    private static final Codec<NBTComponent<?, ?>> NBT_CONTENT = new Codec<>() {
+    private static final StructCodec<NBTComponent<?, ?>> NBT_CONTENT = new StructCodec<>() {
         @Override
-        public @NotNull <D> Result<NBTComponent<?, ?>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return new Result.Error<>("NBTComponent decoding not implemented");
+        public @NotNull <D> Result<NBTComponent<?, ?>> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+            return new Result.Error<>("NBTComponent not yet supported");
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable NBTComponent<?, ?> value) {
-            return new Result.Error<>("NBTComponent decoding not implemented");
+        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull NBTComponent<?, ?> value, @NotNull MapBuilder<D> map) {
+            return new Result.Error<>("NBTComponent not yet supported");
         }
     };
 
     // TODO(1.21.5) need to accept list or string, and try to encode as string if possible. never encode as list.
     public static final Codec<Component> COMPONENT = Codec.Recursive((componentCodec) -> {
-        final Codec<List<Component>> childrenCodec = StructCodec.struct(
-                "extra", componentCodec.list().optional(List.of()), children -> children,
+        final Codec<List<Component>> componentListCodec = componentCodec.list();
+        final StructCodec<List<Component>> childrenCodec = StructCodec.struct(
+                "extra", componentListCodec.optional(List.of()), children -> children,
                 children -> children);
         return new Codec<>() {
             @Override
             public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-                final String maybeType = coder.getValue(value, "type").map(coder::getString).orElse(null);
+                // A single string is a valid serialized form of a text component, try it.
+                final Result<String> stringResult = coder.getString(value);
+                if (stringResult instanceof Result.Ok(String string))
+                    return new Result.Ok<>(Component.text(string));
+                // A list of components is a valid serialized form of a component, try it.
+                final Result<List<Component>> listResult = componentListCodec.decode(coder, value);
+                if (listResult instanceof Result.Ok(List<Component> list))
+                    return new Result.Ok<>(Component.empty().children(list));
+
+                // Otherwise it must be an object and we need to infer the type
+                final Result<MapLike<D>> mapResult = coder.getMap(value);
+                if (!(mapResult instanceof Result.Ok(MapLike<D> map)))
+                    return mapResult.cast();
+
+                final String maybeType = map.getValue("type").map(coder::getString).orElse(null);
                 final Result<? extends Component> baseResult = switch (maybeType) {
-                    case "text" -> TEXT_CONTENT.decode(coder, value);
-                    case "translatable" -> TRANSLATABLE_CONTENT.decode(coder, value);
-                    case "score" -> SCORE_CONTENT.decode(coder, value);
-                    case "selector" -> SELECTOR_CONTENT.decode(coder, value);
-                    case "keybind" -> KEYBIND_CONTENT.decode(coder, value);
-                    case "nbt" -> NBT_CONTENT.decode(coder, value);
+                    case "text" -> TEXT_CONTENT.decodeFromMap(coder, map);
+                    case "translatable" -> TRANSLATABLE_CONTENT.decodeFromMap(coder, map);
+                    case "score" -> SCORE_CONTENT.decodeFromMap(coder, map);
+                    case "selector" -> SELECTOR_CONTENT.decodeFromMap(coder, map);
+                    case "keybind" -> KEYBIND_CONTENT.decodeFromMap(coder, map);
+                    case "nbt" -> NBT_CONTENT.decodeFromMap(coder, map);
                     case null, default -> {
                         // Type was not included, try to guess based on the content.
-                        final Result<? extends Component> textResult = TEXT_CONTENT.decode(coder, value);
+                        final Result<? extends Component> textResult = TEXT_CONTENT.decodeFromMap(coder, map);
                         if (textResult instanceof Result.Ok<? extends Component>)
                             yield textResult;
-                        final Result<? extends Component> translatableResult = TRANSLATABLE_CONTENT.decode(coder, value);
+                        final Result<? extends Component> translatableResult = TRANSLATABLE_CONTENT.decodeFromMap(coder, map);
                         if (translatableResult instanceof Result.Ok<? extends Component>)
                             yield translatableResult;
-                        final Result<? extends Component> scoreResult = SCORE_CONTENT.decode(coder, value);
+                        final Result<? extends Component> scoreResult = SCORE_CONTENT.decodeFromMap(coder, map);
                         if (scoreResult instanceof Result.Ok<? extends Component>)
                             yield scoreResult;
-                        final Result<? extends Component> selectorResult = SELECTOR_CONTENT.decode(coder, value);
+                        final Result<? extends Component> selectorResult = SELECTOR_CONTENT.decodeFromMap(coder, map);
                         if (selectorResult instanceof Result.Ok<? extends Component>)
                             yield selectorResult;
-                        final Result<? extends Component> keybindResult = KEYBIND_CONTENT.decode(coder, value);
+                        final Result<? extends Component> keybindResult = KEYBIND_CONTENT.decodeFromMap(coder, map);
                         if (keybindResult instanceof Result.Ok<? extends Component>)
                             yield keybindResult;
-                        final Result<? extends Component> nbtResult = NBT_CONTENT.decode(coder, value);
+                        final Result<? extends Component> nbtResult = NBT_CONTENT.decodeFromMap(coder, map);
                         if (nbtResult instanceof Result.Ok<? extends Component>)
                             yield nbtResult;
                         yield new Result.Error<>("Unable to determine component type");
                     }
                 };
-                if (!(baseResult instanceof Result.Ok(Component base)))
-                    return baseResult.cast();
 
-                final Result<List<Component>> childrenResult = childrenCodec.decode(coder, value);
-                if (!(childrenResult instanceof Result.Ok(List<Component> children)))
-                    return childrenResult.cast();
-                final Result<Style> styleResult = STYLE.decode(coder, value);
-                if (!(styleResult instanceof Result.Ok(Style style)))
-                    return styleResult.cast();
-                return new Result.Ok<>(base.style(style).children(children));
+                return baseResult
+                        .map(base -> childrenCodec.decodeFromMap(coder, map).mapResult(base::children))
+                        .map(style -> STYLE.decodeFromMap(coder, map).mapResult(style::style));
             }
 
             @Override
             public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
                 if (value == null) return new Result.Error<>("null");
+
+                // As a special case we want to encode text components with no children or styling as strings directly.
+                if (value instanceof TextComponent text && value.children().isEmpty() && value.style().isEmpty())
+                    return new Result.Ok<>(coder.createString(text.content()));
+
+                // Otherwise an object. Never encode as a list even through it is a supported decode format.
+                final MapBuilder<D> map = coder.createMap();
                 final Result<D> baseResult = switch (value) {
-                    case TextComponent textComponent -> TEXT_CONTENT.encode(coder, textComponent);
+                    case TextComponent textComponent -> TEXT_CONTENT.encodeToMap(coder, textComponent, map);
                     case TranslatableComponent translatableComponent ->
-                            TRANSLATABLE_CONTENT.encode(coder, translatableComponent);
-                    case ScoreComponent scoreComponent -> SCORE_CONTENT.encode(coder, scoreComponent);
-                    case SelectorComponent selectorComponent -> SELECTOR_CONTENT.encode(coder, selectorComponent);
-                    case KeybindComponent keybindComponent -> KEYBIND_CONTENT.encode(coder, keybindComponent);
-                    case NBTComponent<?, ?> nbtComponent -> NBT_CONTENT.encode(coder, nbtComponent);
+                            TRANSLATABLE_CONTENT.encodeToMap(coder, translatableComponent, map);
+                    case ScoreComponent scoreComponent -> SCORE_CONTENT.encodeToMap(coder, scoreComponent, map);
+                    case SelectorComponent selectorComponent ->
+                            SELECTOR_CONTENT.encodeToMap(coder, selectorComponent, map);
+                    case KeybindComponent keybindComponent -> KEYBIND_CONTENT.encodeToMap(coder, keybindComponent, map);
+                    case NBTComponent<?, ?> nbtComponent -> NBT_CONTENT.encodeToMap(coder, nbtComponent, map);
                     default -> new Result.Error<>("Unknown component type: " + value.getClass());
                 };
-                if (!(baseResult instanceof Result.Ok(D base)))
-                    return baseResult.cast();
-                final Result<D> childrenResult = childrenCodec.encode(coder, value.children());
-                if (!(childrenResult instanceof Result.Ok(D children)))
-                    return childrenResult.cast();
-                final Result<D> styleResult = STYLE.encode(coder, value.style());
-                if (!(styleResult instanceof Result.Ok(D style)))
-                    return styleResult.cast();
-                return coder.mergeToMap(List.of(base, children, style));
+
+                return baseResult
+                        .map(ignored -> childrenCodec.encodeToMap(coder, value.children(), map))
+                        .map(ignored -> STYLE.encodeToMap(coder, value.style(), map))
+                        .mapResult(ignored -> map.build());
             }
         };
     });

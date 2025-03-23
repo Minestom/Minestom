@@ -103,9 +103,19 @@ public non-sealed class PlayerInventory extends AbstractInventory {
      * @param cursorItem the new cursor item
      */
     public void setCursorItem(@NotNull ItemStack cursorItem) {
+        setCursorItem(cursorItem, true);
+    }
+
+    /**
+     * Changes the player cursor item.
+     *
+     * @param cursorItem the new cursor item
+     * @param sendPacket true to send the update packet to the client, false otherwise
+     */
+    public void setCursorItem(@NotNull ItemStack cursorItem, boolean sendPacket) {
         if (this.cursorItem.equals(cursorItem)) return;
         this.cursorItem = cursorItem;
-        sendPacketToViewers(new SetCursorItemPacket(cursorItem));
+        if (sendPacket) sendPacketToViewers(new SetCursorItemPacket(cursorItem));
     }
 
     @Override
