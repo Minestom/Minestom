@@ -27,7 +27,6 @@ public sealed interface VillagerProfession extends StaticProtocolObject, Village
         return registry().id();
     }
 
-
     static @Nullable VillagerProfession fromId(int id) {
         return VillagerProfessionImpl.getId(id);
     }

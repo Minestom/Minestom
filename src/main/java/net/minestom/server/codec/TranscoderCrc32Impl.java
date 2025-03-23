@@ -105,8 +105,10 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
         final HashMap<Integer, Integer> map = new HashMap<>();
         return new MapBuilder<>() {
             @Override
-            public void put(@NotNull String key, Integer value) {
-                map.put(createString(key), value);
+            public @NotNull MapBuilder<Integer> put(@NotNull String key, Integer value) {
+                if (value != EMPTY)
+                    map.put(createString(key), value);
+                return this;
             }
 
             @Override
@@ -125,7 +127,7 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
     @Override
     public @NotNull Result<Integer> mergeToMap(@NotNull List<Integer> maps) {
         // TODO(1.21.5): this cannot work, need to figure out alternative.
-        //  we cannot create a map from 3 pre-serialized maps.
+        //  we cannot create a map from 3 pre-hashed maps.
         throw new UnsupportedOperationException("cannot mergeToMap in a CRC32 transcoder map");
     }
 
@@ -197,6 +199,21 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
     }
 
     @Override
+    public @NotNull Result<byte[]> getByteArray(@NotNull Integer value) {
+        return writeOnly();
+    }
+
+    @Override
+    public @NotNull Result<int[]> getIntArray(@NotNull Integer value) {
+        return writeOnly();
+    }
+
+    @Override
+    public @NotNull Result<long[]> getLongArray(@NotNull Integer value) {
+        return writeOnly();
+    }
+
+    @Override
     public @NotNull Result<List<Integer>> getList(@NotNull Integer value) {
         return writeOnly();
     }
@@ -223,6 +240,16 @@ final class TranscoderCrc32Impl implements Transcoder<Integer> {
 
     @Override
     public @NotNull Result<Integer> getValue(@NotNull Integer value, @NotNull String key) {
+        return writeOnly();
+    }
+
+    @Override
+    public @NotNull Result<MapLike<Integer>> getMap(@NotNull Integer value) {
+        return writeOnly();
+    }
+
+    @Override
+    public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull Integer value) {
         return writeOnly();
     }
 

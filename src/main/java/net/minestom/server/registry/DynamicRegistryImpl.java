@@ -2,7 +2,6 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -17,8 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -231,30 +228,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             final String namespace = entry.getKey();
             final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
             registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
-        }
-    }
-
-    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
-        Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
-            if (!(tag instanceof CompoundBinaryTag compound)) {
-                throw new IllegalStateException("Root tag must be a compound tag");
-            }
-
-            final Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
-            for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
-                final String namespace = entry.getKey();
-                final Result<T> valueResult = registry.codec.decode(transcoder, entry.getValue());
-                if (valueResult instanceof Result.Ok(T value)) {
-                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
-                } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.id() + ": " + valueResult);
-                }
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 }

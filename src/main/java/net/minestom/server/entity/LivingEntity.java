@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
@@ -92,6 +92,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack leggings = ItemStack.AIR;
     private ItemStack boots = ItemStack.AIR;
     private ItemStack bodyEquipment = ItemStack.AIR;
+    private ItemStack saddleEquipment = ItemStack.AIR;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -126,6 +127,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate;
             case HELMET -> helmet;
             case BODY -> bodyEquipment;
+            case SADDLE -> saddleEquipment;
         };
     }
 
@@ -142,6 +144,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate = newItem;
             case HELMET -> helmet = newItem;
             case BODY -> bodyEquipment = newItem;
+            case SADDLE -> saddleEquipment = newItem;
         }
 
         syncEquipment(slot);
@@ -153,8 +156,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
-
-
+    
     /**
      * Updates the current attributes of the living entity based on
      *
