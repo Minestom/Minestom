@@ -93,9 +93,9 @@ public sealed interface Holder<T> {
             @Override
             public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Holder<T> value) {
                 if (value == null) return new Result.Error<>("null");
-                if (!(coder instanceof RegistryTranscoder<D>(var ignored, var registries)))
+                if (!(coder instanceof RegistryTranscoder<D> context))
                     return new Result.Error<>("Missing registries in transcoder");
-                final var registry = selector.select(registries);
+                final var registry = selector.select(context.registries());
                 return switch (value) {
                     case Reference(DynamicRegistry.Key<T> key) -> {
                         if (registry.getId(key) == -1)
@@ -108,9 +108,9 @@ public sealed interface Holder<T> {
 
             @Override
             public @NotNull <D> Result<Holder<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-                if (!(coder instanceof RegistryTranscoder<D>(var ignored, var registries)))
+                if (!(coder instanceof RegistryTranscoder<D> context))
                     return new Result.Error<>("Missing registries in transcoder");
-                final var registry = selector.select(registries);
+                final var registry = selector.select(context.registries());
                 final Result<T> directResult = registryCodec.decode(coder, value);
                 if (directResult instanceof Result.Ok(T direct))
                     return new Result.Ok<>(new Direct<>(direct));

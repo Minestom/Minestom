@@ -104,7 +104,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
             @NotNull String id, @NotNull Codec<T> codec,
             @NotNull Registries registries, @NotNull Registry.Resource resource) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
-        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
+        RegistryHelper.loadStaticJsonRegistry(registries, registry, resource);
         return registry;
     }
 

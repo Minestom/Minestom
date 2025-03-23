@@ -1,15 +1,14 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.validate.Check;
+import net.minestom.server.registry.RegistryTranscoder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,12 +20,33 @@ final class CodecImpl {
 
     record RawValueImpl<D>(@NotNull Transcoder<D> coder, @NotNull D value) implements Codec.RawValue {
 
+        RawValueImpl {
+            Objects.requireNonNull(coder);
+            Objects.requireNonNull(value);
+        }
+
         @Override
         public @NotNull <D1> Result<D1> convertTo(@NotNull Transcoder<D1> coder) {
-            return null;
+            // If the two transcoders are the same instance, we can immediately return the value.
+            if (TranscoderProxy.extractDelegate(this.coder) == TranscoderProxy.extractDelegate(coder))
+                //noinspection unchecked
+                return new Result.Ok<>((D1) value);
+            return this.coder.convertTo(coder, value);
         }
     }
 
+    record RawValueCodecImpl() implements Codec<Codec.RawValue> {
+        @Override
+        public @NotNull <D> Result<RawValue> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            return new Result.Ok<>(new RawValueImpl<>(coder, value));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable RawValue value) {
+            if (value == null) return new Result.Error<>("null");
+            return value.convertTo(coder);
+        }
+    }
 
     interface PrimitiveEncoder<T> {
         <D> @NotNull D encode(@NotNull Transcoder<D> coder, @NotNull T value);
@@ -42,7 +62,7 @@ final class CodecImpl {
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
             if (value == null) return new Result.Error<>("null");
-            return (Result<D>) encoder.encode(coder, value);
+            return new Result.Ok<>(encoder.encode(coder, value));
         }
     }
 
@@ -54,7 +74,8 @@ final class CodecImpl {
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
-            if (value == null) return new Result.Ok<>(coder.createNull());
+            if (value == null || Objects.equals(value, defaultValue))
+                return new Result.Ok<>(coder.createNull());
             return inner.encode(coder, value);
         }
     }
@@ -63,12 +84,24 @@ final class CodecImpl {
                                @NotNull Function<S, T> from) implements Codec<S> {
         @Override
         public @NotNull <D> Result<S> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return new Result.Ok<>(to.apply(inner.decode(coder, value).orElse(null)));
+            try {
+                final Result<T> innerResult = inner.decode(coder, value);
+                return switch (innerResult) {
+                    case Result.Ok(T inner) -> new Result.Ok<>(to.apply(inner));
+                    case Result.Error(String error) -> new Result.Error<>(error);
+                };
+            } catch (Exception e) {
+                return new Result.Error<>(e.getMessage());
+            }
         }
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder, @Nullable S value) {
-            return inner.encode(coder, from.apply(value));
+            try {
+                return inner.encode(coder, from.apply(value));
+            } catch (Exception e) {
+                return new Result.Error<>(e.getMessage());
+            }
         }
     }
 
@@ -89,7 +122,7 @@ final class CodecImpl {
                     return decodedItem.cast();
                 decodedList.add(valueItem);
             }
-            return new Result.Ok<>(decodedList);
+            return new Result.Ok<>(List.copyOf(decodedList));
         }
 
         @Override
@@ -102,7 +135,8 @@ final class CodecImpl {
                 final Result<D> itemResult = inner.encode(coder, item);
                 if (!(itemResult instanceof Result.Ok(D encodedItem)))
                     return itemResult.cast();
-                encodedList.add(encodedItem);
+                if (encodedItem != null)
+                    encodedList.add(encodedItem);
             }
             return new Result.Ok<>(encodedList.build());
         }
@@ -157,10 +191,7 @@ final class CodecImpl {
 
             final Map<K, V> decodedMap = new HashMap<>(entries.size());
             for (final Map.Entry<String, D> entry : entries) {
-                final Result<D> keyDResult = coder.getValue(value, entry.getKey());
-                if (!(keyDResult instanceof Result.Ok(D keyD)))
-                    return keyDResult.cast();
-                final Result<K> keyResult = keyCodec.decode(coder, keyD);
+                final Result<K> keyResult = keyCodec.decode(coder, coder.createString(entry.getKey()));
                 if (!(keyResult instanceof Result.Ok(K decodedKey)))
                     return keyResult.cast();
                 final Result<V> valueResult = valueCodec.decode(coder, entry.getValue());
@@ -197,26 +228,19 @@ final class CodecImpl {
     }
 
     record UnionImpl<T, R>(@NotNull String keyField, @NotNull Codec<T> keyCodec,
-                           @NotNull Function<T, Codec<R>> serializers,
-                           @NotNull Function<R, T> keyFunc) implements Codec<R> {
-        @Override
-        public @NotNull <D> Result<R> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Result<D> discriminantResult = coder.getValue(value, keyField);
-            if (!(discriminantResult instanceof Result.Ok(D discriminant)))
-                return discriminantResult.cast();
-            if (discriminant == null) return new Result.Error<>("null");
+                           @NotNull Function<T, StructCodec<R>> serializers,
+                           @NotNull Function<R, T> keyFunc) implements StructCodec<R> {
 
-            final Result<T> keyResult = keyCodec.decode(coder, discriminant);
+        @Override
+        public @NotNull <D> Result<R> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+            final Result<T> keyResult = map.getValue(keyField).map(key -> keyCodec.decode(coder, key));
             if (!(keyResult instanceof Result.Ok(T key)))
                 return keyResult.cast();
-
-            return serializers.apply(key).decode(coder, value);
+            return serializers.apply(key).decodeFromMap(coder, map);
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable R value) {
-            if (value == null) return new Result.Error<>("null");
-
+        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull R value, Transcoder.@NotNull MapBuilder<D> map) {
             final T key = keyFunc.apply(value);
             var serializer = serializers.apply(key);
             if (serializer == null) return new Result.Error<>("no union value: " + key);
@@ -226,60 +250,81 @@ final class CodecImpl {
                 return keyResult.cast();
             if (keyValue == null) return new Result.Error<>("null");
 
-            final Result<D> serializedResult = serializer.encode(coder, value);
-            if (!(serializedResult instanceof Result.Ok(D serializedValue)))
-                return serializedResult.cast();
-            if (serializedValue == null) return new Result.Error<>("null");
-
-            return coder.putValue(serializedValue, keyField, keyValue);
+            map.put(keyField, keyValue);
+            return serializer.encodeToMap(coder, value, map);
         }
     }
 
-    record RegistryTaggedUnion<T>(
-            @NotNull Registries.Selector<Codec<? extends T>> registrySelector,
-            @NotNull Function<T, Codec<? extends T>> serializerGetter,
-            @NotNull String key
-    ) implements Codec<T> {
+    record RegistryKeyImpl<T>(@NotNull Registries.Selector<T> selector) implements Codec<DynamicRegistry.Key<T>> {
         @Override
-        public @NotNull <D> Result<T> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
-            final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
+        public @NotNull <D> Result<DynamicRegistry.Key<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            if (!(coder instanceof RegistryTranscoder<D> context))
+                return new Result.Error<>("Missing registries in transcoder");
+            final var registry = selector.select(context.registries());
 
-            if (!(tag instanceof CompoundBinaryTag compound))
-                throw new IllegalArgumentException("Expected compound tag for tagged union");
-
-            final String type = compound.getString(key);
-            Check.argCondition(type.isEmpty(), "Missing {0} field: {1}", key, tag);
-            //noinspection unchecked
-            final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) registry.get(Key.key(type));
-            Check.notNull(serializer, "Unregistered serializer for: {0}", type);
-
-            return serializer.read(context, tag);
+            final Result<String> keyResult = coder.getString(value);
+            if (!(keyResult instanceof Result.Ok(@KeyPattern String keyStr)))
+                return keyResult.cast();
+            final DynamicRegistry.Key<T> key = DynamicRegistry.Key.of(Key.key(keyStr));
+            if (registry.getId(key) == -1)
+                return new Result.Error<>("no registry value: " + key);
+            return new Result.Ok<>(key);
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable T value) {
-            final Registries registries = Objects.requireNonNull(context.registries(), "No registries in context");
-            final DynamicRegistry<BinaryTagSerializer<? extends T>> registry = registrySelector.apply(registries);
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, DynamicRegistry.@Nullable Key<T> value) {
+            if (value == null) return new Result.Error<>("null");
+            if (!(coder instanceof RegistryTranscoder<D> context))
+                return new Result.Error<>("Missing registries in transcoder");
+            final var registry = selector.select(context.registries());
+
+            if (registry.getId(value) == -1)
+                return new Result.Error<>("no registry value: " + value);
+            return new Result.Ok<>(coder.createString(value.name()));
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    record RegistryTaggedUnionImpl<T>(
+            @NotNull Registries.Selector<StructCodec<? extends T>> registrySelector,
+            @NotNull Function<T, StructCodec<? extends T>> valueToCodec,
+            @NotNull String key
+    ) implements StructCodec<T> {
+        @Override
+        public @NotNull <D> Result<T> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+            if (!(coder instanceof RegistryTranscoder<D> context))
+                return new Result.Error<>("Missing registries in transcoder");
+            final var registry = registrySelector.select(context.registries());
+
+            final Result<String> type = map.getValue(key).map(coder::getString);
+            if (!(type instanceof Result.Ok(@KeyPattern String tag)))
+                return type.mapError(e -> key + ": " + e).cast();
+            final StructCodec<T> innerCodec = (StructCodec<T>) registry.get(Key.key(tag));
+            if (innerCodec == null) return new Result.Error<>("No such key: " + tag);
+
+            return innerCodec.decodeFromMap(coder, map);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull T value, Transcoder.@NotNull MapBuilder<D> map) {
+            if (!(coder instanceof RegistryTranscoder<D> context))
+                return new Result.Error<>("Missing registries in transcoder");
+            final var registry = registrySelector.select(context.registries());
 
             //noinspection unchecked
-            final BinaryTagSerializer<T> serializer = (BinaryTagSerializer<T>) serializerGetter.apply(value);
-            final DynamicRegistry.Key<BinaryTagSerializer<? extends T>> type = registry.getKey(serializer);
-            Check.notNull(type, "Unregistered serializer for: {0}", value);
+            final StructCodec<T> innerCodec = (StructCodec<T>) valueToCodec.apply(value);
+            final DynamicRegistry.Key<StructCodec<? extends T>> type = registry.getKey(innerCodec);
+            if (type == null) return new Result.Error<>("Unregistered serializer for: " + value);
             if (context.forClient() && registry.getPack(type) != DataPack.MINECRAFT_CORE)
-                return null;
+                return new Result.Ok<>(null);
 
-            final BinaryTag result = serializer.write(context, value);
-            if (result == null) return null;
-            if (!(result instanceof CompoundBinaryTag resultCompound))
-                throw new IllegalArgumentException("Expected compound tag for tagged union");
-
-            return CompoundBinaryTag.builder().put(resultCompound).putString(key, type.name()).build();
+            map.put(key, coder.createString(type.name()));
+            return innerCodec.encodeToMap(coder, value, map);
         }
     }
 
     static final class RecursiveImpl<T> implements Codec<T> {
-        private final Codec<T> delegate;
+        final Codec<T> delegate;
 
         public RecursiveImpl(@NotNull Function<Codec<T>, Codec<T>> self) {
             this.delegate = self.apply(this);
@@ -349,32 +394,6 @@ final class CodecImpl {
         }
     }
 
-    record UUIDImpl() implements Codec<UUID> {
-        @Override
-        public @NotNull <D> Result<UUID> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Result<int[]> uuidResult = coder.getIntArray(value);
-
-            if (uuidResult instanceof Result.Ok<int[]>(int[] ints) && ints.length == 4) {
-                return new Result.Ok<>(new UUID(
-                        ((long) ints[0] << 32) | (ints[1] & 0xFFFFFFFFL),
-                        ((long) ints[2] << 32) | (ints[3] & 0xFFFFFFFFL)
-                ));
-            }
-
-            return new Result.Error<>("Invalid UUID value or length: " + value);
-        }
-
-        @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable UUID value) {
-            if (value == null) return new Result.Error<>("Cannot encode a null UUID");
-
-            return new Result.Ok<>(coder.createIntArray(new int[]{
-                    (int) (value.getMostSignificantBits() >>> 32), (int) value.getMostSignificantBits(),
-                    (int) (value.getLeastSignificantBits() >>> 32), (int) value.getLeastSignificantBits()
-            }));
-        }
-    }
-
     record BlockPositionImpl() implements Codec<Point> {
         @Override
         public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
@@ -388,6 +407,7 @@ final class CodecImpl {
 
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Point value) {
+            if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(coder.createIntArray(new int[]{
                     (int) value.x(),
                     (int) value.y(),
