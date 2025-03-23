@@ -1,11 +1,14 @@
 package net.minestom.server.entity.metadata.animal;
 
 import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class HorseMeta extends AbstractHorseMeta {
     public HorseMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
@@ -37,6 +40,21 @@ public class HorseMeta extends AbstractHorseMeta {
                 Marking.VALUES[variantID >> 8],
                 Color.VALUES[variantID & 0xFF]
         );
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.HORSE_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.HORSE_VARIANT)
+            setVariant((Variant) value);
+        else super.set(component, value);
     }
 
     public static class Variant {

@@ -14,7 +14,7 @@ public record AttributeEffect(
         @NotNull AttributeOperation operation
 ) implements Enchantment.Effect, LocationEffect {
 
-    public static final Codec<AttributeEffect> CODEC = StructCodec.struct(
+    public static final StructCodec<AttributeEffect> CODEC = StructCodec.struct(
             "id", Codec.KEY, AttributeEffect::id,
             "attribute", Attribute.CODEC, AttributeEffect::attribute,
             "amount", LevelBasedValue.CODEC, AttributeEffect::amount,
@@ -22,7 +22,7 @@ public record AttributeEffect(
             AttributeEffect::new);
 
     @Override
-    public @NotNull Codec<AttributeEffect> codec() {
+    public @NotNull StructCodec<AttributeEffect> codec() {
         return CODEC;
     }
 }

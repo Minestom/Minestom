@@ -3,7 +3,7 @@ package net.minestom.server;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
@@ -298,19 +298,19 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.instrument();
     }
 
-    public static @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return process().enchantmentLevelBasedValues();
     }
 
-    public static @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return process().enchantmentValueEffects();
     }
 
-    public static @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return process().enchantmentEntityEffects();
     }
 
-    public static @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return process().enchantmentLocationEffects();
     }
 

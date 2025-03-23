@@ -3,8 +3,9 @@ package net.minestom.server;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
-import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
@@ -67,10 +68,10 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ExceptionManager exception;
 
-    private final DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects;
-    private final DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects;
-    private final DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects;
+    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
+    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
+    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
+    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<DimensionType> dimensionType;
@@ -118,6 +119,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
+        var ignoredForInit = DataComponents.ITEM_NAME;
 
         this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
         this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
@@ -245,22 +247,22 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return enchantmentLevelBasedValues;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends ValueEffect>> enchantmentValueEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return enchantmentValueEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends EntityEffect>> enchantmentEntityEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return enchantmentEntityEffects;
     }
 
     @Override
-    public @NotNull DynamicRegistry<Codec<? extends LocationEffect>> enchantmentLocationEffects() {
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return enchantmentLocationEffects;
     }
 
