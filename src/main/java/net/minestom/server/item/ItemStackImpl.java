@@ -8,6 +8,7 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.TooltipDisplay;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
@@ -188,28 +189,7 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public ItemStack.@NotNull Builder hideExtraTooltip() {
-            // TODO(1.21.5)
-//            AttributeList attributeModifiers = components.get(DataComponents.ATTRIBUTE_MODIFIERS);
-//            components.set(DataComponents.ATTRIBUTE_MODIFIERS, attributeModifiers == null
-//                    ? new AttributeList(List.of(), false) : attributeModifiers.withTooltip(false));
-//            Unbreakable unbreakable = components.get(DataComponents.UNBREAKABLE);
-//            if (unbreakable != null) components.set(DataComponents.UNBREAKABLE, new Unbreakable(false));
-//            ArmorTrim armorTrim = components.get(DataComponents.TRIM);
-//            if (armorTrim != null) components.set(DataComponents.TRIM, armorTrim.withTooltip(false));
-//            BlockPredicates canBreak = components.get(DataComponents.CAN_BREAK);
-//            if (canBreak != null) components.set(DataComponents.CAN_BREAK, canBreak.withTooltip(false));
-//            BlockPredicates canPlaceOn = components.get(DataComponents.CAN_PLACE_ON);
-//            if (canPlaceOn != null) components.set(DataComponents.CAN_PLACE_ON, canPlaceOn.withTooltip(false));
-//            DyedItemColor dyedColor = components.get(DataComponents.DYED_COLOR);
-//            if (dyedColor != null) components.set(DataComponents.DYED_COLOR, dyedColor.withTooltip(false));
-//            EnchantmentList enchantments = components.get(DataComponents.ENCHANTMENTS);
-//            if (enchantments != null) components.set(DataComponents.ENCHANTMENTS, enchantments.withTooltip(false));
-//            JukeboxPlayable jukeboxPlayable = components.get(DataComponents.JUKEBOX_PLAYABLE);
-//            if (jukeboxPlayable != null)
-//                components.set(DataComponents.JUKEBOX_PLAYABLE, jukeboxPlayable.withTooltip(false));
-//            return set(DataComponents.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
-            // TODO(1.21.5)
-            throw new RuntimeException("todo");
+            return set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.HIDE_ALL_EXTRAS);
         }
 
         @Override

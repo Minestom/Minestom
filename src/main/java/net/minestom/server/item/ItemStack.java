@@ -367,11 +367,10 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         }
 
         /**
-         * <p>Sets all available tooltip hide flags. The result should be an item with only name and lore.</p>
+         * <p>Hides all components which append tooltip lines using {@link DataComponents#TOOLTIP_DISPLAY}.
+         * The result should be an item with only name and lore.</p>
          *
-         * <p>One notable behavior here is that {@link DataComponents#ATTRIBUTE_MODIFIERS} will be added if it is not
-         * present. This is because armor flags in tooltips use attribute modifiers show flag to display or not, but
-         * are not actually based on the attribute modifiers component.</p>
+         * @see net.minestom.server.item.component.TooltipDisplay#HIDE_ALL_EXTRAS
          */
         @NotNull Builder hideExtraTooltip();
 
