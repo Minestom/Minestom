@@ -108,24 +108,22 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
                 // Could be a tag or a block name depending if it starts with a #
-                if (string.startsWith("#")) {
-                    return new Result.Ok<>(new Tag(string.substring(1)));
-                } else {
-                    return new Result.Ok<>(new Blocks(Objects.requireNonNull(Block.fromKey(string))));
-                }
+                return new Result.Ok<>(string.startsWith("#")
+                        ? new Tag(string.substring(1))
+                        : new Blocks(Objects.requireNonNull(Block.fromKey(string))));
             }
-            final Result<Integer> listSizeResult = coder.listSize(value);
-            if (!(listSizeResult instanceof Result.Ok(Integer listSize)))
-                return listSizeResult.cast();
 
-            final List<Block> blocks = new ArrayList<>(listSize);
-            for (int i = 0; i < listSize; i++) {
-                final Result<D> indexResult = coder.getIndex(value, i);
-                if (!(indexResult instanceof Result.Ok(D indexValue)))
-                    return indexResult.cast();
-                final Result<String> itemResult = coder.getString(indexValue);
+            // Otherwise, must be a list of blocks
+            final Result<List<D>> listResult = coder.getList(value);
+            if (!(listResult instanceof Result.Ok(List<D> list)))
+                return listResult.cast();
+            
+            final List<Block> blocks = new ArrayList<>(list.size());
+            for (final D entry : list) {
+                final Result<String> itemResult = coder.getString(entry);
                 if (!(itemResult instanceof Result.Ok(String item)))
                     return itemResult.cast();
+
                 blocks.add(Objects.requireNonNull(Block.fromKey(item)));
             }
             return new Result.Ok<>(new Blocks(blocks));

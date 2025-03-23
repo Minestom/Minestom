@@ -116,7 +116,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet<T> value) {
             if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(switch (value) {
-                case Empty<T> empty -> coder.createList(List.of());
+                case Empty<T> empty -> coder.emptyList();
                 case Entries<T> entries -> {
                     if (entries.entries.size() == 1)
                         yield coder.createString(entries.entries.stream().findFirst().get().asString());
