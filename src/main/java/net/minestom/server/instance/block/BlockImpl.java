@@ -4,6 +4,9 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
@@ -32,6 +35,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     private static final int MAX_STATES = Long.SIZE / BITS_PER_INDEX;
     private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
+
+    private static final BlockManager blockManager = MinecraftServer.getBlockManager();
 
     // Block state -> block object
     private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
@@ -203,6 +208,15 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
 
     private Long2ObjectArrayMap<BlockImpl> possibleProperties() {
         return POSSIBLE_STATES.get(id());
+    }
+
+    @Override
+    public boolean canBeReplacedBy(@NotNull Material useMaterial,
+                                   @NotNull BlockFace blockFace,
+                                   @NotNull Point cursorPosition) {
+        final BlockReplacementRule replacementRule = blockManager.getReplacementRule(this);
+        if (replacementRule == null) return registry().isReplaceable();
+        return replacementRule.canReplace(blockFace, cursorPosition, useMaterial);
     }
 
     @Override

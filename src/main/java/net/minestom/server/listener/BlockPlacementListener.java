@@ -20,7 +20,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
@@ -33,7 +32,8 @@ import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 
 public class BlockPlacementListener {
-    private static final BlockManager BLOCK_MANAGER = MinecraftServer.getBlockManager();
+
+    private final static BlockManager blockManager = MinecraftServer.getBlockManager();
 
     public static void listener(ClientPlayerBlockPlacementPacket packet, Player player) {
         final PlayerHand hand = packet.hand();
@@ -95,13 +95,9 @@ public class BlockPlacementListener {
             canPlaceBlock = placePredicate.test(interactedBlock);
         }
 
-
         // Get the newly placed block position
-        //todo it feels like it should be possible to have better replacement rules than this, feels pretty scuffed.
         Point placementPosition = blockPosition;
-        var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(
-                new BlockPlacementRule.Replacement(interactedBlock, blockFace, cursorPosition, useMaterial)))) {
+        if (!interactedBlock.isAir() && interactedBlock.canBeReplacedBy(useMaterial, blockFace, cursorPosition)) {
             // If the block is not replaceable, try to place next to it.
             final int offsetX = blockFace == BlockFace.WEST ? -1 : blockFace == BlockFace.EAST ? 1 : 0;
             final int offsetY = blockFace == BlockFace.BOTTOM ? -1 : blockFace == BlockFace.TOP ? 1 : 0;
@@ -109,9 +105,7 @@ public class BlockPlacementListener {
             placementPosition = blockPosition.add(offsetX, offsetY, offsetZ);
 
             var placementBlock = instance.getBlock(placementPosition);
-            var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(
-                    new BlockPlacementRule.Replacement(placementBlock, blockFace, cursorPosition, useMaterial)))) {
+            if (!placementBlock.canBeReplacedBy(useMaterial, blockFace, cursorPosition)) {
                 // If the block is still not replaceable, cancel the placement
                 canPlaceBlock = false;
             }
@@ -155,7 +149,7 @@ public class BlockPlacementListener {
             // Client also doesn't predict placement of blocks on entities, but we need to refresh for cases where bounding boxes on the server don't match the client
             if (collisionEntity != player)
                 refresh(player, chunk);
-            
+
             return;
         }
 

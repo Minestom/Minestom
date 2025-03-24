@@ -18,7 +18,6 @@ import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
 import net.minestom.server.instance.palette.Palette;
@@ -59,10 +58,6 @@ public class InstanceContainer extends Instance {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
-
-    private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
-    };
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -162,37 +157,8 @@ public class InstanceContainer extends Instance {
             }
             this.currentlyChangingBlocks.put(blockPosition, block);
 
-            // Change id based on neighbors
-            final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
-            if (placement != null && blockPlacementRule != null && doBlockUpdates) {
-                BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
-                    );
-                } else {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, null, blockPosition,
-                            null, null, null,
-                            false
-                    );
-                }
-
-                block = blockPlacementRule.blockPlace(rulePlacement);
-                if (block == null) block = Block.AIR;
-            }
-
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
-
-            // Refresh neighbors since a new block has been placed
-            if (doBlockUpdates) {
-                executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
-            }
 
             // Refresh player chunk block
             {
@@ -650,45 +616,6 @@ public class InstanceContainer extends Instance {
     private boolean isAlreadyChanged(@NotNull Point blockPosition, @NotNull Block block) {
         final Block changedBlock = currentlyChangingBlocks.get(blockPosition);
         return Objects.equals(changedBlock, block);
-    }
-
-    /**
-     * Executed when a block is modified, this is used to modify the states of neighbours blocks.
-     * <p>
-     * For example, this can be used for redstone wires which need an understanding of its neighborhoods to take the right shape.
-     *
-     * @param blockPosition the position of the modified block
-     */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
-        ChunkCache cache = new ChunkCache(this, null, null);
-        for (var updateFace : BLOCK_UPDATE_FACES) {
-            var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
-                continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
-            if (neighborBlock == null || neighborBlock.isAir())
-                continue;
-            final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
-                continue;
-
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-            final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
-                    this,
-                    neighborPosition,
-                    neighborBlock,
-                    updateFace.getOppositeFace()
-            ));
-            if (neighborBlock != newNeighborBlock) {
-                final Chunk chunk = getChunkAt(neighborPosition);
-                if (!isLoaded(chunk)) continue;
-                UNSAFE_setBlock(chunk, neighborPosition.blockX(), neighborPosition.blockY(), neighborPosition.blockZ(), newNeighborBlock,
-                        null, null, true, updateDistance + 1);
-            }
-        }
     }
 
     private CompletableFuture<Chunk> loadOrRetrieve(int chunkX, int chunkZ, Supplier<CompletableFuture<Chunk>> supplier) {
