@@ -5,7 +5,9 @@ import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a player receive a new chunk data.
+ * Called when a chunk is being sent to a player.
+ * <p>
+ * This is always called on the player's tick thread
  */
 public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
 
