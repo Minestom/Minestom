@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Player;
+import net.minestom.server.event.trait.BlockEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
@@ -32,13 +33,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        return instanceContainer.placeBlock(placement, doBlockUpdates);
+    public boolean placeBlock(@NotNull BlockEvent.Source.Player source, @NotNull Block block, @NotNull Point blockPosition, boolean doBlockUpdates) {
+        return instanceContainer.placeBlock(source, block, blockPosition, doBlockUpdates);
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
+    public boolean breakBlock(@NotNull BlockEvent.Source.Player source, @NotNull Point blockPosition, boolean doBlockUpdates) {
+        return instanceContainer.breakBlock(source, blockPosition, doBlockUpdates);
     }
 
     @Override

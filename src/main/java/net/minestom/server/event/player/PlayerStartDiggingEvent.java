@@ -15,24 +15,21 @@ import org.jetbrains.annotations.NotNull;
  * can be used to forbid the {@link Player} from mining it.
  * <p>
  * Be aware that cancelling this event does not necessary prevent the player from breaking the block
- * (could be because of high latency or a modified client) so cancelling {@link PlayerBlockBreakEvent} is also necessary.
+ * (could be because of high latency or a modified client) so cancelling {@link net.minestom.server.event.instance.InstanceBlockChangeEvent} is also necessary.
  * Could be fixed in future Minestom version.
  */
 public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent, CancellableEvent {
 
-    private final Player player;
+    private final Source.Player source;
     private final Block block;
     private final BlockVec blockPosition;
-    private final BlockFace blockFace;
 
     private boolean cancelled;
 
-    public PlayerStartDiggingEvent(@NotNull Player player, @NotNull Block block, @NotNull BlockVec blockPosition,
-                                   @NotNull BlockFace blockFace) {
-        this.player = player;
+    public PlayerStartDiggingEvent(@NotNull Source.Player source, @NotNull Block block, @NotNull BlockVec blockPosition) {
+        this.source = source;
         this.block = block;
         this.blockPosition = blockPosition;
-        this.blockFace = blockFace;
     }
 
     /**
@@ -61,7 +58,7 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
      * @return the block face
      */
     public @NotNull BlockFace getBlockFace() {
-        return blockFace;
+        return source.blockFace();
     }
 
     @Override
@@ -76,6 +73,11 @@ public class PlayerStartDiggingEvent implements PlayerInstanceEvent, BlockEvent,
 
     @Override
     public @NotNull Player getPlayer() {
-        return player;
+        return source.player();
+    }
+
+    @Override
+    public @NotNull Source.Player getSource() {
+        return source;
     }
 }

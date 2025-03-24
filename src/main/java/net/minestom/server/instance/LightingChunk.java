@@ -153,10 +153,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
-        super.setBlock(x, y, z, block, placement, destroy);
+    public void setBlock(int x, int y, int z, @NotNull Block block) {
+        super.setBlock(x, y, z, block);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change

@@ -89,14 +89,7 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
      * @param z     the block Z
      * @param block the block to place
      */
-    @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block) {
-        setBlock(x, y, z, block, null, null);
-    }
-
-    protected abstract void setBlock(int x, int y, int z, @NotNull Block block,
-                                     @Nullable BlockHandler.Placement placement,
-                                     @Nullable BlockHandler.Destroy destroy);
+    public abstract void setBlock(int x, int y, int z, @NotNull Block block);
 
     public abstract @NotNull List<Section> getSections();
 

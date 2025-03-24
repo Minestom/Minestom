@@ -1,10 +1,12 @@
 package net.minestom.demo.block.placement;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,14 +22,14 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
-        var blockFace = Objects.requireNonNullElse(placementState.blockFace(), BlockFace.TOP);
+    public @Nullable Block blockPlace(Block.@NotNull Getter instance, @NotNull Block block, @Nullable BlockFace blockFace, @NotNull Point placePosition, @Nullable Point cursorPosition, @Nullable Pos playerPosition, @Nullable ItemStack usedItemStack, boolean isPlayerShifting) {
+        blockFace = Objects.requireNonNullElse(blockFace, BlockFace.TOP);
         var direction = switch (blockFace) {
             case TOP -> "up";
             case BOTTOM -> "down";
-            default -> Objects.requireNonNullElse(placementState.cursorPosition(), Vec.ZERO).y() < 0.5 ? "up" : "down";
+            default -> Objects.requireNonNullElse(cursorPosition, Vec.ZERO).y() < 0.5 ? "up" : "down";
         };
-        var thickness = getThickness(placementState.instance(), placementState.placePosition(), direction.equals("up"));
+        var thickness = getThickness(instance, placePosition, direction.equals("up"));
         return block.withProperties(Map.of(
                 PROP_VERTICAL_DIRECTION, direction,
                 PROP_THICKNESS, thickness
@@ -35,10 +37,10 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
-        var direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
-        var newThickness = getThickness(updateState.instance(), updateState.blockPosition(), direction);
-        return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
+    public @NotNull Block blockUpdate(Block.@NotNull Getter instance, @NotNull Point blockPosition, @NotNull Block currentBlock, @NotNull BlockFace fromFace) {
+        var direction = currentBlock.getProperty(PROP_VERTICAL_DIRECTION).equals("up");
+        var newThickness = getThickness(instance, blockPosition, direction);
+        return currentBlock.withProperty(PROP_THICKNESS, newThickness);
     }
 
     private @NotNull String getThickness(@NotNull Block.Getter instance, @NotNull Point blockPosition, boolean direction) {
