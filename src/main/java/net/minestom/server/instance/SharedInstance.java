@@ -37,8 +37,13 @@ public class SharedInstance extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates);
+    public boolean breakBlock(BlockHandler.@NotNull Destroy destroy, boolean doBlockUpdates) {
+        return instanceContainer.breakBlock(destroy, doBlockUpdates);
+    }
+
+    @Override
+    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates, BlockHandler.Destroy.PlayerSupplier destroyerSupplier) {
+        return instanceContainer.breakBlock(player, blockPosition, blockFace, doBlockUpdates, destroyerSupplier);
     }
 
     @Override
