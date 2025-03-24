@@ -369,8 +369,6 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         /**
          * <p>Hides all components which append tooltip lines using {@link DataComponents#TOOLTIP_DISPLAY}.
          * The result should be an item with only name and lore.</p>
-         *
-         * @see net.minestom.server.item.component.TooltipDisplay#HIDE_ALL_EXTRAS
          */
         @NotNull Builder hideExtraTooltip();
 

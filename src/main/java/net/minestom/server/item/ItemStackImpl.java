@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Set;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
@@ -189,7 +190,14 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public ItemStack.@NotNull Builder hideExtraTooltip() {
-            return set(DataComponents.TOOLTIP_DISPLAY, TooltipDisplay.HIDE_ALL_EXTRAS);
+            return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
+                    DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
+                    DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
+                    DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
+                    DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
+                    DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
+                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT
+            )));
         }
 
         @Override

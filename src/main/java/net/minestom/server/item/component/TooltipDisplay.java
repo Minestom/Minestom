@@ -3,7 +3,6 @@ package net.minestom.server.item.component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.component.DataComponents;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import org.jetbrains.annotations.NotNull;
@@ -13,14 +12,6 @@ import java.util.Set;
 
 public record TooltipDisplay(boolean hideTooltip, Set<DataComponent<?>> hiddenComponents) {
     public static final TooltipDisplay EMPTY = new TooltipDisplay(false, Set.of());
-    public static final TooltipDisplay HIDE_ALL_EXTRAS = new TooltipDisplay(false, Set.of(
-            DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
-            DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
-            DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
-            DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
-            DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
-            DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT
-    ));
 
     public static final NetworkBuffer.Type<TooltipDisplay> NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.BOOLEAN, TooltipDisplay::hideTooltip,
