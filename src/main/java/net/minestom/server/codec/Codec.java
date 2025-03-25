@@ -73,7 +73,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
-    @NotNull Codec<Point> VECTOR3D = null; // TODO(1.21.5)
+    @NotNull Codec<Point> VECTOR3D = new CodecImpl.Vector3DImpl();
 
     @NotNull Codec<BinaryTag> NBT = RAW_VALUE.transform(
             value -> value.convertTo(Transcoder.NBT).orElseThrow(),
