@@ -13,7 +13,6 @@ import net.minestom.server.network.packet.server.play.SetCursorItemPacket;
 
 public class WindowListener {
 
-    //TODO(1.21.5) creative inventory slot packet update
     public static void clickWindowListener(ClientClickWindowPacket packet, Player player) {
         final int windowId = packet.windowId();
         final AbstractInventory inventory = windowId == 0 ? player.getInventory() : player.getOpenInventory();

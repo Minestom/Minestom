@@ -108,9 +108,8 @@ public class PlayerInit {
 //                        .build();
 //                player.getInventory().addItemStack(itemStack);
 
-                var inv = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
-                inv.addItemStack(ItemStack.of(Material.STICK).with(DataComponents.CUSTOM_NAME, Component.text("Test stick")));
-                player.openInventory(inv);
+                player.sendMessage(Component.text("Hover for item").hoverEvent(ItemStack.of(Material.STICK)
+                        .with(DataComponents.LORE, List.of(Component.text("This is a stick")))));
 
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"
