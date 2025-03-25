@@ -1,16 +1,10 @@
 package net.minestom.server.registry;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
-import net.kyori.adventure.text.serializer.json.JSONComponentSerializer;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -25,7 +19,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Equippable;
-import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.validate.Check;
@@ -41,26 +34,17 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
 public final class Registry {
+    static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
+
     @ApiStatus.Internal
     public static BlockEntry block(String namespace, @NotNull Properties main) {
         return new BlockEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static DimensionTypeEntry dimensionType(String namespace, @NotNull Properties main) {
-        return new DimensionTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static BiomeEntry biome(String namespace, Properties properties) {
-        return new BiomeEntry(namespace, properties, null);
     }
 
     @ApiStatus.Internal
@@ -89,38 +73,8 @@ public final class Registry {
     }
 
     @ApiStatus.Internal
-    public static DamageTypeEntry damageType(String namespace, @NotNull Properties main) {
-        return new DamageTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static TrimMaterialEntry trimMaterial(String namespace, @NotNull Properties main) {
-        return new TrimMaterialEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static TrimPatternEntry trimPattern(String namespace, @NotNull Properties main) {
-        return new TrimPatternEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
     public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
         return new AttributeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static BannerPatternEntry bannerPattern(String namespace, @NotNull Properties main) {
-        return new BannerPatternEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static ChatTypeEntry chatType(String namespace, @NotNull Properties main) {
-        return new ChatTypeEntry(namespace, main, null);
-    }
-
-    @ApiStatus.Internal
-    public static JukeboxSongEntry jukeboxSong(String namespace, @NotNull Properties main) {
-        return new JukeboxSongEntry(namespace, main, null);
     }
 
     public static GameEventEntry gameEventEntry(String namespace, Properties properties) {
@@ -143,11 +97,6 @@ public final class Registry {
         // 3. Not found :(
         Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
         return resourceStream;
-    }
-
-    @ApiStatus.Internal
-    public static InstrumentEntry instrument(String namespace, @NotNull Properties main) {
-        return new InstrumentEntry(namespace, main, null);
     }
 
     @ApiStatus.Internal
@@ -252,7 +201,14 @@ public final class Registry {
         BIOMES("biomes.json"),
         ATTRIBUTES("attributes.json"),
         BANNER_PATTERNS("banner_patterns.json"),
+        PAINTING_VARIANTS("painting_variants.json"),
         WOLF_VARIANTS("wolf_variants.json"),
+        WOLF_SOUND_VARIANTS("wolf_sound_variants.json"),
+        CAT_VARIANTS("cat_variants.json"),
+        CHICKEN_VARIANTS("chicken_variants.json"),
+        COW_VARIANTS("cow_variants.json"),
+        FROG_VARIANTS("frog_variants.json"),
+        PIG_VARIANTS("pig_variants.json"),
         CHAT_TYPES("chat_types.json"),
         ENCHANTMENTS("enchantments.json"),
         JUKEBOX_SONGS("jukebox_songs.json"),
@@ -448,124 +404,6 @@ public final class Registry {
         }
     }
 
-    public record DimensionTypeEntry(
-            Key key,
-            boolean ultrawarm,
-            boolean natural,
-            double coordinateScale,
-            boolean hasSkylight,
-            boolean hasCeiling,
-            float ambientLight,
-            Long fixedTime,
-            boolean piglinSafe,
-            boolean bedWorks,
-            boolean respawnAnchorWorks,
-            boolean hasRaids,
-            int logicalHeight,
-            int minY,
-            int height,
-            String infiniburn,
-            String effects,
-            Properties custom
-    ) implements Entry {
-
-        public DimensionTypeEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    main.getBoolean("ultrawarm"),
-                    main.getBoolean("natural"),
-                    main.getDouble("coordinate_scale"),
-                    main.getBoolean("has_skylight"),
-                    main.getBoolean("has_ceiling"),
-                    main.getFloat("ambient_light"),
-                    (Long) main.asMap().get("fixed_time"),
-                    main.getBoolean("piglin_safe"),
-                    main.getBoolean("bed_works"),
-                    main.getBoolean("respawn_anchor_works"),
-                    main.getBoolean("has_raids"),
-                    main.getInt("logical_height"),
-                    main.getInt("min_y"),
-                    main.getInt("height"),
-                    main.getString("infiniburn"),
-                    main.getString("effects"),
-                    custom);
-        }
-    }
-
-    public static final class BiomeEntry implements Entry {
-        private final Properties custom;
-        private final Key key;
-        private final Integer foliageColor;
-        private final Integer grassColor;
-        private final Integer skyColor;
-        private final Integer waterColor;
-        private final Integer waterFogColor;
-        private final Integer fogColor;
-        private final float temperature;
-        private final float downfall;
-        private final boolean hasPrecipitation;
-
-        private BiomeEntry(String namespace, Properties main, Properties custom) {
-            this.custom = custom;
-            this.key = Key.key(namespace);
-
-            this.foliageColor = main.containsKey("foliageColor") ? main.getInt("foliageColor") : null;
-            this.grassColor = main.containsKey("grassColor") ? main.getInt("grassColor") : null;
-            this.skyColor = main.containsKey("skyColor") ? main.getInt("skyColor") : null;
-            this.waterColor = main.containsKey("waterColor") ? main.getInt("waterColor") : null;
-            this.waterFogColor = main.containsKey("waterFogColor") ? main.getInt("waterFogColor") : null;
-            this.fogColor = main.containsKey("fogColor") ? main.getInt("fogColor") : null;
-
-            this.temperature = (float) main.getDouble("temperature", 0.5F);
-            this.downfall = (float) main.getDouble("downfall", 0.5F);
-            this.hasPrecipitation = main.getBoolean("has_precipitation", true);
-        }
-
-        @Override
-        public Properties custom() {
-            return custom;
-        }
-
-        public @NotNull Key key() {
-            return key;
-        }
-
-        public @Nullable Integer foliageColor() {
-            return foliageColor;
-        }
-
-        public @Nullable Integer grassColor() {
-            return grassColor;
-        }
-
-        public @Nullable Integer skyColor() {
-            return skyColor;
-        }
-
-        public @Nullable Integer waterColor() {
-            return waterColor;
-        }
-
-        public @Nullable Integer waterFogColor() {
-            return waterFogColor;
-        }
-
-        public @Nullable Integer fogColor() {
-            return fogColor;
-        }
-
-        public float temperature() {
-            return temperature;
-        }
-
-        public float downfall() {
-            return downfall;
-        }
-
-        public boolean hasPrecipitation() {
-            return hasPrecipitation;
-        }
-    }
-
     public static final class MaterialEntry implements Entry {
         private final Key key;
         private final Properties main;
@@ -615,26 +453,21 @@ public final class Registry {
 
         public @NotNull DataComponentMap prototype() {
             if (prototype == null) {
-                try {
-                    final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
-                    DataComponentMap.Builder builder = DataComponentMap.builder();
-                    for (Map.Entry<String, Object> entry : main.section("components")) {
-                        //noinspection unchecked
-                        DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
-                        Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
+                final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
+                DataComponentMap.Builder builder = DataComponentMap.builder();
+                for (Map.Entry<String, Object> entry : main.section("components")) {
+                    //noinspection unchecked
+                    DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
+                    Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
 
-                        BinaryTag tag = TagStringIOExt.readTag((String) entry.getValue());
-                        final Result<Object> result = component.decode(coder, tag);
-                        switch (result) {
-                            case Result.Ok(Object ok) -> builder.set(component, ok);
-                            case Result.Error(String message) ->
-                                    throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
-                        }
+                    final Result<Object> result = component.decode(coder, entry.getValue());
+                    switch (result) {
+                        case Result.Ok(Object ok) -> builder.set(component, ok);
+                        case Result.Error(String message) ->
+                                throw new IllegalStateException("Failed to decode component " + entry.getKey() + " in " + key + ": " + message);
                     }
-                    this.prototype = builder.build();
-                } catch (IOException e) {
-                    throw new RuntimeException("failed to parse material registry: " + key, e);
                 }
+                this.prototype = builder.build();
             }
 
             return prototype;
@@ -829,56 +662,6 @@ public final class Registry {
         }
     }
 
-    public record DamageTypeEntry(Key key, float exhaustion,
-                                  String messageId,
-                                  String scaling,
-                                  @Nullable String effects,
-                                  @Nullable String deathMessageType,
-                                  Properties custom) implements Entry {
-        public DamageTypeEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    (float) main.getDouble("exhaustion"),
-                    main.getString("message_id"),
-                    main.getString("scaling"),
-                    main.getString("effects"),
-                    main.getString("death_message_type"),
-                    custom);
-        }
-    }
-
-    public record TrimMaterialEntry(@NotNull Key key,
-                                    @NotNull String assetName,
-                                    @NotNull Map<String, String> overrideArmorMaterials,
-                                    @NotNull Component description,
-                                    Properties custom) implements Entry {
-        public TrimMaterialEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
-            this(
-                    Key.key(namespace),
-                    main.getString("asset_name"),
-                    Objects.requireNonNullElse(main.section("override_armor_materials"), new PropertiesMap(Map.of()))
-                            .asMap().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, entry -> (String) entry.getValue())),
-                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
-                    custom
-            );
-        }
-    }
-
-    public record TrimPatternEntry(@NotNull Key key,
-                                   @NotNull Key assetID,
-                                   @NotNull Component description,
-                                   boolean decal,
-                                   Properties custom) implements Entry {
-        public TrimPatternEntry(@NotNull String namespace, @NotNull Properties main, Properties custom) {
-            this(
-                    Key.key(namespace),
-                    Key.key(main.getString("asset_id")),
-                    JSONComponentSerializer.json().deserialize(main.section("description").toString()),
-                    main.getBoolean("decal"),
-                    custom
-            );
-        }
-    }
-
     public record PotionEffectEntry(Key key, int id,
                                     String translationKey,
                                     int color,
@@ -907,93 +690,6 @@ public final class Registry {
                     main.getBoolean("clientSync"),
                     main.getDouble("maxValue"),
                     main.getDouble("minValue"),
-                    custom);
-        }
-    }
-
-    public record BannerPatternEntry(Key key, Key assetId, String translationKey,
-                                     Properties custom) implements Entry {
-        public BannerPatternEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    Key.key(main.getString("asset_id")),
-                    main.getString("translation_key"),
-                    custom);
-        }
-    }
-
-    public static final class ChatTypeEntry implements Entry {
-        private final Key key;
-        private final ChatTypeDecoration chat;
-        private final ChatTypeDecoration narration;
-        private final Properties custom;
-
-        public ChatTypeEntry(String namespace, Properties main, Properties custom) {
-            this.key = Key.key(namespace);
-            this.chat = readChatTypeDecoration(main.section("chat"));
-            this.narration = readChatTypeDecoration(main.section("narration"));
-            this.custom = custom;
-        }
-
-        public Key key() {
-            return key;
-        }
-
-        public ChatTypeDecoration chat() {
-            return chat;
-        }
-
-        public ChatTypeDecoration narration() {
-            return narration;
-        }
-
-        @Override
-        public Properties custom() {
-            return custom;
-        }
-
-        private static @NotNull ChatTypeDecoration readChatTypeDecoration(Properties properties) {
-            List<ChatTypeDecoration.Parameter> parameters = new ArrayList<>();
-            if (properties.asMap().get("parameters") instanceof List<?> paramList) {
-                for (Object param : paramList) {
-                    parameters.add(ChatTypeDecoration.Parameter.valueOf(param.toString().toUpperCase(Locale.ROOT)));
-                }
-            }
-            Style style = Style.empty();
-            if (properties.containsKey("style")) {
-                // This is admittedly a pretty cursed way to handle deserialization here, however I do not want to
-                // write a standalone JSON style deserializer for this one use case.
-                // The methodology is to just convert it to a valid text component and deserialize that, then take the style.
-                Gson gson = GsonComponentSerializer.gson().serializer();
-                JsonObject textComponentJson = gson.toJsonTree(properties.section("style").asMap()).getAsJsonObject();
-                textComponentJson.addProperty("text", "IGNORED_VALUE");
-                Component textComponent = GsonComponentSerializer.gson().deserializeFromTree(textComponentJson);
-                style = textComponent.style();
-            }
-            return new ChatTypeDecoration(properties.getString("translation_key"), parameters, style);
-        }
-
-    }
-
-    public record JukeboxSongEntry(Key key, SoundEvent soundEvent, Component description,
-                                   float lengthInSeconds, int comparatorOutput, Properties custom) implements Entry {
-        public JukeboxSongEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    SoundEvent.fromKey(main.getString("sound_event")),
-                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
-                    (float) main.getDouble("length_in_seconds"),
-                    main.getInt("comparator_output"),
-                    custom);
-        }
-    }
-
-    public record InstrumentEntry(Key key, SoundEvent soundEvent, float useDuration, float range,
-                                  Component description, Properties custom) implements Entry {
-        public InstrumentEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    SoundEvent.fromKey(main.getString("sound_event")),
-                    (float) main.getDouble("use_duration"),
-                    (float) main.getDouble("range"),
-                    GsonComponentSerializer.gson().deserialize(main.section("description").toString()),
                     custom);
         }
     }

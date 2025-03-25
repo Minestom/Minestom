@@ -2,9 +2,7 @@ package net.minestom.server.world.biome;
 
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
-import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.codec.Transcoder;
 import net.minestom.server.color.Color;
 import net.minestom.server.sound.Music;
 import net.minestom.server.sound.SoundEvent;
@@ -29,6 +27,13 @@ public record BiomeEffects(
         @Nullable List<WeightedMusic> music,
         @Nullable Float musicVolume
 ) {
+    public static final BiomeEffects PLAINS_EFFECTS = BiomeEffects.builder()
+            .fogColor(new Color(0xC0D8FF))
+            .skyColor(new Color(0x78A7FF))
+            .waterColor(new Color(0x3F76E4))
+            .waterFogColor(new Color(0x50533))
+            .build();
+
     public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
             "fog_color", Color.CODEC, BiomeEffects::fogColor,
             "sky_color", Color.CODEC, BiomeEffects::skyColor,

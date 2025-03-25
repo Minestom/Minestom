@@ -10,7 +10,6 @@ import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +22,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
             TrimMaterial::create);
     @NotNull Codec<TrimMaterial> REGISTRY_CODEC = StructCodec.struct(
             "asset_name", Codec.STRING, TrimMaterial::assetName,
-            "override_armor_materials", Codec.STRING.mapValue(Codec.STRING), TrimMaterial::overrideArmorMaterials,
+            "override_armor_materials", Codec.STRING.mapValue(Codec.STRING).optional(Map.of()), TrimMaterial::overrideArmorMaterials,
             "description", Codec.COMPONENT, TrimMaterial::description,
             TrimMaterial::create);
 
@@ -35,7 +34,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
             @NotNull Map<String, String> overrideArmorMaterials,
             @NotNull Component description
     ) {
-        return new TrimMaterialImpl(assetName, overrideArmorMaterials, description, null);
+        return new TrimMaterialImpl(assetName, overrideArmorMaterials, description);
     }
 
     static @NotNull Builder builder() {
@@ -49,10 +48,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:trim_material", REGISTRY_CODEC, Registry.Resource.TRIM_MATERIALS,
-                (namespace, props) -> new TrimMaterialImpl(Registry.trimMaterial(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:trim_material", REGISTRY_CODEC, Registry.Resource.TRIM_MATERIALS);
     }
 
     @NotNull String assetName();
@@ -60,12 +56,6 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
     @NotNull Map<String, String> overrideArmorMaterials();
 
     @NotNull Component description();
-
-    /**
-     * Returns the raw registry entry of this trim, only if the trim is a vanilla trim. Otherwise, returns null.
-     */
-    @Contract(pure = true)
-    @Nullable Registry.TrimMaterialEntry registry();
 
     final class Builder {
         private String assetName;
@@ -102,11 +92,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
 
         @Contract(pure = true)
         public @NotNull TrimMaterial build() {
-            return new TrimMaterialImpl(
-                    assetName,
-                    overrideArmorMaterials,
-                    description, null
-            );
+            return new TrimMaterialImpl(assetName, overrideArmorMaterials, description);
         }
     }
 
