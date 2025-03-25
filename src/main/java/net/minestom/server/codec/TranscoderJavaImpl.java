@@ -187,6 +187,41 @@ final class TranscoderJavaImpl implements Transcoder<Object> {
 
     @Override
     public @NotNull <O> Result<O> convertTo(@NotNull Transcoder<O> coder, @NotNull Object value) {
-        throw new UnsupportedOperationException("cannot convertTo for Java transcoder");
+        return switch (value) {
+            case Optional<?> o when o.isEmpty() -> new Result.Ok<>(coder.createNull());
+            case Boolean b -> new Result.Ok<>(coder.createBoolean(b));
+            case Byte n -> new Result.Ok<>(coder.createByte(n));
+            case Short n -> new Result.Ok<>(coder.createShort(n));
+            case Integer n -> new Result.Ok<>(coder.createInt(n));
+            case Long n -> new Result.Ok<>(coder.createLong(n));
+            case Float n -> new Result.Ok<>(coder.createFloat(n));
+            case Double n -> new Result.Ok<>(coder.createDouble(n));
+            case Number n -> new Result.Ok<>(coder.createDouble(n.doubleValue()));
+            case String s -> new Result.Ok<>(coder.createString(s));
+            case List<?> l -> {
+                var builder = coder.createList(l.size());
+                for (var o : l) {
+                    var result = convertTo(coder, o);
+                    if (!(result instanceof Result.Ok(O inner)))
+                        yield result.cast();
+                    builder.add(inner);
+                }
+                yield new Result.Ok<>(builder.build());
+            }
+            case Map<?, ?> m -> {
+                var builder = coder.createMap();
+                for (var entry : m.entrySet()) {
+                    var key = entry.getKey();
+                    if (!(key instanceof String s))
+                        yield new Result.Error<>("Map key is not a string: " + key);
+                    var result = convertTo(coder, entry.getValue());
+                    if (!(result instanceof Result.Ok(O inner)))
+                        yield result.cast();
+                    builder.put(s, inner);
+                }
+                yield new Result.Ok<>(builder.build());
+            }
+            default -> new Result.Error<>("Unsupported type: " + value);
+        };
     }
 }
