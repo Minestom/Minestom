@@ -13,6 +13,7 @@ import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
@@ -152,12 +153,32 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void ensureWritable(long length);
 
+    /**
+     * Compact all the data from the readIndex to the writing index to zero align.
+     * This does not change the buffer capacity.
+     */
     void compact();
 
+    /**
+     * Trims the network buffer from its read index to its write index.
+     * This shrinks the buffer to the minimum size required to hold the data in [readIndex, writeIndex] and will be #{@link #readableBytes()} size.
+     */
+    void trim();
+
+    @Contract(pure = true)
     NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
 
+    @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex());
+    }
+
+    @Contract(pure = true)
+    NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
+
+    @Contract(pure = true)
+    default NetworkBuffer slice(long index, long length) {
+        return slice(index, length, readIndex(), writeIndex());
     }
 
     int readChannel(ReadableByteChannel channel) throws IOException;
@@ -225,6 +246,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static @NotNull NetworkBuffer staticBuffer(long size) {
         return staticBuffer(size, null);
     }
+
 
     static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         return builder(initialSize)
