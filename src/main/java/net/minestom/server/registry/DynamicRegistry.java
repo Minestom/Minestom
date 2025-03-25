@@ -68,43 +68,34 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull Codec<T> codec,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, codec, resource, loader, null);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull Registry.Resource resource) {
+        return create(id, codec, null, resource, null);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull Codec<T> codec,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
-            @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, codec);
-        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
-        return registry;
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource) {
+        return create(id, codec, registries, resource, null);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull Codec<T> codec,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
-        RegistryHelper.loadStaticJsonRegistry(registries, registry, resource);
+        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator);
         return registry;
     }
 
