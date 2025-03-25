@@ -10,7 +10,6 @@ import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
     @NotNull NetworkBuffer.Type<TrimPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -32,7 +31,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
             @NotNull Component description,
             boolean decal
     ) {
-        return new TrimPatternImpl(assetId, description, decal, null);
+        return new TrimPatternImpl(assetId, description, decal);
     }
 
     static @NotNull Builder builder() {
@@ -46,10 +45,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:trim_pattern", REGISTRY_CODEC, Registry.Resource.TRIM_PATTERNS,
-                (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:trim_pattern", REGISTRY_CODEC, Registry.Resource.TRIM_PATTERNS);
     }
 
     @NotNull Key assetId();
@@ -57,9 +53,6 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @NotNull Component description();
 
     boolean isDecal();
-
-    @Contract(pure = true)
-    @Nullable Registry.TrimPatternEntry registry();
 
     final class Builder {
         private Key assetId;
@@ -94,7 +87,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(pure = true)
         public @NotNull TrimPattern build() {
-            return new TrimPatternImpl(assetId, description, decal, null);
+            return new TrimPatternImpl(assetId, description, decal);
         }
     }
 }

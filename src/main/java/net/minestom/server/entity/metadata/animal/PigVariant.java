@@ -6,6 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,13 +20,13 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
     @NotNull Codec<DynamicRegistry.Key<PigVariant>> CODEC = Codec.RegistryKey(Registries::pigVariant);
 
     /**
-     * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
+     * Creates a new instance of the "minecraft:pig_variant" registry containing the vanilla contents.
      *
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
     static DynamicRegistry<PigVariant> createDefaultRegistry() {
-        return PigVariants.createDefaultRegistry();
+        return DynamicRegistry.create("minecraft:pig_variant", REGISTRY_CODEC, Registry.Resource.PIG_VARIANTS);
     }
 
     static @NotNull PigVariant create(@NotNull Model model, @NotNull Key assetId) {

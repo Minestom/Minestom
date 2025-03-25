@@ -10,7 +10,6 @@ import net.minestom.server.registry.*;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface Instrument extends ProtocolObject, Instruments permits InstrumentImpl {
     @NotNull NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -49,10 +48,7 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:instrument", InstrumentImpl.REGISTRY_NBT_TYPE, Registry.Resource.INSTRUMENTS,
-                (namespace, props) -> new InstrumentImpl(Registry.instrument(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:instrument", REGISTRY_CODEC, Registry.Resource.INSTRUMENTS);
     }
 
     @NotNull SoundEvent soundEvent();
@@ -66,9 +62,6 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
     float range();
 
     @NotNull Component description();
-
-    @Override
-    @Nullable Registry.InstrumentEntry registry();
 
     final class Builder {
         private SoundEvent soundEvent;
