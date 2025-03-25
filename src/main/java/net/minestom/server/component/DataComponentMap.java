@@ -92,6 +92,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         return new DataComponentMapImpl(diff);
     }
 
+    boolean isEmpty();
+
     /**
      * Does a 'patch'ed has against the given prototype. That is, this map is treated as the primary source, but if
      * unspecified, the given prototype is used as a fallback.

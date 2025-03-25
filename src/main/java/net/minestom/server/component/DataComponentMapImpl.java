@@ -28,6 +28,11 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     private static final char REMOVAL_PREFIX = '!';
 
     @Override
+    public boolean isEmpty() {
+        return components.isEmpty();
+    }
+
+    @Override
     public boolean has(@NotNull DataComponent<?> component) {
         return components.containsKey(component.id()) && components.get(component.id()) != null;
     }

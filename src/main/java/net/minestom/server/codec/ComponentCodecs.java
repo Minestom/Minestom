@@ -90,8 +90,15 @@ public final class ComponentCodecs {
     private static final StructCodec<HoverEvent<?>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, hoverEvent -> (Component) hoverEvent.value(),
             HoverEvent::showText);
-    private static final StructCodec<HoverEvent<?>> SHOW_ITEM = null; // TODO(1.21.5)
-    private static final StructCodec<HoverEvent<?>> SHOW_ENTITY = null; // TODO(1.21.5)
+    private static final StructCodec<HoverEvent<?>> SHOW_ITEM = StructCodec.struct(
+            "id", Codec.KEY, hoverEvent -> ((HoverEvent.ShowItem) hoverEvent.value()).item(),
+            "count", Codec.INT.optional(1), hoverEvent -> ((HoverEvent.ShowItem) hoverEvent.value()).count(),
+            HoverEvent::showItem); // TODO(1.21.5): components
+    private static final StructCodec<HoverEvent<?>> SHOW_ENTITY = StructCodec.struct(
+            "id", Codec.KEY, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).type(),
+            "uuid", Codec.UUID_COERCED, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).id(),
+            "name", COMPONENT_FORWARD, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).name(),
+            HoverEvent::showEntity);
 
     private static StructCodec<HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
         if (action == HoverEvent.Action.SHOW_TEXT) return SHOW_TEXT;
