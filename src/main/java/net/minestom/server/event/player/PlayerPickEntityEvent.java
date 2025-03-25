@@ -4,6 +4,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player tries to pick an entity (middle-click).
@@ -15,7 +16,7 @@ public class PlayerPickEntityEvent implements PlayerInstanceEvent {
     private final Entity entityTarget;
     private final boolean includeData;
 
-    public PlayerPickEntityEvent(@NotNull Player player, @NotNull Entity entityTarget,
+    public PlayerPickEntityEvent(@NotNull Player player, @Nullable Entity entityTarget,
                                  boolean includeData) {
         this.player = player;
 
@@ -24,11 +25,11 @@ public class PlayerPickEntityEvent implements PlayerInstanceEvent {
     }
 
     /**
-     * Gets the entity which was picked.
+     * Gets the entity which was picked. May be null if the entity is not known by the server (eg spawned with packets).
      *
      * @return the entity which was picked
      */
-    public @NotNull Entity getTarget() {
+    public @Nullable Entity getTarget() {
         return entityTarget;
     }
 

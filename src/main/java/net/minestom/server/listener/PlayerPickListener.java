@@ -17,7 +17,6 @@ public class PlayerPickListener {
         final Instance instance = player.getInstance();
         if (instance == null) return;
         final Block block = instance.getBlock(packet.pos());
-        if (block.isAir()) return;
         final boolean includeData = packet.includeData();
 
         PlayerPickBlockEvent playerPickBlockEvent = new PlayerPickBlockEvent(player, block, new BlockVec(packet.pos()), includeData);
@@ -28,7 +27,6 @@ public class PlayerPickListener {
         final Instance instance = player.getInstance();
         if (instance == null) return;
         final Entity entity = instance.getEntityById(packet.entityId());
-        if (entity == null) return;
         final boolean includeData = packet.includeData();
 
         PlayerPickEntityEvent playerPickEntityEvent = new PlayerPickEntityEvent(player, entity, includeData);
