@@ -6,6 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -20,16 +21,6 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, false);
     @NotNull Codec<DynamicRegistry.Key<WolfVariant>> CODEC = Codec.RegistryKey(Registries::wolfVariant);
 
-    /**
-     * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
-     *
-     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
-     */
-    @ApiStatus.Internal
-    static DynamicRegistry<WolfVariant> createDefaultRegistry() {
-        return WolfVariants.createDefaultRegistry();
-    }
-
     static @NotNull WolfVariant create(@NotNull Assets assets) {
         return new WolfVariantImpl(assets);
     }
@@ -40,6 +31,16 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
 
     static @NotNull Builder builder() {
         return new Builder();
+    }
+
+    /**
+     * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
+     *
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
+     */
+    @ApiStatus.Internal
+    static DynamicRegistry<WolfVariant> createDefaultRegistry() {
+        return DynamicRegistry.create("minecraft:wolf_variant", REGISTRY_CODEC, Registry.Resource.WOLF_VARIANTS);
     }
 
     @NotNull Assets assets();

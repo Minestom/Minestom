@@ -5,6 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfSoundVariant> createDefaultRegistry() {
-        return WolfSoundVariants.createDefaultRegistry();
+        return DynamicRegistry.create("minecraft:wolf_sound_variant", REGISTRY_CODEC, Registry.Resource.WOLF_SOUND_VARIANTS);
     }
 
     static @NotNull WolfSoundVariant create(
