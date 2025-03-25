@@ -6,6 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -44,6 +45,10 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
     };
     @NotNull Codec<DynamicRegistry.Key<ChickenVariant>> CODEC = Codec.RegistryKey(Registries::chickenVariant);
 
+    static @NotNull ChickenVariant create(@NotNull Model model, @NotNull Key assetId) {
+        return new ChickenVariantImpl(model, assetId);
+    }
+
     /**
      * Creates a new instance of the "minecraft:chicken_variant" registry containing the vanilla contents.
      *
@@ -51,11 +56,7 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return ChickenVariants.createDefaultRegistry();
-    }
-
-    static @NotNull ChickenVariant create(@NotNull Model model, @NotNull Key assetId) {
-        return new ChickenVariantImpl(model, assetId);
+        return DynamicRegistry.create("minecraft:chicken_variant", REGISTRY_CODEC, Registry.Resource.CHICKEN_VARIANTS);
     }
 
     @NotNull Model model();

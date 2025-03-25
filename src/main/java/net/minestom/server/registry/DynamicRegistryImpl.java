@@ -1,5 +1,9 @@
 package net.minestom.server.registry;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.ServerFlag;
@@ -16,6 +20,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -221,13 +228,28 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
-        if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
-        for (var entry : entries) {
-            final String namespace = entry.getKey();
-            final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+        Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
+        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
+            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            final JsonElement json = Registry.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            if (!(json instanceof JsonObject root))
+                throw new IllegalStateException("Failed to load registry " + registry.id() + ": expected a JSON object, got " + json);
+
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
+            List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
+            if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
+            for (Map.Entry<String, JsonElement> entry : entries) {
+                final String namespace = entry.getKey();
+                final Result<T> valueResult = registry.codec().decode(transcoder, entry.getValue());
+                if (valueResult instanceof Result.Ok(T value)) {
+                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                } else {
+                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.id() + ": " + valueResult);
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

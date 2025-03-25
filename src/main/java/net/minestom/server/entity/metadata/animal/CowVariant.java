@@ -6,6 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,18 +19,18 @@ public sealed interface CowVariant extends CowVariants permits CowVariantImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CowVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::cowVariant, false);
     @NotNull Codec<DynamicRegistry.Key<CowVariant>> CODEC = Codec.RegistryKey(Registries::cowVariant);
 
+    static @NotNull CowVariant create(@NotNull Model model, @NotNull Key assetId) {
+        return new CowVariantImpl(model, assetId);
+    }
+
     /**
-     * Creates a new instance of the "minecraft:wolf_variant" registry containing the vanilla contents.
+     * Creates a new instance of the "minecraft:cow_variant" registry containing the vanilla contents.
      *
      * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
      */
     @ApiStatus.Internal
     static DynamicRegistry<CowVariant> createDefaultRegistry() {
-        return CowVariants.createDefaultRegistry();
-    }
-
-    static @NotNull CowVariant create(@NotNull Model model, @NotNull Key assetId) {
-        return new CowVariantImpl(model, assetId);
+        return DynamicRegistry.create("minecraft:cow_variant", REGISTRY_CODEC, Registry.Resource.COW_VARIANTS);
     }
 
     @NotNull Model model();

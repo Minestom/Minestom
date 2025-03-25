@@ -13,6 +13,7 @@ public interface Transcoder<D> {
 
     @NotNull Transcoder<BinaryTag> NBT = TranscoderNbtImpl.INSTANCE;
     @NotNull Transcoder<JsonElement> JSON = TranscoderJsonImpl.INSTANCE;
+    @NotNull Transcoder<Object> JAVA = TranscoderJavaImpl.INSTANCE;
     @NotNull Transcoder<Integer> CRC32_HASH = TranscoderCrc32Impl.INSTANCE;
 
     @NotNull D createNull();

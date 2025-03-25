@@ -59,24 +59,24 @@ public class Generators {
         generator.generate(resource("block_sound_types.json"), "net.minestom.server.instance.block", "BlockSoundType", "BlockSoundImpl", "BlockSoundTypes");
 
         // Dynamic registries
-        generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType", "ChatTypes");
-        generator.generateKeys(resource("dimension_types.json"), "net.minestom.server.world", "DimensionType", "DimensionTypes");
-        generator.generateKeys(resource("biomes.json"), "net.minestom.server.world.biome", "Biome", "Biomes");
-        generator.generateKeys(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType", "DamageTypes");
-        generator.generateKeys(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial", "TrimMaterials");
-        generator.generateKeys(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern", "TrimPatterns");
-        generator.generateKeys(resource("banner_patterns.json"), "net.minestom.server.instance.block.banner", "BannerPattern", "BannerPatterns");
-        generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment", "Enchantments");
-        generator.generateKeysAndRegistry(resource("painting_variants.json"), "minecraft:painting_variant", "net.minestom.server.entity.metadata.other", "PaintingVariant");
-        generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong", "JukeboxSongs");
-        generator.generateKeys(resource("instruments.json"), "net.minestom.server.item.instrument", "Instrument", "Instruments");
-        generator.generateKeysAndRegistry(resource("wolf_variants.json"), "minecraft:wolf_variant", "net.minestom.server.entity.metadata.animal.tameable", "WolfVariant");
-        generator.generateKeysAndRegistry(resource("wolf_sound_variants.json"), "minecraft:wolf_sound_variant", "net.minestom.server.entity.metadata.animal.tameable", "WolfSoundVariant");
-        generator.generateKeysAndRegistry(resource("cat_variants.json"), "minecraft:cat_variant", "net.minestom.server.entity.metadata.animal.tameable", "CatVariant");
-        generator.generateKeysAndRegistry(resource("chicken_variants.json"), "minecraft:chicken_variant", "net.minestom.server.entity.metadata.animal", "ChickenVariant");
-        generator.generateKeysAndRegistry(resource("cow_variants.json"), "minecraft:cow_variant", "net.minestom.server.entity.metadata.animal", "CowVariant");
-        generator.generateKeysAndRegistry(resource("frog_variants.json"), "minecraft:frog_variant", "net.minestom.server.entity.metadata.animal", "FrogVariant");
-        generator.generateKeysAndRegistry(resource("pig_variants.json"), "minecraft:pig_variant", "net.minestom.server.entity.metadata.animal", "PigVariant");
+        generator.generateKeys(resource("chat_types.json"), "net.minestom.server.message", "ChatType");
+        generator.generateKeys(resource("dimension_types.json"), "net.minestom.server.world", "DimensionType");
+        generator.generateKeys(resource("biomes.json"), "net.minestom.server.world.biome", "Biome");
+        generator.generateKeys(resource("damage_types.json"), "net.minestom.server.entity.damage", "DamageType");
+        generator.generateKeys(resource("trim_materials.json"), "net.minestom.server.item.armor", "TrimMaterial");
+        generator.generateKeys(resource("trim_patterns.json"), "net.minestom.server.item.armor", "TrimPattern");
+        generator.generateKeys(resource("banner_patterns.json"), "net.minestom.server.instance.block.banner", "BannerPattern");
+        generator.generateKeys(resource("enchantments.json"), "net.minestom.server.item.enchant", "Enchantment");
+        generator.generateKeys(resource("painting_variants.json"), "net.minestom.server.entity.metadata.other", "PaintingVariant");
+        generator.generateKeys(resource("jukebox_songs.json"), "net.minestom.server.instance.block.jukebox", "JukeboxSong");
+        generator.generateKeys(resource("instruments.json"), "net.minestom.server.item.instrument", "Instrument");
+        generator.generateKeys(resource("wolf_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfVariant");
+        generator.generateKeys(resource("wolf_sound_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "WolfSoundVariant");
+        generator.generateKeys(resource("cat_variants.json"), "net.minestom.server.entity.metadata.animal.tameable", "CatVariant");
+        generator.generateKeys(resource("chicken_variants.json"), "net.minestom.server.entity.metadata.animal", "ChickenVariant");
+        generator.generateKeys(resource("cow_variants.json"), "net.minestom.server.entity.metadata.animal", "CowVariant");
+        generator.generateKeys(resource("frog_variants.json"), "net.minestom.server.entity.metadata.animal", "FrogVariant");
+        generator.generateKeys(resource("pig_variants.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
 
         // Generate fluids
         new FluidGenerator(resource("fluids.json"), outputFolder).generate();

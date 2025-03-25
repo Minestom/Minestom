@@ -8,7 +8,6 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
     @NotNull Codec<DamageType> REGISTRY_CODEC = StructCodec.struct(
@@ -24,7 +23,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
             @NotNull String messageId,
             @NotNull String scaling
     ) {
-        return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+        return new DamageTypeImpl(exhaustion, messageId, scaling);
     }
 
     static @NotNull Builder builder() {
@@ -38,10 +37,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:damage_type", REGISTRY_CODEC, Registry.Resource.DAMAGE_TYPES,
-                (namespace, props) -> new DamageTypeImpl(Registry.damageType(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:damage_type", REGISTRY_CODEC, Registry.Resource.DAMAGE_TYPES);
     }
 
     float exhaustion();
@@ -49,8 +45,6 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
     @NotNull String messageId();
 
     @NotNull String scaling();
-
-    @Nullable Registry.DamageTypeEntry registry();
 
     final class Builder {
         private float exhaustion = 0f;
@@ -76,7 +70,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
         }
 
         public @NotNull DamageType build() {
-            return new DamageTypeImpl(exhaustion, messageId, scaling, null);
+            return new DamageTypeImpl(exhaustion, messageId, scaling);
         }
     }
 

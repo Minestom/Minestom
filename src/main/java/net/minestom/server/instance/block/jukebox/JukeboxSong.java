@@ -12,7 +12,6 @@ import net.minestom.server.registry.Registry;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits JukeboxSongImpl {
     @NotNull NetworkBuffer.Type<JukeboxSong> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -37,7 +36,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
             float lengthInSeconds,
             int comparatorOutput
     ) {
-        return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput, null);
+        return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput);
     }
 
     static @NotNull Builder builder() {
@@ -51,10 +50,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:jukebox_song", REGISTRY_CODEC, Registry.Resource.JUKEBOX_SONGS,
-                (namespace, props) -> new JukeboxSongImpl(Registry.jukeboxSong(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:jukebox_song", REGISTRY_CODEC, Registry.Resource.JUKEBOX_SONGS);
     }
 
     @NotNull SoundEvent soundEvent();
@@ -64,9 +60,6 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
     float lengthInSeconds();
 
     int comparatorOutput();
-
-    @Override
-    @Nullable Registry.JukeboxSongEntry registry();
 
     final class Builder {
         private SoundEvent soundEvent;
@@ -98,7 +91,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
         }
 
         public @NotNull JukeboxSong build() {
-            return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput, null);
+            return new JukeboxSongImpl(soundEvent, description, lengthInSeconds, comparatorOutput);
         }
     }
 
