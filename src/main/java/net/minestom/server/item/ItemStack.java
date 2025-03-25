@@ -1,14 +1,15 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.event.HoverEventSource;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.adventure.MinestomAdventure;
+import net.minestom.server.adventure.MinestomDataComponentValue;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
@@ -29,10 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntUnaryOperator;
 import java.util.function.UnaryOperator;
@@ -274,12 +272,13 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
 
     @Override
     default @NotNull HoverEvent<HoverEvent.ShowItem> asHoverEvent(@NotNull UnaryOperator<HoverEvent.ShowItem> op) {
-        try {
-            BinaryTagHolder tagHolder = BinaryTagHolder.encode(this.toItemNBT(), MinestomAdventure.NBT_CODEC);
-            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), tagHolder)));
-        } catch (IOException e) {
-            throw new RuntimeException("failed to encode itemstack nbt", e);
-        }
+        if (componentPatch().isEmpty())
+            return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount())));
+
+        final Map<Key, DataComponentValue> dataComponents = new HashMap<>();
+        for (final Map.Entry<DataComponent<?>, Object> entry : componentPatch().entrySet())
+            dataComponents.put(entry.getKey().key(), MinestomDataComponentValue.dataComponentValue(entry.getValue()));
+        return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), dataComponents)));
     }
 
     // These functions are mirrors of ComponentHolder, but we can't actually implement that interface
