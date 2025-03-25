@@ -9,7 +9,6 @@ import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface BannerPattern extends ProtocolObject, BannerPatterns permits BannerPatternImpl {
     @NotNull NetworkBuffer.Type<BannerPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -28,7 +27,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
             @NotNull Key assetId,
             @NotNull String translationKey
     ) {
-        return new BannerPatternImpl(assetId, translationKey, null);
+        return new BannerPatternImpl(assetId, translationKey);
     }
 
     static @NotNull Builder builder() {
@@ -42,17 +41,12 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:banner_pattern", REGISTRY_CODEC, Registry.Resource.BANNER_PATTERNS,
-                (namespace, props) -> new BannerPatternImpl(Registry.bannerPattern(namespace, props))
-        );
+        return DynamicRegistry.create("minecraft:banner_pattern", REGISTRY_CODEC, Registry.Resource.BANNER_PATTERNS);
     }
 
     @NotNull Key assetId();
 
     @NotNull String translationKey();
-
-    @Nullable Registry.BannerPatternEntry registry();
 
     final class Builder {
         private Key assetId;
@@ -75,7 +69,7 @@ public sealed interface BannerPattern extends ProtocolObject, BannerPatterns per
 
         @Contract(pure = true)
         public @NotNull BannerPattern build() {
-            return new BannerPatternImpl(assetId, translationKey, null);
+            return new BannerPatternImpl(assetId, translationKey);
         }
     }
 }
