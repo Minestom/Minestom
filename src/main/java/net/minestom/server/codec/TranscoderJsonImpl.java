@@ -225,7 +225,7 @@ final class TranscoderJsonImpl implements Transcoder<JsonElement> {
                 yield new Result.Ok<>(mapBuilder.build());
             }
             case JsonArray array -> {
-                // TODO(1.21.5) empty list call on coder
+                if (array.isEmpty()) yield new Result.Ok<>(coder.emptyList());
                 final ListBuilder<O> listBuilder = coder.createList(array.size());
                 for (int i = 0; i < array.size(); i++) {
                     switch (convertTo(coder, array.get(i))) {
