@@ -1,10 +1,14 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.advancements.FrameType;
+import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.color.AlphaColor;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -23,6 +27,7 @@ import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
+import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -108,9 +113,6 @@ public class PlayerInit {
 //                        .build();
 //                player.getInventory().addItemStack(itemStack);
 
-                player.sendMessage(Component.text("Hover for item").hoverEvent(ItemStack.of(Material.STICK)
-                        .with(DataComponents.LORE, List.of(Component.text("This is a stick")))));
-
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"
                 )));
@@ -122,30 +124,30 @@ public class PlayerInit {
                 ));
 
                 // TODO(1.21.2): Handle bundle slot selection
-//                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-//                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
-//                                ItemStack.of(Material.DIAMOND, 5),
-//                                ItemStack.of(Material.RABBIT_FOOT, 5)
-//                        ))
-//                        .build();
-//                player.getInventory().addItemStack(bundle);
-//
-//                PlayerInventory inventory = event.getPlayer().getInventory();
-//                inventory.addItemStack(getFoodItem(20));
-//                inventory.addItemStack(getFoodItem(10000));
-//                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
-//
-//                if (event.isFirstSpawn()) {
-//                    event.getPlayer().sendNotification(new Notification(
-//                            Component.text("Welcome!"),
-//                            FrameType.TASK,
-//                            Material.IRON_SWORD
-//                    ));
-//
-//                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
-//
-//                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
-//                }
+                ItemStack bundle = ItemStack.builder(Material.BUNDLE)
+                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
+                                ItemStack.of(Material.DIAMOND, 5),
+                                ItemStack.of(Material.RABBIT_FOOT, 5)
+                        ))
+                        .build();
+                player.getInventory().addItemStack(bundle);
+
+                PlayerInventory inventory = event.getPlayer().getInventory();
+                inventory.addItemStack(getFoodItem(20));
+                inventory.addItemStack(getFoodItem(10000));
+                inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
+
+                if (event.isFirstSpawn()) {
+                    event.getPlayer().sendNotification(new Notification(
+                            Component.text("Welcome!"),
+                            FrameType.TASK,
+                            Material.IRON_SWORD
+                    ));
+
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
+
+                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
+                }
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
