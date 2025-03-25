@@ -415,6 +415,37 @@ final class CodecImpl {
         }
     }
 
+    record Vector3DImpl() implements Codec<Point> {
+        @Override
+        public @NotNull <D> Result<Point> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<List<D>> listResult = coder.getList(value);
+            if (!(listResult instanceof Result.Ok(List<D> list)))
+                return listResult.cast();
+            if (list.size() != 3)
+                return new Result.Error<>("Invalid length for Vector, expected 3 but got " + list.size());
+            final Result<Double> xResult = coder.getDouble(list.get(0));
+            if (!(xResult instanceof Result.Ok(Double x)))
+                return xResult.cast();
+            final Result<Double> yResult = coder.getDouble(list.get(1));
+            if (!(yResult instanceof Result.Ok(Double y)))
+                return yResult.cast();
+            final Result<Double> zResult = coder.getDouble(list.get(2));
+            if (!(zResult instanceof Result.Ok(Double z)))
+                return zResult.cast();
+            return new Result.Ok<>(new Vec(x, y, z));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Point value) {
+            if (value == null) return new Result.Error<>("null");
+            final ListBuilder<D> list = coder.createList(3);
+            list.add(coder.createDouble(value.x()));
+            list.add(coder.createDouble(value.y()));
+            list.add(coder.createDouble(value.z()));
+            return new Result.Ok<>(list.build());
+        }
+    }
+
     /**
      * @deprecated Remove once adventure is updated to have change_page be an int.
      */
