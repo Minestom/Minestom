@@ -1,10 +1,11 @@
 package net.minestom.server.adventure.serializer.nbt;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.*;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -14,10 +15,7 @@ import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 //todo write tests for me!!
 final class NbtComponentSerializerImpl implements NbtComponentSerializer {
@@ -235,10 +233,22 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         } else if (action == HoverEvent.Action.SHOW_ITEM) {
             @Subst("minecraft:stick") var id = contents.getString("id");
             Check.notNull(id, "Show item hover event must have an id field");
-            var count = contents.getInt("count");
-            var tag = contents.getString("tag");
-            var binaryTag = tag.isEmpty() ? null : BinaryTagHolder.binaryTagHolder(tag);
-            return HoverEvent.showItem(Key.key(id), count, binaryTag);
+            var count = contents.getInt("count", 1);
+
+            final Map<Key, DataComponentValue> dataComponents = new HashMap<>();
+            final CompoundBinaryTag dataComponentsCompound = contents.getCompound("components");
+            if (!dataComponentsCompound.isEmpty()) {
+                for (final Map.Entry<String, ? extends BinaryTag> entry : dataComponentsCompound) {
+                    @KeyPattern final String name = entry.getKey();
+                    if (name.startsWith("!")) {
+                        dataComponents.put(Key.key(name.substring(1)), DataComponentValue.removed());
+                    } else {
+                        dataComponents.put(Key.key(name), NbtDataComponentValue.nbtDataComponentValue(entry.getValue()));
+                    }
+                }
+            }
+
+            return HoverEvent.showItem(Key.key(id), count, dataComponents);
         } else if (action == HoverEvent.Action.SHOW_ENTITY) {
             var name = contents.getCompound("name");
             var nameComponent = name.size() == 0 ? null : deserializeComponent(name);
@@ -364,7 +374,6 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
     private @NotNull BinaryTag serializeHoverEvent(@NotNull HoverEvent<?> event) {
         CompoundBinaryTag.Builder compound = CompoundBinaryTag.builder();
 
-        //todo surely there is a better way to do this?
         compound.putString("action", event.action().toString());
         if (event.action() == HoverEvent.Action.SHOW_TEXT) {
             var value = ((HoverEvent<Component>) event).value();
@@ -375,8 +384,20 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
             CompoundBinaryTag.Builder itemCompound = CompoundBinaryTag.builder();
             itemCompound.putString("id", value.item().asString());
             if (value.count() != 1) itemCompound.putInt("count", value.count());
-            var tag = value.nbt();
-            if (tag != null) itemCompound.putString("tag", tag.string());
+
+            final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
+            if (!dataComponents.isEmpty()) {
+                final CompoundBinaryTag.Builder dataComponentsCompound = CompoundBinaryTag.builder();
+                for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
+                    final BinaryTag dataComponentValue = entry.getValue().value();
+                    if (dataComponentValue == null) {
+                        dataComponentsCompound.put("!" + entry.getKey().asString(), CompoundBinaryTag.empty());
+                    } else {
+                        dataComponentsCompound.put(entry.getKey().asString(), dataComponentValue);
+                    }
+                }
+                itemCompound.put("components", dataComponentsCompound.build());
+            }
 
             compound.put("contents", itemCompound.build());
         } else if (event.action() == HoverEvent.Action.SHOW_ENTITY) {

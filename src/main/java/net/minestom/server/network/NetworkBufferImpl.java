@@ -10,8 +10,12 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import javax.crypto.Cipher;
 import javax.crypto.ShortBufferException;
-import java.io.EOFException;
 import java.io.IOException;
+import java.io.EOFException;
+import java.io.DataOutputStream;
+import java.io.OutputStream;
+import java.io.DataInputStream;
+import java.io.InputStream;
 import java.lang.ref.Cleaner;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -37,8 +41,8 @@ final class NetworkBufferImpl implements NetworkBuffer {
     private long readIndex, writeIndex;
     boolean readOnly;
 
-    BinaryTagWriter nbtWriter;
-    BinaryTagReader nbtReader;
+    private BinaryTagWriter nbtWriter;
+    private BinaryTagReader nbtReader;
 
     final @Nullable AutoResize autoResize;
     final @Nullable Registries registries;
@@ -553,6 +557,35 @@ final class NetworkBufferImpl implements NetworkBuffer {
 
     static NetworkBufferImpl impl(NetworkBuffer buffer) {
         return (NetworkBufferImpl) buffer;
+    }
+
+    BinaryTagWriter nbtWriter() {
+        if (this.nbtWriter == null) {
+            this.nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
+                @Override
+                public void write(int b) {
+                    NetworkBufferImpl.this.write(BYTE, (byte) b);
+                }
+            }));
+        }
+        return this.nbtWriter;
+    }
+
+    BinaryTagReader nbtReader() {
+        if (nbtReader == null) {
+            this.nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
+                @Override
+                public int read() {
+                    return NetworkBufferImpl.this.read(BYTE) & 0xFF;
+                }
+
+                @Override
+                public int available() {
+                    return (int) NetworkBufferImpl.this.readableBytes();
+                }
+            }));
+        }
+        return nbtReader;
     }
 
     private static void assertOverflow(long value) {
