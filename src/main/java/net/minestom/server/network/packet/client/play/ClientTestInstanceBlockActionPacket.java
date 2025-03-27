@@ -30,7 +30,7 @@ public record ClientTestInstanceBlockActionPacket(
     ) {
         public static final @NotNull NetworkBuffer.Type<Data> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING.optional(), Data::test,
-                NetworkBuffer.BLOCK_POSITION, Data::size,
+                NetworkBuffer.VECTOR3I, Data::size,
                 NetworkBuffer.VAR_INT, Data::rotation,
                 NetworkBuffer.BOOLEAN, Data::ignoreEntities,
                 Status.NETWORK_TYPE, Data::status,
