@@ -21,6 +21,7 @@ record DimensionTypeImpl(
         int height,
         @NotNull String infiniburn,
         @NotNull Key effects,
-        int monsterSpawnBlockLightLimit
+        int monsterSpawnBlockLightLimit,
+        int monsterSpawnLightLevel
 ) implements DimensionType {
 }

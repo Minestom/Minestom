@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -40,17 +41,18 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
             "infiniburn", Codec.STRING, DimensionType::infiniburn,
             "effects", Codec.KEY.optional(OVERWORLD_EFFECTS), DimensionType::effects,
             "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
+            "monster_spawn_light_level", Codec.INT.orElse(Codec.UNIT.transform(ignored -> 0, ignored -> Unit.INSTANCE)), DimensionType::monsterSpawnLightLevel,
             DimensionType::create);
 
     static @NotNull DimensionType create(
             boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
             float ambientLight, @Nullable Long fixedTime, boolean piglinSafe, boolean bedWorks, boolean respawnAnchorWorks,
             boolean hasRaids, int logicalHeight, int minY, int height, @NotNull String infiniburn, @NotNull Key effects,
-            int monsterSpawnBlockLightLimit
+            int monsterSpawnBlockLightLimit, int monsterSpawnLightLevel
     ) {
         return new DimensionTypeImpl(ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                 fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                infiniburn, effects, monsterSpawnBlockLightLimit);
+                infiniburn, effects, monsterSpawnBlockLightLimit, monsterSpawnLightLevel);
     }
 
     static @NotNull Builder builder() {
@@ -104,6 +106,8 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
     @NotNull Key effects();
 
     int monsterSpawnBlockLightLimit();
+
+    int monsterSpawnLightLevel();
 
     default int totalHeight() {
         return minY() + height();
@@ -237,7 +241,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                    infiniburn, effects, 0
+                    infiniburn, effects, 0, 0
             );
         }
     }
