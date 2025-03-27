@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -17,7 +17,7 @@ public class BeesTest extends AbstractItemComponentTest<List<Bee>> {
 
     @Override
     protected @NotNull DataComponent<List<Bee>> component() {
-        return ItemComponent.BEES;
+        return DataComponents.BEES;
     }
 
     @Override

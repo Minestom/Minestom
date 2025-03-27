@@ -1,9 +1,13 @@
 package net.minestom.server.command;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -104,6 +108,8 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     RESOURCE_KEY(Key.key("minecraft:resource_key")),
 
+    RESOURCE_SELECTOR(Key.key("minecraft:resource_selector")),
+
     TEMPLATE_MIRROR(Key.key("minecraft:template_mirror")),
 
     TEMPLATE_ROTATION(Key.key("minecraft:template_rotation")),
@@ -118,9 +124,11 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     UUID(Key.key("minecraft:uuid"));
 
+    private static final Map<Key, ArgumentParserType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(ArgumentParserType::key, Function.identity()));
+
     public static final NetworkBuffer.Type<ArgumentParserType> NETWORK_TYPE = NetworkBuffer.Enum(ArgumentParserType.class);
 
-    public static final BinaryTagSerializer<ArgumentParserType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(ArgumentParserType.class);
+    public static final Codec<ArgumentParserType> CODEC = Codec.KEY.transform(BY_KEY::get, ArgumentParserType::key);
 
     private final Key key;
 

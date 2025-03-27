@@ -413,11 +413,19 @@ interface Materials {
 
     Material FERN = MaterialImpl.get("minecraft:fern");
 
+    Material BUSH = MaterialImpl.get("minecraft:bush");
+
     Material AZALEA = MaterialImpl.get("minecraft:azalea");
 
     Material FLOWERING_AZALEA = MaterialImpl.get("minecraft:flowering_azalea");
 
     Material DEAD_BUSH = MaterialImpl.get("minecraft:dead_bush");
+
+    Material FIREFLY_BUSH = MaterialImpl.get("minecraft:firefly_bush");
+
+    Material SHORT_DRY_GRASS = MaterialImpl.get("minecraft:short_dry_grass");
+
+    Material TALL_DRY_GRASS = MaterialImpl.get("minecraft:tall_dry_grass");
 
     Material SEAGRASS = MaterialImpl.get("minecraft:seagrass");
 
@@ -514,6 +522,10 @@ interface Materials {
     Material KELP = MaterialImpl.get("minecraft:kelp");
 
     Material PINK_PETALS = MaterialImpl.get("minecraft:pink_petals");
+
+    Material WILDFLOWERS = MaterialImpl.get("minecraft:wildflowers");
+
+    Material LEAF_LITTER = MaterialImpl.get("minecraft:leaf_litter");
 
     Material MOSS_CARPET = MaterialImpl.get("minecraft:moss_carpet");
 
@@ -650,6 +662,8 @@ interface Materials {
     Material SNOW_BLOCK = MaterialImpl.get("minecraft:snow_block");
 
     Material CACTUS = MaterialImpl.get("minecraft:cactus");
+
+    Material CACTUS_FLOWER = MaterialImpl.get("minecraft:cactus_flower");
 
     Material CLAY = MaterialImpl.get("minecraft:clay");
 
@@ -1655,6 +1669,10 @@ interface Materials {
 
     Material JIGSAW = MaterialImpl.get("minecraft:jigsaw");
 
+    Material TEST_BLOCK = MaterialImpl.get("minecraft:test_block");
+
+    Material TEST_INSTANCE_BLOCK = MaterialImpl.get("minecraft:test_instance_block");
+
     Material TURTLE_HELMET = MaterialImpl.get("minecraft:turtle_helmet");
 
     Material TURTLE_SCUTE = MaterialImpl.get("minecraft:turtle_scute");
@@ -1926,6 +1944,10 @@ interface Materials {
     Material SLIME_BALL = MaterialImpl.get("minecraft:slime_ball");
 
     Material EGG = MaterialImpl.get("minecraft:egg");
+
+    Material BLUE_EGG = MaterialImpl.get("minecraft:blue_egg");
+
+    Material BROWN_EGG = MaterialImpl.get("minecraft:brown_egg");
 
     Material COMPASS = MaterialImpl.get("minecraft:compass");
 

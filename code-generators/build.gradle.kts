@@ -9,6 +9,7 @@ dependencies {
     // Common
     implementation(libs.jetbrainsAnnotations)
     implementation(libs.slf4j)
+    implementation(libs.bundles.adventure)
     runtimeOnly(libs.bundles.logback)
 
     // Parsing and generation

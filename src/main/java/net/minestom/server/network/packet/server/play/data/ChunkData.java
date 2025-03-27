@@ -4,6 +4,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
@@ -14,9 +15,10 @@ import java.util.stream.Collectors;
 
 import static net.minestom.server.network.NetworkBuffer.*;
 
-public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] data,
+public record ChunkData(@NotNull Map<Heightmap.Type, long[]> heightmaps, byte @NotNull [] data,
                         @NotNull Map<Integer, Block> blockEntities) {
     public ChunkData {
+        heightmaps = Map.copyOf(heightmaps);
         blockEntities = blockEntities.entrySet()
                 .stream()
                 .filter((entry) -> entry.getValue().registry().isBlockEntity())
@@ -24,10 +26,13 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
     }
 
     public static final NetworkBuffer.Type<ChunkData> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        private static final NetworkBuffer.Type<Map<Heightmap.Type, long[]>> HEIGHTMAPS = Heightmap.Type.NETWORK_TYPE
+                .mapValue(LONG_ARRAY, Heightmap.Type.values().length);
+
         @Override
         public void write(@NotNull NetworkBuffer buffer, ChunkData value) {
             // Heightmaps
-            buffer.write(NBT_COMPOUND, value.heightmaps);
+            buffer.write(HEIGHTMAPS, value.heightmaps);
             // Data
             buffer.write(BYTE_ARRAY, value.data);
             // Block entities
@@ -50,7 +55,7 @@ public record ChunkData(@NotNull CompoundBinaryTag heightmaps, byte @NotNull [] 
 
         @Override
         public ChunkData read(@NotNull NetworkBuffer buffer) {
-            return new ChunkData(buffer.read(NBT_COMPOUND), buffer.read(BYTE_ARRAY),
+            return new ChunkData(buffer.read(HEIGHTMAPS), buffer.read(BYTE_ARRAY),
                     readBlockEntities(buffer));
         }
     };

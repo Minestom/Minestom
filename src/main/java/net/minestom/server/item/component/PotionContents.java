@@ -1,17 +1,16 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.color.Color;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public record PotionContents(
@@ -28,72 +27,13 @@ public record PotionContents(
             CustomPotionEffect.NETWORK_TYPE.list(Short.MAX_VALUE), PotionContents::customEffects,
             NetworkBuffer.STRING.optional(), PotionContents::customName,
             PotionContents::new);
-
-    public static final BinaryTagSerializer<PotionContents> NBT_TYPE = new BinaryTagSerializer<>() {
-        @Override
-        public @NotNull BinaryTag write(@NotNull PotionContents value) {
-            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-
-            if (value.potion != null) {
-                builder.put("potion", StringBinaryTag.stringBinaryTag(value.potion.name()));
-            }
-
-            if (value.customColor != null) {
-                builder.put("custom_color", Color.NBT_TYPE.write(value.customColor));
-            }
-
-            if (!value.customEffects.isEmpty()) {
-                ListBinaryTag.Builder<BinaryTag> effectsBuilder = ListBinaryTag.builder();
-                for (CustomPotionEffect effect : value.customEffects) {
-                    effectsBuilder.add(CustomPotionEffect.NBT_TYPE.write(effect));
-                }
-                builder.put("custom_effects", effectsBuilder.build());
-            }
-
-            if (value.customName != null) {
-                builder.putString("custom_name", value.customName);
-            }
-
-            return builder.build();
-        }
-
-        @Override
-        public @NotNull PotionContents read(@NotNull BinaryTag tag) {
-            // Can be a string with just a potion effect id
-            if (tag instanceof StringBinaryTag string) {
-                return new PotionContents(PotionType.fromKey(string.value()), null, List.of(), null);
-            }
-
-            // Otherwise must be a compound
-            if (!(tag instanceof CompoundBinaryTag compound)) {
-                return EMPTY;
-            }
-
-            PotionType potion = null;
-            if (compound.get("potion") instanceof StringBinaryTag potionTag)
-                potion = PotionType.fromKey(potionTag.value());
-
-            Color customColor = null;
-            if (compound.get("custom_color") instanceof IntBinaryTag colorTag) {
-                customColor = new Color(colorTag.value());
-            }
-
-            List<CustomPotionEffect> customEffects = new ArrayList<>();
-            ListBinaryTag customEffectsTag = compound.getList("custom_effects", BinaryTagTypes.COMPOUND);
-            for (BinaryTag customEffectTag : customEffectsTag) {
-                if (!(customEffectTag instanceof CompoundBinaryTag customEffectCompound)) {
-                    continue;
-                }
-                customEffects.add(CustomPotionEffect.NBT_TYPE.read(customEffectCompound));
-            }
-
-            String customName = null;
-            if (compound.get("custom_name") instanceof StringBinaryTag customNameTag)
-                customName = customNameTag.value();
-
-            return new PotionContents(potion, customColor, customEffects, customName);
-        }
-    };
+    private static final Codec<PotionContents> POTION_CODEC = PotionType.CODEC.transform(PotionContents::new, PotionContents::potion);
+    public static final Codec<PotionContents> CODEC = StructCodec.struct(
+            "potion", PotionType.CODEC.optional(), PotionContents::potion,
+            "custom_color", Color.CODEC.optional(), PotionContents::customColor,
+            "custom_effects", CustomPotionEffect.CODEC.list().optional(List.of()), PotionContents::customEffects,
+            "custom_name", Codec.STRING.optional(), PotionContents::customName,
+            PotionContents::new).orElse(POTION_CODEC);
 
     public PotionContents {
         customEffects = List.copyOf(customEffects);

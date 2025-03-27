@@ -53,7 +53,9 @@ public class WindowListener {
         } else if (clickType == ClientClickWindowPacket.ClickType.CLONE) {
             successful = player.getGameMode() == GameMode.CREATIVE;
             if (successful) {
-                player.getInventory().setCursorItem(packet.clickedItem());
+                ItemStack cloneStack = inventory.getItemStack(slot);
+                cloneStack = cloneStack.withAmount(cloneStack.maxStackSize());
+                player.getInventory().setCursorItem(cloneStack, false);
             }
         } else if (clickType == ClientClickWindowPacket.ClickType.THROW) {
             successful = inventory.drop(player, false, slot, button);
@@ -67,13 +69,14 @@ public class WindowListener {
         if (!successful) {
             player.getInventory().update();
             if (inventory instanceof Inventory) {
-                ((Inventory) inventory).update(player);
+                inventory.update(player);
             }
         }
 
-        // Prevent the player from picking a ghost item in cursor
+        // Resync in case the client sent item does not match what we think it should be.
         ItemStack cursorItem = player.getInventory().getCursorItem();
-        player.sendPacket(new SetCursorItemPacket(cursorItem));
+        if (!ItemStack.Hash.of(cursorItem).equals(packet.clickedItem()))
+            player.sendPacket(new SetCursorItemPacket(cursorItem));
 
         // (Why is the ping packet necessary?)
         player.sendPacket(new PingPacket((1 << 30) | (windowId << 16)));

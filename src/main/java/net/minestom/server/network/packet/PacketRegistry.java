@@ -37,8 +37,7 @@ public interface PacketRegistry<T> {
     }
 
     sealed class Client extends PacketRegistryTemplate<ClientPacket> {
-        @SafeVarargs
-        Client(Entry<? extends ClientPacket>... suppliers) {
+        @SafeVarargs Client(Entry<? extends ClientPacket>... suppliers) {
             super(suppliers);
         }
     }
@@ -147,9 +146,11 @@ public interface PacketRegistry<T> {
                     entry(ClientCreativeInventoryActionPacket.class, ClientCreativeInventoryActionPacket.SERIALIZER),
                     entry(ClientUpdateJigsawBlockPacket.class, ClientUpdateJigsawBlockPacket.SERIALIZER),
                     entry(ClientUpdateStructureBlockPacket.class, ClientUpdateStructureBlockPacket.SERIALIZER),
+                    entry(ClientSetTestBlockPacket.class, ClientSetTestBlockPacket.SERIALIZER),
                     entry(ClientUpdateSignPacket.class, ClientUpdateSignPacket.SERIALIZER),
                     entry(ClientAnimationPacket.class, ClientAnimationPacket.SERIALIZER),
                     entry(ClientSpectatePacket.class, ClientSpectatePacket.SERIALIZER),
+                    entry(ClientTestInstanceBlockActionPacket.class, ClientTestInstanceBlockActionPacket.SERIALIZER),
                     entry(ClientPlayerBlockPlacementPacket.class, ClientPlayerBlockPlacementPacket.SERIALIZER),
                     entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
             );
@@ -157,8 +158,7 @@ public interface PacketRegistry<T> {
     }
 
     sealed class Server extends PacketRegistryTemplate<ServerPacket> {
-        @SafeVarargs
-        Server(Entry<? extends ServerPacket>... suppliers) {
+        @SafeVarargs Server(Entry<? extends ServerPacket>... suppliers) {
             super(suppliers);
         }
     }
@@ -222,7 +222,6 @@ public interface PacketRegistry<T> {
             super(
                     entry(BundlePacket.class, BundlePacket.SERIALIZER),
                     entry(SpawnEntityPacket.class, SpawnEntityPacket.SERIALIZER),
-                    entry(SpawnExperienceOrbPacket.class, SpawnExperienceOrbPacket.SERIALIZER),
                     entry(EntityAnimationPacket.class, EntityAnimationPacket.SERIALIZER),
                     entry(StatisticsPacket.class, StatisticsPacket.SERIALIZER),
                     entry(AcknowledgeBlockChangePacket.class, AcknowledgeBlockChangePacket.SERIALIZER),
@@ -340,6 +339,7 @@ public interface PacketRegistry<T> {
                     entry(NbtQueryResponsePacket.class, NbtQueryResponsePacket.SERIALIZER),
                     entry(CollectItemPacket.class, CollectItemPacket.SERIALIZER),
                     entry(EntityTeleportPacket.class, EntityTeleportPacket.SERIALIZER),
+                    entry(TestInstanceBlockStatus.class, TestInstanceBlockStatus.SERIALIZER),
                     entry(SetTickStatePacket.class, SetTickStatePacket.SERIALIZER),
                     entry(TickStepPacket.class, TickStepPacket.SERIALIZER),
                     entry(TransferPacket.class, TransferPacket.SERIALIZER),
@@ -370,8 +370,7 @@ public interface PacketRegistry<T> {
             }
         };
 
-        @SafeVarargs
-        PacketRegistryTemplate(Entry<? extends T>... suppliers) {
+        @SafeVarargs PacketRegistryTemplate(Entry<? extends T>... suppliers) {
             PacketInfo<? extends T>[] packetInfos = new PacketInfo[suppliers.length];
             for (int i = 0; i < suppliers.length; i++) {
                 final Entry<? extends T> entry = suppliers[i];

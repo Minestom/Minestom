@@ -7,13 +7,18 @@ import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.*;
 import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
+import net.minestom.server.adventure.serializer.nbt.NbtDataComponentValue;
+import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import static net.minestom.server.network.NetworkBuffer.*;
+import static net.minestom.server.network.NetworkBufferImpl.impl;
 
 record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Component> {
 
@@ -251,7 +256,24 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
             buffer.write(BYTE, TAG_COMPOUND);
             buffer.write(STRING_IO_UTF8, "components");
-            //todo item components
+            final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
+            if (!dataComponents.isEmpty()) {
+                final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                try {
+                    for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
+                        final BinaryTag dataComponentValue = entry.getValue().value();
+                        if (dataComponentValue == null) {
+                            buffer.write(BYTE, TAG_COMPOUND);
+                            buffer.write(STRING_IO_UTF8, "!" + entry.getKey().asString());
+                            buffer.write(BYTE, TAG_END);
+                        } else {
+                            nbtWriter.writeNamed(entry.getKey().asString(), dataComponentValue);
+                        }
+                    }
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             buffer.write(BYTE, TAG_END);
 
             buffer.write(BYTE, TAG_END); // End contents tag

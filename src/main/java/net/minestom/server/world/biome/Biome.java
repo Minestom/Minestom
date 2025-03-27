@@ -1,17 +1,28 @@
 package net.minestom.server.world.biome;
 
-import net.minestom.server.color.Color;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
+    @NotNull Codec<Biome> REGISTRY_CODEC = StructCodec.struct(
+            "temperature", Codec.FLOAT, Biome::temperature,
+            "downfall", Codec.FLOAT, Biome::downfall,
+            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+            "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
+            "effects", BiomeEffects.CODEC.optional(BiomeEffects.PLAINS_EFFECTS), Biome::effects,
+            Biome::create);
+
+    static @NotNull Biome create(float temperature, float downfall, boolean hasPrecipitation,
+                                 @NotNull TemperatureModifier temperatureModifier, @NotNull BiomeEffects effects) {
+        return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
+    }
 
     static @NotNull Builder builder() {
         return new Builder();
@@ -25,8 +36,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
-                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
+                "minecraft:worldgen/biome", REGISTRY_CODEC, null, Registry.Resource.BIOMES,
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
                 (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0
@@ -43,12 +53,10 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     @NotNull TemperatureModifier temperatureModifier();
 
-    @Nullable Registry.BiomeEntry registry();
-
     enum TemperatureModifier {
         NONE, FROZEN;
 
-        public static final BinaryTagSerializer<TemperatureModifier> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(TemperatureModifier.class);
+        public static final Codec<TemperatureModifier> CODEC = Codec.Enum(TemperatureModifier.class);
     }
 
     interface Setter {
@@ -68,16 +76,9 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     }
 
     final class Builder {
-        private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
-                .fogColor(new Color(0xC0D8FF))
-                .skyColor(new Color(0x78A7FF))
-                .waterColor(new Color(0x3F76E4))
-                .waterFogColor(new Color(0x50533))
-                .build();
-
         private float temperature = 0.25f;
         private float downfall = 0.8f;
-        private BiomeEffects effects = DEFAULT_EFFECTS;
+        private BiomeEffects effects = BiomeEffects.PLAINS_EFFECTS;
         private boolean hasPrecipitation = false;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
@@ -116,7 +117,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier, null);
+            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
         }
     }
 }
