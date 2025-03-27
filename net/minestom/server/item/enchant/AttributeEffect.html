@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a></code>, <code><a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AttributeEffect</span>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id, @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute, @NotNull <a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>&nbsp;amount, @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AttributeEffect</span>(@NotNull net.kyori.adventure.key.Key&nbsp;id, @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute, @NotNull <a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>&nbsp;amount, @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Enchantment.Effect.html" title="interface in net.minestom.server.item.enchant">Enchantment.Effect</a>, <a href="LocationEffect.html" title="interface in net.minestom.server.item.enchant">LocationEffect</a></span></div>
 </section>
@@ -134,7 +134,7 @@ implements <a href="Enchantment.Effect.html" title="interface in net.minestom.se
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,net.minestom.server.entity.attribute.Attribute,net.minestom.server.item.enchant.LevelBasedValue,net.minestom.server.entity.attribute.AttributeOperation)" class="member-name-link">AttributeEffect</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,net.minestom.server.entity.attribute.Attribute,net.minestom.server.item.enchant.LevelBasedValue,net.minestom.server.entity.attribute.AttributeOperation)" class="member-name-link">AttributeEffect</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;id,
  @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute,
  @NotNull <a href="LevelBasedValue.html" title="interface in net.minestom.server.item.enchant">LevelBasedValue</a>&nbsp;amount,
  @NotNull <a href="../../entity/attribute/AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)</code></div>
@@ -175,7 +175,7 @@ implements <a href="Enchantment.Effect.html" title="interface in net.minestom.se
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull net.kyori.adventure.key.Key</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>id</code> record component.</div>
@@ -225,10 +225,10 @@ implements <a href="Enchantment.Effect.html" title="interface in net.minestom.se
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,net.minestom.server.entity.attribute.Attribute,net.minestom.server.item.enchant.LevelBasedValue,net.minestom.server.entity.attribute.AttributeOperation)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,net.minestom.server.entity.attribute.Attribute,net.minestom.server.item.enchant.LevelBasedValue,net.minestom.server.entity.attribute.AttributeOperation)">
 <h3>AttributeEffect</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AttributeEffect</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ @NotNull net.kyori.adventure.key.Key&nbsp;id,
  @NotNull
  @NotNull <a href="../../entity/attribute/Attribute.html" title="interface in net.minestom.server.entity.attribute">Attribute</a>&nbsp;attribute,
  @NotNull
@@ -309,7 +309,7 @@ implements <a href="Enchantment.Effect.html" title="interface in net.minestom.se
 <section class="detail" id="id()">
 <h3>id</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">id</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">id</span>()</div>
 <div class="block">Returns the value of the <code>id</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

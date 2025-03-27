@@ -39,7 +39,7 @@ loadScripts(document, 'script');</script>
 <p>Summary:</p>
 <ul>
 <li><a href="#nested-class-summary">Nested</a></li>
-<li>Field</li>
+<li><a href="#field-summary">Field</a></li>
 <li><a href="#constructor-summary">Constr</a></li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
@@ -47,7 +47,7 @@ loadScripts(document, 'script');</script>
 <li>
 <p>Detail:</p>
 <ul>
-<li>Field</li>
+<li><a href="#field-detail">Field</a></li>
 <li><a href="#constructor-detail">Constr</a></li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -59,13 +59,13 @@ loadScripts(document, 'script');</script>
 <ul class="sub-nav-list">
 <li>Summary:&nbsp;</li>
 <li><a href="#nested-class-summary">Nested</a>&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-summary">Method</a></li>
 </ul>
 <ul class="sub-nav-list">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field-detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor-detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method-detail">Method</a></li>
 </ul>
@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BiomeEffects</span>(int&nbsp;fogColor, int&nbsp;skyColor, int&nbsp;waterColor, int&nbsp;waterFogColor, int&nbsp;foliageColor, int&nbsp;grassColor, <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier, <a href="BiomeParticle.html" title="class in net.minestom.server.world.biome">BiomeParticle</a>&nbsp;biomeParticle, <a href="BiomeEffects.AmbientSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a>&nbsp;ambientSound, <a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a>&nbsp;moodSound, <a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a>&nbsp;additionsSound, <a href="BiomeEffects.Music.html" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a>&nbsp;music)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">BiomeEffects</span>(@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;fogColor, @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;skyColor, @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterColor, @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterFogColor, @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;foliageColor, @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;grassColor, @NotNull <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier, <a href="BiomeEffects.Particle.html" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a>&nbsp;biomeParticle, @Nullable <a href="../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;ambientSound, <a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a>&nbsp;moodSound, <a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a>&nbsp;additionsSound, @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BiomeEffects.WeightedMusic.html" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a>&gt;&nbsp;music, @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;musicVolume)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 </section>
 <section class="summary">
@@ -109,21 +109,36 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="BiomeEffects.AdditionsSound.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="BiomeEffects.AmbientSound.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a></code></div>
+<div class="col-first odd-row-color"><code>static final class&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="BiomeEffects.Builder.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.Builder</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final class&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="BiomeEffects.Builder.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.Builder</a></code></div>
+<div class="col-first even-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second even-row-color"><code><a href="BiomeEffects.GrassColorModifier.html" class="type-name-link" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="BiomeEffects.GrassColorModifier.html" class="type-name-link" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></code></div>
+<div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="BiomeEffects.MoodSound.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second even-row-color"><code><a href="BiomeEffects.MoodSound.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a></code></div>
+<div class="col-second even-row-color"><code><a href="BiomeEffects.Particle.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final record&nbsp;</code></div>
-<div class="col-second odd-row-color"><code><a href="BiomeEffects.Music.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a></code></div>
+<div class="col-second odd-row-color"><code><a href="BiomeEffects.WeightedMusic.html" class="type-name-link" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final <a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a><wbr>&lt;<a href="BiomeEffects.html" title="class in net.minestom.server.world.biome">BiomeEffects</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#NBT_TYPE" class="member-name-link">NBT_TYPE</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -135,18 +150,19 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(int,int,int,int,int,int,net.minestom.server.world.biome.BiomeEffects.GrassColorModifier,net.minestom.server.world.biome.BiomeParticle,net.minestom.server.world.biome.BiomeEffects.AmbientSound,net.minestom.server.world.biome.BiomeEffects.MoodSound,net.minestom.server.world.biome.BiomeEffects.AdditionsSound,net.minestom.server.world.biome.BiomeEffects.Music)" class="member-name-link">BiomeEffects</a><wbr>(int&nbsp;fogColor,
- int&nbsp;skyColor,
- int&nbsp;waterColor,
- int&nbsp;waterFogColor,
- int&nbsp;foliageColor,
- int&nbsp;grassColor,
- <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier,
- <a href="BiomeParticle.html" title="class in net.minestom.server.world.biome">BiomeParticle</a>&nbsp;biomeParticle,
- <a href="BiomeEffects.AmbientSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a>&nbsp;ambientSound,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.minestom.server.world.biome.BiomeEffects.GrassColorModifier,net.minestom.server.world.biome.BiomeEffects.Particle,net.minestom.server.sound.SoundEvent,net.minestom.server.world.biome.BiomeEffects.MoodSound,net.minestom.server.world.biome.BiomeEffects.AdditionsSound,java.util.List,java.lang.Float)" class="member-name-link">BiomeEffects</a><wbr>(@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;fogColor,
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;skyColor,
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterColor,
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterFogColor,
+ @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;foliageColor,
+ @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;grassColor,
+ @NotNull <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier,
+ <a href="BiomeEffects.Particle.html" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a>&nbsp;biomeParticle,
+ @Nullable <a href="../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;ambientSound,
  <a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a>&nbsp;moodSound,
  <a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a>&nbsp;additionsSound,
- <a href="BiomeEffects.Music.html" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a>&nbsp;music)</code></div>
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BiomeEffects.WeightedMusic.html" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a>&gt;&nbsp;music,
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;musicVolume)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>BiomeEffects</code> record class.</div>
 </div>
@@ -169,12 +185,12 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>additionsSound</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BiomeEffects.AmbientSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ambientSound()" class="member-name-link">ambientSound</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>ambientSound</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BiomeParticle.html" title="class in net.minestom.server.world.biome">BiomeParticle</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BiomeEffects.Particle.html" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#biomeParticle()" class="member-name-link">biomeParticle</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>biomeParticle</code> record component.</div>
@@ -187,22 +203,22 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Indicates whether some other object is "equal to" this one.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fogColor()" class="member-name-link">fogColor</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>fogColor</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#foliageColor()" class="member-name-link">foliageColor</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>foliageColor</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grassColor()" class="member-name-link">grassColor</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>grassColor</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#grassColorModifier()" class="member-name-link">grassColorModifier</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>grassColorModifier</code> record component.</div>
@@ -217,30 +233,32 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>moodSound</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="BiomeEffects.Music.html" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="BiomeEffects.WeightedMusic.html" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#music()" class="member-name-link">music</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>music</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skyColor()" class="member-name-link">skyColor</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#musicVolume()" class="member-name-link">musicVolume</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>musicVolume</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#skyColor()" class="member-name-link">skyColor</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>skyColor</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.kyori.adventure.nbt.CompoundBinaryTag</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toNbt()" class="member-name-link">toNbt</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#waterColor()" class="member-name-link">waterColor</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>waterColor</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#waterFogColor()" class="member-name-link">waterFogColor</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>waterFogColor</code> record component.</div>
@@ -257,26 +275,54 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="NBT_TYPE">
+<h3>NBT_TYPE</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="../../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;<a href="BiomeEffects.html" title="class in net.minestom.server.world.biome">BiomeEffects</a>&gt;</span>&nbsp;<span class="element-name">NBT_TYPE</span></div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(int,int,int,int,int,int,net.minestom.server.world.biome.BiomeEffects.GrassColorModifier,net.minestom.server.world.biome.BiomeParticle,net.minestom.server.world.biome.BiomeEffects.AmbientSound,net.minestom.server.world.biome.BiomeEffects.MoodSound,net.minestom.server.world.biome.BiomeEffects.AdditionsSound,net.minestom.server.world.biome.BiomeEffects.Music)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.kyori.adventure.util.RGBLike,net.minestom.server.world.biome.BiomeEffects.GrassColorModifier,net.minestom.server.world.biome.BiomeEffects.Particle,net.minestom.server.sound.SoundEvent,net.minestom.server.world.biome.BiomeEffects.MoodSound,net.minestom.server.world.biome.BiomeEffects.AdditionsSound,java.util.List,java.lang.Float)">
 <h3>BiomeEffects</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeEffects</span><wbr><span class="parameters">(int&nbsp;fogColor,
- int&nbsp;skyColor,
- int&nbsp;waterColor,
- int&nbsp;waterFogColor,
- int&nbsp;foliageColor,
- int&nbsp;grassColor,
- <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier,
- <a href="BiomeParticle.html" title="class in net.minestom.server.world.biome">BiomeParticle</a>&nbsp;biomeParticle,
- <a href="BiomeEffects.AmbientSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a>&nbsp;ambientSound,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">BiomeEffects</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;fogColor,
+ @NotNull
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;skyColor,
+ @NotNull
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterColor,
+ @NotNull
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;waterFogColor,
+ @Nullable
+ @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;foliageColor,
+ @Nullable
+ @Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a>&nbsp;grassColor,
+ @NotNull
+ @NotNull <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a>&nbsp;grassColorModifier,
+ @Nullable
+ <a href="BiomeEffects.Particle.html" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a>&nbsp;biomeParticle,
+ @Nullable
+ @Nullable <a href="../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;ambientSound,
+ @Nullable
  <a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a>&nbsp;moodSound,
+ @Nullable
  <a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a>&nbsp;additionsSound,
- <a href="BiomeEffects.Music.html" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a>&nbsp;music)</span></div>
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BiomeEffects.WeightedMusic.html" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a>&gt;&nbsp;music,
+ @Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;musicVolume)</span></div>
 <div class="block">Creates an instance of a <code>BiomeEffects</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -292,6 +338,7 @@ loadScripts(document, 'script');</script>
 <dd><code>moodSound</code> - the value for the <code>moodSound</code> record component</dd>
 <dd><code>additionsSound</code> - the value for the <code>additionsSound</code> record component</dd>
 <dd><code>music</code> - the value for the <code>music</code> record component</dd>
+<dd><code>musicVolume</code> - the value for the <code>musicVolume</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -307,12 +354,6 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="builder()">
 <h3>builder</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="BiomeEffects.Builder.html" title="class in net.minestom.server.world.biome">BiomeEffects.Builder</a></span>&nbsp;<span class="element-name">builder</span>()</div>
-</section>
-</li>
-<li>
-<section class="detail" id="toNbt()">
-<h3>toNbt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.kyori.adventure.nbt.CompoundBinaryTag</span>&nbsp;<span class="element-name">toNbt</span>()</div>
 </section>
 </li>
 <li>
@@ -345,7 +386,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -359,7 +400,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="fogColor()">
 <h3>fogColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">fogColor</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">fogColor</span>()</div>
 <div class="block">Returns the value of the <code>fogColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -370,7 +412,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="skyColor()">
 <h3>skyColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">skyColor</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">skyColor</span>()</div>
 <div class="block">Returns the value of the <code>skyColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -381,7 +424,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="waterColor()">
 <h3>waterColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">waterColor</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">waterColor</span>()</div>
 <div class="block">Returns the value of the <code>waterColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -392,7 +436,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="waterFogColor()">
 <h3>waterFogColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">waterFogColor</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">waterFogColor</span>()</div>
 <div class="block">Returns the value of the <code>waterFogColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -403,7 +448,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="foliageColor()">
 <h3>foliageColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">foliageColor</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">foliageColor</span>()</div>
 <div class="block">Returns the value of the <code>foliageColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -414,7 +460,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="grassColor()">
 <h3>grassColor</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">grassColor</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/util/RGBLike.html" title="class or interface in net.kyori.adventure.util" class="external-link">RGBLike</a></span>&nbsp;<span class="element-name">grassColor</span>()</div>
 <div class="block">Returns the value of the <code>grassColor</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -425,7 +472,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="grassColorModifier()">
 <h3>grassColorModifier</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></span>&nbsp;<span class="element-name">grassColorModifier</span>()</div>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="BiomeEffects.GrassColorModifier.html" title="enum class in net.minestom.server.world.biome">BiomeEffects.GrassColorModifier</a></span>&nbsp;<span class="element-name">grassColorModifier</span>()</div>
 <div class="block">Returns the value of the <code>grassColorModifier</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -436,7 +484,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="biomeParticle()">
 <h3>biomeParticle</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeParticle.html" title="class in net.minestom.server.world.biome">BiomeParticle</a></span>&nbsp;<span class="element-name">biomeParticle</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.Particle.html" title="class in net.minestom.server.world.biome">BiomeEffects.Particle</a></span>&nbsp;<span class="element-name">biomeParticle</span>()</div>
 <div class="block">Returns the value of the <code>biomeParticle</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -447,7 +496,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="ambientSound()">
 <h3>ambientSound</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.AmbientSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AmbientSound</a></span>&nbsp;<span class="element-name">ambientSound</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="../../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></span>&nbsp;<span class="element-name">ambientSound</span>()</div>
 <div class="block">Returns the value of the <code>ambientSound</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -458,7 +508,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="moodSound()">
 <h3>moodSound</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a></span>&nbsp;<span class="element-name">moodSound</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.MoodSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.MoodSound</a></span>&nbsp;<span class="element-name">moodSound</span>()</div>
 <div class="block">Returns the value of the <code>moodSound</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -469,7 +520,8 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="additionsSound()">
 <h3>additionsSound</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a></span>&nbsp;<span class="element-name">additionsSound</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.AdditionsSound.html" title="class in net.minestom.server.world.biome">BiomeEffects.AdditionsSound</a></span>&nbsp;<span class="element-name">additionsSound</span>()</div>
 <div class="block">Returns the value of the <code>additionsSound</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -480,11 +532,24 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="music()">
 <h3>music</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="BiomeEffects.Music.html" title="class in net.minestom.server.world.biome">BiomeEffects.Music</a></span>&nbsp;<span class="element-name">music</span>()</div>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="BiomeEffects.WeightedMusic.html" title="class in net.minestom.server.world.biome">BiomeEffects.WeightedMusic</a>&gt;</span>&nbsp;<span class="element-name">music</span>()</div>
 <div class="block">Returns the value of the <code>music</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>music</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="musicVolume()">
+<h3>musicVolume</h3>
+<div class="member-signature"><span class="annotations">@Nullable
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@Nullable <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a></span>&nbsp;<span class="element-name">musicVolume</span>()</div>
+<div class="block">Returns the value of the <code>musicVolume</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>musicVolume</code> record component</dd>
 </dl>
 </section>
 </li>

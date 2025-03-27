@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Particle.Block</span>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, int&nbsp;id, <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Particle.Block</span>(@NotNull net.kyori.adventure.key.Key&nbsp;key, int&nbsp;id, <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span></div>
 </section>
@@ -347,116 +347,119 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <div class="col-second odd-row-color"><code><a href="#OMINOUS_SPAWNING" class="member-name-link">OMINOUS_SPAWNING</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#POOF" class="member-name-link">POOF</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PALE_OAK_LEAVES" class="member-name-link">PALE_OAK_LEAVES</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#PORTAL" class="member-name-link">PORTAL</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#POOF" class="member-name-link">POOF</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#RAID_OMEN" class="member-name-link">RAID_OMEN</a></code></div>
+<div class="col-second even-row-color"><code><a href="#PORTAL" class="member-name-link">PORTAL</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#RAIN" class="member-name-link">RAIN</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#RAID_OMEN" class="member-name-link">RAID_OMEN</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#REVERSE_PORTAL" class="member-name-link">REVERSE_PORTAL</a></code></div>
+<div class="col-second even-row-color"><code><a href="#RAIN" class="member-name-link">RAIN</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SCRAPE" class="member-name-link">SCRAPE</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="Particle.SculkCharge.html" title="class in net.minestom.server.particle">Particle.SculkCharge</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SCULK_CHARGE" class="member-name-link">SCULK_CHARGE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SCULK_CHARGE_POP" class="member-name-link">SCULK_CHARGE_POP</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#REVERSE_PORTAL" class="member-name-link">REVERSE_PORTAL</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SCULK_SOUL" class="member-name-link">SCULK_SOUL</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SCRAPE" class="member-name-link">SCRAPE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="Particle.Shriek.html" title="class in net.minestom.server.particle">Particle.Shriek</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SHRIEK" class="member-name-link">SHRIEK</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.SculkCharge.html" title="class in net.minestom.server.particle">Particle.SculkCharge</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SCULK_CHARGE" class="member-name-link">SCULK_CHARGE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SMALL_FLAME" class="member-name-link">SMALL_FLAME</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SCULK_CHARGE_POP" class="member-name-link">SCULK_CHARGE_POP</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SMALL_GUST" class="member-name-link">SMALL_GUST</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SCULK_SOUL" class="member-name-link">SCULK_SOUL</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Particle.Shriek.html" title="class in net.minestom.server.particle">Particle.Shriek</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SHRIEK" class="member-name-link">SHRIEK</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SMALL_FLAME" class="member-name-link">SMALL_FLAME</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SMOKE" class="member-name-link">SMOKE</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SMALL_GUST" class="member-name-link">SMALL_GUST</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SNEEZE" class="member-name-link">SNEEZE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SMOKE" class="member-name-link">SMOKE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SNOWFLAKE" class="member-name-link">SNOWFLAKE</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SNEEZE" class="member-name-link">SNEEZE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SONIC_BOOM" class="member-name-link">SONIC_BOOM</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SNOWFLAKE" class="member-name-link">SNOWFLAKE</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SOUL" class="member-name-link">SOUL</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SONIC_BOOM" class="member-name-link">SONIC_BOOM</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SOUL_FIRE_FLAME" class="member-name-link">SOUL_FIRE_FLAME</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SOUL" class="member-name-link">SOUL</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SPIT" class="member-name-link">SPIT</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SOUL_FIRE_FLAME" class="member-name-link">SOUL_FIRE_FLAME</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SPLASH" class="member-name-link">SPLASH</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SPIT" class="member-name-link">SPIT</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SPORE_BLOSSOM_AIR" class="member-name-link">SPORE_BLOSSOM_AIR</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SPLASH" class="member-name-link">SPLASH</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#SQUID_INK" class="member-name-link">SQUID_INK</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SPORE_BLOSSOM_AIR" class="member-name-link">SPORE_BLOSSOM_AIR</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#SWEEP_ATTACK" class="member-name-link">SWEEP_ATTACK</a></code></div>
+<div class="col-second even-row-color"><code><a href="#SQUID_INK" class="member-name-link">SQUID_INK</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#TOTEM_OF_UNDYING" class="member-name-link">TOTEM_OF_UNDYING</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="Particle.Trail.html" title="class in net.minestom.server.particle">Particle.Trail</a></code></div>
-<div class="col-second even-row-color"><code><a href="#TRAIL" class="member-name-link">TRAIL</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#TRIAL_OMEN" class="member-name-link">TRIAL_OMEN</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#SWEEP_ATTACK" class="member-name-link">SWEEP_ATTACK</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#TRIAL_SPAWNER_DETECTION" class="member-name-link">TRIAL_SPAWNER_DETECTION</a></code></div>
+<div class="col-second even-row-color"><code><a href="#TOTEM_OF_UNDYING" class="member-name-link">TOTEM_OF_UNDYING</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#TRIAL_SPAWNER_DETECTION_OMINOUS" class="member-name-link">TRIAL_SPAWNER_DETECTION_OMINOUS</a></code></div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.Trail.html" title="class in net.minestom.server.particle">Particle.Trail</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#TRAIL" class="member-name-link">TRAIL</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#UNDERWATER" class="member-name-link">UNDERWATER</a></code></div>
+<div class="col-second even-row-color"><code><a href="#TRIAL_OMEN" class="member-name-link">TRIAL_OMEN</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#VAULT_CONNECTION" class="member-name-link">VAULT_CONNECTION</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>static final <a href="Particle.Vibration.html" title="class in net.minestom.server.particle">Particle.Vibration</a></code></div>
-<div class="col-second even-row-color"><code><a href="#VIBRATION" class="member-name-link">VIBRATION</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#WARPED_SPORE" class="member-name-link">WARPED_SPORE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#TRIAL_SPAWNER_DETECTION" class="member-name-link">TRIAL_SPAWNER_DETECTION</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#WAX_OFF" class="member-name-link">WAX_OFF</a></code></div>
+<div class="col-second even-row-color"><code><a href="#TRIAL_SPAWNER_DETECTION_OMINOUS" class="member-name-link">TRIAL_SPAWNER_DETECTION_OMINOUS</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#WAX_ON" class="member-name-link">WAX_ON</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#UNDERWATER" class="member-name-link">UNDERWATER</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#WHITE_ASH" class="member-name-link">WHITE_ASH</a></code></div>
+<div class="col-second even-row-color"><code><a href="#VAULT_CONNECTION" class="member-name-link">VAULT_CONNECTION</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.Vibration.html" title="class in net.minestom.server.particle">Particle.Vibration</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#VIBRATION" class="member-name-link">VIBRATION</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second even-row-color"><code><a href="#WARPED_SPORE" class="member-name-link">WARPED_SPORE</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color"><code><a href="#WHITE_SMOKE" class="member-name-link">WHITE_SMOKE</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#WAX_OFF" class="member-name-link">WAX_OFF</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
 <div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second even-row-color"><code><a href="#WITCH" class="member-name-link">WITCH</a></code></div>
+<div class="col-second even-row-color"><code><a href="#WAX_ON" class="member-name-link">WAX_ON</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#WHITE_ASH" class="member-name-link">WHITE_ASH</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second even-row-color"><code><a href="#WHITE_SMOKE" class="member-name-link">WHITE_SMOKE</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final <a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second odd-row-color"><code><a href="#WITCH" class="member-name-link">WITCH</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 <div class="inherited-list">
 <h3 id="fields-inherited-from-class-net.minestom.server.particle.Particle">Fields inherited from interface&nbsp;net.minestom.server.particle.<a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></h3>
@@ -471,7 +474,7 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,int,net.minestom.server.instance.block.Block)" class="member-name-link">Block</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,int,net.minestom.server.instance.block.Block)" class="member-name-link">Block</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;key,
  int&nbsp;id,
  <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</code></div>
 <div class="col-last even-row-color">
@@ -511,10 +514,10 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>id</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull net.kyori.adventure.key.Key</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="Particle.Block.html" title="class in net.minestom.server.particle">Particle.Block</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#readData(net.minestom.server.network.NetworkBuffer)" class="member-name-link">readData</a><wbr>(@NotNull <a href="../network/NetworkBuffer.html" title="interface in net.minestom.server.network">NetworkBuffer</a>&nbsp;reader)</code></div>
@@ -544,7 +547,7 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <code><a href="../registry/ProtocolObject.html#registry()">registry</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.registry.StaticProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></h3>
-<code><a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
+<code><a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
 </section>
 </li>
 </ul>
@@ -758,6 +761,12 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <section class="detail" id="CHERRY_LEAVES">
 <h3>CHERRY_LEAVES</h3>
 <div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span>&nbsp;<span class="element-name">CHERRY_LEAVES</span></div>
+</section>
+</li>
+<li>
+<section class="detail" id="PALE_OAK_LEAVES">
+<h3>PALE_OAK_LEAVES</h3>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="Particle.html" title="interface in net.minestom.server.particle">Particle</a></span>&nbsp;<span class="element-name">PALE_OAK_LEAVES</span></div>
 </section>
 </li>
 <li>
@@ -1231,17 +1240,17 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,int,net.minestom.server.instance.block.Block)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,int,net.minestom.server.instance.block.Block)">
 <h3>Block</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Block</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+ @NotNull net.kyori.adventure.key.Key&nbsp;key,
  int&nbsp;id,
  @NotNull
  <a href="../instance/block/Block.html" title="interface in net.minestom.server.instance.block">Block</a>&nbsp;block)</span></div>
 <div class="block">Creates an instance of a <code>Block</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>namespace</code> - the value for the <code>namespace</code> record component</dd>
+<dd><code>key</code> - the value for the <code>key</code> record component</dd>
 <dd><code>id</code> - the value for the <code>id</code> record component</dd>
 <dd><code>block</code> - the value for the <code>block</code> record component</dd>
 </dl>
@@ -1340,16 +1349,18 @@ implements <a href="Particle.html" title="interface in net.minestom.server.parti
 </section>
 </li>
 <li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
+<section class="detail" id="key()">
+<h3>key</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">key</span>()</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../registry/StaticProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
+<dd><code>key</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.key.Keyed</code></dd>
+<dt>Specified by:</dt>
+<dd><code><a href="../registry/StaticProtocolObject.html#key()">key</a></code>&nbsp;in interface&nbsp;<code><a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
 <dt>Returns:</dt>
-<dd>the value of the <code>namespace</code> record component</dd>
+<dd>the value of the <code>key</code> record component</dd>
 </dl>
 </section>
 </li>

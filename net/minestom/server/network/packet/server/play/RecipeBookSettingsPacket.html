@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RecipeBookSettingsPacket</span>()
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RecipeBookSettingsPacket</span>(boolean&nbsp;craftingRecipeBookOpen, boolean&nbsp;craftingRecipeBookFilterActive, boolean&nbsp;smeltingRecipeBookOpen, boolean&nbsp;smeltingRecipeBookFilterActive, boolean&nbsp;blastFurnaceRecipeBookOpen, boolean&nbsp;blastFurnaceRecipeBookFilterActive, boolean&nbsp;smokerRecipeBookOpen, boolean&nbsp;smokerRecipeBookFilterActive)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -134,7 +134,14 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">RecipeBookSettingsPacket</a>()</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(boolean,boolean,boolean,boolean,boolean,boolean,boolean,boolean)" class="member-name-link">RecipeBookSettingsPacket</a><wbr>(boolean&nbsp;craftingRecipeBookOpen,
+ boolean&nbsp;craftingRecipeBookFilterActive,
+ boolean&nbsp;smeltingRecipeBookOpen,
+ boolean&nbsp;smeltingRecipeBookFilterActive,
+ boolean&nbsp;blastFurnaceRecipeBookOpen,
+ boolean&nbsp;blastFurnaceRecipeBookFilterActive,
+ boolean&nbsp;smokerRecipeBookOpen,
+ boolean&nbsp;smokerRecipeBookFilterActive)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>RecipeBookSettingsPacket</code> record class.</div>
 </div>
@@ -152,6 +159,26 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blastFurnaceRecipeBookFilterActive()" class="member-name-link">blastFurnaceRecipeBookFilterActive</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>blastFurnaceRecipeBookFilterActive</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#blastFurnaceRecipeBookOpen()" class="member-name-link">blastFurnaceRecipeBookOpen</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>blastFurnaceRecipeBookOpen</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#craftingRecipeBookFilterActive()" class="member-name-link">craftingRecipeBookFilterActive</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>craftingRecipeBookFilterActive</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#craftingRecipeBookOpen()" class="member-name-link">craftingRecipeBookOpen</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>craftingRecipeBookOpen</code> record component.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -161,6 +188,26 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smeltingRecipeBookFilterActive()" class="member-name-link">smeltingRecipeBookFilterActive</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>smeltingRecipeBookFilterActive</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smeltingRecipeBookOpen()" class="member-name-link">smeltingRecipeBookOpen</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>smeltingRecipeBookOpen</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smokerRecipeBookFilterActive()" class="member-name-link">smokerRecipeBookFilterActive</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>smokerRecipeBookFilterActive</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#smokerRecipeBookOpen()" class="member-name-link">smokerRecipeBookOpen</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>smokerRecipeBookOpen</code> record component.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -199,10 +246,28 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;()">
+<section class="detail" id="&lt;init&gt;(boolean,boolean,boolean,boolean,boolean,boolean,boolean,boolean)">
 <h3>RecipeBookSettingsPacket</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RecipeBookSettingsPacket</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">RecipeBookSettingsPacket</span><wbr><span class="parameters">(boolean&nbsp;craftingRecipeBookOpen,
+ boolean&nbsp;craftingRecipeBookFilterActive,
+ boolean&nbsp;smeltingRecipeBookOpen,
+ boolean&nbsp;smeltingRecipeBookFilterActive,
+ boolean&nbsp;blastFurnaceRecipeBookOpen,
+ boolean&nbsp;blastFurnaceRecipeBookFilterActive,
+ boolean&nbsp;smokerRecipeBookOpen,
+ boolean&nbsp;smokerRecipeBookFilterActive)</span></div>
 <div class="block">Creates an instance of a <code>RecipeBookSettingsPacket</code> record class.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>craftingRecipeBookOpen</code> - the value for the <code>craftingRecipeBookOpen</code> record component</dd>
+<dd><code>craftingRecipeBookFilterActive</code> - the value for the <code>craftingRecipeBookFilterActive</code> record component</dd>
+<dd><code>smeltingRecipeBookOpen</code> - the value for the <code>smeltingRecipeBookOpen</code> record component</dd>
+<dd><code>smeltingRecipeBookFilterActive</code> - the value for the <code>smeltingRecipeBookFilterActive</code> record component</dd>
+<dd><code>blastFurnaceRecipeBookOpen</code> - the value for the <code>blastFurnaceRecipeBookOpen</code> record component</dd>
+<dd><code>blastFurnaceRecipeBookFilterActive</code> - the value for the <code>blastFurnaceRecipeBookFilterActive</code> record component</dd>
+<dd><code>smokerRecipeBookOpen</code> - the value for the <code>smokerRecipeBookOpen</code> record component</dd>
+<dd><code>smokerRecipeBookFilterActive</code> - the value for the <code>smokerRecipeBookFilterActive</code> record component</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -243,7 +308,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <section class="detail" id="equals(java.lang.Object)">
 <h3>equals</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
-<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. </div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. All components in this record class are compared with '=='.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
@@ -251,6 +316,94 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dd><code>o</code> - the object with which to compare</dd>
 <dt>Returns:</dt>
 <dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="craftingRecipeBookOpen()">
+<h3>craftingRecipeBookOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">craftingRecipeBookOpen</span>()</div>
+<div class="block">Returns the value of the <code>craftingRecipeBookOpen</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>craftingRecipeBookOpen</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="craftingRecipeBookFilterActive()">
+<h3>craftingRecipeBookFilterActive</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">craftingRecipeBookFilterActive</span>()</div>
+<div class="block">Returns the value of the <code>craftingRecipeBookFilterActive</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>craftingRecipeBookFilterActive</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="smeltingRecipeBookOpen()">
+<h3>smeltingRecipeBookOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">smeltingRecipeBookOpen</span>()</div>
+<div class="block">Returns the value of the <code>smeltingRecipeBookOpen</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>smeltingRecipeBookOpen</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="smeltingRecipeBookFilterActive()">
+<h3>smeltingRecipeBookFilterActive</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">smeltingRecipeBookFilterActive</span>()</div>
+<div class="block">Returns the value of the <code>smeltingRecipeBookFilterActive</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>smeltingRecipeBookFilterActive</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="blastFurnaceRecipeBookOpen()">
+<h3>blastFurnaceRecipeBookOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">blastFurnaceRecipeBookOpen</span>()</div>
+<div class="block">Returns the value of the <code>blastFurnaceRecipeBookOpen</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>blastFurnaceRecipeBookOpen</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="blastFurnaceRecipeBookFilterActive()">
+<h3>blastFurnaceRecipeBookFilterActive</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">blastFurnaceRecipeBookFilterActive</span>()</div>
+<div class="block">Returns the value of the <code>blastFurnaceRecipeBookFilterActive</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>blastFurnaceRecipeBookFilterActive</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="smokerRecipeBookOpen()">
+<h3>smokerRecipeBookOpen</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">smokerRecipeBookOpen</span>()</div>
+<div class="block">Returns the value of the <code>smokerRecipeBookOpen</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>smokerRecipeBookOpen</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="smokerRecipeBookFilterActive()">
+<h3>smokerRecipeBookFilterActive</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">smokerRecipeBookFilterActive</span>()</div>
+<div class="block">Returns the value of the <code>smokerRecipeBookFilterActive</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>smokerRecipeBookFilterActive</code> record component</dd>
 </dl>
 </section>
 </li>

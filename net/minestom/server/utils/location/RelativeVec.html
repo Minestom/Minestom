@@ -5,7 +5,7 @@
 <title>RelativeVec (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.utils.location, class: RelativeVec">
+<meta name="description" content="declaration: package: net.minestom.server.utils.location, record: RelativeVec">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -83,16 +83,20 @@ loadScripts(document, 'script');</script>
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">net.minestom.server.utils.location</a></div>
-<h1 title="Class RelativeVec" class="title">Class RelativeVec</h1>
+<h1 title="Record Class RelativeVec" class="title">Record Class RelativeVec</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">java.lang.Record</a>
 <div class="inheritance">net.minestom.server.utils.location.RelativeVec</div>
+</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">RelativeVec</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Represents a location which can have fields relative to an <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.</div>
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">RelativeVec</span>(@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a>&nbsp;vec, @NotNull <a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a>&nbsp;coordinateType, boolean&nbsp;relativeX, boolean&nbsp;relativeY, boolean&nbsp;relativeZ)
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
+<div class="block">Represents a location which can have fields relative to an <a href="../../entity/Entity.html" title="class in net.minestom.server.entity"><code>Entity</code></a> position.
+ <p>
+ Useful for parsing Vec2 or Vec3 types</div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -124,7 +128,9 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;relativeX,
  boolean&nbsp;relativeY,
  boolean&nbsp;relativeZ)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Creates an instance of a <code>RelativeVec</code> record class.</div>
+</div>
 </div>
 </section>
 </li>
@@ -141,32 +147,45 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#coordinateType()" class="member-name-link">coordinateType</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>coordinateType</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#equals(java.lang.Object)" class="member-name-link">equals</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Indicates whether some other object is "equal to" this one.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#from(net.minestom.server.coordinate.Pos)" class="member-name-link">from</a><wbr>(@Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;origin)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
+<div class="block">Gets the location based on the relative fields and <a href="#vec()"><code>vec()</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#from(net.minestom.server.entity.Entity)" class="member-name-link">from</a><wbr>(@Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+<div class="block">Gets the location based on the relative fields.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fromSender(net.minestom.server.command.CommandSender)" class="member-name-link">fromSender</a><wbr>(@Nullable <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shorthand for <a href="#from(net.minestom.server.coordinate.Pos)"><code>from(Pos)</code></a>
+ If player uses their position otherwise, <a href="../../coordinate/Vec.html#ZERO"><code>Vec.ZERO</code></a></div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fromView(net.minestom.server.coordinate.Pos)" class="member-name-link">fromView</a><wbr>(@Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;point)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Computes a view <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> based on the given point's yaw and pitch.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fromView(net.minestom.server.entity.Entity)" class="member-name-link">fromView</a><wbr>(@Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Shorthand for <a href="#fromView(net.minestom.server.coordinate.Pos)"><code>fromView(Pos)</code></a></div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#hashCode()" class="member-name-link">hashCode</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a hash code value for this object.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isRelativeX()" class="member-name-link">isRelativeX</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -182,12 +201,37 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets if the 'z' field is relative.</div>
 </div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeX()" class="member-name-link">relativeX</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>relativeX</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeY()" class="member-name-link">relativeY</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>relativeY</code> record component.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#relativeZ()" class="member-name-link">relativeZ</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>relativeZ</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns a string representation of this record class.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#vec()" class="member-name-link">vec</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>vec</code> record component.</div>
+</div>
 </div>
 </div>
 </div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-java.lang.Object">Methods inherited from class&nbsp;java.lang.<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></h3>
-<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#toString()" title="class or interface in java.lang" class="external-link">toString</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
+<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#clone()" title="class or interface in java.lang" class="external-link">clone</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#finalize()" title="class or interface in java.lang" class="external-link">finalize</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#getClass()" title="class or interface in java.lang" class="external-link">getClass</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notify()" title="class or interface in java.lang" class="external-link">notify</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#notifyAll()" title="class or interface in java.lang" class="external-link">notifyAll</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait()" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long)" title="class or interface in java.lang" class="external-link">wait</a>, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#wait(long,int)" title="class or interface in java.lang" class="external-link">wait</a></code></div>
 </section>
 </li>
 </ul>
@@ -209,6 +253,15 @@ loadScripts(document, 'script');</script>
  boolean&nbsp;relativeX,
  boolean&nbsp;relativeY,
  boolean&nbsp;relativeZ)</span></div>
+<div class="block">Creates an instance of a <code>RelativeVec</code> record class.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>vec</code> - the value for the <code>vec</code> record component</dd>
+<dd><code>coordinateType</code> - the value for the <code>coordinateType</code> record component</dd>
+<dd><code>relativeX</code> - the value for the <code>relativeX</code> record component</dd>
+<dd><code>relativeY</code> - the value for the <code>relativeY</code> record component</dd>
+<dd><code>relativeZ</code> - the value for the <code>relativeZ</code> record component</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -220,19 +273,12 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="coordinateType()">
-<h3>coordinateType</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span>&nbsp;<span class="element-name">coordinateType</span>()</div>
-</section>
-</li>
-<li>
 <section class="detail" id="from(net.minestom.server.coordinate.Pos)">
 <h3>from</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;origin)</span></div>
-<div class="block">Gets the location based on the relative fields and <code>position</code>.</div>
+<div class="block">Gets the location based on the relative fields and <a href="#vec()"><code>vec()</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>origin</code> - the origin position, null if none</dd>
@@ -242,19 +288,12 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="fromView(net.minestom.server.coordinate.Pos)">
-<h3>fromView</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">fromView</span><wbr><span class="parameters">(@Nullable
- @Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;point)</span></div>
-</section>
-</li>
-<li>
 <section class="detail" id="from(net.minestom.server.entity.Entity)">
 <h3>from</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">from</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</span></div>
-<div class="block">Gets the location based on the relative fields and <code>entity</code>.</div>
+<div class="block">Gets the location based on the relative fields.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>entity</code> - the entity to get the relative position from</dd>
@@ -269,6 +308,29 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">fromSender</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="../../command/CommandSender.html" title="interface in net.minestom.server.command">CommandSender</a>&nbsp;sender)</span></div>
+<div class="block">Shorthand for <a href="#from(net.minestom.server.coordinate.Pos)"><code>from(Pos)</code></a>
+ If player uses their position otherwise, <a href="../../coordinate/Vec.html#ZERO"><code>Vec.ZERO</code></a></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>sender</code> - entity</dd>
+<dt>Returns:</dt>
+<dd>the position with any relativity</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="fromView(net.minestom.server.coordinate.Pos)">
+<h3>fromView</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">fromView</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="../../coordinate/Pos.html" title="class in net.minestom.server.coordinate">Pos</a>&nbsp;point)</span></div>
+<div class="block">Computes a view <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> based on the given point's yaw and pitch.
+ If no point is null, a default position <a href="../../coordinate/Pos.html#ZERO"><code>Pos.ZERO</code></a> is used.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>point</code> - The reference position used for computing relative coordinates. If null <a href="../../coordinate/Pos.html#ZERO"><code>Pos.ZERO</code></a></dd>
+<dt>Returns:</dt>
+<dd>A <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate"><code>Vec</code></a> with XZ based on the provided position. Y is ignored.</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -277,6 +339,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">fromView</span><wbr><span class="parameters">(@Nullable
  @Nullable <a href="../../entity/Entity.html" title="class in net.minestom.server.entity">Entity</a>&nbsp;entity)</span></div>
+<div class="block">Shorthand for <a href="#fromView(net.minestom.server.coordinate.Pos)"><code>fromView(Pos)</code></a></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>entity</code> - to get the position from, otherwise <a href="../../coordinate/Pos.html#ZERO"><code>Pos.ZERO</code></a></dd>
+<dt>Returns:</dt>
+<dd>the view.</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -313,22 +382,100 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="equals(java.lang.Object)">
-<h3>equals</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<section class="detail" id="toString()">
+<h3>toString</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">toString</span>()</div>
+<div class="block">Returns a string representation of this record class. The representation contains the name of the class, followed by the name and value of each of the record components.</div>
 <dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#toString()" title="class or interface in java.lang" class="external-link">toString</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a string representation of this object</dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="hashCode()">
 <h3>hashCode</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">hashCode</span>()</div>
+<div class="block">Returns a hash code value for this object. The value is derived from the hash code of each of the record components.</div>
 <dl class="notes">
-<dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></code></dd>
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#hashCode()" title="class or interface in java.lang" class="external-link">hashCode</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Returns:</dt>
+<dd>a hash code value for this object</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="equals(java.lang.Object)">
+<h3>equals</h3>
+<div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">equals</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;o)</span></div>
+<div class="block">Indicates whether some other object is "equal to" this one. The objects are equal if the other object is of the same class and if all the record components are equal. Reference components are compared with <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Objects.html#equals(java.lang.Object,java.lang.Object)" title="class or interface in java.util" class="external-link"><code>Objects::equals(Object,Object)</code></a>; primitive components are compared with '=='.</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html#equals(java.lang.Object)" title="class or interface in java.lang" class="external-link">equals</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></code></dd>
+<dt>Parameters:</dt>
+<dd><code>o</code> - the object with which to compare</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> if this object is the same as the <code>o</code> argument; <code>false</code> otherwise.</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="vec()">
+<h3>vec</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../coordinate/Vec.html" title="class in net.minestom.server.coordinate">Vec</a></span>&nbsp;<span class="element-name">vec</span>()</div>
+<div class="block">Returns the value of the <code>vec</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>vec</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="coordinateType()">
+<h3>coordinateType</h3>
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span>&nbsp;<span class="element-name">coordinateType</span>()</div>
+<div class="block">Returns the value of the <code>coordinateType</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>coordinateType</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="relativeX()">
+<h3>relativeX</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">relativeX</span>()</div>
+<div class="block">Returns the value of the <code>relativeX</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>relativeX</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="relativeY()">
+<h3>relativeY</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">relativeY</span>()</div>
+<div class="block">Returns the value of the <code>relativeY</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>relativeY</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="relativeZ()">
+<h3>relativeZ</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">relativeZ</span>()</div>
+<div class="block">Returns the value of the <code>relativeZ</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>relativeZ</code> record component</dd>
 </dl>
 </section>
 </li>

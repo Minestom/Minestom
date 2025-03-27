@@ -140,16 +140,16 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull net.kyori.adventure.key.Key</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#assetId()" class="member-name-link">assetId</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TrimPattern.Builder.html" title="class in net.minestom.server.item.armor">TrimPattern.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#builder()" class="member-name-link">builder</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="TrimPattern.html" title="interface in net.minestom.server.item.armor">TrimPattern</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(net.minestom.server.utils.NamespaceID,net.minestom.server.item.Material,net.kyori.adventure.text.Component,boolean)" class="member-name-link">create</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;assetId,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#create(net.kyori.adventure.key.Key,net.minestom.server.item.Material,net.kyori.adventure.text.Component,boolean)" class="member-name-link">create</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;assetId,
  @NotNull <a href="../Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;template,
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
  boolean&nbsp;decal)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="../../registry/DynamicRegistry.html" title="interface in net.minestom.server.registry">DynamicRegistry</a><wbr>&lt;<a href="TrimPattern.html" title="interface in net.minestom.server.item.armor">TrimPattern</a>&gt;</code></div>
@@ -157,7 +157,7 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Creates a new registry for trim materials, loading the vanilla trim materials.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#description()" class="member-name-link">description</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
@@ -206,15 +206,15 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="create(net.minestom.server.utils.NamespaceID,net.minestom.server.item.Material,net.kyori.adventure.text.Component,boolean)">
+<section class="detail" id="create(net.kyori.adventure.key.Key,net.minestom.server.item.Material,net.kyori.adventure.text.Component,boolean)">
 <h3>create</h3>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">static</span>&nbsp;<span class="return-type">@NotNull <a href="TrimPattern.html" title="interface in net.minestom.server.item.armor">TrimPattern</a></span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;assetId,
+ @NotNull net.kyori.adventure.key.Key&nbsp;assetId,
  @NotNull
  @NotNull <a href="../Material.html" title="interface in net.minestom.server.item">Material</a>&nbsp;template,
  @NotNull
- @NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
+ @NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
  boolean&nbsp;decal)</span></div>
 </section>
 </li>
@@ -246,7 +246,7 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <section class="detail" id="assetId()">
 <h3>assetId</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">assetId</span>()</div>
+</span><span class="return-type">@NotNull net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">assetId</span>()</div>
 </section>
 </li>
 <li>
@@ -260,7 +260,7 @@ extends <a href="../../registry/ProtocolObject.html" title="interface in net.min
 <section class="detail" id="description()">
 <h3>description</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">description</span>()</div>
+</span><span class="return-type">@NotNull <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">description</span>()</div>
 </section>
 </li>
 <li>

@@ -109,8 +109,9 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player)" class="member-name-link">InventoryCloseEvent</a><wbr>(@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
- @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player,boolean)" class="member-name-link">InventoryCloseEvent</a><wbr>(@NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
+ @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ boolean&nbsp;fromClient)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -141,9 +142,14 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Gets the player who closed the inventory.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNewInventory(net.minestom.server.inventory.Inventory)" class="member-name-link">setNewInventory</a><wbr>(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isFromClient()" class="member-name-link">isFromClient</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Gets whether the client closed the inventory or the server did.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setNewInventory(net.minestom.server.inventory.Inventory)" class="member-name-link">setNewInventory</a><wbr>(@Nullable <a href="../../inventory/Inventory.html" title="class in net.minestom.server.inventory">Inventory</a>&nbsp;newInventory)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Can be used to open a new inventory after closing the previous one.</div>
 </div>
 </div>
@@ -170,12 +176,13 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.inventory.AbstractInventory,net.minestom.server.entity.Player,boolean)">
 <h3>InventoryCloseEvent</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InventoryCloseEvent</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../inventory/AbstractInventory.html" title="class in net.minestom.server.inventory">AbstractInventory</a>&nbsp;inventory,
  @NotNull
- @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player)</span></div>
+ @NotNull <a href="../../entity/Player.html" title="class in net.minestom.server.entity">Player</a>&nbsp;player,
+ boolean&nbsp;fromClient)</span></div>
 </section>
 </li>
 </ul>
@@ -197,6 +204,17 @@ implements <a href="../trait/InventoryEvent.html" title="interface in net.minest
 <dd><code><a href="../trait/PlayerEvent.html#getPlayer()">getPlayer</a></code>&nbsp;in interface&nbsp;<code><a href="../trait/PlayerEvent.html" title="interface in net.minestom.server.event.trait">PlayerEvent</a></code></dd>
 <dt>Returns:</dt>
 <dd>the player who closed the inventory</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="isFromClient()">
+<h3>isFromClient</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isFromClient</span>()</div>
+<div class="block">Gets whether the client closed the inventory or the server did.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if the client closed the inventory, false if the server closed the inventory</dd>
 </dl>
 </section>
 </li>

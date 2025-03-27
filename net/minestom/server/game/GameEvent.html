@@ -110,28 +110,23 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(java.lang.String)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromKey(java.lang.String)" class="member-name-link">fromKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets a game event by its namespace ID.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(net.minestom.server.utils.NamespaceID)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromKey(net.kyori.adventure.key.Key)" class="member-name-link">fromKey</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets a game event by its namespace ID.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../registry/Registry.GameEventEntry.html" title="class in net.minestom.server.registry">Registry.GameEventEntry</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
-<div class="block">Gets the namespace ID of this game event.</div>
-</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="../registry/Registry.GameEventEntry.html" title="class in net.minestom.server.registry">Registry.GameEventEntry</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registry()" class="member-name-link">registry</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Returns the game event registry.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;@NotNull <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;@NotNull <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">
 <div class="block">Gets the game events from the registry.</div>
 </div>
 </div>
@@ -167,20 +162,6 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="return-type">@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
-<div class="block">Gets the namespace ID of this game event.</div>
-<dl class="notes">
-<dt>Specified by:</dt>
-<dd><code><a href="../registry/StaticProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
-<dt>Returns:</dt>
-<dd>the namespace ID</dd>
-</dl>
-</section>
-</li>
-<li>
 <section class="detail" id="values()">
 <h3>values</h3>
 <div class="member-signature"><span class="annotations">@NotNull
@@ -193,30 +174,30 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="fromNamespaceId(java.lang.String)">
-<h3>fromNamespaceId</h3>
+<section class="detail" id="fromKey(java.lang.String)">
+<h3>fromKey</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></span>&nbsp;<span class="element-name">fromNamespaceId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</span></div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></span>&nbsp;<span class="element-name">fromKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 <div class="block">Gets a game event by its namespace ID.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>namespaceID</code> - the namespace ID</dd>
+<dd><code>key</code> - the namespace ID</dd>
 <dt>Returns:</dt>
 <dd>the game event or null if not found</dd>
 </dl>
 </section>
 </li>
 <li>
-<section class="detail" id="fromNamespaceId(net.minestom.server.utils.NamespaceID)">
-<h3>fromNamespaceId</h3>
+<section class="detail" id="fromKey(net.kyori.adventure.key.Key)">
+<h3>fromKey</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></span>&nbsp;<span class="element-name">fromNamespaceId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</span></div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="GameEvent.html" title="interface in net.minestom.server.game">GameEvent</a></span>&nbsp;<span class="element-name">fromKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull net.kyori.adventure.key.Key&nbsp;key)</span></div>
 <div class="block">Gets a game event by its namespace ID.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>namespaceID</code> - the namespace ID</dd>
+<dd><code>key</code> - the event key</dd>
 <dt>Returns:</dt>
 <dd>the game event or null if not found</dd>
 </dl>

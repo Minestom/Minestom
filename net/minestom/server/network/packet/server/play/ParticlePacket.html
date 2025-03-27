@@ -96,7 +96,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="../SendablePacket.html" title="interface in net.minestom.server.network.packet.server">SendablePacket</a></code>, <code><a href="../ServerPacket.html" title="interface in net.minestom.server.network.packet.server">ServerPacket</a></code>, <code><a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ParticlePacket</span>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle, boolean&nbsp;longDistance, double&nbsp;x, double&nbsp;y, double&nbsp;z, float&nbsp;offsetX, float&nbsp;offsetY, float&nbsp;offsetZ, float&nbsp;maxSpeed, int&nbsp;particleCount)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">ParticlePacket</span>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle, boolean&nbsp;overrideLimiter, boolean&nbsp;longDistance, double&nbsp;x, double&nbsp;y, double&nbsp;z, float&nbsp;offsetX, float&nbsp;offsetY, float&nbsp;offsetZ, float&nbsp;maxSpeed, int&nbsp;particleCount)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.server.network.packet.server">ServerPacket.Play</a></span></div>
 </section>
@@ -134,7 +134,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,boolean,double,double,double,float,float,float,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,boolean,boolean,double,double,double,float,float,float,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;overrideLimiter,
  boolean&nbsp;longDistance,
  double&nbsp;x,
  double&nbsp;y,
@@ -147,7 +148,8 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color">
 <div class="block">Creates an instance of a <code>ParticlePacket</code> record class.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.particle.Particle,boolean,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)" class="member-name-link">ParticlePacket</a><wbr>(@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;overrideLimiter,
  boolean&nbsp;longDistance,
  @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
  @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;offset,
@@ -219,34 +221,39 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>offsetZ</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#particle()" class="member-name-link">particle</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#overrideLimiter()" class="member-name-link">overrideLimiter</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Returns the value of the <code>overrideLimiter</code> record component.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#particle()" class="member-name-link">particle</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>particle</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#particleCount()" class="member-name-link">particleCount</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#particleCount()" class="member-name-link">particleCount</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>particleCount</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a string representation of this record class.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#x()" class="member-name-link">x</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#x()" class="member-name-link">x</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>x</code> record component.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#y()" class="member-name-link">y</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#y()" class="member-name-link">y</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>y</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#z()" class="member-name-link">z</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#z()" class="member-name-link">z</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>z</code> record component.</div>
 </div>
 </div>
@@ -296,10 +303,11 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,boolean,boolean,net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point,float,int)">
 <h3>ParticlePacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ParticlePacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;overrideLimiter,
  boolean&nbsp;longDistance,
  @NotNull
  @NotNull <a href="../../../../coordinate/Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;position,
@@ -323,10 +331,11 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,boolean,double,double,double,float,float,float,float,int)">
+<section class="detail" id="&lt;init&gt;(net.minestom.server.particle.Particle,boolean,boolean,double,double,double,float,float,float,float,int)">
 <h3>ParticlePacket</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ParticlePacket</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="../../../../particle/Particle.html" title="interface in net.minestom.server.particle">Particle</a>&nbsp;particle,
+ boolean&nbsp;overrideLimiter,
  boolean&nbsp;longDistance,
  double&nbsp;x,
  double&nbsp;y,
@@ -340,6 +349,7 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>particle</code> - the value for the <code>particle</code> record component</dd>
+<dd><code>overrideLimiter</code> - the value for the <code>overrideLimiter</code> record component</dd>
 <dd><code>longDistance</code> - the value for the <code>longDistance</code> record component</dd>
 <dd><code>x</code> - the value for the <code>x</code> record component</dd>
 <dd><code>y</code> - the value for the <code>y</code> record component</dd>
@@ -410,6 +420,17 @@ implements <a href="../ServerPacket.Play.html" title="interface in net.minestom.
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>the value of the <code>particle</code> record component</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="overrideLimiter()">
+<h3>overrideLimiter</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">overrideLimiter</span>()</div>
+<div class="block">Returns the value of the <code>overrideLimiter</code> record component.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>the value of the <code>overrideLimiter</code> record component</dd>
 </dl>
 </section>
 </li>

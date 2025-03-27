@@ -169,8 +169,8 @@ implements <a href="../registry/StaticProtocolObject.html" title="interface in n
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull net.kyori.adventure.key.Key</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="VillagerType.html" title="enum class in net.minestom.server.entity">VillagerType</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#valueOf(java.lang.String)" class="member-name-link">valueOf</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
@@ -197,7 +197,7 @@ the order they are declared.</div>
 <code><a href="../registry/ProtocolObject.html#registry()">registry</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.registry.StaticProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></h3>
-<code><a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
+<code><a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
 </section>
 </li>
 </ul>
@@ -311,13 +311,15 @@ not permitted.)</div>
 </section>
 </li>
 <li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
+<section class="detail" id="key()">
+<h3>key</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">key</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="../registry/StaticProtocolObject.html#namespace()">namespace</a></code>&nbsp;in interface&nbsp;<code><a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
+<dd><code>key</code>&nbsp;in interface&nbsp;<code>net.kyori.adventure.key.Keyed</code></dd>
+<dt>Specified by:</dt>
+<dd><code><a href="../registry/StaticProtocolObject.html#key()">key</a></code>&nbsp;in interface&nbsp;<code><a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></code></dd>
 </dl>
 </section>
 </li>

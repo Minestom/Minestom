@@ -347,10 +347,10 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromId(int)" class="member-name-link">fromId</a><wbr>(int&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(java.lang.String)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromKey(java.lang.String)" class="member-name-link">fromKey</a><wbr>(@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static @Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromNamespaceId(net.minestom.server.utils.NamespaceID)" class="member-name-link">fromNamespaceId</a><wbr>(@NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#fromKey(net.kyori.adventure.key.Key)" class="member-name-link">fromKey</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;key)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;@NotNull <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#values()" class="member-name-link">values</a>()</code></div>
@@ -362,7 +362,7 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <code><a href="../registry/ProtocolObject.html#registry()">registry</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.registry.StaticProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></h3>
-<code><a href="../registry/StaticProtocolObject.html#id()">id</a>, <a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a>, <a href="../registry/StaticProtocolObject.html#namespace()">namespace</a></code></div>
+<code><a href="../registry/StaticProtocolObject.html#id()">id</a>, <a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
 </section>
 </li>
 </ul>
@@ -840,19 +840,19 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="fromNamespaceId(java.lang.String)">
-<h3>fromNamespaceId</h3>
+<section class="detail" id="fromKey(java.lang.String)">
+<h3>fromKey</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></span>&nbsp;<span class="element-name">fromNamespaceId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespaceID)</span></div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></span>&nbsp;<span class="element-name">fromKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key)</span></div>
 </section>
 </li>
 <li>
-<section class="detail" id="fromNamespaceId(net.minestom.server.utils.NamespaceID)">
-<h3>fromNamespaceId</h3>
+<section class="detail" id="fromKey(net.kyori.adventure.key.Key)">
+<h3>fromKey</h3>
 <div class="member-signature"><span class="annotations">@Nullable
-</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></span>&nbsp;<span class="element-name">fromNamespaceId</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespaceID)</span></div>
+</span><span class="modifiers">static</span>&nbsp;<span class="return-type">@Nullable <a href="StatisticType.html" title="interface in net.minestom.server.statistic">StatisticType</a></span>&nbsp;<span class="element-name">fromKey</span><wbr><span class="parameters">(@NotNull
+ @NotNull net.kyori.adventure.key.Key&nbsp;key)</span></div>
 </section>
 </li>
 <li>

@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Registry.html" title="class in net.minestom.server.registry">Registry</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.PotionEffectEntry</span>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, int&nbsp;id, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey, int&nbsp;color, boolean&nbsp;isInstantaneous, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.PotionEffectEntry</span>(net.kyori.adventure.key.Key&nbsp;key, int&nbsp;id, <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey, int&nbsp;color, boolean&nbsp;isInstantaneous, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Registry.Entry.html" title="interface in net.minestom.server.registry">Registry.Entry</a></span></div>
 </section>
@@ -118,7 +118,7 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,int,java.lang.String,int,boolean,net.minestom.server.registry.Registry.Properties)" class="member-name-link">PotionEffectEntry</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,int,java.lang.String,int,boolean,net.minestom.server.registry.Registry.Properties)" class="member-name-link">PotionEffectEntry</a><wbr>(net.kyori.adventure.key.Key&nbsp;key,
  int&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey,
  int&nbsp;color,
@@ -171,10 +171,10 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>isInstantaneous</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.kyori.adventure.key.Key</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
@@ -212,9 +212,9 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,int,java.lang.String,int,boolean,net.minestom.server.registry.Registry.Properties)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,int,java.lang.String,int,boolean,net.minestom.server.registry.Registry.Properties)">
 <h3>PotionEffectEntry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PotionEffectEntry</span><wbr><span class="parameters">(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">PotionEffectEntry</span><wbr><span class="parameters">(net.kyori.adventure.key.Key&nbsp;key,
  int&nbsp;id,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;translationKey,
  int&nbsp;color,
@@ -223,7 +223,7 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <div class="block">Creates an instance of a <code>PotionEffectEntry</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>namespace</code> - the value for the <code>namespace</code> record component</dd>
+<dd><code>key</code> - the value for the <code>key</code> record component</dd>
 <dd><code>id</code> - the value for the <code>id</code> record component</dd>
 <dd><code>translationKey</code> - the value for the <code>translationKey</code> record component</dd>
 <dd><code>color</code> - the value for the <code>color</code> record component</dd>
@@ -282,13 +282,13 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+<section class="detail" id="key()">
+<h3>key</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">key</span>()</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>namespace</code> record component</dd>
+<dd>the value of the <code>key</code> record component</dd>
 </dl>
 </section>
 </li>

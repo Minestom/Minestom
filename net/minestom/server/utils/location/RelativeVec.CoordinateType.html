@@ -5,7 +5,7 @@
 <title>RelativeVec.CoordinateType (minestom dev API)</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description" content="declaration: package: net.minestom.server.utils.location, class: RelativeVec, enum: CoordinateType">
+<meta name="description" content="declaration: package: net.minestom.server.utils.location, record: RelativeVec, enum: CoordinateType">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -123,11 +123,17 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="#ABSOLUTE" class="member-name-link">ABSOLUTE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Absolute just returns the original vector.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#LOCAL" class="member-name-link">LOCAL</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Local type used in direction, requires full relatively on XZ/XYZ</div>
+</div>
 <div class="col-first even-row-color"><code><a href="#RELATIVE" class="member-name-link">RELATIVE</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Relative when any XYZ have the relative flag; unless local.</div>
+</div>
 </div>
 </section>
 </li>
@@ -177,18 +183,21 @@ the order they are declared.</div>
 <section class="detail" id="RELATIVE">
 <h3>RELATIVE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span>&nbsp;<span class="element-name">RELATIVE</span></div>
+<div class="block">Relative when any XYZ have the relative flag; unless local.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="LOCAL">
 <h3>LOCAL</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span>&nbsp;<span class="element-name">LOCAL</span></div>
+<div class="block">Local type used in direction, requires full relatively on XZ/XYZ</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ABSOLUTE">
 <h3>ABSOLUTE</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="RelativeVec.CoordinateType.html" title="enum class in net.minestom.server.utils.location">RelativeVec.CoordinateType</a></span>&nbsp;<span class="element-name">ABSOLUTE</span></div>
+<div class="block">Absolute just returns the original vector.</div>
 </section>
 </li>
 </ul>

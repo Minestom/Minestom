@@ -105,7 +105,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a><wbr>&lt;<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>,<wbr><a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>static final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a><wbr>&lt;net.kyori.adventure.key.Key,<wbr><a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#fluids" class="member-name-link">fluids</a></code></div>
 <div class="col-last even-row-color">
 <div class="block"><span class="deprecated-label">Deprecated.</span></div>
@@ -143,13 +143,8 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the corresponding Fluid matching the given id.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getFluid(net.kyori.adventure.key.Key)" class="member-name-link">getFluid</a><wbr>(net.kyori.adventure.key.Key&nbsp;key)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getFluid(net.kyori.adventure.key.Key)" class="member-name-link">getFluid</a><wbr>(net.kyori.adventure.key.Key&nbsp;id)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Returns the corresponding Fluid matching the given key.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static @NotNull <a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getFluid(net.minestom.server.utils.NamespaceID)" class="member-name-link">getFluid</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Returns the corresponding Fluid matching the given id.</div>
 </div>
 </div>
@@ -173,7 +168,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="fluids">
 <h3>fluids</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a>&lt;<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>,<wbr><a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a>&gt;</span>&nbsp;<span class="element-name">fluids</span></div>
+</span><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/HashMap.html" title="class or interface in java.util" class="external-link">HashMap</a>&lt;net.kyori.adventure.key.Key,<wbr><a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a>&gt;</span>&nbsp;<span class="element-name">fluids</span></div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Should only be used for internal code, please use the get* methods.</div>
 </section>
@@ -209,19 +204,11 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="getFluid(net.minestom.server.utils.NamespaceID)">
-<h3>getFluid</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a></span>&nbsp;<span class="element-name">getFluid</span><wbr><span class="parameters">(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</span></div>
-<div class="block">Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.</div>
-</section>
-</li>
-<li>
 <section class="detail" id="getFluid(net.kyori.adventure.key.Key)">
 <h3>getFluid</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a></span>&nbsp;<span class="element-name">getFluid</span><wbr><span class="parameters">(net.kyori.adventure.key.Key&nbsp;key)</span></div>
-<div class="block">Returns the corresponding Fluid matching the given key. Returns 'EMPTY' if none match.</div>
+</span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="../fluid/Fluid.html" title="enum class in net.minestom.server.fluid">Fluid</a></span>&nbsp;<span class="element-name">getFluid</span><wbr><span class="parameters">(net.kyori.adventure.key.Key&nbsp;id)</span></div>
+<div class="block">Returns the corresponding Fluid matching the given id. Returns 'EMPTY' if none match.</div>
 </section>
 </li>
 </ul>

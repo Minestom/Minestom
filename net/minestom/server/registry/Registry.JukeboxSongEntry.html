@@ -100,7 +100,7 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="Registry.html" title="class in net.minestom.server.registry">Registry</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.JukeboxSongEntry</span>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace, <a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent, <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description, float&nbsp;lengthInSeconds, int&nbsp;comparatorOutput, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
+<div class="type-signature"><span class="modifiers">public static record </span><span class="element-name type-name-label">Registry.JukeboxSongEntry</span>(net.kyori.adventure.key.Key&nbsp;key, <a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent, <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description, float&nbsp;lengthInSeconds, int&nbsp;comparatorOutput, <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a>
 implements <a href="Registry.Entry.html" title="interface in net.minestom.server.registry">Registry.Entry</a></span></div>
 </section>
@@ -118,9 +118,9 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;main,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,net.minestom.server.sound.SoundEvent,net.kyori.adventure.text.Component,float,int,net.minestom.server.registry.Registry.Properties)" class="member-name-link">JukeboxSongEntry</a><wbr>(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,net.minestom.server.sound.SoundEvent,net.kyori.adventure.text.Component,float,int,net.minestom.server.registry.Registry.Properties)" class="member-name-link">JukeboxSongEntry</a><wbr>(net.kyori.adventure.key.Key&nbsp;key,
  <a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
+ <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
  float&nbsp;lengthInSeconds,
  int&nbsp;comparatorOutput,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</code></div>
@@ -151,7 +151,7 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>custom</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#description()" class="member-name-link">description</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>description</code> record component.</div>
@@ -166,15 +166,15 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lengthInSeconds()" class="member-name-link">lengthInSeconds</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>net.kyori.adventure.key.Key</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>lengthInSeconds</code> record component.</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>float</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#lengthInSeconds()" class="member-name-link">lengthInSeconds</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+<div class="block">Returns the value of the <code>lengthInSeconds</code> record component.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#soundEvent()" class="member-name-link">soundEvent</a>()</code></div>
@@ -212,18 +212,18 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,net.minestom.server.sound.SoundEvent,net.kyori.adventure.text.Component,float,int,net.minestom.server.registry.Registry.Properties)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,net.minestom.server.sound.SoundEvent,net.kyori.adventure.text.Component,float,int,net.minestom.server.registry.Registry.Properties)">
 <h3>JukeboxSongEntry</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JukeboxSongEntry</span><wbr><span class="parameters">(<a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">JukeboxSongEntry</span><wbr><span class="parameters">(net.kyori.adventure.key.Key&nbsp;key,
  <a href="../sound/SoundEvent.html" title="interface in net.minestom.server.sound">SoundEvent</a>&nbsp;soundEvent,
- <a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
+ <a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a>&nbsp;description,
  float&nbsp;lengthInSeconds,
  int&nbsp;comparatorOutput,
  <a href="Registry.Properties.html" title="interface in net.minestom.server.registry">Registry.Properties</a>&nbsp;custom)</span></div>
 <div class="block">Creates an instance of a <code>JukeboxSongEntry</code> record class.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>namespace</code> - the value for the <code>namespace</code> record component</dd>
+<dd><code>key</code> - the value for the <code>key</code> record component</dd>
 <dd><code>soundEvent</code> - the value for the <code>soundEvent</code> record component</dd>
 <dd><code>description</code> - the value for the <code>description</code> record component</dd>
 <dd><code>lengthInSeconds</code> - the value for the <code>lengthInSeconds</code> record component</dd>
@@ -282,13 +282,13 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 </section>
 </li>
 <li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
-<div class="block">Returns the value of the <code>namespace</code> record component.</div>
+<section class="detail" id="key()">
+<h3>key</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">key</span>()</div>
+<div class="block">Returns the value of the <code>key</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
-<dd>the value of the <code>namespace</code> record component</dd>
+<dd>the value of the <code>key</code> record component</dd>
 </dl>
 </section>
 </li>
@@ -306,7 +306,7 @@ implements <a href="Registry.Entry.html" title="interface in net.minestom.server
 <li>
 <section class="detail" id="description()">
 <h3>description</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.advntr.dev/api/4.17.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">description</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://jd.advntr.dev/api/4.18.0/net/kyori/adventure/text/Component.html" title="class or interface in net.kyori.adventure.text" class="external-link">Component</a></span>&nbsp;<span class="element-name">description</span>()</div>
 <div class="block">Returns the value of the <code>description</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>

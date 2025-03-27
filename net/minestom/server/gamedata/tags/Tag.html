@@ -125,12 +125,12 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID)" class="member-name-link">Tag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key)" class="member-name-link">Tag</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;name)</code></div>
 <div class="col-last even-row-color">
 <div class="block">Creates a new empty tag.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,java.util.Set)" class="member-name-link">Tag</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</code></div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,java.util.Set)" class="member-name-link">Tag</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;name,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;net.kyori.adventure.key.Key&gt;&nbsp;values)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Creates a new tag with the given values.</div>
 </div>
@@ -149,16 +149,16 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contains(net.minestom.server.utils.NamespaceID)" class="member-name-link">contains</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contains(net.kyori.adventure.key.Key)" class="member-name-link">contains</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;id)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Checks whether the given id in inside this tag.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code>net.kyori.adventure.key.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4 method-summary-table-tab6">
 <div class="block"><span class="deprecated-label">Deprecated.</span></div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;net.kyori.adventure.key.Key&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getValues()" class="member-name-link">getValues</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns an immutable set of values present in this tag</div>
@@ -169,12 +169,9 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#name()" class="member-name-link">name</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#namespace()" class="member-name-link">namespace</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#toString()" class="member-name-link">toString</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -196,20 +193,20 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key)">
 <h3>Tag</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name)</span></div>
+ @NotNull net.kyori.adventure.key.Key&nbsp;name)</span></div>
 <div class="block">Creates a new empty tag. This does not cache the tag.</div>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,java.util.Set)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,java.util.Set)">
 <h3>Tag</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">Tag</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;name,
+ @NotNull net.kyori.adventure.key.Key&nbsp;name,
  @NotNull
- @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;&nbsp;values)</span></div>
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;net.kyori.adventure.key.Key&gt;&nbsp;values)</span></div>
 <div class="block">Creates a new tag with the given values. This does not cache the tag.</div>
 </section>
 </li>
@@ -222,10 +219,10 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="contains(net.minestom.server.utils.NamespaceID)">
+<section class="detail" id="contains(net.kyori.adventure.key.Key)">
 <h3>contains</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">contains</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id)</span></div>
+ @NotNull net.kyori.adventure.key.Key&nbsp;id)</span></div>
 <div class="block">Checks whether the given id in inside this tag.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,19 +236,12 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <section class="detail" id="getValues()">
 <h3>getValues</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&gt;</span>&nbsp;<span class="element-name">getValues</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;net.kyori.adventure.key.Key&gt;</span>&nbsp;<span class="element-name">getValues</span>()</div>
 <div class="block">Returns an immutable set of values present in this tag</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>immutable set of values present in this tag</dd>
 </dl>
-</section>
-</li>
-<li>
-<section class="detail" id="namespace()">
-<h3>namespace</h3>
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">namespace</span>()</div>
 </section>
 </li>
 <li>
@@ -278,7 +268,7 @@ implements <a href="../../registry/ProtocolObject.html" title="interface in net.
 <section class="detail" id="getName()">
 <h3>getName</h3>
 <div class="member-signature"><span class="annotations"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Deprecated.html" title="class or interface in java.lang" class="external-link">@Deprecated</a>
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">getName</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">getName</span>()</div>
 <div class="deprecation-block"><span class="deprecated-label">Deprecated.</span></div>
 <div class="block">Returns the name of this tag</div>
 </section>

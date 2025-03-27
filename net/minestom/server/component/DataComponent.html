@@ -140,8 +140,8 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static &lt;T&gt;&nbsp;<a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a><wbr>&lt;T&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#createHeadless(int,net.minestom.server.utils.NamespaceID,net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.utils.nbt.BinaryTagSerializer)" class="member-name-link">createHeadless</a><wbr>(int&nbsp;id,
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#createHeadless(int,net.kyori.adventure.key.Key,net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.utils.nbt.BinaryTagSerializer)" class="member-name-link">createHeadless</a><wbr>(int&nbsp;id,
+ @NotNull net.kyori.adventure.key.Key&nbsp;key,
  <a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;network,
  @Nullable <a href="../utils/nbt/BinaryTagSerializer.html" title="interface in net.minestom.server.utils.nbt">BinaryTagSerializer</a>&lt;T&gt;&nbsp;nbt)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
@@ -174,7 +174,7 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 <code><a href="../registry/ProtocolObject.html#registry()">registry</a></code></div>
 <div class="inherited-list">
 <h3 id="methods-inherited-from-class-net.minestom.server.registry.StaticProtocolObject">Methods inherited from interface&nbsp;net.minestom.server.registry.<a href="../registry/StaticProtocolObject.html" title="interface in net.minestom.server.registry">StaticProtocolObject</a></h3>
-<code><a href="../registry/StaticProtocolObject.html#id()">id</a>, <a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a>, <a href="../registry/StaticProtocolObject.html#namespace()">namespace</a></code></div>
+<code><a href="../registry/StaticProtocolObject.html#id()">id</a>, <a href="../registry/StaticProtocolObject.html#key()">key</a>, <a href="../registry/StaticProtocolObject.html#name()">name</a></code></div>
 </section>
 </li>
 </ul>
@@ -236,12 +236,12 @@ extends <a href="../registry/StaticProtocolObject.html" title="interface in net.
 </section>
 </li>
 <li>
-<section class="detail" id="createHeadless(int,net.minestom.server.utils.NamespaceID,net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.utils.nbt.BinaryTagSerializer)">
+<section class="detail" id="createHeadless(int,net.kyori.adventure.key.Key,net.minestom.server.network.NetworkBuffer.Type,net.minestom.server.utils.nbt.BinaryTagSerializer)">
 <h3>createHeadless</h3>
 <div class="member-signature"><span class="annotations">@Internal
 </span><span class="modifiers">static</span>&nbsp;<span class="type-parameters">&lt;T&gt;</span>&nbsp;<span class="return-type"><a href="DataComponent.html" title="interface in net.minestom.server.component">DataComponent</a>&lt;T&gt;</span>&nbsp;<span class="element-name">createHeadless</span><wbr><span class="parameters">(int&nbsp;id,
  @NotNull
- @NotNull <a href="../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;namespace,
+ @NotNull net.kyori.adventure.key.Key&nbsp;key,
  @Nullable
  <a href="../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;T&gt;&nbsp;network,
  @Nullable

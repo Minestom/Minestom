@@ -92,7 +92,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AttributeModifier</span>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id, double&nbsp;amount, @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)
+<div class="type-signature"><span class="modifiers">public record </span><span class="element-name type-name-label">AttributeModifier</span>(@NotNull net.kyori.adventure.key.Key&nbsp;id, double&nbsp;amount, @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Record.html" title="class or interface in java.lang" class="external-link">Record</a></span></div>
 <div class="block">Represent an attribute modifier.</div>
 </section>
@@ -130,7 +130,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Creates a new modifier with a random id.</div>
 </div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.minestom.server.utils.NamespaceID,double,net.minestom.server.entity.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(net.kyori.adventure.key.Key,double,net.minestom.server.entity.attribute.AttributeOperation)" class="member-name-link">AttributeModifier</a><wbr>(@NotNull net.kyori.adventure.key.Key&nbsp;id,
  double&nbsp;amount,
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)</code></div>
 <div class="col-last odd-row-color">
@@ -165,7 +165,7 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns a hash code value for this object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull net.kyori.adventure.key.Key</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the value of the <code>id</code> record component.</div>
@@ -235,10 +235,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(net.minestom.server.utils.NamespaceID,double,net.minestom.server.entity.attribute.AttributeOperation)">
+<section class="detail" id="&lt;init&gt;(net.kyori.adventure.key.Key,double,net.minestom.server.entity.attribute.AttributeOperation)">
 <h3>AttributeModifier</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">AttributeModifier</span><wbr><span class="parameters">(@NotNull
- @NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a>&nbsp;id,
+ @NotNull net.kyori.adventure.key.Key&nbsp;id,
  double&nbsp;amount,
  @NotNull
  @NotNull <a href="AttributeOperation.html" title="enum class in net.minestom.server.entity.attribute">AttributeOperation</a>&nbsp;operation)</span></div>
@@ -304,7 +304,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="id()">
 <h3>id</h3>
 <div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="../../utils/NamespaceID.html" title="class in net.minestom.server.utils">NamespaceID</a></span>&nbsp;<span class="element-name">id</span>()</div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull net.kyori.adventure.key.Key</span>&nbsp;<span class="element-name">id</span>()</div>
 <div class="block">Returns the value of the <code>id</code> record component.</div>
 <dl class="notes">
 <dt>Returns:</dt>
