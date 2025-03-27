@@ -393,7 +393,7 @@ public class Sidebar implements Scoreboard {
         private final byte friendlyFlags = 0x00;
         private final TeamsPacket.NameTagVisibility nameTagVisibility = TeamsPacket.NameTagVisibility.NEVER;
         private final TeamsPacket.CollisionRule collisionRule = TeamsPacket.CollisionRule.NEVER;
-        private final NamedTextColor teamColor = NamedTextColor.DARK_GREEN;
+        private final NamedTextColor teamColor = NamedTextColor.WHITE;
 
 
         /**
