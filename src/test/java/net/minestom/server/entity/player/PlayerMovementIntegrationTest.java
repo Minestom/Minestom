@@ -160,7 +160,7 @@ public class PlayerMovementIntegrationTest {
         int chunkDifference = ChunkRange.chunksCount(endViewDistance) - ChunkRange.chunksCount(startingViewDistance);
 
         // Preload chunks, otherwise our first tracker.assertCount call will fail randomly due to chunks being loaded off the main thread
-        ChunkRange.chunksInRange(0, 0, endViewDistance, instance::loadChunk);
+        ChunkRange.chunksInRange(0, 0, endViewDistance, (chunkX, chunkZ) -> instance.loadChunk(chunkX, chunkZ).join());
 
         var tracker = connection.trackIncoming(ChunkDataPacket.class);
         player.addPacketToQueue(new ClientSettingsPacket(new ClientSettings(Locale.US, endViewDistance,
