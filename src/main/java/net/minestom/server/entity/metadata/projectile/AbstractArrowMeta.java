@@ -6,7 +6,7 @@ import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
-public class AbstractArrowMeta extends EntityMeta {
+public class AbstractArrowMeta extends ProjectileEntityMeta {
     protected AbstractArrowMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
