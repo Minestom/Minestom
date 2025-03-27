@@ -17,6 +17,7 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
 import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -206,6 +207,13 @@ public class PlayerInit {
 
                 if (block.id() == Block.CRAFTING_TABLE.id()) {
                     event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                }
+            })
+            .addListener(CreativeInventoryActionEvent.class, event -> {
+                if (event.getClickedItem().material() == Material.APPLE) {
+                    event.setClickedItem(ItemStack.of(Material.GOLDEN_APPLE, event.getClickedItem().amount()));
+                } else if (event.getClickedItem().material() == Material.ENCHANTED_GOLDEN_APPLE) {
+                    event.setCancelled(true);
                 }
             });
 

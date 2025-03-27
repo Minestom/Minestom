@@ -126,10 +126,10 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
 
     protected void UNSAFE_itemInsert(int slot, @NotNull ItemStack item, @NotNull ItemStack previous, boolean sendPacket) {
         itemStacks[slot] = item;
-        if (sendPacket) sendSlotRefresh(slot, item, previous);
+        if (sendPacket) sendSlotRefresh(slot, item);
     }
 
-    public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
+    public void sendSlotRefresh(int slot, @NotNull ItemStack item) {
         sendPacketToViewers(new SetSlotPacket(getWindowId(), 0, (short) slot, item));
     }
 

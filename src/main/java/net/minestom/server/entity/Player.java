@@ -420,7 +420,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 // has not changed the item (the default behavior) we need to refresh the slot.
                 if (itemStack.equals(getItemInHand(itemUseHand))) {
                     final int slot = isOffHand ? PlayerInventoryUtils.OFFHAND_SLOT : getHeldSlot();
-                    inventory.sendSlotRefresh(slot, itemStack, itemStack);
+                    inventory.sendSlotRefresh(slot, itemStack);
                 }
             }
         }
