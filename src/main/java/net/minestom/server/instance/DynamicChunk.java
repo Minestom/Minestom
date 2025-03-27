@@ -58,7 +58,6 @@ public class DynamicChunk extends Chunk {
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
 
-    private long lastChange;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
@@ -81,7 +80,6 @@ public class DynamicChunk extends Chunk {
         }
         assertLock();
 
-        this.lastChange = System.currentTimeMillis();
         this.chunkCache.invalidate();
 
         Section section = getSectionAt(y);
@@ -224,11 +222,6 @@ public class DynamicChunk extends Chunk {
         DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
-    }
-
-    @Override
-    public long getLastChangeTime() {
-        return lastChange;
     }
 
     @Override

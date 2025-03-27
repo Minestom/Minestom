@@ -123,17 +123,6 @@ public abstract class Chunk implements Block.Getter, Block.Setter, Biome.Getter,
     public abstract void tick(long time);
 
     /**
-     * Gets the last time that this chunk changed.
-     * <p>
-     * "Change" means here data used in {@link ChunkDataPacket}.
-     * It is necessary to see if the cached version of this chunk can be used
-     * instead of re-writing and compressing everything.
-     *
-     * @return the last change time in milliseconds
-     */
-    public abstract long getLastChangeTime();
-
-    /**
      * Sends the chunk data to {@code player}.
      *
      * @param player the player
