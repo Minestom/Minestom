@@ -1,5 +1,6 @@
 package net.minestom.server.thread;
 
+import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,6 +17,15 @@ public interface ThreadProvider<T> {
             public int findThread(@NotNull T partition) {
                 return counter.getAndIncrement();
             }
+        };
+    }
+
+    static <T> @NotNull ThreadProvider<T> leastOccupiedThread() {
+        return partition -> {
+            Integer index = MinecraftServer.process().dispatcher().getIndexOfLeastOccupiedThread();
+            if (index == null)
+                throw new IllegalStateException("No threads available");
+            return index;
         };
     }
 
