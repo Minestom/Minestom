@@ -5,18 +5,21 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.ItemEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.drop.DropReason;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, CancellableEvent {
 
     private final Player player;
     private final ItemStack itemStack;
+    private final DropReason dropReason;
 
     private boolean cancelled;
 
-    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack, @NotNull DropReason reason) {
         this.player = player;
         this.itemStack = itemStack;
+        this.dropReason = reason;
     }
 
     @Override
@@ -39,4 +42,7 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
         this.cancelled = cancel;
     }
 
+    public @NotNull DropReason getDropReason() {
+        return dropReason;
+    }
 }
