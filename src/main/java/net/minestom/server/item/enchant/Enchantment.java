@@ -1,14 +1,15 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EquipmentSlotGroup;
+import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.*;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +18,21 @@ import java.util.List;
 
 public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
     @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment, false);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<Enchantment>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::enchantment);
+    @NotNull Codec<DynamicRegistry.Key<Enchantment>> CODEC = Codec.RegistryKey(Registries::enchantment);
+
+    @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
+            "description", Codec.COMPONENT, Enchantment::description,
+            "exclusive_set", ObjectSet.<Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
+            "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
+            "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
+            "weight", Codec.INT, Enchantment::weight,
+            "max_level", Codec.INT, Enchantment::maxLevel,
+            "min_cost", Cost.CODEC, Enchantment::minCost,
+            "max_cost", Cost.CODEC, Enchantment::maxCost,
+            "anvil_cost", Codec.INT, Enchantment::anvilCost,
+            "slots", EquipmentSlotGroup.CODEC.list(), Enchantment::slots,
+            "effects", EffectComponent.CODEC.optional(DataComponentMap.EMPTY), Enchantment::effects,
+            EnchantmentImpl::new);
 
     static @NotNull Builder builder() {
         return new Builder();
@@ -30,10 +45,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
-        return DynamicRegistry.create(
-                "minecraft:enchantment", EnchantmentImpl.REGISTRY_NBT_TYPE,
-                registries, Registry.Resource.ENCHANTMENTS
-        );
+        return DynamicRegistry.create("minecraft:enchantment", REGISTRY_CODEC, registries, Registry.Resource.ENCHANTMENTS);
     }
 
     @NotNull Component description();
@@ -42,7 +54,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull ObjectSet<Material> supportedItems();
 
-    @NotNull ObjectSet<Material> primaryItems();
+    @Nullable ObjectSet<Material> primaryItems();
 
     int weight();
 
@@ -58,15 +70,12 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull DataComponentMap effects();
 
-    @Override
-    @Nullable Registry.EnchantmentEntry registry();
-
     enum Target {
         ATTACKER,
         DAMAGING_ENTITY,
         VICTIM;
 
-        public static final BinaryTagSerializer<Target> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(Target.class);
+        public static final Codec<Target> CODEC = Codec.Enum(Target.class);
     }
 
     sealed interface Effect permits AttributeEffect, ConditionalEffect, DamageImmunityEffect, EntityEffect, LocationEffect, TargetedConditionalEffect, ValueEffect {
@@ -76,13 +85,10 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
     record Cost(int base, int perLevelAboveFirst) {
         public static final Cost DEFAULT = new Cost(1, 1);
 
-        public static final BinaryTagSerializer<Cost> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-                tag -> new Cost(tag.getInt("base"), tag.getInt("per_level_above_first")),
-                cost -> CompoundBinaryTag.builder()
-                        .putInt("base", cost.base)
-                        .putInt("per_level_above_first", cost.perLevelAboveFirst)
-                        .build()
-        );
+        public static final Codec<Cost> CODEC = StructCodec.struct(
+                "base", Codec.INT, Cost::base,
+                "per_level_above_first", Codec.INT, Cost::perLevelAboveFirst,
+                Cost::new);
     }
 
     class Builder {
@@ -178,7 +184,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return new EnchantmentImpl(
                     description, exclusiveSet, supportedItems,
                     primaryItems, weight, maxLevel, minCost, maxCost,
-                    anvilCost, slots, effects.build(), null
+                    anvilCost, slots, effects.build()
             );
         }
     }

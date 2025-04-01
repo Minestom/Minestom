@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class DebugStickStateTest extends AbstractItemComponentTest<DebugStickSta
 
     @Override
     protected @NotNull DataComponent<DebugStickState> component() {
-        return ItemComponent.DEBUG_STICK_STATE;
+        return DataComponents.DEBUG_STICK_STATE;
     }
 
     @Override

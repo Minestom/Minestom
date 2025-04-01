@@ -11,6 +11,6 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
 public record ClientCreativeInventoryActionPacket(short slot, @NotNull ItemStack item) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientCreativeInventoryActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             SHORT, ClientCreativeInventoryActionPacket::slot,
-            ItemStack.NETWORK_TYPE, ClientCreativeInventoryActionPacket::item,
+            ItemStack.UNTRUSTED_NETWORK_TYPE, ClientCreativeInventoryActionPacket::item,
             ClientCreativeInventoryActionPacket::new);
 }

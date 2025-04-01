@@ -1,14 +1,19 @@
 package net.minestom.server.registry;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +21,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -57,11 +63,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private final List<DataPack> packById = new CopyOnWriteArrayList<>();
 
     private final String id;
-    private final BinaryTagSerializer<T> nbtType;
+    private final Codec<T> codec;
 
-    DynamicRegistryImpl(@NotNull String id, @Nullable BinaryTagSerializer<T> nbtType) {
+    DynamicRegistryImpl(@NotNull String id, @Nullable Codec<T> codec) {
         this.id = id;
-        this.nbtType = nbtType;
+        this.codec = codec;
     }
 
     @Override
@@ -69,8 +75,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return id;
     }
 
-    public @UnknownNullability BinaryTagSerializer<T> nbtType() {
-        return nbtType;
+    public @UnknownNullability Codec<T> codec() {
+        return codec;
     }
 
     @Override
@@ -193,8 +199,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     private @NotNull RegistryDataPacket createRegistryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
-        Check.notNull(nbtType, "Cannot create registry data packet for server-only registry");
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, true);
+        Check.notNull(codec, "Cannot create registry data packet for server-only registry");
+        Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());
         for (int i = 0; i < entryById.size(); i++) {
             CompoundBinaryTag data = null;
@@ -209,7 +215,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             T entry = entryById.get(i);
             DataPack pack = packById.get(i);
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
-                data = (CompoundBinaryTag) nbtType.write(context, entry);
+                final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
+                if (entryResult instanceof Result.Ok(BinaryTag tag)) {
+                    data = (CompoundBinaryTag) tag;
+                } else {
+                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + id);
+                }
             }
             //noinspection DataFlowIssue
             entries.add(new RegistryDataPacket.Entry(getKey(i).name(), data));
@@ -217,31 +228,25 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T extends ProtocolObject> void loadStaticRegistry(@NotNull DynamicRegistry<T> registry, @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader, @Nullable Comparator<String> idComparator) {
-        List<Map.Entry<String, Map<String, Object>>> entries = new ArrayList<>(Registry.load(resource).entrySet());
-        if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
-        for (var entry : entries) {
-            final String namespace = entry.getKey();
-            final Registry.Properties properties = Registry.Properties.fromMap(entry.getValue());
-            registry.register(namespace, loader.get(namespace, properties), DataPack.MINECRAFT_CORE);
-        }
-    }
-
-    static <T extends ProtocolObject> void loadStaticSnbtRegistry(@NotNull Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource) {
-        Check.argCondition(!resource.fileName().endsWith(".snbt"), "Resource must be an SNBT file: {0}", resource.fileName());
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+        Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
         try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final BinaryTag tag = TagStringIOExt.readTag(new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8));
-            if (!(tag instanceof CompoundBinaryTag compound)) {
-                throw new IllegalStateException("Root tag must be a compound tag");
-            }
+            final JsonElement json = Registry.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            if (!(json instanceof JsonObject root))
+                throw new IllegalStateException("Failed to load registry " + registry.id() + ": expected a JSON object, got " + json);
 
-            final BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(registries, false);
-            for (Map.Entry<String, ? extends BinaryTag> entry : compound) {
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
+            List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
+            if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
+            for (Map.Entry<String, JsonElement> entry : entries) {
                 final String namespace = entry.getKey();
-                final T value = registry.nbtType.read(context, entry.getValue());
-                Check.notNull(value, "Failed to read value for namespace {0}", namespace);
-                registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                final Result<T> valueResult = registry.codec().decode(transcoder, entry.getValue());
+                if (valueResult instanceof Result.Ok(T value)) {
+                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                } else {
+                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.id() + ": " + valueResult);
+                }
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

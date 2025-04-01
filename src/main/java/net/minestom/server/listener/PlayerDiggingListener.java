@@ -1,6 +1,7 @@
 package net.minestom.server.listener;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
@@ -17,7 +18,6 @@ import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
@@ -126,7 +126,7 @@ public final class PlayerDiggingListener {
         } else if (player.getGameMode() == GameMode.ADVENTURE) {
             // Check if the item can break the block with the current item
             final ItemStack itemInMainHand = player.getItemInMainHand();
-            final BlockPredicates breakPredicate = itemInMainHand.get(ItemComponent.CAN_BREAK, BlockPredicates.NEVER);
+            final BlockPredicates breakPredicate = itemInMainHand.get(DataComponents.CAN_BREAK, BlockPredicates.NEVER);
             return !breakPredicate.test(block);
         }
         return false;

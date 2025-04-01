@@ -51,8 +51,8 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
 
         ClassName networkBufferCN = ClassName.get("net.minestom.server.network", "NetworkBuffer");
         ParameterizedTypeName networkBufferTypeCN = ParameterizedTypeName.get(networkBufferCN.nestedClass("Type"), dyeColorCN);
-        ClassName binaryTagSerializerCN = ClassName.get("net.minestom.server.utils.nbt", "BinaryTagSerializer");
-        ParameterizedTypeName binaryTagSerializerTypeCN = ParameterizedTypeName.get(binaryTagSerializerCN, dyeColorCN);
+        ClassName codecCN = ClassName.get("net.minestom.server.codec", "Codec");
+        ParameterizedTypeName codecTypeCN = ParameterizedTypeName.get(codecCN, dyeColorCN);
 
         // Fields
         dyeColorEnum.addFields(
@@ -60,8 +60,8 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, dyeColorCN)
                                 .build(),
-                        FieldSpec.builder(binaryTagSerializerTypeCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.fromEnumStringable($T.class)", binaryTagSerializerCN, dyeColorCN)
+                        FieldSpec.builder(codecTypeCN, "CODEC", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$T.Enum($T.class)", codecCN, dyeColorCN)
                                 .build(),
                         FieldSpec.builder(colorCN, "textureDiffuseColor", Modifier.PRIVATE, Modifier.FINAL).build(),
                         FieldSpec.builder(colorCN, "textColor", Modifier.PRIVATE, Modifier.FINAL).build(),

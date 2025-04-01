@@ -1,6 +1,7 @@
 package net.minestom.server.potion;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.NotNull;
@@ -10,7 +11,8 @@ import java.util.Collection;
 
 public sealed interface PotionType extends StaticProtocolObject, PotionTypes permits PotionTypeImpl {
 
-    NetworkBuffer.Type<PotionType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionTypeImpl::getId, PotionType::id);
+    @NotNull NetworkBuffer.Type<PotionType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionTypeImpl::getId, PotionType::id);
+    @NotNull Codec<PotionType> CODEC = Codec.KEY.transform(PotionType::fromKey, PotionType::key);
 
     static @NotNull Collection<@NotNull PotionType> values() {
         return PotionTypeImpl.values();

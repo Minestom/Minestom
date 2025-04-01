@@ -3,6 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
@@ -22,7 +23,6 @@ import net.minestom.server.event.item.EntityEquipEvent;
 import net.minestom.server.event.item.PickupItemEvent;
 import net.minestom.server.instance.EntityTracker;
 import net.minestom.server.inventory.EquipmentHandler;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.AttributeList;
 import net.minestom.server.network.ConnectionState;
@@ -47,7 +47,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.ADD_MULTIPLIED_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
@@ -92,6 +92,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     private ItemStack leggings = ItemStack.AIR;
     private ItemStack boots = ItemStack.AIR;
     private ItemStack bodyEquipment = ItemStack.AIR;
+    private ItemStack saddleEquipment = ItemStack.AIR;
 
     /**
      * Constructor which allows to specify an UUID. Only use if you know what you are doing!
@@ -126,6 +127,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate;
             case HELMET -> helmet;
             case BODY -> bodyEquipment;
+            case SADDLE -> saddleEquipment;
         };
     }
 
@@ -142,6 +144,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             case CHESTPLATE -> chestplate = newItem;
             case HELMET -> helmet = newItem;
             case BODY -> bodyEquipment = newItem;
+            case SADDLE -> saddleEquipment = newItem;
         }
 
         syncEquipment(slot);
@@ -153,8 +156,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
-
-
+    
     /**
      * Updates the current attributes of the living entity based on
      *
@@ -164,7 +166,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      */
     @ApiStatus.Internal
     public void updateEquipmentAttributes(@NotNull ItemStack oldItemStack, @NotNull ItemStack newItemStack, @NotNull EquipmentSlot slot) {
-        AttributeList oldAttributes = oldItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        AttributeList oldAttributes = oldItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Remove old attributes
         if (oldAttributes != null) {
             for (AttributeList.Modifier modifier : oldAttributes.modifiers()) {
@@ -175,7 +177,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
                 }
             }
         }
-        AttributeList newAttributes = newItemStack.get(ItemComponent.ATTRIBUTE_MODIFIERS);
+        AttributeList newAttributes = newItemStack.get(DataComponents.ATTRIBUTE_MODIFIERS);
         // Add new attributes
         if (newAttributes != null) {
             for (AttributeList.Modifier modifier : newAttributes.modifiers()) {
@@ -523,10 +525,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @return true if this entity needs to send attributes, false otherwise
      */
     protected boolean shouldSendAttributes() {
-        final EntitySpawnType spawnType = this.entityType.registry().spawnType();
-
-        // sending attributes for a non-living entity disconnects clients
-        return spawnType == EntitySpawnType.PLAYER || spawnType == EntitySpawnType.LIVING;
+        return this.entityType.registry().shouldSendAttributes();
     }
 
     @Override
