@@ -35,35 +35,45 @@ public final class PlayerDiggingListener {
         final Instance instance = player.getInstance();
         if (instance == null) return;
 
+        // even if the chunk is unloaded, we have to send the "acknowledge" packet
+        // the client will otherwise prevent updates to the block, until another
+        // "acknowledge" packet (with a higher sequence) is sent.
+        boolean sendAcknowledge = false;
         DiggingResult diggingResult = null;
-        if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = cancelDigging(player, instance, blockPosition);
-        } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
-            if (!instance.isChunkLoaded(blockPosition)) return;
-            diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
-        } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
-            dropStack(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
-            dropSingle(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
-            updateItemState(player);
-        } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
-            swapItemHand(player);
+        try {
+            if (status == ClientPlayerDiggingPacket.Status.STARTED_DIGGING) {
+                sendAcknowledge = true;
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = startDigging(player, instance, blockPosition, packet.blockFace());
+            } else if (status == ClientPlayerDiggingPacket.Status.CANCELLED_DIGGING) {
+                sendAcknowledge = true;
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = cancelDigging(player, instance, blockPosition);
+            } else if (status == ClientPlayerDiggingPacket.Status.FINISHED_DIGGING) {
+                sendAcknowledge = true;
+                if (!instance.isChunkLoaded(blockPosition)) return;
+                diggingResult = finishDigging(player, instance, blockPosition, packet.blockFace());
+            } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM_STACK) {
+                dropStack(player);
+            } else if (status == ClientPlayerDiggingPacket.Status.DROP_ITEM) {
+                dropSingle(player);
+            } else if (status == ClientPlayerDiggingPacket.Status.UPDATE_ITEM_STATE) {
+                updateItemState(player);
+            } else if (status == ClientPlayerDiggingPacket.Status.SWAP_ITEM_HAND) {
+                swapItemHand(player);
+            }
+        } finally {
+            if (sendAcknowledge) {
+                player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
+            }
         }
         // Acknowledge start/cancel/finish digging status
-        if (diggingResult != null) {
-            player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
-            if (!diggingResult.success()) {
-                // Refresh block on player screen in case it had special data (like a sign)
-                var registry = diggingResult.block().registry();
-                if (registry.isBlockEntity()) {
-                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
-                    player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
-                }
+        if (diggingResult != null && !diggingResult.success()) {
+            // Refresh block on player screen in case it had special data (like a sign)
+            var registry = diggingResult.block().registry();
+            if (registry.isBlockEntity()) {
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(diggingResult.block());
+                player.sendPacketToViewersAndSelf(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
             }
         }
     }
