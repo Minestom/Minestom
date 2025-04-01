@@ -223,25 +223,34 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
         buffer.write(STRING_IO_UTF8, "action");
         buffer.write(STRING_IO_UTF8, clickEvent.action().name().toLowerCase(Locale.ROOT));
 
-        buffer.write(BYTE, TAG_STRING);
         switch (clickEvent.action()) {
             case OPEN_URL -> {
+                buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "url");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
             }
             case OPEN_FILE -> {
+                buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "path");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
             }
             case RUN_COMMAND, SUGGEST_COMMAND -> {
+                buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "command");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
             }
             case CHANGE_PAGE -> {
+                buffer.write(BYTE, TAG_INT);
                 buffer.write(STRING_IO_UTF8, "page");
+                int page = Integer.parseInt(clickEvent.value());
+                buffer.write(INT, page);
             }
             default -> { // Includes COPY_TO_CLIPBOARD
+                buffer.write(BYTE, TAG_STRING);
                 buffer.write(STRING_IO_UTF8, "value");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
             }
         }
-        buffer.write(STRING_IO_UTF8, clickEvent.value());
 
         buffer.write(BYTE, TAG_END);
     }
