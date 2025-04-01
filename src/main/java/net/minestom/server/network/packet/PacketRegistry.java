@@ -1,5 +1,6 @@
 package net.minestom.server.network.packet;
 
+import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.client.common.*;
@@ -33,13 +34,23 @@ public interface PacketRegistry<T> {
 
     PacketInfo<T> packetInfo(int packetId);
 
+    @NotNull
+    ConnectionState state();
+
+    @NotNull ConnectionSide side();
+
     record PacketInfo<T>(Class<T> packetClass, int id, NetworkBuffer.Type<T> serializer) {
     }
 
-    sealed class Client extends PacketRegistryTemplate<ClientPacket> {
+    abstract sealed class Client extends PacketRegistryTemplate<ClientPacket> {
         @SafeVarargs
         Client(Entry<? extends ClientPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public @NotNull ConnectionSide side() {
+            return ConnectionSide.CLIENT;
         }
     }
 
@@ -49,6 +60,11 @@ public interface PacketRegistry<T> {
                     entry(ClientHandshakePacket.class, ClientHandshakePacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
+        }
     }
 
     final class ClientStatus extends Client {
@@ -57,6 +73,11 @@ public interface PacketRegistry<T> {
                     entry(StatusRequestPacket.class, StatusRequestPacket.SERIALIZER),
                     entry(ClientPingRequestPacket.class, ClientPingRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -69,6 +90,11 @@ public interface PacketRegistry<T> {
                     entry(ClientLoginAcknowledgedPacket.class, ClientLoginAcknowledgedPacket.SERIALIZER),
                     entry(ClientCookieResponsePacket.class, ClientCookieResponsePacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.LOGIN;
         }
     }
 
@@ -84,6 +110,11 @@ public interface PacketRegistry<T> {
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
                     entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -154,12 +185,22 @@ public interface PacketRegistry<T> {
                     entry(ClientUseItemPacket.class, ClientUseItemPacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.PLAY;
+        }
     }
 
-    sealed class Server extends PacketRegistryTemplate<ServerPacket> {
+    abstract sealed class Server extends PacketRegistryTemplate<ServerPacket> {
         @SafeVarargs
         Server(Entry<? extends ServerPacket>... suppliers) {
             super(suppliers);
+        }
+
+        @Override
+        public @NotNull ConnectionSide side() {
+            return ConnectionSide.SERVER;
         }
     }
 
@@ -169,6 +210,11 @@ public interface PacketRegistry<T> {
                     // Empty
             );
         }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.HANDSHAKE;
+        }
     }
 
     final class ServerStatus extends Server {
@@ -177,6 +223,11 @@ public interface PacketRegistry<T> {
                     entry(ResponsePacket.class, ResponsePacket.SERIALIZER),
                     entry(PingResponsePacket.class, PingResponsePacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.STATUS;
         }
     }
 
@@ -190,6 +241,11 @@ public interface PacketRegistry<T> {
                     entry(LoginPluginRequestPacket.class, LoginPluginRequestPacket.SERIALIZER),
                     entry(CookieRequestPacket.class, CookieRequestPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.LOGIN;
         }
     }
 
@@ -214,6 +270,11 @@ public interface PacketRegistry<T> {
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
             );
+        }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.CONFIGURATION;
         }
     }
 
@@ -353,10 +414,15 @@ public interface PacketRegistry<T> {
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER)
             );
         }
+
+        @Override
+        public @NotNull ConnectionState state() {
+            return ConnectionState.PLAY;
+        }
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
+    abstract sealed class PacketRegistryTemplate<T> implements PacketRegistry<T> {
         private final PacketInfo<? extends T>[] suppliers;
         private final ClassValue<PacketInfo<T>> packetIds = new ClassValue<>() {
             @Override
@@ -366,7 +432,7 @@ public interface PacketRegistry<T> {
                         return (PacketInfo<T>) info;
                     }
                 }
-                throw new IllegalStateException("Packet type " + type + " isn't registered!");
+                throw new IllegalStateException("Packet type " + type + " cannot be sent in state " + side().name() + "_" + state().name() + "!");
             }
         };
 
@@ -405,6 +471,8 @@ public interface PacketRegistry<T> {
             return info;
         }
 
+
+
         record Entry<T>(Class<T> type, NetworkBuffer.Type<T> reader) {
         }
 
@@ -412,5 +480,10 @@ public interface PacketRegistry<T> {
         static <T> Entry<T> entry(Class<T> type, NetworkBuffer.Type<T> reader) {
             return new Entry<>((Class) type, reader);
         }
+    }
+
+    enum ConnectionSide {
+        CLIENT,
+        SERVER
     }
 }
