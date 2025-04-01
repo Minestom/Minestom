@@ -66,6 +66,7 @@ public final class ServerFlag {
 
     // Entities
     public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
+    public static final boolean USE_FAST_TOUCH = booleanProperty("minestom.entity-fast-touch", true);
 
     // Experimental/Unstable
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");

@@ -2341,4 +2341,18 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public @NotNull Acquirable<? extends Player> acquirable() {
         return (Acquirable<? extends Player>) super.acquirable();
     }
+
+    @Override
+    protected boolean isTickingTouch() {
+        return gameMode != GameMode.SPECTATOR && super.isTickingTouch();
+    }
+
+    /*
+      Players are missing the fast touch feature because it is not compatible with the player's.
+      (Missing XZ, +Y from engine)
+     */
+    @Override
+    protected boolean isFastTouch() {
+        return false;
+    }
 }
