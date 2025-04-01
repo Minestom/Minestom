@@ -259,7 +259,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(BYTE, TAG_COMPOUND);
             buffer.write(STRING_IO_UTF8, "value");
             writeInnerComponent(buffer, (Component) hoverEvent.value());
-            buffer.write(BYTE, TAG_END);
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ITEM) {
             var value = ((HoverEvent<HoverEvent.ShowItem>) hoverEvent).value();
 
@@ -303,7 +302,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             }
 
             buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "type");
+            buffer.write(STRING_IO_UTF8, "id");
             buffer.write(STRING_IO_UTF8, value.type().asString());
 
             buffer.write(BYTE, TAG_STRING);
