@@ -388,9 +388,9 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         var insertion = style.insertion();
         if (insertion != null) compound.putString("insertion", insertion);
         var clickEvent = style.clickEvent();
-        if (clickEvent != null) compound.put("clickEvent", serializeClickEvent(clickEvent));
+        if (clickEvent != null) compound.put("click_event", serializeClickEvent(clickEvent));
         var hoverEvent = style.hoverEvent();
-        if (hoverEvent != null) compound.put("hoverEvent", serializeHoverEvent(hoverEvent));
+        if (hoverEvent != null) compound.put("hover_event", serializeHoverEvent(hoverEvent));
 
         return compound.build();
     }
