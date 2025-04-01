@@ -17,12 +17,12 @@ import java.util.function.Supplier;
  * <p>
  * The cache is stored in a {@link SoftReference} and is invalidated when {@link #invalidate()} is called.
  * <p>
- * Packet supplier must be thread-safe.
+ * Packet supplier must be thread-safe, but we ensure its only called once during contention.
  */
 @ApiStatus.Internal
 public final class CachedPacket implements SendablePacket {
     private final Supplier<ServerPacket> packetSupplier;
-    private volatile SoftReference<FramedPacket> packet;
+    private volatile SoftReference<FramedPacket> packetRef;
 
     public CachedPacket(@NotNull Supplier<@NotNull ServerPacket> packetSupplier) {
         this.packetSupplier = packetSupplier;
@@ -33,7 +33,7 @@ public final class CachedPacket implements SendablePacket {
     }
 
     public void invalidate() {
-        this.packet = null;
+        this.packetRef = null;
     }
 
     public @NotNull ServerPacket packet(@NotNull ConnectionState state) {
@@ -49,26 +49,36 @@ public final class CachedPacket implements SendablePacket {
     private @Nullable FramedPacket updatedCache(@NotNull ConnectionState state) {
         if (!ServerFlag.CACHED_PACKET)
             return null;
-        SoftReference<FramedPacket> ref = packet;
+        SoftReference<FramedPacket> ref = this.packetRef;
         FramedPacket cache;
-        if (ref == null || (cache = ref.get()) == null) {
+
+        if (ref != null && (cache = ref.get()) != null) {
+            return cache;
+        }
+
+        synchronized (this) {
+            ref = this.packetRef;
+            if (ref != null && (cache = ref.get()) != null) {
+                return cache;
+            }
+
             final ServerPacket packet = packetSupplier.get();
             final NetworkBuffer buffer = PacketWriting.allocateTrimmedPacket(state, packet,
                     MinecraftServer.getCompressionThreshold());
             cache = new FramedPacket(packet, buffer);
-            this.packet = new SoftReference<>(cache);
+            this.packetRef = new SoftReference<>(cache);
         }
         return cache;
     }
 
     public boolean isValid() {
-        final SoftReference<FramedPacket> ref = packet;
+        final SoftReference<FramedPacket> ref = packetRef;
         return ref != null && ref.get() != null;
     }
 
     @Override
     public String toString() {
-        final SoftReference<FramedPacket> ref = packet;
+        final SoftReference<FramedPacket> ref = packetRef;
         final FramedPacket cache = ref != null ? ref.get() : null;
         return String.format("CachedPacket{cache=%s}", cache);
     }
