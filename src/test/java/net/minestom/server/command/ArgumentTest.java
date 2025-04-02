@@ -48,7 +48,7 @@ public class ArgumentTest {
         arg.setSuggestionCallback((sender, context, suggestion) -> suggestion.addEntry(new SuggestionEntry("entry")));
         assertTrue(arg.hasSuggestion());
 
-        Suggestion suggestion = new Suggestion("input", 2, 4);
+        Suggestion suggestion = new Suggestion("input", 2, 3);
         arg.getSuggestionCallback().apply(new ServerSender(), new CommandContext("input"), suggestion);
 
         assertEquals(suggestion.getEntries(), List.of(new SuggestionEntry("entry")));
