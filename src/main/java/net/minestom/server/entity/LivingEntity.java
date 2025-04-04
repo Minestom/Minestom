@@ -336,10 +336,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+                sendPacketToViewersAndSelf(new DamageEventPacket(
+                        getEntityId(), damage.getTypeId(),
+                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
+                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1,
+                        damage.getSourcePosition()
+                ));
             }
-
-            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
 
             // Additional hearts support
             if (this instanceof Player player) {
