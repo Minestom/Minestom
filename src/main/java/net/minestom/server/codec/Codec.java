@@ -8,6 +8,7 @@ import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
@@ -119,7 +120,7 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return new CodecImpl.OptionalImpl<>(this, defaultValue);
     }
 
-    default <S> @NotNull Codec<S> transform(@NotNull Function<T, S> to, @NotNull Function<S, T> from) {
+    default <S> @NotNull Codec<S> transform(@NotNull ThrowingFunction<T, S> to, @NotNull ThrowingFunction<S, T> from) {
         return new CodecImpl.TransformImpl<>(this, to, from);
     }
 
