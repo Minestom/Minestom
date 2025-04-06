@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
@@ -191,15 +192,15 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockImpl.values();
+        return BlockImpl.REGISTRY.values();
     }
 
-    static @Nullable Block fromKey(@NotNull String key) {
-        return BlockImpl.getSafe(key);
+    static @Nullable Block fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Block fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return BlockImpl.REGISTRY.get(key);
     }
 
     static @Nullable Block fromStateId(int stateId) {
@@ -207,7 +208,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockImpl.getId(blockId);
+        return BlockImpl.REGISTRY.get(blockId);
     }
 
     @FunctionalInterface

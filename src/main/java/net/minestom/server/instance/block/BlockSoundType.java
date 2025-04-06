@@ -1,12 +1,15 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
 
 /**
  * Represents a BlockSoundType object, a set of sounds associated with a particular block (or group of blocks).
@@ -26,14 +29,6 @@ public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundT
     @NotNull
     default Key key() {
         return registry().key();
-    }
-
-    static @Nullable BlockSoundType fromKey(@NotNull String key) {
-        return BlockSoundImpl.getSafe(key);
-    }
-
-    static @Nullable BlockSoundType fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
     }
 
     default float volume() {
@@ -67,4 +62,17 @@ public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundT
     default int id() {
         return 0; // Not sent through packets in the protocol, also must be between 0 and [size of block sound type list] because id mappings are stored in an array
     }
+
+    static @NotNull Collection<@NotNull BlockSoundType> values() {
+        return BlockSoundImpl.REGISTRY.values();
+    }
+
+    static @Nullable BlockSoundType fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
+    }
+
+    static @Nullable BlockSoundType fromKey(@NotNull Key key) {
+        return BlockSoundImpl.REGISTRY.get(key);
+    }
+
 }

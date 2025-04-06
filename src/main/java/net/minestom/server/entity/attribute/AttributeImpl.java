@@ -1,28 +1,18 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 record AttributeImpl(@NotNull RegistryData.AttributeEntry registry) implements Attribute {
-    private static final RegistryData.Container<Attribute> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.ATTRIBUTES,
+    static final StaticRegistry<Attribute> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.ATTRIBUTES, "minecraft:attribute",
             (namespace, properties) -> new AttributeImpl(RegistryData.attribute(namespace, properties)));
 
-    static Attribute get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Attribute getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Attribute getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<Attribute> values() {
-        return CONTAINER.values();
+    static @UnknownNullability Attribute get(@NotNull String namespace) {
+        return REGISTRY.get(Key.key(namespace));
     }
 
     @Override

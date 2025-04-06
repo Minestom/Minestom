@@ -3,8 +3,10 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.MergedMap;
@@ -39,7 +41,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<Properties, Block>
     private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final RegistryData.Container<Block> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.BLOCKS,
+    static final StaticRegistry<Block> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.BLOCKS, "minecraft:block",
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
                 final RegistryData.Properties stateObject = properties.section("states");
@@ -105,24 +108,12 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         POSSIBLE_STATES.trim();
     }
 
-    static Block get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Block getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Block getId(int id) {
-        return CONTAINER.getId(id);
+    static @UnknownNullability Block get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     static Block getState(int stateId) {
         return BLOCK_STATE_MAP.get(stateId);
-    }
-
-    static Collection<Block> values() {
-        return CONTAINER.values();
     }
 
     @Override

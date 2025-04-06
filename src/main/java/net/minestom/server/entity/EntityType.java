@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryData;
@@ -42,18 +43,18 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
     }
 
     static @NotNull Collection<@NotNull EntityType> values() {
-        return EntityTypeImpl.values();
+        return EntityTypeImpl.REGISTRY.values();
     }
 
-    static EntityType fromKey(@NotNull String key) {
-        return EntityTypeImpl.getSafe(key);
+    static @Nullable EntityType fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
-    static EntityType fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+    static @Nullable EntityType fromKey(@NotNull Key key) {
+        return EntityTypeImpl.REGISTRY.get(key);
     }
 
     static @Nullable EntityType fromId(int id) {
-        return EntityTypeImpl.getId(id);
+        return EntityTypeImpl.REGISTRY.get(id);
     }
 }

@@ -1,6 +1,7 @@
 package net.minestom.server.entity.attribute;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryData;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 
 public sealed interface Attribute extends StaticProtocolObject, Attributes permits AttributeImpl {
-    @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(AttributeImpl::getId, Attribute::id);
+    @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
     @NotNull Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
 
     @Contract(pure = true)
@@ -45,19 +46,19 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     }
 
     static @NotNull Collection<@NotNull Attribute> values() {
-        return AttributeImpl.values();
+        return AttributeImpl.REGISTRY.values();
     }
 
-    static @Nullable Attribute fromKey(@NotNull String key) {
-        return AttributeImpl.getSafe(key);
+    static @Nullable Attribute fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Attribute fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return AttributeImpl.REGISTRY.get(key);
     }
 
     static @Nullable Attribute fromId(int id) {
-        return AttributeImpl.getId(id);
+        return AttributeImpl.REGISTRY.get(id);
     }
 
 }
