@@ -11,6 +11,7 @@ import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.ThrowingFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,8 +83,8 @@ final class CodecImpl {
         }
     }
 
-    record TransformImpl<T, S>(@NotNull Codec<T> inner, @NotNull Function<T, S> to,
-                               @NotNull Function<S, T> from) implements Codec<S> {
+    record TransformImpl<T, S>(@NotNull Codec<T> inner, @NotNull ThrowingFunction<T, S> to,
+                               @NotNull ThrowingFunction<S, T> from) implements Codec<S> {
         @Override
         public @NotNull <D> Result<S> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             try {
