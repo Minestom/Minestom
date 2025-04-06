@@ -2,6 +2,7 @@ package net.minestom.server.game;
 
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
@@ -25,33 +26,20 @@ public sealed interface GameEvent extends StaticProtocolObject permits GameEvent
     @Nullable
     RegistryData.GameEventEntry registry();
 
-    /**
-     * Gets the game events from the registry.
-     *
-     * @return the game events
-     */
     static @NotNull Collection<@NotNull GameEvent> values() {
-        return GameEventImpl.values();
+        return GameEventImpl.REGISTRY.values();
     }
 
-    /**
-     * Gets a game event by its namespace ID.
-     *
-     * @param key the namespace ID
-     * @return the game event or null if not found
-     */
-    static @Nullable GameEvent fromKey(@NotNull String key) {
-        return GameEventImpl.getSafe(key);
+    static @Nullable GameEvent fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
-    /**
-     * Gets a game event by its namespace ID.
-     *
-     * @param key the event key
-     * @return the game event or null if not found
-     */
     static @Nullable GameEvent fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return GameEventImpl.REGISTRY.get(key);
+    }
+
+    static @Nullable GameEvent fromId(int id) {
+        return GameEventImpl.REGISTRY.get(id);
     }
 
 }

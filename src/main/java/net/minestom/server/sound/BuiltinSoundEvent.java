@@ -3,28 +3,17 @@ package net.minestom.server.sound;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject, SoundEvent {
-    private static final RegistryData.Container<BuiltinSoundEvent> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.SOUNDS,
+    static final StaticRegistry<BuiltinSoundEvent> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.SOUNDS, "minecraft:sound_event",
             (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id")));
 
-    static SoundEvent get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static SoundEvent getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static SoundEvent getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<? extends SoundEvent> values() {
-        return CONTAINER.values();
+    static @UnknownNullability SoundEvent get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

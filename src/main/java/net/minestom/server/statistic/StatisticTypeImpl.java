@@ -2,28 +2,16 @@ package net.minestom.server.statistic;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-
 record StatisticTypeImpl(Key key, int id) implements StatisticType {
-    private static final RegistryData.Container<StatisticType> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.STATISTICS,
+    static final StaticRegistry<StatisticType> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.STATISTICS, "minecraft:statistic_type",
             (namespace, properties) -> new StatisticTypeImpl(Key.key(namespace), properties.getInt("id")));
 
-    static StatisticType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static StatisticType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static StatisticType getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<StatisticType> values() {
-        return CONTAINER.values();
+    static StatisticType get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

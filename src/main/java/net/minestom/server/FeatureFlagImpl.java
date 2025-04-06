@@ -2,23 +2,17 @@ package net.minestom.server;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
 record FeatureFlagImpl(@NotNull RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
-
-    private static final RegistryData.Container<FeatureFlagImpl> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.FEATURE_FLAGS,
+    static final StaticRegistry<FeatureFlag> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.FEATURE_FLAGS, "minecraft:feature_flag",
             (namespace, properties) -> new FeatureFlagImpl(RegistryData.featureFlag(namespace, properties)));
 
-    static FeatureFlag get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static FeatureFlag getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static FeatureFlag getId(int id) {
-        return CONTAINER.getId(id);
+    static @UnknownNullability FeatureFlag get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

@@ -1,23 +1,18 @@
 package net.minestom.server.instance.block;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 public record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
-    private static final RegistryData.Container<BlockSoundType> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.BLOCK_SOUND_TYPES,
+    static final StaticRegistry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.BLOCK_SOUND_TYPES, "minecraft:block_sound_type",
             (namespace, properties) -> new BlockSoundImpl(RegistryData.blockSoundTypeEntry(namespace, properties)));
 
-    static BlockSoundType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
+    static @UnknownNullability BlockSoundType get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
-    static BlockSoundType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Collection<BlockSoundType> values() {
-        return CONTAINER.values();
-    }
 }
