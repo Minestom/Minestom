@@ -136,7 +136,7 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     }
 
     @Override
-    public void sendSlotRefresh(int slot, @NotNull ItemStack item, @NotNull ItemStack previous) {
+    public void sendSlotRefresh(int slot, @NotNull ItemStack item) {
         if (slot < 0 || slot > INVENTORY_SIZE)
             return; // Sanity check
         // See note in PlayerInventoryUtils about why we do this conversion
