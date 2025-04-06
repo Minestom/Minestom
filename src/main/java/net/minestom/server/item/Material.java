@@ -1,6 +1,7 @@
 package net.minestom.server.item;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
@@ -17,8 +18,8 @@ import java.util.Collection;
 
 public sealed interface Material extends StaticProtocolObject, Materials permits MaterialImpl {
 
-    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(MaterialImpl::getId, Material::id);
-    Codec<Material> CODEC = Codec.STRING.transform(MaterialImpl::getSafe, Material::name);
+    NetworkBuffer.Type<Material> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Material::fromId, Material::id);
+    Codec<Material> CODEC = Codec.KEY.transform(Material::fromKey, Material::key);
 
     /**
      * Returns the raw registry data for the material.
@@ -57,18 +58,18 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
     }
 
     static @NotNull Collection<@NotNull Material> values() {
-        return MaterialImpl.values();
+        return MaterialImpl.REGISTRY.values();
     }
 
-    static @Nullable Material fromKey(@NotNull String key) {
-        return MaterialImpl.getSafe(key);
+    static @Nullable Material fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Material fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return MaterialImpl.REGISTRY.get(key);
     }
 
     static @Nullable Material fromId(int id) {
-        return MaterialImpl.getId(id);
+        return MaterialImpl.REGISTRY.get(id);
     }
 }

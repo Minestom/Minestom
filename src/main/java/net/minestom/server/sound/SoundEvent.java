@@ -1,6 +1,7 @@
 package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.codec.Codec;
@@ -35,7 +36,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
         @Override
         public SoundEvent read(@NotNull NetworkBuffer buffer) {
             int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
-            if (id != -1) return BuiltinSoundEvent.getId(id);
+            if (id != -1) return BuiltinSoundEvent.REGISTRY.get(id);
 
             return new CustomSoundEvent(buffer.read(NetworkBuffer.KEY),
                     buffer.read(NetworkBuffer.FLOAT.optional()));
@@ -46,7 +47,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
         public @NotNull <D> Result<SoundEvent> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
-                final SoundEvent soundEvent = BuiltinSoundEvent.getSafe(string);
+                final SoundEvent soundEvent = BuiltinSoundEvent.get(string);
                 if (soundEvent == null) return new Result.Error<>("Unknown sound event: " + string);
                 return new Result.Ok<>(soundEvent);
             }
@@ -71,7 +72,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * Get all the builtin sound events. Resource pack sounds will never be returned from this method.
      */
     static @NotNull Collection<? extends SoundEvent> values() {
-        return BuiltinSoundEvent.values();
+        return BuiltinSoundEvent.REGISTRY.values();
     }
 
     /**
@@ -80,8 +81,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromKey(@NotNull String key) {
-        return BuiltinSoundEvent.getSafe(key);
+    static @Nullable SoundEvent fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     /**
@@ -91,7 +92,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @return the sound event, or null if not found
      */
     static @Nullable SoundEvent fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return BuiltinSoundEvent.REGISTRY.get(key);
     }
 
     /**
@@ -101,7 +102,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @return the sound event, or null if not found
      */
     static @Nullable SoundEvent fromId(int id) {
-        return BuiltinSoundEvent.getId(id);
+        return BuiltinSoundEvent.REGISTRY.get(id);
     }
 
     /**

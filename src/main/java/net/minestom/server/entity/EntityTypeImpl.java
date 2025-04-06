@@ -1,28 +1,18 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 record EntityTypeImpl(RegistryData.EntityEntry registry) implements EntityType {
-    private static final RegistryData.Container<EntityType> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.ENTITIES,
+    static final StaticRegistry<EntityType> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.ENTITIES, "minecraft:entity_type",
             (namespace, properties) -> new EntityTypeImpl(RegistryData.entity(namespace, properties)));
 
-    static EntityType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static EntityType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static EntityType getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<EntityType> values() {
-        return CONTAINER.values();
+    static @UnknownNullability EntityType get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

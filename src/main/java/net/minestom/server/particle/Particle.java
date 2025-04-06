@@ -1,6 +1,7 @@
 package net.minestom.server.particle;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -56,19 +57,19 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
     };
 
     static @NotNull Collection<@NotNull Particle> values() {
-        return ParticleImpl.values();
+        return ParticleImpl.REGISTRY.values();
     }
 
-    static @Nullable Particle fromKey(@NotNull String key) {
-        return ParticleImpl.getSafe(key);
+    static @Nullable Particle fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Particle fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return ParticleImpl.REGISTRY.get(key);
     }
 
     static @Nullable Particle fromId(int id) {
-        return ParticleImpl.getId(id);
+        return ParticleImpl.REGISTRY.get(id);
     }
 
     @NotNull Particle readData(@NotNull NetworkBuffer reader);

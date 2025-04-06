@@ -116,7 +116,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
+    public static <T extends StaticProtocolObject> StaticRegistry<T> createStaticRegistry(Resource resource, String registryId, Loader<T> loader) {
         var entries = RegistryData.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
@@ -127,53 +127,11 @@ public final class RegistryData {
             ids.set(value.id(), value);
             namespaces.put(value.name(), value);
         }
-        return new Container<>(resource, namespaces, ids);
+        return new StaticRegistry<>(registryId, namespaces, ids);
     }
 
-    @ApiStatus.Internal
-    public record Container<T extends StaticProtocolObject>(Resource resource,
-                                                            Map<String, T> namespaces,
-                                                            ObjectArray<T> ids) {
-        public Container {
-            namespaces = Map.copyOf(namespaces);
-            ids.trim();
-        }
-
-        public T get(@NotNull String namespace) {
-            return namespaces.get(namespace);
-        }
-
-        public T getSafe(@NotNull String namespace) {
-            return get(namespace.contains(":") ? namespace : "minecraft:" + namespace);
-        }
-
-        public T getId(int id) {
-            return ids.get(id);
-        }
-
-        public int toId(@NotNull String namespace) {
-            return get(namespace).id();
-        }
-
-        public Collection<T> values() {
-            return namespaces.values();
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (!(o instanceof Container<?> container)) return false;
-            return resource == container.resource;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(resource);
-        }
-
-        public interface Loader<T extends ProtocolObject> {
-            T get(String namespace, Properties properties);
-        }
+    public interface Loader<T extends ProtocolObject> {
+        T get(String namespace, Properties properties);
     }
 
     @ApiStatus.Internal

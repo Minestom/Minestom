@@ -25,7 +25,7 @@ import java.util.Objects;
  * @param <T> The type of the registry entries
  * @see Registries
  */
-public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
+public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
     /**
      * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
@@ -98,51 +98,6 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
         return registry;
     }
-
-    @NotNull String id();
-
-    @Nullable T get(int id);
-    @Nullable T get(@NotNull net.kyori.adventure.key.Key key);
-    default @Nullable T get(@NotNull Key<T> key) {
-        return get(key.key());
-    }
-
-    @Nullable Key<T> getKey(int id);
-    @Nullable Key<T> getKey(@NotNull T value);
-    @Nullable net.kyori.adventure.key.Key getName(int id);
-    @Nullable DataPack getPack(int id);
-    default @Nullable DataPack getPack(@NotNull Key<T> key) {
-        final int id = getId(key);
-        return id == -1 ? null : getPack(id);
-    }
-
-    /**
-     * Returns the protocol ID associated with the given {@link net.kyori.adventure.key.Key}, or -1 if none is registered.
-     *
-     * @see #register(net.kyori.adventure.key.Key, T)
-     */
-    int getId(@NotNull net.kyori.adventure.key.Key id);
-
-    /**
-     * Returns the protocol ID associated with the given {@link Key}, or -1 if none is registered.
-     *
-     * @see #register(net.kyori.adventure.key.Key, T)
-     */
-    default int getId(@NotNull Key<T> key) {
-        return getId(key.key());
-    }
-
-
-    /**
-     * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
-     * to the protocol ID of each entry.</p>
-     *
-     * <p>Note: The returned list is not guaranteed to update with the registry,
-     * it should be fetched again for updated values.</p>
-     *
-     * @return An immutable list of the entries in this registry.
-     */
-    @NotNull List<T> values();
 
     /**
      * <p>Register an object to this registry, overwriting the previous entry if any is present.</p>
