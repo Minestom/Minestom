@@ -91,7 +91,7 @@ public non-sealed class Inventory extends AbstractInventory {
         if (!this.viewers.add(player)) return false;
 
         // Also send the open window packet
-        player.sendPacket(new OpenWindowPacket(id, inventoryType.getWindowType(), title));
+        player.sendPacket(new OpenWindowPacket(id, getInventoryType().getWindowType(), title));
         update(player);
         return true;
     }
