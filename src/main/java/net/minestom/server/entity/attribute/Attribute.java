@@ -3,7 +3,7 @@ package net.minestom.server.entity.attribute;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     @NotNull Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
 
     @Contract(pure = true)
-    @NotNull Registry.AttributeEntry registry();
+    @NotNull RegistryData.AttributeEntry registry();
 
     @Override
     default @NotNull Key key() {

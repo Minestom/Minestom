@@ -4,7 +4,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,7 +34,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:chat_type", REGISTRY_CODEC, Registry.Resource.CHAT_TYPES);
+        return DynamicRegistry.create("minecraft:chat_type", REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
     }
 
     @NotNull ChatTypeDecoration chat();

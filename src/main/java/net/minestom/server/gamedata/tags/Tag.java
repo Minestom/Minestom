@@ -85,28 +85,28 @@ public final class Tag implements ProtocolObject, Keyed {
     }
 
     public enum BasicType {
-        BLOCKS("minecraft:block", Registry.Resource.BLOCK_TAGS,
+        BLOCKS("minecraft:block", RegistryData.Resource.BLOCK_TAGS,
                 (blockName, registries) -> Optional.ofNullable(Block.fromKey(blockName)).map(Block::id)),
-        ITEMS("minecraft:item", Registry.Resource.ITEM_TAGS,
+        ITEMS("minecraft:item", RegistryData.Resource.ITEM_TAGS,
                 (itemName, registries) -> Optional.ofNullable(Material.fromKey(itemName)).map(Material::id)),
-        FLUIDS("minecraft:fluid", Registry.Resource.FLUID_TAGS,
+        FLUIDS("minecraft:fluid", RegistryData.Resource.FLUID_TAGS,
                 (name, registries) -> Optional.of(name).map(FluidRegistries::getFluid).map(Enum::ordinal)),
-        ENTITY_TYPES("minecraft:entity_type", Registry.Resource.ENTITY_TYPE_TAGS,
+        ENTITY_TYPES("minecraft:entity_type", RegistryData.Resource.ENTITY_TYPE_TAGS,
                 (entityName, registries) -> Optional.ofNullable(EntityType.fromKey(entityName)).map(EntityType::id)),
-        GAME_EVENTS("minecraft:game_event", Registry.Resource.GAMEPLAY_TAGS,
+        GAME_EVENTS("minecraft:game_event", RegistryData.Resource.GAMEPLAY_TAGS,
                 (eventName, registries) -> Optional.ofNullable(GameEvent.fromKey(eventName)).map(GameEvent::id)),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
         POTION_EFFECTS("minecraft:potion_effect", null, null), // Seems not to be included in server data
 
-        ENCHANTMENTS("minecraft:enchantment", Registry.Resource.ENCHANTMENT_TAGS,
+        ENCHANTMENTS("minecraft:enchantment", RegistryData.Resource.ENCHANTMENT_TAGS,
                 (name, registries) -> Optional.of(DynamicRegistry.Key.of(name))
                         .map(DynamicRegistry.Key::key)
                         .map(registries.enchantment()::getId)),
-        BIOMES("minecraft:worldgen/biome", Registry.Resource.BIOME_TAGS,
+        BIOMES("minecraft:worldgen/biome", RegistryData.Resource.BIOME_TAGS,
                 (name, registries) -> Optional.of(DynamicRegistry.Key.of(name))
                         .map(DynamicRegistry.Key::key)
                         .map(registries.biome()::getId)),
-        INSTRUMENTS("minecraft:instrument", Registry.Resource.INSTRUMENT_TAGS,
+        INSTRUMENTS("minecraft:instrument", RegistryData.Resource.INSTRUMENT_TAGS,
                 (name, registries) -> Optional.of(DynamicRegistry.Key.of(name))
                         .map(DynamicRegistry.Key::key)
                         .map(registries.instrument()::getId)),
@@ -114,11 +114,11 @@ public final class Tag implements ProtocolObject, Keyed {
 
         private static final BasicType[] VALUES = values();
         private final String identifier;
-        private final Registry.Resource resource;
+        private final RegistryData.Resource resource;
         private final BiFunction<String, Registries, Optional<Integer>> function;
 
         BasicType(@NotNull String identifier,
-                  @Nullable Registry.Resource resource,
+                  @Nullable RegistryData.Resource resource,
                   @Nullable BiFunction<String, Registries, Optional<Integer>> function) {
             this.identifier = identifier;
             this.resource = resource;
@@ -129,7 +129,7 @@ public final class Tag implements ProtocolObject, Keyed {
             return identifier;
         }
 
-        public Registry.Resource getResource() {
+        public RegistryData.Resource getResource() {
             return resource;
         }
 

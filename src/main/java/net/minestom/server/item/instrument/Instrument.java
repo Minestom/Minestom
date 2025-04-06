@@ -48,7 +48,7 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:instrument", REGISTRY_CODEC, Registry.Resource.INSTRUMENTS);
+        return DynamicRegistry.create("minecraft:instrument", REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
     }
 
     @NotNull SoundEvent soundEvent();

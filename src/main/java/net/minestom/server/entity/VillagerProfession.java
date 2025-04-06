@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -15,7 +15,7 @@ public sealed interface VillagerProfession extends StaticProtocolObject, Village
     Codec<VillagerProfession> NBT_TYPE = Codec.STRING.transform(VillagerProfessionImpl::getSafe, VillagerProfession::name);
 
     @Contract(pure = true)
-    @NotNull Registry.VillagerProfessionEntry registry();
+    @NotNull RegistryData.VillagerProfessionEntry registry();
 
     @Override
     default @NotNull Key key() {
