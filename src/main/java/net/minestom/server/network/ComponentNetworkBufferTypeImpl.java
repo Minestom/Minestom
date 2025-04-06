@@ -217,15 +217,40 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
 
     private void writeClickEvent(@NotNull NetworkBuffer buffer, @NotNull ClickEvent clickEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
-        buffer.write(STRING_IO_UTF8, "clickEvent");
+        buffer.write(STRING_IO_UTF8, "click_event");
 
         buffer.write(BYTE, TAG_STRING);
         buffer.write(STRING_IO_UTF8, "action");
         buffer.write(STRING_IO_UTF8, clickEvent.action().name().toLowerCase(Locale.ROOT));
 
-        buffer.write(BYTE, TAG_STRING);
-        buffer.write(STRING_IO_UTF8, "value");
-        buffer.write(STRING_IO_UTF8, clickEvent.value());
+        switch (clickEvent.action()) {
+            case OPEN_URL -> {
+                buffer.write(BYTE, TAG_STRING);
+                buffer.write(STRING_IO_UTF8, "url");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
+            }
+            case OPEN_FILE -> {
+                buffer.write(BYTE, TAG_STRING);
+                buffer.write(STRING_IO_UTF8, "path");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
+            }
+            case RUN_COMMAND, SUGGEST_COMMAND -> {
+                buffer.write(BYTE, TAG_STRING);
+                buffer.write(STRING_IO_UTF8, "command");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
+            }
+            case CHANGE_PAGE -> {
+                buffer.write(BYTE, TAG_INT);
+                buffer.write(STRING_IO_UTF8, "page");
+                int page = Integer.parseInt(clickEvent.value());
+                buffer.write(INT, page);
+            }
+            default -> { // Includes COPY_TO_CLIPBOARD
+                buffer.write(BYTE, TAG_STRING);
+                buffer.write(STRING_IO_UTF8, "value");
+                buffer.write(STRING_IO_UTF8, clickEvent.value());
+            }
+        }
 
         buffer.write(BYTE, TAG_END);
     }
@@ -233,15 +258,15 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
     @SuppressWarnings("unchecked")
     private void writeHoverEvent(@NotNull NetworkBuffer buffer, @NotNull HoverEvent<?> hoverEvent) {
         buffer.write(BYTE, TAG_COMPOUND);
-        buffer.write(STRING_IO_UTF8, "hoverEvent");
+        buffer.write(STRING_IO_UTF8, "hover_event");
 
         buffer.write(BYTE, TAG_STRING);
         buffer.write(STRING_IO_UTF8, "action");
         buffer.write(STRING_IO_UTF8, hoverEvent.action().toString().toLowerCase(Locale.ROOT));
 
-        buffer.write(BYTE, TAG_COMPOUND); // Start contents tag
-        buffer.write(STRING_IO_UTF8, "contents");
         if (hoverEvent.action() == HoverEvent.Action.SHOW_TEXT) {
+            buffer.write(BYTE, TAG_COMPOUND);
+            buffer.write(STRING_IO_UTF8, "value");
             writeInnerComponent(buffer, (Component) hoverEvent.value());
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ITEM) {
             var value = ((HoverEvent<HoverEvent.ShowItem>) hoverEvent).value();
@@ -275,8 +300,6 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
                 }
             }
             buffer.write(BYTE, TAG_END);
-
-            buffer.write(BYTE, TAG_END); // End contents tag
         } else if (hoverEvent.action() == HoverEvent.Action.SHOW_ENTITY) {
             var value = ((HoverEvent<HoverEvent.ShowEntity>) hoverEvent).value();
 
@@ -288,14 +311,12 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             }
 
             buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "type");
+            buffer.write(STRING_IO_UTF8, "id");
             buffer.write(STRING_IO_UTF8, value.type().asString());
 
             buffer.write(BYTE, TAG_STRING);
-            buffer.write(STRING_IO_UTF8, "id");
+            buffer.write(STRING_IO_UTF8, "uuid");
             buffer.write(STRING_IO_UTF8, value.id().toString());
-
-            buffer.write(BYTE, TAG_END); // End contents tag
         } else {
             throw new UnsupportedOperationException("Unknown hover event action: " + hoverEvent.action());
         }
