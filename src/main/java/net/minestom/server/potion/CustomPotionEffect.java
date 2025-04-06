@@ -23,7 +23,7 @@ public record CustomPotionEffect(@NotNull PotionEffect id, @NotNull Settings set
 
     public static final BinaryTagSerializer<CustomPotionEffect> NBT_TYPE = BinaryTagSerializer.lazy(() -> BinaryTagSerializer.COMPOUND.map(
             tag -> new CustomPotionEffect(
-                    PotionEffect.fromNamespaceId(tag.getString("id")),
+                    PotionEffect.fromKey(tag.getString("id")),
                     Settings.NBT_TYPE.read(tag)),
             value -> CompoundBinaryTag.builder()
                     .putString("id", value.id.name())

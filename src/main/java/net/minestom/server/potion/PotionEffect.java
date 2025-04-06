@@ -1,9 +1,9 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,8 +18,8 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
     @NotNull Registry.PotionEffectEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -31,12 +31,12 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
         return PotionEffectImpl.values();
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull String namespaceID) {
-        return PotionEffectImpl.getSafe(namespaceID);
+    static @Nullable PotionEffect fromKey(@NotNull String key) {
+        return PotionEffectImpl.getSafe(key);
     }
 
-    static @Nullable PotionEffect fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable PotionEffect fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable PotionEffect fromId(int id) {

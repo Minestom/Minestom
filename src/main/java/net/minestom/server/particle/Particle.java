@@ -1,5 +1,6 @@
 package net.minestom.server.particle;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.util.RGBLike;
 import net.minestom.server.color.AlphaColor;
@@ -8,7 +9,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
@@ -46,12 +46,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         return ParticleImpl.values();
     }
 
-    static @Nullable Particle fromNamespaceId(@NotNull String namespaceID) {
-        return ParticleImpl.getSafe(namespaceID);
+    static @Nullable Particle fromKey(@NotNull String key) {
+        return ParticleImpl.getSafe(key);
     }
 
-    static @Nullable Particle fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Particle fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Particle fromId(int id) {
@@ -64,7 +64,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     @NotNull CompoundBinaryTag toNbt();
 
-    record Simple(@NotNull NamespaceID namespace, int id) implements Particle {
+    record Simple(@NotNull Key key, int id) implements Particle {
         @Override
         public @NotNull Particle readData(@NotNull NetworkBuffer reader) {
             return this;
@@ -77,17 +77,17 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .build();
         }
     }
 
-    record Block(@NotNull NamespaceID namespace, int id,
+    record Block(@NotNull Key key, int id,
                  @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Block withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new Block(namespace(), id(), block);
+            return new Block(key(), id(), block);
         }
 
         @Override
@@ -106,18 +106,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
                     .build();
         }
     }
 
-    record BlockMarker(@NotNull NamespaceID namespace, int id,
+    record BlockMarker(@NotNull Key key, int id,
                        @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull BlockMarker withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new BlockMarker(namespace(), id(), block);
+            return new BlockMarker(key(), id(), block);
         }
 
         @Override
@@ -136,18 +136,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
                     .build();
         }
 
     }
 
-    record Dust(@NotNull NamespaceID namespace, int id, @NotNull RGBLike color, float scale) implements Particle {
+    record Dust(@NotNull Key key, int id, @NotNull RGBLike color, float scale) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Dust withProperties(@NotNull RGBLike color, float scale) {
-            return new Dust(namespace(), id(), color, scale);
+            return new Dust(key(), id(), color, scale);
         }
 
         @Contract(pure = true)
@@ -174,19 +174,19 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("color", Color.NBT_TYPE.write(color))
                     .putFloat("scale", scale)
                     .build();
         }
     }
 
-    record DustColorTransition(@NotNull NamespaceID namespace, int id, @NotNull RGBLike color,
+    record DustColorTransition(@NotNull Key key, int id, @NotNull RGBLike color,
                                @NotNull RGBLike transitionColor, float scale) implements Particle {
 
         @Contract(pure = true)
         public @NotNull DustColorTransition withProperties(@NotNull RGBLike color, @NotNull RGBLike transitionColor, float scale) {
-            return new DustColorTransition(namespace, id, color, transitionColor, scale);
+            return new DustColorTransition(key, id, color, transitionColor, scale);
         }
 
         @Contract(pure = true)
@@ -221,7 +221,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putFloat("scale", scale)
                     .put("from_color", Color.NBT_TYPE.write(color))
                     .put("to_color", Color.NBT_TYPE.write(transitionColor))
@@ -229,12 +229,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record DustPillar(@NotNull NamespaceID namespace, int id,
+    record DustPillar(@NotNull Key key, int id,
                       @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull DustPillar withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new DustPillar(namespace(), id(), block);
+            return new DustPillar(key(), id(), block);
         }
 
         @Override
@@ -253,19 +253,19 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
                     .build();
         }
 
     }
 
-    record FallingDust(@NotNull NamespaceID namespace, int id,
+    record FallingDust(@NotNull Key key, int id,
                        @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull FallingDust withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new FallingDust(namespace(), id(), block);
+            return new FallingDust(key(), id(), block);
         }
 
         @Override
@@ -284,18 +284,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
                     .build();
         }
 
     }
 
-    record Item(@NotNull NamespaceID namespace, int id, @NotNull ItemStack item) implements Particle {
+    record Item(@NotNull Key key, int id, @NotNull ItemStack item) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Item withItem(@NotNull ItemStack item) {
-            return new Item(namespace(), id(), item);
+            return new Item(key(), id(), item);
         }
 
         @Override
@@ -311,27 +311,27 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("item", item.toItemNBT())
                     .build();
         }
     }
 
-    record EntityEffect(@NotNull NamespaceID namespace, int id, @NotNull AlphaColor color) implements Particle {
+    record EntityEffect(@NotNull Key key, int id, @NotNull AlphaColor color) implements Particle {
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(@NotNull AlphaColor color) {
-            return new EntityEffect(namespace(), id(), color);
+            return new EntityEffect(key(), id(), color);
         }
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(@NotNull RGBLike color) {
-            return new EntityEffect(namespace(), id(), new AlphaColor(1, color));
+            return new EntityEffect(key(), id(), new AlphaColor(1, color));
         }
 
         @Contract(pure = true)
         public @NotNull EntityEffect withColor(int alpha, @NotNull RGBLike color) {
-            return new EntityEffect(namespace(), id(), new AlphaColor(alpha, color));
+            return new EntityEffect(key(), id(), new AlphaColor(alpha, color));
         }
 
         @Override
@@ -347,17 +347,17 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("color", AlphaColor.NBT_TYPE.write(color))
                     .build();
         }
     }
 
-    record SculkCharge(@NotNull NamespaceID namespace, int id, float roll) implements Particle {
+    record SculkCharge(@NotNull Key key, int id, float roll) implements Particle {
 
         @Contract(pure = true)
         public @NotNull SculkCharge withRoll(float roll) {
-            return new SculkCharge(namespace(), id(), roll);
+            return new SculkCharge(key(), id(), roll);
         }
 
         @Override
@@ -374,17 +374,17 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putFloat("roll", roll)
                     .build();
         }
     }
 
-    record Shriek(@NotNull NamespaceID namespace, int id, int delay) implements Particle {
+    record Shriek(@NotNull Key key, int id, int delay) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Shriek withDelay(int delay) {
-            return new Shriek(namespace(), id(), delay);
+            return new Shriek(key(), id(), delay);
         }
 
         @Override
@@ -400,30 +400,30 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putInt("delay", delay)
                     .build();
         }
     }
 
-    record Vibration(@NotNull NamespaceID namespace, int id, @NotNull SourceType sourceType,
+    record Vibration(@NotNull Key key, int id, @NotNull SourceType sourceType,
                      @Nullable Point sourceBlockPosition, int sourceEntityId, float sourceEntityEyeHeight,
                      int travelTicks) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Vibration withProperties(@NotNull SourceType sourceType, @Nullable Point sourceBlockPosition,
                                                  int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
-            return new Vibration(namespace(), id(), sourceType, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), sourceType, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Contract(pure = true)
         public @NotNull Vibration withSourceBlockPosition(@Nullable Point sourceBlockPosition, int travelTicks) {
-            return new Vibration(namespace(), id(), SourceType.BLOCK, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), SourceType.BLOCK, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Contract(pure = true)
         public @NotNull Vibration withSourceEntity(int sourceEntityId, float sourceEntityEyeHeight, int travelTicks) {
-            return new Vibration(namespace(), id(), SourceType.ENTITY, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
+            return new Vibration(key(), id(), SourceType.ENTITY, sourceBlockPosition, sourceEntityId, sourceEntityEyeHeight, travelTicks);
         }
 
         @Override
@@ -461,35 +461,40 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
     }
 
-    record Trail(@NotNull NamespaceID namespace, int id, @NotNull Point target, @NotNull RGBLike color) implements Particle {
+    record Trail(@NotNull Key key, int id, @NotNull Point target, @NotNull RGBLike color, int duration) implements Particle {
 
-        public @NotNull Trail withProperties(@NotNull Point target, @NotNull RGBLike color) {
-            return new Trail(namespace(), id(), target, color);
+        public @NotNull Trail withProperties(@NotNull Point target, @NotNull RGBLike color, int duration) {
+            return new Trail(key(), id(), target, color, duration);
         }
 
         public @NotNull Trail withTarget(@NotNull Point target) {
-            return new Trail(namespace(), id(), target, color);
+            return new Trail(key(), id(), target, color, duration);
         }
 
         public @NotNull Trail withColor(@NotNull RGBLike color) {
-            return new Trail(namespace(), id(), target, color);
+            return new Trail(key(), id(), target, color, duration);
+        }
+
+        public @NotNull Trail withDuration(int duration) {
+            return new Trail(key(), id(), target, color, duration);
         }
 
         @Override
         public @NotNull Trail readData(@NotNull NetworkBuffer reader) {
-            return this.withProperties(reader.read(VECTOR3D), reader.read(Color.NETWORK_TYPE));
+            return this.withProperties(reader.read(VECTOR3D), reader.read(Color.NETWORK_TYPE), reader.read(VAR_INT));
         }
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(VECTOR3D, target);
             writer.write(Color.NETWORK_TYPE, color);
+            writer.write(VAR_INT, duration);
         }
 
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .put("target", BinaryTagSerializer.VECTOR3D.write(target))
                     .put("color", Color.NBT_TYPE.write(color))
                     .build();
@@ -497,12 +502,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     }
 
-    record BlockCrumble(@NotNull NamespaceID namespace, int id,
+    record BlockCrumble(@NotNull Key key, int id,
                         @NotNull net.minestom.server.instance.block.Block block) implements Particle {
 
         @Contract(pure = true)
         public @NotNull Block withBlock(@NotNull net.minestom.server.instance.block.Block block) {
-            return new Block(namespace(), id(), block);
+            return new Block(key(), id(), block);
         }
 
         @Override
@@ -521,7 +526,7 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public @NotNull CompoundBinaryTag toNbt() {
             return CompoundBinaryTag.builder()
-                    .putString("type", namespace.asString())
+                    .putString("type", key.asString())
                     .putString("block_state", BlockUtils.toString(block))
                     .build();
         }

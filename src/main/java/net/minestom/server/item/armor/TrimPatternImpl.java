@@ -1,17 +1,17 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record TrimPatternImpl(
-        @NotNull NamespaceID assetId,
+        @NotNull Key assetId,
         @NotNull Material template,
         @NotNull Component description,
         boolean isDecal,

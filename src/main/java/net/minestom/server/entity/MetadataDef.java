@@ -123,6 +123,7 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_CRITICAL = bitMask(0, (byte) 0x01, false);
         public static final Entry<Boolean> IS_NO_CLIP = bitMask(0, (byte) 0x02, false);
         public static final Entry<Byte> PIERCING_LEVEL = index(1, Metadata::Byte, (byte) 0);
+        public static final Entry<Boolean> IN_GROUND = index(2, Metadata::Boolean, false);
     }
 
     public static final class Arrow extends AbstractArrow {
@@ -432,9 +433,9 @@ public sealed class MetadataDef {
 
     public static final class Cat extends TameableAnimal {
         public static final Entry<CatMeta.Variant> VARIANT = index(0, Metadata::CatVariant, CatMeta.Variant.BLACK);
-        public static final Entry<Boolean> IS_LYING = index(2, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_RELAXED = index(3, Metadata::Boolean, false);
-        public static final Entry<Integer> COLLAR_COLOR = index(4, Metadata::VarInt, 14);
+        public static final Entry<Boolean> IS_LYING = index(1, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_RELAXED = index(2, Metadata::Boolean, false);
+        public static final Entry<Integer> COLLAR_COLOR = index(3, Metadata::VarInt, 14);
     }
 
     public static final class Wolf extends TameableAnimal {
@@ -492,8 +493,10 @@ public sealed class MetadataDef {
     }
 
     public static final class Creaking extends Mob {
-        public static final Entry<Boolean> CAN_MOVE = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> CAN_MOVE = index(0, Metadata::Boolean, true);
         public static final Entry<Boolean> IS_ACTIVE = index(1, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_TEARING_DOWN = index(2, Metadata::Boolean, false);
+        public static final Entry<@Nullable Point> HOME_POS = index(3, Metadata::OptBlockPosition, null);
     }
 
     public static final class Creeper extends Mob {
@@ -580,8 +583,9 @@ public sealed class MetadataDef {
         public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, 1);
     }
 
-    public static final class PrimedTnt extends Mob {
+    public static final class PrimedTnt extends MetadataDef {
         public static final Entry<Integer> FUSE_TIME = index(0, Metadata::VarInt, 80);
+        public static final Entry<Block> BLOCK_STATE = index(1, Metadata::BlockState, Block.TNT);
     }
 
     public static final class OminousItemSpawner extends MetadataDef {

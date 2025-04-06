@@ -1,5 +1,6 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.StringBinaryTag;
@@ -11,7 +12,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -62,9 +62,9 @@ public class WolfMeta extends TameableAnimalMeta {
         @NotNull BinaryTagSerializer<DynamicRegistry.Key<Variant>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::wolfVariant);
 
         static @NotNull Variant create(
-                @NotNull NamespaceID wildTexture,
-                @NotNull NamespaceID tameTexture,
-                @NotNull NamespaceID angryTexture,
+                @NotNull Key wildTexture,
+                @NotNull Key tameTexture,
+                @NotNull Key angryTexture,
                 @NotNull String biome
         ) {
             return new VariantImpl(wildTexture, tameTexture, angryTexture, List.of(biome), null);
@@ -87,11 +87,11 @@ public class WolfMeta extends TameableAnimalMeta {
             );
         }
 
-        @NotNull NamespaceID wildTexture();
+        @NotNull Key wildTexture();
 
-        @NotNull NamespaceID tameTexture();
+        @NotNull Key tameTexture();
 
-        @NotNull NamespaceID angryTexture();
+        @NotNull Key angryTexture();
 
         @NotNull List<String> biomes();
 
@@ -99,25 +99,25 @@ public class WolfMeta extends TameableAnimalMeta {
         @Nullable Registry.WolfVariantEntry registry();
 
         final class Builder {
-            private NamespaceID wildTexture;
-            private NamespaceID tameTexture;
-            private NamespaceID angryTexture;
+            private Key wildTexture;
+            private Key tameTexture;
+            private Key angryTexture;
             private List<String> biomes;
 
             private Builder() {
             }
 
-            public @NotNull Builder wildTexture(@NotNull NamespaceID wildTexture) {
+            public @NotNull Builder wildTexture(@NotNull Key wildTexture) {
                 this.wildTexture = wildTexture;
                 return this;
             }
 
-            public @NotNull Builder tameTexture(@NotNull NamespaceID tameTexture) {
+            public @NotNull Builder tameTexture(@NotNull Key tameTexture) {
                 this.tameTexture = tameTexture;
                 return this;
             }
 
-            public @NotNull Builder angryTexture(@NotNull NamespaceID angryTexture) {
+            public @NotNull Builder angryTexture(@NotNull Key angryTexture) {
                 this.angryTexture = angryTexture;
                 return this;
             }
@@ -139,9 +139,9 @@ public class WolfMeta extends TameableAnimalMeta {
     }
 
     record VariantImpl(
-            @NotNull NamespaceID wildTexture,
-            @NotNull NamespaceID tameTexture,
-            @NotNull NamespaceID angryTexture,
+            @NotNull Key wildTexture,
+            @NotNull Key tameTexture,
+            @NotNull Key angryTexture,
             @NotNull List<String> biomes,
             @Nullable Registry.WolfVariantEntry registry
     ) implements Variant {

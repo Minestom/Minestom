@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class LeftClickIntegrationTest {
@@ -34,7 +33,7 @@ public class LeftClickIntegrationTest {
         // Empty click
         {
             listener.followup(event -> {
-                assertNull(event.getInventory()); // Player inventory
+                assertEquals(event.getInventory(), inventory);
                 assertEquals(0, event.getSlot());
                 assertEquals(ClickType.LEFT_CLICK, event.getClickType());
                 assertEquals(ItemStack.AIR, inventory.getCursorItem());
@@ -93,7 +92,7 @@ public class LeftClickIntegrationTest {
         // Empty click in player inv
         {
             listener.followup(event -> {
-                assertNull(event.getInventory()); // Player inventory
+                assertEquals(player.getInventory(), event.getInventory());
                 assertEquals(0, event.getSlot());
                 assertEquals(ClickType.LEFT_CLICK, event.getClickType());
                 assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
@@ -136,7 +135,7 @@ public class LeftClickIntegrationTest {
         // Change items
         {
             listener.followup(event -> {
-                assertNull(event.getInventory());
+                assertEquals(player.getInventory(), event.getInventory());
                 assertEquals(9, event.getSlot());
                 event.setClickedItem(ItemStack.of(Material.DIAMOND, 5));
                 event.setCursorItem(ItemStack.of(Material.DIAMOND));

@@ -1,6 +1,8 @@
 package net.minestom.server.world.biome;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.color.Color;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
@@ -31,7 +33,7 @@ record BiomeImpl(
                 if (biome.temperatureModifier() != TemperatureModifier.NONE)
                     builder.putString("temperature_modifier", biome.temperatureModifier().name().toLowerCase(Locale.ROOT));
                 return builder
-                        .put("effects", biome.effects().toNbt())
+                        .put("effects", BiomeEffects.NBT_TYPE.write(biome.effects()))
                         .build();
             }
     );
@@ -47,12 +49,12 @@ record BiomeImpl(
     @NotNull
     private static BiomeEffects.Builder getBuilder(Registry.BiomeEntry entry) {
         BiomeEffects.Builder effectsBuilder = BiomeEffects.builder();
-        if (entry.foliageColor() != null) effectsBuilder.foliageColor(entry.foliageColor());
-        if (entry.grassColor() != null) effectsBuilder.grassColor(entry.grassColor());
-        if (entry.skyColor() != null) effectsBuilder.skyColor(entry.skyColor());
-        if (entry.waterColor() != null) effectsBuilder.waterColor(entry.waterColor());
-        if (entry.waterFogColor() != null) effectsBuilder.waterFogColor(entry.waterFogColor());
-        if (entry.fogColor() != null) effectsBuilder.fogColor(entry.fogColor());
+        if (entry.foliageColor() != null) effectsBuilder.foliageColor(new Color(entry.foliageColor()));
+        if (entry.grassColor() != null) effectsBuilder.grassColor(new Color(entry.grassColor()));
+        if (entry.skyColor() != null) effectsBuilder.skyColor(new Color(entry.skyColor()));
+        if (entry.waterColor() != null) effectsBuilder.waterColor(new Color(entry.waterColor()));
+        if (entry.waterFogColor() != null) effectsBuilder.waterFogColor(new Color(entry.waterFogColor()));
+        if (entry.fogColor() != null) effectsBuilder.fogColor(new Color(entry.fogColor()));
         return effectsBuilder;
     }
 

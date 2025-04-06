@@ -56,7 +56,7 @@ public class ItemComponentReadWriteTest {
         }
 
         assertAll(componentEntries.stream().map(entry -> () -> {
-            var component = ItemComponent.fromNamespaceId(entry.getKey());
+            var component = ItemComponent.fromKey(entry.getKey());
             assertNotNull(component, "Component not found: " + entry.getKey());
             //noinspection unchecked
             readWriteTestImpl((DataComponent<Object>) component, entry.getValue());
