@@ -73,7 +73,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull Registry.Resource resource) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull RegistryData.Resource resource) {
         return create(id, codec, null, resource, null, null);
     }
 
@@ -83,7 +83,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource) {
         return create(id, codec, registries, resource, null, null);
     }
 
@@ -93,7 +93,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
         return registry;

@@ -2,7 +2,7 @@ package net.minestom.server.game;
 
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +23,7 @@ public sealed interface GameEvent extends StaticProtocolObject permits GameEvent
      */
     @Contract(pure = true)
     @Nullable
-    Registry.GameEventEntry registry();
+    RegistryData.GameEventEntry registry();
 
     /**
      * Gets the game events from the registry.

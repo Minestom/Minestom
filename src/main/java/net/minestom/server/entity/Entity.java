@@ -38,7 +38,7 @@ import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.potion.TimedPotion;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.snapshot.EntitySnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -192,7 +192,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
 
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final Registry.EntityEntry registry = entityType.registry();
+        final RegistryData.EntityEntry registry = entityType.registry();
         setBoundingBox(entityType.registry().boundingBox());
 
         this.aerodynamics = new Aerodynamics(
@@ -569,7 +569,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.metadata = new MetadataHolder(this);
         this.entityMeta = MetadataHolder.createMeta(entityType, this, this.metadata);
 
-        final Registry.EntityEntry registry = entityType.registry();
+        final RegistryData.EntityEntry registry = entityType.registry();
         this.aerodynamics = aerodynamics.withAirResistance(
                 registry.horizontalAirResistance(),
                 registry.verticalAirResistance());

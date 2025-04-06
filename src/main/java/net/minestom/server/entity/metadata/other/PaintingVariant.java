@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -54,7 +54,7 @@ public sealed interface PaintingVariant extends PaintingVariants permits Paintin
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<PaintingVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:painting_variant", REGISTRY_CODEC, Registry.Resource.PAINTING_VARIANTS);
+        return DynamicRegistry.create("minecraft:painting_variant", REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
     }
 
     @NotNull Key assetId();

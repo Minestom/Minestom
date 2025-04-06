@@ -40,7 +40,7 @@ import java.util.function.Supplier;
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
  * Use at your own risk.
  */
-public final class Registry {
+public final class RegistryData {
     static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
 
     @ApiStatus.Internal
@@ -88,7 +88,7 @@ public final class Registry {
 
     public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
         // 1. Try to load from jar resources
-        InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
+        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(resource.name);
 
         // 2. Try to load from working directory
         if (resourceStream == null && Files.exists(Path.of(resource.name))) {
@@ -117,7 +117,7 @@ public final class Registry {
 
     @ApiStatus.Internal
     public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
-        var entries = Registry.load(resource);
+        var entries = RegistryData.load(resource);
         Map<String, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.entrySet()) {

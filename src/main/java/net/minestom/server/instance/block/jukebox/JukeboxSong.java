@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -50,7 +50,7 @@ public sealed interface JukeboxSong extends ProtocolObject, JukeboxSongs permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<JukeboxSong> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:jukebox_song", REGISTRY_CODEC, Registry.Resource.JUKEBOX_SONGS);
+        return DynamicRegistry.create("minecraft:jukebox_song", REGISTRY_CODEC, RegistryData.Resource.JUKEBOX_SONGS);
     }
 
     @NotNull SoundEvent soundEvent();

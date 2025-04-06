@@ -5,7 +5,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +37,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:damage_type", REGISTRY_CODEC, Registry.Resource.DAMAGE_TYPES);
+        return DynamicRegistry.create("minecraft:damage_type", REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
     }
 
     float exhaustion();

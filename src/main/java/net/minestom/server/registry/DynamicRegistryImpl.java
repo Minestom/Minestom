@@ -1,7 +1,5 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.nbt.BinaryTag;
@@ -228,11 +226,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
         Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
+        try (InputStream resourceStream = RegistryData.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final JsonElement json = Registry.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            final JsonElement json = RegistryData.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.id() + ": expected a JSON object, got " + json);
 
