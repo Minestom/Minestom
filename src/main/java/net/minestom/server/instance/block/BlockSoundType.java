@@ -1,7 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Contract;
@@ -20,7 +20,7 @@ public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundT
      */
     @Contract(pure = true)
     @NotNull
-    Registry.BlockSoundTypeEntry registry();
+    RegistryData.BlockSoundTypeEntry registry();
 
     @Override
     @NotNull

@@ -6,7 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:wolf_variant", REGISTRY_CODEC, Registry.Resource.WOLF_VARIANTS);
+        return DynamicRegistry.create("minecraft:wolf_variant", REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
     }
 
     @NotNull Assets assets();

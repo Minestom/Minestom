@@ -3,7 +3,7 @@ package net.minestom.server.entity;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +21,7 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
      * @return the entity registry
      */
     @Contract(pure = true)
-    @NotNull Registry.EntityEntry registry();
+    @NotNull RegistryData.EntityEntry registry();
 
     @Override
     default @NotNull Key key() {

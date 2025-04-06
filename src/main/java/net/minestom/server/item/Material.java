@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -24,7 +24,7 @@ public sealed interface Material extends StaticProtocolObject, Materials permits
      * Returns the raw registry data for the material.
      */
     @Contract(pure = true)
-    @NotNull Registry.MaterialEntry registry();
+    @NotNull RegistryData.MaterialEntry registry();
 
     @Override
     default @NotNull Key key() {

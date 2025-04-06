@@ -1,13 +1,13 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-public record VillagerProfessionImpl(Registry.VillagerProfessionEntry registry) implements VillagerProfession {
-    private static final Registry.Container<VillagerProfession> CONTAINER = Registry.createStaticContainer(Registry.Resource.VILLAGER_PROFESSIONS,
-            (namespace, properties) -> new VillagerProfessionImpl(Registry.villagerProfession(namespace, properties)));
+public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry registry) implements VillagerProfession {
+    private static final RegistryData.Container<VillagerProfession> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.VILLAGER_PROFESSIONS,
+            (namespace, properties) -> new VillagerProfessionImpl(RegistryData.villagerProfession(namespace, properties)));
 
     static VillagerProfession get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

@@ -1,13 +1,13 @@
 package net.minestom.server.potion;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
-record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
-    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS,
-            (namespace, properties) -> new PotionEffectImpl(Registry.potionEffect(namespace, properties)));
+record PotionEffectImpl(RegistryData.PotionEffectEntry registry) implements PotionEffect {
+    private static final RegistryData.Container<PotionEffect> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.POTION_EFFECTS,
+            (namespace, properties) -> new PotionEffectImpl(RegistryData.potionEffect(namespace, properties)));
 
     static PotionEffect get(@NotNull String namespace) {
         return CONTAINER.get(namespace);

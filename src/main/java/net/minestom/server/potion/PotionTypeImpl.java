@@ -1,13 +1,13 @@
 package net.minestom.server.potion;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 
 record PotionTypeImpl(Key key, int id) implements PotionType {
-    private static final Registry.Container<PotionType> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_TYPES,
+    private static final RegistryData.Container<PotionType> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.POTION_TYPES,
             (namespace, properties) -> new PotionTypeImpl(Key.key(namespace), properties.getInt("id")));
 
     static PotionType get(@NotNull String namespace) {

@@ -45,7 +45,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:trim_pattern", REGISTRY_CODEC, Registry.Resource.TRIM_PATTERNS);
+        return DynamicRegistry.create("minecraft:trim_pattern", REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
     }
 
     @NotNull Key assetId();

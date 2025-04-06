@@ -1,13 +1,13 @@
 package net.minestom.server;
 
 import net.kyori.adventure.key.Key;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 
-record FeatureFlagImpl(@NotNull Registry.FeatureFlagEntry registry) implements FeatureFlag {
+record FeatureFlagImpl(@NotNull RegistryData.FeatureFlagEntry registry) implements FeatureFlag {
 
-    private static final Registry.Container<FeatureFlagImpl> CONTAINER = Registry.createStaticContainer(Registry.Resource.FEATURE_FLAGS,
-            (namespace, properties) -> new FeatureFlagImpl(Registry.featureFlag(namespace, properties)));
+    private static final RegistryData.Container<FeatureFlagImpl> CONTAINER = RegistryData.createStaticContainer(RegistryData.Resource.FEATURE_FLAGS,
+            (namespace, properties) -> new FeatureFlagImpl(RegistryData.featureFlag(namespace, properties)));
 
     static FeatureFlag get(@NotNull String namespace) {
         return CONTAINER.get(namespace);
