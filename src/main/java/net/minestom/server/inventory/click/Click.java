@@ -15,14 +15,17 @@ public sealed interface Click {
 
     /**
      * Gets the slot of this click. -999 indicates the click either drops the cursor item in some way (implements
-     * {@link DropCursor}) or is a drag click with multiple slots (implements {@link Drag}).
+     * {@link DropCursor}) or is a drag click, which support multiple slots (implements {@link Drag}). Otherwise, this
+     * represents a slot inside the relevant inventory, so {@code inventory.getItemStack(click.slot())}) will return the
+     * "clicked" item.
      */
     default int slot() {
         return -999;
     }
 
     /**
-     * Represents
+     * Represents the player dropping an item, whether from clicking outside the inventory or from pressing the drop
+     * key.
      */
     sealed interface DropCursor extends Click {
     }
@@ -139,26 +142,28 @@ public sealed interface Click {
     }
 
     private static @NotNull Click.Window toWindowSingle(int slot, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
-        if (containerSize == null) {
+        if (containerSize == null) { // No opened inventory, so always in the player inventory
             return new Window(false, constructor.apply(slot));
-        } else if (slot < containerSize) {
+        } else if (slot < containerSize) { // In the opened inventory, so do nothing
             return new Window(true, constructor.apply(slot));
-        } else {
+        } else { // In the opened inventory, so shift it over and place inside player inventory
             return new Window(false, constructor.apply(slot - containerSize));
         }
     }
 
     private static @NotNull Click.Window toWindowMultiple(@NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
-        if (containerSize == null) {
+        if (containerSize == null) { // No opened inventory, so always in the player inventory
             return new Window(false, constructor.apply(slots));
         }
 
+        // If there's at least one slot in the opened inventory, the entire click is considered inside it
         for (int slot : slots) {
             if (slot < containerSize) {
                 return new Window(true, constructor.apply(slots));
             }
         }
 
+        // Otherwise, everything is in the player inventory, and map it over
         return new Window(false, constructor.apply(slots.stream().map(slot -> slot - containerSize).toList()));
     }
 
@@ -198,11 +203,13 @@ public sealed interface Click {
     }
 
     private static @NotNull Click fromWindowSingle(@NotNull Click.Window window, @Nullable Integer containerSize, @NotNull IntFunction<Click> constructor) {
+        // The inverse of toWindowSingle; more details there
         return containerSize == null || window.inOpened() ? window.click()
                 : constructor.apply(window.click().slot() + containerSize);
     }
 
     private static @NotNull Click fromWindowMultiple(@NotNull Window window, @NotNull List<Integer> slots, @Nullable Integer containerSize, @NotNull Function<List<Integer>, Click> constructor) {
+        // The inverse of toWindowMultiple; more details there
         return containerSize == null || window.inOpened() ? window.click()
                 : constructor.apply(slots.stream().map(slot -> slot + containerSize).toList());
     }

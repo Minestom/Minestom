@@ -6,6 +6,7 @@ import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -49,6 +50,25 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
      */
     public void setClick(@NotNull Click click) {
         this.click = click;
+    }
+
+    /**
+     * Returns the clicked slot. This is only for convenience and may return -999 (a meaningless number), as some clicks
+     * don't have a relevant slot (drag clicks and some drops). See {@link Click#slot()} for details.
+     */
+    public int getSlot() {
+        return this.click.slot();
+    }
+
+    /**
+     * Returns the clicked item. Some clicks involve more than a single item, like drops or clicks outside the inventory
+     * menu; in these cases, the cursor is returned.
+     */
+    public @NotNull ItemStack getClickedItem() {
+        int slot = getSlot();
+
+        return slot == -999 ? player.getInventory().getCursorItem()
+                : this.inventory.getItemStack(slot);
     }
 
     @Override
