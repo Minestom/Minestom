@@ -41,8 +41,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<Properties, Block>
     private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    static final StaticRegistry<Block> REGISTRY = RegistryData.createStaticRegistry(
-            RegistryData.Resource.BLOCKS, "minecraft:block",
+    static final StaticRegistry<Block> REGISTRY = RegistryData.createStaticRegistryWithTags(
+            RegistryData.Resource.BLOCKS, RegistryData.Resource.BLOCK_TAGS, "minecraft:block",
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
                 final RegistryData.Properties stateObject = properties.section("states");

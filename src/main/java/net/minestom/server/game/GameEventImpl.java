@@ -12,8 +12,9 @@ import org.jetbrains.annotations.UnknownNullability;
  * Used for a wide variety of events, from weather to bed use to game mode to demo messages.
  */
 record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) implements GameEvent {
-    static final StaticRegistry<GameEvent> REGISTRY = RegistryData.createStaticRegistry(
-            RegistryData.Resource.GAME_EVENTS, "minecraft:game_event", GameEventImpl::createImpl);
+    static final StaticRegistry<GameEvent> REGISTRY = RegistryData.createStaticRegistryWithTags(
+            RegistryData.Resource.GAME_EVENTS, RegistryData.Resource.GAME_EVENT_TAGS, "minecraft:game_event",
+            GameEventImpl::createImpl);
 
     /**
      * Creates a new {@link GameEventImpl} with the given namespace and properties.

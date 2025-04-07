@@ -7,8 +7,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record MaterialImpl(RegistryData.MaterialEntry registry) implements Material {
-    static final StaticRegistry<Material> REGISTRY = RegistryData.createStaticRegistry(
-            RegistryData.Resource.ITEMS, "minecraft:item",
+    static final StaticRegistry<Material> REGISTRY = RegistryData.createStaticRegistryWithTags(
+            RegistryData.Resource.ITEMS, RegistryData.Resource.ITEM_TAGS, "minecraft:item",
             (namespace, properties) -> new MaterialImpl(RegistryData.material(namespace, properties)));
 
     static @UnknownNullability Material get(@NotNull String key) {
