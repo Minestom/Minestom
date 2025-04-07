@@ -197,11 +197,30 @@ public non-sealed class Inventory extends AbstractInventory {
         final int clickSlot = isInWindow ? slot : slot - offset;
         final ItemStack clicked = isInWindow ? getItemStack(slot) : playerInventory.getItemStack(clickSlot);
         final ItemStack cursor = playerInventory.getCursorItem(); // Isn't used in the algorithm
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(
-                isInWindow ? this : playerInventory,
-                isInWindow ? playerInventory : this,
-                0, isInWindow ? playerInventory.getInnerSize() : getInnerSize(), 1,
-                player, clickSlot, clicked, cursor);
+
+        InventoryClickResult clickResult;
+
+        if (isInWindow) {
+            // The player shift-clicked an item in this GUI into their inventory.
+            // Prioritize the hotbar (8->0), then their regular inventory (35->9).
+            clickResult = clickProcessor.shiftClick(
+                    this, playerInventory,
+                    8, 0, -1,
+                    player, clickSlot, clicked, cursor);
+
+            if (clickResult.isCancel()) {
+                clickResult = clickProcessor.shiftClick(
+                        this, playerInventory,
+                        playerInventory.getInnerSize() - 1, 0, -1,
+                        player, clickSlot, clicked, cursor);
+            }
+        } else {
+            clickResult = clickProcessor.shiftClick(
+                    playerInventory, this,
+                    0, getInnerSize(), 1,
+                    player, clickSlot, clicked, cursor);
+        }
+
         if (clickResult.isCancel()) {
             updateAll(player);
             return false;
@@ -211,7 +230,6 @@ public non-sealed class Inventory extends AbstractInventory {
         } else {
             playerInventory.setItemStack(clickSlot, clickResult.getClicked());
         }
-        updateAll(player); // FIXME: currently not properly client-predicted
         playerInventory.setCursorItem(clickResult.getCursor());
         return true;
     }
