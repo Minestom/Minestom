@@ -273,7 +273,11 @@ public class InstanceContainer extends Instance {
         chunk.unload();
         chunkLoader.unloadChunk(chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
-        dispatcher.deletePartition(chunk);
+        switch (dispatcher.getPartitionType()) {
+            case CHUNK -> dispatcher.asChunk().deletePartition(chunk);
+            case INSTANCE -> dispatcher.asInstance().removeElement(chunk);
+            case null -> {}
+        }
     }
 
     @Override
@@ -703,6 +707,10 @@ public class InstanceContainer extends Instance {
     private void cacheChunk(@NotNull Chunk chunk) {
         this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
-        dispatcher.createPartition(chunk);
+        switch (dispatcher.getPartitionType()) {
+            case CHUNK -> dispatcher.asChunk().createPartition(chunk);
+            case INSTANCE -> dispatcher.asInstance().updateElement(chunk, this);
+            case null -> {}
+        }
     }
 }
