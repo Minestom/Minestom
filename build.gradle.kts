@@ -12,7 +12,6 @@ plugins {
 // Read env vars (used for publishing generally)
 version = System.getenv("MINESTOM_VERSION") ?: "dev"
 val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
-val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
 
 val shortDescription = "1.21 Lightweight Minecraft server"
 
@@ -37,7 +36,7 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
 
-        toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+        toolchain.languageVersion = JavaLanguageVersion.of(21)
     }
 
     tasks.withType<Zip> {
@@ -111,9 +110,9 @@ tasks {
 
             // Custom options
             addBooleanOption("html5", true)
-            addStringOption("-release", javaVersion)
+            addStringOption("-release", "21")
             // Links to external javadocs
-            links("https://docs.oracle.com/en/java/javase/${javaVersion}/docs/api/")
+            links("https://docs.oracle.com/en/java/javase/21/docs/api/")
             links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
         }
     }
