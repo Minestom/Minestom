@@ -13,7 +13,7 @@ import java.util.Collection;
  *
  * @param <T> The type of protocol object represented by this set.
  */
-public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImpl {
+public sealed interface ObjectSet<T> permits ObjectSetImpl {
 
     static <T extends ProtocolObject> @NotNull ObjectSet<T> empty() {
         //noinspection unchecked

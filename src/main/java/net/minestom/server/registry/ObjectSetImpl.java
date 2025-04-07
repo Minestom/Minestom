@@ -11,8 +11,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
-sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
+sealed interface ObjectSetImpl<T> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag, ObjectSetImpl.TagV2 {
 
     record Empty<T extends ProtocolObject>() implements ObjectSetImpl<T> {
         static final Empty<?> INSTANCE = new Empty<>();
@@ -34,6 +35,33 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
             return entries.contains(key);
         }
     }
+
+    final class TagV2<T> implements ObjectSetImpl<T> {
+        private final DynamicRegistry.Key<T> key;
+        // Only updated by DynamicRegistryImpl while holding a write lock.
+        private final Set<Key> entries = new CopyOnWriteArraySet<>();
+
+        public TagV2(@NotNull DynamicRegistry.Key<T> key) {
+            this.key = key;
+        }
+
+        public @NotNull Key key() {
+            return key.key();
+        }
+
+        @Override
+        public boolean contains(@NotNull Key namespace) {
+            return entries.contains(namespace);
+        }
+
+        /**
+         * Exposed internally for {@link DynamicRegistryImpl}.
+         */
+        @NotNull Set<Key> entries() {
+            return entries;
+        }
+    }
+
 
     final class Tag<T extends ProtocolObject> implements ObjectSetImpl<T> {
         private final net.minestom.server.gamedata.tags.Tag.BasicType tagType;
@@ -126,6 +154,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
                     yield list.build();
                 }
                 case Tag<T> tag -> coder.createString("#" + tag.name());
+                case TagV2<T> tag -> coder.createString("#" + tag.key().asString());
             });
         }
     }

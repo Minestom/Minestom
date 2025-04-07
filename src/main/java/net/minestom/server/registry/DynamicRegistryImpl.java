@@ -11,6 +11,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -123,8 +124,23 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
+    public @Nullable ObjectSet<T> getTag(@NotNull Key<T> key) {
+        return null;
+    }
+
+    @Override
     public @NotNull List<T> values() {
         return Collections.unmodifiableList(entryById);
+    }
+
+    @Override
+    public @NotNull Collection<ObjectSet<T>> tags() {
+        return List.of();
+    }
+
+    @Override
+    public TagsPacket.@NotNull Registry tagRegistry() {
+        throw new UnsupportedOperationException("todo");
     }
 
     @Override
