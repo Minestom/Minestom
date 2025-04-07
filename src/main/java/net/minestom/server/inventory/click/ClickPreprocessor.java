@@ -27,13 +27,14 @@ public final class ClickPreprocessor {
     /**
      * Determines whether or not a click is creative only. This should match client behaviour, including edge cases like
      * middle clicks (item clones) being sent in survival when there is an item in the cursor (which would make it a
-     * no-op), hence the parameter.
+     * no-op), hence the parameter. This function can be overridden if modifying the creative check logic is desired,
+     * since {@link net.minestom.server.listener.WindowListener} directly depends on this.
      *
      * @param click the click to check
      * @param hasCursorItem if the client has an item in the cursor (for checking {@code Click.Middle})
      * @return if the click is creative only
      */
-    public static boolean isCreativeClick(@NotNull Click click, boolean hasCursorItem) {
+    public boolean isCreativeClick(@NotNull Click click, boolean hasCursorItem) {
         return switch (click) {
             case Click.Middle ignored -> !hasCursorItem; // Block clones (except the edge case)
             case Click.MiddleDrag ignored -> true; // Block clone drags

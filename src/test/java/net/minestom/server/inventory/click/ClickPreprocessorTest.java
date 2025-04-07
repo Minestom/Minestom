@@ -91,14 +91,16 @@ public class ClickPreprocessorTest {
 
     @Test
     public void testCreativeClicks() {
-        assertTrue(ClickPreprocessor.isCreativeClick(new Click.Middle(0), false));
-        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Middle(0), true));
+        var processor = new ClickPreprocessor();
 
-        assertTrue(ClickPreprocessor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), false));
-        assertTrue(ClickPreprocessor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), true));
+        assertTrue(processor.isCreativeClick(new Click.Middle(0), false));
+        assertFalse(processor.isCreativeClick(new Click.Middle(0), true));
 
-        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Left(5), true));
-        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Right(5), true));
+        assertTrue(processor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), false));
+        assertTrue(processor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), true));
+
+        assertFalse(processor.isCreativeClick(new Click.Left(5), true));
+        assertFalse(processor.isCreativeClick(new Click.Right(5), true));
     }
 
 }

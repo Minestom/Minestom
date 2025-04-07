@@ -33,7 +33,7 @@ public class WindowListener {
         check: if (click != null) {
             // Disallow creative clicks when not in creative
             boolean isNotCreative = player.getGameMode() != GameMode.CREATIVE;
-            if (isNotCreative && ClickPreprocessor.isCreativeClick(click, !player.getInventory().getCursorItem().isAir())) {
+            if (isNotCreative && player.getClickPreprocessor().isCreativeClick(click, !player.getInventory().getCursorItem().isAir())) {
                 successful = false;
                 break check;
             }
