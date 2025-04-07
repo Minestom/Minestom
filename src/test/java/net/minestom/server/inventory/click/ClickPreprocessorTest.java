@@ -2,11 +2,13 @@ package net.minestom.server.inventory.click;
 
 import it.unimi.dsi.fastutil.ints.IntList;
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.GameMode;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 import static net.minestom.server.inventory.click.ClickUtils.*;
 import static net.minestom.server.network.packet.client.play.ClientClickWindowPacket.ClickType.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class ClickPreprocessorTest {
 
@@ -52,12 +54,8 @@ public class ClickPreprocessorTest {
 
     @Test
     public void testCloneType() {
-        var player = createPlayer();
-        player.setGameMode(GameMode.CREATIVE);
-
-        assertProcessed(null, clickPacket(CLONE, 1, 0, 0));
-        assertProcessed(player, new Click.Middle(0), clickPacket(CLONE, 1, 0, 0));
-        assertProcessed(player, null, clickPacket(CLONE, 1, 0, -1));
+        assertProcessed(new Click.Middle(0), clickPacket(CLONE, 1, 0, 0));
+        assertProcessed(null, clickPacket(CLONE, 1, 0, -1));
     }
 
     @Test
@@ -74,28 +72,33 @@ public class ClickPreprocessorTest {
     @Test
     public void testQuickCraft() {
         var processor = new ClickPreprocessor();
-        var player = createPlayer();
 
-        assertProcessed(player, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
-        assertProcessed(player, null, clickPacket(QUICK_CRAFT, 1, 9, 0));
-        assertProcessed(player, null, clickPacket(QUICK_CRAFT, 1, 10, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 0, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 1, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 1, 1));
+        assertProcessed(processor, new Click.LeftDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 2, -999));
 
-        player.setGameMode(GameMode.CREATIVE);
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 4, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 5, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 5, 1));
+        assertProcessed(processor, new Click.RightDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 6, -999));
 
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 0, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 1, 1));
-        assertProcessed(processor, player, new Click.LeftDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 2, -999));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 9, 0));
+        assertProcessed(processor, null, clickPacket(QUICK_CRAFT, 1, 9, 1));
+        assertProcessed(processor, new Click.MiddleDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, -999));
+    }
 
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 4, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 5, 1));
-        assertProcessed(processor, player, new Click.RightDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 6, -999));
+    @Test
+    public void testCreativeClicks() {
+        assertTrue(ClickPreprocessor.isCreativeClick(new Click.Middle(0), false));
+        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Middle(0), true));
 
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 8, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 0));
-        assertProcessed(processor, player, null, clickPacket(QUICK_CRAFT, 1, 9, 1));
-        assertProcessed(processor, player, new Click.MiddleDrag(IntList.of(0, 1)), clickPacket(QUICK_CRAFT, 1, 10, -999));
+        assertTrue(ClickPreprocessor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), false));
+        assertTrue(ClickPreprocessor.isCreativeClick(new Click.MiddleDrag(List.of(1, 2)), true));
+
+        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Left(5), true));
+        assertFalse(ClickPreprocessor.isCreativeClick(new Click.Right(5), true));
     }
 
 }

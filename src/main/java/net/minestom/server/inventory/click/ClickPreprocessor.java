@@ -25,24 +25,31 @@ public final class ClickPreprocessor {
     }
 
     /**
+     * Determines whether or not a click is creative only. This should match client behaviour, including edge cases like
+     * middle clicks (item clones) being sent in survival when there is an item in the cursor (which would make it a
+     * no-op), hence the parameter.
+     *
+     * @param click the click to check
+     * @param hasCursorItem if the client has an item in the cursor (for checking {@code Click.Middle})
+     * @return if the click is creative only
+     */
+    public static boolean isCreativeClick(@NotNull Click click, boolean hasCursorItem) {
+        return switch (click) {
+            case Click.Middle ignored -> !hasCursorItem; // Block clones (except the edge case)
+            case Click.MiddleDrag ignored -> true; // Block clone drags
+            default -> false;
+        };
+    }
+
+    /**
      * Processes the provided click packet, turning it into a {@link Click}.
-     * This will do simple verification of the packet before sending it to {@link #process(ClientClickWindowPacket.ClickType, int, byte)}.
      *
      * @param packet        the raw click packet
-     * @param isCreative    whether the player is in creative mode (used for ignoring some actions)
      * @param containerSize the size of the open container, or null if the player inventory is open
      * @return the processed click, or nothing if the click takes place over multiple packets and this is not the final
      *         one (e.g. a drag)
      */
-    public @Nullable Click processClick(@NotNull ClientClickWindowPacket packet, boolean isCreative, @Nullable Integer containerSize) {
-        final byte button = packet.button();
-        final boolean requireCreative = switch (packet.clickType()) {
-            case CLONE -> packet.slot() != -999; // Permit middle click dropping
-            case QUICK_CRAFT -> button == 8 || button == 9 || button == 10;
-            default -> false;
-        };
-        if (requireCreative && !isCreative) return null;
-
+    public @Nullable Click processClick(@NotNull ClientClickWindowPacket packet, @Nullable Integer containerSize) {
         final int slot;
         if (containerSize == null) {
             slot = PlayerInventoryUtils.convertWindow0SlotToMinestomSlot(packet.slot());
@@ -56,9 +63,9 @@ public final class ClickPreprocessor {
         final boolean valid = slot >= 0 && slot < maxSize;
 
         if (valid) {
-            return process(packet.clickType(), slot, button);
+            return process(packet.clickType(), slot, packet.button());
         } else {
-            return slot == -999 ? processInvalidSlot(packet.clickType(), button) : null;
+            return slot == -999 ? processInvalidSlot(packet.clickType(), packet.button()) : null;
         }
     }
 

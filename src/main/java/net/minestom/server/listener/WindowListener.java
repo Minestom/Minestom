@@ -6,6 +6,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.click.Click;
+import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.packet.client.common.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientClickWindowPacket;
@@ -25,13 +26,18 @@ public class WindowListener {
         if (inventory == null || packet.slot() == -1) return;
 
         // Process the click
-        boolean isCreative = player.getGameMode() == GameMode.CREATIVE;
         @Nullable Integer size = playerInventory ? null : inventory.getSize();
-
-        Click click = player.getClickPreprocessor().processClick(packet, isCreative, size);
+        Click click = player.getClickPreprocessor().processClick(packet, size);
 
         boolean successful = true;
-        if (click != null) {
+        check: if (click != null) {
+            // Disallow creative clicks when not in creative
+            boolean isNotCreative = player.getGameMode() != GameMode.CREATIVE;
+            if (isNotCreative && ClickPreprocessor.isCreativeClick(click, !player.getInventory().getCursorItem().isAir())) {
+                successful = false;
+                break check;
+            }
+
             // Reset the didCloseInventory field
             // Wait for events to possibly close the inventory
             player.UNSAFE_changeDidCloseInventory(false);

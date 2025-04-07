@@ -26,36 +26,15 @@ public final class ClickUtils {
         return new Inventory(TYPE, "TestInventory");
     }
 
-    public static @NotNull Player createPlayer() {
-        return new Player(new PlayerConnection() {
-            @Override
-            public void sendPacket(@NotNull SendablePacket packet) {
-            }
-
-            @Override
-            public @NotNull SocketAddress getRemoteAddress() {
-                return null;
-            }
-
-            @Override
-            public void disconnect() {
-            }
-        }, new GameProfile(UUID.randomUUID(), "TestPlayer"));
-    }
-
-    public static void assertProcessed(@NotNull ClickPreprocessor preprocessor, @NotNull Player player, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
-        assertEquals(info, preprocessor.processClick(packet, player.getGameMode() == GameMode.CREATIVE, SIZE));
-    }
-
-    public static void assertProcessed(@NotNull Player player, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
-        assertProcessed(new ClickPreprocessor(), player, info, packet);
+    public static void assertProcessed(@NotNull ClickPreprocessor preprocessor, @Nullable Click info, @NotNull ClientClickWindowPacket packet) {
+        assertEquals(info, preprocessor.processClick(packet, SIZE));
     }
 
     public static void assertProcessed(@Nullable Click info, @NotNull ClientClickWindowPacket packet) {
-        assertProcessed(createPlayer(), info, packet);
+        assertProcessed(new ClickPreprocessor(), info, packet);
     }
 
     public static @NotNull ClientClickWindowPacket clickPacket(@NotNull ClientClickWindowPacket.ClickType type, int windowId, int button, int slot) {
-        return new ClientClickWindowPacket((byte) windowId, 0, (short) slot, (byte) button, type, List.of(), ItemStack.AIR);
+        return new ClientClickWindowPacket((byte) windowId, 0, (short) slot, (byte) button, type, Map.of(), ItemStack.Hash.AIR);
     }
 }
