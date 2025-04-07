@@ -127,7 +127,45 @@ public final class RegistryData {
             ids.set(value.id(), value);
             namespaces.put(value.name(), value);
         }
-        return new StaticRegistry<>(registryId, namespaces, ids);
+        return new StaticRegistry<>(registryId, namespaces, ids, Map.of());
+    }
+
+    @ApiStatus.Internal
+    public static <T extends StaticProtocolObject> StaticRegistry<T> createStaticRegistryWithTags(Resource resource, Resource tagsResource, String registryId, Loader<T> loader) {
+        // Resources
+        var entries = RegistryData.load(resource);
+        Map<String, T> namespaces = new HashMap<>(entries.size());
+        ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
+        for (var entry : entries.entrySet()) {
+            final String namespace = entry.getKey();
+            final Properties properties = Properties.fromMap(entry.getValue());
+            final T value = loader.get(namespace, properties);
+            ids.set(value.id(), value);
+            namespaces.put(value.name(), value);
+        }
+
+        // Tags
+        final var tagJson = RegistryData.load(tagsResource);
+        final var tags = new HashMap<String, ObjectSetImpl.TagV2<T>>(tagJson.size());
+        tagJson.keySet().forEach(tagName -> {
+            final ObjectSetImpl.TagV2<T> tag = new ObjectSetImpl.TagV2<>(DynamicRegistry.Key.of(tagName.substring(1)));
+            getTagValues(tag, tagJson, tagName);
+            tags.put(tag.key().asString(), tag);
+        });
+
+        return new StaticRegistry<>(registryId, namespaces, ids, tags);
+    }
+
+    private static <T extends StaticProtocolObject> void getTagValues(@NotNull ObjectSetImpl.TagV2<T> result, Map<String, Map<String, Object>> main, String value) {
+        Map<String, Object> tagObject = main.get(value);
+        final List<String> tagValues = (List<String>) tagObject.get("values");
+        tagValues.forEach(tagString -> {
+            if (tagString.startsWith("#")) {
+                getTagValues(result, main, tagString.substring(1));
+            } else {
+                result.entries().add(Key.key(tagString));
+            }
+        });
     }
 
     public interface Loader<T extends ProtocolObject> {
@@ -136,31 +174,28 @@ public final class RegistryData {
 
     @ApiStatus.Internal
     public enum Resource {
+        // Static Registries
         BLOCKS("blocks.json"),
+        BLOCK_TAGS("tags/block.json"),
         ITEMS("items.json"),
-        ENTITIES("entities.json"),
-        FEATURE_FLAGS("feature_flags.json"),
-        SOUNDS("sounds.json"),
-        STATISTICS("custom_statistics.json"),
-        POTION_EFFECTS("potion_effects.json"),
-        POTION_TYPES("potions.json"),
-        PARTICLES("particles.json"),
+        ITEM_TAGS("tags/item.json"),
+        ENTITY_TYPES("entities.json"),
+        ENTITY_TYPE_TAGS("tags/entity_type.json"),
+        GAME_EVENTS("game_events.json"),
+        GAME_EVENT_TAGS("tags/game_event.json"),
+
+        // Dynamic Registries
+        CHAT_TYPES("chat_types.json"),
+        DIMENSION_TYPES("dimension_types.json"),
+        BIOMES("biomes.json"),
         DAMAGE_TYPES("damage_types.json"),
         TRIM_MATERIALS("trim_materials.json"),
         TRIM_PATTERNS("trim_patterns.json"),
-        BLOCK_TAGS("tags/block.json"),
-        ENTITY_TYPE_TAGS("tags/entity_type.json"),
-        FLUID_TAGS("tags/fluid.json"),
-        GAMEPLAY_TAGS("tags/game_event.json"),
-        GAME_EVENTS("game_events.json"),
-        ITEM_TAGS("tags/item.json"),
-        ENCHANTMENT_TAGS("tags/enchantment.json"),
-        BIOME_TAGS("tags/biome.json"),
-        DIMENSION_TYPES("dimension_types.json"),
-        BIOMES("biomes.json"),
-        ATTRIBUTES("attributes.json"),
         BANNER_PATTERNS("banner_patterns.json"),
+        ENCHANTMENTS("enchantments.json"),
         PAINTING_VARIANTS("painting_variants.json"),
+        JUKEBOX_SONGS("jukebox_songs.json"),
+        INSTRUMENTS("instruments.json"),
         WOLF_VARIANTS("wolf_variants.json"),
         WOLF_SOUND_VARIANTS("wolf_sound_variants.json"),
         CAT_VARIANTS("cat_variants.json"),
@@ -168,11 +203,21 @@ public final class RegistryData {
         COW_VARIANTS("cow_variants.json"),
         FROG_VARIANTS("frog_variants.json"),
         PIG_VARIANTS("pig_variants.json"),
-        CHAT_TYPES("chat_types.json"),
-        ENCHANTMENTS("enchantments.json"),
-        JUKEBOX_SONGS("jukebox_songs.json"),
+
+        // "banner_pattern", "damage_type", "enchantment", "fluid", "instrument", "painting_variant", "worldgen/biome"
+
+        // The rest to be categorized
+        FEATURE_FLAGS("feature_flags.json"),
+        SOUNDS("sounds.json"),
+        STATISTICS("custom_statistics.json"),
+        POTION_EFFECTS("potion_effects.json"),
+        POTION_TYPES("potions.json"),
+        PARTICLES("particles.json"),
+        FLUID_TAGS("tags/fluid.json"),
+        ENCHANTMENT_TAGS("tags/enchantment.json"),
+        BIOME_TAGS("tags/biome.json"),
+        ATTRIBUTES("attributes.json"),
         VILLAGER_PROFESSIONS("villager_professions.json"),
-        INSTRUMENTS("instruments.json"),
         INSTRUMENT_TAGS("tags/instrument.json"),
         BLOCK_SOUND_TYPES("block_sound_types.json");
 

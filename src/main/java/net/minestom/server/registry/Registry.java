@@ -1,9 +1,12 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.network.packet.server.common.TagsPacket;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public sealed interface Registry<T> permits StaticRegistry, DynamicRegistry {
@@ -38,6 +41,14 @@ public sealed interface Registry<T> permits StaticRegistry, DynamicRegistry {
     }
 
     /**
+     * Get a tag by its key (without hash prefix).
+     *
+     * @param key The key of the tag
+     * @return The tag, or null if not found
+     */
+    @Nullable ObjectSet<T> getTag(@NotNull DynamicRegistry.Key<T> key);
+
+    /**
      * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
      * to the protocol ID of each entry.</p>
      *
@@ -47,5 +58,18 @@ public sealed interface Registry<T> permits StaticRegistry, DynamicRegistry {
      * @return An immutable list of the entries in this registry.
      */
     @NotNull List<T> values();
+
+    /**
+     * <p>Returns the available tags in this registry.</p>
+     *
+     * <p>Note: The returned list is not guaranteed to update with the registry,
+     * it should be fetched again for updated values.</p>
+     *
+     * @return An immutable collection of the tags in this registry.
+     */
+    @NotNull Collection<ObjectSet<T>> tags();
+
+    @ApiStatus.Internal
+    @NotNull TagsPacket.Registry tagRegistry();
 
 }

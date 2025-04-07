@@ -2,10 +2,12 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -16,7 +18,14 @@ public final class StaticRegistry<T extends StaticProtocolObject> implements Reg
     private final ObjectArray<T> ids;
     private final List<T> values;
 
-    StaticRegistry(@NotNull String id, @NotNull Map<String, T> namespaces, @NotNull ObjectArray<T> ids) {
+    private final Map<String, ObjectSetImpl.TagV2<T>> tags;
+
+    StaticRegistry(
+            @NotNull String id,
+            @NotNull Map<String, T> namespaces,
+            @NotNull ObjectArray<T> ids,
+            @NotNull Map<String, ObjectSetImpl.TagV2<T>> tags
+    ) {
         this.id = id;
         this.namespaces = Map.copyOf(namespaces);
         this.ids = ids;
@@ -24,6 +33,8 @@ public final class StaticRegistry<T extends StaticProtocolObject> implements Reg
 
         //noinspection unchecked
         this.values = List.of(ids.arrayCopy((Class<T>) StaticProtocolObject.class));
+
+        this.tags = Map.copyOf(tags);
     }
 
     @Override
@@ -75,8 +86,24 @@ public final class StaticRegistry<T extends StaticProtocolObject> implements Reg
     }
 
     @Override
+    public @Nullable ObjectSet<T> getTag(DynamicRegistry.@NotNull Key<T> key) {
+        return tags.get(key.key().asString());
+    }
+
+    @Override
     public @NotNull List<T> values() {
         return values;
+    }
+
+    @Override
+    public @NotNull Collection<ObjectSet<T>> tags() {
+        //noinspection unchecked
+        return (Collection<ObjectSet<T>>) (Object) tags.values();
+    }
+
+    @Override
+    public TagsPacket.@NotNull Registry tagRegistry() {
+        throw new UnsupportedOperationException("todo");
     }
 
     @Override

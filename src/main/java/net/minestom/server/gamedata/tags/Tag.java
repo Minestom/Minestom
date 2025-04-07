@@ -93,7 +93,7 @@ public final class Tag implements ProtocolObject, Keyed {
                 (name, registries) -> Optional.of(name).map(FluidRegistries::getFluid).map(Enum::ordinal)),
         ENTITY_TYPES("minecraft:entity_type", RegistryData.Resource.ENTITY_TYPE_TAGS,
                 (entityName, registries) -> Optional.ofNullable(EntityType.fromKey(entityName)).map(EntityType::id)),
-        GAME_EVENTS("minecraft:game_event", RegistryData.Resource.GAMEPLAY_TAGS,
+        GAME_EVENTS("minecraft:game_event", RegistryData.Resource.GAME_EVENT_TAGS,
                 (eventName, registries) -> Optional.ofNullable(GameEvent.fromKey(eventName)).map(GameEvent::id)),
         SOUND_EVENTS("minecraft:sound_event", null, null), // Seems not to be included in server data
         POTION_EFFECTS("minecraft:potion_effect", null, null), // Seems not to be included in server data
