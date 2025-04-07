@@ -50,6 +50,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.PlayerInventory;
+import net.minestom.server.inventory.click.ClickPreprocessor;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.WrittenBookContent;
@@ -174,6 +175,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     private int level;
     private int portalCooldown = 0;
 
+    protected ClickPreprocessor clickPreprocessor = new ClickPreprocessor();
     protected PlayerInventory inventory;
     private AbstractInventory openInventory;
     // Used internally to allow the closing of inventory within the inventory listener
@@ -1713,6 +1715,10 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         }
 
         this.belowNameTag = belowNameTag;
+    }
+
+    public @NotNull ClickPreprocessor getClickPreprocessor() {
+        return clickPreprocessor;
     }
 
     /**
