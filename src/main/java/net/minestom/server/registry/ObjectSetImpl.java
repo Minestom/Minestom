@@ -94,7 +94,7 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
                 .transform(Entries::new, Entries::entries);
 
         @Override
-        public @NotNull Result<ObjectSet> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+        public @NotNull <D> Result<ObjectSet> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             final Result<Entries> entriesResult = ENTRIES_CODEC.decode(coder, value);
             if (entriesResult instanceof Result.Ok(Entries entries)) {
                 //noinspection unchecked
@@ -113,7 +113,7 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
         }
 
         @Override
-        public @NotNull Result encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet value) {
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet value) {
             if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(switch (value) {
                 case Empty empty -> coder.emptyList();

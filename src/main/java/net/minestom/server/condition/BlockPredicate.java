@@ -1,8 +1,8 @@
 package net.minestom.server.condition;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -16,7 +16,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -26,46 +25,35 @@ import java.util.List;
 
 public interface BlockPredicate {
 
-    @NotNull BinaryTagSerializer<BlockPredicate> NBT_TYPE = BinaryTagSerializer.registryTaggedUnion(
-            Registries::blockPredicates, BlockPredicate::nbtType, "type");
+    @NotNull StructCodec<BlockPredicate> CODEC = Codec.RegistryTaggedUnion(
+            Registries::blockPredicates, BlockPredicate::codec, "type");
 
     @ApiStatus.Internal
-    static @NotNull DynamicRegistry<BinaryTagSerializer<? extends BlockPredicate>> createDefaultRegistry() {
-        final DynamicRegistry<BinaryTagSerializer<? extends BlockPredicate>> registry = DynamicRegistry.create("minestom:block_state_provider");
-        registry.register("true", True.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("all_of", AllOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("any_of", AnyOf.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("has_sturdy_face", HasSturdyFace.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("inside_world_bounds", InsideWorldBounds.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("matching_block_tag", MatchingBlockTag.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("matching_blocks", MatchingBlocks.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("matching_fluids", MatchingFluids.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("not", Not.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("replaceable", Replaceable.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("solid", Solid.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("would_survive", WouldSurvive.NBT_TYPE, DataPack.MINECRAFT_CORE);
-        registry.register("unobstructed", Unobstructed.NBT_TYPE, DataPack.MINECRAFT_CORE);
+    static @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> createDefaultRegistry() {
+        final DynamicRegistry<StructCodec<? extends BlockPredicate>> registry = DynamicRegistry.create("minestom:block_state_provider");
+        registry.register("true", True.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("any_of", AnyOf.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("has_sturdy_face", HasSturdyFace.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("inside_world_bounds", InsideWorldBounds.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("matching_block_tag", MatchingBlockTag.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("matching_blocks", MatchingBlocks.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("matching_fluids", MatchingFluids.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("not", Not.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("replaceable", Replaceable.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("solid", Solid.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("would_survive", WouldSurvive.CODEC, DataPack.MINECRAFT_CORE);
+        registry.register("unobstructed", Unobstructed.CODEC, DataPack.MINECRAFT_CORE);
         return registry;
     }
 
     boolean test(Instance instance, Point blockPosition);
 
-    @NotNull BinaryTagSerializer<? extends BlockPredicate> nbtType();
+    @NotNull StructCodec<? extends BlockPredicate> codec();
 
     record True() implements BlockPredicate {
-        public static final BinaryTagSerializer<True> NBT_TYPE = new BinaryTagSerializer<>() {
-            @Override
-            public @NotNull BinaryTag write(@NotNull Context context, @NotNull True value) {
-                return CompoundBinaryTag.empty();
-            }
-
-            @Override
-            public @NotNull True read(@NotNull Context context, @NotNull BinaryTag tag) {
-                return INSTANCE;
-            }
-        };
-
         public static final True INSTANCE = new True();
+        public static final StructCodec<True> CODEC = StructCodec.struct(() -> INSTANCE);
 
         @Override
         public boolean test(Instance instance, Point blockPosition) {
@@ -73,14 +61,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<True> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<True> codec() {
+            return CODEC;
         }
     }
 
     record AllOf(@NotNull List<BlockPredicate> predicates) implements BlockPredicate {
-        public static final BinaryTagSerializer<AllOf> NBT_TYPE = BinaryTagSerializer.object(
-                "predicates", BlockPredicate.NBT_TYPE.list(), AllOf::predicates,
+        public static final StructCodec<AllOf> CODEC = StructCodec.struct(
+                "predicates", BlockPredicate.CODEC.list(), AllOf::predicates,
                 AllOf::new
         );
 
@@ -99,14 +87,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<AllOf> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<AllOf> codec() {
+            return CODEC;
         }
     }
 
     record AnyOf(@NotNull List<BlockPredicate> predicates) implements BlockPredicate {
-        public static final BinaryTagSerializer<AnyOf> NBT_TYPE = BinaryTagSerializer.object(
-                "predicates", BlockPredicate.NBT_TYPE.list(), AnyOf::predicates,
+        public static final StructCodec<AnyOf> CODEC = StructCodec.struct(
+                "predicates", BlockPredicate.CODEC.list(), AnyOf::predicates,
                 AnyOf::new
         );
 
@@ -125,8 +113,8 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<AnyOf> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<AnyOf> codec() {
+            return CODEC;
         }
     }
 
@@ -134,10 +122,10 @@ public interface BlockPredicate {
             @Nullable Point offset,
             @NotNull BlockFace direction
     ) implements BlockPredicate {
-        public static final BinaryTagSerializer<HasSturdyFace> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, HasSturdyFace::offset,
-                "direction", BinaryTagSerializer.fromEnumStringable(Direction.class)
-                        .map(BlockFace::fromDirection, BlockFace::toDirection), HasSturdyFace::direction,
+        public static final StructCodec<HasSturdyFace> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), HasSturdyFace::offset,
+                "direction", Codec.Enum(Direction.class)
+                        .transform(BlockFace::fromDirection, BlockFace::toDirection), HasSturdyFace::direction,
                 HasSturdyFace::new
         );
 
@@ -148,14 +136,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<HasSturdyFace> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<HasSturdyFace> codec() {
+            return CODEC;
         }
     }
 
     record InsideWorldBounds(@Nullable Point offset) implements BlockPredicate {
-        public static final BinaryTagSerializer<InsideWorldBounds> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, InsideWorldBounds::offset,
+        public static final StructCodec<InsideWorldBounds> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), InsideWorldBounds::offset,
                 InsideWorldBounds::new
         );
 
@@ -168,8 +156,8 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<InsideWorldBounds> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<InsideWorldBounds> codec() {
+            return CODEC;
         }
     }
 
@@ -177,9 +165,9 @@ public interface BlockPredicate {
             @Nullable Point offset,
             @NotNull String tag
     ) implements BlockPredicate {
-        public static final BinaryTagSerializer<MatchingBlockTag> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, MatchingBlockTag::offset,
-                "tag", BinaryTagSerializer.STRING, MatchingBlockTag::tag,
+        public static final StructCodec<MatchingBlockTag> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), MatchingBlockTag::offset,
+                "tag", Codec.STRING, MatchingBlockTag::tag,
                 MatchingBlockTag::new
         );
 
@@ -189,12 +177,12 @@ public interface BlockPredicate {
             if (registeredTag == null) return false;
 
             Block block = instance.getBlock(blockPosition.add(offset == null ? Vec.ZERO : offset));
-            return registeredTag.contains(block.namespace());
+            return registeredTag.contains(block.key());
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<MatchingBlockTag> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<MatchingBlockTag> codec() {
+            return CODEC;
         }
     }
 
@@ -202,9 +190,9 @@ public interface BlockPredicate {
             @Nullable Point offset,
             @NotNull ObjectSet blocks
     ) implements BlockPredicate {
-        public static final BinaryTagSerializer<MatchingBlocks> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, MatchingBlocks::offset,
-                "blocks", ObjectSet.nbtType(Tag.BasicType.BLOCKS), MatchingBlocks::blocks,
+        public static final StructCodec<MatchingBlocks> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), MatchingBlocks::offset,
+                "blocks", ObjectSet.codec(Tag.BasicType.BLOCKS), MatchingBlocks::blocks,
                 MatchingBlocks::new
         );
 
@@ -215,8 +203,8 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<MatchingBlocks> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<MatchingBlocks> codec() {
+            return CODEC;
         }
     }
 
@@ -224,9 +212,9 @@ public interface BlockPredicate {
             @Nullable Point offset,
             @NotNull ObjectSet fluids
     ) implements BlockPredicate {
-        public static final BinaryTagSerializer<MatchingFluids> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, MatchingFluids::offset,
-                "fluids", ObjectSet.nbtType(Tag.BasicType.FLUIDS), MatchingFluids::fluids,
+        public static final StructCodec<MatchingFluids> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), MatchingFluids::offset,
+                "fluids", ObjectSet.codec(Tag.BasicType.FLUIDS), MatchingFluids::fluids,
                 MatchingFluids::new
         );
 
@@ -236,14 +224,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<MatchingFluids> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<MatchingFluids> codec() {
+            return CODEC;
         }
     }
 
     record Not(@NotNull BlockPredicate predicate) implements BlockPredicate {
-        public static final BinaryTagSerializer<Not> NBT_TYPE = BinaryTagSerializer.object(
-                "predicate", BlockPredicate.NBT_TYPE, Not::predicate,
+        public static final StructCodec<Not> CODEC = StructCodec.struct(
+                "predicate", BlockPredicate.CODEC, Not::predicate,
                 Not::new
         );
 
@@ -253,14 +241,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Not> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Not> codec() {
+            return CODEC;
         }
     }
 
     record Replaceable(@Nullable Point offset) implements BlockPredicate {
-        public static final BinaryTagSerializer<Replaceable> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, Replaceable::offset,
+        public static final StructCodec<Replaceable> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), Replaceable::offset,
                 Replaceable::new
         );
 
@@ -271,14 +259,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Replaceable> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Replaceable> codec() {
+            return CODEC;
         }
     }
 
     record Solid(@Nullable Point offset) implements BlockPredicate {
-        public static final BinaryTagSerializer<Solid> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, Solid::offset,
+        public static final StructCodec<Solid> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), Solid::offset,
                 Solid::new
         );
 
@@ -289,8 +277,8 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Solid> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Solid> codec() {
+            return CODEC;
         }
     }
 
@@ -298,9 +286,9 @@ public interface BlockPredicate {
             @Nullable Point offset,
             @NotNull Block state
     ) implements BlockPredicate {
-        public static final BinaryTagSerializer<WouldSurvive> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, WouldSurvive::offset,
-                "state", Block.NBT_TYPE, WouldSurvive::state,
+        public static final StructCodec<WouldSurvive> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), WouldSurvive::offset,
+                "state", Block.CODEC, WouldSurvive::state,
                 WouldSurvive::new
         );
 
@@ -310,14 +298,14 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<WouldSurvive> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<WouldSurvive> codec() {
+            return CODEC;
         }
     }
 
     record Unobstructed(@Nullable Point offset) implements BlockPredicate {
-        public static final BinaryTagSerializer<Unobstructed> NBT_TYPE = BinaryTagSerializer.object(
-                "offset", BinaryTagSerializer.BLOCK_POSITION, Unobstructed::offset,
+        public static final StructCodec<Unobstructed> CODEC = StructCodec.struct(
+                "offset", Codec.BLOCK_POSITION.optional(), Unobstructed::offset,
                 Unobstructed::new
         );
 
@@ -334,8 +322,8 @@ public interface BlockPredicate {
         }
 
         @Override
-        public @NotNull BinaryTagSerializer<Unobstructed> nbtType() {
-            return NBT_TYPE;
+        public @NotNull StructCodec<Unobstructed> codec() {
+            return CODEC;
         }
     }
 }
