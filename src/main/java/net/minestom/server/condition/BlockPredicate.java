@@ -3,6 +3,7 @@ package net.minestom.server.condition;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
@@ -312,13 +313,7 @@ public interface BlockPredicate {
         @Override
         public boolean test(Instance instance, Point blockPosition) {
             Point position = blockPosition.add(offset == null ? Vec.ZERO : offset);
-            Shape fullBlock = Block.STONE.registry().collisionShape();
-            for (Entity entity : instance.getNearbyEntities(blockPosition, 3)) {
-                if (fullBlock.intersectBox(entity.getPosition().sub(position), entity.getBoundingBox()))
-                    return false;
-            }
-
-            return true;
+            return CollisionUtils.canPlaceBlockAt(instance, position, Block.STONE) == null;
         }
 
         @Override
