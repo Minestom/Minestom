@@ -17,7 +17,7 @@ public record Equippable(
         @NotNull SoundEvent equipSound,
         @Nullable String assetId,
         @Nullable String cameraOverlay,
-        @Nullable ObjectSet<EntityType> allowedEntities,
+        @Nullable ObjectSet allowedEntities,
         boolean dispensable,
         boolean swappable,
         boolean damageOnHurt,
@@ -62,7 +62,7 @@ public record Equippable(
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract);
     }
 
-    public @NotNull Equippable withAllowedEntities(@Nullable ObjectSet<EntityType> allowedEntities) {
+    public @NotNull Equippable withAllowedEntities(@Nullable ObjectSet allowedEntities) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract);
     }
 

@@ -2,7 +2,6 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.entity.EntityType;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
@@ -18,7 +17,7 @@ public record BlocksAttacks(
         float disableCooldownScale,
         @NotNull List<DamageReduction> damageReductions,
         @NotNull ItemDamageFunction itemDamage,
-        @Nullable ObjectSet<EntityType> bypassedBy,
+        @Nullable ObjectSet bypassedBy,
         @Nullable SoundEvent blockSound,
         @Nullable SoundEvent disableSound
 ) {
@@ -36,7 +35,7 @@ public record BlocksAttacks(
             "disable_cooldown_scale", Codec.FLOAT.optional(1f), BlocksAttacks::disableCooldownScale,
             "damage_reductions", DamageReduction.CODEC.list().optional(List.of(DamageReduction.DEFAULT)), BlocksAttacks::damageReductions,
             "item_damage", ItemDamageFunction.CODEC.optional(ItemDamageFunction.DEFAULT), BlocksAttacks::itemDamage,
-            "bypassed_by", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), BlocksAttacks::bypassedBy,
+            "bypassed_by", ObjectSet.codec(Tag.BasicType.ENTITY_TYPES).optional(), BlocksAttacks::bypassedBy,
             "block_sound", SoundEvent.CODEC.optional(), BlocksAttacks::blockSound,
             "disabled_sound", SoundEvent.CODEC.optional(), BlocksAttacks::disableSound,
             BlocksAttacks::new);
@@ -58,20 +57,20 @@ public record BlocksAttacks(
 
     public record DamageReduction(
             float horizontalBlockingAngle,
-            @Nullable ObjectSet<EntityType> type,
+            @Nullable ObjectSet type,
             float base, float factor
     ) {
         public static final DamageReduction DEFAULT = new DamageReduction(90.0f, null, 0.0f, 1.0f);
 
         public static final NetworkBuffer.Type<DamageReduction> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.FLOAT, DamageReduction::horizontalBlockingAngle,
-                ObjectSet.<EntityType>networkType(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
+                ObjectSet.networkType(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
                 NetworkBuffer.FLOAT, DamageReduction::base,
                 NetworkBuffer.FLOAT, DamageReduction::factor,
                 DamageReduction::new);
         public static final Codec<DamageReduction> CODEC = StructCodec.struct(
                 "horizontal_blocking_angle", Codec.FLOAT.optional(90f), DamageReduction::horizontalBlockingAngle,
-                "type", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
+                "type", ObjectSet.codec(Tag.BasicType.ENTITY_TYPES).optional(), DamageReduction::type,
                 "base", Codec.FLOAT, DamageReduction::base,
                 "factor", Codec.FLOAT, DamageReduction::factor,
                 DamageReduction::new);
