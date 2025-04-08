@@ -70,8 +70,8 @@ public class EffectComponent {
         return NAMESPACES.values();
     }
 
-    static <T> DataComponent<T> register(@NotNull String name, @Nullable Codec<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), null, nbt);
+    static <T> DataComponent<T> register(@NotNull String name, @Nullable Codec<T> serializer) {
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), null, serializer);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;
