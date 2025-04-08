@@ -72,14 +72,14 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final ExceptionManager exception;
 
-    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues;
-    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects;
-    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects;
-    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
-    private final DynamicRegistry<StructCodec<? extends IntProvider>> intProviders;
-    private final DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders;
-    private final DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders;
-    private final DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates;
+    private final DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValue;
+    private final DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffect;
+    private final DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffect;
+    private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffect;
+    private final DynamicRegistry<StructCodec<? extends IntProvider>> intProvider;
+    private final DynamicRegistry<StructCodec<? extends FloatProvider>> floatProvider;
+    private final DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProvider;
+    private final DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicate;
 
     private final DynamicRegistry<ChatType> chatType;
     private final DynamicRegistry<DimensionType> dimensionType;
@@ -129,14 +129,14 @@ final class ServerProcessImpl implements ServerProcess {
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
         var ignoredForInit = DataComponents.ITEM_NAME;
 
-        this.enchantmentLevelBasedValues = LevelBasedValue.createDefaultRegistry();
-        this.enchantmentValueEffects = ValueEffect.createDefaultRegistry();
-        this.enchantmentEntityEffects = EntityEffect.createDefaultRegistry();
-        this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
-        this.intProviders = IntProvider.createDefaultRegistry();
-        this.floatProviders = FloatProvider.createDefaultRegistry();
-        this.blockStateProviders = BlockStateProvider.createDefaultRegistry();
-        this.blockPredicates = BlockPredicate.createDefaultRegistry();
+        this.enchantmentLevelBasedValue = LevelBasedValue.createDefaultRegistry();
+        this.enchantmentValueEffect = ValueEffect.createDefaultRegistry();
+        this.enchantmentEntityEffect = EntityEffect.createDefaultRegistry();
+        this.enchantmentLocationEffect = LocationEffect.createDefaultRegistry();
+        this.intProvider = IntProvider.createDefaultRegistry();
+        this.floatProvider = FloatProvider.createDefaultRegistry();
+        this.blockStateProvider = BlockStateProvider.createDefaultRegistry();
+        this.blockPredicate = BlockPredicate.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
         this.dimensionType = DimensionType.createDefaultRegistry();
@@ -259,43 +259,43 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return enchantmentLevelBasedValues;
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValue() {
+        return enchantmentLevelBasedValue;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return enchantmentValueEffects;
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffect() {
+        return enchantmentValueEffect;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return enchantmentEntityEffects;
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffect() {
+        return enchantmentEntityEffect;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return enchantmentLocationEffects;
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffect() {
+        return enchantmentLocationEffect;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProviders() {
-        return intProviders;
+    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProvider() {
+        return intProvider;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders() {
-        return floatProviders;
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProvider() {
+        return floatProvider;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
-        return blockStateProviders;
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProvider() {
+        return blockStateProvider;
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates() {
-        return blockPredicates;
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicate() {
+        return blockPredicate;
     }
 
     @Override

@@ -16,7 +16,7 @@ import java.util.Random;
 public interface FloatProvider {
 
     @NotNull StructCodec<FloatProvider> TAGGED_CODEC = Codec.RegistryTaggedUnion(
-            Registries::floatProviders, FloatProvider::codec, "type");
+            Registries::floatProvider, FloatProvider::codec, "type");
     @NotNull Codec<FloatProvider> CODEC = new Codec<>() {
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable FloatProvider value) {

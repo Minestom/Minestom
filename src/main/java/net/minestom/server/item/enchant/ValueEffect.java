@@ -13,7 +13,7 @@ import java.util.List;
 public non-sealed interface ValueEffect extends Enchantment.Effect {
 
     @NotNull StructCodec<ValueEffect> CODEC = Codec.RegistryTaggedUnion(
-            Registries::enchantmentValueEffects, ValueEffect::codec, "type");
+            Registries::enchantmentValueEffect, ValueEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> createDefaultRegistry() {

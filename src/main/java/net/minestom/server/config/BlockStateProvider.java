@@ -16,7 +16,7 @@ import java.util.Random;
 public interface BlockStateProvider {
 
     @NotNull StructCodec<BlockStateProvider> CODEC = Codec.RegistryTaggedUnion(
-            Registries::blockStateProviders, BlockStateProvider::codec, "type");
+            Registries::blockStateProvider, BlockStateProvider::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> createDefaultRegistry() {
