@@ -2,6 +2,7 @@ package net.minestom.server.item.enchant;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
@@ -12,14 +13,11 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
-
 
 public non-sealed interface EntityEffect extends Enchantment.Effect {
 
@@ -126,59 +124,20 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             @NotNull Particle largeParticle,
             @NotNull SoundEvent sound
     ) implements EntityEffect, LocationEffect {
-        private static final BinaryTagSerializer<ObjectSet<Block>> IMMUNE_BLOCKS_NBT_TYPE = ObjectSet.nbtType(Tag.BasicType.BLOCKS);
-        public static final BinaryTagSerializer<Explode> NBT_TYPE = new BinaryTagSerializer<>() {
-            @Override
-            public @NotNull BinaryTag write(@NotNull Context context, @NotNull Explode value) {
-                CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
 
-                builder.putBoolean("attribute_to_user", value.attributeToUser);
-                if (value.damageType != null)
-                    builder.put("damage_type", DamageType.NBT_TYPE.write(context, value.damageType));
-                if (value.immuneBlocks != null)
-                    builder.put("immune_blocks", IMMUNE_BLOCKS_NBT_TYPE.write(context, value.immuneBlocks));
-                if (value.knockbackMultiplier != null)
-                    builder.put("knockback_multiplier", LevelBasedValue.NBT_TYPE.write(context, value.knockbackMultiplier));
-                if (value.offset != null)
-                    builder.put("offset", BinaryTagSerializer.BLOCK_POSITION.write(context, value.offset));
-                builder.put("radius", LevelBasedValue.NBT_TYPE.write(context, value.radius));
-                builder.putBoolean("create_fire", value.createFire);
-                builder.putString("block_interaction", value.blockInteraction.id());
-                builder.put("small_particle", Particle.NBT_TYPE.write(context, value.smallParticle));
-                builder.put("large_particle", Particle.NBT_TYPE.write(context, value.largeParticle));
-                builder.putString("sound", value.sound.namespace().asString());
-
-                return builder.build();
-            }
-
-            @Override
-            public @NotNull Explode read(@NotNull Context context, @NotNull BinaryTag tag) {
-                final CompoundBinaryTag compound = (CompoundBinaryTag) tag;
-
-                boolean attributeToUser = compound.getBoolean("attribute_to_user");
-                BinaryTag damageTypeTag = compound.get("damage_type");
-                DynamicRegistry.Key<DamageType> damageType = damageTypeTag == null ? null : DamageType.NBT_TYPE.read(damageTypeTag);
-                BinaryTag immuneBlocksTag = compound.get("immune_blocks");
-                ObjectSet<Block> immuneBlocks = immuneBlocksTag == null ? null : IMMUNE_BLOCKS_NBT_TYPE.read(immuneBlocksTag);
-                BinaryTag knockbackMultiplierTag = compound.get("knockback_multiplier");
-                LevelBasedValue knockbackMultiplier = knockbackMultiplierTag == null ? null : LevelBasedValue.NBT_TYPE.read(knockbackMultiplierTag);
-                BinaryTag offsetTag = compound.get("offset");
-                Point offset = offsetTag == null ? null : BinaryTagSerializer.BLOCK_POSITION.read(offsetTag);
-                LevelBasedValue radius = LevelBasedValue.NBT_TYPE.read(Objects.requireNonNull(compound.get("radius")));
-                boolean createFire = compound.getBoolean("create_fire");
-                BlockInteraction blockInteraction = BlockInteraction.fromId(compound.getString("block_interaction"));
-                Particle smallParticle = Particle.NBT_TYPE.read(Objects.requireNonNull(compound.get("small_particle")));
-                Particle largeParticle = Particle.NBT_TYPE.read(Objects.requireNonNull(compound.get("large_particle")));
-                SoundEvent sound = SoundEvent.fromNamespaceId(Objects.requireNonNull(compound.getString("sound")));
-                Check.notNull(sound, "Cannot find sound event");
-
-                return new Explode(
-                        attributeToUser, damageType, immuneBlocks,
-                        knockbackMultiplier, offset, radius, createFire,
-                        blockInteraction, smallParticle, largeParticle, sound
-                );
-            }
-        };
+        public static final StructCodec<Explode> CODEC = StructCodec.struct(
+                "attribute_to_user", Codec.BOOLEAN, Explode::attributeToUser,
+                "damage_type", DamageType.CODEC.optional(), Explode::damageType,
+                "immune_blocks", ObjectSet.<Block>codec(Tag.BasicType.BLOCKS).optional(), Explode::immuneBlocks,
+                "knockback_multiplier", LevelBasedValue.CODEC.optional(), Explode::knockbackMultiplier,
+                "offset", Codec.BLOCK_POSITION.optional(), Explode::offset,
+                "radius", LevelBasedValue.CODEC, Explode::radius,
+                "create_fire", Codec.BOOLEAN, Explode::createFire,
+                "block_interaction", BlockInteraction.CODEC, Explode::blockInteraction,
+                "small_particle", Particle.CODEC, Explode::smallParticle,
+                "large_particle", Particle.CODEC, Explode::largeParticle,
+                "sound", SoundEvent.CODEC, Explode::sound,
+                Explode::new);
 
         @Override
         public @NotNull StructCodec<Explode> codec() {
@@ -191,6 +150,9 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             MOB("mob"),
             TNT("tnt"),
             TRIGGER("trigger");
+
+            public static final Codec<BlockInteraction> CODEC = Codec.STRING
+                    .transform(BlockInteraction::fromId, BlockInteraction::id);
 
             private final String id;
 
@@ -226,8 +188,17 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record PlaySound(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(PlaySound::new);
+    record PlaySound(
+            @NotNull SoundEvent sound,
+            @NotNull FloatProvider volume,
+            @NotNull FloatProvider pitch
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
+                "sound", SoundEvent.CODEC, PlaySound::sound,
+                "volume", FloatProvider.CODEC, PlaySound::volume,
+                "pitch", FloatProvider.CODEC, PlaySound::pitch,
+                PlaySound::new
+        );
 
         @Override
         public @NotNull StructCodec<PlaySound> codec() {
