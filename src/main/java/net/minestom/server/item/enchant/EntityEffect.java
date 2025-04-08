@@ -126,13 +126,13 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
             @NotNull SoundEvent sound
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<Explode> CODEC = StructCodec.struct(
-                "attribute_to_user", Codec.BOOLEAN, Explode::attributeToUser,
+                "attribute_to_user", Codec.BOOLEAN.optional(false), Explode::attributeToUser,
                 "damage_type", DamageType.CODEC.optional(), Explode::damageType,
                 "immune_blocks", ObjectSet.codec(Tag.BasicType.BLOCKS).optional(), Explode::immuneBlocks,
                 "knockback_multiplier", LevelBasedValue.CODEC.optional(), Explode::knockbackMultiplier,
                 "offset", Codec.BLOCK_POSITION.optional(), Explode::offset,
                 "radius", LevelBasedValue.CODEC, Explode::radius,
-                "create_fire", Codec.BOOLEAN, Explode::createFire,
+                "create_fire", Codec.BOOLEAN.optional(false), Explode::createFire,
                 "block_interaction", BlockInteraction.CODEC, Explode::blockInteraction,
                 "small_particle", Particle.CODEC, Explode::smallParticle,
                 "large_particle", Particle.CODEC, Explode::largeParticle,
