@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Random;
 
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
@@ -85,7 +86,7 @@ class SerializationContextTest {
         public static final StructCodec<MyEffect> CODEC = StructCodec.struct(MyEffect::new);
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             return 0;
         }
 

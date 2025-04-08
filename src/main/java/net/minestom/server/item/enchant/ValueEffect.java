@@ -9,6 +9,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.Random;
 
 public non-sealed interface ValueEffect extends Enchantment.Effect {
 
@@ -26,7 +27,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         return registry;
     }
 
-    float apply(float base, int level);
+    float apply(float base, int level, Random random);
 
     @NotNull StructCodec<? extends ValueEffect> codec();
 
@@ -36,7 +37,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
                 Add::new);
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             return base + value.calc(level);
         }
 
@@ -56,9 +57,9 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         }
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             for (ValueEffect effect : effects)
-                base = effect.apply(base, level);
+                base = effect.apply(base, level, random);
             return base;
         }
 
@@ -74,7 +75,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
                 Multiply::new);
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             return base * factor.calc(level);
         }
 
@@ -90,8 +91,18 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
                 RemoveBinomial::new);
 
         @Override
-        public float apply(float base, int level) {
-            throw new UnsupportedOperationException("todo");
+        public float apply(final float base, int level, Random random) {
+            float currentChance = chance.calc(level);
+            float value = base;
+
+            // Every iteration, there is a chance to decrease the value by 1
+            // The loop runs Math.ceil(base) times
+            for (int j = 0; j < base; j++) {
+                if (random.nextFloat() < currentChance)
+                    value -= 1;
+            }
+
+            return value;
         }
 
         @Override
@@ -104,7 +115,7 @@ public non-sealed interface ValueEffect extends Enchantment.Effect {
         public static final StructCodec<Set> CODEC = StructCodec.struct("value", LevelBasedValue.CODEC, Set::value, Set::new);
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             return value.calc(level);
         }
 
