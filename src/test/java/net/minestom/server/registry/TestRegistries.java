@@ -44,6 +44,7 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
     public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
+    public DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders = null;
     public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
     public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
     public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
@@ -149,6 +150,11 @@ public class TestRegistries implements Registries {
     @Override
     public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return Objects.requireNonNull(enchantmentLevelBasedValues);
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> enchantmentFloatProviders() {
+        return Objects.requireNonNull(enchantmentFloatProviders);
     }
 
     @Override
