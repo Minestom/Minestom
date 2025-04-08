@@ -13,7 +13,7 @@ import java.util.List;
 public non-sealed interface LocationEffect extends Enchantment.Effect {
 
     @NotNull StructCodec<LocationEffect> CODEC = Codec.RegistryTaggedUnion(
-            Registries::enchantmentLocationEffects, LocationEffect::codec, "type");
+            Registries::enchantmentLocationEffect, LocationEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> createDefaultRegistry() {

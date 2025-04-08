@@ -47,14 +47,14 @@ public class TestRegistries implements Registries {
     public DynamicRegistry<CowVariant> cowVariant = null;
     public DynamicRegistry<FrogVariant> frogVariant = null;
     public DynamicRegistry<PigVariant> pigVariant = null;
-    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues = null;
-    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects = null;
-    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects = null;
-    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects = null;
-    public DynamicRegistry<StructCodec<? extends IntProvider>> intProviders = null;
-    public DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders = null;
-    public DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders = null;
-    public DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates = null;
+    public DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValue = null;
+    public DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffect = null;
+    public DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffect = null;
+    public DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffect = null;
+    public DynamicRegistry<StructCodec<? extends IntProvider>> intProvider = null;
+    public DynamicRegistry<StructCodec<? extends FloatProvider>> floatProvider = null;
+    public DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProvider = null;
+    public DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicate = null;
 
     public TestRegistries() {
 
@@ -155,42 +155,42 @@ public class TestRegistries implements Registries {
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return Objects.requireNonNull(enchantmentLevelBasedValues);
+    public @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValue() {
+        return Objects.requireNonNull(enchantmentLevelBasedValue);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return Objects.requireNonNull(enchantmentValueEffects);
+    public @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffect() {
+        return Objects.requireNonNull(enchantmentValueEffect);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return Objects.requireNonNull(enchantmentEntityEffects);
+    public @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffect() {
+        return Objects.requireNonNull(enchantmentEntityEffect);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return Objects.requireNonNull(enchantmentLocationEffects);
+    public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffect() {
+        return Objects.requireNonNull(enchantmentLocationEffect);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProviders() {
-        return Objects.requireNonNull(intProviders);
+    public @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProvider() {
+        return Objects.requireNonNull(intProvider);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProviders() {
-        return Objects.requireNonNull(floatProviders);
+    public @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProvider() {
+        return Objects.requireNonNull(floatProvider);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProviders() {
-        return Objects.requireNonNull(blockStateProviders);
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProvider() {
+        return Objects.requireNonNull(blockStateProvider);
     }
 
     @Override
-    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicates() {
-        return Objects.requireNonNull(blockPredicates);
+    public @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicate() {
+        return Objects.requireNonNull(blockPredicate);
     }
 }

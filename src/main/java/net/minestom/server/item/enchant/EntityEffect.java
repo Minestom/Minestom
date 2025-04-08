@@ -25,7 +25,7 @@ import java.util.List;
 public non-sealed interface EntityEffect extends Enchantment.Effect {
 
     @NotNull StructCodec<EntityEffect> CODEC = Codec.RegistryTaggedUnion(
-            Registries::enchantmentEntityEffects, EntityEffect::codec, "type");
+            Registries::enchantmentEntityEffect, EntityEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> createDefaultRegistry() {

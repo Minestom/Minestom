@@ -26,7 +26,7 @@ import java.util.List;
 public interface BlockPredicate {
 
     @NotNull StructCodec<BlockPredicate> CODEC = Codec.RegistryTaggedUnion(
-            Registries::blockPredicates, BlockPredicate::codec, "type");
+            Registries::blockPredicate, BlockPredicate::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> createDefaultRegistry() {
