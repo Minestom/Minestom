@@ -1,7 +1,6 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.config.FloatProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
