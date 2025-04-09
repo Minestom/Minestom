@@ -1627,10 +1627,17 @@ public interface StructCodec<R> extends Codec<R> {
 
     private static <D, T> @NotNull Result<T> get(@NotNull Transcoder<D> coder, @NotNull Codec<T> codec, @NotNull String key, @NotNull MapLike<D> map) {
         if (INLINE.equals(key)) {
-            if (!(codec instanceof StructCodec<T> s))
-                return new Result.Error<>(key + ": not a struct");
-            return s.decodeFromMap(coder, map)
-                    .mapError(e -> key + ": " + e);
+            final Codec<T> decodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
+                    Codec<T> inner, T ignored
+            ) ? inner : codec;
+            if (!(decodeCodec instanceof StructCodec<T> s)) return new Result.Error<>(key + ": not a struct");
+
+            final Result<T> decodeResult = s.decodeFromMap(coder, map);
+            if (decodeResult instanceof Result.Error<T> && codec instanceof CodecImpl.OptionalImpl<T>(
+                    Codec<T> ignored, T defaultValue
+            )) return new Result.Ok<>(defaultValue);
+
+            return decodeResult.mapError(e -> key + ": " + e);
         }
         if (codec instanceof CodecImpl.OptionalImpl<T> optional && !map.hasValue(key))
             return new Result.Ok<>(optional.defaultValue());
@@ -1647,7 +1654,10 @@ public interface StructCodec<R> extends Codec<R> {
         }
 
         if (INLINE.equals(key)) {
-            if (!(codec instanceof StructCodec<T> s))
+            final Codec<T> encodeCodec = codec instanceof CodecImpl.OptionalImpl<T>(
+                    Codec<T> inner, T ignored
+            ) ? inner : codec;
+            if (!(encodeCodec instanceof StructCodec<T> s))
                 return new Result.Error<>(key + ": not a struct");
             final Result<D> mapEncodeResult = s.encodeToMap(coder, value, map);
             if (mapEncodeResult instanceof Result.Error<?> e)
