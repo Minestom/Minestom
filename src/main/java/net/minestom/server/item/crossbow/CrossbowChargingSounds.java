@@ -4,14 +4,15 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.registry.ObjectSet;
+import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.Nullable;
 
 public record CrossbowChargingSounds(
-        @Nullable ObjectSet start,
-        @Nullable ObjectSet mid,
-        @Nullable ObjectSet end
+        @Nullable ObjectSet<SoundEvent> start,
+        @Nullable ObjectSet<SoundEvent> mid,
+        @Nullable ObjectSet<SoundEvent> end
 ) {
-    private static final Codec<ObjectSet> SOUND_SET_CODEC = ObjectSet.codec(Tag.BasicType.SOUND_EVENTS);
+    private static final Codec<ObjectSet<SoundEvent>> SOUND_SET_CODEC = ObjectSet.codec(Tag.BasicType.SOUND_EVENTS);
     public static final Codec<CrossbowChargingSounds> CODEC = StructCodec.struct(
             "start", SOUND_SET_CODEC.optional(), CrossbowChargingSounds::start,
             "mid", SOUND_SET_CODEC.optional(), CrossbowChargingSounds::mid,

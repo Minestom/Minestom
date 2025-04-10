@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
@@ -12,26 +13,27 @@ import java.util.List;
 /**
  * A set of some keyed objects. May contain a single element, multiple elements, or a single tag (which itself contains multiple elements).
  */
-public sealed interface ObjectSet permits ObjectSetImpl {
+public sealed interface ObjectSet<T extends Keyed> permits ObjectSetImpl {
 
-    static @NotNull ObjectSet empty() {
-        return ObjectSetImpl.Empty.INSTANCE;
+    static <T extends Keyed> @NotNull ObjectSet<T> empty() {
+        // noinspection unchecked
+        return (ObjectSet<T>) ObjectSetImpl.Empty.INSTANCE;
     }
 
-    static @NotNull ObjectSet of(@NotNull Collection<Key> entries) {
-        return new ObjectSetImpl.Entries(List.copyOf(entries));
+    static <T extends Keyed> @NotNull ObjectSet<T> of(@NotNull Collection<Key> entries) {
+        return new ObjectSetImpl.Entries<>(List.copyOf(entries));
     }
 
-    static @NotNull ObjectSet of(@NotNull Tag tag) {
-        return new ObjectSetImpl.Tag(tag);
+    static <T extends Keyed> @NotNull ObjectSet<T> of(@NotNull Tag tag) {
+        return new ObjectSetImpl.Tag<>(tag);
     }
 
-    static NetworkBuffer.@NotNull Type<ObjectSet> networkType(@NotNull Tag.BasicType tagType) {
-        return new ObjectSetImpl.NetworkType(tagType);
+    static <T extends Keyed> NetworkBuffer.@NotNull Type<ObjectSet<T>> networkType(@NotNull Tag.BasicType tagType) {
+        return new ObjectSetImpl.NetworkType<>(tagType);
     }
 
-    static @NotNull Codec<ObjectSet> codec(@NotNull Tag.BasicType tagType) {
-        return new ObjectSetImpl.CodecImpl(tagType);
+    static <T extends Keyed> @NotNull Codec<ObjectSet<T>> codec(@NotNull Tag.BasicType tagType) {
+        return new ObjectSetImpl.CodecImpl<>(tagType);
     }
 
     /**
@@ -46,7 +48,7 @@ public sealed interface ObjectSet permits ObjectSetImpl {
         return contains(object.key());
     }
 
-    default boolean contains(@NotNull DynamicRegistry.Key<?> key) {
+    default boolean contains(@NotNull DynamicRegistry.Key<T> key) {
         return contains(key.key());
     }
 

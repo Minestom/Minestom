@@ -4,10 +4,9 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.collision.CollisionUtils;
-import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
+import net.minestom.server.fluid.Fluid;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.instance.Instance;
@@ -189,7 +188,7 @@ public interface BlockPredicate {
 
     record MatchingBlocks(
             @Nullable Point offset,
-            @NotNull ObjectSet blocks
+            @NotNull ObjectSet<Block> blocks
     ) implements BlockPredicate {
         public static final StructCodec<MatchingBlocks> CODEC = StructCodec.struct(
                 "offset", Codec.BLOCK_POSITION.optional(), MatchingBlocks::offset,
@@ -211,7 +210,7 @@ public interface BlockPredicate {
 
     record MatchingFluids(
             @Nullable Point offset,
-            @NotNull ObjectSet fluids
+            @NotNull ObjectSet<Fluid> fluids
     ) implements BlockPredicate {
         public static final StructCodec<MatchingFluids> CODEC = StructCodec.struct(
                 "offset", Codec.BLOCK_POSITION.optional(), MatchingFluids::offset,

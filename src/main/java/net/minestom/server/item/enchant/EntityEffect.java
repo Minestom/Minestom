@@ -7,11 +7,14 @@ import net.minestom.server.condition.BlockPredicate;
 import net.minestom.server.config.BlockStateProvider;
 import net.minestom.server.config.FloatProvider;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.component.ItemBlockState;
 import net.minestom.server.particle.Particle;
+import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
@@ -64,7 +67,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     }
 
     record ApplyPotionEffect(
-            @NotNull ObjectSet toApply,
+            @NotNull ObjectSet<PotionEffect> toApply,
             @NotNull LevelBasedValue minDuration,
             @NotNull LevelBasedValue maxDuration,
             @NotNull LevelBasedValue minAmplifier,
@@ -115,7 +118,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     record Explode(
             boolean attributeToUser,
             @Nullable DynamicRegistry.Key<DamageType> damageType,
-            @Nullable ObjectSet immuneBlocks,
+            @Nullable ObjectSet<Block> immuneBlocks,
             @Nullable LevelBasedValue knockbackMultiplier,
             @Nullable Point offset,
             @NotNull LevelBasedValue radius,
@@ -128,7 +131,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         public static final StructCodec<Explode> CODEC = StructCodec.struct(
                 "attribute_to_user", Codec.BOOLEAN.optional(false), Explode::attributeToUser,
                 "damage_type", DamageType.CODEC.optional(), Explode::damageType,
-                "immune_blocks", ObjectSet.codec(Tag.BasicType.BLOCKS).optional(), Explode::immuneBlocks,
+                "immune_blocks", ObjectSet.<Block>codec(Tag.BasicType.BLOCKS).optional(), Explode::immuneBlocks,
                 "knockback_multiplier", LevelBasedValue.CODEC.optional(), Explode::knockbackMultiplier,
                 "offset", Codec.BLOCK_POSITION.optional(), Explode::offset,
                 "radius", LevelBasedValue.CODEC, Explode::radius,
@@ -301,7 +304,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     }
 
     record SummonEntity(
-            @NotNull ObjectSet entity,
+            @NotNull ObjectSet<EntityType> entity,
             boolean joinTeam
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(
