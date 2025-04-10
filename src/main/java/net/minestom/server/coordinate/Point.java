@@ -50,9 +50,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     /**
-     * Gets the floored value of the X component
+     * Gets the floored value of the Y component
      *
-     * @return the block X
+     * @return the block Y
      */
     @Contract(pure = true)
     default int blockY() {
@@ -60,9 +60,9 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     /**
-     * Gets the floored value of the X component
+     * Gets the floored value of the Z component
      *
-     * @return the block X
+     * @return the block Z
      */
     @Contract(pure = true)
     default int blockZ() {
