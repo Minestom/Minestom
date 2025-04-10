@@ -43,7 +43,7 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record RemoveEffects(@NotNull ObjectSet effects) implements ConsumeEffect {
+    record RemoveEffects(@NotNull ObjectSet<PotionEffect> effects) implements ConsumeEffect {
         public static final NetworkBuffer.Type<RemoveEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
                 ObjectSet.networkType(Tag.BasicType.POTION_EFFECTS), RemoveEffects::effects,
                 RemoveEffects::new);

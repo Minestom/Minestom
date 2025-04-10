@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -22,9 +23,9 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
             "description", Codec.COMPONENT, Enchantment::description,
-            "exclusive_set", ObjectSet.codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
-            "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
-            "primary_items", ObjectSet.codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
+            "exclusive_set", ObjectSet.<Key>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
+            "supported_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
+            "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
             "weight", Codec.INT, Enchantment::weight,
             "max_level", Codec.INT, Enchantment::maxLevel,
             "min_cost", Cost.CODEC, Enchantment::minCost,
@@ -50,11 +51,11 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Component description();
 
-    @NotNull ObjectSet exclusiveSet();
+    @NotNull ObjectSet<Key> exclusiveSet();
 
-    @NotNull ObjectSet supportedItems();
+    @NotNull ObjectSet<Material> supportedItems();
 
-    @Nullable ObjectSet primaryItems();
+    @Nullable ObjectSet<Material> primaryItems();
 
     int weight();
 
@@ -93,9 +94,9 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     class Builder {
         private Component description = Component.empty();
-        private ObjectSet exclusiveSet = ObjectSet.empty();
-        private ObjectSet supportedItems = ObjectSet.empty();
-        private ObjectSet primaryItems = ObjectSet.empty();
+        private ObjectSet<Key> exclusiveSet = ObjectSet.empty();
+        private ObjectSet<Material> supportedItems = ObjectSet.empty();
+        private ObjectSet<Material> primaryItems = ObjectSet.empty();
         private int weight = 1;
         private int maxLevel = 1;
         private Cost minCost = Cost.DEFAULT;
@@ -112,17 +113,17 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return this;
         }
 
-        public @NotNull Builder exclusiveSet(@NotNull ObjectSet exclusiveSet) {
+        public @NotNull Builder exclusiveSet(@NotNull ObjectSet<Key> exclusiveSet) {
             this.exclusiveSet = exclusiveSet;
             return this;
         }
 
-        public @NotNull Builder supportedItems(@NotNull ObjectSet supportedItems) {
+        public @NotNull Builder supportedItems(@NotNull ObjectSet<Material> supportedItems) {
             this.supportedItems = supportedItems;
             return this;
         }
 
-        public @NotNull Builder primaryItems(@NotNull ObjectSet primaryItems) {
+        public @NotNull Builder primaryItems(@NotNull ObjectSet<Material> primaryItems) {
             this.primaryItems = primaryItems;
             return this;
         }

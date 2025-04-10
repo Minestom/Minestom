@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -12,10 +13,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
+sealed interface ObjectSetImpl<T extends Keyed> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
 
-    record Empty() implements ObjectSetImpl {
-        static final Empty INSTANCE = new Empty();
+    record Empty<T extends Keyed>() implements ObjectSetImpl<T> {
+        static final Empty<?> INSTANCE = new Empty<>();
 
         @Override
         public boolean contains(@NotNull Key namespace) {
@@ -23,7 +24,7 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
         }
     }
 
-    record Entries(@NotNull List<Key> entries) implements ObjectSetImpl {
+    record Entries<T extends Keyed>(@NotNull List<Key> entries) implements ObjectSetImpl<T> {
 
         public Entries {
             entries = List.copyOf(entries);
@@ -35,7 +36,7 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
         }
     }
 
-    final class Tag implements ObjectSetImpl {
+    final class Tag<T extends Keyed> implements ObjectSetImpl<T> {
         private final net.minestom.server.gamedata.tags.Tag.BasicType tagType;
         private final String name;
         private volatile Set<Key> value = null;
@@ -73,32 +74,32 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
         }
     }
 
-    record NetworkType(
+    record NetworkType<T extends Keyed>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements NetworkBuffer.Type<ObjectSet> {
+    ) implements NetworkBuffer.Type<ObjectSet<T>> {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, ObjectSet value) {
+        public void write(@NotNull NetworkBuffer buffer, ObjectSet<T> value) {
             throw new UnsupportedOperationException("todo");
         }
 
         @Override
-        public ObjectSet read(@NotNull NetworkBuffer buffer) {
+        public ObjectSet<T> read(@NotNull NetworkBuffer buffer) {
             throw new UnsupportedOperationException("todo");
         }
     }
 
-    record CodecImpl(
+    record CodecImpl<T extends Keyed>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
-    ) implements Codec<ObjectSet> {
-        private static final Codec<Entries> ENTRIES_CODEC = Codec.KEY.list()
+    ) implements Codec<ObjectSet<T>> {
+        private static final Codec<Entries<?>> ENTRIES_CODEC = Codec.KEY.list()
                 .transform(Entries::new, Entries::entries);
 
         @Override
-        public @NotNull <D> Result<ObjectSet> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            final Result<Entries> entriesResult = ENTRIES_CODEC.decode(coder, value);
-            if (entriesResult instanceof Result.Ok(Entries entries)) {
+        public @NotNull <D> Result<ObjectSet<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<Entries<?>> entriesResult = ENTRIES_CODEC.decode(coder, value);
+            if (entriesResult instanceof Result.Ok(Entries<?> entries)) {
                 //noinspection unchecked
-                return new Result.Ok<>((ObjectSet) entries);
+                return new Result.Ok<>((ObjectSet<T>) entries);
             }
 
             final Result<String> stringResult = coder.getString(value);
@@ -108,16 +109,16 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
 
             // Could be a tag or a block name depending if it starts with a #
             return new Result.Ok<>(string.startsWith("#")
-                    ? new Tag(tagType(), string.substring(1))
-                    : new Entries(List.of(Key.key(string))));
+                    ? new Tag<>(tagType(), string.substring(1))
+                    : new Entries<>(List.of(Key.key(string))));
         }
 
         @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet value) {
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable ObjectSet<T> value) {
             if (value == null) return new Result.Error<>("null");
             return new Result.Ok<>(switch (value) {
-                case Empty empty -> coder.emptyList();
-                case Entries entries -> {
+                case Empty<T> empty -> coder.emptyList();
+                case Entries<T> entries -> {
                     if (entries.entries.size() == 1)
                         yield coder.createString(entries.entries.stream().findFirst().get().asString());
                     final Transcoder.ListBuilder<D> list = coder.createList(entries.entries.size());
@@ -125,7 +126,7 @@ sealed interface ObjectSetImpl extends ObjectSet permits ObjectSetImpl.Empty, Ob
                         list.add(coder.createString(entry.asString()));
                     yield list.build();
                 }
-                case Tag tag -> coder.createString("#" + tag.name());
+                case Tag<T> tag -> coder.createString("#" + tag.name());
             });
         }
     }

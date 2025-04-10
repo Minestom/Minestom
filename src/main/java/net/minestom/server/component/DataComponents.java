@@ -66,7 +66,7 @@ public class DataComponents {
     public static final DataComponent<Weapon> WEAPON = register("weapon", Weapon.NETWORK_TYPE, Weapon.CODEC);
     public static final DataComponent<Integer> ENCHANTABLE = register("enchantable", NetworkBuffer.VAR_INT, wrapObject("value", Codec.INT));
     public static final DataComponent<Equippable> EQUIPPABLE = register("equippable", Equippable.NETWORK_TYPE, Equippable.CODEC);
-    public static final DataComponent<ObjectSet> REPAIRABLE = register("repairable",
+    public static final DataComponent<ObjectSet<Material>> REPAIRABLE = register("repairable",
             ObjectSet.networkType(Tag.BasicType.ITEMS),
             wrapObject("items", ObjectSet.codec(Tag.BasicType.ITEMS)));
     public static final DataComponent<Unit> GLIDER = register("glider", NetworkBuffer.UNIT, Codec.UNIT);
