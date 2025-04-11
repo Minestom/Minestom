@@ -20,13 +20,14 @@ import static net.minestom.server.network.NetworkBuffer.*;
 /**
  * Represents an outgoing chat message packet.
  */
-public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] signature,
+public record PlayerChatMessagePacket(int globalIndex, UUID sender, int index, byte @Nullable [] signature,
                                       SignedMessageBody.@NotNull Packed messageBody,
                                       @Nullable Component unsignedContent, FilterMask filterMask,
                                       int msgTypeId, Component msgTypeName,
                                       @Nullable Component msgTypeTarget) implements ServerPacket.Play, ServerPacket.ComponentHolding {
 
     public static final NetworkBuffer.Type<PlayerChatMessagePacket> SERIALIZER = NetworkBufferTemplate.template(
+            VAR_INT, PlayerChatMessagePacket::globalIndex,
             UUID, PlayerChatMessagePacket::sender,
             VAR_INT, PlayerChatMessagePacket::index,
             RAW_BYTES.optional(), PlayerChatMessagePacket::signature,
@@ -50,10 +51,8 @@ public record PlayerChatMessagePacket(UUID sender, int index, byte @Nullable [] 
 
     @Override
     public @NotNull ServerPacket copyWithOperator(@NotNull UnaryOperator<Component> operator) {
-        return new PlayerChatMessagePacket(sender, index, signature,
-                messageBody,
-                operator.apply(unsignedContent), filterMask,
-                msgTypeId, operator.apply(msgTypeName),
-                operator.apply(msgTypeTarget));
+        return new PlayerChatMessagePacket(globalIndex, sender, index, signature,
+                messageBody, operator.apply(unsignedContent), filterMask,
+                msgTypeId, operator.apply(msgTypeName), operator.apply(msgTypeTarget));
     }
 }

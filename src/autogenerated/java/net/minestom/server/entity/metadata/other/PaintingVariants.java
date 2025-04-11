@@ -7,103 +7,103 @@ import net.minestom.server.registry.DynamicRegistry;
  */
 @SuppressWarnings("unused")
 interface PaintingVariants {
-    DynamicRegistry.Key<PaintingMeta.Variant> BOUQUET = DynamicRegistry.Key.of("minecraft:bouquet");
+    DynamicRegistry.Key<PaintingVariant> BOUQUET = DynamicRegistry.Key.of("minecraft:bouquet");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> WITHER = DynamicRegistry.Key.of("minecraft:wither");
+    DynamicRegistry.Key<PaintingVariant> WITHER = DynamicRegistry.Key.of("minecraft:wither");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> ALBAN = DynamicRegistry.Key.of("minecraft:alban");
+    DynamicRegistry.Key<PaintingVariant> ALBAN = DynamicRegistry.Key.of("minecraft:alban");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> UNPACKED = DynamicRegistry.Key.of("minecraft:unpacked");
+    DynamicRegistry.Key<PaintingVariant> UNPACKED = DynamicRegistry.Key.of("minecraft:unpacked");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> AZTEC = DynamicRegistry.Key.of("minecraft:aztec");
+    DynamicRegistry.Key<PaintingVariant> AZTEC = DynamicRegistry.Key.of("minecraft:aztec");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> MATCH = DynamicRegistry.Key.of("minecraft:match");
+    DynamicRegistry.Key<PaintingVariant> MATCH = DynamicRegistry.Key.of("minecraft:match");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> FINDING = DynamicRegistry.Key.of("minecraft:finding");
+    DynamicRegistry.Key<PaintingVariant> FINDING = DynamicRegistry.Key.of("minecraft:finding");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> BAROQUE = DynamicRegistry.Key.of("minecraft:baroque");
+    DynamicRegistry.Key<PaintingVariant> BAROQUE = DynamicRegistry.Key.of("minecraft:baroque");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> ENDBOSS = DynamicRegistry.Key.of("minecraft:endboss");
+    DynamicRegistry.Key<PaintingVariant> ENDBOSS = DynamicRegistry.Key.of("minecraft:endboss");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> ORB = DynamicRegistry.Key.of("minecraft:orb");
+    DynamicRegistry.Key<PaintingVariant> ORB = DynamicRegistry.Key.of("minecraft:orb");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> AZTEC2 = DynamicRegistry.Key.of("minecraft:aztec2");
+    DynamicRegistry.Key<PaintingVariant> AZTEC2 = DynamicRegistry.Key.of("minecraft:aztec2");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> SUNFLOWERS = DynamicRegistry.Key.of("minecraft:sunflowers");
+    DynamicRegistry.Key<PaintingVariant> SUNFLOWERS = DynamicRegistry.Key.of("minecraft:sunflowers");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> CHANGING = DynamicRegistry.Key.of("minecraft:changing");
+    DynamicRegistry.Key<PaintingVariant> CHANGING = DynamicRegistry.Key.of("minecraft:changing");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> WASTELAND = DynamicRegistry.Key.of("minecraft:wasteland");
+    DynamicRegistry.Key<PaintingVariant> WASTELAND = DynamicRegistry.Key.of("minecraft:wasteland");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> DONKEY_KONG = DynamicRegistry.Key.of("minecraft:donkey_kong");
+    DynamicRegistry.Key<PaintingVariant> DONKEY_KONG = DynamicRegistry.Key.of("minecraft:donkey_kong");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> BUST = DynamicRegistry.Key.of("minecraft:bust");
+    DynamicRegistry.Key<PaintingVariant> BUST = DynamicRegistry.Key.of("minecraft:bust");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> POOL = DynamicRegistry.Key.of("minecraft:pool");
+    DynamicRegistry.Key<PaintingVariant> POOL = DynamicRegistry.Key.of("minecraft:pool");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> PIGSCENE = DynamicRegistry.Key.of("minecraft:pigscene");
+    DynamicRegistry.Key<PaintingVariant> PIGSCENE = DynamicRegistry.Key.of("minecraft:pigscene");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> BURNING_SKULL = DynamicRegistry.Key.of("minecraft:burning_skull");
+    DynamicRegistry.Key<PaintingVariant> BURNING_SKULL = DynamicRegistry.Key.of("minecraft:burning_skull");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> FIRE = DynamicRegistry.Key.of("minecraft:fire");
+    DynamicRegistry.Key<PaintingVariant> FIRE = DynamicRegistry.Key.of("minecraft:fire");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> SEA = DynamicRegistry.Key.of("minecraft:sea");
+    DynamicRegistry.Key<PaintingVariant> SEA = DynamicRegistry.Key.of("minecraft:sea");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> SUNSET = DynamicRegistry.Key.of("minecraft:sunset");
+    DynamicRegistry.Key<PaintingVariant> SUNSET = DynamicRegistry.Key.of("minecraft:sunset");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> POND = DynamicRegistry.Key.of("minecraft:pond");
+    DynamicRegistry.Key<PaintingVariant> POND = DynamicRegistry.Key.of("minecraft:pond");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> HUMBLE = DynamicRegistry.Key.of("minecraft:humble");
+    DynamicRegistry.Key<PaintingVariant> HUMBLE = DynamicRegistry.Key.of("minecraft:humble");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> TIDES = DynamicRegistry.Key.of("minecraft:tides");
+    DynamicRegistry.Key<PaintingVariant> TIDES = DynamicRegistry.Key.of("minecraft:tides");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> PRAIRIE_RIDE = DynamicRegistry.Key.of("minecraft:prairie_ride");
+    DynamicRegistry.Key<PaintingVariant> PRAIRIE_RIDE = DynamicRegistry.Key.of("minecraft:prairie_ride");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> FERN = DynamicRegistry.Key.of("minecraft:fern");
+    DynamicRegistry.Key<PaintingVariant> FERN = DynamicRegistry.Key.of("minecraft:fern");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> PASSAGE = DynamicRegistry.Key.of("minecraft:passage");
+    DynamicRegistry.Key<PaintingVariant> PASSAGE = DynamicRegistry.Key.of("minecraft:passage");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> LOWMIST = DynamicRegistry.Key.of("minecraft:lowmist");
+    DynamicRegistry.Key<PaintingVariant> LOWMIST = DynamicRegistry.Key.of("minecraft:lowmist");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> COURBET = DynamicRegistry.Key.of("minecraft:courbet");
+    DynamicRegistry.Key<PaintingVariant> COURBET = DynamicRegistry.Key.of("minecraft:courbet");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> WANDERER = DynamicRegistry.Key.of("minecraft:wanderer");
+    DynamicRegistry.Key<PaintingVariant> WANDERER = DynamicRegistry.Key.of("minecraft:wanderer");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> BACKYARD = DynamicRegistry.Key.of("minecraft:backyard");
+    DynamicRegistry.Key<PaintingVariant> BACKYARD = DynamicRegistry.Key.of("minecraft:backyard");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> EARTH = DynamicRegistry.Key.of("minecraft:earth");
+    DynamicRegistry.Key<PaintingVariant> EARTH = DynamicRegistry.Key.of("minecraft:earth");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> SKULL_AND_ROSES = DynamicRegistry.Key.of("minecraft:skull_and_roses");
+    DynamicRegistry.Key<PaintingVariant> SKULL_AND_ROSES = DynamicRegistry.Key.of("minecraft:skull_and_roses");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> CAVEBIRD = DynamicRegistry.Key.of("minecraft:cavebird");
+    DynamicRegistry.Key<PaintingVariant> CAVEBIRD = DynamicRegistry.Key.of("minecraft:cavebird");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> FIGHTERS = DynamicRegistry.Key.of("minecraft:fighters");
+    DynamicRegistry.Key<PaintingVariant> FIGHTERS = DynamicRegistry.Key.of("minecraft:fighters");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> COTAN = DynamicRegistry.Key.of("minecraft:cotan");
+    DynamicRegistry.Key<PaintingVariant> COTAN = DynamicRegistry.Key.of("minecraft:cotan");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> CREEBET = DynamicRegistry.Key.of("minecraft:creebet");
+    DynamicRegistry.Key<PaintingVariant> CREEBET = DynamicRegistry.Key.of("minecraft:creebet");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> OWLEMONS = DynamicRegistry.Key.of("minecraft:owlemons");
+    DynamicRegistry.Key<PaintingVariant> OWLEMONS = DynamicRegistry.Key.of("minecraft:owlemons");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> GRAHAM = DynamicRegistry.Key.of("minecraft:graham");
+    DynamicRegistry.Key<PaintingVariant> GRAHAM = DynamicRegistry.Key.of("minecraft:graham");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> MEDITATIVE = DynamicRegistry.Key.of("minecraft:meditative");
+    DynamicRegistry.Key<PaintingVariant> MEDITATIVE = DynamicRegistry.Key.of("minecraft:meditative");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> KEBAB = DynamicRegistry.Key.of("minecraft:kebab");
+    DynamicRegistry.Key<PaintingVariant> KEBAB = DynamicRegistry.Key.of("minecraft:kebab");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> STAGE = DynamicRegistry.Key.of("minecraft:stage");
+    DynamicRegistry.Key<PaintingVariant> STAGE = DynamicRegistry.Key.of("minecraft:stage");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> BOMB = DynamicRegistry.Key.of("minecraft:bomb");
+    DynamicRegistry.Key<PaintingVariant> BOMB = DynamicRegistry.Key.of("minecraft:bomb");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> PLANT = DynamicRegistry.Key.of("minecraft:plant");
+    DynamicRegistry.Key<PaintingVariant> PLANT = DynamicRegistry.Key.of("minecraft:plant");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> WATER = DynamicRegistry.Key.of("minecraft:water");
+    DynamicRegistry.Key<PaintingVariant> WATER = DynamicRegistry.Key.of("minecraft:water");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> POINTER = DynamicRegistry.Key.of("minecraft:pointer");
+    DynamicRegistry.Key<PaintingVariant> POINTER = DynamicRegistry.Key.of("minecraft:pointer");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> SKELETON = DynamicRegistry.Key.of("minecraft:skeleton");
+    DynamicRegistry.Key<PaintingVariant> SKELETON = DynamicRegistry.Key.of("minecraft:skeleton");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> VOID = DynamicRegistry.Key.of("minecraft:void");
+    DynamicRegistry.Key<PaintingVariant> VOID = DynamicRegistry.Key.of("minecraft:void");
 
-    DynamicRegistry.Key<PaintingMeta.Variant> WIND = DynamicRegistry.Key.of("minecraft:wind");
+    DynamicRegistry.Key<PaintingVariant> WIND = DynamicRegistry.Key.of("minecraft:wind");
 }
