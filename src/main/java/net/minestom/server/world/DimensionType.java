@@ -6,7 +6,7 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -66,7 +66,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:dimension_type", REGISTRY_CODEC, Registry.Resource.DIMENSION_TYPES);
+        return DynamicRegistry.create("minecraft:dimension_type", REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean ultrawarm();

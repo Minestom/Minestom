@@ -8,7 +8,7 @@ import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.WorldBorder;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.chunk.ChunkCache;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -177,7 +177,7 @@ public final class CollisionUtils {
         return newPosition;
     }
 
-    public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
+    public static Shape parseBlockShape(String collision, String occlusion, RegistryData.BlockEntry blockEntry) {
         return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
     }
 

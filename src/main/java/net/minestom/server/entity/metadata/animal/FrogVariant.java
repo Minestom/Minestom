@@ -6,7 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,7 +25,7 @@ public sealed interface FrogVariant extends FrogVariants permits FrogVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<FrogVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:frog_variant", REGISTRY_CODEC, Registry.Resource.FROG_VARIANTS);
+        return DynamicRegistry.create("minecraft:frog_variant", REGISTRY_CODEC, RegistryData.Resource.FROG_VARIANTS);
     }
 
     static @NotNull FrogVariant create(@NotNull Key assetId) {

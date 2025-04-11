@@ -1,7 +1,5 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.kyori.adventure.nbt.BinaryTag;
@@ -13,6 +11,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -125,8 +124,23 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
+    public @Nullable ObjectSet<T> getTag(@NotNull Key<T> key) {
+        return null;
+    }
+
+    @Override
     public @NotNull List<T> values() {
         return Collections.unmodifiableList(entryById);
+    }
+
+    @Override
+    public @NotNull Collection<ObjectSet<T>> tags() {
+        return List.of();
+    }
+
+    @Override
+    public TagsPacket.@NotNull Registry tagRegistry() {
+        throw new UnsupportedOperationException("todo");
     }
 
     @Override
@@ -228,11 +242,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator) {
         Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
+        try (InputStream resourceStream = RegistryData.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final JsonElement json = Registry.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            final JsonElement json = RegistryData.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.id() + ": expected a JSON object, got " + json);
 

@@ -3,6 +3,7 @@ package net.minestom.server.gamedata.tags;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -19,7 +20,7 @@ public final class TagManager {
         // Load required tags from files
         for (var type : Tag.BasicType.values()) {
             if (type.getResource() == null || type.getFunction() == null) continue;
-            final var json = net.minestom.server.registry.Registry.load(type.getResource());
+            final var json = RegistryData.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
             json.keySet().forEach(tagName -> {
                 final var tag = new Tag(Key.key(tagName), getValues(json, tagName));
