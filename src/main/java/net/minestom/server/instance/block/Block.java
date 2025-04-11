@@ -2,6 +2,8 @@ package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
@@ -28,6 +30,15 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
 
     @NotNull
     NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
+    @NotNull
+    Codec<Block> CODEC = Codec.STRING.transform(Block::fromKey, block -> {
+        if (block.defaultState() != block) return null; // Use the struct codec
+        return block.key().asString();
+    }).orElse(StructCodec.struct(
+            "Name", Codec.KEY, Block::key,
+            "Properties", Codec.STRING.mapValue(Codec.STRING), Block::properties,
+            (name, properties) -> Objects.requireNonNull(Block.fromKey(name)).withProperties(properties)
+    ));
 
     /**
      * Creates a new block with the the property {@code property} sets to {@code value}.

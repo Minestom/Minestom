@@ -7,6 +7,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,7 +23,16 @@ public class Color implements RGBLike {
             color -> Color.fromRGBLike(color).asRGB()
     );
     public static final Codec<RGBLike> CODEC = Codec.INT
-            .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
+            .<RGBLike>transform(Color::new, color -> Color.fromRGBLike(color).asRGB())
+            .orElse(Codec.FLOAT.list().transform(list -> new Color(
+                    (int) (list.get(0) * 255),
+                    (int) (list.get(1) * 255),
+                    (int) (list.get(2) * 255)
+            ), color -> List.of(
+                    color.red() / 255.0f,
+                    color.blue() / 255.0f,
+                    color.green() / 255.0f
+            )));
 
     public static final RGBLike WHITE = new Color(255, 255, 255);
 
