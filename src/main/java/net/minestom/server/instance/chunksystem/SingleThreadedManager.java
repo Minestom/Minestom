@@ -321,7 +321,7 @@ class SingleThreadedManager {
         if (!ServerFlag.ASYNC_CHUNK_SYSTEM) {
             task.run();
         } else {
-            chunk.getScheduler().scheduleTask(task, TaskSchedule.tick(10), TaskSchedule.stop());
+            this.scheduleOnChunk(chunk, task);
         }
     }
 
@@ -372,6 +372,10 @@ class SingleThreadedManager {
                 return;
             }
         }
+    }
+
+    private void scheduleOnChunk(Chunk chunk, Runnable task) {
+        chunk.getScheduler().scheduleTask(task, TaskSchedule.tick(10), TaskSchedule.stop());
     }
 
     void startWorkerGenerateChunk(int x, int z) {
@@ -438,7 +442,7 @@ class SingleThreadedManager {
             runChunk.run();
         } else {
             this.instance.scheduler().scheduleNextProcess(runInstance);
-            chunk.getScheduler().scheduleNextProcess(runChunk);
+            this.scheduleOnChunk(chunk, runChunk);
         }
     }
 
