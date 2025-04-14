@@ -77,6 +77,8 @@ public class Main {
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
+        commandManager.register(new CopyInstanceCommand());
+        commandManager.register(new LoadedChunksCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
