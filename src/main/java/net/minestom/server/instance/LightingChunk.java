@@ -347,7 +347,6 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Chunk> flushQueue(Instance instance, Set<Point> queue, LightType type, QueueType queueType) {
-        Set<Light> sections = ConcurrentHashMap.newKeySet();
         Set<Point> newQueue = ConcurrentHashMap.newKeySet();
 
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
@@ -396,8 +395,6 @@ public class LightingChunk extends DynamicChunk {
                             Light.getNeighbors(chunk, point.blockY()),
                             lightLookup, paletteLookup);
                 };
-
-                sections.add(light);
 
                 light.flip();
                 newQueue.addAll(toAdd);
@@ -477,6 +474,8 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
+                if (x == 0 && z == 0) continue; // Don't check origin
+
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
@@ -490,6 +489,8 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
+                if (x == 0 && z == 0) continue; // Don't check origin
+
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
