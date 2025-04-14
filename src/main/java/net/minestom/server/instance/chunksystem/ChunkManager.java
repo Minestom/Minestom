@@ -2,6 +2,8 @@ package net.minestom.server.instance.chunksystem;
 
 import it.unimi.dsi.fastutil.Pair;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.event.instance.InstanceChunkLoadEvent;
+import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.instance.*;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.utils.chunk.ChunkSupplier;
@@ -113,6 +115,11 @@ public interface ChunkManager {
      * WARNING: this should only return already-loaded chunk, use {@link #addClaim(int, int)} or similar to load one instead.
      * <p>
      * WARNING: the returned chunk can be unloaded as soon as this call returns. The better approach is to use {@link #addClaim(int, int)} to get a chunk.
+     * @implNote
+     * After the callback {@link ClaimCallbacks#chunkLoaded(ChunkClaim, Chunk)} or {@link ClaimCallbacks#allChunksLoaded(ChunkClaim)} is called, the given chunk
+     * could still not be returned by this method. This is because the "loadedChunks" HashMap is updated on the chunk tick thread (partition).
+     * This behavior makes {@link InstanceChunkLoadEvent} and {@link InstanceChunkUnloadEvent} more consistent, but creates this inconsistency instead.
+     * This could change in the future, when a better alternative presents itself, hence this is an implementation note.
      *
      * @param chunkX the chunk X
      * @param chunkZ the chunk Z
