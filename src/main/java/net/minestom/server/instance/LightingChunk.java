@@ -483,7 +483,6 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
-                if (x == 0 && z == 0) continue; // Don't check origin
 
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
@@ -498,7 +497,6 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
-                if (x == 0 && z == 0) continue; // Don't check origin
 
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
