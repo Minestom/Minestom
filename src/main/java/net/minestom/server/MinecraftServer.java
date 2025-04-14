@@ -30,6 +30,8 @@ import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
+import net.minestom.server.thread.ChunkBasedThreadDispatcherHandler;
+import net.minestom.server.thread.ThreadDispatcherHandler;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketSendingUtils;
@@ -75,15 +77,28 @@ public final class MinecraftServer implements MinecraftConstants {
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        updateProcess();
-        return new MinecraftServer();
+        return init(createDefaultDispatcherHandler());
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
-        ServerProcess process = new ServerProcessImpl();
+        return updateProcess(createDefaultDispatcherHandler());
+    }
+
+    public static <P extends Tickable> MinecraftServer init(ThreadDispatcherHandler<P> dispatcherHandler) {
+        updateProcess(dispatcherHandler);
+        return new MinecraftServer();
+    }
+
+    @ApiStatus.Internal
+    public static <P extends Tickable> ServerProcess updateProcess(ThreadDispatcherHandler<P> dispatcherHandler) {
+        ServerProcess process = new ServerProcessImpl<>(dispatcherHandler);
         serverProcess = process;
         return process;
+    }
+
+    private static @NotNull ThreadDispatcherHandler<? extends Tickable> createDefaultDispatcherHandler() {
+        return new ChunkBasedThreadDispatcherHandler();
     }
 
     /**

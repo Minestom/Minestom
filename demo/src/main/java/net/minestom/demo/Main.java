@@ -30,8 +30,10 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        //System.setProperty("minestom.dispatcher-threads", "3");
         MinecraftServer.setCompressionThreshold(0);
 
+        //MinecraftServer minecraftServer = MinecraftServer.init(new InstanceBasedThreadDispatcherHandler());
         MinecraftServer minecraftServer = MinecraftServer.init();
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
@@ -78,6 +80,7 @@ public class Main {
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
+        commandManager.register(new InstanceCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 

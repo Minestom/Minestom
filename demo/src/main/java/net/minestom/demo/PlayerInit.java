@@ -227,6 +227,9 @@ public class PlayerInit {
         instanceContainer.setTimeRate(0);
         instanceContainer.setTime(12000);
 
+//        for (int i = 0; i < 2; i++)
+//            instanceManager.createSharedInstance(instanceContainer);
+
         inventory = new Inventory(InventoryType.CHEST_1_ROW, Component.text("Test inventory"));
         inventory.setItemStack(3, ItemStack.of(Material.DIAMOND, 34));
     }
