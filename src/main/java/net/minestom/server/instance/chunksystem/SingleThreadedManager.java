@@ -376,6 +376,7 @@ class SingleThreadedManager {
 
     private void scheduleOnChunk(Chunk chunk, Runnable task) {
         chunk.getScheduler().scheduleTask(task, TaskSchedule.tick(10), TaskSchedule.stop());
+//        chunk.getScheduler().scheduleNextProcess(task); TODO use this again, line above is to provoke problems while debugging
     }
 
     void startWorkerGenerateChunk(int x, int z) {
