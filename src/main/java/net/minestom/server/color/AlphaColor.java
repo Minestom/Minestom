@@ -8,6 +8,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -19,7 +20,19 @@ public final class AlphaColor extends Color implements ARGBLike {
     private static final int BIT_MASK = 0xff;
 
     public static final NetworkBuffer.Type<AlphaColor> NETWORK_TYPE = NetworkBuffer.INT.transform(AlphaColor::new, AlphaColor::asARGB);
-    public static final Codec<AlphaColor> CODEC = Codec.INT.transform(AlphaColor::new, AlphaColor::asARGB);
+    public static final Codec<AlphaColor> CODEC = Codec.INT
+            .transform(AlphaColor::new, AlphaColor::asARGB)
+            .orElse(Codec.FLOAT.list().transform(list -> new AlphaColor(
+                    (int) (list.get(3) * 255),
+                    (int) (list.get(0) * 255),
+                    (int) (list.get(1) * 255),
+                    (int) (list.get(2) * 255)
+            ), color -> List.of(
+                    color.red() / 255.0f,
+                    color.blue() / 255.0f,
+                    color.green() / 255.0f,
+                    color.alpha() / 255.0f
+            )));
 
     public static final AlphaColor WHITE = new AlphaColor(255, 255, 255, 255);
 

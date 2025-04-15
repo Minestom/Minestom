@@ -5,6 +5,10 @@ import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.condition.BlockPredicate;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
@@ -298,20 +302,36 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.instrument();
     }
 
-    public static @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
-        return process().enchantmentLevelBasedValues();
+    public static @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> getEnchantmentLevelBasedValueRegistry() {
+        return process().enchantmentLevelBasedValue();
     }
 
-    public static @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
-        return process().enchantmentValueEffects();
+    public static @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> getEnchantmentValueEffectRegistry() {
+        return process().enchantmentValueEffect();
     }
 
-    public static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
-        return process().enchantmentEntityEffects();
+    public static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> getEnchantmentEntityEffectRegistry() {
+        return process().enchantmentEntityEffect();
     }
 
-    public static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
-        return process().enchantmentLocationEffects();
+    public static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> getEnchantmentLocationEffectRegistry() {
+        return process().enchantmentLocationEffect();
+    }
+
+    public static @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> getIntProviderRegistry() {
+        return process().intProvider();
+    }
+
+    public static @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> getFloatProviderRegistry() {
+        return process().floatProvider();
+    }
+
+    public static @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> getBlockStateProviderRegistry() {
+        return process().blockStateProvider();
+    }
+
+    public static @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> getBlockPredicateRegistry() {
+        return process().blockPredicate();
     }
 
     public static Server getServer() {

@@ -1,6 +1,10 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.condition.BlockPredicate;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.config.BlockStateProvider;
+import net.minestom.server.config.FloatProvider;
+import net.minestom.server.config.IntProvider;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
 import net.minestom.server.entity.metadata.animal.CowVariant;
@@ -67,17 +71,24 @@ public interface Registries {
 
     // The following are _not_ sent to the client.
 
-    @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues();
+    @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValue();
 
-    @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects();
+    @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffect();
 
-    @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects();
+    @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffect();
 
-    @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
+    @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffect();
+
+    @NotNull DynamicRegistry<StructCodec<? extends IntProvider>> intProvider();
+
+    @NotNull DynamicRegistry<StructCodec<? extends FloatProvider>> floatProvider();
+
+    @NotNull DynamicRegistry<StructCodec<? extends BlockStateProvider>> blockStateProvider();
+
+    @NotNull DynamicRegistry<StructCodec<? extends BlockPredicate>> blockPredicate();
 
     @FunctionalInterface
     interface Selector<T> {
         @NotNull DynamicRegistry<T> select(@NotNull Registries registries);
     }
-
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public interface LevelBasedValue {
 
     @NotNull StructCodec<LevelBasedValue> TAGGED_CODEC = Codec.RegistryTaggedUnion(
-            Registries::enchantmentLevelBasedValues, LevelBasedValue::codec, "type");
+            Registries::enchantmentLevelBasedValue, LevelBasedValue::codec, "type");
     @NotNull Codec<LevelBasedValue> CODEC = new Codec<>() {
         @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable LevelBasedValue value) {

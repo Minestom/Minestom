@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Random;
 
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static net.minestom.testing.TestUtils.assertEqualsSNBT;
@@ -19,7 +20,7 @@ class SerializationContextTest {
     @Test
     void testValueEffectSerializationVanilla() {
         var registry = ValueEffect.createDefaultRegistry();
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffect = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new ValueEffect.Add(new LevelBasedValue.Constant(1))));
         assertEqualsSNBT("""
@@ -31,7 +32,7 @@ class SerializationContextTest {
     void testValueEffectSerializationCustom() {
         var registry = ValueEffect.createDefaultRegistry();
         registry.register("minestom:my_effect", MyEffect.CODEC); // NOT registered to MINECRAFT_CORE
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffect = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new MyEffect()));
         assertNull(result);
@@ -41,7 +42,7 @@ class SerializationContextTest {
     void testValueEffectSerializationCustomInList() {
         var registry = ValueEffect.createDefaultRegistry();
         registry.register("minestom:my_effect", MyEffect.CODEC); // NOT registered to MINECRAFT_CORE
-        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffects = registry), true);
+        var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> r.enchantmentValueEffect = registry), true);
 
         var result = assertOk(ValueEffect.CODEC.list().encode(coder, List.of(
                 new ValueEffect.Add(new LevelBasedValue.Constant(1)),
@@ -59,8 +60,8 @@ class SerializationContextTest {
         var valueEffectRegistry = ValueEffect.createDefaultRegistry();
         levelBasedValueRegistry.register("minestom:my_level_based_value", MyLevelBasedValue.CODEC); // NOT registered to MINECRAFT_CORE
         var coder = new RegistryTranscoder<>(Transcoder.NBT, new TestRegistries(r -> {
-            r.enchantmentLevelBasedValues = levelBasedValueRegistry;
-            r.enchantmentValueEffects = valueEffectRegistry;
+            r.enchantmentLevelBasedValue = levelBasedValueRegistry;
+            r.enchantmentValueEffect = valueEffectRegistry;
         }), true);
 
         var result = assertOk(ValueEffect.CODEC.encode(coder, new ValueEffect.Add(new MyLevelBasedValue())));
@@ -85,7 +86,7 @@ class SerializationContextTest {
         public static final StructCodec<MyEffect> CODEC = StructCodec.struct(MyEffect::new);
 
         @Override
-        public float apply(float base, int level) {
+        public float apply(float base, int level, Random random) {
             return 0;
         }
 
