@@ -13,14 +13,12 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.*;
 
 import javax.crypto.Cipher;
 import java.io.IOException;
 import java.nio.channels.ReadableByteChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.WritableByteChannel;
 import java.security.PublicKey;
 import java.time.Instant;
 import java.util.*;
@@ -29,7 +27,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.zip.DataFormatException;
 
-public sealed interface NetworkBuffer permits NetworkBufferImpl {
+public sealed interface NetworkBuffer permits NetworkBufferIO, NetworkBufferImpl {
     Type<Unit> UNIT = new NetworkBufferTypeImpl.UnitType();
     Type<Boolean> BOOLEAN = new NetworkBufferTypeImpl.BooleanType();
     Type<Byte> BYTE = new NetworkBufferTypeImpl.ByteType();
@@ -152,17 +150,37 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
 
     void ensureWritable(long length);
 
+    /**
+     * Compact all the data from the readIndex to the writing index to zero align.
+     * This does not change the buffer capacity.
+     */
     void compact();
 
+    /**
+     * Trims the network buffer from its read index to its write index.
+     * This shrinks the buffer to the minimum size required to hold the data in [readIndex, writeIndex] and will be #{@link #readableBytes()} size.
+     */
+    void trim();
+
+    @Contract(pure = true)
     NetworkBuffer copy(long index, long length, long readIndex, long writeIndex);
 
+    @Contract(pure = true)
     default NetworkBuffer copy(long index, long length) {
         return copy(index, length, readIndex(), writeIndex());
     }
 
+    @Contract(pure = true)
+    NetworkBuffer slice(long index, long length, long readIndex, long writeIndex);
+
+    @Contract(pure = true)
+    default NetworkBuffer slice(long index, long length) {
+        return slice(index, length, readIndex(), writeIndex());
+    }
+
     int readChannel(ReadableByteChannel channel) throws IOException;
 
-    boolean writeChannel(SocketChannel channel) throws IOException;
+    boolean writeChannel(WritableByteChannel channel) throws IOException;
 
     void cipher(Cipher cipher, long start, long length);
 
@@ -171,6 +189,18 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     long decompress(long start, long length, NetworkBuffer output) throws DataFormatException;
 
     @Nullable Registries registries();
+
+    /**
+     * Warning: Experimental API
+     * The {@link NetworkBufferIO} view of this {@link NetworkBuffer}
+     * <p>
+     * Not intended for use, this method can be removed at any point if its no longer required for interoperability.
+     * @return the view
+     */
+    @ApiStatus.Experimental
+    default NetworkBufferIO io() {
+        return (NetworkBufferIO) this;
+    }
 
     interface Type<T> {
         void write(@NotNull NetworkBuffer buffer, T value);
@@ -233,6 +263,7 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     static @NotNull NetworkBuffer staticBuffer(long size) {
         return staticBuffer(size, null);
     }
+
 
     static @NotNull NetworkBuffer resizableBuffer(long initialSize, Registries registries) {
         return builder(initialSize)

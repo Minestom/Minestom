@@ -283,7 +283,7 @@ record ComponentNetworkBufferTypeImpl() implements NetworkBufferTypeImpl<Compone
             buffer.write(STRING_IO_UTF8, "components");
             final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
             if (!dataComponents.isEmpty()) {
-                final BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
+                final BinaryTagWriter nbtWriter = new BinaryTagWriter(impl(buffer));
                 try {
                     for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
                         final BinaryTag dataComponentValue = entry.getValue().value();
