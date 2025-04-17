@@ -17,6 +17,7 @@ public class BlockLightTest {
 
     @Test
     public void empty() {
+        assert Thread.holdsLock(new Object());
         var palette = Palette.blocks();
         var result = LightCompute.compute(palette, BlockLight.buildInternalQueue(palette));
         for (byte light : result) {

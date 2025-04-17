@@ -351,6 +351,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Chunk> flushQueue(Instance instance, Set<Point> queue, LightType type, QueueType queueType) {
+        assert Thread.holdsLock(instance);
+
         Set<Point> newQueue = ConcurrentHashMap.newKeySet();
 
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
@@ -475,6 +477,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Point> getNearbyRequired(Instance instance, Point point, LightType type) {
+        assert Thread.holdsLock(instance);
+
         Set<Point> collected = new HashSet<>();
         collected.add(point);
 
@@ -520,6 +524,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Point> collectRequiredNearby(Instance instance, Point point, LightType type) {
+        assert Thread.holdsLock(instance);
+
         final Set<Point> found = new HashSet<>();
         final ArrayDeque<Point> toCheck = new ArrayDeque<>();
 
