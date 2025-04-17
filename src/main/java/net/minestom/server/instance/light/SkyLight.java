@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -139,7 +140,7 @@ final class SkyLight implements Light {
     @ApiStatus.Internal
     public void set(byte[] copyArray) {
         this.content = copyArray.clone();
-        this.contentPropagation = this.content;
+        this.contentPropagation = null;
         this.isValidBorders = true;
         this.needsSend.set(true);
     }
@@ -150,7 +151,7 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public byte[] array() {
+    public byte @NotNull [] array() {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = LightCompute.bake(contentPropagation, content);
