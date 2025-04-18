@@ -6,7 +6,7 @@ import net.minestom.server.instance.Instance;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Chunks & Entities are elements and Instances are the partitions.
+ * Chunks and Entities are elements and Instances are the partitions.
  * Therefore, an instance can only have 1 ticking thread.
  */
 public class InstanceBasedThreadDispatcherHandler extends ThreadDispatcherHandler<Instance> {
