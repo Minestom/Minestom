@@ -11,9 +11,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -77,11 +77,11 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
     }
 
     @Override
-    public @NotNull Set<Map.Entry<DataComponent<?>, Object>> entrySet() {
-        if (components.isEmpty()) return Set.of();
-        final HashSet<Map.Entry<DataComponent<?>, Object>> entries = new HashSet<>();
+    public @NotNull Collection<DataComponent.Value> entrySet() {
+        if (components.isEmpty()) return List.of();
+        final List<DataComponent.Value> entries = new ArrayList<>(components.size());
         for (var entry : components.int2ObjectEntrySet())
-            entries.add(Map.entry(DataComponent.fromId(entry.getIntKey()), entry.getValue()));
+            entries.add(new DataComponent.Value(DataComponent.fromId(entry.getIntKey()), entry.getValue()));
         return entries;
     }
 
