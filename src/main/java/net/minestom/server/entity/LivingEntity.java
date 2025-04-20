@@ -607,6 +607,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         }
     }
 
+    public void leaveBed() {
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setBedInWhichSleepingPosition(null);
+        }
+    }
+
     public boolean isFlyingWithElytra() {
         return this.entityMeta.isFlyingWithElytra();
     }

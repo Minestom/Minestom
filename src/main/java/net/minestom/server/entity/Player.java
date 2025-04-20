@@ -821,7 +821,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         var meta = getEntityMeta();
         if (meta.isFlyingWithElytra()) {
             newPose = EntityPose.FALL_FLYING;
-        } else if (false) { // When should they be sleeping? We don't have any in-bed state...
+        } else if (meta instanceof LivingEntityMeta livingMeta && livingMeta.getBedInWhichSleepingPosition() != null) {
             newPose = EntityPose.SLEEPING;
         } else if (meta.isSwimming()) {
             newPose = EntityPose.SWIMMING;
@@ -945,7 +945,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     /**
      * Plays a given worldEvent at the given position for this player.
      *
-     * @param worldEvent                the worldEvent to play
+     * @param worldEvent            the worldEvent to play
      * @param x                     x position of the worldEvent
      * @param y                     y position of the worldEvent
      * @param z                     z position of the worldEvent
@@ -2322,6 +2322,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
     public void sendNotification(@NotNull Notification notification) {
         sendPacket(notification.buildAddPacket());
         sendPacket(notification.buildRemovePacket());
+    }
+
+    /**
+     * Sends a {@link EntityAnimationPacket} to clear remove the sleep darkness.
+     */
+    @Override
+    public void leaveBed() {
+        EntityAnimationPacket packet = new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.LEAVE_BED);
+        sendPacket(packet);
+        super.leaveBed();
     }
 
     public enum FacePoint {
