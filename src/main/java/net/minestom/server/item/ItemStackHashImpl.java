@@ -20,10 +20,10 @@ final class ItemStackHashImpl {
         final Map<DataComponent<?>, Integer> addedComponents = new HashMap<>();
         final Set<DataComponent<?>> removedComponents = new HashSet<>();
         for (var entry : itemStack.componentPatch().entrySet()) {
-            if (entry.getValue() != null) {
-                addedComponents.put(entry.getKey(), ((DataComponent<Object>) entry.getKey()).encode(hashCoder, entry.getValue()).orElseThrow());
+            if (entry.value() != null) {
+                addedComponents.put(entry.component(), ((DataComponent<Object>) entry.component()).encode(hashCoder, entry.value()).orElseThrow());
             } else {
-                removedComponents.add(entry.getKey());
+                removedComponents.add(entry.component());
             }
 
         }

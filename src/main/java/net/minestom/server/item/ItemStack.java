@@ -276,8 +276,8 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
             return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount())));
 
         final Map<Key, DataComponentValue> dataComponents = new HashMap<>();
-        for (final Map.Entry<DataComponent<?>, Object> entry : componentPatch().entrySet())
-            dataComponents.put(entry.getKey().key(), MinestomDataComponentValue.dataComponentValue(entry.getValue()));
+        for (final DataComponent.Value entry : componentPatch().entrySet())
+            dataComponents.put(entry.component().key(), MinestomDataComponentValue.dataComponentValue(entry.value()));
         return HoverEvent.showItem(op.apply(HoverEvent.ShowItem.showItem(material(), amount(), dataComponents)));
     }
 
