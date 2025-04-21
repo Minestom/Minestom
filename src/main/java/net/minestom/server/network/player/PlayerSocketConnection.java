@@ -89,6 +89,7 @@ public class PlayerSocketConnection extends PlayerConnection {
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
 
+    // NetworkMonitor is used to track the amount of data sent and received
     private final NetworkMonitor networkMonitor = new NetworkMonitor();
 
     // Index where compression starts, linked to `sentPacketCounter`
@@ -141,6 +142,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Success<ClientPacket> success -> {
                 for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : success.packets()) {
                     final ClientPacket packet = parsedPacket.packet();
+                    // Add the packet size to the network monitor
                     if (networkMonitor.isEnabled())
                         networkMonitor.addIncomingBytes(readBuffer.readIndex());
 
@@ -436,6 +438,7 @@ public class PlayerSocketConnection extends PlayerConnection {
             final boolean success = writeSendable(b, packet, compressed);
             if (success) {
                 sentPacketCounter.getAndIncrement();
+                // Add the packet size to the network monitor
                 if (networkMonitor.isEnabled())
                     networkMonitor.addOutgoingBytes(buffer.readableBytes());
             }
@@ -451,6 +454,11 @@ public class PlayerSocketConnection extends PlayerConnection {
     record EncryptionContext(Cipher encrypt, Cipher decrypt) {
     }
 
+    /**
+     * Gets the network monitor.
+     *
+     * @return the network monitor
+     */
     public NetworkMonitor networkMonitor() {
         return networkMonitor;
     }
