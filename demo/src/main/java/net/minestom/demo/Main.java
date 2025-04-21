@@ -6,6 +6,7 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.block.TestBlockHandler;
+import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
@@ -15,7 +16,9 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
@@ -35,6 +38,8 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
+        var beds = Block.values().stream().filter(block -> block.registry().blockEntityId() == 25).toList();
+        beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
@@ -77,6 +82,7 @@ public class Main {
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
+        commandManager.register(new SleepCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
