@@ -206,7 +206,7 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
                     patch.put(type.id(), type.read(buffer));
                 } else {
                     final byte[] array = buffer.read(NetworkBuffer.BYTE_ARRAY);
-                    final NetworkBuffer tempBuffer = NetworkBuffer.wrap(array, 0, array.length);
+                    final NetworkBuffer tempBuffer = NetworkBuffer.wrap(array, 0, array.length, buffer.registries());
                     patch.put(type.id(), type.read(tempBuffer));
                 }
             }
