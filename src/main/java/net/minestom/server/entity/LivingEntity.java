@@ -5,6 +5,7 @@ import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
@@ -604,6 +605,28 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             updatePose(); // Riptide spin attack has a pose
 
             meta.setNotifyAboutChanges(true);
+        }
+    }
+
+    /**
+     * Kicks the entity out of the bed.
+     */
+    public void leaveBed() {
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setBedInWhichSleepingPosition(null);
+        }
+    }
+
+    /**
+     * Sets the {@code point} of the bed in which the entity is sleeping in.
+     *
+     * @param point the position of the bed
+     */
+    public void enterBed(@NotNull Point point) {
+        LivingEntityMeta meta = getLivingEntityMeta();
+        if (meta != null) {
+            meta.setBedInWhichSleepingPosition(point);
         }
     }
 
