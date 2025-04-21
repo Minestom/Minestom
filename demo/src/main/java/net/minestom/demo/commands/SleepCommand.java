@@ -12,7 +12,7 @@ public class SleepCommand extends Command {
         setCondition(Conditions::playerOnly);
         setDefaultExecutor((sender, context) -> {
             Player player = (Player) sender;
-            player.getLivingEntityMeta().setBedInWhichSleepingPosition(player.getPosition());
+            player.enterBed(player.getPosition());
         });
 
     }

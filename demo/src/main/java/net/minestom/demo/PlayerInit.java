@@ -186,12 +186,20 @@ public class PlayerInit {
                     if (otherBlock.id() == block.id()) {
                         player.setVelocity(Vec.ZERO);
                         player.swingMainHand();
-                        player.getLivingEntityMeta().setBedInWhichSleepingPosition((isHead ? pos : other));
+                        player.enterBed((isHead ? pos : other));
                     }
                 }
             })
             .addListener(PlayerLeaveBedEvent.class, event -> {
-                event.setCancelled(ThreadLocalRandom.current().nextFloat() < 0.7f);
+                var player = event.getPlayer();
+                boolean snooze = ThreadLocalRandom.current().nextFloat() < 0.7f;
+                if (snooze) {
+                    event.setCancelled(true);
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_ALLAY_ITEM_THROWN, Sound.Source.PLAYER, 1f, 0.6f));
+                    player.sendActionBar(Component.text("I'm too tired to stand up!"));
+                } else {
+                    player.sendActionBar(Component.empty());
+                }
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
                 if (event.getHand() != PlayerHand.MAIN) return;
