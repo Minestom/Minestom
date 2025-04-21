@@ -14,6 +14,7 @@ public class EntityActionListener {
             case START_SPRINTING -> EntityActionListener.setSprinting(player, true);
             case STOP_SPRINTING -> EntityActionListener.setSprinting(player, false);
             case START_FLYING_ELYTRA -> EntityActionListener.startFlyingElytra(player);
+            case LEAVE_BED -> EntityActionListener.onLeaveBed(player);
 
             // TODO do remaining actions
         }
@@ -49,5 +50,13 @@ public class EntityActionListener {
     private static void startFlyingElytra(Player player) {
         player.setFlyingWithElytra(true);
         EventDispatcher.call(new PlayerStartFlyingWithElytraEvent(player));
+    }
+
+    private static void onLeaveBed(Player player) {
+        var event = new PlayerLeaveBedEvent(player);
+        EventDispatcher.callCancellable(event, () -> {
+            player.getLivingEntityMeta().setBedInWhichSleepingPosition(null);
+            player.leaveBed();
+        });
     }
 }

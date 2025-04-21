@@ -26,6 +26,7 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -137,6 +138,7 @@ public class PlayerInit {
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
+                inventory.addItemStack(ItemStack.of(Material.PURPLE_BED));
 
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(
@@ -156,6 +158,48 @@ public class PlayerInit {
             .addListener(PlayerPacketEvent.class, event -> {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
+            })
+            .addListener(PlayerBlockBreakEvent.class, event -> {
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                var pos = event.getBlockPosition();
+                if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                var isHead = "head".equals(block.getProperty("part"));
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                var otherBlock = instance.getBlock(other);
+                if (otherBlock.id() == block.id()) {
+                    instance.setBlock(other, Block.AIR);
+                }
+            })
+            .addListener(PlayerBlockInteractEvent.class, event -> {
+                var player = event.getPlayer();
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
+                    var pos = event.getBlockPosition();
+                    if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                    var isHead = "head".equals(block.getProperty("part"));
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                    var otherBlock = instance.getBlock(other);
+                    if (otherBlock.id() == block.id()) {
+                        player.setVelocity(Vec.ZERO);
+                        player.swingMainHand();
+                        player.enterBed((isHead ? pos : other));
+                    }
+                }
+            })
+            .addListener(PlayerLeaveBedEvent.class, event -> {
+                var player = event.getPlayer();
+                boolean snooze = ThreadLocalRandom.current().nextFloat() < 0.7f;
+                if (snooze) {
+                    event.setCancelled(true);
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_ALLAY_ITEM_THROWN, Sound.Source.PLAYER, 1f, 0.6f));
+                    player.sendActionBar(Component.text("I'm too tired to stand up!"));
+                } else {
+                    player.sendActionBar(Component.empty());
+                }
             })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
                 if (event.getHand() != PlayerHand.MAIN) return;
