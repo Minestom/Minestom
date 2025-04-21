@@ -95,6 +95,7 @@ dependencies {
     // Testing
     testImplementation(libs.bundles.junit)
     testImplementation(project(":testing"))
+    testRuntimeOnly(libs.slf4j.simple)
 }
 
 tasks {

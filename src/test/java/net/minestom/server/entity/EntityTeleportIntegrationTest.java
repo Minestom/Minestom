@@ -1,6 +1,7 @@
 package net.minestom.server.entity;
 
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.network.packet.server.ServerPacket;
 import net.minestom.server.network.packet.server.play.EntityPositionSyncPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
@@ -95,14 +96,14 @@ public class EntityTeleportIntegrationTest {
         var player = connection.connect(instance, new Pos(0, 0, 0));
 
         player.teleport(new Pos(10, 10, 10, 90, 0)).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
+        assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
-        player.teleport(new Pos(0, 0, 0, 0, 0), null, RelativeFlags.ALL).join();
-        assertEquals(player.getPosition(), new Pos(10, 10, 10, 90, 0));
+        player.teleport(new Pos(0, 0, 0, 0, 0), Vec.ZERO, RelativeFlags.ALL).join();
+        assertEquals(new Pos(10, 10, 10, 90, 0), player.getPosition());
 
         var tracker = connection.trackIncoming(PlayerPositionAndLookPacket.class);
-        player.teleport(new Pos(5, 10, 2, 5, 5), null, RelativeFlags.VIEW).join();
-        assertEquals(player.getPosition(), new Pos(5, 10, 2, 95, 5));
+        player.teleport(new Pos(5, 10, 2, 5, 5), Vec.ZERO, RelativeFlags.VIEW).join();
+        assertEquals(new Pos(5, 10, 2, 95, 5), player.getPosition());
     }
 
     @Test
