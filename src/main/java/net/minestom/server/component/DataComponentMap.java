@@ -8,8 +8,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Map;
-import java.util.Set;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -134,7 +133,7 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
 
-    @NotNull Set<Map.Entry<DataComponent<?>, Object>> entrySet();
+    @NotNull Collection<DataComponent.Value> entrySet();
 
     @NotNull Builder toBuilder();
 
