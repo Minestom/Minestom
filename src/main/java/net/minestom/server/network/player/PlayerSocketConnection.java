@@ -8,6 +8,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.ListenerHandle;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 import net.minestom.server.extras.mojangAuth.MojangCrypt;
+import net.minestom.server.monitoring.NetworkMonitor;
 import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.packet.PacketParser;
@@ -87,6 +88,9 @@ public class PlayerSocketConnection extends PlayerConnection {
     private final MpscUnboundedXaddArrayQueue<SendablePacket> packetQueue = new MpscUnboundedXaddArrayQueue<>(1024);
 
     private final AtomicLong sentPacketCounter = new AtomicLong();
+
+    private final NetworkMonitor networkMonitor = new NetworkMonitor();
+
     // Index where compression starts, linked to `sentPacketCounter`
     // Used instead of a simple boolean so we can get proper timing for serialization
     private volatile long compressionStart = Long.MAX_VALUE;
@@ -124,7 +128,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             result = PacketReading.readPackets(
                     readBuffer,
                     packetParser,
-                    startingState, PacketVanilla::nextClientState,
+                    startingState,
+                    PacketVanilla::nextClientState,
                     compression()
             );
         } catch (DataFormatException e) {
@@ -136,6 +141,8 @@ public class PlayerSocketConnection extends PlayerConnection {
             case PacketReading.Result.Success<ClientPacket> success -> {
                 for (PacketReading.ParsedPacket<ClientPacket> parsedPacket : success.packets()) {
                     final ClientPacket packet = parsedPacket.packet();
+                    if (networkMonitor.isEnabled())
+                        networkMonitor.addIncomingBytes(readBuffer.readIndex());
 
                     // Update connection state 'as we receive' the packet, aka before we send any responses
                     // from processing. This is important for disconnection during start of handshake.
@@ -427,7 +434,11 @@ public class PlayerSocketConnection extends PlayerConnection {
         PacketWriting.writeQueue(buffer, packetQueue, 1, (b, packet) -> {
             final boolean compressed = sentPacketCounter.get() > compressionStart;
             final boolean success = writeSendable(b, packet, compressed);
-            if (success) sentPacketCounter.getAndIncrement();
+            if (success) {
+                sentPacketCounter.getAndIncrement();
+                if (networkMonitor.isEnabled())
+                    networkMonitor.addOutgoingBytes(buffer.readableBytes());
+            }
             return success;
         });
         // Write to channel
@@ -438,5 +449,9 @@ public class PlayerSocketConnection extends PlayerConnection {
     }
 
     record EncryptionContext(Cipher encrypt, Cipher decrypt) {
+    }
+
+    public NetworkMonitor networkMonitor() {
+        return networkMonitor;
     }
 }
