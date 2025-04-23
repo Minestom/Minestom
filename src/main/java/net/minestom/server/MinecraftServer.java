@@ -80,18 +80,18 @@ public final class MinecraftServer implements MinecraftConstants {
         return init(createDefaultDispatcherHandler());
     }
 
-    @ApiStatus.Internal
-    public static ServerProcess updateProcess() {
-        return updateProcess(createDefaultDispatcherHandler());
-    }
-
-    public static <P extends Tickable> MinecraftServer init(ThreadDispatcherHandler<P> dispatcherHandler) {
+    public static <P extends Tickable> MinecraftServer init(@NotNull ThreadDispatcherHandler<P> dispatcherHandler) {
         updateProcess(dispatcherHandler);
         return new MinecraftServer();
     }
 
     @ApiStatus.Internal
-    public static <P extends Tickable> ServerProcess updateProcess(ThreadDispatcherHandler<P> dispatcherHandler) {
+    public static ServerProcess updateProcess() {
+        return updateProcess(createDefaultDispatcherHandler());
+    }
+
+    @ApiStatus.Internal
+    public static <P extends Tickable> ServerProcess updateProcess(@NotNull ThreadDispatcherHandler<P> dispatcherHandler) {
         ServerProcess process = new ServerProcessImpl<>(dispatcherHandler);
         serverProcess = process;
         return process;
