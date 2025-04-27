@@ -29,10 +29,10 @@ public class ItemDisplayMeta extends AbstractDisplayMeta {
 
     public enum DisplayContext {
         NONE,
-        THIRD_PERSON_LEFT_HAND,
-        THIRD_PERSON_RIGHT_HAND,
-        FIRST_PERSON_LEFT_HAND,
-        FIRST_PERSON_RIGHT_HAND,
+        THIRDPERSON_LEFT_HAND,
+        THIRDPERSON_RIGHT_HAND,
+        FIRSTPERSON_LEFT_HAND,
+        FIRSTPERSON_RIGHT_HAND,
         HEAD,
         GUI,
         GROUND,
