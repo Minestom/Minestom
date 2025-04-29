@@ -52,6 +52,14 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
+    static @NotNull NetworkBuffer.Type<DataComponentMap> tradeNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.TradePatchNetworkType(idToType);
+    }
+
+    /**
+     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
+     */
+    @ApiStatus.Internal
     static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(
             @NotNull IntFunction<DataComponent<?>> idToType,
             @NotNull Function<String, DataComponent<?>> nameToType

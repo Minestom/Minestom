@@ -104,6 +104,7 @@ public final class ItemComponent {
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);
     public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromKey);
+    public static final NetworkBuffer.Type<DataComponentMap> TRADE_NETWORK_TYPE = DataComponentMap.tradeNetworkType(ItemComponent::fromId);
 
     public static @Nullable DataComponent<?> fromKey(@NotNull String key) {
         return NAMESPACES.get(key);

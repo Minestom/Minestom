@@ -106,6 +106,11 @@ public class PacketWriteReadTest {
                 RecipeBookCategory.CRAFTING_MISC, List.of(new Ingredient(Material.STONE)), true, true)), false));
         SERVER_PACKETS.add(new RecipeBookRemovePacket(List.of(1)));
 
+        SERVER_PACKETS.add(new TradeListPacket(0, List.of(
+                new TradeListPacket.Trade(ItemStack.of(Material.DIRT), ItemStack.of(Material.DIAMOND), ItemStack.AIR, false, 0, 1, 5, 2, 1.5f, 1),
+                new TradeListPacket.Trade(ItemStack.of(Material.HONEY_BOTTLE), ItemStack.of(Material.SNIFFER_EGG), ItemStack.of(Material.MAGENTA_TERRACOTTA), true, 1, 5, 99, 0, 9.5f, 127)
+        ), 5, 64, true, false));
+
         SERVER_PACKETS.add(new DestroyEntitiesPacket(List.of(5, 5, 5)));
         SERVER_PACKETS.add(new DisconnectPacket(COMPONENT));
         SERVER_PACKETS.add(new DisplayScoreboardPacket((byte) 5, "scoreboard"));

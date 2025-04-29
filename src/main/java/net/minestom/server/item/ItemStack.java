@@ -70,6 +70,24 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         return itemStack;
     });
     @NotNull BinaryTagSerializer<ItemStack> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(ItemStackImpl::fromCompound, ItemStackImpl::toCompound);
+    @NotNull NetworkBuffer.Type<ItemStack> TRADE_NETWORK_TYPE = new NetworkBuffer.Type<>() {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+            buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+            buffer.write(NetworkBuffer.VAR_INT, value.amount());
+            buffer.write(ItemComponent.TRADE_NETWORK_TYPE, ((ItemStackImpl) value).components());
+        }
+
+        @Override
+        public ItemStack read(@NotNull NetworkBuffer buffer) {
+            Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+            int amount = buffer.read(NetworkBuffer.VAR_INT);
+            if (amount <= 0) return ItemStack.AIR;
+
+            DataComponentMap components = buffer.read(ItemComponent.TRADE_NETWORK_TYPE);
+            return ItemStackImpl.create(material, amount, components);
+        }
+    };
 
     /**
      * Constant AIR item. Should be used instead of 'null'.

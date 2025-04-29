@@ -33,9 +33,9 @@ public record TradeListPacket(int windowId, @NotNull List<Trade> trades,
                         int tradeUsesNumber, int maxTradeUsesNumber, int exp,
                         int specialPrice, float priceMultiplier, int demand) {
         public static final NetworkBuffer.Type<Trade> SERIALIZER = NetworkBufferTemplate.template(
-                ItemStack.NETWORK_TYPE, Trade::inputItem1,
+                ItemStack.TRADE_NETWORK_TYPE, Trade::inputItem1,
                 ItemStack.NETWORK_TYPE, Trade::result,
-                ItemStack.NETWORK_TYPE.optional(), Trade::inputItem2,
+                ItemStack.TRADE_NETWORK_TYPE.optional(), Trade::inputItem2,
                 BOOLEAN, Trade::tradeDisabled,
                 INT, Trade::tradeUsesNumber,
                 INT, Trade::maxTradeUsesNumber,

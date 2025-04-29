@@ -10,6 +10,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.IntFunction;
@@ -232,5 +233,37 @@ record DataComponentMapImpl(@NotNull Int2ObjectMap<Object> components) implement
             return new DataComponentMapImpl(patch);
         }
     }
+    record TradePatchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) implements NetworkBuffer.Type<DataComponentMap> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, DataComponentMap value) {
+            final DataComponentMapImpl patch = (DataComponentMapImpl) value;
 
+            List<Int2ObjectMap.@NotNull Entry<Object>> components = patch.components.int2ObjectEntrySet().stream()
+                    .filter(v -> v.getValue() != null).toList();
+            buffer.write(NetworkBuffer.VAR_INT, components.size());
+
+            for (Int2ObjectMap.Entry<Object> entry : components) {
+                buffer.write(NetworkBuffer.VAR_INT, entry.getIntKey());
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(entry.getIntKey());
+                assert type != null;
+                type.write(buffer, entry.getValue());
+            }
+        }
+
+        @Override
+        public DataComponentMap read(@NotNull NetworkBuffer buffer) {
+            int added = buffer.read(NetworkBuffer.VAR_INT);
+            Check.stateCondition(added > 256, "Item component patch too large: {0}", added);
+            Int2ObjectMap<Object> patch = new Int2ObjectArrayMap<>(added);
+            for (int i = 0; i < added; i++) {
+                int id = buffer.read(NetworkBuffer.VAR_INT);
+                //noinspection unchecked
+                DataComponent<Object> type = (DataComponent<Object>) this.idToType.apply(id);
+                Check.notNull(type, "Unknown component: {0}", id);
+                patch.put(type.id(), type.read(buffer));
+            }
+            return new DataComponentMapImpl(patch);
+        }
+    }
 }
