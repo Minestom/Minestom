@@ -671,6 +671,8 @@ interface Blocks {
 
     Block GLOW_LICHEN = BlockImpl.get("minecraft:glow_lichen");
 
+    Block RESIN_CLUMP = BlockImpl.get("minecraft:resin_clump");
+
     Block OAK_FENCE_GATE = BlockImpl.get("minecraft:oak_fence_gate");
 
     Block BRICK_STAIRS = BlockImpl.get("minecraft:brick_stairs");
@@ -682,6 +684,18 @@ interface Blocks {
     Block MYCELIUM = BlockImpl.get("minecraft:mycelium");
 
     Block LILY_PAD = BlockImpl.get("minecraft:lily_pad");
+
+    Block RESIN_BLOCK = BlockImpl.get("minecraft:resin_block");
+
+    Block RESIN_BRICKS = BlockImpl.get("minecraft:resin_bricks");
+
+    Block RESIN_BRICK_STAIRS = BlockImpl.get("minecraft:resin_brick_stairs");
+
+    Block RESIN_BRICK_SLAB = BlockImpl.get("minecraft:resin_brick_slab");
+
+    Block RESIN_BRICK_WALL = BlockImpl.get("minecraft:resin_brick_wall");
+
+    Block CHISELED_RESIN_BRICKS = BlockImpl.get("minecraft:chiseled_resin_bricks");
 
     Block NETHER_BRICKS = BlockImpl.get("minecraft:nether_bricks");
 
@@ -2172,4 +2186,12 @@ interface Blocks {
     Block PALE_MOSS_CARPET = BlockImpl.get("minecraft:pale_moss_carpet");
 
     Block PALE_HANGING_MOSS = BlockImpl.get("minecraft:pale_hanging_moss");
+
+    Block OPEN_EYEBLOSSOM = BlockImpl.get("minecraft:open_eyeblossom");
+
+    Block CLOSED_EYEBLOSSOM = BlockImpl.get("minecraft:closed_eyeblossom");
+
+    Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get("minecraft:potted_open_eyeblossom");
+
+    Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get("minecraft:potted_closed_eyeblossom");
 }

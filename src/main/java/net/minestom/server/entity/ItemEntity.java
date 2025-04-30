@@ -77,7 +77,6 @@ public class ItemEntity extends Entity {
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (itemEntity == this) return;
                         if (!itemEntity.isPickable() || !itemEntity.isMergeable()) return;
-                        if (getDistanceSquared(itemEntity) > mergeRange * mergeRange) return;
 
                         final ItemStack itemStackEntity = itemEntity.getItemStack();
                         final boolean canStack = itemStack.isSimilar(itemStackEntity);

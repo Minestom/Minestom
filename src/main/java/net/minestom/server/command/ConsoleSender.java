@@ -32,16 +32,6 @@ public class ConsoleSender implements CommandSender {
     }
 
     @Override
-    public boolean isConsole() {
-        return true;
-    }
-
-    @Override
-    public ConsoleSender asConsole() {
-        return this;
-    }
-
-    @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
     }
