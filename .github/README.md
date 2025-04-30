@@ -4,7 +4,7 @@
 # Minestom
 
 [![license](https://img.shields.io/github/license/Minestom/Minestom?style=for-the-badge&color=b2204c)](../LICENSE)
-[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)  
+[![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=for-the-badge)](https://github.com/RichardLitt/standard-readme)
 [![javadocs](https://img.shields.io/badge/documentation-javadocs-4d7a97?style=for-the-badge)](https://javadoc.minestom.net)
 [![wiki](https://img.shields.io/badge/documentation-wiki-74aad6?style=for-the-badge)](https://minestom.net/docs/introduction)
 [![discord-banner](https://img.shields.io/discord/706185253441634317?label=discord&style=for-the-badge&color=7289da)](https://discord.gg/pkFRvqB)
@@ -81,9 +81,9 @@ implementation 'net.minestom:minestom-snapshots:XXXXXXXXXX'
 To get started writing your first server, check out our official [wiki](https://minestom.net/docs/introduction). For an API reference, consult the [Javadocs](https://javadoc.minestom.net).
 
 # Why Minestom?
-Minecraft has evolved a lot since its release, and most of the servers today do not take advantage of vanilla features, which leads to performance struggles.
+Minecraft has evolved a lot since its release, but many servers today overlook the built-in mechanics in favor of custom gameplay, leading to wasted performance.
 
-Our target audience are developers who wish to make a server that benefits very little from vanilla features, such as a mini game or KitPVP server.
+Our target audience are developers who wish to make a server which benefits very little from vanilla features, such as a mini game or KitPVP server.
 
 The goal is to offer more performance for those who need it. In other words, it makes sense to use Minestom when it will take less time implementing every missing feature you want, rather than removing every vanilla feature that will slow you down.
 
@@ -101,7 +101,7 @@ Minestom isn't perfect, and while our choices make it better for some cases, it'
 
 ## Disadvantages
 * Doesn't work with traditional plugins or mods.
-* Doesn't support older versions. (Using a proxy like Velocity with [ViaBackwards](https://modrinth.com/plugin/viabackwards) is possible)
+* Doesn't support older versions. See [the wiki page](https://minestom.net/docs/compatibility/unsupported-versions) for more info.
 * Unsuitable for those who want a server with vanilla mechanics.
 * Takes a bigger time investment to develop something playable.
 * Less users and a smaller plugin/library ecosystem than Spigot.
@@ -114,7 +114,7 @@ This is one of our major concepts. While worlds are great for playing survival w
 
 Being able to create instances directly on the go is a must-have, and we believe it can push many more projects forward.
 
-Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, meaning more CPU power.
+Instances also come with performance benefits, unlike other server implementations which are single-threaded or only using one thread per world, we are using a set number of threads in a pool to manage all chunks independently from instances, meaning taking advantage of the CPU power.
 
 ## Blocks
 Minestom does not recognize what a chest does by default, you will have to define that it should open an inventory when you right click it.
@@ -130,7 +130,7 @@ However, all blocks exist visually, they just won't have any interaction by defa
 In modern Minecraft, inventories are used as a graphical user interface with clickable items, and we support these interactions natively without needing to program your own solution.
 
 ## Commands
-Since 1.13, Minecraft has added a new library named "[Brigadier](https://github.com/Mojang/brigadier)". We have developed an API designed to use the new argument types to their full potential.
+Since 1.13, Minecraft has integrated a Java library to manage commands named "[Brigadier](https://github.com/Mojang/brigadier)". We have developed an API designed to use the argument types to their full potential.
 
 # Credits
 * The [contributors](https://github.com/Minestom/Minestom/graphs/contributors) of the project.
