@@ -6,6 +6,7 @@ import net.minestom.server.network.packet.PacketParser;
 import net.minestom.server.network.packet.PacketVanilla;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.player.PlayerSocketConnection;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,6 +18,7 @@ import java.nio.channels.ClosedChannelException;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.nio.file.Files;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class Server {
     private volatile boolean stop;
@@ -66,14 +68,21 @@ public final class Server {
 
     @ApiStatus.Internal
     public void start() {
-        Thread.startVirtualThread(() -> {
+        var readBuilder = Thread.ofVirtual().name("Ms-Socket-Reader-", 0);
+        var writeBuilder = Thread.ofVirtual().name("Ms-Socket-Writer-", 0);
+        Thread.ofVirtual().name("Ms-Socket-Server").start(() -> {
             while (!stop) {
                 try {
                     final SocketChannel client = serverSocket.accept();
                     configureSocket(client);
-                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress());
-                    Thread.startVirtualThread(() -> playerReadLoop(connection));
-                    Thread.startVirtualThread(() -> playerWriteLoop(connection));
+                    // Hack to get folding
+                    AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
+                    Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.getPlain()));
+                    Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.getPlain()));
+                    PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
+                    reference.setPlain(connection);
+                    readThread.start();
+                    writeThread.start();
                 } catch (AsynchronousCloseException ignored) {
                     // We are exiting, bye bye!
                 } catch (IOException e) {
@@ -94,6 +103,7 @@ public final class Server {
     }
 
     private void playerReadLoop(PlayerSocketConnection connection) {
+        Check.notNull(connection, "connection cannot be null");
         while (!stop) {
             try {
                 // Read & process packets
@@ -113,6 +123,7 @@ public final class Server {
     }
 
     private void playerWriteLoop(PlayerSocketConnection connection) {
+        Check.notNull(connection, "connection cannot be null");
         while (!stop) {
             try {
                 connection.flushSync();
