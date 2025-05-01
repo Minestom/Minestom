@@ -77,10 +77,10 @@ public final class Server {
                     configureSocket(client);
                     // Hack to get folding
                     AtomicReference<PlayerSocketConnection> reference = new AtomicReference<>(null);
-                    Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.getPlain()));
-                    Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.getPlain()));
+                    Thread readThread = readBuilder.unstarted(() -> playerReadLoop(reference.get()));
+                    Thread writeThread = writeBuilder.unstarted(() -> playerWriteLoop(reference.get()));
                     PlayerSocketConnection connection = new PlayerSocketConnection(client, client.getRemoteAddress(), readThread, writeThread);
-                    reference.setPlain(connection);
+                    reference.set(connection);
                     readThread.start();
                     writeThread.start();
                 } catch (AsynchronousCloseException ignored) {
