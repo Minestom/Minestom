@@ -141,7 +141,7 @@ public class Main {
 
         new PlayerInit().init();
 
-       VelocityProxy.enable("abcdef");
+//       VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
 //        MojangAuth.init();
