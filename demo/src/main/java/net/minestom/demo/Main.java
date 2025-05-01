@@ -14,15 +14,21 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
+import net.minestom.server.extras.bungee.messaging.BungeeRequest;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.extras.velocity.VelocityProxy;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.network.ConnectionState;
+import net.minestom.server.network.packet.PacketWriting;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeBookCategory;
+import net.minestom.server.utils.PacketSendingUtils;
+import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -83,6 +89,7 @@ public class Main {
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
         commandManager.register(new SleepCommand());
+        commandManager.register(new ProxyCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -134,7 +141,7 @@ public class Main {
 
         new PlayerInit().init();
 
-//        VelocityProxy.enable("abcdef");
+       VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
 //        MojangAuth.init();

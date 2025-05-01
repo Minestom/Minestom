@@ -6,45 +6,12 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.network.packet.client.common.ClientPluginMessagePacket;
-import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-// TODO: add javadocs
-public sealed interface BungeeRequest extends BungeeProtocol {
-
-    static byte @NotNull [] write(@NotNull BungeeRequest request) {
-        return NetworkBuffer.makeArray(REQUEST_TYPE, request);
-    }
-
-    static @NotNull BungeeRequest read(@NotNull NetworkBuffer buffer) {
-        return buffer.read(REQUEST_TYPE);
-    }
-
-    static @NotNull BungeeRequest read(byte @NotNull [] bytes) {
-        return read(NetworkBuffer.wrap(bytes, 0, 0));
-    }
-
-    static @NotNull BungeeRequest read(@NotNull ClientPluginMessagePacket packet) {
-        Check.argCondition(!packet.channel().equals(CHANNEL), "Channel is not the `{0}` channel!", CHANNEL);
-        return read(packet.data());
-    }
-
-    static @NotNull BungeeRequest read(@NotNull PluginMessagePacket packet) {
-        Check.argCondition(!packet.channel().equals(CHANNEL), "Channel is not the `{0}` channel!", CHANNEL);
-        return read(packet.data());
-    }
-
-    @Override
-    default @NotNull ClientPluginMessagePacket toClientPacket() {
-        return new ClientPluginMessagePacket(CHANNEL, write(this));
-    }
-
-    @Override
-    default @NotNull PluginMessagePacket toServerPacket() {
-        return new PluginMessagePacket(CHANNEL, write(this));
-    }
+public sealed interface BungeeRequest extends BungeeMessage {
+    NetworkBuffer.Type<BungeeRequest> SERIALIZER = BungeeProtocol.Type.SERIALIZER
+            .unionType(BungeeProtocol.Type::requestSerializer, BungeeProtocol.Type::toType);
 
     record Connect(@NotNull String serverName) implements BungeeRequest {
         public static final NetworkBuffer.Type<Connect> SERIALIZER = NetworkBufferTemplate.template(
@@ -54,10 +21,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public Connect {
             Check.notNull(serverName, "Server name cannot be null");
-        }
-        @Override
-        public @NotNull String type() {
-            return "Connect";
         }
     }
 
@@ -76,20 +39,10 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public ConnectOther(@NotNull Pointered player, @NotNull String serverName) {
             this(player.get(Identity.NAME).orElseThrow(), serverName);
         }
-
-        @Override
-        public @NotNull String type() {
-            return "ConnectOther";
-        }
     }
 
     record IP() implements BungeeRequest {
         public static final NetworkBuffer.Type<IP> SERIALIZER = NetworkBufferTemplate.template(IP::new);
-
-        @Override
-        public @NotNull String type() {
-            return "IP";
-        }
     }
 
     record IPOther(@NotNull String playerName) implements BungeeRequest {
@@ -105,11 +58,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public IPOther(@NotNull Pointered player) {
             this(player.get(Identity.NAME).orElseThrow());
         }
-
-        @Override
-        public @NotNull String type() {
-            return "IPOther";
-        }
     }
 
     record PlayerCount(@NotNull String serverName) implements BungeeRequest {
@@ -120,11 +68,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public PlayerCount {
             Check.notNull(serverName, "Server name cannot be null");
-        }
-
-        @Override
-        public @NotNull String type() {
-            return "PlayerCount";
         }
     }
 
@@ -137,20 +80,10 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public PlayerList {
             Check.notNull(serverName, "Server name cannot be null");
         }
-
-        @Override
-        public @NotNull String type() {
-            return "PlayerList";
-        }
     }
 
     record GetServers() implements BungeeRequest {
         public static final NetworkBuffer.Type<GetServers> SERIALIZER = NetworkBufferTemplate.template(GetServers::new);
-
-        @Override
-        public @NotNull String type() {
-            return "GetServers";
-        }
     }
 
     record Message(@NotNull String playerName, @NotNull String message) implements BungeeRequest {
@@ -167,11 +100,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public Message(@NotNull Pointered player, @NotNull String message) {
             this(player.get(Identity.NAME).orElseThrow(), message);
-        }
-
-        @Override
-        public @NotNull String type() {
-            return "Message";
         }
     }
 
@@ -198,20 +126,11 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public MessageRaw(@NotNull Pointered player, @NotNull Component message) {
             this(player.get(Identity.NAME).orElseThrow(), GsonComponentSerializer.gson().serialize(message));
         }
-
-        @Override
-        public @NotNull String type() {
-            return "MessageRaw";
-        }
     }
 
     record GetServer() implements BungeeRequest {
         public static final NetworkBuffer.Type<GetServer> SERIALIZER = NetworkBufferTemplate.template(GetServer::new);
 
-        @Override
-        public @NotNull String type() {
-            return "GetServer";
-        }
     }
 
     record GetPlayerServer(@NotNull String playerName) implements BungeeRequest {
@@ -227,20 +146,10 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public GetPlayerServer(@NotNull Pointered player) {
             this(player.get(Identity.NAME).orElseThrow());
         }
-
-        @Override
-        public @NotNull String type() {
-            return "GetPlayerServer";
-        }
     }
 
     record UUID() implements BungeeRequest {
         public static final NetworkBuffer.Type<UUID> SERIALIZER = NetworkBufferTemplate.template(UUID::new);
-
-        @Override
-        public @NotNull String type() {
-            return "UUID";
-        }
     }
 
     record UUIDOther(@NotNull String playerName) implements BungeeRequest {
@@ -256,11 +165,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public UUIDOther(@NotNull Pointered player) {
             this(player.get(Identity.NAME).orElseThrow());
         }
-
-        @Override
-        public @NotNull String type() {
-            return "UUIDOther";
-        }
     }
 
     record ServerIp(@NotNull String serverName) implements BungeeRequest {
@@ -271,11 +175,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public ServerIp {
             Check.notNull(serverName, "Server name cannot be null");
-        }
-
-        @Override
-        public @NotNull String type() {
-            return "ServerIp";
         }
     }
 
@@ -293,11 +192,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public KickPlayer(@NotNull Pointered player, @NotNull String message) {
             this(player.get(Identity.NAME).orElseThrow(), message);
-        }
-
-        @Override
-        public @NotNull String type() {
-            return "KickPlayer";
         }
     }
 
@@ -324,18 +218,13 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public KickPlayerRaw(@NotNull Pointered player, @NotNull Component message) {
             this(player.get(Identity.NAME).orElseThrow(), GsonComponentSerializer.gson().serialize(message));
         }
-
-        @Override
-        public @NotNull String type() {
-            return "KickPlayerRaw";
-        }
     }
 
     record Forward(@NotNull String server, @NotNull String channel, byte @NotNull [] data) implements BungeeRequest {
         public static final NetworkBuffer.Type<Forward> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING_IO_UTF8, Forward::server,
                 NetworkBuffer.STRING_IO_UTF8, Forward::channel,
-                SHORT_FIXED_BYTE_ARRAY_TYPE, Forward::data,
+                BungeeProtocol.SHORT_BYTE_ARRAY_TYPE, Forward::data,
                 Forward::new
         );
 
@@ -346,11 +235,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
             Check.argCondition(data.length > 65535, "Data cannot be more than a 65535 in length");
             data = data.clone();
         }
-
-        @Override
-        public @NotNull String type() {
-            return "Forward";
-        }
     }
 
     record ForwardToPlayer(@NotNull String playerName, @NotNull String channel,
@@ -358,7 +242,7 @@ public sealed interface BungeeRequest extends BungeeProtocol {
         public static final NetworkBuffer.Type<ForwardToPlayer> SERIALIZER = NetworkBufferTemplate.template(
                 NetworkBuffer.STRING_IO_UTF8, ForwardToPlayer::playerName,
                 NetworkBuffer.STRING_IO_UTF8, ForwardToPlayer::channel,
-                SHORT_FIXED_BYTE_ARRAY_TYPE, ForwardToPlayer::data,
+                BungeeProtocol.SHORT_BYTE_ARRAY_TYPE, ForwardToPlayer::data,
                 ForwardToPlayer::new
         );
 
@@ -372,11 +256,6 @@ public sealed interface BungeeRequest extends BungeeProtocol {
 
         public ForwardToPlayer(@NotNull Pointered player, @NotNull String channel, byte @NotNull [] data) {
             this(player.get(Identity.NAME).orElseThrow(), channel, data);
-        }
-
-        @Override
-        public @NotNull String type() {
-            return "ForwardToPlayer";
         }
     }
 }
