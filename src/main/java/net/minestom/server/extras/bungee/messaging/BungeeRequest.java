@@ -1,5 +1,6 @@
 package net.minestom.server.extras.bungee.messaging;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.Component;
@@ -9,6 +10,14 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * BungeeCord request interface.
+ * <p>
+ * This interface holds all requests data structures for the BungeeCord protocol.
+ * It includes the request types, serializers, and data types.
+ * <p>
+ * You can construct requests using {@link BungeeRequest} and send them to the server with {@link #send(Audience)}.
+ */
 public sealed interface BungeeRequest extends BungeeMessage {
     NetworkBuffer.Type<BungeeRequest> SERIALIZER = BungeeProtocol.Type.SERIALIZER
             .unionType(BungeeProtocol.Type::requestSerializer, BungeeProtocol.Type::toType);

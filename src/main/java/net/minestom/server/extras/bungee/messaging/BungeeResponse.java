@@ -1,5 +1,6 @@
 package net.minestom.server.extras.bungee.messaging;
 
+import net.minestom.server.event.player.PlayerPluginMessageEvent;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.utils.validate.Check;
@@ -7,7 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-// TODO: add javadocs
+/**
+ * BungeeCord response interface.
+ * <p>
+ * This interface holds all response data structures for the BungeeCord protocol.
+ * It includes the request types, serializers, and data types.
+ * <p>
+ * The most common use cases are to deserialize the response from a {@link NetworkBuffer} or {@code byte[]}.
+ * To do this, you can use the {@link BungeeMessage#readResponse(NetworkBuffer)} method.
+ * There is also a shorthand version for events {@link BungeeMessage#readResponse(PlayerPluginMessageEvent)}
+ */
 public sealed interface BungeeResponse extends BungeeMessage {
     NetworkBuffer.Type<BungeeResponse> SERIALIZER = BungeeProtocol.Type.SERIALIZER
             .unionType(BungeeProtocol.Type::responseSerializer, BungeeProtocol.Type::toType);

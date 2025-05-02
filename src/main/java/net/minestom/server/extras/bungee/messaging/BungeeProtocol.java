@@ -3,6 +3,7 @@ package net.minestom.server.extras.bungee.messaging;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +49,10 @@ interface BungeeProtocol {
             return buffer.read(NetworkBuffer.FixedRawBytes(length));
         }
     };
+
+    static boolean isIdentifier(@Nullable String channel) {
+        return CHANNEL.equals(channel) || "bungeecord:main".equals(channel);
+    }
 
     // Reads the message from the buffer and checks if there are any leftover bytes
     static <T extends BungeeMessage> T read(NetworkBuffer buffer, NetworkBuffer.Type<T> type) {
