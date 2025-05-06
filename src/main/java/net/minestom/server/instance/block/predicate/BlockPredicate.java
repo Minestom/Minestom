@@ -68,7 +68,7 @@ public record BlockPredicate(
             "blocks", BlockTypeFilter.CODEC.optional(), BlockPredicate::blocks,
             "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
             "nbt", Codec.NBT_COMPOUND.optional(), BlockPredicate::nbt,
-            StructCodec.INLINE, DataComponentPredicates.CODEC.optional(), BlockPredicate::componentPredicates,
+            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::componentPredicates,
             BlockPredicate::new
     );
 
@@ -92,7 +92,7 @@ public record BlockPredicate(
         this(null, null, null, new DataComponentPredicates(components, null));
     }
 
-    public BlockPredicate(@NotNull Map<String, DataComponentPredicate> predicates) {
+    public BlockPredicate(@NotNull Map<DataComponentPredicates.ComponentPredicateType, DataComponentPredicate> predicates) {
         this(null, null, null, new DataComponentPredicates(null, predicates));
     }
 
@@ -102,6 +102,13 @@ public record BlockPredicate(
 
     public BlockPredicate(BlockTypeFilter blocks, PropertiesPredicate state, CompoundBinaryTag nbt) {
         this(blocks, state, nbt, null);
+    }
+
+    public BlockPredicate(@Nullable BlockTypeFilter blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt, @Nullable DataComponentPredicates componentPredicates) {
+        this.blocks = blocks;
+        this.state = state;
+        this.nbt = nbt;
+        this.componentPredicates = Objects.requireNonNullElseGet(componentPredicates, () -> new DataComponentPredicates(null, null));
     }
 
     @Override
