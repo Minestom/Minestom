@@ -185,7 +185,12 @@ public record DataComponentPredicates(DataComponentMap exact,
 
         @Override
         public DataComponentPredicates read(@NotNull NetworkBuffer buffer) {
-            return delegate.read(buffer);
+            DataComponentPredicates value = delegate.read(buffer);
+            if ((value.exact == null || value.exact.isEmpty()) && (value.predicates == null || value.predicates.isEmpty())) {
+                return null;
+            } else {
+                return value;
+            }
         }
     };
 
