@@ -21,18 +21,18 @@ import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
+import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
 
-    record Damage(Bounds.IntBounds durability, Bounds.IntBounds damage) implements DataComponentPredicate {
+    record Damage(Range.Int durability, Range.Int damage) implements DataComponentPredicate {
         public static Codec<Damage> CODEC = StructCodec.struct(
-                "durability", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), Damage::durability,
-                "damage", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), Damage::damage,
+                "durability", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::durability,
+                "damage", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::damage,
                 Damage::new
         );
 
@@ -43,7 +43,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             } else {
                 int i = holder.get(DataComponents.MAX_DAMAGE, 0);
-                return this.durability.matches(i - damageValue) && this.damage.matches(damageValue);
+                return (durability == null || durability.inRange(i - damageValue)) &&
+                        (damage == null || damage.inRange(damageValue));
             }
         }
     }
@@ -58,11 +59,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record Enchantment(@Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
-                       Bounds.@NonNull IntBounds levels) implements DataComponentPredicate {
+                       Range.Int levels) implements DataComponentPredicate {
 
         public static Codec<Enchantment> CODEC = StructCodec.struct(
                 "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), Enchantment::enchantments,
-                "levels", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), Enchantment::levels,
+                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), Enchantment::levels,
                 Enchantment::new
         );
 
@@ -74,10 +75,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             }
             if (enchantments == null) {
                 // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels.matches(entry.getValue()));
+                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
             }
             for (DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e : enchantments) {
-                if (holderEnchants.has(e) && levels.matches(holderEnchants.level(e))) {
+                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
                     return true;
                 }
             }
@@ -97,11 +98,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record StoredEnchantment(
             @Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
-            Bounds.@NonNull IntBounds levels) implements DataComponentPredicate {
+            Range.Int levels) implements DataComponentPredicate {
 
         public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
                 "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), StoredEnchantment::enchantments,
-                "levels", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), StoredEnchantment::levels,
+                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), StoredEnchantment::levels,
                 StoredEnchantment::new
         );
 
@@ -113,10 +114,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             }
             if (enchantments == null) {
                 // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels.matches(entry.getValue()));
+                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
             }
             for (DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e : enchantments) {
-                if (holderEnchants.has(e) && levels.matches(holderEnchants.level(e))) {
+                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
                     return true;
                 }
             }
@@ -174,11 +175,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record Fireworks(
             CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
-            Bounds.IntBounds flightDuration) implements DataComponentPredicate {
+            Range.Int flightDuration) implements DataComponentPredicate {
 
         public static final Codec<Fireworks> CODEC = StructCodec.struct(
                 "explosions", CollectionPredicate.createCodec(FireworkExplosionPredicate.CODEC), Fireworks::explosions,
-                "flight_duration", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), Fireworks::flightDuration,
+                "flight_duration", DataComponentPredicates.INT_RANGE_CODEC.optional(), Fireworks::flightDuration,
                 Fireworks::new
         );
 
@@ -186,7 +187,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             FireworkList fireworks = holder.get(DataComponents.FIREWORKS);
             if (fireworks == null) return false;
-            if (flightDuration != null && !flightDuration.matches(fireworks.flightDuration()))
+            if (flightDuration != null && !flightDuration.inRange(fireworks.flightDuration()))
                 return false;
             return explosions.test(fireworks.explosions());
         }
@@ -253,13 +254,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record WrittenBook(CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages, String author,
                        String title,
-                       Bounds.IntBounds generation, Boolean resolved) implements DataComponentPredicate {
+                       Range.Int generation, Boolean resolved) implements DataComponentPredicate {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WrittenBook::pages,
                 "author", Codec.STRING.optional(), WrittenBook::author,
                 "title", Codec.STRING.optional(), WrittenBook::title,
-                "generation", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), WrittenBook::generation,
+                "generation", DataComponentPredicates.INT_RANGE_CODEC.optional(), WrittenBook::generation,
                 "resolved", Codec.BOOLEAN.optional(), WrittenBook::resolved,
                 WrittenBook::new
         );
@@ -273,7 +274,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             if (title != null && !title.equals(content.title().text()))
                 return false;
-            if (generation != null && !generation.matches(content.generation()))
+            if (generation != null && !generation.inRange(content.generation()))
                 return false;
             if (resolved != null && resolved != content.resolved())
                 return false;
@@ -314,14 +315,14 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                      EquipmentSlotGroup slot) {
         }
 
-        record AttributeModifierPredicate(Attribute attribute, Key id, Bounds.DoubleBounds amount,
+        record AttributeModifierPredicate(Attribute attribute, Key id, Range.Double amount,
                                           AttributeOperation operation,
                                           EquipmentSlotGroup slot) implements Predicate<Entry> {
 
             public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
                     "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
                     "id", Codec.KEY.optional(), AttributeModifierPredicate::id,
-                    "amount", Bounds.DoubleBounds.CODEC.optional(), AttributeModifierPredicate::amount,
+                    "amount", DataComponentPredicates.DOUBLE_RANGE_CODEC.optional(), AttributeModifierPredicate::amount,
                     "operation", AttributeOperation.CODEC.optional(), AttributeModifierPredicate::operation,
                     "slot", EquipmentSlotGroup.CODEC.optional(), AttributeModifierPredicate::slot,
                     AttributeModifierPredicate::new
@@ -333,7 +334,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                     return false;
                 if (id != null && !id.equals(other.id))
                     return false;
-                if (amount != null && !amount.matches(other.amount))
+                if (amount != null && !amount.inRange(other.amount))
                     return false;
                 if (operation != null && !operation.equals(other.operation))
                     return false;

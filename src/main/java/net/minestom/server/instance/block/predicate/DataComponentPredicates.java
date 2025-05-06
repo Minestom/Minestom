@@ -12,6 +12,7 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -19,6 +20,18 @@ import java.util.function.Predicate;
 
 public record DataComponentPredicates(DataComponentMap exact,
                                       Map<String, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
+
+    public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
+            "min", Codec.INT, Range.Int::min,
+            "max", Codec.INT, Range.Int::max,
+            Range.Int::new
+    ).orElse(Codec.INT.transform(Range.Int::new, Range.Int::min));
+
+    public static final Codec<Range.Double> DOUBLE_RANGE_CODEC = StructCodec.struct(
+            "min", Codec.DOUBLE, Range.Double::min,
+            "max", Codec.DOUBLE, Range.Double::max,
+            Range.Double::new
+    ).orElse(Codec.DOUBLE.transform(Range.Double::new, Range.Double::min));
 
     private static Codec<? extends DataComponentPredicate> getCodec(String type) {
         return switch (type) {

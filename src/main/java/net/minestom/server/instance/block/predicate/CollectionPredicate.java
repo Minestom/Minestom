@@ -2,19 +2,20 @@ package net.minestom.server.instance.block.predicate;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.utils.Range;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
 public record CollectionPredicate<T, P extends Predicate<T>>(Contains<T, P> contains, Count<T, P> counts,
-                                     Bounds.IntBounds size) implements Predicate<Iterable<T>> {
+                                     Range.Int size) implements Predicate<Iterable<T>> {
 
     public static <T, P extends Predicate<T>> Codec<CollectionPredicate<T, P>> createCodec(Codec<P> codec) {
         return StructCodec.struct(
                 "contains", Contains.createCodec(codec).optional(), CollectionPredicate::contains,
                 "count", Count.createCodec(codec).optional(), CollectionPredicate::counts,
-                "size", Bounds.IntBounds.CODEC.optional(), CollectionPredicate::size,
+                "size", DataComponentPredicates.INT_RANGE_CODEC.optional(), CollectionPredicate::size,
                 CollectionPredicate::new
         );
     }
@@ -23,7 +24,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(Contains<T, P> cont
     public boolean test(Iterable<T> collection) {
         return (contains == null || contains.test(collection)) &&
                 (counts == null || counts.test(collection)) &&
-                (size == null || (size.matches(sizeOf(collection))));
+                (size == null || (size.inRange(sizeOf(collection))));
     }
 
     private int sizeOf(Iterable<?> iterable) {
@@ -58,11 +59,11 @@ public record CollectionPredicate<T, P extends Predicate<T>>(Contains<T, P> cont
 
     public record Count<T, P extends Predicate<T>>(List<Entry<T, P>> entries) implements Predicate<Iterable<T>> {
 
-        record Entry<T, P extends Predicate<T>>(P predicate, Bounds.IntBounds count) implements Predicate<Iterable<T>> {
+        record Entry<T, P extends Predicate<T>>(P predicate, Range.Int count) implements Predicate<Iterable<T>> {
             public static <T, P extends Predicate<T>> Codec<Entry<T, P>> createCodec(Codec<P> codec) {
                 return StructCodec.struct(
                         "test", codec, Entry::predicate,
-                        "count", Bounds.IntBounds.CODEC, Entry::count,
+                        "count", DataComponentPredicates.INT_RANGE_CODEC, Entry::count,
                         Entry::new
                 );
             }
@@ -75,7 +76,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(Contains<T, P> cont
                         i++;
                     }
                 }
-                return this.count().matches(i);
+                return this.count().inRange(i);
             }
         }
 

@@ -4,23 +4,23 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.instance.block.predicate.Bounds;
 import net.minestom.server.instance.block.predicate.DataComponentPredicates;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.Range;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public record ItemPredicate(
         List<Material> items,
-        Bounds.IntBounds count,
+        Range.Int count,
         DataComponentPredicates predicates
 ) implements Predicate<ItemStack> {
 
     public static final Codec<ItemPredicate> CODEC = StructCodec.struct(
             "items", Material.CODEC.listOrSingle().optional(), ItemPredicate::items,
-            "count", Bounds.IntBounds.CODEC.optional(Bounds.IntBounds.ANY), ItemPredicate::count,
+            "count", DataComponentPredicates.INT_RANGE_CODEC.optional(), ItemPredicate::count,
             StructCodec.INLINE, DataComponentPredicates.CODEC.optional(), ItemPredicate::predicates,
             ItemPredicate::new
     );
@@ -29,7 +29,7 @@ public record ItemPredicate(
     public boolean test(ItemStack itemStack) {
         if (items != null && !items.contains(itemStack.material()))
             return false;
-        if (count != null && !count.matches(itemStack.amount()))
+        if (count != null && !count.inRange(itemStack.amount()))
             return false;
         if (predicates == null)
             return true;
