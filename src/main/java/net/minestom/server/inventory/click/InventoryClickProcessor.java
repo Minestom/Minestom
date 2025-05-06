@@ -126,7 +126,7 @@ public final class InventoryClickProcessor {
         if (inventory instanceof PlayerInventory && targetInventory instanceof PlayerInventory) {
             final Material material = clicked.material();
             final EquipmentSlot equipmentSlot = material.registry().equipmentSlot();
-            if (equipmentSlot != null) {
+            if (equipmentSlot != null && equipmentSlot.isArmor()) {
                 // Shift-click equip
                 final ItemStack currentArmor = player.getEquipment(equipmentSlot);
                 if (currentArmor.isAir()) {
