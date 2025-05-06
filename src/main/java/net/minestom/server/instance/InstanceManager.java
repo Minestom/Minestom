@@ -122,11 +122,10 @@ public final class InstanceManager {
             EventDispatcher.call(event);
 
             // Unload all chunks
-            if (instance instanceof InstanceContainer) {
+            if (instance instanceof InstanceContainer)
                 instance.getChunks().forEach(instance::unloadChunk);
-                var dispatcher = MinecraftServer.process().dispatcher();
-                instance.getChunks().forEach(dispatcher::deletePartition);
-            }
+
+            MinecraftServer.process().dispatcherHandler().onInstanceUnregister(instance);
             // Unregister
             instance.setRegistered(false);
             this.instances.remove(instance);
@@ -166,8 +165,7 @@ public final class InstanceManager {
     private void UNSAFE_registerInstance(@NotNull Instance instance) {
         instance.setRegistered(true);
         this.instances.add(instance);
-        var dispatcher = MinecraftServer.process().dispatcher();
-        instance.getChunks().forEach(dispatcher::createPartition);
+        MinecraftServer.process().dispatcherHandler().onInstanceRegister(instance);
         InstanceRegisterEvent event = new InstanceRegisterEvent(instance);
         EventDispatcher.call(event);
     }
