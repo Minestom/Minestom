@@ -59,7 +59,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record Enchantment(@Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
-                       Range.Int levels) implements DataComponentPredicate {
+                       Range.Int levels) {
 
         public static Codec<Enchantment> CODEC = StructCodec.struct(
                 "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), Enchantment::enchantments,
@@ -67,7 +67,6 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 Enchantment::new
         );
 
-        @Override
         public boolean test(DataComponent.Holder holder) {
             EnchantmentList holderEnchants = holder.get(DataComponents.ENCHANTMENTS);
             if (holderEnchants == null) {
@@ -98,7 +97,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record StoredEnchantment(
             @Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
-            Range.Int levels) implements DataComponentPredicate {
+            Range.Int levels) {
 
         public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
                 "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), StoredEnchantment::enchantments,
@@ -106,7 +105,6 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 StoredEnchantment::new
         );
 
-        @Override
         public boolean test(DataComponent.Holder holder) {
             EnchantmentList holderEnchants = holder.get(DataComponents.STORED_ENCHANTMENTS);
             if (holderEnchants == null) {

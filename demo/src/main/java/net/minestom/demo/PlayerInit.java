@@ -124,7 +124,10 @@ public class PlayerInit {
                                         DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(CustomData.EMPTY, 10, 5))).build()
                                 ),
                                 new BlockPredicate(
-                                        Map.of("custom_data", new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()))
+                                        Map.of(
+                                                DataComponentPredicates.ComponentPredicateType.CUSTOM_DATA,
+                                                new DataComponentPredicate.CustomData(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build())
+                                        )
                                 )
                         )))
                         .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(Block.DIAMOND_ORE)))
