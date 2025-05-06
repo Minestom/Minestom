@@ -653,7 +653,9 @@ public final class Registry {
         }
 
         public boolean isArmor() {
-            return prototype.has(ItemComponent.EQUIPPABLE);
+            final Equippable equippableComponent = prototype.get(ItemComponent.EQUIPPABLE);
+            final EquipmentSlot equipmentSlot = equippableComponent == null ? null : equippableComponent.slot();
+            return equipmentSlot != null && equipmentSlot.isArmor();
         }
 
         public @Nullable EquipmentSlot equipmentSlot() {
