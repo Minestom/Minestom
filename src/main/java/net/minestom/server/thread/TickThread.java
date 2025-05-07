@@ -21,7 +21,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created in {@link ThreadDispatcher}, and awaken every tick with a task to execute.
  */
 @ApiStatus.Internal
-public final class TickThread extends MinestomThread {
+public class TickThread extends MinestomThread {
     private final ReentrantLock lock = new ReentrantLock();
     private volatile boolean stop;
 
