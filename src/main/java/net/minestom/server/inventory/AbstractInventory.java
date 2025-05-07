@@ -1,9 +1,15 @@
 package net.minestom.server.inventory;
 
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerProcess;
 import net.minestom.server.Viewable;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
+import net.minestom.server.event.EventFilter;
+import net.minestom.server.event.EventHandler;
+import net.minestom.server.event.EventNode;
 import net.minestom.server.event.inventory.InventoryItemChangeEvent;
+import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.click.InventoryClickProcessor;
 import net.minestom.server.inventory.condition.InventoryCondition;
 import net.minestom.server.item.ItemStack;
@@ -26,8 +32,8 @@ import java.util.function.UnaryOperator;
 /**
  * Represents an inventory where items can be modified/retrieved.
  */
-public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable
-        permits Inventory, PlayerInventory {
+public sealed abstract class AbstractInventory implements InventoryClickHandler, Taggable, Viewable,
+        EventHandler<InventoryEvent> permits Inventory, PlayerInventory {
 
     private static final VarHandle ITEM_UPDATER = MethodHandles.arrayElementVarHandle(ItemStack[].class);
 
@@ -40,6 +46,7 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     protected final InventoryClickProcessor clickProcessor = new InventoryClickProcessor();
 
     private final TagHandler tagHandler = TagHandler.newHandler();
+    private final EventNode<InventoryEvent> eventNode;
 
     // the players currently viewing this inventory
     protected final Set<Player> viewers = new CopyOnWriteArraySet<>();
@@ -49,6 +56,13 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
         this.size = size;
         this.itemStacks = new ItemStack[getSize()];
         Arrays.fill(itemStacks, ItemStack.AIR);
+
+        final ServerProcess process = MinecraftServer.process();
+        if (process != null) {
+            this.eventNode = process.eventHandler().map(this, EventFilter.INVENTORY);
+        } else {
+            this.eventNode = null;
+        }
     }
 
     /**
@@ -310,5 +324,10 @@ public sealed abstract class AbstractInventory implements InventoryClickHandler,
     @Override
     public @NotNull TagHandler tagHandler() {
         return tagHandler;
+    }
+
+    @Override
+    public @NotNull EventNode<InventoryEvent> eventNode() {
+        return eventNode;
     }
 }
