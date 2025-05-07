@@ -50,6 +50,9 @@ public sealed interface DataComponent<T> extends StaticProtocolObject, Codec<T> 
         }
     }
 
+    record Value(@NotNull DataComponent<?> component, @Nullable Object value) {
+    }
+
     boolean isSynced();
     boolean isSerialized();
 

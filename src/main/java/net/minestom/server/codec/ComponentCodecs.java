@@ -53,7 +53,7 @@ public final class ComponentCodecs {
     }
 
     public static final Codec<ClickEvent> CLICK_EVENT = Codec.Enum(ClickEvent.Action.class)
-            .unionType(ComponentCodecs::clickEventCodec, ClickEvent::action);
+            .unionType("action", ComponentCodecs::clickEventCodec, ClickEvent::action);
     private static final StructCodec<ClickEvent> CLICK_EVENT_OPEN_URL = StructCodec.struct(
             "url", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
@@ -85,7 +85,7 @@ public final class ComponentCodecs {
     }
 
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
-    private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType(ComponentCodecs::hoverEventCodec, HoverEvent::action);
+    private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
     private static final StructCodec<HoverEvent<?>> SHOW_TEXT = StructCodec.struct(
             "value", COMPONENT_FORWARD, hoverEvent -> (Component) hoverEvent.value(),
