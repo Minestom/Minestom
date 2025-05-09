@@ -12,11 +12,11 @@ public record CrossbowChargingSounds(
         @Nullable ObjectSet<SoundEvent> mid,
         @Nullable ObjectSet<SoundEvent> end
 ) {
-    private static final Codec<ObjectSet<SoundEvent>> SOUND_SET_NBT_TYPE = ObjectSet.codec(Tag.BasicType.SOUND_EVENTS);
-    public static final Codec<CrossbowChargingSounds> NBT_TYPE = StructCodec.struct(
-            "start", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::start,
-            "mid", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::mid,
-            "end", SOUND_SET_NBT_TYPE.optional(), CrossbowChargingSounds::end,
+    private static final Codec<ObjectSet<SoundEvent>> SOUND_SET_CODEC = ObjectSet.codec(Tag.BasicType.SOUND_EVENTS);
+    public static final Codec<CrossbowChargingSounds> CODEC = StructCodec.struct(
+            "start", SOUND_SET_CODEC.optional(), CrossbowChargingSounds::start,
+            "mid", SOUND_SET_CODEC.optional(), CrossbowChargingSounds::mid,
+            "end", SOUND_SET_CODEC.optional(), CrossbowChargingSounds::end,
             CrossbowChargingSounds::new
     );
 }

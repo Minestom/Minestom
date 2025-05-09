@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EquipmentSlotGroup;
@@ -12,7 +13,7 @@ import java.util.List;
 
 record EnchantmentImpl(
         @NotNull Component description,
-        @NotNull ObjectSet<Enchantment> exclusiveSet,
+        @NotNull ObjectSet<Key> exclusiveSet,
         @NotNull ObjectSet<Material> supportedItems,
         @Nullable ObjectSet<Material> primaryItems,
         int weight,
@@ -27,5 +28,4 @@ record EnchantmentImpl(
     EnchantmentImpl {
         slots = List.copyOf(slots);
     }
-
 }

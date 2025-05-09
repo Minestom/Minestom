@@ -11,7 +11,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -45,7 +44,15 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
     @NotNull Codec<Particle> CODEC = new Codec<>() {
         @Override
         public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return new Result.Error<>("particles cannot be decoded");
+            final Result<Transcoder.MapLike<D>> mapResult = coder.getMap(value);
+            if (!(mapResult instanceof Result.Ok(Transcoder.MapLike<D> map)))
+                return mapResult.cast();
+            final Result<String> typeResult = map.getValue("type").map(coder::getString);
+            if (!(typeResult instanceof Result.Ok(String type)))
+                return typeResult.cast();
+            Particle particle = fromKey(type);
+            if (particle == null) return new Result.Error<>("unknown particle type: " + type);
+            return particle.decode(coder, map);
         }
 
         @Override
@@ -75,6 +82,8 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
     void writeData(@NotNull NetworkBuffer writer);
 
+    <D> @NotNull Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map);
+
     <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder);
 
     record Simple(@NotNull Key key, int id) implements Particle {
@@ -89,7 +98,12 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            return new Result.Ok<>(this);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
                     .build());
@@ -114,14 +128,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("block_state")
+                    .map(blockState -> net.minestom.server.instance.block.Block.CODEC.decode(coder, blockState));
+            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
+                return blockResult.cast();
+            return new Result.Ok<>(this.withBlock(block));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> blockResult = net.minestom.server.instance.block.Block.CODEC.encode(coder, block);
+            if (!(blockResult instanceof Result.Ok(D encodedBlock)))
+                return blockResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", encodedBlock)
                     .build());
         }
     }
@@ -144,14 +170,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("block_state")
+                    .map(blockState -> net.minestom.server.instance.block.Block.CODEC.decode(coder, blockState));
+            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
+                return blockResult.cast();
+            return new Result.Ok<>(this.withBlock(block));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> blockResult = net.minestom.server.instance.block.Block.CODEC.encode(coder, block);
+            if (!(blockResult instanceof Result.Ok(D encodedBlock)))
+                return blockResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", encodedBlock)
                     .build());
         }
     }
@@ -182,6 +220,18 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(Color.NETWORK_TYPE, color);
             writer.write(NetworkBuffer.FLOAT, scale);
+        }
+
+        @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<RGBLike> colorResult = map.getValue("color")
+                    .map(color -> Color.CODEC.decode(coder, color));
+            if (!(colorResult instanceof Result.Ok(RGBLike color)))
+                return colorResult.cast();
+            final Result<Float> scaleResult = map.getValue("scale").map(coder::getFloat);
+            if (!(scaleResult instanceof Result.Ok(Float scale)))
+                return scaleResult.cast();
+            return new Result.Ok<>(this.withProperties(color, scale));
         }
 
         @Override
@@ -235,6 +285,22 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<RGBLike> fromColorResult = map.getValue("from_color")
+                    .map(color -> Color.CODEC.decode(coder, color));
+            if (!(fromColorResult instanceof Result.Ok(RGBLike fromColor)))
+                return fromColorResult.cast();
+            final Result<RGBLike> toColorResult = map.getValue("to_color")
+                    .map(color -> Color.CODEC.decode(coder, color));
+            if (!(toColorResult instanceof Result.Ok(RGBLike toColor)))
+                return toColorResult.cast();
+            final Result<Float> scaleResult = map.getValue("scale").map(coder::getFloat);
+            if (!(scaleResult instanceof Result.Ok(Float scale)))
+                return scaleResult.cast();
+            return new Result.Ok<>(this.withProperties(fromColor, toColor, scale));
+        }
+
+        @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
             final Result<D> fromColorResult = Color.CODEC.encode(coder, color);
             if (!(fromColorResult instanceof Result.Ok(D fromColorData)))
@@ -269,14 +335,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("block_state")
+                    .map(blockState -> net.minestom.server.instance.block.Block.CODEC.decode(coder, blockState));
+            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
+                return blockResult.cast();
+            return new Result.Ok<>(this.withBlock(block));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> blockResult = net.minestom.server.instance.block.Block.CODEC.encode(coder, block);
+            if (!(blockResult instanceof Result.Ok(D encodedBlock)))
+                return blockResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", encodedBlock)
                     .build());
         }
     }
@@ -299,14 +377,26 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("block_state")
+                    .map(blockState -> net.minestom.server.instance.block.Block.CODEC.decode(coder, blockState));
+            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
+                return blockResult.cast();
+            return new Result.Ok<>(this.withBlock(block));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> blockResult = net.minestom.server.instance.block.Block.CODEC.encode(coder, block);
+            if (!(blockResult instanceof Result.Ok(D encodedBlock)))
+                return blockResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", encodedBlock)
                     .build());
         }
     }
@@ -326,6 +416,15 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(ItemStack.NETWORK_TYPE, item);
+        }
+
+        @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<ItemStack> itemResult = map.getValue("item")
+                    .map(item -> ItemStack.CODEC.decode(coder, item));
+            if (!(itemResult instanceof Result.Ok(ItemStack item)))
+                return itemResult.cast();
+            return new Result.Ok<>(this.withItem(item));
         }
 
         @Override
@@ -368,6 +467,15 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<AlphaColor> colorResult = map.getValue("color")
+                    .map(color -> AlphaColor.CODEC.decode(coder, color));
+            if (!(colorResult instanceof Result.Ok(AlphaColor color)))
+                return colorResult.cast();
+            return new Result.Ok<>(this.withColor(color));
+        }
+
+        @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
             final Result<D> colorResult = AlphaColor.CODEC.encode(coder, color);
             if (!(colorResult instanceof Result.Ok(D colorData)))
@@ -397,6 +505,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<Float> rollResult = map.getValue("roll").map(coder::getFloat);
+            if (!(rollResult instanceof Result.Ok(Float roll)))
+                return rollResult.cast();
+            return new Result.Ok<>(this.withRoll(roll));
+        }
+
+        @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
@@ -420,6 +536,14 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(NetworkBuffer.VAR_INT, delay);
+        }
+
+        @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<Integer> delayResult = map.getValue("delay").map(coder::getInt);
+            if (!(delayResult instanceof Result.Ok(Integer delay)))
+                return delayResult.cast();
+            return new Result.Ok<>(this.withDelay(delay));
         }
 
         @Override
@@ -467,17 +591,49 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
             if (sourceType == SourceType.BLOCK) {
                 Objects.requireNonNull(sourceBlockPosition);
                 writer.write(NetworkBuffer.BLOCK_POSITION, sourceBlockPosition);
-                writer.write(NetworkBuffer.VAR_INT, travelTicks);
+                writer.write(VAR_INT, travelTicks);
             } else {
-                writer.write(NetworkBuffer.VAR_INT, sourceEntityId);
+                writer.write(VAR_INT, sourceEntityId);
                 writer.write(NetworkBuffer.FLOAT, sourceEntityEyeHeight);
-                writer.write(NetworkBuffer.VAR_INT, travelTicks);
+                writer.write(VAR_INT, travelTicks);
             }
         }
 
         @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<Transcoder.MapLike<D>> destinationResult = map.getValue("destination").map(coder::getMap);
+            if (!(destinationResult instanceof Result.Ok(Transcoder.MapLike<D> destination)))
+                return destinationResult.cast();
+            final Result<String> typeResult = destination.getValue("type").map(coder::getString);
+            if (!(typeResult instanceof Result.Ok(String type)))
+                return typeResult.cast();
+            if (!type.equals("block"))
+                return new Result.Error<>(type + " vibration source cannot be decoded");
+            final Result<Point> posResult = destination.getValue("pos")
+                    .map(pos -> Codec.BLOCK_POSITION.decode(coder, pos));
+            if (!(posResult instanceof Result.Ok(Point position)))
+                return posResult.cast();
+            final Result<Integer> arrivalResult = map.getValue("arrival_in_ticks").map(coder::getInt);
+            if (!(arrivalResult instanceof Result.Ok(Integer travelTicks)))
+                return arrivalResult.cast();
+            return new Result.Ok<>(this.withSourceBlockPosition(position, travelTicks));
+        }
+
+        @Override
         public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
-            return new Result.Error<>("Vibration particle cannot be serialized to NBT");
+            if (sourceType == SourceType.ENTITY)
+                return new Result.Error<>("entity vibration source cannot be encoded");
+            final Result<D> posResult = Codec.BLOCK_POSITION.encode(coder, sourceBlockPosition);
+            if (!(posResult instanceof Result.Ok(D posData)))
+                return posResult.cast();
+            return new Result.Ok<>(coder.createMap()
+                    .put("type", coder.createString(key.asString()))
+                    .put("destination", coder.createMap()
+                            .put("type", coder.createString("block"))
+                            .put("pos", posData)
+                            .build())
+                    .put("arrival_in_ticks", coder.createInt(travelTicks))
+                    .build());
         }
 
         public enum SourceType {
@@ -517,17 +673,34 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
-            final Result<D> colorResult = Color.CODEC.encode(coder, color);
-            if (!(colorResult instanceof Result.Ok(D colorData)))
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<Point> targetResult = map.getValue("target")
+                    .map(target -> Codec.VECTOR3D.decode(coder, target));
+            if (!(targetResult instanceof Result.Ok(Point target)))
+                return targetResult.cast();
+            final Result<RGBLike> colorResult = map.getValue("color")
+                    .map(color -> Color.CODEC.decode(coder, color));
+            if (!(colorResult instanceof Result.Ok(RGBLike color)))
                 return colorResult.cast();
+            final Result<Integer> durationResult = map.getValue("duration").map(coder::getInt);
+            if (!(durationResult instanceof Result.Ok(Integer duration)))
+                return durationResult.cast();
+            return new Result.Ok<>(this.withProperties(target, color, duration));
+        }
+
+        @Override
+        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             final Result<D> targetResult = Codec.VECTOR3D.encode(coder, target);
             if (!(targetResult instanceof Result.Ok(D targetData)))
                 return targetResult.cast();
+            final Result<D> colorResult = Color.CODEC.encode(coder, color);
+            if (!(colorResult instanceof Result.Ok(D colorData)))
+                return colorResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
                     .put("target", targetData)
                     .put("color", colorData)
+                    .put("duration", coder.createInt(duration))
                     .build());
         }
     }
@@ -554,10 +727,22 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         }
 
         @Override
-        public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, Transcoder.@NotNull MapLike<D> map) {
+            final Result<net.minestom.server.instance.block.Block> blockResult = map.getValue("block_state")
+                    .map(blockState -> net.minestom.server.instance.block.Block.CODEC.decode(coder, blockState));
+            if (!(blockResult instanceof Result.Ok(net.minestom.server.instance.block.Block block)))
+                return blockResult.cast();
+            return new Result.Ok<>(this.withBlock(block));
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder) {
+            final Result<D> blockResult = net.minestom.server.instance.block.Block.CODEC.encode(coder, block);
+            if (!(blockResult instanceof Result.Ok(D encodedBlock)))
+                return blockResult.cast();
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", encodedBlock)
                     .build());
         }
     }
@@ -586,6 +771,15 @@ public sealed interface Particle extends StaticProtocolObject, Particles permits
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
             writer.write(AlphaColor.NETWORK_TYPE, color);
+        }
+
+        @Override
+        public @NotNull <D> Result<Particle> decode(@NotNull Transcoder<D> coder, @NotNull Transcoder.MapLike<D> map) {
+            final Result<AlphaColor> colorResult = map.getValue("color")
+                    .map(color -> AlphaColor.CODEC.decode(coder, color));
+            if (!(colorResult instanceof Result.Ok(AlphaColor color)))
+                return colorResult.cast();
+            return new Result.Ok<>(this.withColor(color));
         }
 
         @Override

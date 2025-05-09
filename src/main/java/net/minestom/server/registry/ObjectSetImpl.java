@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
@@ -12,9 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Set;
 
-sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
+sealed interface ObjectSetImpl<T extends Keyed> extends ObjectSet<T> permits ObjectSetImpl.Empty, ObjectSetImpl.Entries, ObjectSetImpl.Tag {
 
-    record Empty<T extends ProtocolObject>() implements ObjectSetImpl<T> {
+    record Empty<T extends Keyed>() implements ObjectSetImpl<T> {
         static final Empty<?> INSTANCE = new Empty<>();
 
         @Override
@@ -23,7 +24,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record Entries<T extends ProtocolObject>(@NotNull List<Key> entries) implements ObjectSetImpl<T> {
+    record Entries<T extends Keyed>(@NotNull List<Key> entries) implements ObjectSetImpl<T> {
 
         public Entries {
             entries = List.copyOf(entries);
@@ -35,7 +36,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    final class Tag<T extends ProtocolObject> implements ObjectSetImpl<T> {
+    final class Tag<T extends Keyed> implements ObjectSetImpl<T> {
         private final net.minestom.server.gamedata.tags.Tag.BasicType tagType;
         private final String name;
         private volatile Set<Key> value = null;
@@ -73,7 +74,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record NetworkType<T extends ProtocolObject>(
+    record NetworkType<T extends Keyed>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
     ) implements NetworkBuffer.Type<ObjectSet<T>> {
         @Override
@@ -87,7 +88,7 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         }
     }
 
-    record CodecImpl<T extends ProtocolObject>(
+    record CodecImpl<T extends Keyed>(
             @NotNull net.minestom.server.gamedata.tags.Tag.BasicType tagType
     ) implements Codec<ObjectSet<T>> {
         private static final Codec<Entries<?>> ENTRIES_CODEC = Codec.KEY.list()

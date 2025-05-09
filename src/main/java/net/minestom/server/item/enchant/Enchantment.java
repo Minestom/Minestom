@@ -1,5 +1,6 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -22,8 +23,8 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
             "description", Codec.COMPONENT, Enchantment::description,
-            "exclusive_set", ObjectSet.<Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
-            "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
+            "exclusive_set", ObjectSet.<Key>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
+            "supported_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
             "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
             "weight", Codec.INT, Enchantment::weight,
             "max_level", Codec.INT, Enchantment::maxLevel,
@@ -50,7 +51,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     @NotNull Component description();
 
-    @NotNull ObjectSet<Enchantment> exclusiveSet();
+    @NotNull ObjectSet<Key> exclusiveSet();
 
     @NotNull ObjectSet<Material> supportedItems();
 
@@ -93,7 +94,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     class Builder {
         private Component description = Component.empty();
-        private ObjectSet<Enchantment> exclusiveSet = ObjectSet.empty();
+        private ObjectSet<Key> exclusiveSet = ObjectSet.empty();
         private ObjectSet<Material> supportedItems = ObjectSet.empty();
         private ObjectSet<Material> primaryItems = ObjectSet.empty();
         private int weight = 1;
@@ -112,7 +113,7 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return this;
         }
 
-        public @NotNull Builder exclusiveSet(@NotNull ObjectSet<Enchantment> exclusiveSet) {
+        public @NotNull Builder exclusiveSet(@NotNull ObjectSet<Key> exclusiveSet) {
             this.exclusiveSet = exclusiveSet;
             return this;
         }
