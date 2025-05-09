@@ -1,10 +1,13 @@
 package net.minestom.server.entity.metadata;
 
 import net.kyori.adventure.text.Component;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityPose;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -101,11 +104,18 @@ public class EntityMeta {
         metadata.set(MetadataDef.AIR_TICKS, value);
     }
 
-    @Nullable
-    public Component getCustomName() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
+    public @Nullable Component getCustomName() {
         return metadata.get(MetadataDef.CUSTOM_NAME);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CUSTOM_NAME} instead.
+     */
+    @Deprecated
     public void setCustomName(@Nullable Component value) {
         metadata.set(MetadataDef.CUSTOM_NAME, value);
     }
@@ -156,6 +166,42 @@ public class EntityMeta {
         if (entity != null) {
             consumer.accept(entity);
         }
+    }
+
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> @Nullable T getComponent(@NotNull EntityMeta meta, @NotNull DataComponent<T> component) {
+        return meta.get(component);
+    }
+
+    /**
+     * Exists to hide the component set implementation on meta to direct people to use the method on Entity.
+     *
+     * <p>Planned to only exist while we have both metadata and components separately/all metadata is not represented by components.</p>
+     *
+     * @see Entity#set(DataComponent, Object)
+     */
+    @ApiStatus.Internal
+    public static <T> void setComponent(@NotNull EntityMeta meta, @NotNull DataComponent<T> component, @NotNull T value) {
+        meta.set(component, value);
+    }
+
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.CUSTOM_NAME)
+            return (T) metadata.get(MetadataDef.CUSTOM_NAME);
+        return null;
+    }
+
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.CUSTOM_NAME)
+            metadata.set(MetadataDef.CUSTOM_NAME, (Component) value);
     }
 
 }

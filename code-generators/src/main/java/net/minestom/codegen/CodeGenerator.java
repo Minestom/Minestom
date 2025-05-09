@@ -70,7 +70,7 @@ public class CodeGenerator {
                 outputFolder);
     }
 
-    public void generateKeys(InputStream resourceFile, String packageName, String typeName, String generatedName) {
+    public void generateKeys(InputStream resourceFile, String packageName, String typeName) {
         if (resourceFile == null) {
             LOGGER.error("Failed to find (keys) resource file for " + typeName);
             return;
@@ -82,7 +82,7 @@ public class CodeGenerator {
 
         JsonObject json;
         json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
-        ClassName materialsCN = ClassName.get(packageName, generatedName);
+        ClassName materialsCN = ClassName.get(packageName, typeName + "s");
         // BlockConstants class
         TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(materialsCN)
                 // Add @SuppressWarnings("unused")

@@ -1,28 +1,22 @@
 package net.minestom.server.entity.metadata.other;
 
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class ExperienceOrbMeta extends EntityMeta {
-    private int count = 1;
 
     public ExperienceOrbMeta(@NotNull Entity entity, @NotNull MetadataHolder metadata) {
         super(entity, metadata);
     }
 
-    public int getCount() {
-        return count;
+    public int getValue() {
+        return metadata.get(MetadataDef.ExperienceOrb.VALUE);
     }
 
-    /**
-     * Sets count of orbs.
-     * This is possible only before spawn packet is sent.
-     *
-     * @param count count of orbs.
-     */
-    public void setCount(int count) {
-        this.count = count;
+    public void setValue(int value) {
+        metadata.set(MetadataDef.ExperienceOrb.VALUE, value);
     }
 }

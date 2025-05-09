@@ -1,10 +1,10 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -13,7 +13,7 @@ import java.util.Collection;
 
 public sealed interface EntityType extends StaticProtocolObject, EntityTypes permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
-    BinaryTagSerializer<EntityType> NBT_TYPE = BinaryTagSerializer.INT.map(EntityType::fromId, EntityType::id);
+    Codec<EntityType> CODEC = Codec.INT.transform(EntityType::fromId, EntityType::id);
 
     /**
      * Returns the entity registry.

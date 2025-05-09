@@ -1,10 +1,10 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.SendablePacket;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -63,49 +63,39 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType) {
-        return new DynamicRegistryImpl<>(id, nbtType);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec) {
+        return new DynamicRegistryImpl<>(id, codec);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader) {
-        return create(id, nbtType, resource, loader, null);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull Registry.Resource resource) {
+        return create(id, codec, null, resource, null);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registry.Resource resource, @NotNull Registry.Container.Loader<T> loader,
-            @Nullable Comparator<String> idComparator) {
-        final DynamicRegistry<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticRegistry(registry, resource, loader, idComparator);
-        return registry;
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource) {
+        return create(id, codec, registries, resource, null);
     }
 
     /**
-     * Creates a new empty registry of the given type. Should only be used internally.
+     * Creates a new registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T extends ProtocolObject> @NotNull DynamicRegistry<T> create(
-            @NotNull String id, @NotNull BinaryTagSerializer<T> nbtType,
-            @NotNull Registries registries, @NotNull Registry.Resource resource) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, nbtType);
-        DynamicRegistryImpl.loadStaticSnbtRegistry(registries, registry, resource);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator);
         return registry;
     }
 

@@ -1,5 +1,7 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
@@ -12,10 +14,18 @@ public class FrogMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    public Variant getVariant() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
+     */
+    @Deprecated
+    public @NotNull Variant getVariant() {
         return metadata.get(MetadataDef.Frog.VARIANT);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FROG_VARIANT} instead.
+     */
+    @Deprecated
     public void setVariant(@NotNull Variant value) {
         metadata.set(MetadataDef.Frog.VARIANT, value);
     }
@@ -26,6 +36,21 @@ public class FrogMeta extends AnimalMeta {
 
     public void setTongueTarget(@Nullable Integer value) {
         metadata.set(MetadataDef.Frog.TONGUE_TARGET, value);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.FROG_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.FROG_VARIANT)
+            setVariant((Variant) value);
+        else super.set(component, value);
     }
 
     public enum Variant {
