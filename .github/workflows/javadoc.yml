@@ -8,22 +8,25 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build and deploy Javadoc
+    env:
+      JAVA_VERSION: 23
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK 21
-        uses: actions/setup-java@v1
+      - uses: actions/checkout@v4
+      - name: Set up JDK ${{ env.JAVA_VERSION }}
+        uses: actions/setup-java@v4
         with:
-          java-version: 21
-      - name: Grant execute permission for gradlew
-        run: chmod +x gradlew
+          java-version: ${{ env.JAVA_VERSION }}
+          distribution: 'zulu'
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
       - name: Build javadoc
         run: ./gradlew javadoc
-
       - name: Deploy javadoc to its assigned branch
         uses: s0/git-publish-subdir-action@develop
         env:
           REPO: self
           BRANCH: javadoc
           FOLDER: build/docs/javadoc
+          SKIP_EMPTY_COMMITS: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CLEAR_GLOBS_FILE: ".github/javadoc-publish-clear"
