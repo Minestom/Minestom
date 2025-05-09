@@ -65,6 +65,6 @@ public sealed interface BlockSoundType extends StaticProtocolObject, BlockSoundT
     }
 
     default int id() {
-        return 0; // Not sent through packets in the protocol, also must be between 0 and [size of block sound type list] because id mappings are stored in an array
+        throw new UnsupportedOperationException("BlockSoundType does not have an id");
     }
 }

@@ -116,25 +116,33 @@ public final class Registry {
     @ApiStatus.Internal
     public static <T extends StaticProtocolObject> Container<T> createStaticContainer(Resource resource, Container.Loader<T> loader) {
         var entries = Registry.load(resource);
+        final var requiresId = resource.requiresId();
         Map<String, T> namespaces = new HashMap<>(entries.size());
-        ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
+        ObjectArray<T> ids = requiresId ? ObjectArray.singleThread(entries.size()) : null;
         for (var entry : entries.entrySet()) {
             final String namespace = entry.getKey();
             final Properties properties = Properties.fromMap(entry.getValue());
             final T value = loader.get(namespace, properties);
-            ids.set(value.id(), value);
             namespaces.put(value.name(), value);
+            if (!requiresId) continue;
+            assert ids.get(value.id()) == null: "Duplicate id " + value.id() + " for " + value.name() + " in " + resource.name();
+            ids.set(value.id(), value);
         }
-        return new Container<>(resource, namespaces, ids);
+        //noinspection unchecked
+        final List<T> computedIds = requiresId
+                ? List.of(ids.arrayCopy((Class<T>) StaticProtocolObject.class))
+                : List.of();
+
+        return new Container<>(resource, namespaces, computedIds);
     }
 
     @ApiStatus.Internal
-    public record Container<T extends StaticProtocolObject>(Resource resource,
-                                                            Map<String, T> namespaces,
-                                                            ObjectArray<T> ids) {
+    public record Container<T extends StaticProtocolObject>(@NotNull Resource resource,
+                                                            @NotNull Map<String, T> namespaces,
+                                                            @NotNull List<T> ids) {
         public Container {
             namespaces = Map.copyOf(namespaces);
-            ids.trim();
+            ids = List.copyOf(ids);
         }
 
         public T get(@NotNull String namespace) {
@@ -224,6 +232,11 @@ public final class Registry {
 
         public @NotNull String fileName() {
             return name;
+        }
+
+        public boolean requiresId() {
+            // no reason to add another field for this is only used for BLOCK_SOUND_TYPES
+            return this != BLOCK_SOUND_TYPES;
         }
     }
 
