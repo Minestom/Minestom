@@ -38,6 +38,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.network.player.PlayerSocketConnection;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -106,6 +107,9 @@ public class PlayerInit {
             })
             .addListener(PlayerSpawnEvent.class, event -> {
                 final Player player = event.getPlayer();
+                if (player.getPlayerConnection() instanceof PlayerSocketConnection connection) {
+                    connection.networkMonitor().enable();
+                }
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
 //                ItemStack itemStack = ItemStack.builder(Material.STONE)
@@ -308,7 +312,35 @@ public class PlayerInit {
             final Component footer = benchmarkManager.getCpuMonitoringMessage();
             Audiences.players().sendPlayerListHeaderAndFooter(header, footer);
         }).repeat(10, TimeUnit.SERVER_TICK).schedule();
+
+        MinecraftServer.getSchedulerManager().buildTask(() -> {
+            MinecraftServer.getConnectionManager().getOnlinePlayers().forEach(player -> {
+                if (player.getPlayerConnection() instanceof PlayerSocketConnection connection && connection.networkMonitor().isEnabled()) {
+                    var result = connection.networkMonitor().getResultAndReset();
+                    
+                    String receivedStr = formatBytesPerSecond(result.incomingBytes());
+                    String sentStr = formatBytesPerSecond(result.outgoingBytes());
+
+                    player.sendActionBar(Component.text("⬇ " + receivedStr + " ⬆ " + sentStr + " ⬇ " + result.incomingPackets() + " ⬆ " + result.outgoingPackets() + " packets/s"));
+                    //  System.out.println(player.getUsername() + " outgoing " + sentStr + " and incoming " + receivedStr + " in the last second");
+                }
+            });
+        }).repeat(1, TimeUnit.SECOND).schedule();
     }
+
+    private String formatBytesPerSecond(long bytes) {
+        String[] units = {"B/s", "KB/s", "MB/s", "GB/s"};
+        double value = bytes;
+        int unitIndex = 0;
+        while (value >= 1024 && unitIndex < units.length - 1) {
+            value /= 1024;
+            unitIndex++;
+        }
+        return unitIndex == 0
+                ? String.format("%d%s", (int) value, units[unitIndex])
+                : String.format("%.2f%s", value, units[unitIndex]);
+    }
+
 
     public static ItemStack getFoodItem(int consumeTicks) {
         return ItemStack.builder(Material.IRON_NUGGET)
