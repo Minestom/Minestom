@@ -21,6 +21,8 @@ import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
 import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
+import net.minestom.server.extras.bungee.messaging.BungeeMessage;
+import net.minestom.server.extras.bungee.messaging.BungeeResponse;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
@@ -43,10 +45,7 @@ import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -258,6 +257,28 @@ public class PlayerInit {
                     event.setClickedItem(ItemStack.of(Material.GOLDEN_APPLE, event.getClickedItem().amount()));
                 } else if (event.getClickedItem().material() == Material.ENCHANTED_GOLDEN_APPLE) {
                     event.setCancelled(true);
+                }
+            }).addListener(PlayerPluginMessageEvent.class, event -> {
+                if (!BungeeMessage.isIdentifier(event.getIdentifier())) {
+                    return;
+                }
+                var out = BungeeMessage.readResponse(event.getMessage());
+                switch (out) {
+                    case BungeeResponse.IP(var ip, var port) -> System.out.println("IP: " + ip + ":" + port);
+                    case BungeeResponse.IPOther(var playerName, var ip, var port) ->
+                            System.out.println("IP: " + ip + ":" + port + " for player " + playerName);
+                    case BungeeResponse.PlayerCount(String serverName, int playerCount) ->
+                            System.out.println("Player count: " + playerCount + " for server " + serverName);
+                    case BungeeResponse.PlayerList(String serverName, List<String> playerNameList) ->
+                            System.out.println("Player list: " + playerNameList + " for server " + serverName);
+                    case BungeeResponse.GetServers(var servers) ->
+                            System.out.println("Get servers: " + servers);
+                    case BungeeResponse.UUID(var uuid) -> System.out.println("UUID: " + uuid);
+                    case BungeeResponse.Forward(String channel, byte[] data) ->
+                            System.out.println("Forward: " + channel + " with message: " + Arrays.toString(data));
+                    case BungeeResponse.ForwardToPlayer(String channel, byte[] data) ->
+                            System.out.println("Forward to player: " + channel + " with message: " + Arrays.toString(data));
+                    default -> System.out.println("Other response: " + out);
                 }
             });
 
