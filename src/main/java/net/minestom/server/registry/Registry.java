@@ -13,6 +13,7 @@ import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.instance.block.Block;
@@ -474,13 +475,13 @@ public final class Registry {
         }
 
         public boolean isArmor() {
-            final Equippable equippableComponent = prototype.get(ItemComponent.EQUIPPABLE);
+            final Equippable equippableComponent = prototype.get(DataComponents.EQUIPPABLE);
             final EquipmentSlot equipmentSlot = equippableComponent == null ? null : equippableComponent.slot();
             return equipmentSlot != null && equipmentSlot.isArmor();
         }
 
         public @Nullable EquipmentSlot equipmentSlot() {
-            final Equippable equippableComponent = prototype.get(ItemComponent.EQUIPPABLE);
+            final Equippable equippableComponent = prototype.get(DataComponents.EQUIPPABLE);
             return equippableComponent == null ? null : equippableComponent.slot();
         }
 
@@ -599,8 +600,8 @@ public final class Registry {
         }
 
         /**
-         *
          * Gets the entity attachment by name. Typically, will be PASSENGER or VEHICLE, but some entities have custom attachments (e.g. WARDEN_CHEST, NAMETAG)
+         *
          * @param attachmentName The attachment to retrieve
          * @return A list of 3 doubles if the attachment is defined for this entity, or null if it is not defined
          */
