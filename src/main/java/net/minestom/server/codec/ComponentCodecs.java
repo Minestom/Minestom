@@ -87,20 +87,20 @@ public final class ComponentCodecs {
     private static final Codec<HoverEvent.Action<?>> HOVER_EVENT_ACTION = Codec.STRING.transform(HoverEvent.Action.NAMES::value, HoverEvent.Action::toString);
     private static final Codec<HoverEvent<?>> HOVER_EVENT = HOVER_EVENT_ACTION.unionType("action", ComponentCodecs::hoverEventCodec, HoverEvent::action);
 
-    private static final StructCodec<HoverEvent<?>> SHOW_TEXT = StructCodec.struct(
-            "value", COMPONENT_FORWARD, hoverEvent -> (Component) hoverEvent.value(),
+    private static final StructCodec<HoverEvent<Component>> SHOW_TEXT = StructCodec.struct(
+            "value", COMPONENT_FORWARD, HoverEvent::value,
             HoverEvent::showText);
-    private static final StructCodec<HoverEvent<?>> SHOW_ITEM = StructCodec.struct(
-            "id", Codec.KEY, hoverEvent -> ((HoverEvent.ShowItem) hoverEvent.value()).item(),
-            "count", Codec.INT.optional(1), hoverEvent -> ((HoverEvent.ShowItem) hoverEvent.value()).count(),
+    private static final StructCodec<HoverEvent<HoverEvent.ShowItem>> SHOW_ITEM = StructCodec.struct(
+            "id", Codec.KEY, hoverEvent -> hoverEvent.value().item(),
+            "count", Codec.INT.optional(1), hoverEvent -> hoverEvent.value().count(),
             HoverEvent::showItem); // TODO(1.21.5): components
-    private static final StructCodec<HoverEvent<?>> SHOW_ENTITY = StructCodec.struct(
-            "id", Codec.KEY, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).type(),
-            "uuid", Codec.UUID_COERCED, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).id(),
-            "name", COMPONENT_FORWARD, hoverEvent -> ((HoverEvent.ShowEntity) hoverEvent.value()).name(),
+    private static final StructCodec<HoverEvent<HoverEvent.ShowEntity>> SHOW_ENTITY = StructCodec.struct(
+            "id", Codec.KEY, hoverEvent -> hoverEvent.value().type(),
+            "uuid", Codec.UUID_COERCED, hoverEvent -> hoverEvent.value().id(),
+            "name", COMPONENT_FORWARD, hoverEvent -> hoverEvent.value().name(),
             HoverEvent::showEntity);
 
-    private static StructCodec<HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
+    private static StructCodec<? extends HoverEvent<?>> hoverEventCodec(@NotNull HoverEvent.Action<?> action) {
         if (action == HoverEvent.Action.SHOW_TEXT) return SHOW_TEXT;
         if (action == HoverEvent.Action.SHOW_ITEM) return SHOW_ITEM;
         if (action == HoverEvent.Action.SHOW_ENTITY) return SHOW_ENTITY;

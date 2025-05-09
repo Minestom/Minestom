@@ -153,12 +153,12 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return mapValue(valueCodec, Integer.MAX_VALUE);
     }
 
-    default <R> StructCodec<R> unionType(@NotNull Function<T, StructCodec<R>> serializers, @NotNull Function<R, T> keyFunc) {
+    default <R, T1 extends T, TR extends R> StructCodec<R> unionType(@NotNull Function<T, StructCodec<TR>> serializers, @NotNull Function<R, T1> keyFunc) {
         return unionType("type", serializers, keyFunc);
     }
 
-    default <R> StructCodec<R> unionType(@NotNull String keyField, @NotNull Function<T, StructCodec<R>> serializers, @NotNull Function<R, T> keyFunc) {
-        return new CodecImpl.UnionImpl<>(keyField, Codec.this, serializers, keyFunc);
+    default <R, T1 extends T, TR extends R> StructCodec<R> unionType(@NotNull String keyField, @NotNull Function<T, StructCodec<TR>> serializers, @NotNull Function<R, T1> keyFunc) {
+        return new CodecImpl.UnionImpl<>(keyField, this, serializers, keyFunc);
     }
 
     default Codec<T> orElse(@NotNull Codec<T> other) {
