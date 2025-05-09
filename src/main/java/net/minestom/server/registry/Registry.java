@@ -24,6 +24,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockSoundType;
 import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.Material;
+import net.minestom.server.item.component.Equippable;
 import net.minestom.server.message.ChatTypeDecoration;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -590,7 +591,6 @@ public final class Registry {
         private final Supplier<Block> blockSupplier;
         private DataComponentMap prototype;
 
-        private final EquipmentSlot equipmentSlot;
         private final EntityType entityType;
         private final Properties custom;
 
@@ -603,20 +603,6 @@ public final class Registry {
             {
                 final String blockNamespace = main.getString("correspondingBlock", null);
                 this.blockSupplier = blockNamespace != null ? () -> Block.fromKey(blockNamespace) : () -> null;
-            }
-            {
-                final Properties armorProperties = main.section("armorProperties");
-                if (armorProperties != null) {
-                    switch (armorProperties.getString("slot")) {
-                        case "feet" -> this.equipmentSlot = EquipmentSlot.BOOTS;
-                        case "legs" -> this.equipmentSlot = EquipmentSlot.LEGGINGS;
-                        case "chest" -> this.equipmentSlot = EquipmentSlot.CHESTPLATE;
-                        case "head" -> this.equipmentSlot = EquipmentSlot.HELMET;
-                        default -> this.equipmentSlot = null;
-                    }
-                } else {
-                    this.equipmentSlot = null;
-                }
             }
             {
                 final Properties spawnEggProperties = main.section("spawnEggProperties");
@@ -667,11 +653,14 @@ public final class Registry {
         }
 
         public boolean isArmor() {
-            return equipmentSlot != null;
+            final Equippable equippableComponent = prototype.get(ItemComponent.EQUIPPABLE);
+            final EquipmentSlot equipmentSlot = equippableComponent == null ? null : equippableComponent.slot();
+            return equipmentSlot != null && equipmentSlot.isArmor();
         }
 
         public @Nullable EquipmentSlot equipmentSlot() {
-            return equipmentSlot;
+            final Equippable equippableComponent = prototype.get(ItemComponent.EQUIPPABLE);
+            return equippableComponent == null ? null : equippableComponent.slot();
         }
 
         /**
