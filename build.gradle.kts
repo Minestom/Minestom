@@ -35,7 +35,7 @@ allprojects {
         withSourcesJar()
         withJavadocJar()
 
-        toolchain.languageVersion = JavaLanguageVersion.of(21)
+        toolchain.languageVersion = JavaLanguageVersion.of(22)
     }
 
     tasks.withType<Zip> {
