@@ -1,28 +1,18 @@
 package net.minestom.server.entity;
 
-import net.minestom.server.registry.Registry;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Collection;
+public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry registry) implements VillagerProfession {
+    static final StaticRegistry<VillagerProfession> REGISTRY = RegistryData.createStaticRegistry(
+            RegistryData.Resource.VILLAGER_PROFESSIONS, "minecraft:villager_profession",
+            (namespace, properties) -> new VillagerProfessionImpl(RegistryData.villagerProfession(namespace, properties)));
 
-public record VillagerProfessionImpl(Registry.VillagerProfessionEntry registry) implements VillagerProfession {
-    private static final Registry.Container<VillagerProfession> CONTAINER = Registry.createStaticContainer(Registry.Resource.VILLAGER_PROFESSIONS,
-            (namespace, properties) -> new VillagerProfessionImpl(Registry.villagerProfession(namespace, properties)));
-
-    static VillagerProfession get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static VillagerProfession getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static VillagerProfession getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<VillagerProfession> values() {
-        return CONTAINER.values();
+    static @UnknownNullability VillagerProfession get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

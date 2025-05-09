@@ -6,7 +6,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -26,7 +26,7 @@ public sealed interface PigVariant extends PigVariants permits PigVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<PigVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:pig_variant", REGISTRY_CODEC, Registry.Resource.PIG_VARIANTS);
+        return DynamicRegistry.create("minecraft:pig_variant", REGISTRY_CODEC, RegistryData.Resource.PIG_VARIANTS);
     }
 
     static @NotNull PigVariant create(@NotNull Model model, @NotNull Key assetId) {

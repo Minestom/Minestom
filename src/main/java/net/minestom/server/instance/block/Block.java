@@ -1,12 +1,13 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -154,10 +155,12 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block registry
      */
     @Contract(pure = true)
-    @NotNull Registry.BlockEntry registry();
+    @NotNull RegistryData.BlockEntry registry();
 
     @Override
-    default @NotNull Key key() { return registry().key(); }
+    default @NotNull Key key() {
+        return registry().key();
+    }
 
     @Override
     default int id() {
@@ -189,15 +192,15 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockImpl.values();
+        return BlockImpl.REGISTRY.values();
     }
 
-    static @Nullable Block fromKey(@NotNull String key) {
-        return BlockImpl.getSafe(key);
+    static @Nullable Block fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Block fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return BlockImpl.REGISTRY.get(key);
     }
 
     static @Nullable Block fromStateId(int stateId) {
@@ -205,7 +208,7 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockImpl.getId(blockId);
+        return BlockImpl.REGISTRY.get(blockId);
     }
 
     @FunctionalInterface

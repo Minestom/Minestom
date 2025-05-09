@@ -13,7 +13,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.Tool;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -41,7 +41,7 @@ public class BlockBreakCalculation {
         // Taken from minecraft wiki Breaking#Calculation
         // https://minecraft.wiki/w/Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
-        Registry.BlockEntry registry = block.registry();
+        RegistryData.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
         if (blockHardness == -1) {
             // Bedrock, barrier, and unbreakable blocks
