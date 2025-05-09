@@ -98,9 +98,8 @@ public sealed interface ConsumeEffect {
         };
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private static StructCodec<ConsumeEffect> codec(@NotNull ConsumeEffectType type) {
-        return (StructCodec) switch (type) {
+    private static StructCodec<? extends ConsumeEffect> codec(@NotNull ConsumeEffectType type) {
+        return switch (type) {
             case APPLY_EFFECTS -> ApplyEffects.CODEC;
             case REMOVE_EFFECTS -> RemoveEffects.CODEC;
             case CLEAR_ALL_EFFECTS -> ClearAllEffects.CODEC;
