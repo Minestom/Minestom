@@ -135,7 +135,7 @@ public final class PlayerDiggingListener {
 
     private static void dropStack(Player player) {
         final ItemStack droppedItemStack = player.getItemInMainHand();
-        dropItem(player, droppedItemStack, ItemStack.AIR, -999);
+        dropItem(player, droppedItemStack, ItemStack.AIR, player.getHeldSlot());
     }
 
     private static void dropSingle(Player player) {
