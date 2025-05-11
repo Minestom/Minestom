@@ -268,7 +268,7 @@ public final class InventoryClickProcessor {
                 // Left (drop all)
                 final int amount = cursor.amount();
                 final ItemStack dropItem = cursor.withAmount(amount);
-                final boolean dropResult = player.dropItem(dropItem);
+                final boolean dropResult = player.dropItem(dropItem, slot);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     cursor = ItemStack.AIR;
@@ -276,7 +276,7 @@ public final class InventoryClickProcessor {
             } else {
                 // Right (drop 1)
                 final ItemStack dropItem = cursor.withAmount(1);
-                final boolean dropResult = player.dropItem(dropItem);
+                final boolean dropResult = player.dropItem(dropItem, slot);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = cursor.amount();
@@ -290,7 +290,7 @@ public final class InventoryClickProcessor {
                 // Ctrl + Drop key Q (drop all)
                 final int amount = clicked.amount();
                 final ItemStack dropItem = clicked.withAmount(amount);
-                final boolean dropResult = player.dropItem(dropItem);
+                final boolean dropResult = player.dropItem(dropItem, slot);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     clicked = ItemStack.AIR;
@@ -298,7 +298,7 @@ public final class InventoryClickProcessor {
             } else {
                 // Drop key Q (drop 1)
                 final ItemStack dropItem = clicked.withAmount(1);
-                final boolean dropResult = player.dropItem(dropItem);
+                final boolean dropResult = player.dropItem(dropItem, slot);
                 clickResult.setCancel(!dropResult);
                 if (dropResult) {
                     final int amount = clicked.amount();

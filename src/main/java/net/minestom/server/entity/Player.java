@@ -1275,9 +1275,9 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      * @param item the item to drop
      * @return true if player can drop the item (event not cancelled), false otherwise
      */
-    public boolean dropItem(@NotNull ItemStack item) {
+    public boolean dropItem(@NotNull ItemStack item, int slot) {
         if (item.isAir()) return false;
-        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item);
+        ItemDropEvent itemDropEvent = new ItemDropEvent(this, item, slot);
         EventDispatcher.call(itemDropEvent);
         return !itemDropEvent.isCancelled();
     }

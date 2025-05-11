@@ -21,7 +21,7 @@ public final class CreativeInventoryActionListener {
             CreativeInventoryActionEvent event = new CreativeInventoryActionEvent(player, slot, sentItem);
             EventDispatcher.call(event);
             if (event.isCancelled()) return;
-            player.dropItem(event.getClickedItem());
+            player.dropItem(event.getClickedItem(), slot);
             return;
         }
         // Bounds check

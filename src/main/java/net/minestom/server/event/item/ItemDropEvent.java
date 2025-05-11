@@ -11,12 +11,14 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
 
     private final Player player;
     private final ItemStack itemStack;
+    private final int slot;
 
     private boolean cancelled;
 
-    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack) {
+    public ItemDropEvent(@NotNull Player player, @NotNull ItemStack itemStack, int slot) {
         this.player = player;
         this.itemStack = itemStack;
+        this.slot = slot;
     }
 
     @Override
@@ -27,6 +29,10 @@ public class ItemDropEvent implements PlayerInstanceEvent, ItemEvent, Cancellabl
     @NotNull
     public ItemStack getItemStack() {
         return itemStack;
+    }
+
+    public int getSlot() {
+        return slot;
     }
 
     @Override

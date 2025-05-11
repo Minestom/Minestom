@@ -25,6 +25,7 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
+import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingListener {
@@ -134,20 +135,27 @@ public final class PlayerDiggingListener {
 
     private static void dropStack(Player player) {
         final ItemStack droppedItemStack = player.getItemInMainHand();
-        dropItem(player, droppedItemStack, ItemStack.AIR);
+        dropItem(player, droppedItemStack, ItemStack.AIR, -999);
     }
 
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getItemInMainHand();
         final int handAmount = handItem.amount();
+        final int slot;
+        if (player.getItemUseHand() == PlayerHand.MAIN) {
+            slot = player.getHeldSlot();
+        } else {
+            slot = PlayerInventoryUtils.OFFHAND_SLOT;
+        }
         if (handAmount <= 1) {
             // Drop the whole item without copy
-            dropItem(player, handItem, ItemStack.AIR);
+            dropItem(player, handItem, ItemStack.AIR, slot);
         } else {
             // Drop a single item
             dropItem(player,
                     handItem.withAmount(1), // Single dropped item
-                    handItem.withAmount(handAmount - 1)); // Updated hand
+                    handItem.withAmount(handAmount - 1), // Updated hand
+                    slot); //Send slot
         }
     }
 
@@ -194,8 +202,8 @@ public final class PlayerDiggingListener {
     }
 
     private static void dropItem(@NotNull Player player,
-                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem) {
-        if (player.dropItem(droppedItem)) {
+                                 @NotNull ItemStack droppedItem, @NotNull ItemStack handItem, int slot) {
+        if (player.dropItem(droppedItem, slot)) {
             player.setItemInMainHand(handItem);
         } else {
             player.getInventory().update();
