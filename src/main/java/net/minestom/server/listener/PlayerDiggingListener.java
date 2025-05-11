@@ -25,7 +25,6 @@ import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePack
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.utils.block.BlockBreakCalculation;
 import net.minestom.server.utils.block.BlockUtils;
-import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import org.jetbrains.annotations.NotNull;
 
 public final class PlayerDiggingListener {
@@ -141,21 +140,15 @@ public final class PlayerDiggingListener {
     private static void dropSingle(Player player) {
         final ItemStack handItem = player.getItemInMainHand();
         final int handAmount = handItem.amount();
-        final int slot;
-        if (player.getItemUseHand() == PlayerHand.MAIN) {
-            slot = player.getHeldSlot();
-        } else {
-            slot = PlayerInventoryUtils.OFFHAND_SLOT;
-        }
         if (handAmount <= 1) {
             // Drop the whole item without copy
-            dropItem(player, handItem, ItemStack.AIR, slot);
+            dropItem(player, handItem, ItemStack.AIR, player.getHeldSlot());
         } else {
             // Drop a single item
             dropItem(player,
                     handItem.withAmount(1), // Single dropped item
                     handItem.withAmount(handAmount - 1), // Updated hand
-                    slot); //Send slot
+                    player.getHeldSlot()); //Send slot
         }
     }
 
