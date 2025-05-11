@@ -42,7 +42,7 @@ public record JoinGamePacket(
             GameMode.OPT_NETWORK_TYPE, JoinGamePacket::previousGameMode,
             BOOLEAN, JoinGamePacket::isDebug,
             BOOLEAN, JoinGamePacket::isFlat,
-            WorldPos.NETWORK_TYPE.optional(), JoinGamePacket::deathLocation,
+            WorldPos.OPT_NETWORK_TYPE, JoinGamePacket::deathLocation,
             VAR_INT, JoinGamePacket::portalCooldown,
             VAR_INT, JoinGamePacket::seaLevel,
             BOOLEAN, JoinGamePacket::enforcesSecureChat,

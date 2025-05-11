@@ -12,6 +12,7 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
@@ -22,9 +23,8 @@ import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public final class Metadata {
+public final class Metadata implements Metadatas {
     public static Entry<Byte> Byte(byte value) {
         return new MetadataImpl.EntryImpl<>(TYPE_BYTE, value, NetworkBuffer.BYTE);
     }
@@ -163,6 +163,10 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 
+    public static Entry<WorldPos> OptionalWorldPosition(@Nullable WorldPos value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_GLOBAL_POSITION, value, WorldPos.OPT_NETWORK_TYPE);
+    }
+
     public static Entry<Holder<PaintingVariant>> PaintingVariant(@NotNull Holder<PaintingVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
@@ -181,50 +185,6 @@ public final class Metadata {
 
     public static Entry<float[]> Quaternion(float @NotNull [] value) {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
-    }
-
-    private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
-
-    public static final byte TYPE_BYTE = nextId();
-    public static final byte TYPE_VARINT = nextId();
-    public static final byte TYPE_LONG = nextId();
-    public static final byte TYPE_FLOAT = nextId();
-    public static final byte TYPE_STRING = nextId();
-    public static final byte TYPE_CHAT = nextId();
-    public static final byte TYPE_OPT_CHAT = nextId();
-    public static final byte TYPE_ITEM_STACK = nextId();
-    public static final byte TYPE_BOOLEAN = nextId();
-    public static final byte TYPE_ROTATION = nextId();
-    public static final byte TYPE_BLOCK_POSITION = nextId();
-    public static final byte TYPE_OPT_BLOCK_POSITION = nextId();
-    public static final byte TYPE_DIRECTION = nextId();
-    public static final byte TYPE_OPT_UUID = nextId();
-    public static final byte TYPE_BLOCKSTATE = nextId();
-    public static final byte TYPE_OPT_BLOCKSTATE = nextId();
-    public static final byte TYPE_NBT = nextId();
-    public static final byte TYPE_PARTICLE = nextId();
-    public static final byte TYPE_PARTICLE_LIST = nextId();
-    public static final byte TYPE_VILLAGERDATA = nextId();
-    public static final byte TYPE_OPT_VARINT = nextId();
-    public static final byte TYPE_POSE = nextId();
-    public static final byte TYPE_CAT_VARIANT = nextId();
-    public static final byte TYPE_COW_VARIANT = nextId();
-    public static final byte TYPE_WOLF_VARIANT = nextId();
-    public static final byte TYPE_WOLF_SOUND_VARIANT = nextId();
-    public static final byte TYPE_FROG_VARIANT = nextId();
-    public static final byte TYPE_PIG_VARIANT = nextId();
-    public static final byte TYPE_CHICKEN_VARIANT = nextId();
-    public static final byte TYPE_OPT_GLOBAL_POSITION = nextId(); // Unused by protocol it seems
-    public static final byte TYPE_PAINTING_VARIANT = nextId();
-    public static final byte TYPE_SNIFFER_STATE = nextId();
-    public static final byte TYPE_ARMADILLO_STATE = nextId();
-    public static final byte TYPE_VECTOR3 = nextId();
-    public static final byte TYPE_QUATERNION = nextId();
-
-    // Impl Note: Adding an entry here requires that a default value entry is added in MetadataImpl.EMPTY_VALUES
-
-    private static byte nextId() {
-        return (byte) NEXT_ID.getAndIncrement();
     }
 
     public sealed interface Entry<T> permits MetadataImpl.EntryImpl {
