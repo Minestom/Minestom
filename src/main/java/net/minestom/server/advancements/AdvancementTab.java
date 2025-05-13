@@ -37,7 +37,7 @@ public class AdvancementTab implements Viewable {
     protected AdvancementTab(@NotNull String rootIdentifier, @NotNull AdvancementRoot root) {
         this.root = root;
         cacheAdvancement(rootIdentifier, root, null);
-        this.removePacket = new AdvancementsPacket(false, List.of(), List.of(rootIdentifier), List.of());
+        this.removePacket = new AdvancementsPacket(false, List.of(), List.of(rootIdentifier), List.of(), true);
     }
 
     /**
@@ -91,7 +91,7 @@ public class AdvancementTab implements Viewable {
             mappings.add(advancement.toMapping());
             progressMappings.add(advancement.toProgressMapping());
         }
-        return new AdvancementsPacket(false, mappings, List.of(), progressMappings);
+        return new AdvancementsPacket(false, mappings, List.of(), progressMappings, true);
     }
 
     /**

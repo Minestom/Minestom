@@ -1,15 +1,14 @@
 package net.minestom.server.instance.block.predicate;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.BinaryTagTypes;
-import net.kyori.adventure.nbt.ListBinaryTag;
-import net.kyori.adventure.nbt.StringBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,49 +83,50 @@ public sealed interface BlockTypeFilter extends Predicate<Block> permits BlockTy
             }
         }
     };
-
-    BinaryTagSerializer<BlockTypeFilter> NBT_TYPE = new BinaryTagSerializer<>() {
+    Codec<BlockTypeFilter> CODEC = new Codec<>() {
         @Override
-        public @NotNull BinaryTag write(@NotNull BlockTypeFilter value) {
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable BlockTypeFilter value) {
             return switch (value) {
                 case Blocks blocks -> {
                     if (blocks.blocks.size() == 1) {
                         // Special case to match mojang serialization
-                        yield StringBinaryTag.stringBinaryTag(blocks.blocks.get(0).name());
+                        yield new Result.Ok<>(coder.createString(blocks.blocks.getFirst().name()));
                     }
 
-                    ListBinaryTag.Builder<StringBinaryTag> builder = ListBinaryTag.builder(BinaryTagTypes.STRING);
+                    final Transcoder.ListBuilder<D> list = coder.createList(blocks.blocks.size());
                     for (Block block : blocks.blocks) {
-                        builder.add(StringBinaryTag.stringBinaryTag(block.name()));
+                        list.add(coder.createString(block.name()));
                     }
-                    yield builder.build();
+                    yield new Result.Ok<>(list.build());
                 }
-                case Tag tag -> StringBinaryTag.stringBinaryTag("#" + tag.tag.name());
+                case Tag tag -> new Result.Ok<>(coder.createString("#" + tag.tag.name()));
             };
         }
 
         @Override
-        public @NotNull BlockTypeFilter read(@NotNull BinaryTag tag) {
-            return switch (tag) {
-                case ListBinaryTag list -> {
-                    final List<Block> blocks = new ArrayList<>(list.size());
-                    for (BinaryTag binaryTag : list) {
-                        if (!(binaryTag instanceof StringBinaryTag string)) continue;
-                        blocks.add(Objects.requireNonNull(Block.fromKey(string.value())));
-                    }
-                    yield new Blocks(blocks);
-                }
-                case StringBinaryTag string -> {
-                    // Could be a tag or a block name depending if it starts with a #
-                    final String value = string.value();
-                    if (value.startsWith("#")) {
-                        yield new Tag(value.substring(1));
-                    } else {
-                        yield new Blocks(Objects.requireNonNull(Block.fromKey(value)));
-                    }
-                }
-                default -> throw new IllegalArgumentException("Invalid tag type: " + tag.type());
-            };
+        public @NotNull <D> Result<BlockTypeFilter> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<String> stringResult = coder.getString(value);
+            if (stringResult instanceof Result.Ok(String string)) {
+                // Could be a tag or a block name depending if it starts with a #
+                return new Result.Ok<>(string.startsWith("#")
+                        ? new Tag(string.substring(1))
+                        : new Blocks(Objects.requireNonNull(Block.fromKey(string))));
+            }
+
+            // Otherwise, must be a list of blocks
+            final Result<List<D>> listResult = coder.getList(value);
+            if (!(listResult instanceof Result.Ok(List<D> list)))
+                return listResult.cast();
+            
+            final List<Block> blocks = new ArrayList<>(list.size());
+            for (final D entry : list) {
+                final Result<String> itemResult = coder.getString(entry);
+                if (!(itemResult instanceof Result.Ok(String item)))
+                    return itemResult.cast();
+
+                blocks.add(Objects.requireNonNull(Block.fromKey(item)));
+            }
+            return new Result.Ok<>(new Blocks(blocks));
         }
     };
 

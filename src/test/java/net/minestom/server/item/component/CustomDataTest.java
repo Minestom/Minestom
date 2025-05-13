@@ -2,7 +2,7 @@ package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.component.DataComponent;
-import net.minestom.server.item.ItemComponent;
+import net.minestom.server.component.DataComponents;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,10 +14,10 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
     // This is not a test, but it creates a compile error if the component type is changed away,
     // as a reminder that tests should be added for that new component type.
     private static final List<DataComponent<CustomData>> SHARED_COMPONENTS = List.of(
-            ItemComponent.CUSTOM_DATA,
-            ItemComponent.ENTITY_DATA,
-            ItemComponent.BUCKET_ENTITY_DATA,
-            ItemComponent.BLOCK_ENTITY_DATA
+            DataComponents.CUSTOM_DATA,
+            DataComponents.ENTITY_DATA,
+            DataComponents.BUCKET_ENTITY_DATA,
+            DataComponents.BLOCK_ENTITY_DATA
     );
 
     @Override

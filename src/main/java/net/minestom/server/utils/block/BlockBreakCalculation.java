@@ -1,6 +1,7 @@
 package net.minestom.server.utils.block;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
@@ -9,7 +10,6 @@ import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.gamedata.tags.Tag.BasicType;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.Tool;
 import net.minestom.server.potion.PotionEffect;
@@ -54,7 +54,7 @@ public class BlockBreakCalculation {
                 return 0;
             }
         }
-        Tool tool = item.get(ItemComponent.TOOL);
+        Tool tool = item.get(DataComponents.TOOL);
         boolean isBestTool = canBreakBlock(tool, block);
         float speedMultiplier;
 

@@ -5,15 +5,17 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
@@ -347,16 +349,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record NbtType() implements NetworkBufferTypeImpl<BinaryTag> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, BinaryTag value) {
-            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter;
-            if (nbtWriter == null) {
-                nbtWriter = new BinaryTagWriter(new DataOutputStream(new OutputStream() {
-                    @Override
-                    public void write(int b) {
-                        buffer.write(BYTE, (byte) b);
-                    }
-                }));
-                impl(buffer).nbtWriter = nbtWriter;
-            }
+            BinaryTagWriter nbtWriter = impl(buffer).nbtWriter();
             try {
                 nbtWriter.writeNameless(value);
             } catch (IOException e) {
@@ -366,21 +359,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
 
         @Override
         public BinaryTag read(@NotNull NetworkBuffer buffer) {
-            BinaryTagReader nbtReader = impl(buffer).nbtReader;
-            if (nbtReader == null) {
-                nbtReader = new BinaryTagReader(new DataInputStream(new InputStream() {
-                    @Override
-                    public int read() {
-                        return buffer.read(BYTE) & 0xFF;
-                    }
-
-                    @Override
-                    public int available() {
-                        return (int) buffer.readableBytes();
-                    }
-                }));
-                impl(buffer).nbtReader = nbtReader;
-            }
+            BinaryTagReader nbtReader = impl(buffer).nbtReader();
             try {
                 return nbtReader.readNameless();
             } catch (IOException e) {
@@ -526,38 +505,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    // METADATA
-
-    record BlockStateType() implements NetworkBufferTypeImpl<Integer> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, Integer value) {
-            buffer.write(VAR_INT, value);
-        }
-
-        @Override
-        public Integer read(@NotNull NetworkBuffer buffer) {
-            return buffer.read(VAR_INT);
-        }
-    }
-
-    record VillagerDataType() implements NetworkBufferTypeImpl<int[]> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, int[] value) {
-            buffer.write(VAR_INT, value[0]);
-            buffer.write(VAR_INT, value[1]);
-            buffer.write(VAR_INT, value[2]);
-        }
-
-        @Override
-        public int[] read(@NotNull NetworkBuffer buffer) {
-            final int[] value = new int[3];
-            value[0] = buffer.read(VAR_INT);
-            value[1] = buffer.read(VAR_INT);
-            value[2] = buffer.read(VAR_INT);
-            return value;
-        }
-    }
-
     record Vector3Type() implements NetworkBufferTypeImpl<Point> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Point value) {
@@ -588,6 +535,23 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             final double x = buffer.read(DOUBLE);
             final double y = buffer.read(DOUBLE);
             final double z = buffer.read(DOUBLE);
+            return new Vec(x, y, z);
+        }
+    }
+
+    record Vector3IType() implements NetworkBufferTypeImpl<Point> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Point value) {
+            buffer.write(VAR_INT, (int) value.x());
+            buffer.write(VAR_INT, (int) value.y());
+            buffer.write(VAR_INT, (int) value.z());
+        }
+
+        @Override
+        public Point read(@NotNull NetworkBuffer buffer) {
+            final int x = buffer.read(VAR_INT);
+            final int y = buffer.read(VAR_INT);
+            final int z = buffer.read(VAR_INT);
             return new Vec(x, y, z);
         }
     }
@@ -709,20 +673,27 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record TypedNbtType<T>(@NotNull BinaryTagSerializer<T> nbtType) implements NetworkBufferTypeImpl<T> {
+    record TypedNbtType<T>(@NotNull Codec<T> nbtType) implements NetworkBufferTypeImpl<T> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, T value) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            buffer.write(NBT, nbtType.write(new BinaryTagSerializer.ContextWithRegistries(registries), value));
+            final Result<BinaryTag> result = nbtType.encode(new RegistryTranscoder<>(Transcoder.NBT, registries), value);
+            switch (result) {
+                case Result.Ok(BinaryTag tag) -> buffer.write(NBT, tag);
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            }
         }
 
         @Override
         public T read(@NotNull NetworkBuffer buffer) {
             final Registries registries = impl(buffer).registries;
             Check.stateCondition(registries == null, "Buffer does not have registries");
-            final BinaryTag tag = buffer.read(NBT);
-            return nbtType.read(new BinaryTagSerializer.ContextWithRegistries(registries), tag);
+            final Result<T> result = nbtType.decode(new RegistryTranscoder<>(Transcoder.NBT, registries), buffer.read(NBT));
+            return switch (result) {
+                case Result.Ok(T value) -> value;
+                case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
+            };
         }
     }
 
@@ -787,6 +758,28 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record SetType<T>(@NotNull Type<T> parent, int maxSize) implements NetworkBufferTypeImpl<Set<T>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Set<T> values) {
+            if (values == null) {
+                buffer.write(BYTE, (byte) 0);
+                return;
+            }
+            buffer.write(VAR_INT, values.size());
+            for (T value : values) buffer.write(parent, value);
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Set<T> read(@NotNull NetworkBuffer buffer) {
+            final int size = buffer.read(VAR_INT);
+            Check.argCondition(size > maxSize, "Collection size ({0}) is higher than the maximum allowed size ({1})", size, maxSize);
+            T[] values = (T[]) new Object[size];
+            for (int i = 0; i < size; i++) values[i] = buffer.read(parent);
+            return Set.of(values);
+        }
+    }
+
     record UnionType<K, T>(
             @NotNull Type<K> keyType, @NotNull Function<T, K> keyFunc,
             @NotNull Function<K, NetworkBuffer.Type<T>> serializers
@@ -811,7 +804,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record RegistryTypeType<T extends ProtocolObject>(
+    record RegistryTypeType<T>(
             @NotNull Function<Registries, DynamicRegistry<T>> selector,
             boolean holder
     ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {

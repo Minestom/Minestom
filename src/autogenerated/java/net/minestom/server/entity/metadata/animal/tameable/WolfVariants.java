@@ -7,21 +7,21 @@ import net.minestom.server.registry.DynamicRegistry;
  */
 @SuppressWarnings("unused")
 interface WolfVariants {
-    DynamicRegistry.Key<WolfMeta.Variant> BLACK = DynamicRegistry.Key.of("minecraft:black");
+    DynamicRegistry.Key<WolfVariant> BLACK = DynamicRegistry.Key.of("minecraft:black");
 
-    DynamicRegistry.Key<WolfMeta.Variant> CHESTNUT = DynamicRegistry.Key.of("minecraft:chestnut");
+    DynamicRegistry.Key<WolfVariant> CHESTNUT = DynamicRegistry.Key.of("minecraft:chestnut");
 
-    DynamicRegistry.Key<WolfMeta.Variant> SNOWY = DynamicRegistry.Key.of("minecraft:snowy");
+    DynamicRegistry.Key<WolfVariant> SNOWY = DynamicRegistry.Key.of("minecraft:snowy");
 
-    DynamicRegistry.Key<WolfMeta.Variant> STRIPED = DynamicRegistry.Key.of("minecraft:striped");
+    DynamicRegistry.Key<WolfVariant> STRIPED = DynamicRegistry.Key.of("minecraft:striped");
 
-    DynamicRegistry.Key<WolfMeta.Variant> ASHEN = DynamicRegistry.Key.of("minecraft:ashen");
+    DynamicRegistry.Key<WolfVariant> ASHEN = DynamicRegistry.Key.of("minecraft:ashen");
 
-    DynamicRegistry.Key<WolfMeta.Variant> SPOTTED = DynamicRegistry.Key.of("minecraft:spotted");
+    DynamicRegistry.Key<WolfVariant> SPOTTED = DynamicRegistry.Key.of("minecraft:spotted");
 
-    DynamicRegistry.Key<WolfMeta.Variant> RUSTY = DynamicRegistry.Key.of("minecraft:rusty");
+    DynamicRegistry.Key<WolfVariant> RUSTY = DynamicRegistry.Key.of("minecraft:rusty");
 
-    DynamicRegistry.Key<WolfMeta.Variant> WOODS = DynamicRegistry.Key.of("minecraft:woods");
+    DynamicRegistry.Key<WolfVariant> WOODS = DynamicRegistry.Key.of("minecraft:woods");
 
-    DynamicRegistry.Key<WolfMeta.Variant> PALE = DynamicRegistry.Key.of("minecraft:pale");
+    DynamicRegistry.Key<WolfVariant> PALE = DynamicRegistry.Key.of("minecraft:pale");
 }

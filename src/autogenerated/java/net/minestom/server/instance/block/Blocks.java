@@ -271,6 +271,12 @@ interface Blocks {
 
     Block DEAD_BUSH = BlockImpl.get("minecraft:dead_bush");
 
+    Block BUSH = BlockImpl.get("minecraft:bush");
+
+    Block SHORT_DRY_GRASS = BlockImpl.get("minecraft:short_dry_grass");
+
+    Block TALL_DRY_GRASS = BlockImpl.get("minecraft:tall_dry_grass");
+
     Block SEAGRASS = BlockImpl.get("minecraft:seagrass");
 
     Block TALL_SEAGRASS = BlockImpl.get("minecraft:tall_seagrass");
@@ -532,6 +538,8 @@ interface Blocks {
     Block SNOW_BLOCK = BlockImpl.get("minecraft:snow_block");
 
     Block CACTUS = BlockImpl.get("minecraft:cactus");
+
+    Block CACTUS_FLOWER = BlockImpl.get("minecraft:cactus_flower");
 
     Block CLAY = BlockImpl.get("minecraft:clay");
 
@@ -1729,6 +1737,10 @@ interface Blocks {
 
     Block JIGSAW = BlockImpl.get("minecraft:jigsaw");
 
+    Block TEST_BLOCK = BlockImpl.get("minecraft:test_block");
+
+    Block TEST_INSTANCE_BLOCK = BlockImpl.get("minecraft:test_instance_block");
+
     Block COMPOSTER = BlockImpl.get("minecraft:composter");
 
     Block TARGET = BlockImpl.get("minecraft:target");
@@ -2093,6 +2105,10 @@ interface Blocks {
 
     Block PINK_PETALS = BlockImpl.get("minecraft:pink_petals");
 
+    Block WILDFLOWERS = BlockImpl.get("minecraft:wildflowers");
+
+    Block LEAF_LITTER = BlockImpl.get("minecraft:leaf_litter");
+
     Block MOSS_BLOCK = BlockImpl.get("minecraft:moss_block");
 
     Block BIG_DRIPLEAF = BlockImpl.get("minecraft:big_dripleaf");
@@ -2194,4 +2210,6 @@ interface Blocks {
     Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get("minecraft:potted_open_eyeblossom");
 
     Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get("minecraft:potted_closed_eyeblossom");
+
+    Block FIREFLY_BUSH = BlockImpl.get("minecraft:firefly_bush");
 }

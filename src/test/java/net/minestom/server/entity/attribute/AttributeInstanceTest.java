@@ -28,7 +28,7 @@ public class AttributeInstanceTest {
         attribute.addModifier(new AttributeModifier("test", 2.0, AttributeOperation.ADD_VALUE));
         assertEquals(5, attribute.getValue()); // New value
 
-        attribute.addModifier(new AttributeModifier("test", 2.0, AttributeOperation.MULTIPLY_BASE));
+        attribute.addModifier(new AttributeModifier("test", 2.0, AttributeOperation.ADD_MULTIPLIED_BASE));
         assertEquals(9, attribute.getValue()); // New operation
 
     }

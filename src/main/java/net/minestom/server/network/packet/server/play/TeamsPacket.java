@@ -83,8 +83,8 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public void write(@NotNull NetworkBuffer buffer, CreateTeamAction value) {
                 buffer.write(COMPONENT, value.displayName);
                 buffer.write(BYTE, value.friendlyFlags);
-                buffer.write(STRING, value.nameTagVisibility.getIdentifier());
-                buffer.write(STRING, value.collisionRule.getIdentifier());
+                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
+                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
                 buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
                 buffer.write(COMPONENT, value.teamPrefix);
                 buffer.write(COMPONENT, value.teamSuffix);
@@ -94,7 +94,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             @Override
             public CreateTeamAction read(@NotNull NetworkBuffer buffer) {
                 return new CreateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
-                        NameTagVisibility.fromIdentifier(buffer.read(STRING)), CollisionRule.fromIdentifier(buffer.read(STRING)),
+                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
                         NamedTextColor.namedColor(buffer.read(VAR_INT)), buffer.read(COMPONENT), buffer.read(COMPONENT),
                         buffer.read(STRING.list(MAX_MEMBERS)));
             }
@@ -145,8 +145,8 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             public void write(@NotNull NetworkBuffer buffer, UpdateTeamAction value) {
                 buffer.write(COMPONENT, value.displayName);
                 buffer.write(BYTE, value.friendlyFlags);
-                buffer.write(STRING, value.nameTagVisibility.getIdentifier());
-                buffer.write(STRING, value.collisionRule.getIdentifier());
+                buffer.write(NameTagVisibility.NETWORK_TYPE, value.nameTagVisibility);
+                buffer.write(CollisionRule.NETWORK_TYPE, value.collisionRule);
                 buffer.write(VAR_INT, AdventurePacketConvertor.getNamedTextColorValue(value.teamColor));
                 buffer.write(COMPONENT, value.teamPrefix);
                 buffer.write(COMPONENT, value.teamSuffix);
@@ -155,7 +155,7 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
             @Override
             public UpdateTeamAction read(@NotNull NetworkBuffer buffer) {
                 return new UpdateTeamAction(buffer.read(COMPONENT), buffer.read(BYTE),
-                        NameTagVisibility.fromIdentifier(buffer.read(STRING)), CollisionRule.fromIdentifier(buffer.read(STRING)),
+                        buffer.read(NameTagVisibility.NETWORK_TYPE), buffer.read(CollisionRule.NETWORK_TYPE),
                         NamedTextColor.namedColor(buffer.read(VAR_INT)),
                         buffer.read(COMPONENT), buffer.read(COMPONENT));
             }
@@ -234,17 +234,19 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          */
         ALWAYS("always"),
         /**
+         * The name tag is invisible
+         */
+        NEVER("never"),
+        /**
          * Hides the name tag for other teams
          */
         HIDE_FOR_OTHER_TEAMS("hideForOtherTeams"),
         /**
          * Hides the name tag for the own team
          */
-        HIDE_FOR_OWN_TEAM("hideForOwnTeam"),
-        /**
-         * The name tag is invisible
-         */
-        NEVER("never");
+        HIDE_FOR_OWN_TEAM("hideForOwnTeam");
+
+        public static final NetworkBuffer.Type<NameTagVisibility> NETWORK_TYPE = NetworkBuffer.Enum(NameTagVisibility.class);
 
         /**
          * The identifier for the client
@@ -290,17 +292,19 @@ public record TeamsPacket(String teamName, Action action) implements ServerPacke
          */
         ALWAYS("always"),
         /**
+         * Cannot push an object, but neither can they be pushed
+         */
+        NEVER("never"),
+        /**
          * Can push objects of other teams, but teammates cannot
          */
         PUSH_OTHER_TEAMS("pushOtherTeams"),
         /**
          * Can only push objects of the same team
          */
-        PUSH_OWN_TEAM("pushOwnTeam"),
-        /**
-         * Cannot push an object, but neither can they be pushed
-         */
-        NEVER("never");
+        PUSH_OWN_TEAM("pushOwnTeam");
+
+        public static final NetworkBuffer.Type<CollisionRule> NETWORK_TYPE = NetworkBuffer.Enum(CollisionRule.class);
 
         /**
          * The identifier for the client

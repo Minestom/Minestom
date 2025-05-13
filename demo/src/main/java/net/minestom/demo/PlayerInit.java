@@ -9,6 +9,7 @@ import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
 import net.minestom.server.color.AlphaColor;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.*;
@@ -16,6 +17,7 @@ import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.entity.EntityAttackEvent;
+import net.minestom.server.event.inventory.CreativeInventoryActionEvent;
 import net.minestom.server.event.item.*;
 import net.minestom.server.event.player.*;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
@@ -24,16 +26,13 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
+import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
-import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
@@ -109,12 +108,12 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 player.setGameMode(GameMode.CREATIVE);
                 player.setPermissionLevel(4);
-                ItemStack itemStack = ItemStack.builder(Material.STONE)
-                        .amount(64)
-                        .set(ItemComponent.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
-                        .set(ItemComponent.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
-                        .build();
-                player.getInventory().addItemStack(itemStack);
+//                ItemStack itemStack = ItemStack.builder(Material.STONE)
+//                        .amount(64)
+//                        .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE), null, null)))
+//                        .set(DataComponents.CAN_BREAK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.DIAMOND_ORE), null, null)))
+//                        .build();
+//                player.getInventory().addItemStack(itemStack);
 
                 player.sendPacket(new CustomReportDetailsPacket(Map.of(
                         "hello", "world"
@@ -128,7 +127,7 @@ public class PlayerInit {
 
                 // TODO(1.21.2): Handle bundle slot selection
                 ItemStack bundle = ItemStack.builder(Material.BUNDLE)
-                        .set(ItemComponent.BUNDLE_CONTENTS, List.of(
+                        .set(DataComponents.BUNDLE_CONTENTS, List.of(
                                 ItemStack.of(Material.DIAMOND, 5),
                                 ItemStack.of(Material.RABBIT_FOOT, 5)
                         ))
@@ -139,6 +138,7 @@ public class PlayerInit {
                 inventory.addItemStack(getFoodItem(20));
                 inventory.addItemStack(getFoodItem(10000));
                 inventory.addItemStack(getFoodItem(Integer.MAX_VALUE));
+                inventory.addItemStack(ItemStack.of(Material.PURPLE_BED));
 
                 if (event.isFirstSpawn()) {
                     event.getPlayer().sendNotification(new Notification(
@@ -159,6 +159,48 @@ public class PlayerInit {
 
                 //System.out.println("in " + event.getPacket().getClass().getSimpleName());
             })
+            .addListener(PlayerBlockBreakEvent.class, event -> {
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                var pos = event.getBlockPosition();
+                if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                var isHead = "head".equals(block.getProperty("part"));
+                var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                var otherBlock = instance.getBlock(other);
+                if (otherBlock.id() == block.id()) {
+                    instance.setBlock(other, Block.AIR);
+                }
+            })
+            .addListener(PlayerBlockInteractEvent.class, event -> {
+                var player = event.getPlayer();
+                var instance = event.getInstance();
+                var block = event.getBlock();
+                if (event.getBlock().key().asMinimalString().endsWith("_bed")) {
+                    var pos = event.getBlockPosition();
+                    if (block.getProperty("part") == null || block.getProperty("facing") == null) return;
+                    var isHead = "head".equals(block.getProperty("part"));
+                    var facing = BlockFace.valueOf(block.getProperty("facing").toUpperCase());
+                    var other = (isHead ? pos.add(facing.getOppositeFace().toDirection().vec().asPosition()) : pos.add(facing.toDirection().vec().asPosition()));
+                    var otherBlock = instance.getBlock(other);
+                    if (otherBlock.id() == block.id()) {
+                        player.setVelocity(Vec.ZERO);
+                        player.swingMainHand();
+                        player.enterBed((isHead ? pos : other));
+                    }
+                }
+            })
+            .addListener(PlayerLeaveBedEvent.class, event -> {
+                var player = event.getPlayer();
+                boolean snooze = ThreadLocalRandom.current().nextFloat() < 0.7f;
+                if (snooze) {
+                    event.setCancelled(true);
+                    player.playSound(Sound.sound(SoundEvent.ENTITY_ALLAY_ITEM_THROWN, Sound.Source.PLAYER, 1f, 0.6f));
+                    player.sendActionBar(Component.text("I'm too tired to stand up!"));
+                } else {
+                    player.sendActionBar(Component.empty());
+                }
+            })
             .addListener(PlayerUseItemOnBlockEvent.class, event -> {
                 if (event.getHand() != PlayerHand.MAIN) return;
 
@@ -177,10 +219,10 @@ public class PlayerInit {
             .addListener(PlayerBeginItemUseEvent.class, event -> {
                 final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
-                final boolean hasProjectile = !itemStack.get(ItemComponent.CHARGED_PROJECTILES, List.of()).isEmpty();
+                final boolean hasProjectile = !itemStack.get(DataComponents.CHARGED_PROJECTILES, List.of()).isEmpty();
                 if (itemStack.material() == Material.CROSSBOW && hasProjectile) {
                     // "shoot" the arrow
-                    player.setItemInHand(event.getHand(), itemStack.without(ItemComponent.CHARGED_PROJECTILES));
+                    player.setItemInHand(event.getHand(), itemStack.without(DataComponents.CHARGED_PROJECTILES));
                     event.getPlayer().sendMessage("pew pew!");
                     event.setItemUseDuration(0); // Do not start using the item
                     return;
@@ -195,7 +237,7 @@ public class PlayerInit {
                 final Player player = event.getPlayer();
                 final ItemStack itemStack = event.getItemStack();
                 if (itemStack.material() == Material.CROSSBOW && event.getUseDuration() > 25) {
-                    player.setItemInHand(event.getHand(), itemStack.with(ItemComponent.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
+                    player.setItemInHand(event.getHand(), itemStack.with(DataComponents.CHARGED_PROJECTILES, List.of(ItemStack.of(Material.ARROW))));
                     return;
                 }
             })
@@ -209,6 +251,13 @@ public class PlayerInit {
 
                 if (block.id() == Block.CRAFTING_TABLE.id()) {
                     event.getPlayer().openInventory(new Inventory(InventoryType.CRAFTING, "Crafting"));
+                }
+            })
+            .addListener(CreativeInventoryActionEvent.class, event -> {
+                if (event.getClickedItem().material() == Material.APPLE) {
+                    event.setClickedItem(ItemStack.of(Material.GOLDEN_APPLE, event.getClickedItem().amount()));
+                } else if (event.getClickedItem().material() == Material.ENCHANTED_GOLDEN_APPLE) {
+                    event.setCancelled(true);
                 }
             });
 
@@ -264,7 +313,7 @@ public class PlayerInit {
     public static ItemStack getFoodItem(int consumeTicks) {
         return ItemStack.builder(Material.IRON_NUGGET)
                 .amount(64)
-                .set(ItemComponent.CONSUMABLE, new Consumable(
+                .set(DataComponents.CONSUMABLE, new Consumable(
                         (float) consumeTicks / 20,
                         ItemAnimation.EAT,
                         SoundEvent.BLOCK_CHAIN_STEP,

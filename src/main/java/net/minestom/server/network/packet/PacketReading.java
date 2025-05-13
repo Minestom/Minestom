@@ -218,7 +218,7 @@ public final class PacketReading {
             }
             return packet;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("failed to read packet " + packetInfo.packetClass(), e);
         }
     }
 

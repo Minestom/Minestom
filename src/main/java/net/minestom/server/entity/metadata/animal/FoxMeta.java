@@ -1,8 +1,12 @@
 package net.minestom.server.entity.metadata.animal;
 
+import net.minestom.server.codec.Codec;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
+import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -13,13 +17,21 @@ public class FoxMeta extends AnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public Type getType() {
-        return Type.VALUES[metadata.get(MetadataDef.Fox.TYPE)];
+
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
+     */
+    @Deprecated
+    public @NotNull FoxMeta.Variant getVariant() {
+        return Variant.VALUES[metadata.get(MetadataDef.Fox.VARIANT)];
     }
 
-    public void setType(@NotNull Type type) {
-        metadata.set(MetadataDef.Fox.TYPE, type.ordinal());
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#FOX_VARIANT} instead.
+     */
+    @Deprecated
+    public void setVariant(@NotNull FoxMeta.Variant variant) {
+        metadata.set(MetadataDef.Fox.VARIANT, variant.ordinal());
     }
 
     public boolean isSitting() {
@@ -96,11 +108,29 @@ public class FoxMeta extends AnimalMeta {
         metadata.set(MetadataDef.Fox.SECOND_UUID, value);
     }
 
-    public enum Type {
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.FOX_VARIANT)
+            return (T) getVariant();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.FOX_VARIANT)
+            setVariant((FoxMeta.Variant) value);
+        else super.set(component, value);
+    }
+
+    public enum Variant {
         RED,
         SNOW;
 
-        private final static Type[] VALUES = values();
+        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
+        public static final Codec<Variant> CODEC = Codec.Enum(Variant.class);
+
+        private final static Variant[] VALUES = values();
     }
 
 }

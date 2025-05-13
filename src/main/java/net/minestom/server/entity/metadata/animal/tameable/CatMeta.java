@@ -1,11 +1,14 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
 import net.minestom.server.color.DyeColor;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CatMeta extends TameableAnimalMeta {
     private static final DyeColor[] DYE_VALUES = DyeColor.values();
@@ -14,11 +17,18 @@ public class CatMeta extends TameableAnimalMeta {
         super(entity, metadata);
     }
 
-    @NotNull
-    public CatMeta.Variant getVariant() {
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
+     */
+    @Deprecated
+    public @NotNull CatMeta.Variant getVariant() {
         return metadata.get(MetadataDef.Cat.VARIANT);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
+     */
+    @Deprecated
     public void setVariant(@NotNull CatMeta.Variant value) {
         metadata.set(MetadataDef.Cat.VARIANT, value);
     }
@@ -39,12 +49,39 @@ public class CatMeta extends TameableAnimalMeta {
         metadata.set(MetadataDef.Cat.IS_RELAXED, value);
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_COLLAR} instead.
+     */
+    @Deprecated
     public @NotNull DyeColor getCollarColor() {
         return DYE_VALUES[metadata.get(MetadataDef.Cat.COLLAR_COLOR)];
     }
 
+    /**
+     * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_COLLAR} instead.
+     */
+    @Deprecated
     public void setCollarColor(@NotNull DyeColor value) {
         metadata.set(MetadataDef.Cat.COLLAR_COLOR, value.ordinal());
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
+        if (component == DataComponents.CAT_VARIANT)
+            return (T) getVariant();
+        if (component == DataComponents.CAT_COLLAR)
+            return (T) getCollarColor();
+        return super.get(component);
+    }
+
+    @Override
+    protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
+        if (component == DataComponents.CAT_VARIANT)
+            setVariant((CatMeta.Variant) value);
+        else if (component == DataComponents.CAT_COLLAR)
+            setCollarColor((DyeColor) value);
+        else super.set(component, value);
     }
 
     public enum Variant {
