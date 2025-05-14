@@ -11,6 +11,7 @@ import net.minestom.server.entity.EntityPose;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.NotNull;
@@ -110,7 +111,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
-    <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    static <L, R> @NotNull Type<Either<L, R>> Either(@NotNull NetworkBuffer.Type<L> left, @NotNull NetworkBuffer.Type<R> right) {
+        return new NetworkBufferTypeImpl.EitherType<>(left, right);
+    }
+
+    <T>
+    void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
     <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
 

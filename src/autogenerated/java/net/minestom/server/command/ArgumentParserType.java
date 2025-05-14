@@ -48,6 +48,8 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     COLOR(Key.key("minecraft:color")),
 
+    HEX_COLOR(Key.key("minecraft:hex_color")),
+
     COMPONENT(Key.key("minecraft:component")),
 
     STYLE(Key.key("minecraft:style")),
@@ -121,6 +123,8 @@ public enum ArgumentParserType implements StaticProtocolObject {
     LOOT_PREDICATE(Key.key("minecraft:loot_predicate")),
 
     LOOT_MODIFIER(Key.key("minecraft:loot_modifier")),
+
+    DIALOG(Key.key("minecraft:dialog")),
 
     UUID(Key.key("minecraft:uuid"));
 

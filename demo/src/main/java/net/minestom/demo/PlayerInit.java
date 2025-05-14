@@ -1,5 +1,7 @@
 package net.minestom.demo;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
@@ -8,7 +10,8 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.color.AlphaColor;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -38,7 +41,10 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.network.packet.server.common.ShowDialogPacket;
+import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -149,8 +155,22 @@ public class PlayerInit {
 
                     player.playSound(Sound.sound(SoundEvent.ENTITY_EXPERIENCE_ORB_PICKUP, Sound.Source.PLAYER, 0.5f, 1f));
 
-                    player.sendMessage(Component.text("Hello shadow").shadowColor(new AlphaColor(0xFFFF0000)));
+                    var happyGhast = new LivingEntity(EntityType.HAPPY_GHAST);
+                    happyGhast.setNoGravity(true);
+                    happyGhast.setBodyEquipment(ItemStack.of(Material.GREEN_HARNESS));
+                    happyGhast.setInstance(player.getInstance(), new Pos(10, 43, 5, 45, 0));
+
+                    player.sendPacket(new TrackedWaypointPacket(TrackedWaypointPacket.Operation.TRACK, new TrackedWaypointPacket.Waypoint(
+                            Either.left(happyGhast.getUuid()),
+                            TrackedWaypointPacket.Icon.DEFAULT,
+                            new TrackedWaypointPacket.Target.Vec3i(happyGhast.getPosition())
+                    )));
                 }
+            })
+            .addListener(PlayerChatEvent.class, event -> {
+                var json = new Gson().fromJson("{  \"type\": \"minecraft:simple_input_form\",  \"title\": { \"text\": \"Are you sure you want to confirm?\" },  \"inputs\": [    {      \"type\": \"minecraft:text\",      \"key\": \"text_input\",      \"label\": \"Enter some text\"    },    {      \"type\": \"minecraft:boolean\",      \"key\": \"boolean\",      \"label\": \"Checkbox\"    },    {      \"type\": \"minecraft:single_option\",      \"key\": \"options\",      \"label\": \"Checkbox\",      \"options\": [        {          \"id\": \"option1\",          \"display\": \"Option 1\"        },        {          \"id\": \"option2\",          \"display\": \"Option 2\"        },        {          \"id\": \"option3\",          \"display\": \"Option 3\"        }      ]    },    {      \"type\": \"minecraft:number_range\",      \"key\": \"number\",      \"label\": \"Number range\",      \"start\": 0,      \"end\": 500,      \"steps\": 500,      \"initial\": 250    }  ],  \"action\": { \"label\": \"Done\", \"id\": \"submit\", \"on_submit\": { \"type\": \"command_template\", \"template\": \"tellraw @a 'text value: \\\"$(text_input)\\\"\\\\ncheckbox value: \\\"$(boolean)\\\"\\\\nmulti option value: \\\"$(options)\\\"\\\\nrange value: \\\"$(number)\\\"'\" } }}", JsonElement.class);
+                var nbt = Codec.RawValue.of(Transcoder.JSON, json).convertTo(Transcoder.NBT).orElseThrow();
+                event.getPlayer().sendPacket(new ShowDialogPacket(nbt));
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());

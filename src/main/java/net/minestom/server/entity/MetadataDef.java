@@ -15,7 +15,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -196,7 +195,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Painting extends MetadataDef {
-        public static final Entry<Holder<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, new Holder.Reference<>(PaintingVariant.KEBAB));
+        public static final Entry<DynamicRegistry.Key<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingVariant.KEBAB);
     }
 
     public static final class ItemEntity extends MetadataDef {
@@ -466,6 +465,11 @@ public sealed class MetadataDef {
 
     public static final class Villager extends AbstractVillager {
         public static final Entry<VillagerMeta.VillagerData> VARIANT = index(0, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
+    }
+
+    public static final class HappyGhast extends AgeableMob {
+        public static final Entry<Boolean> IS_LEASH_HOLDER = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> STAYS_STILL = index(1, Metadata::Boolean, false);
     }
 
     public static final class IronGolem extends Mob {

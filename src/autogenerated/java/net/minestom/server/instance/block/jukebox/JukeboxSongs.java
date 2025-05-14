@@ -27,6 +27,8 @@ interface JukeboxSongs {
 
     DynamicRegistry.Key<JukeboxSong> OTHERSIDE = DynamicRegistry.Key.of("minecraft:otherside");
 
+    DynamicRegistry.Key<JukeboxSong> TEARS = DynamicRegistry.Key.of("minecraft:tears");
+
     DynamicRegistry.Key<JukeboxSong> MELLOHI = DynamicRegistry.Key.of("minecraft:mellohi");
 
     DynamicRegistry.Key<JukeboxSong> MALL = DynamicRegistry.Key.of("minecraft:mall");

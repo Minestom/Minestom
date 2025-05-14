@@ -14,6 +14,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
@@ -21,7 +22,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
@@ -694,6 +697,32 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
                 case Result.Ok(T value) -> value;
                 case Result.Error(String message) -> throw new IllegalArgumentException("Invalid NBT tag: " + message);
             };
+        }
+    }
+
+    record EitherType<L, R>(
+            @NotNull NetworkBuffer.Type<L> left,
+            @NotNull NetworkBuffer.Type<R> right
+    ) implements NetworkBuffer.Type<Either<L, R>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Either<L, R> value) {
+            switch (value) {
+                case Either.Left(L leftValue) -> {
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(left, leftValue);
+                }
+                case Either.Right(R rightValue) -> {
+                    buffer.write(BOOLEAN, false);
+                    buffer.write(right, rightValue);
+                }
+            }
+        }
+
+        @Override
+        public Either<L, R> read(@NotNull NetworkBuffer buffer) {
+            if (buffer.read(BOOLEAN))
+                return Either.left(buffer.read(left));
+            return Either.right(buffer.read(right));
         }
     }
 

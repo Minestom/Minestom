@@ -5,9 +5,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,13 +14,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public sealed interface PaintingVariant extends PaintingVariants permits PaintingVariantImpl {
-    @NotNull NetworkBuffer.Type<PaintingVariant> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
-            NetworkBuffer.KEY, PaintingVariant::assetId,
-            NetworkBuffer.INT, PaintingVariant::width,
-            NetworkBuffer.INT, PaintingVariant::height,
-            NetworkBuffer.COMPONENT.optional(), PaintingVariant::title,
-            NetworkBuffer.COMPONENT.optional(), PaintingVariant::author,
-            PaintingVariant::create);
     @NotNull Codec<PaintingVariant> REGISTRY_CODEC = StructCodec.struct(
             "asset_id", Codec.KEY, PaintingVariant::assetId,
             "width", Codec.INT, PaintingVariant::width,
@@ -31,8 +22,8 @@ public sealed interface PaintingVariant extends PaintingVariants permits Paintin
             "author", Codec.COMPONENT.optional(), PaintingVariant::author,
             PaintingVariant::create);
 
-    @NotNull NetworkBuffer.Type<Holder<PaintingVariant>> NETWORK_TYPE = Holder.networkType(Registries::paintingVariant, REGISTRY_NETWORK_TYPE);
-    @NotNull Codec<Holder<PaintingVariant>> CODEC = Holder.codec(Registries::paintingVariant, REGISTRY_CODEC);
+    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<PaintingVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::paintingVariant, false);
+    @NotNull Codec<DynamicRegistry.Key<PaintingVariant>> CODEC = Codec.RegistryKey(Registries::paintingVariant);
 
     static @NotNull PaintingVariant create(
             @NotNull Key assetId,
