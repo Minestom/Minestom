@@ -11,7 +11,7 @@ public class EntityPotionAddEvent implements EntityInstanceEvent, CancellableEve
     private final Entity entity;
     private final Potion potion;
 
-    private boolean cancelled = false;
+    private boolean cancelled;
 
     public EntityPotionAddEvent(@NotNull Entity entity, @NotNull Potion potion) {
         this.entity = entity;
