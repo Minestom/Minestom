@@ -130,11 +130,7 @@ public final class Registry {
             assert ids.get(value.id()) == null: "Duplicate id " + value.id() + " for " + value.name() + " in " + resource.name();
             ids.set(value.id(), value);
         }
-        //noinspection unchecked
-        final List<T> computedIds = requiresId
-                ? List.of(ids.arrayCopy((Class<T>) StaticProtocolObject.class))
-                : List.of();
-
+        final List<T> computedIds = requiresId ? ids.toList() : List.of();
         return new Container<>(resource, namespaces, computedIds);
     }
 
