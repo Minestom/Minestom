@@ -1243,6 +1243,8 @@ interface Materials {
 
     Material SNIFFER_EGG = MaterialImpl.get("minecraft:sniffer_egg");
 
+    Material DRIED_GHAST = MaterialImpl.get("minecraft:dried_ghast");
+
     Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_tube_coral_block");
 
     Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_brain_coral_block");
@@ -1606,6 +1608,38 @@ interface Materials {
     Material ACTIVATOR_RAIL = MaterialImpl.get("minecraft:activator_rail");
 
     Material SADDLE = MaterialImpl.get("minecraft:saddle");
+
+    Material WHITE_HARNESS = MaterialImpl.get("minecraft:white_harness");
+
+    Material ORANGE_HARNESS = MaterialImpl.get("minecraft:orange_harness");
+
+    Material MAGENTA_HARNESS = MaterialImpl.get("minecraft:magenta_harness");
+
+    Material LIGHT_BLUE_HARNESS = MaterialImpl.get("minecraft:light_blue_harness");
+
+    Material YELLOW_HARNESS = MaterialImpl.get("minecraft:yellow_harness");
+
+    Material LIME_HARNESS = MaterialImpl.get("minecraft:lime_harness");
+
+    Material PINK_HARNESS = MaterialImpl.get("minecraft:pink_harness");
+
+    Material GRAY_HARNESS = MaterialImpl.get("minecraft:gray_harness");
+
+    Material LIGHT_GRAY_HARNESS = MaterialImpl.get("minecraft:light_gray_harness");
+
+    Material CYAN_HARNESS = MaterialImpl.get("minecraft:cyan_harness");
+
+    Material PURPLE_HARNESS = MaterialImpl.get("minecraft:purple_harness");
+
+    Material BLUE_HARNESS = MaterialImpl.get("minecraft:blue_harness");
+
+    Material BROWN_HARNESS = MaterialImpl.get("minecraft:brown_harness");
+
+    Material GREEN_HARNESS = MaterialImpl.get("minecraft:green_harness");
+
+    Material RED_HARNESS = MaterialImpl.get("minecraft:red_harness");
+
+    Material BLACK_HARNESS = MaterialImpl.get("minecraft:black_harness");
 
     Material MINECART = MaterialImpl.get("minecraft:minecart");
 
@@ -2193,6 +2227,8 @@ interface Materials {
 
     Material GHAST_SPAWN_EGG = MaterialImpl.get("minecraft:ghast_spawn_egg");
 
+    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("minecraft:happy_ghast_spawn_egg");
+
     Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("minecraft:glow_squid_spawn_egg");
 
     Material GOAT_SPAWN_EGG = MaterialImpl.get("minecraft:goat_spawn_egg");
@@ -2504,6 +2540,8 @@ interface Materials {
     Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("minecraft:music_disc_pigstep");
 
     Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("minecraft:music_disc_precipice");
+
+    Material MUSIC_DISC_TEARS = MaterialImpl.get("minecraft:music_disc_tears");
 
     Material DISC_FRAGMENT_5 = MaterialImpl.get("minecraft:disc_fragment_5");
 
