@@ -3,6 +3,8 @@ package net.minestom.server.utils.collection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.Arrays;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ObjectArrayTest {
@@ -47,5 +49,42 @@ public class ObjectArrayTest {
         array.set(2, "Hey2");
         assertArrayEquals(new String[]{null, "Hey", "Hey2"}, array.arrayCopy(String.class));
         assertArrayEquals(new String[]{null, "Hey"}, copyCache, "The copy cache should not be modified");
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {false, true})
+    public void trim(boolean concurrent) {
+        ObjectArray<String> array = concurrent ? ObjectArray.concurrent() : ObjectArray.singleThread();
+        // zero case
+        array.trim();
+        assertArrayEquals(new String[0], array.arrayCopy(String.class));
+
+        // 3 elements with a space
+        array.set(0, "Hey");
+        array.set(1, "Hey2");
+        array.set(3, "Hey4");
+        array.trim();
+        assertArrayEquals(new String[]{"Hey", "Hey2", null, "Hey4"}, array.arrayCopy(String.class));
+
+        // 4 elements without a space
+        array.set(2, "Hey3");
+        array.trim();
+        assertArrayEquals(new String[]{"Hey", "Hey2", "Hey3", "Hey4"}, array.arrayCopy(String.class));
+
+        // set trailing 2 elements with a null
+        array.remove(2);
+        array.remove(3);
+        array.trim();
+        assertArrayEquals(new String[]{"Hey", "Hey2"}, array.arrayCopy(String.class));
+
+        // remove first element
+        array.remove(0);
+        array.trim();
+        assertArrayEquals(new String[]{null, "Hey2"}, array.arrayCopy(String.class));
+
+        // remove last element, forcing the array to shrink after trim
+        array.remove(1);
+        array.trim();
+        assertArrayEquals(new String[0], array.arrayCopy(String.class));
     }
 }
