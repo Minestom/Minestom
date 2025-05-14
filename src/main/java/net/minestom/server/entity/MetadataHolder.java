@@ -225,6 +225,7 @@ public final class MetadataHolder {
         map.put("minecraft:glow_squid", GlowSquidMeta::new);
         map.put("minecraft:goat", GoatMeta::new);
         map.put("minecraft:guardian", GuardianMeta::new);
+        map.put("minecraft:happy_ghast", HappyGhastMeta::new);
         map.put("minecraft:hoglin", HoglinMeta::new);
         map.put("minecraft:horse", HorseMeta::new);
         map.put("minecraft:husk", HuskMeta::new);
