@@ -5,2795 +5,2833 @@ package net.minestom.server.item;
  */
 @SuppressWarnings("unused")
 interface Materials {
-    Material AIR = MaterialImpl.get("air");
+    Material AIR = MaterialImpl.get("minecraft:air");
 
-    Material STONE = MaterialImpl.get("stone");
+    Material STONE = MaterialImpl.get("minecraft:stone");
 
-    Material GRANITE = MaterialImpl.get("granite");
+    Material GRANITE = MaterialImpl.get("minecraft:granite");
 
-    Material POLISHED_GRANITE = MaterialImpl.get("polished_granite");
+    Material POLISHED_GRANITE = MaterialImpl.get("minecraft:polished_granite");
 
-    Material DIORITE = MaterialImpl.get("diorite");
+    Material DIORITE = MaterialImpl.get("minecraft:diorite");
 
-    Material POLISHED_DIORITE = MaterialImpl.get("polished_diorite");
+    Material POLISHED_DIORITE = MaterialImpl.get("minecraft:polished_diorite");
 
-    Material ANDESITE = MaterialImpl.get("andesite");
+    Material ANDESITE = MaterialImpl.get("minecraft:andesite");
 
-    Material POLISHED_ANDESITE = MaterialImpl.get("polished_andesite");
+    Material POLISHED_ANDESITE = MaterialImpl.get("minecraft:polished_andesite");
 
-    Material DEEPSLATE = MaterialImpl.get("deepslate");
+    Material DEEPSLATE = MaterialImpl.get("minecraft:deepslate");
 
-    Material COBBLED_DEEPSLATE = MaterialImpl.get("cobbled_deepslate");
+    Material COBBLED_DEEPSLATE = MaterialImpl.get("minecraft:cobbled_deepslate");
 
-    Material POLISHED_DEEPSLATE = MaterialImpl.get("polished_deepslate");
+    Material POLISHED_DEEPSLATE = MaterialImpl.get("minecraft:polished_deepslate");
 
-    Material CALCITE = MaterialImpl.get("calcite");
+    Material CALCITE = MaterialImpl.get("minecraft:calcite");
 
-    Material TUFF = MaterialImpl.get("tuff");
+    Material TUFF = MaterialImpl.get("minecraft:tuff");
 
-    Material TUFF_SLAB = MaterialImpl.get("tuff_slab");
+    Material TUFF_SLAB = MaterialImpl.get("minecraft:tuff_slab");
 
-    Material TUFF_STAIRS = MaterialImpl.get("tuff_stairs");
+    Material TUFF_STAIRS = MaterialImpl.get("minecraft:tuff_stairs");
 
-    Material TUFF_WALL = MaterialImpl.get("tuff_wall");
+    Material TUFF_WALL = MaterialImpl.get("minecraft:tuff_wall");
 
-    Material CHISELED_TUFF = MaterialImpl.get("chiseled_tuff");
+    Material CHISELED_TUFF = MaterialImpl.get("minecraft:chiseled_tuff");
 
-    Material POLISHED_TUFF = MaterialImpl.get("polished_tuff");
+    Material POLISHED_TUFF = MaterialImpl.get("minecraft:polished_tuff");
 
-    Material POLISHED_TUFF_SLAB = MaterialImpl.get("polished_tuff_slab");
+    Material POLISHED_TUFF_SLAB = MaterialImpl.get("minecraft:polished_tuff_slab");
 
-    Material POLISHED_TUFF_STAIRS = MaterialImpl.get("polished_tuff_stairs");
+    Material POLISHED_TUFF_STAIRS = MaterialImpl.get("minecraft:polished_tuff_stairs");
 
-    Material POLISHED_TUFF_WALL = MaterialImpl.get("polished_tuff_wall");
+    Material POLISHED_TUFF_WALL = MaterialImpl.get("minecraft:polished_tuff_wall");
 
-    Material TUFF_BRICKS = MaterialImpl.get("tuff_bricks");
+    Material TUFF_BRICKS = MaterialImpl.get("minecraft:tuff_bricks");
 
-    Material TUFF_BRICK_SLAB = MaterialImpl.get("tuff_brick_slab");
+    Material TUFF_BRICK_SLAB = MaterialImpl.get("minecraft:tuff_brick_slab");
 
-    Material TUFF_BRICK_STAIRS = MaterialImpl.get("tuff_brick_stairs");
+    Material TUFF_BRICK_STAIRS = MaterialImpl.get("minecraft:tuff_brick_stairs");
 
-    Material TUFF_BRICK_WALL = MaterialImpl.get("tuff_brick_wall");
+    Material TUFF_BRICK_WALL = MaterialImpl.get("minecraft:tuff_brick_wall");
 
-    Material CHISELED_TUFF_BRICKS = MaterialImpl.get("chiseled_tuff_bricks");
+    Material CHISELED_TUFF_BRICKS = MaterialImpl.get("minecraft:chiseled_tuff_bricks");
 
-    Material DRIPSTONE_BLOCK = MaterialImpl.get("dripstone_block");
+    Material DRIPSTONE_BLOCK = MaterialImpl.get("minecraft:dripstone_block");
 
-    Material GRASS_BLOCK = MaterialImpl.get("grass_block");
+    Material GRASS_BLOCK = MaterialImpl.get("minecraft:grass_block");
 
-    Material DIRT = MaterialImpl.get("dirt");
+    Material DIRT = MaterialImpl.get("minecraft:dirt");
 
-    Material COARSE_DIRT = MaterialImpl.get("coarse_dirt");
+    Material COARSE_DIRT = MaterialImpl.get("minecraft:coarse_dirt");
 
-    Material PODZOL = MaterialImpl.get("podzol");
+    Material PODZOL = MaterialImpl.get("minecraft:podzol");
 
-    Material ROOTED_DIRT = MaterialImpl.get("rooted_dirt");
+    Material ROOTED_DIRT = MaterialImpl.get("minecraft:rooted_dirt");
 
-    Material MUD = MaterialImpl.get("mud");
+    Material MUD = MaterialImpl.get("minecraft:mud");
 
-    Material CRIMSON_NYLIUM = MaterialImpl.get("crimson_nylium");
+    Material CRIMSON_NYLIUM = MaterialImpl.get("minecraft:crimson_nylium");
 
-    Material WARPED_NYLIUM = MaterialImpl.get("warped_nylium");
+    Material WARPED_NYLIUM = MaterialImpl.get("minecraft:warped_nylium");
 
-    Material COBBLESTONE = MaterialImpl.get("cobblestone");
+    Material COBBLESTONE = MaterialImpl.get("minecraft:cobblestone");
 
-    Material OAK_PLANKS = MaterialImpl.get("oak_planks");
+    Material OAK_PLANKS = MaterialImpl.get("minecraft:oak_planks");
 
-    Material SPRUCE_PLANKS = MaterialImpl.get("spruce_planks");
+    Material SPRUCE_PLANKS = MaterialImpl.get("minecraft:spruce_planks");
 
-    Material BIRCH_PLANKS = MaterialImpl.get("birch_planks");
+    Material BIRCH_PLANKS = MaterialImpl.get("minecraft:birch_planks");
 
-    Material JUNGLE_PLANKS = MaterialImpl.get("jungle_planks");
+    Material JUNGLE_PLANKS = MaterialImpl.get("minecraft:jungle_planks");
 
-    Material ACACIA_PLANKS = MaterialImpl.get("acacia_planks");
+    Material ACACIA_PLANKS = MaterialImpl.get("minecraft:acacia_planks");
 
-    Material CHERRY_PLANKS = MaterialImpl.get("cherry_planks");
+    Material CHERRY_PLANKS = MaterialImpl.get("minecraft:cherry_planks");
 
-    Material DARK_OAK_PLANKS = MaterialImpl.get("dark_oak_planks");
+    Material DARK_OAK_PLANKS = MaterialImpl.get("minecraft:dark_oak_planks");
 
-    Material PALE_OAK_PLANKS = MaterialImpl.get("pale_oak_planks");
+    Material PALE_OAK_PLANKS = MaterialImpl.get("minecraft:pale_oak_planks");
 
-    Material MANGROVE_PLANKS = MaterialImpl.get("mangrove_planks");
+    Material MANGROVE_PLANKS = MaterialImpl.get("minecraft:mangrove_planks");
 
-    Material BAMBOO_PLANKS = MaterialImpl.get("bamboo_planks");
+    Material BAMBOO_PLANKS = MaterialImpl.get("minecraft:bamboo_planks");
 
-    Material CRIMSON_PLANKS = MaterialImpl.get("crimson_planks");
+    Material CRIMSON_PLANKS = MaterialImpl.get("minecraft:crimson_planks");
 
-    Material WARPED_PLANKS = MaterialImpl.get("warped_planks");
+    Material WARPED_PLANKS = MaterialImpl.get("minecraft:warped_planks");
 
-    Material BAMBOO_MOSAIC = MaterialImpl.get("bamboo_mosaic");
+    Material BAMBOO_MOSAIC = MaterialImpl.get("minecraft:bamboo_mosaic");
 
-    Material OAK_SAPLING = MaterialImpl.get("oak_sapling");
+    Material OAK_SAPLING = MaterialImpl.get("minecraft:oak_sapling");
 
-    Material SPRUCE_SAPLING = MaterialImpl.get("spruce_sapling");
+    Material SPRUCE_SAPLING = MaterialImpl.get("minecraft:spruce_sapling");
 
-    Material BIRCH_SAPLING = MaterialImpl.get("birch_sapling");
+    Material BIRCH_SAPLING = MaterialImpl.get("minecraft:birch_sapling");
 
-    Material JUNGLE_SAPLING = MaterialImpl.get("jungle_sapling");
+    Material JUNGLE_SAPLING = MaterialImpl.get("minecraft:jungle_sapling");
 
-    Material ACACIA_SAPLING = MaterialImpl.get("acacia_sapling");
+    Material ACACIA_SAPLING = MaterialImpl.get("minecraft:acacia_sapling");
 
-    Material CHERRY_SAPLING = MaterialImpl.get("cherry_sapling");
+    Material CHERRY_SAPLING = MaterialImpl.get("minecraft:cherry_sapling");
 
-    Material DARK_OAK_SAPLING = MaterialImpl.get("dark_oak_sapling");
+    Material DARK_OAK_SAPLING = MaterialImpl.get("minecraft:dark_oak_sapling");
 
-    Material PALE_OAK_SAPLING = MaterialImpl.get("pale_oak_sapling");
+    Material PALE_OAK_SAPLING = MaterialImpl.get("minecraft:pale_oak_sapling");
 
-    Material MANGROVE_PROPAGULE = MaterialImpl.get("mangrove_propagule");
+    Material MANGROVE_PROPAGULE = MaterialImpl.get("minecraft:mangrove_propagule");
 
-    Material BEDROCK = MaterialImpl.get("bedrock");
+    Material BEDROCK = MaterialImpl.get("minecraft:bedrock");
 
-    Material SAND = MaterialImpl.get("sand");
+    Material SAND = MaterialImpl.get("minecraft:sand");
 
-    Material SUSPICIOUS_SAND = MaterialImpl.get("suspicious_sand");
+    Material SUSPICIOUS_SAND = MaterialImpl.get("minecraft:suspicious_sand");
 
-    Material SUSPICIOUS_GRAVEL = MaterialImpl.get("suspicious_gravel");
+    Material SUSPICIOUS_GRAVEL = MaterialImpl.get("minecraft:suspicious_gravel");
 
-    Material RED_SAND = MaterialImpl.get("red_sand");
+    Material RED_SAND = MaterialImpl.get("minecraft:red_sand");
 
-    Material GRAVEL = MaterialImpl.get("gravel");
+    Material GRAVEL = MaterialImpl.get("minecraft:gravel");
 
-    Material COAL_ORE = MaterialImpl.get("coal_ore");
+    Material COAL_ORE = MaterialImpl.get("minecraft:coal_ore");
 
-    Material DEEPSLATE_COAL_ORE = MaterialImpl.get("deepslate_coal_ore");
+    Material DEEPSLATE_COAL_ORE = MaterialImpl.get("minecraft:deepslate_coal_ore");
 
-    Material IRON_ORE = MaterialImpl.get("iron_ore");
+    Material IRON_ORE = MaterialImpl.get("minecraft:iron_ore");
 
-    Material DEEPSLATE_IRON_ORE = MaterialImpl.get("deepslate_iron_ore");
+    Material DEEPSLATE_IRON_ORE = MaterialImpl.get("minecraft:deepslate_iron_ore");
 
-    Material COPPER_ORE = MaterialImpl.get("copper_ore");
+    Material COPPER_ORE = MaterialImpl.get("minecraft:copper_ore");
 
-    Material DEEPSLATE_COPPER_ORE = MaterialImpl.get("deepslate_copper_ore");
+    Material DEEPSLATE_COPPER_ORE = MaterialImpl.get("minecraft:deepslate_copper_ore");
 
-    Material GOLD_ORE = MaterialImpl.get("gold_ore");
+    Material GOLD_ORE = MaterialImpl.get("minecraft:gold_ore");
 
-    Material DEEPSLATE_GOLD_ORE = MaterialImpl.get("deepslate_gold_ore");
+    Material DEEPSLATE_GOLD_ORE = MaterialImpl.get("minecraft:deepslate_gold_ore");
 
-    Material REDSTONE_ORE = MaterialImpl.get("redstone_ore");
+    Material REDSTONE_ORE = MaterialImpl.get("minecraft:redstone_ore");
 
-    Material DEEPSLATE_REDSTONE_ORE = MaterialImpl.get("deepslate_redstone_ore");
+    Material DEEPSLATE_REDSTONE_ORE = MaterialImpl.get("minecraft:deepslate_redstone_ore");
 
-    Material EMERALD_ORE = MaterialImpl.get("emerald_ore");
+    Material EMERALD_ORE = MaterialImpl.get("minecraft:emerald_ore");
 
-    Material DEEPSLATE_EMERALD_ORE = MaterialImpl.get("deepslate_emerald_ore");
+    Material DEEPSLATE_EMERALD_ORE = MaterialImpl.get("minecraft:deepslate_emerald_ore");
 
-    Material LAPIS_ORE = MaterialImpl.get("lapis_ore");
+    Material LAPIS_ORE = MaterialImpl.get("minecraft:lapis_ore");
 
-    Material DEEPSLATE_LAPIS_ORE = MaterialImpl.get("deepslate_lapis_ore");
+    Material DEEPSLATE_LAPIS_ORE = MaterialImpl.get("minecraft:deepslate_lapis_ore");
 
-    Material DIAMOND_ORE = MaterialImpl.get("diamond_ore");
+    Material DIAMOND_ORE = MaterialImpl.get("minecraft:diamond_ore");
 
-    Material DEEPSLATE_DIAMOND_ORE = MaterialImpl.get("deepslate_diamond_ore");
+    Material DEEPSLATE_DIAMOND_ORE = MaterialImpl.get("minecraft:deepslate_diamond_ore");
 
-    Material NETHER_GOLD_ORE = MaterialImpl.get("nether_gold_ore");
+    Material NETHER_GOLD_ORE = MaterialImpl.get("minecraft:nether_gold_ore");
 
-    Material NETHER_QUARTZ_ORE = MaterialImpl.get("nether_quartz_ore");
+    Material NETHER_QUARTZ_ORE = MaterialImpl.get("minecraft:nether_quartz_ore");
 
-    Material ANCIENT_DEBRIS = MaterialImpl.get("ancient_debris");
+    Material ANCIENT_DEBRIS = MaterialImpl.get("minecraft:ancient_debris");
 
-    Material COAL_BLOCK = MaterialImpl.get("coal_block");
+    Material COAL_BLOCK = MaterialImpl.get("minecraft:coal_block");
 
-    Material RAW_IRON_BLOCK = MaterialImpl.get("raw_iron_block");
+    Material RAW_IRON_BLOCK = MaterialImpl.get("minecraft:raw_iron_block");
 
-    Material RAW_COPPER_BLOCK = MaterialImpl.get("raw_copper_block");
+    Material RAW_COPPER_BLOCK = MaterialImpl.get("minecraft:raw_copper_block");
 
-    Material RAW_GOLD_BLOCK = MaterialImpl.get("raw_gold_block");
+    Material RAW_GOLD_BLOCK = MaterialImpl.get("minecraft:raw_gold_block");
 
-    Material HEAVY_CORE = MaterialImpl.get("heavy_core");
+    Material HEAVY_CORE = MaterialImpl.get("minecraft:heavy_core");
 
-    Material AMETHYST_BLOCK = MaterialImpl.get("amethyst_block");
+    Material AMETHYST_BLOCK = MaterialImpl.get("minecraft:amethyst_block");
 
-    Material BUDDING_AMETHYST = MaterialImpl.get("budding_amethyst");
+    Material BUDDING_AMETHYST = MaterialImpl.get("minecraft:budding_amethyst");
 
-    Material IRON_BLOCK = MaterialImpl.get("iron_block");
+    Material IRON_BLOCK = MaterialImpl.get("minecraft:iron_block");
 
-    Material COPPER_BLOCK = MaterialImpl.get("copper_block");
+    Material COPPER_BLOCK = MaterialImpl.get("minecraft:copper_block");
 
-    Material GOLD_BLOCK = MaterialImpl.get("gold_block");
+    Material GOLD_BLOCK = MaterialImpl.get("minecraft:gold_block");
 
-    Material DIAMOND_BLOCK = MaterialImpl.get("diamond_block");
+    Material DIAMOND_BLOCK = MaterialImpl.get("minecraft:diamond_block");
 
-    Material NETHERITE_BLOCK = MaterialImpl.get("netherite_block");
+    Material NETHERITE_BLOCK = MaterialImpl.get("minecraft:netherite_block");
 
-    Material EXPOSED_COPPER = MaterialImpl.get("exposed_copper");
+    Material EXPOSED_COPPER = MaterialImpl.get("minecraft:exposed_copper");
 
-    Material WEATHERED_COPPER = MaterialImpl.get("weathered_copper");
+    Material WEATHERED_COPPER = MaterialImpl.get("minecraft:weathered_copper");
 
-    Material OXIDIZED_COPPER = MaterialImpl.get("oxidized_copper");
+    Material OXIDIZED_COPPER = MaterialImpl.get("minecraft:oxidized_copper");
 
-    Material CHISELED_COPPER = MaterialImpl.get("chiseled_copper");
+    Material CHISELED_COPPER = MaterialImpl.get("minecraft:chiseled_copper");
 
-    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("exposed_chiseled_copper");
+    Material EXPOSED_CHISELED_COPPER = MaterialImpl.get("minecraft:exposed_chiseled_copper");
 
-    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("weathered_chiseled_copper");
+    Material WEATHERED_CHISELED_COPPER = MaterialImpl.get("minecraft:weathered_chiseled_copper");
 
-    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("oxidized_chiseled_copper");
+    Material OXIDIZED_CHISELED_COPPER = MaterialImpl.get("minecraft:oxidized_chiseled_copper");
 
-    Material CUT_COPPER = MaterialImpl.get("cut_copper");
+    Material CUT_COPPER = MaterialImpl.get("minecraft:cut_copper");
 
-    Material EXPOSED_CUT_COPPER = MaterialImpl.get("exposed_cut_copper");
+    Material EXPOSED_CUT_COPPER = MaterialImpl.get("minecraft:exposed_cut_copper");
 
-    Material WEATHERED_CUT_COPPER = MaterialImpl.get("weathered_cut_copper");
+    Material WEATHERED_CUT_COPPER = MaterialImpl.get("minecraft:weathered_cut_copper");
 
-    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("oxidized_cut_copper");
+    Material OXIDIZED_CUT_COPPER = MaterialImpl.get("minecraft:oxidized_cut_copper");
 
-    Material CUT_COPPER_STAIRS = MaterialImpl.get("cut_copper_stairs");
+    Material CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:cut_copper_stairs");
 
-    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("exposed_cut_copper_stairs");
+    Material EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:exposed_cut_copper_stairs");
 
-    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("weathered_cut_copper_stairs");
+    Material WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:weathered_cut_copper_stairs");
 
-    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("oxidized_cut_copper_stairs");
+    Material OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:oxidized_cut_copper_stairs");
 
-    Material CUT_COPPER_SLAB = MaterialImpl.get("cut_copper_slab");
+    Material CUT_COPPER_SLAB = MaterialImpl.get("minecraft:cut_copper_slab");
 
-    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("exposed_cut_copper_slab");
+    Material EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:exposed_cut_copper_slab");
 
-    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("weathered_cut_copper_slab");
+    Material WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:weathered_cut_copper_slab");
 
-    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("oxidized_cut_copper_slab");
+    Material OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:oxidized_cut_copper_slab");
 
-    Material WAXED_COPPER_BLOCK = MaterialImpl.get("waxed_copper_block");
+    Material WAXED_COPPER_BLOCK = MaterialImpl.get("minecraft:waxed_copper_block");
 
-    Material WAXED_EXPOSED_COPPER = MaterialImpl.get("waxed_exposed_copper");
+    Material WAXED_EXPOSED_COPPER = MaterialImpl.get("minecraft:waxed_exposed_copper");
 
-    Material WAXED_WEATHERED_COPPER = MaterialImpl.get("waxed_weathered_copper");
+    Material WAXED_WEATHERED_COPPER = MaterialImpl.get("minecraft:waxed_weathered_copper");
 
-    Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("waxed_oxidized_copper");
+    Material WAXED_OXIDIZED_COPPER = MaterialImpl.get("minecraft:waxed_oxidized_copper");
 
-    Material WAXED_CHISELED_COPPER = MaterialImpl.get("waxed_chiseled_copper");
+    Material WAXED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_chiseled_copper");
 
-    Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("waxed_exposed_chiseled_copper");
+    Material WAXED_EXPOSED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_exposed_chiseled_copper");
 
-    Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("waxed_weathered_chiseled_copper");
+    Material WAXED_WEATHERED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_weathered_chiseled_copper");
 
-    Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("waxed_oxidized_chiseled_copper");
+    Material WAXED_OXIDIZED_CHISELED_COPPER = MaterialImpl.get("minecraft:waxed_oxidized_chiseled_copper");
 
-    Material WAXED_CUT_COPPER = MaterialImpl.get("waxed_cut_copper");
+    Material WAXED_CUT_COPPER = MaterialImpl.get("minecraft:waxed_cut_copper");
 
-    Material WAXED_EXPOSED_CUT_COPPER = MaterialImpl.get("waxed_exposed_cut_copper");
+    Material WAXED_EXPOSED_CUT_COPPER = MaterialImpl.get("minecraft:waxed_exposed_cut_copper");
 
-    Material WAXED_WEATHERED_CUT_COPPER = MaterialImpl.get("waxed_weathered_cut_copper");
+    Material WAXED_WEATHERED_CUT_COPPER = MaterialImpl.get("minecraft:waxed_weathered_cut_copper");
 
-    Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get("waxed_oxidized_cut_copper");
+    Material WAXED_OXIDIZED_CUT_COPPER = MaterialImpl.get("minecraft:waxed_oxidized_cut_copper");
 
-    Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_cut_copper_stairs");
+    Material WAXED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:waxed_cut_copper_stairs");
 
-    Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_exposed_cut_copper_stairs");
+    Material WAXED_EXPOSED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:waxed_exposed_cut_copper_stairs");
 
-    Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_weathered_cut_copper_stairs");
+    Material WAXED_WEATHERED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:waxed_weathered_cut_copper_stairs");
 
-    Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("waxed_oxidized_cut_copper_stairs");
+    Material WAXED_OXIDIZED_CUT_COPPER_STAIRS = MaterialImpl.get("minecraft:waxed_oxidized_cut_copper_stairs");
 
-    Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_cut_copper_slab");
+    Material WAXED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:waxed_cut_copper_slab");
 
-    Material WAXED_EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_exposed_cut_copper_slab");
+    Material WAXED_EXPOSED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:waxed_exposed_cut_copper_slab");
 
-    Material WAXED_WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_weathered_cut_copper_slab");
+    Material WAXED_WEATHERED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:waxed_weathered_cut_copper_slab");
 
-    Material WAXED_OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("waxed_oxidized_cut_copper_slab");
+    Material WAXED_OXIDIZED_CUT_COPPER_SLAB = MaterialImpl.get("minecraft:waxed_oxidized_cut_copper_slab");
 
-    Material OAK_LOG = MaterialImpl.get("oak_log");
+    Material OAK_LOG = MaterialImpl.get("minecraft:oak_log");
 
-    Material SPRUCE_LOG = MaterialImpl.get("spruce_log");
+    Material SPRUCE_LOG = MaterialImpl.get("minecraft:spruce_log");
 
-    Material BIRCH_LOG = MaterialImpl.get("birch_log");
+    Material BIRCH_LOG = MaterialImpl.get("minecraft:birch_log");
 
-    Material JUNGLE_LOG = MaterialImpl.get("jungle_log");
+    Material JUNGLE_LOG = MaterialImpl.get("minecraft:jungle_log");
 
-    Material ACACIA_LOG = MaterialImpl.get("acacia_log");
+    Material ACACIA_LOG = MaterialImpl.get("minecraft:acacia_log");
 
-    Material CHERRY_LOG = MaterialImpl.get("cherry_log");
+    Material CHERRY_LOG = MaterialImpl.get("minecraft:cherry_log");
 
-    Material PALE_OAK_LOG = MaterialImpl.get("pale_oak_log");
+    Material PALE_OAK_LOG = MaterialImpl.get("minecraft:pale_oak_log");
 
-    Material DARK_OAK_LOG = MaterialImpl.get("dark_oak_log");
+    Material DARK_OAK_LOG = MaterialImpl.get("minecraft:dark_oak_log");
 
-    Material MANGROVE_LOG = MaterialImpl.get("mangrove_log");
+    Material MANGROVE_LOG = MaterialImpl.get("minecraft:mangrove_log");
 
-    Material MANGROVE_ROOTS = MaterialImpl.get("mangrove_roots");
+    Material MANGROVE_ROOTS = MaterialImpl.get("minecraft:mangrove_roots");
 
-    Material MUDDY_MANGROVE_ROOTS = MaterialImpl.get("muddy_mangrove_roots");
+    Material MUDDY_MANGROVE_ROOTS = MaterialImpl.get("minecraft:muddy_mangrove_roots");
 
-    Material CRIMSON_STEM = MaterialImpl.get("crimson_stem");
+    Material CRIMSON_STEM = MaterialImpl.get("minecraft:crimson_stem");
 
-    Material WARPED_STEM = MaterialImpl.get("warped_stem");
+    Material WARPED_STEM = MaterialImpl.get("minecraft:warped_stem");
 
-    Material BAMBOO_BLOCK = MaterialImpl.get("bamboo_block");
+    Material BAMBOO_BLOCK = MaterialImpl.get("minecraft:bamboo_block");
 
-    Material STRIPPED_OAK_LOG = MaterialImpl.get("stripped_oak_log");
+    Material STRIPPED_OAK_LOG = MaterialImpl.get("minecraft:stripped_oak_log");
 
-    Material STRIPPED_SPRUCE_LOG = MaterialImpl.get("stripped_spruce_log");
+    Material STRIPPED_SPRUCE_LOG = MaterialImpl.get("minecraft:stripped_spruce_log");
 
-    Material STRIPPED_BIRCH_LOG = MaterialImpl.get("stripped_birch_log");
+    Material STRIPPED_BIRCH_LOG = MaterialImpl.get("minecraft:stripped_birch_log");
 
-    Material STRIPPED_JUNGLE_LOG = MaterialImpl.get("stripped_jungle_log");
+    Material STRIPPED_JUNGLE_LOG = MaterialImpl.get("minecraft:stripped_jungle_log");
 
-    Material STRIPPED_ACACIA_LOG = MaterialImpl.get("stripped_acacia_log");
+    Material STRIPPED_ACACIA_LOG = MaterialImpl.get("minecraft:stripped_acacia_log");
 
-    Material STRIPPED_CHERRY_LOG = MaterialImpl.get("stripped_cherry_log");
+    Material STRIPPED_CHERRY_LOG = MaterialImpl.get("minecraft:stripped_cherry_log");
 
-    Material STRIPPED_DARK_OAK_LOG = MaterialImpl.get("stripped_dark_oak_log");
+    Material STRIPPED_DARK_OAK_LOG = MaterialImpl.get("minecraft:stripped_dark_oak_log");
 
-    Material STRIPPED_PALE_OAK_LOG = MaterialImpl.get("stripped_pale_oak_log");
+    Material STRIPPED_PALE_OAK_LOG = MaterialImpl.get("minecraft:stripped_pale_oak_log");
 
-    Material STRIPPED_MANGROVE_LOG = MaterialImpl.get("stripped_mangrove_log");
+    Material STRIPPED_MANGROVE_LOG = MaterialImpl.get("minecraft:stripped_mangrove_log");
 
-    Material STRIPPED_CRIMSON_STEM = MaterialImpl.get("stripped_crimson_stem");
+    Material STRIPPED_CRIMSON_STEM = MaterialImpl.get("minecraft:stripped_crimson_stem");
 
-    Material STRIPPED_WARPED_STEM = MaterialImpl.get("stripped_warped_stem");
+    Material STRIPPED_WARPED_STEM = MaterialImpl.get("minecraft:stripped_warped_stem");
 
-    Material STRIPPED_OAK_WOOD = MaterialImpl.get("stripped_oak_wood");
+    Material STRIPPED_OAK_WOOD = MaterialImpl.get("minecraft:stripped_oak_wood");
 
-    Material STRIPPED_SPRUCE_WOOD = MaterialImpl.get("stripped_spruce_wood");
+    Material STRIPPED_SPRUCE_WOOD = MaterialImpl.get("minecraft:stripped_spruce_wood");
 
-    Material STRIPPED_BIRCH_WOOD = MaterialImpl.get("stripped_birch_wood");
+    Material STRIPPED_BIRCH_WOOD = MaterialImpl.get("minecraft:stripped_birch_wood");
 
-    Material STRIPPED_JUNGLE_WOOD = MaterialImpl.get("stripped_jungle_wood");
+    Material STRIPPED_JUNGLE_WOOD = MaterialImpl.get("minecraft:stripped_jungle_wood");
 
-    Material STRIPPED_ACACIA_WOOD = MaterialImpl.get("stripped_acacia_wood");
+    Material STRIPPED_ACACIA_WOOD = MaterialImpl.get("minecraft:stripped_acacia_wood");
 
-    Material STRIPPED_CHERRY_WOOD = MaterialImpl.get("stripped_cherry_wood");
+    Material STRIPPED_CHERRY_WOOD = MaterialImpl.get("minecraft:stripped_cherry_wood");
 
-    Material STRIPPED_DARK_OAK_WOOD = MaterialImpl.get("stripped_dark_oak_wood");
+    Material STRIPPED_DARK_OAK_WOOD = MaterialImpl.get("minecraft:stripped_dark_oak_wood");
 
-    Material STRIPPED_PALE_OAK_WOOD = MaterialImpl.get("stripped_pale_oak_wood");
+    Material STRIPPED_PALE_OAK_WOOD = MaterialImpl.get("minecraft:stripped_pale_oak_wood");
 
-    Material STRIPPED_MANGROVE_WOOD = MaterialImpl.get("stripped_mangrove_wood");
+    Material STRIPPED_MANGROVE_WOOD = MaterialImpl.get("minecraft:stripped_mangrove_wood");
 
-    Material STRIPPED_CRIMSON_HYPHAE = MaterialImpl.get("stripped_crimson_hyphae");
+    Material STRIPPED_CRIMSON_HYPHAE = MaterialImpl.get("minecraft:stripped_crimson_hyphae");
 
-    Material STRIPPED_WARPED_HYPHAE = MaterialImpl.get("stripped_warped_hyphae");
+    Material STRIPPED_WARPED_HYPHAE = MaterialImpl.get("minecraft:stripped_warped_hyphae");
 
-    Material STRIPPED_BAMBOO_BLOCK = MaterialImpl.get("stripped_bamboo_block");
+    Material STRIPPED_BAMBOO_BLOCK = MaterialImpl.get("minecraft:stripped_bamboo_block");
 
-    Material OAK_WOOD = MaterialImpl.get("oak_wood");
+    Material OAK_WOOD = MaterialImpl.get("minecraft:oak_wood");
 
-    Material SPRUCE_WOOD = MaterialImpl.get("spruce_wood");
+    Material SPRUCE_WOOD = MaterialImpl.get("minecraft:spruce_wood");
 
-    Material BIRCH_WOOD = MaterialImpl.get("birch_wood");
+    Material BIRCH_WOOD = MaterialImpl.get("minecraft:birch_wood");
 
-    Material JUNGLE_WOOD = MaterialImpl.get("jungle_wood");
+    Material JUNGLE_WOOD = MaterialImpl.get("minecraft:jungle_wood");
 
-    Material ACACIA_WOOD = MaterialImpl.get("acacia_wood");
+    Material ACACIA_WOOD = MaterialImpl.get("minecraft:acacia_wood");
 
-    Material CHERRY_WOOD = MaterialImpl.get("cherry_wood");
+    Material CHERRY_WOOD = MaterialImpl.get("minecraft:cherry_wood");
 
-    Material PALE_OAK_WOOD = MaterialImpl.get("pale_oak_wood");
+    Material PALE_OAK_WOOD = MaterialImpl.get("minecraft:pale_oak_wood");
 
-    Material DARK_OAK_WOOD = MaterialImpl.get("dark_oak_wood");
+    Material DARK_OAK_WOOD = MaterialImpl.get("minecraft:dark_oak_wood");
 
-    Material MANGROVE_WOOD = MaterialImpl.get("mangrove_wood");
+    Material MANGROVE_WOOD = MaterialImpl.get("minecraft:mangrove_wood");
 
-    Material CRIMSON_HYPHAE = MaterialImpl.get("crimson_hyphae");
+    Material CRIMSON_HYPHAE = MaterialImpl.get("minecraft:crimson_hyphae");
 
-    Material WARPED_HYPHAE = MaterialImpl.get("warped_hyphae");
+    Material WARPED_HYPHAE = MaterialImpl.get("minecraft:warped_hyphae");
 
-    Material OAK_LEAVES = MaterialImpl.get("oak_leaves");
+    Material OAK_LEAVES = MaterialImpl.get("minecraft:oak_leaves");
 
-    Material SPRUCE_LEAVES = MaterialImpl.get("spruce_leaves");
+    Material SPRUCE_LEAVES = MaterialImpl.get("minecraft:spruce_leaves");
 
-    Material BIRCH_LEAVES = MaterialImpl.get("birch_leaves");
+    Material BIRCH_LEAVES = MaterialImpl.get("minecraft:birch_leaves");
 
-    Material JUNGLE_LEAVES = MaterialImpl.get("jungle_leaves");
+    Material JUNGLE_LEAVES = MaterialImpl.get("minecraft:jungle_leaves");
 
-    Material ACACIA_LEAVES = MaterialImpl.get("acacia_leaves");
+    Material ACACIA_LEAVES = MaterialImpl.get("minecraft:acacia_leaves");
 
-    Material CHERRY_LEAVES = MaterialImpl.get("cherry_leaves");
+    Material CHERRY_LEAVES = MaterialImpl.get("minecraft:cherry_leaves");
 
-    Material DARK_OAK_LEAVES = MaterialImpl.get("dark_oak_leaves");
+    Material DARK_OAK_LEAVES = MaterialImpl.get("minecraft:dark_oak_leaves");
 
-    Material PALE_OAK_LEAVES = MaterialImpl.get("pale_oak_leaves");
+    Material PALE_OAK_LEAVES = MaterialImpl.get("minecraft:pale_oak_leaves");
 
-    Material MANGROVE_LEAVES = MaterialImpl.get("mangrove_leaves");
+    Material MANGROVE_LEAVES = MaterialImpl.get("minecraft:mangrove_leaves");
 
-    Material AZALEA_LEAVES = MaterialImpl.get("azalea_leaves");
+    Material AZALEA_LEAVES = MaterialImpl.get("minecraft:azalea_leaves");
 
-    Material FLOWERING_AZALEA_LEAVES = MaterialImpl.get("flowering_azalea_leaves");
+    Material FLOWERING_AZALEA_LEAVES = MaterialImpl.get("minecraft:flowering_azalea_leaves");
 
-    Material SPONGE = MaterialImpl.get("sponge");
+    Material SPONGE = MaterialImpl.get("minecraft:sponge");
 
-    Material WET_SPONGE = MaterialImpl.get("wet_sponge");
+    Material WET_SPONGE = MaterialImpl.get("minecraft:wet_sponge");
 
-    Material GLASS = MaterialImpl.get("glass");
+    Material GLASS = MaterialImpl.get("minecraft:glass");
 
-    Material TINTED_GLASS = MaterialImpl.get("tinted_glass");
+    Material TINTED_GLASS = MaterialImpl.get("minecraft:tinted_glass");
 
-    Material LAPIS_BLOCK = MaterialImpl.get("lapis_block");
+    Material LAPIS_BLOCK = MaterialImpl.get("minecraft:lapis_block");
 
-    Material SANDSTONE = MaterialImpl.get("sandstone");
+    Material SANDSTONE = MaterialImpl.get("minecraft:sandstone");
 
-    Material CHISELED_SANDSTONE = MaterialImpl.get("chiseled_sandstone");
+    Material CHISELED_SANDSTONE = MaterialImpl.get("minecraft:chiseled_sandstone");
 
-    Material CUT_SANDSTONE = MaterialImpl.get("cut_sandstone");
+    Material CUT_SANDSTONE = MaterialImpl.get("minecraft:cut_sandstone");
 
-    Material COBWEB = MaterialImpl.get("cobweb");
+    Material COBWEB = MaterialImpl.get("minecraft:cobweb");
 
-    Material SHORT_GRASS = MaterialImpl.get("short_grass");
+    Material SHORT_GRASS = MaterialImpl.get("minecraft:short_grass");
 
-    Material FERN = MaterialImpl.get("fern");
+    Material FERN = MaterialImpl.get("minecraft:fern");
 
-    Material BUSH = MaterialImpl.get("bush");
+    Material BUSH = MaterialImpl.get("minecraft:bush");
 
-    Material AZALEA = MaterialImpl.get("azalea");
+    Material AZALEA = MaterialImpl.get("minecraft:azalea");
 
-    Material FLOWERING_AZALEA = MaterialImpl.get("flowering_azalea");
+    Material FLOWERING_AZALEA = MaterialImpl.get("minecraft:flowering_azalea");
 
-    Material DEAD_BUSH = MaterialImpl.get("dead_bush");
+    Material DEAD_BUSH = MaterialImpl.get("minecraft:dead_bush");
 
-    Material FIREFLY_BUSH = MaterialImpl.get("firefly_bush");
+    Material FIREFLY_BUSH = MaterialImpl.get("minecraft:firefly_bush");
 
-    Material SHORT_DRY_GRASS = MaterialImpl.get("short_dry_grass");
+    Material SHORT_DRY_GRASS = MaterialImpl.get("minecraft:short_dry_grass");
 
-    Material TALL_DRY_GRASS = MaterialImpl.get("tall_dry_grass");
+    Material TALL_DRY_GRASS = MaterialImpl.get("minecraft:tall_dry_grass");
 
-    Material SEAGRASS = MaterialImpl.get("seagrass");
+    Material SEAGRASS = MaterialImpl.get("minecraft:seagrass");
 
-    Material SEA_PICKLE = MaterialImpl.get("sea_pickle");
+    Material SEA_PICKLE = MaterialImpl.get("minecraft:sea_pickle");
 
-    Material WHITE_WOOL = MaterialImpl.get("white_wool");
+    Material WHITE_WOOL = MaterialImpl.get("minecraft:white_wool");
 
-    Material ORANGE_WOOL = MaterialImpl.get("orange_wool");
+    Material ORANGE_WOOL = MaterialImpl.get("minecraft:orange_wool");
 
-    Material MAGENTA_WOOL = MaterialImpl.get("magenta_wool");
+    Material MAGENTA_WOOL = MaterialImpl.get("minecraft:magenta_wool");
 
-    Material LIGHT_BLUE_WOOL = MaterialImpl.get("light_blue_wool");
+    Material LIGHT_BLUE_WOOL = MaterialImpl.get("minecraft:light_blue_wool");
 
-    Material YELLOW_WOOL = MaterialImpl.get("yellow_wool");
+    Material YELLOW_WOOL = MaterialImpl.get("minecraft:yellow_wool");
 
-    Material LIME_WOOL = MaterialImpl.get("lime_wool");
+    Material LIME_WOOL = MaterialImpl.get("minecraft:lime_wool");
 
-    Material PINK_WOOL = MaterialImpl.get("pink_wool");
+    Material PINK_WOOL = MaterialImpl.get("minecraft:pink_wool");
 
-    Material GRAY_WOOL = MaterialImpl.get("gray_wool");
+    Material GRAY_WOOL = MaterialImpl.get("minecraft:gray_wool");
 
-    Material LIGHT_GRAY_WOOL = MaterialImpl.get("light_gray_wool");
+    Material LIGHT_GRAY_WOOL = MaterialImpl.get("minecraft:light_gray_wool");
 
-    Material CYAN_WOOL = MaterialImpl.get("cyan_wool");
+    Material CYAN_WOOL = MaterialImpl.get("minecraft:cyan_wool");
 
-    Material PURPLE_WOOL = MaterialImpl.get("purple_wool");
+    Material PURPLE_WOOL = MaterialImpl.get("minecraft:purple_wool");
 
-    Material BLUE_WOOL = MaterialImpl.get("blue_wool");
+    Material BLUE_WOOL = MaterialImpl.get("minecraft:blue_wool");
 
-    Material BROWN_WOOL = MaterialImpl.get("brown_wool");
+    Material BROWN_WOOL = MaterialImpl.get("minecraft:brown_wool");
 
-    Material GREEN_WOOL = MaterialImpl.get("green_wool");
+    Material GREEN_WOOL = MaterialImpl.get("minecraft:green_wool");
 
-    Material RED_WOOL = MaterialImpl.get("red_wool");
+    Material RED_WOOL = MaterialImpl.get("minecraft:red_wool");
 
-    Material BLACK_WOOL = MaterialImpl.get("black_wool");
+    Material BLACK_WOOL = MaterialImpl.get("minecraft:black_wool");
 
-    Material DANDELION = MaterialImpl.get("dandelion");
+    Material DANDELION = MaterialImpl.get("minecraft:dandelion");
 
-    Material OPEN_EYEBLOSSOM = MaterialImpl.get("open_eyeblossom");
+    Material OPEN_EYEBLOSSOM = MaterialImpl.get("minecraft:open_eyeblossom");
 
-    Material CLOSED_EYEBLOSSOM = MaterialImpl.get("closed_eyeblossom");
+    Material CLOSED_EYEBLOSSOM = MaterialImpl.get("minecraft:closed_eyeblossom");
 
-    Material POPPY = MaterialImpl.get("poppy");
+    Material POPPY = MaterialImpl.get("minecraft:poppy");
 
-    Material BLUE_ORCHID = MaterialImpl.get("blue_orchid");
+    Material BLUE_ORCHID = MaterialImpl.get("minecraft:blue_orchid");
 
-    Material ALLIUM = MaterialImpl.get("allium");
+    Material ALLIUM = MaterialImpl.get("minecraft:allium");
 
-    Material AZURE_BLUET = MaterialImpl.get("azure_bluet");
+    Material AZURE_BLUET = MaterialImpl.get("minecraft:azure_bluet");
 
-    Material RED_TULIP = MaterialImpl.get("red_tulip");
+    Material RED_TULIP = MaterialImpl.get("minecraft:red_tulip");
 
-    Material ORANGE_TULIP = MaterialImpl.get("orange_tulip");
+    Material ORANGE_TULIP = MaterialImpl.get("minecraft:orange_tulip");
 
-    Material WHITE_TULIP = MaterialImpl.get("white_tulip");
+    Material WHITE_TULIP = MaterialImpl.get("minecraft:white_tulip");
 
-    Material PINK_TULIP = MaterialImpl.get("pink_tulip");
+    Material PINK_TULIP = MaterialImpl.get("minecraft:pink_tulip");
 
-    Material OXEYE_DAISY = MaterialImpl.get("oxeye_daisy");
+    Material OXEYE_DAISY = MaterialImpl.get("minecraft:oxeye_daisy");
 
-    Material CORNFLOWER = MaterialImpl.get("cornflower");
+    Material CORNFLOWER = MaterialImpl.get("minecraft:cornflower");
 
-    Material LILY_OF_THE_VALLEY = MaterialImpl.get("lily_of_the_valley");
+    Material LILY_OF_THE_VALLEY = MaterialImpl.get("minecraft:lily_of_the_valley");
 
-    Material WITHER_ROSE = MaterialImpl.get("wither_rose");
+    Material WITHER_ROSE = MaterialImpl.get("minecraft:wither_rose");
 
-    Material TORCHFLOWER = MaterialImpl.get("torchflower");
+    Material TORCHFLOWER = MaterialImpl.get("minecraft:torchflower");
 
-    Material PITCHER_PLANT = MaterialImpl.get("pitcher_plant");
+    Material PITCHER_PLANT = MaterialImpl.get("minecraft:pitcher_plant");
 
-    Material SPORE_BLOSSOM = MaterialImpl.get("spore_blossom");
+    Material SPORE_BLOSSOM = MaterialImpl.get("minecraft:spore_blossom");
 
-    Material BROWN_MUSHROOM = MaterialImpl.get("brown_mushroom");
+    Material BROWN_MUSHROOM = MaterialImpl.get("minecraft:brown_mushroom");
 
-    Material RED_MUSHROOM = MaterialImpl.get("red_mushroom");
+    Material RED_MUSHROOM = MaterialImpl.get("minecraft:red_mushroom");
 
-    Material CRIMSON_FUNGUS = MaterialImpl.get("crimson_fungus");
+    Material CRIMSON_FUNGUS = MaterialImpl.get("minecraft:crimson_fungus");
 
-    Material WARPED_FUNGUS = MaterialImpl.get("warped_fungus");
+    Material WARPED_FUNGUS = MaterialImpl.get("minecraft:warped_fungus");
 
-    Material CRIMSON_ROOTS = MaterialImpl.get("crimson_roots");
+    Material CRIMSON_ROOTS = MaterialImpl.get("minecraft:crimson_roots");
 
-    Material WARPED_ROOTS = MaterialImpl.get("warped_roots");
+    Material WARPED_ROOTS = MaterialImpl.get("minecraft:warped_roots");
 
-    Material NETHER_SPROUTS = MaterialImpl.get("nether_sprouts");
+    Material NETHER_SPROUTS = MaterialImpl.get("minecraft:nether_sprouts");
 
-    Material WEEPING_VINES = MaterialImpl.get("weeping_vines");
+    Material WEEPING_VINES = MaterialImpl.get("minecraft:weeping_vines");
 
-    Material TWISTING_VINES = MaterialImpl.get("twisting_vines");
+    Material TWISTING_VINES = MaterialImpl.get("minecraft:twisting_vines");
 
-    Material SUGAR_CANE = MaterialImpl.get("sugar_cane");
+    Material SUGAR_CANE = MaterialImpl.get("minecraft:sugar_cane");
 
-    Material KELP = MaterialImpl.get("kelp");
+    Material KELP = MaterialImpl.get("minecraft:kelp");
 
-    Material PINK_PETALS = MaterialImpl.get("pink_petals");
+    Material PINK_PETALS = MaterialImpl.get("minecraft:pink_petals");
 
-    Material WILDFLOWERS = MaterialImpl.get("wildflowers");
+    Material WILDFLOWERS = MaterialImpl.get("minecraft:wildflowers");
 
-    Material LEAF_LITTER = MaterialImpl.get("leaf_litter");
+    Material LEAF_LITTER = MaterialImpl.get("minecraft:leaf_litter");
 
-    Material MOSS_CARPET = MaterialImpl.get("moss_carpet");
+    Material MOSS_CARPET = MaterialImpl.get("minecraft:moss_carpet");
 
-    Material MOSS_BLOCK = MaterialImpl.get("moss_block");
+    Material MOSS_BLOCK = MaterialImpl.get("minecraft:moss_block");
 
-    Material PALE_MOSS_CARPET = MaterialImpl.get("pale_moss_carpet");
+    Material PALE_MOSS_CARPET = MaterialImpl.get("minecraft:pale_moss_carpet");
 
-    Material PALE_HANGING_MOSS = MaterialImpl.get("pale_hanging_moss");
+    Material PALE_HANGING_MOSS = MaterialImpl.get("minecraft:pale_hanging_moss");
 
-    Material PALE_MOSS_BLOCK = MaterialImpl.get("pale_moss_block");
+    Material PALE_MOSS_BLOCK = MaterialImpl.get("minecraft:pale_moss_block");
 
-    Material HANGING_ROOTS = MaterialImpl.get("hanging_roots");
+    Material HANGING_ROOTS = MaterialImpl.get("minecraft:hanging_roots");
 
-    Material BIG_DRIPLEAF = MaterialImpl.get("big_dripleaf");
+    Material BIG_DRIPLEAF = MaterialImpl.get("minecraft:big_dripleaf");
 
-    Material SMALL_DRIPLEAF = MaterialImpl.get("small_dripleaf");
+    Material SMALL_DRIPLEAF = MaterialImpl.get("minecraft:small_dripleaf");
 
-    Material BAMBOO = MaterialImpl.get("bamboo");
+    Material BAMBOO = MaterialImpl.get("minecraft:bamboo");
 
-    Material OAK_SLAB = MaterialImpl.get("oak_slab");
+    Material OAK_SLAB = MaterialImpl.get("minecraft:oak_slab");
 
-    Material SPRUCE_SLAB = MaterialImpl.get("spruce_slab");
+    Material SPRUCE_SLAB = MaterialImpl.get("minecraft:spruce_slab");
 
-    Material BIRCH_SLAB = MaterialImpl.get("birch_slab");
+    Material BIRCH_SLAB = MaterialImpl.get("minecraft:birch_slab");
 
-    Material JUNGLE_SLAB = MaterialImpl.get("jungle_slab");
+    Material JUNGLE_SLAB = MaterialImpl.get("minecraft:jungle_slab");
 
-    Material ACACIA_SLAB = MaterialImpl.get("acacia_slab");
+    Material ACACIA_SLAB = MaterialImpl.get("minecraft:acacia_slab");
 
-    Material CHERRY_SLAB = MaterialImpl.get("cherry_slab");
+    Material CHERRY_SLAB = MaterialImpl.get("minecraft:cherry_slab");
 
-    Material DARK_OAK_SLAB = MaterialImpl.get("dark_oak_slab");
+    Material DARK_OAK_SLAB = MaterialImpl.get("minecraft:dark_oak_slab");
 
-    Material PALE_OAK_SLAB = MaterialImpl.get("pale_oak_slab");
+    Material PALE_OAK_SLAB = MaterialImpl.get("minecraft:pale_oak_slab");
 
-    Material MANGROVE_SLAB = MaterialImpl.get("mangrove_slab");
+    Material MANGROVE_SLAB = MaterialImpl.get("minecraft:mangrove_slab");
 
-    Material BAMBOO_SLAB = MaterialImpl.get("bamboo_slab");
+    Material BAMBOO_SLAB = MaterialImpl.get("minecraft:bamboo_slab");
 
-    Material BAMBOO_MOSAIC_SLAB = MaterialImpl.get("bamboo_mosaic_slab");
+    Material BAMBOO_MOSAIC_SLAB = MaterialImpl.get("minecraft:bamboo_mosaic_slab");
 
-    Material CRIMSON_SLAB = MaterialImpl.get("crimson_slab");
+    Material CRIMSON_SLAB = MaterialImpl.get("minecraft:crimson_slab");
 
-    Material WARPED_SLAB = MaterialImpl.get("warped_slab");
+    Material WARPED_SLAB = MaterialImpl.get("minecraft:warped_slab");
 
-    Material STONE_SLAB = MaterialImpl.get("stone_slab");
+    Material STONE_SLAB = MaterialImpl.get("minecraft:stone_slab");
 
-    Material SMOOTH_STONE_SLAB = MaterialImpl.get("smooth_stone_slab");
+    Material SMOOTH_STONE_SLAB = MaterialImpl.get("minecraft:smooth_stone_slab");
 
-    Material SANDSTONE_SLAB = MaterialImpl.get("sandstone_slab");
+    Material SANDSTONE_SLAB = MaterialImpl.get("minecraft:sandstone_slab");
 
-    Material CUT_SANDSTONE_SLAB = MaterialImpl.get("cut_sandstone_slab");
+    Material CUT_SANDSTONE_SLAB = MaterialImpl.get("minecraft:cut_sandstone_slab");
 
-    Material PETRIFIED_OAK_SLAB = MaterialImpl.get("petrified_oak_slab");
+    Material PETRIFIED_OAK_SLAB = MaterialImpl.get("minecraft:petrified_oak_slab");
 
-    Material COBBLESTONE_SLAB = MaterialImpl.get("cobblestone_slab");
+    Material COBBLESTONE_SLAB = MaterialImpl.get("minecraft:cobblestone_slab");
 
-    Material BRICK_SLAB = MaterialImpl.get("brick_slab");
+    Material BRICK_SLAB = MaterialImpl.get("minecraft:brick_slab");
 
-    Material STONE_BRICK_SLAB = MaterialImpl.get("stone_brick_slab");
+    Material STONE_BRICK_SLAB = MaterialImpl.get("minecraft:stone_brick_slab");
 
-    Material MUD_BRICK_SLAB = MaterialImpl.get("mud_brick_slab");
+    Material MUD_BRICK_SLAB = MaterialImpl.get("minecraft:mud_brick_slab");
 
-    Material NETHER_BRICK_SLAB = MaterialImpl.get("nether_brick_slab");
+    Material NETHER_BRICK_SLAB = MaterialImpl.get("minecraft:nether_brick_slab");
 
-    Material QUARTZ_SLAB = MaterialImpl.get("quartz_slab");
+    Material QUARTZ_SLAB = MaterialImpl.get("minecraft:quartz_slab");
 
-    Material RED_SANDSTONE_SLAB = MaterialImpl.get("red_sandstone_slab");
+    Material RED_SANDSTONE_SLAB = MaterialImpl.get("minecraft:red_sandstone_slab");
 
-    Material CUT_RED_SANDSTONE_SLAB = MaterialImpl.get("cut_red_sandstone_slab");
+    Material CUT_RED_SANDSTONE_SLAB = MaterialImpl.get("minecraft:cut_red_sandstone_slab");
 
-    Material PURPUR_SLAB = MaterialImpl.get("purpur_slab");
+    Material PURPUR_SLAB = MaterialImpl.get("minecraft:purpur_slab");
 
-    Material PRISMARINE_SLAB = MaterialImpl.get("prismarine_slab");
+    Material PRISMARINE_SLAB = MaterialImpl.get("minecraft:prismarine_slab");
 
-    Material PRISMARINE_BRICK_SLAB = MaterialImpl.get("prismarine_brick_slab");
+    Material PRISMARINE_BRICK_SLAB = MaterialImpl.get("minecraft:prismarine_brick_slab");
 
-    Material DARK_PRISMARINE_SLAB = MaterialImpl.get("dark_prismarine_slab");
+    Material DARK_PRISMARINE_SLAB = MaterialImpl.get("minecraft:dark_prismarine_slab");
 
-    Material SMOOTH_QUARTZ = MaterialImpl.get("smooth_quartz");
+    Material SMOOTH_QUARTZ = MaterialImpl.get("minecraft:smooth_quartz");
 
-    Material SMOOTH_RED_SANDSTONE = MaterialImpl.get("smooth_red_sandstone");
+    Material SMOOTH_RED_SANDSTONE = MaterialImpl.get("minecraft:smooth_red_sandstone");
 
-    Material SMOOTH_SANDSTONE = MaterialImpl.get("smooth_sandstone");
+    Material SMOOTH_SANDSTONE = MaterialImpl.get("minecraft:smooth_sandstone");
 
-    Material SMOOTH_STONE = MaterialImpl.get("smooth_stone");
+    Material SMOOTH_STONE = MaterialImpl.get("minecraft:smooth_stone");
 
-    Material BRICKS = MaterialImpl.get("bricks");
+    Material BRICKS = MaterialImpl.get("minecraft:bricks");
 
-    Material BOOKSHELF = MaterialImpl.get("bookshelf");
+    Material BOOKSHELF = MaterialImpl.get("minecraft:bookshelf");
 
-    Material CHISELED_BOOKSHELF = MaterialImpl.get("chiseled_bookshelf");
+    Material CHISELED_BOOKSHELF = MaterialImpl.get("minecraft:chiseled_bookshelf");
 
-    Material DECORATED_POT = MaterialImpl.get("decorated_pot");
+    Material DECORATED_POT = MaterialImpl.get("minecraft:decorated_pot");
 
-    Material MOSSY_COBBLESTONE = MaterialImpl.get("mossy_cobblestone");
+    Material MOSSY_COBBLESTONE = MaterialImpl.get("minecraft:mossy_cobblestone");
 
-    Material OBSIDIAN = MaterialImpl.get("obsidian");
+    Material OBSIDIAN = MaterialImpl.get("minecraft:obsidian");
 
-    Material TORCH = MaterialImpl.get("torch");
+    Material TORCH = MaterialImpl.get("minecraft:torch");
 
-    Material END_ROD = MaterialImpl.get("end_rod");
+    Material END_ROD = MaterialImpl.get("minecraft:end_rod");
 
-    Material CHORUS_PLANT = MaterialImpl.get("chorus_plant");
+    Material CHORUS_PLANT = MaterialImpl.get("minecraft:chorus_plant");
 
-    Material CHORUS_FLOWER = MaterialImpl.get("chorus_flower");
+    Material CHORUS_FLOWER = MaterialImpl.get("minecraft:chorus_flower");
 
-    Material PURPUR_BLOCK = MaterialImpl.get("purpur_block");
+    Material PURPUR_BLOCK = MaterialImpl.get("minecraft:purpur_block");
 
-    Material PURPUR_PILLAR = MaterialImpl.get("purpur_pillar");
+    Material PURPUR_PILLAR = MaterialImpl.get("minecraft:purpur_pillar");
 
-    Material PURPUR_STAIRS = MaterialImpl.get("purpur_stairs");
+    Material PURPUR_STAIRS = MaterialImpl.get("minecraft:purpur_stairs");
 
-    Material SPAWNER = MaterialImpl.get("spawner");
+    Material SPAWNER = MaterialImpl.get("minecraft:spawner");
 
-    Material CREAKING_HEART = MaterialImpl.get("creaking_heart");
+    Material CREAKING_HEART = MaterialImpl.get("minecraft:creaking_heart");
 
-    Material CHEST = MaterialImpl.get("chest");
+    Material CHEST = MaterialImpl.get("minecraft:chest");
 
-    Material CRAFTING_TABLE = MaterialImpl.get("crafting_table");
+    Material CRAFTING_TABLE = MaterialImpl.get("minecraft:crafting_table");
 
-    Material FARMLAND = MaterialImpl.get("farmland");
+    Material FARMLAND = MaterialImpl.get("minecraft:farmland");
 
-    Material FURNACE = MaterialImpl.get("furnace");
+    Material FURNACE = MaterialImpl.get("minecraft:furnace");
 
-    Material LADDER = MaterialImpl.get("ladder");
+    Material LADDER = MaterialImpl.get("minecraft:ladder");
 
-    Material COBBLESTONE_STAIRS = MaterialImpl.get("cobblestone_stairs");
+    Material COBBLESTONE_STAIRS = MaterialImpl.get("minecraft:cobblestone_stairs");
 
-    Material SNOW = MaterialImpl.get("snow");
+    Material SNOW = MaterialImpl.get("minecraft:snow");
 
-    Material ICE = MaterialImpl.get("ice");
+    Material ICE = MaterialImpl.get("minecraft:ice");
 
-    Material SNOW_BLOCK = MaterialImpl.get("snow_block");
+    Material SNOW_BLOCK = MaterialImpl.get("minecraft:snow_block");
 
-    Material CACTUS = MaterialImpl.get("cactus");
+    Material CACTUS = MaterialImpl.get("minecraft:cactus");
 
-    Material CACTUS_FLOWER = MaterialImpl.get("cactus_flower");
+    Material CACTUS_FLOWER = MaterialImpl.get("minecraft:cactus_flower");
 
-    Material CLAY = MaterialImpl.get("clay");
+    Material CLAY = MaterialImpl.get("minecraft:clay");
 
-    Material JUKEBOX = MaterialImpl.get("jukebox");
+    Material JUKEBOX = MaterialImpl.get("minecraft:jukebox");
 
-    Material OAK_FENCE = MaterialImpl.get("oak_fence");
+    Material OAK_FENCE = MaterialImpl.get("minecraft:oak_fence");
 
-    Material SPRUCE_FENCE = MaterialImpl.get("spruce_fence");
+    Material SPRUCE_FENCE = MaterialImpl.get("minecraft:spruce_fence");
 
-    Material BIRCH_FENCE = MaterialImpl.get("birch_fence");
+    Material BIRCH_FENCE = MaterialImpl.get("minecraft:birch_fence");
 
-    Material JUNGLE_FENCE = MaterialImpl.get("jungle_fence");
+    Material JUNGLE_FENCE = MaterialImpl.get("minecraft:jungle_fence");
 
-    Material ACACIA_FENCE = MaterialImpl.get("acacia_fence");
+    Material ACACIA_FENCE = MaterialImpl.get("minecraft:acacia_fence");
 
-    Material CHERRY_FENCE = MaterialImpl.get("cherry_fence");
+    Material CHERRY_FENCE = MaterialImpl.get("minecraft:cherry_fence");
 
-    Material DARK_OAK_FENCE = MaterialImpl.get("dark_oak_fence");
+    Material DARK_OAK_FENCE = MaterialImpl.get("minecraft:dark_oak_fence");
 
-    Material PALE_OAK_FENCE = MaterialImpl.get("pale_oak_fence");
+    Material PALE_OAK_FENCE = MaterialImpl.get("minecraft:pale_oak_fence");
 
-    Material MANGROVE_FENCE = MaterialImpl.get("mangrove_fence");
+    Material MANGROVE_FENCE = MaterialImpl.get("minecraft:mangrove_fence");
 
-    Material BAMBOO_FENCE = MaterialImpl.get("bamboo_fence");
+    Material BAMBOO_FENCE = MaterialImpl.get("minecraft:bamboo_fence");
 
-    Material CRIMSON_FENCE = MaterialImpl.get("crimson_fence");
+    Material CRIMSON_FENCE = MaterialImpl.get("minecraft:crimson_fence");
 
-    Material WARPED_FENCE = MaterialImpl.get("warped_fence");
+    Material WARPED_FENCE = MaterialImpl.get("minecraft:warped_fence");
 
-    Material PUMPKIN = MaterialImpl.get("pumpkin");
+    Material PUMPKIN = MaterialImpl.get("minecraft:pumpkin");
 
-    Material CARVED_PUMPKIN = MaterialImpl.get("carved_pumpkin");
+    Material CARVED_PUMPKIN = MaterialImpl.get("minecraft:carved_pumpkin");
 
-    Material JACK_O_LANTERN = MaterialImpl.get("jack_o_lantern");
+    Material JACK_O_LANTERN = MaterialImpl.get("minecraft:jack_o_lantern");
 
-    Material NETHERRACK = MaterialImpl.get("netherrack");
+    Material NETHERRACK = MaterialImpl.get("minecraft:netherrack");
 
-    Material SOUL_SAND = MaterialImpl.get("soul_sand");
+    Material SOUL_SAND = MaterialImpl.get("minecraft:soul_sand");
 
-    Material SOUL_SOIL = MaterialImpl.get("soul_soil");
+    Material SOUL_SOIL = MaterialImpl.get("minecraft:soul_soil");
 
-    Material BASALT = MaterialImpl.get("basalt");
+    Material BASALT = MaterialImpl.get("minecraft:basalt");
 
-    Material POLISHED_BASALT = MaterialImpl.get("polished_basalt");
+    Material POLISHED_BASALT = MaterialImpl.get("minecraft:polished_basalt");
 
-    Material SMOOTH_BASALT = MaterialImpl.get("smooth_basalt");
+    Material SMOOTH_BASALT = MaterialImpl.get("minecraft:smooth_basalt");
 
-    Material SOUL_TORCH = MaterialImpl.get("soul_torch");
+    Material SOUL_TORCH = MaterialImpl.get("minecraft:soul_torch");
 
-    Material GLOWSTONE = MaterialImpl.get("glowstone");
+    Material GLOWSTONE = MaterialImpl.get("minecraft:glowstone");
 
-    Material INFESTED_STONE = MaterialImpl.get("infested_stone");
+    Material INFESTED_STONE = MaterialImpl.get("minecraft:infested_stone");
 
-    Material INFESTED_COBBLESTONE = MaterialImpl.get("infested_cobblestone");
+    Material INFESTED_COBBLESTONE = MaterialImpl.get("minecraft:infested_cobblestone");
 
-    Material INFESTED_STONE_BRICKS = MaterialImpl.get("infested_stone_bricks");
+    Material INFESTED_STONE_BRICKS = MaterialImpl.get("minecraft:infested_stone_bricks");
 
-    Material INFESTED_MOSSY_STONE_BRICKS = MaterialImpl.get("infested_mossy_stone_bricks");
+    Material INFESTED_MOSSY_STONE_BRICKS = MaterialImpl.get("minecraft:infested_mossy_stone_bricks");
 
-    Material INFESTED_CRACKED_STONE_BRICKS = MaterialImpl.get("infested_cracked_stone_bricks");
+    Material INFESTED_CRACKED_STONE_BRICKS = MaterialImpl.get("minecraft:infested_cracked_stone_bricks");
 
-    Material INFESTED_CHISELED_STONE_BRICKS = MaterialImpl.get("infested_chiseled_stone_bricks");
+    Material INFESTED_CHISELED_STONE_BRICKS = MaterialImpl.get("minecraft:infested_chiseled_stone_bricks");
 
-    Material INFESTED_DEEPSLATE = MaterialImpl.get("infested_deepslate");
+    Material INFESTED_DEEPSLATE = MaterialImpl.get("minecraft:infested_deepslate");
 
-    Material STONE_BRICKS = MaterialImpl.get("stone_bricks");
+    Material STONE_BRICKS = MaterialImpl.get("minecraft:stone_bricks");
 
-    Material MOSSY_STONE_BRICKS = MaterialImpl.get("mossy_stone_bricks");
+    Material MOSSY_STONE_BRICKS = MaterialImpl.get("minecraft:mossy_stone_bricks");
 
-    Material CRACKED_STONE_BRICKS = MaterialImpl.get("cracked_stone_bricks");
+    Material CRACKED_STONE_BRICKS = MaterialImpl.get("minecraft:cracked_stone_bricks");
 
-    Material CHISELED_STONE_BRICKS = MaterialImpl.get("chiseled_stone_bricks");
+    Material CHISELED_STONE_BRICKS = MaterialImpl.get("minecraft:chiseled_stone_bricks");
 
-    Material PACKED_MUD = MaterialImpl.get("packed_mud");
+    Material PACKED_MUD = MaterialImpl.get("minecraft:packed_mud");
 
-    Material MUD_BRICKS = MaterialImpl.get("mud_bricks");
+    Material MUD_BRICKS = MaterialImpl.get("minecraft:mud_bricks");
 
-    Material DEEPSLATE_BRICKS = MaterialImpl.get("deepslate_bricks");
+    Material DEEPSLATE_BRICKS = MaterialImpl.get("minecraft:deepslate_bricks");
 
-    Material CRACKED_DEEPSLATE_BRICKS = MaterialImpl.get("cracked_deepslate_bricks");
+    Material CRACKED_DEEPSLATE_BRICKS = MaterialImpl.get("minecraft:cracked_deepslate_bricks");
 
-    Material DEEPSLATE_TILES = MaterialImpl.get("deepslate_tiles");
+    Material DEEPSLATE_TILES = MaterialImpl.get("minecraft:deepslate_tiles");
 
-    Material CRACKED_DEEPSLATE_TILES = MaterialImpl.get("cracked_deepslate_tiles");
+    Material CRACKED_DEEPSLATE_TILES = MaterialImpl.get("minecraft:cracked_deepslate_tiles");
 
-    Material CHISELED_DEEPSLATE = MaterialImpl.get("chiseled_deepslate");
+    Material CHISELED_DEEPSLATE = MaterialImpl.get("minecraft:chiseled_deepslate");
 
-    Material REINFORCED_DEEPSLATE = MaterialImpl.get("reinforced_deepslate");
+    Material REINFORCED_DEEPSLATE = MaterialImpl.get("minecraft:reinforced_deepslate");
 
-    Material BROWN_MUSHROOM_BLOCK = MaterialImpl.get("brown_mushroom_block");
+    Material BROWN_MUSHROOM_BLOCK = MaterialImpl.get("minecraft:brown_mushroom_block");
 
-    Material RED_MUSHROOM_BLOCK = MaterialImpl.get("red_mushroom_block");
+    Material RED_MUSHROOM_BLOCK = MaterialImpl.get("minecraft:red_mushroom_block");
 
-    Material MUSHROOM_STEM = MaterialImpl.get("mushroom_stem");
+    Material MUSHROOM_STEM = MaterialImpl.get("minecraft:mushroom_stem");
 
-    Material IRON_BARS = MaterialImpl.get("iron_bars");
+    Material IRON_BARS = MaterialImpl.get("minecraft:iron_bars");
 
-    Material CHAIN = MaterialImpl.get("chain");
+    Material CHAIN = MaterialImpl.get("minecraft:chain");
 
-    Material GLASS_PANE = MaterialImpl.get("glass_pane");
+    Material GLASS_PANE = MaterialImpl.get("minecraft:glass_pane");
 
-    Material MELON = MaterialImpl.get("melon");
+    Material MELON = MaterialImpl.get("minecraft:melon");
 
-    Material VINE = MaterialImpl.get("vine");
+    Material VINE = MaterialImpl.get("minecraft:vine");
 
-    Material GLOW_LICHEN = MaterialImpl.get("glow_lichen");
+    Material GLOW_LICHEN = MaterialImpl.get("minecraft:glow_lichen");
 
-    Material RESIN_CLUMP = MaterialImpl.get("resin_clump");
+    Material RESIN_CLUMP = MaterialImpl.get("minecraft:resin_clump");
 
-    Material RESIN_BLOCK = MaterialImpl.get("resin_block");
+    Material RESIN_BLOCK = MaterialImpl.get("minecraft:resin_block");
 
-    Material RESIN_BRICKS = MaterialImpl.get("resin_bricks");
+    Material RESIN_BRICKS = MaterialImpl.get("minecraft:resin_bricks");
 
-    Material RESIN_BRICK_STAIRS = MaterialImpl.get("resin_brick_stairs");
+    Material RESIN_BRICK_STAIRS = MaterialImpl.get("minecraft:resin_brick_stairs");
 
-    Material RESIN_BRICK_SLAB = MaterialImpl.get("resin_brick_slab");
+    Material RESIN_BRICK_SLAB = MaterialImpl.get("minecraft:resin_brick_slab");
 
-    Material RESIN_BRICK_WALL = MaterialImpl.get("resin_brick_wall");
+    Material RESIN_BRICK_WALL = MaterialImpl.get("minecraft:resin_brick_wall");
 
-    Material CHISELED_RESIN_BRICKS = MaterialImpl.get("chiseled_resin_bricks");
+    Material CHISELED_RESIN_BRICKS = MaterialImpl.get("minecraft:chiseled_resin_bricks");
 
-    Material BRICK_STAIRS = MaterialImpl.get("brick_stairs");
+    Material BRICK_STAIRS = MaterialImpl.get("minecraft:brick_stairs");
 
-    Material STONE_BRICK_STAIRS = MaterialImpl.get("stone_brick_stairs");
+    Material STONE_BRICK_STAIRS = MaterialImpl.get("minecraft:stone_brick_stairs");
 
-    Material MUD_BRICK_STAIRS = MaterialImpl.get("mud_brick_stairs");
+    Material MUD_BRICK_STAIRS = MaterialImpl.get("minecraft:mud_brick_stairs");
 
-    Material MYCELIUM = MaterialImpl.get("mycelium");
+    Material MYCELIUM = MaterialImpl.get("minecraft:mycelium");
 
-    Material LILY_PAD = MaterialImpl.get("lily_pad");
+    Material LILY_PAD = MaterialImpl.get("minecraft:lily_pad");
 
-    Material NETHER_BRICKS = MaterialImpl.get("nether_bricks");
+    Material NETHER_BRICKS = MaterialImpl.get("minecraft:nether_bricks");
 
-    Material CRACKED_NETHER_BRICKS = MaterialImpl.get("cracked_nether_bricks");
+    Material CRACKED_NETHER_BRICKS = MaterialImpl.get("minecraft:cracked_nether_bricks");
 
-    Material CHISELED_NETHER_BRICKS = MaterialImpl.get("chiseled_nether_bricks");
+    Material CHISELED_NETHER_BRICKS = MaterialImpl.get("minecraft:chiseled_nether_bricks");
 
-    Material NETHER_BRICK_FENCE = MaterialImpl.get("nether_brick_fence");
+    Material NETHER_BRICK_FENCE = MaterialImpl.get("minecraft:nether_brick_fence");
 
-    Material NETHER_BRICK_STAIRS = MaterialImpl.get("nether_brick_stairs");
+    Material NETHER_BRICK_STAIRS = MaterialImpl.get("minecraft:nether_brick_stairs");
 
-    Material SCULK = MaterialImpl.get("sculk");
+    Material SCULK = MaterialImpl.get("minecraft:sculk");
 
-    Material SCULK_VEIN = MaterialImpl.get("sculk_vein");
+    Material SCULK_VEIN = MaterialImpl.get("minecraft:sculk_vein");
 
-    Material SCULK_CATALYST = MaterialImpl.get("sculk_catalyst");
+    Material SCULK_CATALYST = MaterialImpl.get("minecraft:sculk_catalyst");
 
-    Material SCULK_SHRIEKER = MaterialImpl.get("sculk_shrieker");
+    Material SCULK_SHRIEKER = MaterialImpl.get("minecraft:sculk_shrieker");
 
-    Material ENCHANTING_TABLE = MaterialImpl.get("enchanting_table");
+    Material ENCHANTING_TABLE = MaterialImpl.get("minecraft:enchanting_table");
 
-    Material END_PORTAL_FRAME = MaterialImpl.get("end_portal_frame");
+    Material END_PORTAL_FRAME = MaterialImpl.get("minecraft:end_portal_frame");
 
-    Material END_STONE = MaterialImpl.get("end_stone");
+    Material END_STONE = MaterialImpl.get("minecraft:end_stone");
 
-    Material END_STONE_BRICKS = MaterialImpl.get("end_stone_bricks");
+    Material END_STONE_BRICKS = MaterialImpl.get("minecraft:end_stone_bricks");
 
-    Material DRAGON_EGG = MaterialImpl.get("dragon_egg");
+    Material DRAGON_EGG = MaterialImpl.get("minecraft:dragon_egg");
 
-    Material SANDSTONE_STAIRS = MaterialImpl.get("sandstone_stairs");
+    Material SANDSTONE_STAIRS = MaterialImpl.get("minecraft:sandstone_stairs");
 
-    Material ENDER_CHEST = MaterialImpl.get("ender_chest");
+    Material ENDER_CHEST = MaterialImpl.get("minecraft:ender_chest");
 
-    Material EMERALD_BLOCK = MaterialImpl.get("emerald_block");
+    Material EMERALD_BLOCK = MaterialImpl.get("minecraft:emerald_block");
 
-    Material OAK_STAIRS = MaterialImpl.get("oak_stairs");
+    Material OAK_STAIRS = MaterialImpl.get("minecraft:oak_stairs");
 
-    Material SPRUCE_STAIRS = MaterialImpl.get("spruce_stairs");
+    Material SPRUCE_STAIRS = MaterialImpl.get("minecraft:spruce_stairs");
 
-    Material BIRCH_STAIRS = MaterialImpl.get("birch_stairs");
+    Material BIRCH_STAIRS = MaterialImpl.get("minecraft:birch_stairs");
 
-    Material JUNGLE_STAIRS = MaterialImpl.get("jungle_stairs");
+    Material JUNGLE_STAIRS = MaterialImpl.get("minecraft:jungle_stairs");
 
-    Material ACACIA_STAIRS = MaterialImpl.get("acacia_stairs");
+    Material ACACIA_STAIRS = MaterialImpl.get("minecraft:acacia_stairs");
 
-    Material CHERRY_STAIRS = MaterialImpl.get("cherry_stairs");
+    Material CHERRY_STAIRS = MaterialImpl.get("minecraft:cherry_stairs");
 
-    Material DARK_OAK_STAIRS = MaterialImpl.get("dark_oak_stairs");
+    Material DARK_OAK_STAIRS = MaterialImpl.get("minecraft:dark_oak_stairs");
 
-    Material PALE_OAK_STAIRS = MaterialImpl.get("pale_oak_stairs");
+    Material PALE_OAK_STAIRS = MaterialImpl.get("minecraft:pale_oak_stairs");
 
-    Material MANGROVE_STAIRS = MaterialImpl.get("mangrove_stairs");
+    Material MANGROVE_STAIRS = MaterialImpl.get("minecraft:mangrove_stairs");
 
-    Material BAMBOO_STAIRS = MaterialImpl.get("bamboo_stairs");
+    Material BAMBOO_STAIRS = MaterialImpl.get("minecraft:bamboo_stairs");
 
-    Material BAMBOO_MOSAIC_STAIRS = MaterialImpl.get("bamboo_mosaic_stairs");
+    Material BAMBOO_MOSAIC_STAIRS = MaterialImpl.get("minecraft:bamboo_mosaic_stairs");
 
-    Material CRIMSON_STAIRS = MaterialImpl.get("crimson_stairs");
+    Material CRIMSON_STAIRS = MaterialImpl.get("minecraft:crimson_stairs");
 
-    Material WARPED_STAIRS = MaterialImpl.get("warped_stairs");
+    Material WARPED_STAIRS = MaterialImpl.get("minecraft:warped_stairs");
 
-    Material COMMAND_BLOCK = MaterialImpl.get("command_block");
+    Material COMMAND_BLOCK = MaterialImpl.get("minecraft:command_block");
 
-    Material BEACON = MaterialImpl.get("beacon");
+    Material BEACON = MaterialImpl.get("minecraft:beacon");
 
-    Material COBBLESTONE_WALL = MaterialImpl.get("cobblestone_wall");
+    Material COBBLESTONE_WALL = MaterialImpl.get("minecraft:cobblestone_wall");
 
-    Material MOSSY_COBBLESTONE_WALL = MaterialImpl.get("mossy_cobblestone_wall");
+    Material MOSSY_COBBLESTONE_WALL = MaterialImpl.get("minecraft:mossy_cobblestone_wall");
 
-    Material BRICK_WALL = MaterialImpl.get("brick_wall");
+    Material BRICK_WALL = MaterialImpl.get("minecraft:brick_wall");
 
-    Material PRISMARINE_WALL = MaterialImpl.get("prismarine_wall");
+    Material PRISMARINE_WALL = MaterialImpl.get("minecraft:prismarine_wall");
 
-    Material RED_SANDSTONE_WALL = MaterialImpl.get("red_sandstone_wall");
+    Material RED_SANDSTONE_WALL = MaterialImpl.get("minecraft:red_sandstone_wall");
 
-    Material MOSSY_STONE_BRICK_WALL = MaterialImpl.get("mossy_stone_brick_wall");
+    Material MOSSY_STONE_BRICK_WALL = MaterialImpl.get("minecraft:mossy_stone_brick_wall");
 
-    Material GRANITE_WALL = MaterialImpl.get("granite_wall");
+    Material GRANITE_WALL = MaterialImpl.get("minecraft:granite_wall");
 
-    Material STONE_BRICK_WALL = MaterialImpl.get("stone_brick_wall");
+    Material STONE_BRICK_WALL = MaterialImpl.get("minecraft:stone_brick_wall");
 
-    Material MUD_BRICK_WALL = MaterialImpl.get("mud_brick_wall");
+    Material MUD_BRICK_WALL = MaterialImpl.get("minecraft:mud_brick_wall");
 
-    Material NETHER_BRICK_WALL = MaterialImpl.get("nether_brick_wall");
+    Material NETHER_BRICK_WALL = MaterialImpl.get("minecraft:nether_brick_wall");
 
-    Material ANDESITE_WALL = MaterialImpl.get("andesite_wall");
+    Material ANDESITE_WALL = MaterialImpl.get("minecraft:andesite_wall");
 
-    Material RED_NETHER_BRICK_WALL = MaterialImpl.get("red_nether_brick_wall");
+    Material RED_NETHER_BRICK_WALL = MaterialImpl.get("minecraft:red_nether_brick_wall");
 
-    Material SANDSTONE_WALL = MaterialImpl.get("sandstone_wall");
+    Material SANDSTONE_WALL = MaterialImpl.get("minecraft:sandstone_wall");
 
-    Material END_STONE_BRICK_WALL = MaterialImpl.get("end_stone_brick_wall");
+    Material END_STONE_BRICK_WALL = MaterialImpl.get("minecraft:end_stone_brick_wall");
 
-    Material DIORITE_WALL = MaterialImpl.get("diorite_wall");
+    Material DIORITE_WALL = MaterialImpl.get("minecraft:diorite_wall");
 
-    Material BLACKSTONE_WALL = MaterialImpl.get("blackstone_wall");
+    Material BLACKSTONE_WALL = MaterialImpl.get("minecraft:blackstone_wall");
 
-    Material POLISHED_BLACKSTONE_WALL = MaterialImpl.get("polished_blackstone_wall");
+    Material POLISHED_BLACKSTONE_WALL = MaterialImpl.get("minecraft:polished_blackstone_wall");
 
-    Material POLISHED_BLACKSTONE_BRICK_WALL = MaterialImpl.get("polished_blackstone_brick_wall");
+    Material POLISHED_BLACKSTONE_BRICK_WALL = MaterialImpl.get("minecraft:polished_blackstone_brick_wall");
 
-    Material COBBLED_DEEPSLATE_WALL = MaterialImpl.get("cobbled_deepslate_wall");
+    Material COBBLED_DEEPSLATE_WALL = MaterialImpl.get("minecraft:cobbled_deepslate_wall");
 
-    Material POLISHED_DEEPSLATE_WALL = MaterialImpl.get("polished_deepslate_wall");
+    Material POLISHED_DEEPSLATE_WALL = MaterialImpl.get("minecraft:polished_deepslate_wall");
 
-    Material DEEPSLATE_BRICK_WALL = MaterialImpl.get("deepslate_brick_wall");
+    Material DEEPSLATE_BRICK_WALL = MaterialImpl.get("minecraft:deepslate_brick_wall");
 
-    Material DEEPSLATE_TILE_WALL = MaterialImpl.get("deepslate_tile_wall");
+    Material DEEPSLATE_TILE_WALL = MaterialImpl.get("minecraft:deepslate_tile_wall");
 
-    Material ANVIL = MaterialImpl.get("anvil");
+    Material ANVIL = MaterialImpl.get("minecraft:anvil");
 
-    Material CHIPPED_ANVIL = MaterialImpl.get("chipped_anvil");
+    Material CHIPPED_ANVIL = MaterialImpl.get("minecraft:chipped_anvil");
 
-    Material DAMAGED_ANVIL = MaterialImpl.get("damaged_anvil");
+    Material DAMAGED_ANVIL = MaterialImpl.get("minecraft:damaged_anvil");
 
-    Material CHISELED_QUARTZ_BLOCK = MaterialImpl.get("chiseled_quartz_block");
+    Material CHISELED_QUARTZ_BLOCK = MaterialImpl.get("minecraft:chiseled_quartz_block");
 
-    Material QUARTZ_BLOCK = MaterialImpl.get("quartz_block");
+    Material QUARTZ_BLOCK = MaterialImpl.get("minecraft:quartz_block");
 
-    Material QUARTZ_BRICKS = MaterialImpl.get("quartz_bricks");
+    Material QUARTZ_BRICKS = MaterialImpl.get("minecraft:quartz_bricks");
 
-    Material QUARTZ_PILLAR = MaterialImpl.get("quartz_pillar");
+    Material QUARTZ_PILLAR = MaterialImpl.get("minecraft:quartz_pillar");
 
-    Material QUARTZ_STAIRS = MaterialImpl.get("quartz_stairs");
+    Material QUARTZ_STAIRS = MaterialImpl.get("minecraft:quartz_stairs");
 
-    Material WHITE_TERRACOTTA = MaterialImpl.get("white_terracotta");
+    Material WHITE_TERRACOTTA = MaterialImpl.get("minecraft:white_terracotta");
 
-    Material ORANGE_TERRACOTTA = MaterialImpl.get("orange_terracotta");
+    Material ORANGE_TERRACOTTA = MaterialImpl.get("minecraft:orange_terracotta");
 
-    Material MAGENTA_TERRACOTTA = MaterialImpl.get("magenta_terracotta");
+    Material MAGENTA_TERRACOTTA = MaterialImpl.get("minecraft:magenta_terracotta");
 
-    Material LIGHT_BLUE_TERRACOTTA = MaterialImpl.get("light_blue_terracotta");
+    Material LIGHT_BLUE_TERRACOTTA = MaterialImpl.get("minecraft:light_blue_terracotta");
 
-    Material YELLOW_TERRACOTTA = MaterialImpl.get("yellow_terracotta");
+    Material YELLOW_TERRACOTTA = MaterialImpl.get("minecraft:yellow_terracotta");
 
-    Material LIME_TERRACOTTA = MaterialImpl.get("lime_terracotta");
+    Material LIME_TERRACOTTA = MaterialImpl.get("minecraft:lime_terracotta");
 
-    Material PINK_TERRACOTTA = MaterialImpl.get("pink_terracotta");
+    Material PINK_TERRACOTTA = MaterialImpl.get("minecraft:pink_terracotta");
 
-    Material GRAY_TERRACOTTA = MaterialImpl.get("gray_terracotta");
+    Material GRAY_TERRACOTTA = MaterialImpl.get("minecraft:gray_terracotta");
 
-    Material LIGHT_GRAY_TERRACOTTA = MaterialImpl.get("light_gray_terracotta");
+    Material LIGHT_GRAY_TERRACOTTA = MaterialImpl.get("minecraft:light_gray_terracotta");
 
-    Material CYAN_TERRACOTTA = MaterialImpl.get("cyan_terracotta");
+    Material CYAN_TERRACOTTA = MaterialImpl.get("minecraft:cyan_terracotta");
 
-    Material PURPLE_TERRACOTTA = MaterialImpl.get("purple_terracotta");
+    Material PURPLE_TERRACOTTA = MaterialImpl.get("minecraft:purple_terracotta");
 
-    Material BLUE_TERRACOTTA = MaterialImpl.get("blue_terracotta");
+    Material BLUE_TERRACOTTA = MaterialImpl.get("minecraft:blue_terracotta");
 
-    Material BROWN_TERRACOTTA = MaterialImpl.get("brown_terracotta");
+    Material BROWN_TERRACOTTA = MaterialImpl.get("minecraft:brown_terracotta");
 
-    Material GREEN_TERRACOTTA = MaterialImpl.get("green_terracotta");
+    Material GREEN_TERRACOTTA = MaterialImpl.get("minecraft:green_terracotta");
 
-    Material RED_TERRACOTTA = MaterialImpl.get("red_terracotta");
+    Material RED_TERRACOTTA = MaterialImpl.get("minecraft:red_terracotta");
 
-    Material BLACK_TERRACOTTA = MaterialImpl.get("black_terracotta");
+    Material BLACK_TERRACOTTA = MaterialImpl.get("minecraft:black_terracotta");
 
-    Material BARRIER = MaterialImpl.get("barrier");
+    Material BARRIER = MaterialImpl.get("minecraft:barrier");
 
-    Material LIGHT = MaterialImpl.get("light");
+    Material LIGHT = MaterialImpl.get("minecraft:light");
 
-    Material HAY_BLOCK = MaterialImpl.get("hay_block");
+    Material HAY_BLOCK = MaterialImpl.get("minecraft:hay_block");
 
-    Material WHITE_CARPET = MaterialImpl.get("white_carpet");
+    Material WHITE_CARPET = MaterialImpl.get("minecraft:white_carpet");
 
-    Material ORANGE_CARPET = MaterialImpl.get("orange_carpet");
+    Material ORANGE_CARPET = MaterialImpl.get("minecraft:orange_carpet");
 
-    Material MAGENTA_CARPET = MaterialImpl.get("magenta_carpet");
+    Material MAGENTA_CARPET = MaterialImpl.get("minecraft:magenta_carpet");
 
-    Material LIGHT_BLUE_CARPET = MaterialImpl.get("light_blue_carpet");
+    Material LIGHT_BLUE_CARPET = MaterialImpl.get("minecraft:light_blue_carpet");
 
-    Material YELLOW_CARPET = MaterialImpl.get("yellow_carpet");
+    Material YELLOW_CARPET = MaterialImpl.get("minecraft:yellow_carpet");
 
-    Material LIME_CARPET = MaterialImpl.get("lime_carpet");
+    Material LIME_CARPET = MaterialImpl.get("minecraft:lime_carpet");
 
-    Material PINK_CARPET = MaterialImpl.get("pink_carpet");
+    Material PINK_CARPET = MaterialImpl.get("minecraft:pink_carpet");
 
-    Material GRAY_CARPET = MaterialImpl.get("gray_carpet");
+    Material GRAY_CARPET = MaterialImpl.get("minecraft:gray_carpet");
 
-    Material LIGHT_GRAY_CARPET = MaterialImpl.get("light_gray_carpet");
+    Material LIGHT_GRAY_CARPET = MaterialImpl.get("minecraft:light_gray_carpet");
 
-    Material CYAN_CARPET = MaterialImpl.get("cyan_carpet");
+    Material CYAN_CARPET = MaterialImpl.get("minecraft:cyan_carpet");
 
-    Material PURPLE_CARPET = MaterialImpl.get("purple_carpet");
+    Material PURPLE_CARPET = MaterialImpl.get("minecraft:purple_carpet");
 
-    Material BLUE_CARPET = MaterialImpl.get("blue_carpet");
+    Material BLUE_CARPET = MaterialImpl.get("minecraft:blue_carpet");
 
-    Material BROWN_CARPET = MaterialImpl.get("brown_carpet");
+    Material BROWN_CARPET = MaterialImpl.get("minecraft:brown_carpet");
 
-    Material GREEN_CARPET = MaterialImpl.get("green_carpet");
+    Material GREEN_CARPET = MaterialImpl.get("minecraft:green_carpet");
 
-    Material RED_CARPET = MaterialImpl.get("red_carpet");
+    Material RED_CARPET = MaterialImpl.get("minecraft:red_carpet");
 
-    Material BLACK_CARPET = MaterialImpl.get("black_carpet");
+    Material BLACK_CARPET = MaterialImpl.get("minecraft:black_carpet");
 
-    Material TERRACOTTA = MaterialImpl.get("terracotta");
+    Material TERRACOTTA = MaterialImpl.get("minecraft:terracotta");
 
-    Material PACKED_ICE = MaterialImpl.get("packed_ice");
+    Material PACKED_ICE = MaterialImpl.get("minecraft:packed_ice");
 
-    Material DIRT_PATH = MaterialImpl.get("dirt_path");
+    Material DIRT_PATH = MaterialImpl.get("minecraft:dirt_path");
 
-    Material SUNFLOWER = MaterialImpl.get("sunflower");
+    Material SUNFLOWER = MaterialImpl.get("minecraft:sunflower");
 
-    Material LILAC = MaterialImpl.get("lilac");
+    Material LILAC = MaterialImpl.get("minecraft:lilac");
 
-    Material ROSE_BUSH = MaterialImpl.get("rose_bush");
+    Material ROSE_BUSH = MaterialImpl.get("minecraft:rose_bush");
 
-    Material PEONY = MaterialImpl.get("peony");
+    Material PEONY = MaterialImpl.get("minecraft:peony");
 
-    Material TALL_GRASS = MaterialImpl.get("tall_grass");
+    Material TALL_GRASS = MaterialImpl.get("minecraft:tall_grass");
 
-    Material LARGE_FERN = MaterialImpl.get("large_fern");
+    Material LARGE_FERN = MaterialImpl.get("minecraft:large_fern");
 
-    Material WHITE_STAINED_GLASS = MaterialImpl.get("white_stained_glass");
+    Material WHITE_STAINED_GLASS = MaterialImpl.get("minecraft:white_stained_glass");
 
-    Material ORANGE_STAINED_GLASS = MaterialImpl.get("orange_stained_glass");
+    Material ORANGE_STAINED_GLASS = MaterialImpl.get("minecraft:orange_stained_glass");
 
-    Material MAGENTA_STAINED_GLASS = MaterialImpl.get("magenta_stained_glass");
+    Material MAGENTA_STAINED_GLASS = MaterialImpl.get("minecraft:magenta_stained_glass");
 
-    Material LIGHT_BLUE_STAINED_GLASS = MaterialImpl.get("light_blue_stained_glass");
+    Material LIGHT_BLUE_STAINED_GLASS = MaterialImpl.get("minecraft:light_blue_stained_glass");
 
-    Material YELLOW_STAINED_GLASS = MaterialImpl.get("yellow_stained_glass");
+    Material YELLOW_STAINED_GLASS = MaterialImpl.get("minecraft:yellow_stained_glass");
 
-    Material LIME_STAINED_GLASS = MaterialImpl.get("lime_stained_glass");
+    Material LIME_STAINED_GLASS = MaterialImpl.get("minecraft:lime_stained_glass");
 
-    Material PINK_STAINED_GLASS = MaterialImpl.get("pink_stained_glass");
+    Material PINK_STAINED_GLASS = MaterialImpl.get("minecraft:pink_stained_glass");
 
-    Material GRAY_STAINED_GLASS = MaterialImpl.get("gray_stained_glass");
+    Material GRAY_STAINED_GLASS = MaterialImpl.get("minecraft:gray_stained_glass");
 
-    Material LIGHT_GRAY_STAINED_GLASS = MaterialImpl.get("light_gray_stained_glass");
+    Material LIGHT_GRAY_STAINED_GLASS = MaterialImpl.get("minecraft:light_gray_stained_glass");
 
-    Material CYAN_STAINED_GLASS = MaterialImpl.get("cyan_stained_glass");
+    Material CYAN_STAINED_GLASS = MaterialImpl.get("minecraft:cyan_stained_glass");
 
-    Material PURPLE_STAINED_GLASS = MaterialImpl.get("purple_stained_glass");
+    Material PURPLE_STAINED_GLASS = MaterialImpl.get("minecraft:purple_stained_glass");
 
-    Material BLUE_STAINED_GLASS = MaterialImpl.get("blue_stained_glass");
+    Material BLUE_STAINED_GLASS = MaterialImpl.get("minecraft:blue_stained_glass");
 
-    Material BROWN_STAINED_GLASS = MaterialImpl.get("brown_stained_glass");
+    Material BROWN_STAINED_GLASS = MaterialImpl.get("minecraft:brown_stained_glass");
 
-    Material GREEN_STAINED_GLASS = MaterialImpl.get("green_stained_glass");
+    Material GREEN_STAINED_GLASS = MaterialImpl.get("minecraft:green_stained_glass");
 
-    Material RED_STAINED_GLASS = MaterialImpl.get("red_stained_glass");
+    Material RED_STAINED_GLASS = MaterialImpl.get("minecraft:red_stained_glass");
 
-    Material BLACK_STAINED_GLASS = MaterialImpl.get("black_stained_glass");
+    Material BLACK_STAINED_GLASS = MaterialImpl.get("minecraft:black_stained_glass");
 
-    Material WHITE_STAINED_GLASS_PANE = MaterialImpl.get("white_stained_glass_pane");
+    Material WHITE_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:white_stained_glass_pane");
 
-    Material ORANGE_STAINED_GLASS_PANE = MaterialImpl.get("orange_stained_glass_pane");
+    Material ORANGE_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:orange_stained_glass_pane");
 
-    Material MAGENTA_STAINED_GLASS_PANE = MaterialImpl.get("magenta_stained_glass_pane");
+    Material MAGENTA_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:magenta_stained_glass_pane");
 
-    Material LIGHT_BLUE_STAINED_GLASS_PANE = MaterialImpl.get("light_blue_stained_glass_pane");
+    Material LIGHT_BLUE_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:light_blue_stained_glass_pane");
 
-    Material YELLOW_STAINED_GLASS_PANE = MaterialImpl.get("yellow_stained_glass_pane");
+    Material YELLOW_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:yellow_stained_glass_pane");
 
-    Material LIME_STAINED_GLASS_PANE = MaterialImpl.get("lime_stained_glass_pane");
+    Material LIME_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:lime_stained_glass_pane");
 
-    Material PINK_STAINED_GLASS_PANE = MaterialImpl.get("pink_stained_glass_pane");
+    Material PINK_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:pink_stained_glass_pane");
 
-    Material GRAY_STAINED_GLASS_PANE = MaterialImpl.get("gray_stained_glass_pane");
+    Material GRAY_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:gray_stained_glass_pane");
 
-    Material LIGHT_GRAY_STAINED_GLASS_PANE = MaterialImpl.get("light_gray_stained_glass_pane");
+    Material LIGHT_GRAY_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:light_gray_stained_glass_pane");
 
-    Material CYAN_STAINED_GLASS_PANE = MaterialImpl.get("cyan_stained_glass_pane");
+    Material CYAN_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:cyan_stained_glass_pane");
 
-    Material PURPLE_STAINED_GLASS_PANE = MaterialImpl.get("purple_stained_glass_pane");
+    Material PURPLE_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:purple_stained_glass_pane");
 
-    Material BLUE_STAINED_GLASS_PANE = MaterialImpl.get("blue_stained_glass_pane");
+    Material BLUE_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:blue_stained_glass_pane");
 
-    Material BROWN_STAINED_GLASS_PANE = MaterialImpl.get("brown_stained_glass_pane");
+    Material BROWN_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:brown_stained_glass_pane");
 
-    Material GREEN_STAINED_GLASS_PANE = MaterialImpl.get("green_stained_glass_pane");
+    Material GREEN_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:green_stained_glass_pane");
 
-    Material RED_STAINED_GLASS_PANE = MaterialImpl.get("red_stained_glass_pane");
+    Material RED_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:red_stained_glass_pane");
 
-    Material BLACK_STAINED_GLASS_PANE = MaterialImpl.get("black_stained_glass_pane");
+    Material BLACK_STAINED_GLASS_PANE = MaterialImpl.get("minecraft:black_stained_glass_pane");
 
-    Material PRISMARINE = MaterialImpl.get("prismarine");
+    Material PRISMARINE = MaterialImpl.get("minecraft:prismarine");
 
-    Material PRISMARINE_BRICKS = MaterialImpl.get("prismarine_bricks");
+    Material PRISMARINE_BRICKS = MaterialImpl.get("minecraft:prismarine_bricks");
 
-    Material DARK_PRISMARINE = MaterialImpl.get("dark_prismarine");
+    Material DARK_PRISMARINE = MaterialImpl.get("minecraft:dark_prismarine");
 
-    Material PRISMARINE_STAIRS = MaterialImpl.get("prismarine_stairs");
+    Material PRISMARINE_STAIRS = MaterialImpl.get("minecraft:prismarine_stairs");
 
-    Material PRISMARINE_BRICK_STAIRS = MaterialImpl.get("prismarine_brick_stairs");
+    Material PRISMARINE_BRICK_STAIRS = MaterialImpl.get("minecraft:prismarine_brick_stairs");
 
-    Material DARK_PRISMARINE_STAIRS = MaterialImpl.get("dark_prismarine_stairs");
+    Material DARK_PRISMARINE_STAIRS = MaterialImpl.get("minecraft:dark_prismarine_stairs");
 
-    Material SEA_LANTERN = MaterialImpl.get("sea_lantern");
+    Material SEA_LANTERN = MaterialImpl.get("minecraft:sea_lantern");
 
-    Material RED_SANDSTONE = MaterialImpl.get("red_sandstone");
+    Material RED_SANDSTONE = MaterialImpl.get("minecraft:red_sandstone");
 
-    Material CHISELED_RED_SANDSTONE = MaterialImpl.get("chiseled_red_sandstone");
+    Material CHISELED_RED_SANDSTONE = MaterialImpl.get("minecraft:chiseled_red_sandstone");
 
-    Material CUT_RED_SANDSTONE = MaterialImpl.get("cut_red_sandstone");
+    Material CUT_RED_SANDSTONE = MaterialImpl.get("minecraft:cut_red_sandstone");
 
-    Material RED_SANDSTONE_STAIRS = MaterialImpl.get("red_sandstone_stairs");
+    Material RED_SANDSTONE_STAIRS = MaterialImpl.get("minecraft:red_sandstone_stairs");
 
-    Material REPEATING_COMMAND_BLOCK = MaterialImpl.get("repeating_command_block");
+    Material REPEATING_COMMAND_BLOCK = MaterialImpl.get("minecraft:repeating_command_block");
 
-    Material CHAIN_COMMAND_BLOCK = MaterialImpl.get("chain_command_block");
+    Material CHAIN_COMMAND_BLOCK = MaterialImpl.get("minecraft:chain_command_block");
 
-    Material MAGMA_BLOCK = MaterialImpl.get("magma_block");
+    Material MAGMA_BLOCK = MaterialImpl.get("minecraft:magma_block");
 
-    Material NETHER_WART_BLOCK = MaterialImpl.get("nether_wart_block");
+    Material NETHER_WART_BLOCK = MaterialImpl.get("minecraft:nether_wart_block");
 
-    Material WARPED_WART_BLOCK = MaterialImpl.get("warped_wart_block");
+    Material WARPED_WART_BLOCK = MaterialImpl.get("minecraft:warped_wart_block");
 
-    Material RED_NETHER_BRICKS = MaterialImpl.get("red_nether_bricks");
+    Material RED_NETHER_BRICKS = MaterialImpl.get("minecraft:red_nether_bricks");
 
-    Material BONE_BLOCK = MaterialImpl.get("bone_block");
+    Material BONE_BLOCK = MaterialImpl.get("minecraft:bone_block");
 
-    Material STRUCTURE_VOID = MaterialImpl.get("structure_void");
+    Material STRUCTURE_VOID = MaterialImpl.get("minecraft:structure_void");
 
-    Material SHULKER_BOX = MaterialImpl.get("shulker_box");
+    Material SHULKER_BOX = MaterialImpl.get("minecraft:shulker_box");
 
-    Material WHITE_SHULKER_BOX = MaterialImpl.get("white_shulker_box");
+    Material WHITE_SHULKER_BOX = MaterialImpl.get("minecraft:white_shulker_box");
 
-    Material ORANGE_SHULKER_BOX = MaterialImpl.get("orange_shulker_box");
+    Material ORANGE_SHULKER_BOX = MaterialImpl.get("minecraft:orange_shulker_box");
 
-    Material MAGENTA_SHULKER_BOX = MaterialImpl.get("magenta_shulker_box");
+    Material MAGENTA_SHULKER_BOX = MaterialImpl.get("minecraft:magenta_shulker_box");
 
-    Material LIGHT_BLUE_SHULKER_BOX = MaterialImpl.get("light_blue_shulker_box");
+    Material LIGHT_BLUE_SHULKER_BOX = MaterialImpl.get("minecraft:light_blue_shulker_box");
 
-    Material YELLOW_SHULKER_BOX = MaterialImpl.get("yellow_shulker_box");
+    Material YELLOW_SHULKER_BOX = MaterialImpl.get("minecraft:yellow_shulker_box");
 
-    Material LIME_SHULKER_BOX = MaterialImpl.get("lime_shulker_box");
+    Material LIME_SHULKER_BOX = MaterialImpl.get("minecraft:lime_shulker_box");
 
-    Material PINK_SHULKER_BOX = MaterialImpl.get("pink_shulker_box");
+    Material PINK_SHULKER_BOX = MaterialImpl.get("minecraft:pink_shulker_box");
 
-    Material GRAY_SHULKER_BOX = MaterialImpl.get("gray_shulker_box");
+    Material GRAY_SHULKER_BOX = MaterialImpl.get("minecraft:gray_shulker_box");
 
-    Material LIGHT_GRAY_SHULKER_BOX = MaterialImpl.get("light_gray_shulker_box");
+    Material LIGHT_GRAY_SHULKER_BOX = MaterialImpl.get("minecraft:light_gray_shulker_box");
 
-    Material CYAN_SHULKER_BOX = MaterialImpl.get("cyan_shulker_box");
+    Material CYAN_SHULKER_BOX = MaterialImpl.get("minecraft:cyan_shulker_box");
 
-    Material PURPLE_SHULKER_BOX = MaterialImpl.get("purple_shulker_box");
+    Material PURPLE_SHULKER_BOX = MaterialImpl.get("minecraft:purple_shulker_box");
 
-    Material BLUE_SHULKER_BOX = MaterialImpl.get("blue_shulker_box");
+    Material BLUE_SHULKER_BOX = MaterialImpl.get("minecraft:blue_shulker_box");
 
-    Material BROWN_SHULKER_BOX = MaterialImpl.get("brown_shulker_box");
+    Material BROWN_SHULKER_BOX = MaterialImpl.get("minecraft:brown_shulker_box");
 
-    Material GREEN_SHULKER_BOX = MaterialImpl.get("green_shulker_box");
+    Material GREEN_SHULKER_BOX = MaterialImpl.get("minecraft:green_shulker_box");
 
-    Material RED_SHULKER_BOX = MaterialImpl.get("red_shulker_box");
+    Material RED_SHULKER_BOX = MaterialImpl.get("minecraft:red_shulker_box");
 
-    Material BLACK_SHULKER_BOX = MaterialImpl.get("black_shulker_box");
+    Material BLACK_SHULKER_BOX = MaterialImpl.get("minecraft:black_shulker_box");
 
-    Material WHITE_GLAZED_TERRACOTTA = MaterialImpl.get("white_glazed_terracotta");
+    Material WHITE_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:white_glazed_terracotta");
 
-    Material ORANGE_GLAZED_TERRACOTTA = MaterialImpl.get("orange_glazed_terracotta");
+    Material ORANGE_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:orange_glazed_terracotta");
 
-    Material MAGENTA_GLAZED_TERRACOTTA = MaterialImpl.get("magenta_glazed_terracotta");
+    Material MAGENTA_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:magenta_glazed_terracotta");
 
-    Material LIGHT_BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("light_blue_glazed_terracotta");
+    Material LIGHT_BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:light_blue_glazed_terracotta");
 
-    Material YELLOW_GLAZED_TERRACOTTA = MaterialImpl.get("yellow_glazed_terracotta");
+    Material YELLOW_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:yellow_glazed_terracotta");
 
-    Material LIME_GLAZED_TERRACOTTA = MaterialImpl.get("lime_glazed_terracotta");
+    Material LIME_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:lime_glazed_terracotta");
 
-    Material PINK_GLAZED_TERRACOTTA = MaterialImpl.get("pink_glazed_terracotta");
+    Material PINK_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:pink_glazed_terracotta");
 
-    Material GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("gray_glazed_terracotta");
+    Material GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:gray_glazed_terracotta");
 
-    Material LIGHT_GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("light_gray_glazed_terracotta");
+    Material LIGHT_GRAY_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:light_gray_glazed_terracotta");
 
-    Material CYAN_GLAZED_TERRACOTTA = MaterialImpl.get("cyan_glazed_terracotta");
+    Material CYAN_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:cyan_glazed_terracotta");
 
-    Material PURPLE_GLAZED_TERRACOTTA = MaterialImpl.get("purple_glazed_terracotta");
+    Material PURPLE_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:purple_glazed_terracotta");
 
-    Material BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("blue_glazed_terracotta");
+    Material BLUE_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:blue_glazed_terracotta");
 
-    Material BROWN_GLAZED_TERRACOTTA = MaterialImpl.get("brown_glazed_terracotta");
+    Material BROWN_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:brown_glazed_terracotta");
 
-    Material GREEN_GLAZED_TERRACOTTA = MaterialImpl.get("green_glazed_terracotta");
+    Material GREEN_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:green_glazed_terracotta");
 
-    Material RED_GLAZED_TERRACOTTA = MaterialImpl.get("red_glazed_terracotta");
+    Material RED_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:red_glazed_terracotta");
 
-    Material BLACK_GLAZED_TERRACOTTA = MaterialImpl.get("black_glazed_terracotta");
+    Material BLACK_GLAZED_TERRACOTTA = MaterialImpl.get("minecraft:black_glazed_terracotta");
 
-    Material WHITE_CONCRETE = MaterialImpl.get("white_concrete");
+    Material WHITE_CONCRETE = MaterialImpl.get("minecraft:white_concrete");
 
-    Material ORANGE_CONCRETE = MaterialImpl.get("orange_concrete");
+    Material ORANGE_CONCRETE = MaterialImpl.get("minecraft:orange_concrete");
 
-    Material MAGENTA_CONCRETE = MaterialImpl.get("magenta_concrete");
+    Material MAGENTA_CONCRETE = MaterialImpl.get("minecraft:magenta_concrete");
 
-    Material LIGHT_BLUE_CONCRETE = MaterialImpl.get("light_blue_concrete");
+    Material LIGHT_BLUE_CONCRETE = MaterialImpl.get("minecraft:light_blue_concrete");
 
-    Material YELLOW_CONCRETE = MaterialImpl.get("yellow_concrete");
+    Material YELLOW_CONCRETE = MaterialImpl.get("minecraft:yellow_concrete");
 
-    Material LIME_CONCRETE = MaterialImpl.get("lime_concrete");
+    Material LIME_CONCRETE = MaterialImpl.get("minecraft:lime_concrete");
 
-    Material PINK_CONCRETE = MaterialImpl.get("pink_concrete");
+    Material PINK_CONCRETE = MaterialImpl.get("minecraft:pink_concrete");
 
-    Material GRAY_CONCRETE = MaterialImpl.get("gray_concrete");
+    Material GRAY_CONCRETE = MaterialImpl.get("minecraft:gray_concrete");
 
-    Material LIGHT_GRAY_CONCRETE = MaterialImpl.get("light_gray_concrete");
+    Material LIGHT_GRAY_CONCRETE = MaterialImpl.get("minecraft:light_gray_concrete");
 
-    Material CYAN_CONCRETE = MaterialImpl.get("cyan_concrete");
+    Material CYAN_CONCRETE = MaterialImpl.get("minecraft:cyan_concrete");
 
-    Material PURPLE_CONCRETE = MaterialImpl.get("purple_concrete");
+    Material PURPLE_CONCRETE = MaterialImpl.get("minecraft:purple_concrete");
 
-    Material BLUE_CONCRETE = MaterialImpl.get("blue_concrete");
+    Material BLUE_CONCRETE = MaterialImpl.get("minecraft:blue_concrete");
 
-    Material BROWN_CONCRETE = MaterialImpl.get("brown_concrete");
+    Material BROWN_CONCRETE = MaterialImpl.get("minecraft:brown_concrete");
 
-    Material GREEN_CONCRETE = MaterialImpl.get("green_concrete");
+    Material GREEN_CONCRETE = MaterialImpl.get("minecraft:green_concrete");
 
-    Material RED_CONCRETE = MaterialImpl.get("red_concrete");
+    Material RED_CONCRETE = MaterialImpl.get("minecraft:red_concrete");
 
-    Material BLACK_CONCRETE = MaterialImpl.get("black_concrete");
+    Material BLACK_CONCRETE = MaterialImpl.get("minecraft:black_concrete");
 
-    Material WHITE_CONCRETE_POWDER = MaterialImpl.get("white_concrete_powder");
+    Material WHITE_CONCRETE_POWDER = MaterialImpl.get("minecraft:white_concrete_powder");
 
-    Material ORANGE_CONCRETE_POWDER = MaterialImpl.get("orange_concrete_powder");
+    Material ORANGE_CONCRETE_POWDER = MaterialImpl.get("minecraft:orange_concrete_powder");
 
-    Material MAGENTA_CONCRETE_POWDER = MaterialImpl.get("magenta_concrete_powder");
+    Material MAGENTA_CONCRETE_POWDER = MaterialImpl.get("minecraft:magenta_concrete_powder");
 
-    Material LIGHT_BLUE_CONCRETE_POWDER = MaterialImpl.get("light_blue_concrete_powder");
+    Material LIGHT_BLUE_CONCRETE_POWDER = MaterialImpl.get("minecraft:light_blue_concrete_powder");
 
-    Material YELLOW_CONCRETE_POWDER = MaterialImpl.get("yellow_concrete_powder");
+    Material YELLOW_CONCRETE_POWDER = MaterialImpl.get("minecraft:yellow_concrete_powder");
 
-    Material LIME_CONCRETE_POWDER = MaterialImpl.get("lime_concrete_powder");
+    Material LIME_CONCRETE_POWDER = MaterialImpl.get("minecraft:lime_concrete_powder");
 
-    Material PINK_CONCRETE_POWDER = MaterialImpl.get("pink_concrete_powder");
+    Material PINK_CONCRETE_POWDER = MaterialImpl.get("minecraft:pink_concrete_powder");
 
-    Material GRAY_CONCRETE_POWDER = MaterialImpl.get("gray_concrete_powder");
+    Material GRAY_CONCRETE_POWDER = MaterialImpl.get("minecraft:gray_concrete_powder");
 
-    Material LIGHT_GRAY_CONCRETE_POWDER = MaterialImpl.get("light_gray_concrete_powder");
+    Material LIGHT_GRAY_CONCRETE_POWDER = MaterialImpl.get("minecraft:light_gray_concrete_powder");
 
-    Material CYAN_CONCRETE_POWDER = MaterialImpl.get("cyan_concrete_powder");
+    Material CYAN_CONCRETE_POWDER = MaterialImpl.get("minecraft:cyan_concrete_powder");
 
-    Material PURPLE_CONCRETE_POWDER = MaterialImpl.get("purple_concrete_powder");
+    Material PURPLE_CONCRETE_POWDER = MaterialImpl.get("minecraft:purple_concrete_powder");
 
-    Material BLUE_CONCRETE_POWDER = MaterialImpl.get("blue_concrete_powder");
+    Material BLUE_CONCRETE_POWDER = MaterialImpl.get("minecraft:blue_concrete_powder");
 
-    Material BROWN_CONCRETE_POWDER = MaterialImpl.get("brown_concrete_powder");
+    Material BROWN_CONCRETE_POWDER = MaterialImpl.get("minecraft:brown_concrete_powder");
 
-    Material GREEN_CONCRETE_POWDER = MaterialImpl.get("green_concrete_powder");
+    Material GREEN_CONCRETE_POWDER = MaterialImpl.get("minecraft:green_concrete_powder");
 
-    Material RED_CONCRETE_POWDER = MaterialImpl.get("red_concrete_powder");
+    Material RED_CONCRETE_POWDER = MaterialImpl.get("minecraft:red_concrete_powder");
 
-    Material BLACK_CONCRETE_POWDER = MaterialImpl.get("black_concrete_powder");
+    Material BLACK_CONCRETE_POWDER = MaterialImpl.get("minecraft:black_concrete_powder");
 
-    Material TURTLE_EGG = MaterialImpl.get("turtle_egg");
+    Material TURTLE_EGG = MaterialImpl.get("minecraft:turtle_egg");
 
-    Material SNIFFER_EGG = MaterialImpl.get("sniffer_egg");
+    Material SNIFFER_EGG = MaterialImpl.get("minecraft:sniffer_egg");
 
-    Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("dead_tube_coral_block");
+    Material DRIED_GHAST = MaterialImpl.get("minecraft:dried_ghast");
 
-    Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("dead_brain_coral_block");
+    Material DEAD_TUBE_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_tube_coral_block");
 
-    Material DEAD_BUBBLE_CORAL_BLOCK = MaterialImpl.get("dead_bubble_coral_block");
+    Material DEAD_BRAIN_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_brain_coral_block");
 
-    Material DEAD_FIRE_CORAL_BLOCK = MaterialImpl.get("dead_fire_coral_block");
+    Material DEAD_BUBBLE_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_bubble_coral_block");
 
-    Material DEAD_HORN_CORAL_BLOCK = MaterialImpl.get("dead_horn_coral_block");
+    Material DEAD_FIRE_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_fire_coral_block");
 
-    Material TUBE_CORAL_BLOCK = MaterialImpl.get("tube_coral_block");
+    Material DEAD_HORN_CORAL_BLOCK = MaterialImpl.get("minecraft:dead_horn_coral_block");
 
-    Material BRAIN_CORAL_BLOCK = MaterialImpl.get("brain_coral_block");
+    Material TUBE_CORAL_BLOCK = MaterialImpl.get("minecraft:tube_coral_block");
 
-    Material BUBBLE_CORAL_BLOCK = MaterialImpl.get("bubble_coral_block");
+    Material BRAIN_CORAL_BLOCK = MaterialImpl.get("minecraft:brain_coral_block");
 
-    Material FIRE_CORAL_BLOCK = MaterialImpl.get("fire_coral_block");
+    Material BUBBLE_CORAL_BLOCK = MaterialImpl.get("minecraft:bubble_coral_block");
 
-    Material HORN_CORAL_BLOCK = MaterialImpl.get("horn_coral_block");
+    Material FIRE_CORAL_BLOCK = MaterialImpl.get("minecraft:fire_coral_block");
 
-    Material TUBE_CORAL = MaterialImpl.get("tube_coral");
+    Material HORN_CORAL_BLOCK = MaterialImpl.get("minecraft:horn_coral_block");
 
-    Material BRAIN_CORAL = MaterialImpl.get("brain_coral");
+    Material TUBE_CORAL = MaterialImpl.get("minecraft:tube_coral");
 
-    Material BUBBLE_CORAL = MaterialImpl.get("bubble_coral");
+    Material BRAIN_CORAL = MaterialImpl.get("minecraft:brain_coral");
 
-    Material FIRE_CORAL = MaterialImpl.get("fire_coral");
+    Material BUBBLE_CORAL = MaterialImpl.get("minecraft:bubble_coral");
 
-    Material HORN_CORAL = MaterialImpl.get("horn_coral");
+    Material FIRE_CORAL = MaterialImpl.get("minecraft:fire_coral");
 
-    Material DEAD_BRAIN_CORAL = MaterialImpl.get("dead_brain_coral");
+    Material HORN_CORAL = MaterialImpl.get("minecraft:horn_coral");
 
-    Material DEAD_BUBBLE_CORAL = MaterialImpl.get("dead_bubble_coral");
+    Material DEAD_BRAIN_CORAL = MaterialImpl.get("minecraft:dead_brain_coral");
 
-    Material DEAD_FIRE_CORAL = MaterialImpl.get("dead_fire_coral");
+    Material DEAD_BUBBLE_CORAL = MaterialImpl.get("minecraft:dead_bubble_coral");
 
-    Material DEAD_HORN_CORAL = MaterialImpl.get("dead_horn_coral");
+    Material DEAD_FIRE_CORAL = MaterialImpl.get("minecraft:dead_fire_coral");
 
-    Material DEAD_TUBE_CORAL = MaterialImpl.get("dead_tube_coral");
+    Material DEAD_HORN_CORAL = MaterialImpl.get("minecraft:dead_horn_coral");
 
-    Material TUBE_CORAL_FAN = MaterialImpl.get("tube_coral_fan");
+    Material DEAD_TUBE_CORAL = MaterialImpl.get("minecraft:dead_tube_coral");
 
-    Material BRAIN_CORAL_FAN = MaterialImpl.get("brain_coral_fan");
+    Material TUBE_CORAL_FAN = MaterialImpl.get("minecraft:tube_coral_fan");
 
-    Material BUBBLE_CORAL_FAN = MaterialImpl.get("bubble_coral_fan");
+    Material BRAIN_CORAL_FAN = MaterialImpl.get("minecraft:brain_coral_fan");
 
-    Material FIRE_CORAL_FAN = MaterialImpl.get("fire_coral_fan");
+    Material BUBBLE_CORAL_FAN = MaterialImpl.get("minecraft:bubble_coral_fan");
 
-    Material HORN_CORAL_FAN = MaterialImpl.get("horn_coral_fan");
+    Material FIRE_CORAL_FAN = MaterialImpl.get("minecraft:fire_coral_fan");
 
-    Material DEAD_TUBE_CORAL_FAN = MaterialImpl.get("dead_tube_coral_fan");
+    Material HORN_CORAL_FAN = MaterialImpl.get("minecraft:horn_coral_fan");
 
-    Material DEAD_BRAIN_CORAL_FAN = MaterialImpl.get("dead_brain_coral_fan");
+    Material DEAD_TUBE_CORAL_FAN = MaterialImpl.get("minecraft:dead_tube_coral_fan");
 
-    Material DEAD_BUBBLE_CORAL_FAN = MaterialImpl.get("dead_bubble_coral_fan");
+    Material DEAD_BRAIN_CORAL_FAN = MaterialImpl.get("minecraft:dead_brain_coral_fan");
 
-    Material DEAD_FIRE_CORAL_FAN = MaterialImpl.get("dead_fire_coral_fan");
+    Material DEAD_BUBBLE_CORAL_FAN = MaterialImpl.get("minecraft:dead_bubble_coral_fan");
 
-    Material DEAD_HORN_CORAL_FAN = MaterialImpl.get("dead_horn_coral_fan");
+    Material DEAD_FIRE_CORAL_FAN = MaterialImpl.get("minecraft:dead_fire_coral_fan");
 
-    Material BLUE_ICE = MaterialImpl.get("blue_ice");
+    Material DEAD_HORN_CORAL_FAN = MaterialImpl.get("minecraft:dead_horn_coral_fan");
 
-    Material CONDUIT = MaterialImpl.get("conduit");
+    Material BLUE_ICE = MaterialImpl.get("minecraft:blue_ice");
 
-    Material POLISHED_GRANITE_STAIRS = MaterialImpl.get("polished_granite_stairs");
+    Material CONDUIT = MaterialImpl.get("minecraft:conduit");
 
-    Material SMOOTH_RED_SANDSTONE_STAIRS = MaterialImpl.get("smooth_red_sandstone_stairs");
+    Material POLISHED_GRANITE_STAIRS = MaterialImpl.get("minecraft:polished_granite_stairs");
 
-    Material MOSSY_STONE_BRICK_STAIRS = MaterialImpl.get("mossy_stone_brick_stairs");
+    Material SMOOTH_RED_SANDSTONE_STAIRS = MaterialImpl.get("minecraft:smooth_red_sandstone_stairs");
 
-    Material POLISHED_DIORITE_STAIRS = MaterialImpl.get("polished_diorite_stairs");
+    Material MOSSY_STONE_BRICK_STAIRS = MaterialImpl.get("minecraft:mossy_stone_brick_stairs");
 
-    Material MOSSY_COBBLESTONE_STAIRS = MaterialImpl.get("mossy_cobblestone_stairs");
+    Material POLISHED_DIORITE_STAIRS = MaterialImpl.get("minecraft:polished_diorite_stairs");
 
-    Material END_STONE_BRICK_STAIRS = MaterialImpl.get("end_stone_brick_stairs");
+    Material MOSSY_COBBLESTONE_STAIRS = MaterialImpl.get("minecraft:mossy_cobblestone_stairs");
 
-    Material STONE_STAIRS = MaterialImpl.get("stone_stairs");
+    Material END_STONE_BRICK_STAIRS = MaterialImpl.get("minecraft:end_stone_brick_stairs");
 
-    Material SMOOTH_SANDSTONE_STAIRS = MaterialImpl.get("smooth_sandstone_stairs");
+    Material STONE_STAIRS = MaterialImpl.get("minecraft:stone_stairs");
 
-    Material SMOOTH_QUARTZ_STAIRS = MaterialImpl.get("smooth_quartz_stairs");
+    Material SMOOTH_SANDSTONE_STAIRS = MaterialImpl.get("minecraft:smooth_sandstone_stairs");
 
-    Material GRANITE_STAIRS = MaterialImpl.get("granite_stairs");
+    Material SMOOTH_QUARTZ_STAIRS = MaterialImpl.get("minecraft:smooth_quartz_stairs");
 
-    Material ANDESITE_STAIRS = MaterialImpl.get("andesite_stairs");
+    Material GRANITE_STAIRS = MaterialImpl.get("minecraft:granite_stairs");
 
-    Material RED_NETHER_BRICK_STAIRS = MaterialImpl.get("red_nether_brick_stairs");
+    Material ANDESITE_STAIRS = MaterialImpl.get("minecraft:andesite_stairs");
 
-    Material POLISHED_ANDESITE_STAIRS = MaterialImpl.get("polished_andesite_stairs");
+    Material RED_NETHER_BRICK_STAIRS = MaterialImpl.get("minecraft:red_nether_brick_stairs");
 
-    Material DIORITE_STAIRS = MaterialImpl.get("diorite_stairs");
+    Material POLISHED_ANDESITE_STAIRS = MaterialImpl.get("minecraft:polished_andesite_stairs");
 
-    Material COBBLED_DEEPSLATE_STAIRS = MaterialImpl.get("cobbled_deepslate_stairs");
+    Material DIORITE_STAIRS = MaterialImpl.get("minecraft:diorite_stairs");
 
-    Material POLISHED_DEEPSLATE_STAIRS = MaterialImpl.get("polished_deepslate_stairs");
+    Material COBBLED_DEEPSLATE_STAIRS = MaterialImpl.get("minecraft:cobbled_deepslate_stairs");
 
-    Material DEEPSLATE_BRICK_STAIRS = MaterialImpl.get("deepslate_brick_stairs");
+    Material POLISHED_DEEPSLATE_STAIRS = MaterialImpl.get("minecraft:polished_deepslate_stairs");
 
-    Material DEEPSLATE_TILE_STAIRS = MaterialImpl.get("deepslate_tile_stairs");
+    Material DEEPSLATE_BRICK_STAIRS = MaterialImpl.get("minecraft:deepslate_brick_stairs");
 
-    Material POLISHED_GRANITE_SLAB = MaterialImpl.get("polished_granite_slab");
+    Material DEEPSLATE_TILE_STAIRS = MaterialImpl.get("minecraft:deepslate_tile_stairs");
 
-    Material SMOOTH_RED_SANDSTONE_SLAB = MaterialImpl.get("smooth_red_sandstone_slab");
+    Material POLISHED_GRANITE_SLAB = MaterialImpl.get("minecraft:polished_granite_slab");
 
-    Material MOSSY_STONE_BRICK_SLAB = MaterialImpl.get("mossy_stone_brick_slab");
+    Material SMOOTH_RED_SANDSTONE_SLAB = MaterialImpl.get("minecraft:smooth_red_sandstone_slab");
 
-    Material POLISHED_DIORITE_SLAB = MaterialImpl.get("polished_diorite_slab");
+    Material MOSSY_STONE_BRICK_SLAB = MaterialImpl.get("minecraft:mossy_stone_brick_slab");
 
-    Material MOSSY_COBBLESTONE_SLAB = MaterialImpl.get("mossy_cobblestone_slab");
+    Material POLISHED_DIORITE_SLAB = MaterialImpl.get("minecraft:polished_diorite_slab");
 
-    Material END_STONE_BRICK_SLAB = MaterialImpl.get("end_stone_brick_slab");
+    Material MOSSY_COBBLESTONE_SLAB = MaterialImpl.get("minecraft:mossy_cobblestone_slab");
 
-    Material SMOOTH_SANDSTONE_SLAB = MaterialImpl.get("smooth_sandstone_slab");
+    Material END_STONE_BRICK_SLAB = MaterialImpl.get("minecraft:end_stone_brick_slab");
 
-    Material SMOOTH_QUARTZ_SLAB = MaterialImpl.get("smooth_quartz_slab");
+    Material SMOOTH_SANDSTONE_SLAB = MaterialImpl.get("minecraft:smooth_sandstone_slab");
 
-    Material GRANITE_SLAB = MaterialImpl.get("granite_slab");
+    Material SMOOTH_QUARTZ_SLAB = MaterialImpl.get("minecraft:smooth_quartz_slab");
 
-    Material ANDESITE_SLAB = MaterialImpl.get("andesite_slab");
+    Material GRANITE_SLAB = MaterialImpl.get("minecraft:granite_slab");
 
-    Material RED_NETHER_BRICK_SLAB = MaterialImpl.get("red_nether_brick_slab");
+    Material ANDESITE_SLAB = MaterialImpl.get("minecraft:andesite_slab");
 
-    Material POLISHED_ANDESITE_SLAB = MaterialImpl.get("polished_andesite_slab");
+    Material RED_NETHER_BRICK_SLAB = MaterialImpl.get("minecraft:red_nether_brick_slab");
 
-    Material DIORITE_SLAB = MaterialImpl.get("diorite_slab");
+    Material POLISHED_ANDESITE_SLAB = MaterialImpl.get("minecraft:polished_andesite_slab");
 
-    Material COBBLED_DEEPSLATE_SLAB = MaterialImpl.get("cobbled_deepslate_slab");
+    Material DIORITE_SLAB = MaterialImpl.get("minecraft:diorite_slab");
 
-    Material POLISHED_DEEPSLATE_SLAB = MaterialImpl.get("polished_deepslate_slab");
+    Material COBBLED_DEEPSLATE_SLAB = MaterialImpl.get("minecraft:cobbled_deepslate_slab");
 
-    Material DEEPSLATE_BRICK_SLAB = MaterialImpl.get("deepslate_brick_slab");
+    Material POLISHED_DEEPSLATE_SLAB = MaterialImpl.get("minecraft:polished_deepslate_slab");
 
-    Material DEEPSLATE_TILE_SLAB = MaterialImpl.get("deepslate_tile_slab");
+    Material DEEPSLATE_BRICK_SLAB = MaterialImpl.get("minecraft:deepslate_brick_slab");
 
-    Material SCAFFOLDING = MaterialImpl.get("scaffolding");
+    Material DEEPSLATE_TILE_SLAB = MaterialImpl.get("minecraft:deepslate_tile_slab");
 
-    Material REDSTONE = MaterialImpl.get("redstone");
+    Material SCAFFOLDING = MaterialImpl.get("minecraft:scaffolding");
 
-    Material REDSTONE_TORCH = MaterialImpl.get("redstone_torch");
+    Material REDSTONE = MaterialImpl.get("minecraft:redstone");
 
-    Material REDSTONE_BLOCK = MaterialImpl.get("redstone_block");
+    Material REDSTONE_TORCH = MaterialImpl.get("minecraft:redstone_torch");
 
-    Material REPEATER = MaterialImpl.get("repeater");
+    Material REDSTONE_BLOCK = MaterialImpl.get("minecraft:redstone_block");
 
-    Material COMPARATOR = MaterialImpl.get("comparator");
+    Material REPEATER = MaterialImpl.get("minecraft:repeater");
 
-    Material PISTON = MaterialImpl.get("piston");
+    Material COMPARATOR = MaterialImpl.get("minecraft:comparator");
 
-    Material STICKY_PISTON = MaterialImpl.get("sticky_piston");
+    Material PISTON = MaterialImpl.get("minecraft:piston");
 
-    Material SLIME_BLOCK = MaterialImpl.get("slime_block");
+    Material STICKY_PISTON = MaterialImpl.get("minecraft:sticky_piston");
 
-    Material HONEY_BLOCK = MaterialImpl.get("honey_block");
+    Material SLIME_BLOCK = MaterialImpl.get("minecraft:slime_block");
 
-    Material OBSERVER = MaterialImpl.get("observer");
+    Material HONEY_BLOCK = MaterialImpl.get("minecraft:honey_block");
 
-    Material HOPPER = MaterialImpl.get("hopper");
+    Material OBSERVER = MaterialImpl.get("minecraft:observer");
 
-    Material DISPENSER = MaterialImpl.get("dispenser");
+    Material HOPPER = MaterialImpl.get("minecraft:hopper");
 
-    Material DROPPER = MaterialImpl.get("dropper");
+    Material DISPENSER = MaterialImpl.get("minecraft:dispenser");
 
-    Material LECTERN = MaterialImpl.get("lectern");
+    Material DROPPER = MaterialImpl.get("minecraft:dropper");
 
-    Material TARGET = MaterialImpl.get("target");
+    Material LECTERN = MaterialImpl.get("minecraft:lectern");
 
-    Material LEVER = MaterialImpl.get("lever");
+    Material TARGET = MaterialImpl.get("minecraft:target");
 
-    Material LIGHTNING_ROD = MaterialImpl.get("lightning_rod");
+    Material LEVER = MaterialImpl.get("minecraft:lever");
 
-    Material DAYLIGHT_DETECTOR = MaterialImpl.get("daylight_detector");
+    Material LIGHTNING_ROD = MaterialImpl.get("minecraft:lightning_rod");
 
-    Material SCULK_SENSOR = MaterialImpl.get("sculk_sensor");
+    Material DAYLIGHT_DETECTOR = MaterialImpl.get("minecraft:daylight_detector");
 
-    Material CALIBRATED_SCULK_SENSOR = MaterialImpl.get("calibrated_sculk_sensor");
+    Material SCULK_SENSOR = MaterialImpl.get("minecraft:sculk_sensor");
 
-    Material TRIPWIRE_HOOK = MaterialImpl.get("tripwire_hook");
+    Material CALIBRATED_SCULK_SENSOR = MaterialImpl.get("minecraft:calibrated_sculk_sensor");
 
-    Material TRAPPED_CHEST = MaterialImpl.get("trapped_chest");
+    Material TRIPWIRE_HOOK = MaterialImpl.get("minecraft:tripwire_hook");
 
-    Material TNT = MaterialImpl.get("tnt");
+    Material TRAPPED_CHEST = MaterialImpl.get("minecraft:trapped_chest");
 
-    Material REDSTONE_LAMP = MaterialImpl.get("redstone_lamp");
+    Material TNT = MaterialImpl.get("minecraft:tnt");
 
-    Material NOTE_BLOCK = MaterialImpl.get("note_block");
+    Material REDSTONE_LAMP = MaterialImpl.get("minecraft:redstone_lamp");
 
-    Material STONE_BUTTON = MaterialImpl.get("stone_button");
+    Material NOTE_BLOCK = MaterialImpl.get("minecraft:note_block");
 
-    Material POLISHED_BLACKSTONE_BUTTON = MaterialImpl.get("polished_blackstone_button");
+    Material STONE_BUTTON = MaterialImpl.get("minecraft:stone_button");
 
-    Material OAK_BUTTON = MaterialImpl.get("oak_button");
+    Material POLISHED_BLACKSTONE_BUTTON = MaterialImpl.get("minecraft:polished_blackstone_button");
 
-    Material SPRUCE_BUTTON = MaterialImpl.get("spruce_button");
+    Material OAK_BUTTON = MaterialImpl.get("minecraft:oak_button");
 
-    Material BIRCH_BUTTON = MaterialImpl.get("birch_button");
+    Material SPRUCE_BUTTON = MaterialImpl.get("minecraft:spruce_button");
 
-    Material JUNGLE_BUTTON = MaterialImpl.get("jungle_button");
+    Material BIRCH_BUTTON = MaterialImpl.get("minecraft:birch_button");
 
-    Material ACACIA_BUTTON = MaterialImpl.get("acacia_button");
+    Material JUNGLE_BUTTON = MaterialImpl.get("minecraft:jungle_button");
 
-    Material CHERRY_BUTTON = MaterialImpl.get("cherry_button");
+    Material ACACIA_BUTTON = MaterialImpl.get("minecraft:acacia_button");
 
-    Material DARK_OAK_BUTTON = MaterialImpl.get("dark_oak_button");
+    Material CHERRY_BUTTON = MaterialImpl.get("minecraft:cherry_button");
 
-    Material PALE_OAK_BUTTON = MaterialImpl.get("pale_oak_button");
+    Material DARK_OAK_BUTTON = MaterialImpl.get("minecraft:dark_oak_button");
 
-    Material MANGROVE_BUTTON = MaterialImpl.get("mangrove_button");
+    Material PALE_OAK_BUTTON = MaterialImpl.get("minecraft:pale_oak_button");
 
-    Material BAMBOO_BUTTON = MaterialImpl.get("bamboo_button");
+    Material MANGROVE_BUTTON = MaterialImpl.get("minecraft:mangrove_button");
 
-    Material CRIMSON_BUTTON = MaterialImpl.get("crimson_button");
+    Material BAMBOO_BUTTON = MaterialImpl.get("minecraft:bamboo_button");
 
-    Material WARPED_BUTTON = MaterialImpl.get("warped_button");
+    Material CRIMSON_BUTTON = MaterialImpl.get("minecraft:crimson_button");
 
-    Material STONE_PRESSURE_PLATE = MaterialImpl.get("stone_pressure_plate");
+    Material WARPED_BUTTON = MaterialImpl.get("minecraft:warped_button");
 
-    Material POLISHED_BLACKSTONE_PRESSURE_PLATE = MaterialImpl.get("polished_blackstone_pressure_plate");
+    Material STONE_PRESSURE_PLATE = MaterialImpl.get("minecraft:stone_pressure_plate");
 
-    Material LIGHT_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("light_weighted_pressure_plate");
+    Material POLISHED_BLACKSTONE_PRESSURE_PLATE = MaterialImpl.get("minecraft:polished_blackstone_pressure_plate");
 
-    Material HEAVY_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("heavy_weighted_pressure_plate");
+    Material LIGHT_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("minecraft:light_weighted_pressure_plate");
 
-    Material OAK_PRESSURE_PLATE = MaterialImpl.get("oak_pressure_plate");
+    Material HEAVY_WEIGHTED_PRESSURE_PLATE = MaterialImpl.get("minecraft:heavy_weighted_pressure_plate");
 
-    Material SPRUCE_PRESSURE_PLATE = MaterialImpl.get("spruce_pressure_plate");
+    Material OAK_PRESSURE_PLATE = MaterialImpl.get("minecraft:oak_pressure_plate");
 
-    Material BIRCH_PRESSURE_PLATE = MaterialImpl.get("birch_pressure_plate");
+    Material SPRUCE_PRESSURE_PLATE = MaterialImpl.get("minecraft:spruce_pressure_plate");
 
-    Material JUNGLE_PRESSURE_PLATE = MaterialImpl.get("jungle_pressure_plate");
+    Material BIRCH_PRESSURE_PLATE = MaterialImpl.get("minecraft:birch_pressure_plate");
 
-    Material ACACIA_PRESSURE_PLATE = MaterialImpl.get("acacia_pressure_plate");
+    Material JUNGLE_PRESSURE_PLATE = MaterialImpl.get("minecraft:jungle_pressure_plate");
 
-    Material CHERRY_PRESSURE_PLATE = MaterialImpl.get("cherry_pressure_plate");
+    Material ACACIA_PRESSURE_PLATE = MaterialImpl.get("minecraft:acacia_pressure_plate");
 
-    Material DARK_OAK_PRESSURE_PLATE = MaterialImpl.get("dark_oak_pressure_plate");
+    Material CHERRY_PRESSURE_PLATE = MaterialImpl.get("minecraft:cherry_pressure_plate");
 
-    Material PALE_OAK_PRESSURE_PLATE = MaterialImpl.get("pale_oak_pressure_plate");
+    Material DARK_OAK_PRESSURE_PLATE = MaterialImpl.get("minecraft:dark_oak_pressure_plate");
 
-    Material MANGROVE_PRESSURE_PLATE = MaterialImpl.get("mangrove_pressure_plate");
+    Material PALE_OAK_PRESSURE_PLATE = MaterialImpl.get("minecraft:pale_oak_pressure_plate");
 
-    Material BAMBOO_PRESSURE_PLATE = MaterialImpl.get("bamboo_pressure_plate");
+    Material MANGROVE_PRESSURE_PLATE = MaterialImpl.get("minecraft:mangrove_pressure_plate");
 
-    Material CRIMSON_PRESSURE_PLATE = MaterialImpl.get("crimson_pressure_plate");
+    Material BAMBOO_PRESSURE_PLATE = MaterialImpl.get("minecraft:bamboo_pressure_plate");
 
-    Material WARPED_PRESSURE_PLATE = MaterialImpl.get("warped_pressure_plate");
+    Material CRIMSON_PRESSURE_PLATE = MaterialImpl.get("minecraft:crimson_pressure_plate");
 
-    Material IRON_DOOR = MaterialImpl.get("iron_door");
+    Material WARPED_PRESSURE_PLATE = MaterialImpl.get("minecraft:warped_pressure_plate");
 
-    Material OAK_DOOR = MaterialImpl.get("oak_door");
+    Material IRON_DOOR = MaterialImpl.get("minecraft:iron_door");
 
-    Material SPRUCE_DOOR = MaterialImpl.get("spruce_door");
+    Material OAK_DOOR = MaterialImpl.get("minecraft:oak_door");
 
-    Material BIRCH_DOOR = MaterialImpl.get("birch_door");
+    Material SPRUCE_DOOR = MaterialImpl.get("minecraft:spruce_door");
 
-    Material JUNGLE_DOOR = MaterialImpl.get("jungle_door");
+    Material BIRCH_DOOR = MaterialImpl.get("minecraft:birch_door");
 
-    Material ACACIA_DOOR = MaterialImpl.get("acacia_door");
+    Material JUNGLE_DOOR = MaterialImpl.get("minecraft:jungle_door");
 
-    Material CHERRY_DOOR = MaterialImpl.get("cherry_door");
+    Material ACACIA_DOOR = MaterialImpl.get("minecraft:acacia_door");
 
-    Material DARK_OAK_DOOR = MaterialImpl.get("dark_oak_door");
+    Material CHERRY_DOOR = MaterialImpl.get("minecraft:cherry_door");
 
-    Material PALE_OAK_DOOR = MaterialImpl.get("pale_oak_door");
+    Material DARK_OAK_DOOR = MaterialImpl.get("minecraft:dark_oak_door");
 
-    Material MANGROVE_DOOR = MaterialImpl.get("mangrove_door");
+    Material PALE_OAK_DOOR = MaterialImpl.get("minecraft:pale_oak_door");
 
-    Material BAMBOO_DOOR = MaterialImpl.get("bamboo_door");
+    Material MANGROVE_DOOR = MaterialImpl.get("minecraft:mangrove_door");
 
-    Material CRIMSON_DOOR = MaterialImpl.get("crimson_door");
+    Material BAMBOO_DOOR = MaterialImpl.get("minecraft:bamboo_door");
 
-    Material WARPED_DOOR = MaterialImpl.get("warped_door");
+    Material CRIMSON_DOOR = MaterialImpl.get("minecraft:crimson_door");
 
-    Material COPPER_DOOR = MaterialImpl.get("copper_door");
+    Material WARPED_DOOR = MaterialImpl.get("minecraft:warped_door");
 
-    Material EXPOSED_COPPER_DOOR = MaterialImpl.get("exposed_copper_door");
+    Material COPPER_DOOR = MaterialImpl.get("minecraft:copper_door");
 
-    Material WEATHERED_COPPER_DOOR = MaterialImpl.get("weathered_copper_door");
+    Material EXPOSED_COPPER_DOOR = MaterialImpl.get("minecraft:exposed_copper_door");
 
-    Material OXIDIZED_COPPER_DOOR = MaterialImpl.get("oxidized_copper_door");
+    Material WEATHERED_COPPER_DOOR = MaterialImpl.get("minecraft:weathered_copper_door");
 
-    Material WAXED_COPPER_DOOR = MaterialImpl.get("waxed_copper_door");
+    Material OXIDIZED_COPPER_DOOR = MaterialImpl.get("minecraft:oxidized_copper_door");
 
-    Material WAXED_EXPOSED_COPPER_DOOR = MaterialImpl.get("waxed_exposed_copper_door");
+    Material WAXED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_copper_door");
 
-    Material WAXED_WEATHERED_COPPER_DOOR = MaterialImpl.get("waxed_weathered_copper_door");
+    Material WAXED_EXPOSED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_exposed_copper_door");
 
-    Material WAXED_OXIDIZED_COPPER_DOOR = MaterialImpl.get("waxed_oxidized_copper_door");
+    Material WAXED_WEATHERED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_weathered_copper_door");
 
-    Material IRON_TRAPDOOR = MaterialImpl.get("iron_trapdoor");
+    Material WAXED_OXIDIZED_COPPER_DOOR = MaterialImpl.get("minecraft:waxed_oxidized_copper_door");
 
-    Material OAK_TRAPDOOR = MaterialImpl.get("oak_trapdoor");
+    Material IRON_TRAPDOOR = MaterialImpl.get("minecraft:iron_trapdoor");
 
-    Material SPRUCE_TRAPDOOR = MaterialImpl.get("spruce_trapdoor");
+    Material OAK_TRAPDOOR = MaterialImpl.get("minecraft:oak_trapdoor");
 
-    Material BIRCH_TRAPDOOR = MaterialImpl.get("birch_trapdoor");
+    Material SPRUCE_TRAPDOOR = MaterialImpl.get("minecraft:spruce_trapdoor");
 
-    Material JUNGLE_TRAPDOOR = MaterialImpl.get("jungle_trapdoor");
+    Material BIRCH_TRAPDOOR = MaterialImpl.get("minecraft:birch_trapdoor");
 
-    Material ACACIA_TRAPDOOR = MaterialImpl.get("acacia_trapdoor");
+    Material JUNGLE_TRAPDOOR = MaterialImpl.get("minecraft:jungle_trapdoor");
 
-    Material CHERRY_TRAPDOOR = MaterialImpl.get("cherry_trapdoor");
+    Material ACACIA_TRAPDOOR = MaterialImpl.get("minecraft:acacia_trapdoor");
 
-    Material DARK_OAK_TRAPDOOR = MaterialImpl.get("dark_oak_trapdoor");
+    Material CHERRY_TRAPDOOR = MaterialImpl.get("minecraft:cherry_trapdoor");
 
-    Material PALE_OAK_TRAPDOOR = MaterialImpl.get("pale_oak_trapdoor");
+    Material DARK_OAK_TRAPDOOR = MaterialImpl.get("minecraft:dark_oak_trapdoor");
 
-    Material MANGROVE_TRAPDOOR = MaterialImpl.get("mangrove_trapdoor");
+    Material PALE_OAK_TRAPDOOR = MaterialImpl.get("minecraft:pale_oak_trapdoor");
 
-    Material BAMBOO_TRAPDOOR = MaterialImpl.get("bamboo_trapdoor");
+    Material MANGROVE_TRAPDOOR = MaterialImpl.get("minecraft:mangrove_trapdoor");
 
-    Material CRIMSON_TRAPDOOR = MaterialImpl.get("crimson_trapdoor");
+    Material BAMBOO_TRAPDOOR = MaterialImpl.get("minecraft:bamboo_trapdoor");
 
-    Material WARPED_TRAPDOOR = MaterialImpl.get("warped_trapdoor");
+    Material CRIMSON_TRAPDOOR = MaterialImpl.get("minecraft:crimson_trapdoor");
 
-    Material COPPER_TRAPDOOR = MaterialImpl.get("copper_trapdoor");
+    Material WARPED_TRAPDOOR = MaterialImpl.get("minecraft:warped_trapdoor");
 
-    Material EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("exposed_copper_trapdoor");
+    Material COPPER_TRAPDOOR = MaterialImpl.get("minecraft:copper_trapdoor");
 
-    Material WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("weathered_copper_trapdoor");
+    Material EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:exposed_copper_trapdoor");
 
-    Material OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("oxidized_copper_trapdoor");
+    Material WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:weathered_copper_trapdoor");
 
-    Material WAXED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_copper_trapdoor");
+    Material OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:oxidized_copper_trapdoor");
 
-    Material WAXED_EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_exposed_copper_trapdoor");
+    Material WAXED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_copper_trapdoor");
 
-    Material WAXED_WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_weathered_copper_trapdoor");
+    Material WAXED_EXPOSED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_exposed_copper_trapdoor");
 
-    Material WAXED_OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("waxed_oxidized_copper_trapdoor");
+    Material WAXED_WEATHERED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_weathered_copper_trapdoor");
 
-    Material OAK_FENCE_GATE = MaterialImpl.get("oak_fence_gate");
+    Material WAXED_OXIDIZED_COPPER_TRAPDOOR = MaterialImpl.get("minecraft:waxed_oxidized_copper_trapdoor");
 
-    Material SPRUCE_FENCE_GATE = MaterialImpl.get("spruce_fence_gate");
+    Material OAK_FENCE_GATE = MaterialImpl.get("minecraft:oak_fence_gate");
 
-    Material BIRCH_FENCE_GATE = MaterialImpl.get("birch_fence_gate");
+    Material SPRUCE_FENCE_GATE = MaterialImpl.get("minecraft:spruce_fence_gate");
 
-    Material JUNGLE_FENCE_GATE = MaterialImpl.get("jungle_fence_gate");
+    Material BIRCH_FENCE_GATE = MaterialImpl.get("minecraft:birch_fence_gate");
 
-    Material ACACIA_FENCE_GATE = MaterialImpl.get("acacia_fence_gate");
+    Material JUNGLE_FENCE_GATE = MaterialImpl.get("minecraft:jungle_fence_gate");
 
-    Material CHERRY_FENCE_GATE = MaterialImpl.get("cherry_fence_gate");
+    Material ACACIA_FENCE_GATE = MaterialImpl.get("minecraft:acacia_fence_gate");
 
-    Material DARK_OAK_FENCE_GATE = MaterialImpl.get("dark_oak_fence_gate");
+    Material CHERRY_FENCE_GATE = MaterialImpl.get("minecraft:cherry_fence_gate");
 
-    Material PALE_OAK_FENCE_GATE = MaterialImpl.get("pale_oak_fence_gate");
+    Material DARK_OAK_FENCE_GATE = MaterialImpl.get("minecraft:dark_oak_fence_gate");
 
-    Material MANGROVE_FENCE_GATE = MaterialImpl.get("mangrove_fence_gate");
+    Material PALE_OAK_FENCE_GATE = MaterialImpl.get("minecraft:pale_oak_fence_gate");
 
-    Material BAMBOO_FENCE_GATE = MaterialImpl.get("bamboo_fence_gate");
+    Material MANGROVE_FENCE_GATE = MaterialImpl.get("minecraft:mangrove_fence_gate");
 
-    Material CRIMSON_FENCE_GATE = MaterialImpl.get("crimson_fence_gate");
+    Material BAMBOO_FENCE_GATE = MaterialImpl.get("minecraft:bamboo_fence_gate");
 
-    Material WARPED_FENCE_GATE = MaterialImpl.get("warped_fence_gate");
+    Material CRIMSON_FENCE_GATE = MaterialImpl.get("minecraft:crimson_fence_gate");
 
-    Material POWERED_RAIL = MaterialImpl.get("powered_rail");
+    Material WARPED_FENCE_GATE = MaterialImpl.get("minecraft:warped_fence_gate");
 
-    Material DETECTOR_RAIL = MaterialImpl.get("detector_rail");
+    Material POWERED_RAIL = MaterialImpl.get("minecraft:powered_rail");
 
-    Material RAIL = MaterialImpl.get("rail");
+    Material DETECTOR_RAIL = MaterialImpl.get("minecraft:detector_rail");
 
-    Material ACTIVATOR_RAIL = MaterialImpl.get("activator_rail");
+    Material RAIL = MaterialImpl.get("minecraft:rail");
 
-    Material SADDLE = MaterialImpl.get("saddle");
+    Material ACTIVATOR_RAIL = MaterialImpl.get("minecraft:activator_rail");
 
-    Material MINECART = MaterialImpl.get("minecart");
+    Material SADDLE = MaterialImpl.get("minecraft:saddle");
 
-    Material CHEST_MINECART = MaterialImpl.get("chest_minecart");
+    Material WHITE_HARNESS = MaterialImpl.get("minecraft:white_harness");
 
-    Material FURNACE_MINECART = MaterialImpl.get("furnace_minecart");
+    Material ORANGE_HARNESS = MaterialImpl.get("minecraft:orange_harness");
 
-    Material TNT_MINECART = MaterialImpl.get("tnt_minecart");
+    Material MAGENTA_HARNESS = MaterialImpl.get("minecraft:magenta_harness");
 
-    Material HOPPER_MINECART = MaterialImpl.get("hopper_minecart");
+    Material LIGHT_BLUE_HARNESS = MaterialImpl.get("minecraft:light_blue_harness");
 
-    Material CARROT_ON_A_STICK = MaterialImpl.get("carrot_on_a_stick");
+    Material YELLOW_HARNESS = MaterialImpl.get("minecraft:yellow_harness");
 
-    Material WARPED_FUNGUS_ON_A_STICK = MaterialImpl.get("warped_fungus_on_a_stick");
+    Material LIME_HARNESS = MaterialImpl.get("minecraft:lime_harness");
 
-    Material PHANTOM_MEMBRANE = MaterialImpl.get("phantom_membrane");
+    Material PINK_HARNESS = MaterialImpl.get("minecraft:pink_harness");
 
-    Material ELYTRA = MaterialImpl.get("elytra");
+    Material GRAY_HARNESS = MaterialImpl.get("minecraft:gray_harness");
 
-    Material OAK_BOAT = MaterialImpl.get("oak_boat");
+    Material LIGHT_GRAY_HARNESS = MaterialImpl.get("minecraft:light_gray_harness");
 
-    Material OAK_CHEST_BOAT = MaterialImpl.get("oak_chest_boat");
+    Material CYAN_HARNESS = MaterialImpl.get("minecraft:cyan_harness");
 
-    Material SPRUCE_BOAT = MaterialImpl.get("spruce_boat");
+    Material PURPLE_HARNESS = MaterialImpl.get("minecraft:purple_harness");
 
-    Material SPRUCE_CHEST_BOAT = MaterialImpl.get("spruce_chest_boat");
+    Material BLUE_HARNESS = MaterialImpl.get("minecraft:blue_harness");
 
-    Material BIRCH_BOAT = MaterialImpl.get("birch_boat");
+    Material BROWN_HARNESS = MaterialImpl.get("minecraft:brown_harness");
 
-    Material BIRCH_CHEST_BOAT = MaterialImpl.get("birch_chest_boat");
+    Material GREEN_HARNESS = MaterialImpl.get("minecraft:green_harness");
 
-    Material JUNGLE_BOAT = MaterialImpl.get("jungle_boat");
+    Material RED_HARNESS = MaterialImpl.get("minecraft:red_harness");
 
-    Material JUNGLE_CHEST_BOAT = MaterialImpl.get("jungle_chest_boat");
+    Material BLACK_HARNESS = MaterialImpl.get("minecraft:black_harness");
 
-    Material ACACIA_BOAT = MaterialImpl.get("acacia_boat");
+    Material MINECART = MaterialImpl.get("minecraft:minecart");
 
-    Material ACACIA_CHEST_BOAT = MaterialImpl.get("acacia_chest_boat");
+    Material CHEST_MINECART = MaterialImpl.get("minecraft:chest_minecart");
 
-    Material CHERRY_BOAT = MaterialImpl.get("cherry_boat");
+    Material FURNACE_MINECART = MaterialImpl.get("minecraft:furnace_minecart");
 
-    Material CHERRY_CHEST_BOAT = MaterialImpl.get("cherry_chest_boat");
+    Material TNT_MINECART = MaterialImpl.get("minecraft:tnt_minecart");
 
-    Material DARK_OAK_BOAT = MaterialImpl.get("dark_oak_boat");
+    Material HOPPER_MINECART = MaterialImpl.get("minecraft:hopper_minecart");
 
-    Material DARK_OAK_CHEST_BOAT = MaterialImpl.get("dark_oak_chest_boat");
+    Material CARROT_ON_A_STICK = MaterialImpl.get("minecraft:carrot_on_a_stick");
 
-    Material PALE_OAK_BOAT = MaterialImpl.get("pale_oak_boat");
+    Material WARPED_FUNGUS_ON_A_STICK = MaterialImpl.get("minecraft:warped_fungus_on_a_stick");
 
-    Material PALE_OAK_CHEST_BOAT = MaterialImpl.get("pale_oak_chest_boat");
+    Material PHANTOM_MEMBRANE = MaterialImpl.get("minecraft:phantom_membrane");
 
-    Material MANGROVE_BOAT = MaterialImpl.get("mangrove_boat");
+    Material ELYTRA = MaterialImpl.get("minecraft:elytra");
 
-    Material MANGROVE_CHEST_BOAT = MaterialImpl.get("mangrove_chest_boat");
+    Material OAK_BOAT = MaterialImpl.get("minecraft:oak_boat");
 
-    Material BAMBOO_RAFT = MaterialImpl.get("bamboo_raft");
+    Material OAK_CHEST_BOAT = MaterialImpl.get("minecraft:oak_chest_boat");
 
-    Material BAMBOO_CHEST_RAFT = MaterialImpl.get("bamboo_chest_raft");
+    Material SPRUCE_BOAT = MaterialImpl.get("minecraft:spruce_boat");
 
-    Material STRUCTURE_BLOCK = MaterialImpl.get("structure_block");
+    Material SPRUCE_CHEST_BOAT = MaterialImpl.get("minecraft:spruce_chest_boat");
 
-    Material JIGSAW = MaterialImpl.get("jigsaw");
+    Material BIRCH_BOAT = MaterialImpl.get("minecraft:birch_boat");
 
-    Material TEST_BLOCK = MaterialImpl.get("test_block");
+    Material BIRCH_CHEST_BOAT = MaterialImpl.get("minecraft:birch_chest_boat");
 
-    Material TEST_INSTANCE_BLOCK = MaterialImpl.get("test_instance_block");
+    Material JUNGLE_BOAT = MaterialImpl.get("minecraft:jungle_boat");
 
-    Material TURTLE_HELMET = MaterialImpl.get("turtle_helmet");
+    Material JUNGLE_CHEST_BOAT = MaterialImpl.get("minecraft:jungle_chest_boat");
 
-    Material TURTLE_SCUTE = MaterialImpl.get("turtle_scute");
+    Material ACACIA_BOAT = MaterialImpl.get("minecraft:acacia_boat");
 
-    Material ARMADILLO_SCUTE = MaterialImpl.get("armadillo_scute");
+    Material ACACIA_CHEST_BOAT = MaterialImpl.get("minecraft:acacia_chest_boat");
 
-    Material WOLF_ARMOR = MaterialImpl.get("wolf_armor");
+    Material CHERRY_BOAT = MaterialImpl.get("minecraft:cherry_boat");
 
-    Material FLINT_AND_STEEL = MaterialImpl.get("flint_and_steel");
+    Material CHERRY_CHEST_BOAT = MaterialImpl.get("minecraft:cherry_chest_boat");
 
-    Material BOWL = MaterialImpl.get("bowl");
+    Material DARK_OAK_BOAT = MaterialImpl.get("minecraft:dark_oak_boat");
 
-    Material APPLE = MaterialImpl.get("apple");
+    Material DARK_OAK_CHEST_BOAT = MaterialImpl.get("minecraft:dark_oak_chest_boat");
 
-    Material BOW = MaterialImpl.get("bow");
+    Material PALE_OAK_BOAT = MaterialImpl.get("minecraft:pale_oak_boat");
 
-    Material ARROW = MaterialImpl.get("arrow");
+    Material PALE_OAK_CHEST_BOAT = MaterialImpl.get("minecraft:pale_oak_chest_boat");
 
-    Material COAL = MaterialImpl.get("coal");
+    Material MANGROVE_BOAT = MaterialImpl.get("minecraft:mangrove_boat");
 
-    Material CHARCOAL = MaterialImpl.get("charcoal");
+    Material MANGROVE_CHEST_BOAT = MaterialImpl.get("minecraft:mangrove_chest_boat");
 
-    Material DIAMOND = MaterialImpl.get("diamond");
+    Material BAMBOO_RAFT = MaterialImpl.get("minecraft:bamboo_raft");
 
-    Material EMERALD = MaterialImpl.get("emerald");
+    Material BAMBOO_CHEST_RAFT = MaterialImpl.get("minecraft:bamboo_chest_raft");
 
-    Material LAPIS_LAZULI = MaterialImpl.get("lapis_lazuli");
+    Material STRUCTURE_BLOCK = MaterialImpl.get("minecraft:structure_block");
 
-    Material QUARTZ = MaterialImpl.get("quartz");
+    Material JIGSAW = MaterialImpl.get("minecraft:jigsaw");
 
-    Material AMETHYST_SHARD = MaterialImpl.get("amethyst_shard");
+    Material TEST_BLOCK = MaterialImpl.get("minecraft:test_block");
 
-    Material RAW_IRON = MaterialImpl.get("raw_iron");
+    Material TEST_INSTANCE_BLOCK = MaterialImpl.get("minecraft:test_instance_block");
 
-    Material IRON_INGOT = MaterialImpl.get("iron_ingot");
+    Material TURTLE_HELMET = MaterialImpl.get("minecraft:turtle_helmet");
 
-    Material RAW_COPPER = MaterialImpl.get("raw_copper");
+    Material TURTLE_SCUTE = MaterialImpl.get("minecraft:turtle_scute");
 
-    Material COPPER_INGOT = MaterialImpl.get("copper_ingot");
+    Material ARMADILLO_SCUTE = MaterialImpl.get("minecraft:armadillo_scute");
 
-    Material RAW_GOLD = MaterialImpl.get("raw_gold");
+    Material WOLF_ARMOR = MaterialImpl.get("minecraft:wolf_armor");
 
-    Material GOLD_INGOT = MaterialImpl.get("gold_ingot");
+    Material FLINT_AND_STEEL = MaterialImpl.get("minecraft:flint_and_steel");
 
-    Material NETHERITE_INGOT = MaterialImpl.get("netherite_ingot");
+    Material BOWL = MaterialImpl.get("minecraft:bowl");
 
-    Material NETHERITE_SCRAP = MaterialImpl.get("netherite_scrap");
+    Material APPLE = MaterialImpl.get("minecraft:apple");
 
-    Material WOODEN_SWORD = MaterialImpl.get("wooden_sword");
+    Material BOW = MaterialImpl.get("minecraft:bow");
 
-    Material WOODEN_SHOVEL = MaterialImpl.get("wooden_shovel");
+    Material ARROW = MaterialImpl.get("minecraft:arrow");
 
-    Material WOODEN_PICKAXE = MaterialImpl.get("wooden_pickaxe");
+    Material COAL = MaterialImpl.get("minecraft:coal");
 
-    Material WOODEN_AXE = MaterialImpl.get("wooden_axe");
+    Material CHARCOAL = MaterialImpl.get("minecraft:charcoal");
 
-    Material WOODEN_HOE = MaterialImpl.get("wooden_hoe");
+    Material DIAMOND = MaterialImpl.get("minecraft:diamond");
 
-    Material STONE_SWORD = MaterialImpl.get("stone_sword");
+    Material EMERALD = MaterialImpl.get("minecraft:emerald");
 
-    Material STONE_SHOVEL = MaterialImpl.get("stone_shovel");
+    Material LAPIS_LAZULI = MaterialImpl.get("minecraft:lapis_lazuli");
 
-    Material STONE_PICKAXE = MaterialImpl.get("stone_pickaxe");
+    Material QUARTZ = MaterialImpl.get("minecraft:quartz");
 
-    Material STONE_AXE = MaterialImpl.get("stone_axe");
+    Material AMETHYST_SHARD = MaterialImpl.get("minecraft:amethyst_shard");
 
-    Material STONE_HOE = MaterialImpl.get("stone_hoe");
+    Material RAW_IRON = MaterialImpl.get("minecraft:raw_iron");
 
-    Material GOLDEN_SWORD = MaterialImpl.get("golden_sword");
+    Material IRON_INGOT = MaterialImpl.get("minecraft:iron_ingot");
 
-    Material GOLDEN_SHOVEL = MaterialImpl.get("golden_shovel");
+    Material RAW_COPPER = MaterialImpl.get("minecraft:raw_copper");
 
-    Material GOLDEN_PICKAXE = MaterialImpl.get("golden_pickaxe");
+    Material COPPER_INGOT = MaterialImpl.get("minecraft:copper_ingot");
 
-    Material GOLDEN_AXE = MaterialImpl.get("golden_axe");
+    Material RAW_GOLD = MaterialImpl.get("minecraft:raw_gold");
 
-    Material GOLDEN_HOE = MaterialImpl.get("golden_hoe");
+    Material GOLD_INGOT = MaterialImpl.get("minecraft:gold_ingot");
 
-    Material IRON_SWORD = MaterialImpl.get("iron_sword");
+    Material NETHERITE_INGOT = MaterialImpl.get("minecraft:netherite_ingot");
 
-    Material IRON_SHOVEL = MaterialImpl.get("iron_shovel");
+    Material NETHERITE_SCRAP = MaterialImpl.get("minecraft:netherite_scrap");
 
-    Material IRON_PICKAXE = MaterialImpl.get("iron_pickaxe");
+    Material WOODEN_SWORD = MaterialImpl.get("minecraft:wooden_sword");
 
-    Material IRON_AXE = MaterialImpl.get("iron_axe");
+    Material WOODEN_SHOVEL = MaterialImpl.get("minecraft:wooden_shovel");
 
-    Material IRON_HOE = MaterialImpl.get("iron_hoe");
+    Material WOODEN_PICKAXE = MaterialImpl.get("minecraft:wooden_pickaxe");
 
-    Material DIAMOND_SWORD = MaterialImpl.get("diamond_sword");
+    Material WOODEN_AXE = MaterialImpl.get("minecraft:wooden_axe");
 
-    Material DIAMOND_SHOVEL = MaterialImpl.get("diamond_shovel");
+    Material WOODEN_HOE = MaterialImpl.get("minecraft:wooden_hoe");
 
-    Material DIAMOND_PICKAXE = MaterialImpl.get("diamond_pickaxe");
+    Material STONE_SWORD = MaterialImpl.get("minecraft:stone_sword");
 
-    Material DIAMOND_AXE = MaterialImpl.get("diamond_axe");
+    Material STONE_SHOVEL = MaterialImpl.get("minecraft:stone_shovel");
 
-    Material DIAMOND_HOE = MaterialImpl.get("diamond_hoe");
+    Material STONE_PICKAXE = MaterialImpl.get("minecraft:stone_pickaxe");
 
-    Material NETHERITE_SWORD = MaterialImpl.get("netherite_sword");
+    Material STONE_AXE = MaterialImpl.get("minecraft:stone_axe");
 
-    Material NETHERITE_SHOVEL = MaterialImpl.get("netherite_shovel");
+    Material STONE_HOE = MaterialImpl.get("minecraft:stone_hoe");
 
-    Material NETHERITE_PICKAXE = MaterialImpl.get("netherite_pickaxe");
+    Material GOLDEN_SWORD = MaterialImpl.get("minecraft:golden_sword");
 
-    Material NETHERITE_AXE = MaterialImpl.get("netherite_axe");
+    Material GOLDEN_SHOVEL = MaterialImpl.get("minecraft:golden_shovel");
 
-    Material NETHERITE_HOE = MaterialImpl.get("netherite_hoe");
+    Material GOLDEN_PICKAXE = MaterialImpl.get("minecraft:golden_pickaxe");
 
-    Material STICK = MaterialImpl.get("stick");
+    Material GOLDEN_AXE = MaterialImpl.get("minecraft:golden_axe");
 
-    Material MUSHROOM_STEW = MaterialImpl.get("mushroom_stew");
+    Material GOLDEN_HOE = MaterialImpl.get("minecraft:golden_hoe");
 
-    Material STRING = MaterialImpl.get("string");
+    Material IRON_SWORD = MaterialImpl.get("minecraft:iron_sword");
 
-    Material FEATHER = MaterialImpl.get("feather");
+    Material IRON_SHOVEL = MaterialImpl.get("minecraft:iron_shovel");
 
-    Material GUNPOWDER = MaterialImpl.get("gunpowder");
+    Material IRON_PICKAXE = MaterialImpl.get("minecraft:iron_pickaxe");
 
-    Material WHEAT_SEEDS = MaterialImpl.get("wheat_seeds");
+    Material IRON_AXE = MaterialImpl.get("minecraft:iron_axe");
 
-    Material WHEAT = MaterialImpl.get("wheat");
+    Material IRON_HOE = MaterialImpl.get("minecraft:iron_hoe");
 
-    Material BREAD = MaterialImpl.get("bread");
+    Material DIAMOND_SWORD = MaterialImpl.get("minecraft:diamond_sword");
 
-    Material LEATHER_HELMET = MaterialImpl.get("leather_helmet");
+    Material DIAMOND_SHOVEL = MaterialImpl.get("minecraft:diamond_shovel");
 
-    Material LEATHER_CHESTPLATE = MaterialImpl.get("leather_chestplate");
+    Material DIAMOND_PICKAXE = MaterialImpl.get("minecraft:diamond_pickaxe");
 
-    Material LEATHER_LEGGINGS = MaterialImpl.get("leather_leggings");
+    Material DIAMOND_AXE = MaterialImpl.get("minecraft:diamond_axe");
 
-    Material LEATHER_BOOTS = MaterialImpl.get("leather_boots");
+    Material DIAMOND_HOE = MaterialImpl.get("minecraft:diamond_hoe");
 
-    Material CHAINMAIL_HELMET = MaterialImpl.get("chainmail_helmet");
+    Material NETHERITE_SWORD = MaterialImpl.get("minecraft:netherite_sword");
 
-    Material CHAINMAIL_CHESTPLATE = MaterialImpl.get("chainmail_chestplate");
+    Material NETHERITE_SHOVEL = MaterialImpl.get("minecraft:netherite_shovel");
 
-    Material CHAINMAIL_LEGGINGS = MaterialImpl.get("chainmail_leggings");
+    Material NETHERITE_PICKAXE = MaterialImpl.get("minecraft:netherite_pickaxe");
 
-    Material CHAINMAIL_BOOTS = MaterialImpl.get("chainmail_boots");
+    Material NETHERITE_AXE = MaterialImpl.get("minecraft:netherite_axe");
 
-    Material IRON_HELMET = MaterialImpl.get("iron_helmet");
+    Material NETHERITE_HOE = MaterialImpl.get("minecraft:netherite_hoe");
 
-    Material IRON_CHESTPLATE = MaterialImpl.get("iron_chestplate");
+    Material STICK = MaterialImpl.get("minecraft:stick");
 
-    Material IRON_LEGGINGS = MaterialImpl.get("iron_leggings");
+    Material MUSHROOM_STEW = MaterialImpl.get("minecraft:mushroom_stew");
 
-    Material IRON_BOOTS = MaterialImpl.get("iron_boots");
+    Material STRING = MaterialImpl.get("minecraft:string");
 
-    Material DIAMOND_HELMET = MaterialImpl.get("diamond_helmet");
+    Material FEATHER = MaterialImpl.get("minecraft:feather");
 
-    Material DIAMOND_CHESTPLATE = MaterialImpl.get("diamond_chestplate");
+    Material GUNPOWDER = MaterialImpl.get("minecraft:gunpowder");
 
-    Material DIAMOND_LEGGINGS = MaterialImpl.get("diamond_leggings");
+    Material WHEAT_SEEDS = MaterialImpl.get("minecraft:wheat_seeds");
 
-    Material DIAMOND_BOOTS = MaterialImpl.get("diamond_boots");
+    Material WHEAT = MaterialImpl.get("minecraft:wheat");
 
-    Material GOLDEN_HELMET = MaterialImpl.get("golden_helmet");
+    Material BREAD = MaterialImpl.get("minecraft:bread");
 
-    Material GOLDEN_CHESTPLATE = MaterialImpl.get("golden_chestplate");
+    Material LEATHER_HELMET = MaterialImpl.get("minecraft:leather_helmet");
 
-    Material GOLDEN_LEGGINGS = MaterialImpl.get("golden_leggings");
+    Material LEATHER_CHESTPLATE = MaterialImpl.get("minecraft:leather_chestplate");
 
-    Material GOLDEN_BOOTS = MaterialImpl.get("golden_boots");
+    Material LEATHER_LEGGINGS = MaterialImpl.get("minecraft:leather_leggings");
 
-    Material NETHERITE_HELMET = MaterialImpl.get("netherite_helmet");
+    Material LEATHER_BOOTS = MaterialImpl.get("minecraft:leather_boots");
 
-    Material NETHERITE_CHESTPLATE = MaterialImpl.get("netherite_chestplate");
+    Material CHAINMAIL_HELMET = MaterialImpl.get("minecraft:chainmail_helmet");
 
-    Material NETHERITE_LEGGINGS = MaterialImpl.get("netherite_leggings");
+    Material CHAINMAIL_CHESTPLATE = MaterialImpl.get("minecraft:chainmail_chestplate");
 
-    Material NETHERITE_BOOTS = MaterialImpl.get("netherite_boots");
+    Material CHAINMAIL_LEGGINGS = MaterialImpl.get("minecraft:chainmail_leggings");
 
-    Material FLINT = MaterialImpl.get("flint");
+    Material CHAINMAIL_BOOTS = MaterialImpl.get("minecraft:chainmail_boots");
 
-    Material PORKCHOP = MaterialImpl.get("porkchop");
+    Material IRON_HELMET = MaterialImpl.get("minecraft:iron_helmet");
 
-    Material COOKED_PORKCHOP = MaterialImpl.get("cooked_porkchop");
+    Material IRON_CHESTPLATE = MaterialImpl.get("minecraft:iron_chestplate");
 
-    Material PAINTING = MaterialImpl.get("painting");
+    Material IRON_LEGGINGS = MaterialImpl.get("minecraft:iron_leggings");
 
-    Material GOLDEN_APPLE = MaterialImpl.get("golden_apple");
+    Material IRON_BOOTS = MaterialImpl.get("minecraft:iron_boots");
 
-    Material ENCHANTED_GOLDEN_APPLE = MaterialImpl.get("enchanted_golden_apple");
+    Material DIAMOND_HELMET = MaterialImpl.get("minecraft:diamond_helmet");
 
-    Material OAK_SIGN = MaterialImpl.get("oak_sign");
+    Material DIAMOND_CHESTPLATE = MaterialImpl.get("minecraft:diamond_chestplate");
 
-    Material SPRUCE_SIGN = MaterialImpl.get("spruce_sign");
+    Material DIAMOND_LEGGINGS = MaterialImpl.get("minecraft:diamond_leggings");
 
-    Material BIRCH_SIGN = MaterialImpl.get("birch_sign");
+    Material DIAMOND_BOOTS = MaterialImpl.get("minecraft:diamond_boots");
 
-    Material JUNGLE_SIGN = MaterialImpl.get("jungle_sign");
+    Material GOLDEN_HELMET = MaterialImpl.get("minecraft:golden_helmet");
 
-    Material ACACIA_SIGN = MaterialImpl.get("acacia_sign");
+    Material GOLDEN_CHESTPLATE = MaterialImpl.get("minecraft:golden_chestplate");
 
-    Material CHERRY_SIGN = MaterialImpl.get("cherry_sign");
+    Material GOLDEN_LEGGINGS = MaterialImpl.get("minecraft:golden_leggings");
 
-    Material DARK_OAK_SIGN = MaterialImpl.get("dark_oak_sign");
+    Material GOLDEN_BOOTS = MaterialImpl.get("minecraft:golden_boots");
 
-    Material PALE_OAK_SIGN = MaterialImpl.get("pale_oak_sign");
+    Material NETHERITE_HELMET = MaterialImpl.get("minecraft:netherite_helmet");
 
-    Material MANGROVE_SIGN = MaterialImpl.get("mangrove_sign");
+    Material NETHERITE_CHESTPLATE = MaterialImpl.get("minecraft:netherite_chestplate");
 
-    Material BAMBOO_SIGN = MaterialImpl.get("bamboo_sign");
+    Material NETHERITE_LEGGINGS = MaterialImpl.get("minecraft:netherite_leggings");
 
-    Material CRIMSON_SIGN = MaterialImpl.get("crimson_sign");
+    Material NETHERITE_BOOTS = MaterialImpl.get("minecraft:netherite_boots");
 
-    Material WARPED_SIGN = MaterialImpl.get("warped_sign");
+    Material FLINT = MaterialImpl.get("minecraft:flint");
 
-    Material OAK_HANGING_SIGN = MaterialImpl.get("oak_hanging_sign");
+    Material PORKCHOP = MaterialImpl.get("minecraft:porkchop");
 
-    Material SPRUCE_HANGING_SIGN = MaterialImpl.get("spruce_hanging_sign");
+    Material COOKED_PORKCHOP = MaterialImpl.get("minecraft:cooked_porkchop");
 
-    Material BIRCH_HANGING_SIGN = MaterialImpl.get("birch_hanging_sign");
+    Material PAINTING = MaterialImpl.get("minecraft:painting");
 
-    Material JUNGLE_HANGING_SIGN = MaterialImpl.get("jungle_hanging_sign");
+    Material GOLDEN_APPLE = MaterialImpl.get("minecraft:golden_apple");
 
-    Material ACACIA_HANGING_SIGN = MaterialImpl.get("acacia_hanging_sign");
+    Material ENCHANTED_GOLDEN_APPLE = MaterialImpl.get("minecraft:enchanted_golden_apple");
 
-    Material CHERRY_HANGING_SIGN = MaterialImpl.get("cherry_hanging_sign");
+    Material OAK_SIGN = MaterialImpl.get("minecraft:oak_sign");
 
-    Material DARK_OAK_HANGING_SIGN = MaterialImpl.get("dark_oak_hanging_sign");
+    Material SPRUCE_SIGN = MaterialImpl.get("minecraft:spruce_sign");
 
-    Material PALE_OAK_HANGING_SIGN = MaterialImpl.get("pale_oak_hanging_sign");
+    Material BIRCH_SIGN = MaterialImpl.get("minecraft:birch_sign");
 
-    Material MANGROVE_HANGING_SIGN = MaterialImpl.get("mangrove_hanging_sign");
+    Material JUNGLE_SIGN = MaterialImpl.get("minecraft:jungle_sign");
 
-    Material BAMBOO_HANGING_SIGN = MaterialImpl.get("bamboo_hanging_sign");
+    Material ACACIA_SIGN = MaterialImpl.get("minecraft:acacia_sign");
 
-    Material CRIMSON_HANGING_SIGN = MaterialImpl.get("crimson_hanging_sign");
+    Material CHERRY_SIGN = MaterialImpl.get("minecraft:cherry_sign");
 
-    Material WARPED_HANGING_SIGN = MaterialImpl.get("warped_hanging_sign");
+    Material DARK_OAK_SIGN = MaterialImpl.get("minecraft:dark_oak_sign");
 
-    Material BUCKET = MaterialImpl.get("bucket");
+    Material PALE_OAK_SIGN = MaterialImpl.get("minecraft:pale_oak_sign");
 
-    Material WATER_BUCKET = MaterialImpl.get("water_bucket");
+    Material MANGROVE_SIGN = MaterialImpl.get("minecraft:mangrove_sign");
 
-    Material LAVA_BUCKET = MaterialImpl.get("lava_bucket");
+    Material BAMBOO_SIGN = MaterialImpl.get("minecraft:bamboo_sign");
 
-    Material POWDER_SNOW_BUCKET = MaterialImpl.get("powder_snow_bucket");
+    Material CRIMSON_SIGN = MaterialImpl.get("minecraft:crimson_sign");
 
-    Material SNOWBALL = MaterialImpl.get("snowball");
+    Material WARPED_SIGN = MaterialImpl.get("minecraft:warped_sign");
 
-    Material LEATHER = MaterialImpl.get("leather");
+    Material OAK_HANGING_SIGN = MaterialImpl.get("minecraft:oak_hanging_sign");
 
-    Material MILK_BUCKET = MaterialImpl.get("milk_bucket");
+    Material SPRUCE_HANGING_SIGN = MaterialImpl.get("minecraft:spruce_hanging_sign");
 
-    Material PUFFERFISH_BUCKET = MaterialImpl.get("pufferfish_bucket");
+    Material BIRCH_HANGING_SIGN = MaterialImpl.get("minecraft:birch_hanging_sign");
 
-    Material SALMON_BUCKET = MaterialImpl.get("salmon_bucket");
+    Material JUNGLE_HANGING_SIGN = MaterialImpl.get("minecraft:jungle_hanging_sign");
 
-    Material COD_BUCKET = MaterialImpl.get("cod_bucket");
+    Material ACACIA_HANGING_SIGN = MaterialImpl.get("minecraft:acacia_hanging_sign");
 
-    Material TROPICAL_FISH_BUCKET = MaterialImpl.get("tropical_fish_bucket");
+    Material CHERRY_HANGING_SIGN = MaterialImpl.get("minecraft:cherry_hanging_sign");
 
-    Material AXOLOTL_BUCKET = MaterialImpl.get("axolotl_bucket");
+    Material DARK_OAK_HANGING_SIGN = MaterialImpl.get("minecraft:dark_oak_hanging_sign");
 
-    Material TADPOLE_BUCKET = MaterialImpl.get("tadpole_bucket");
+    Material PALE_OAK_HANGING_SIGN = MaterialImpl.get("minecraft:pale_oak_hanging_sign");
 
-    Material BRICK = MaterialImpl.get("brick");
+    Material MANGROVE_HANGING_SIGN = MaterialImpl.get("minecraft:mangrove_hanging_sign");
 
-    Material CLAY_BALL = MaterialImpl.get("clay_ball");
+    Material BAMBOO_HANGING_SIGN = MaterialImpl.get("minecraft:bamboo_hanging_sign");
 
-    Material DRIED_KELP_BLOCK = MaterialImpl.get("dried_kelp_block");
+    Material CRIMSON_HANGING_SIGN = MaterialImpl.get("minecraft:crimson_hanging_sign");
 
-    Material PAPER = MaterialImpl.get("paper");
+    Material WARPED_HANGING_SIGN = MaterialImpl.get("minecraft:warped_hanging_sign");
 
-    Material BOOK = MaterialImpl.get("book");
+    Material BUCKET = MaterialImpl.get("minecraft:bucket");
 
-    Material SLIME_BALL = MaterialImpl.get("slime_ball");
+    Material WATER_BUCKET = MaterialImpl.get("minecraft:water_bucket");
 
-    Material EGG = MaterialImpl.get("egg");
+    Material LAVA_BUCKET = MaterialImpl.get("minecraft:lava_bucket");
 
-    Material BLUE_EGG = MaterialImpl.get("blue_egg");
+    Material POWDER_SNOW_BUCKET = MaterialImpl.get("minecraft:powder_snow_bucket");
 
-    Material BROWN_EGG = MaterialImpl.get("brown_egg");
+    Material SNOWBALL = MaterialImpl.get("minecraft:snowball");
 
-    Material COMPASS = MaterialImpl.get("compass");
+    Material LEATHER = MaterialImpl.get("minecraft:leather");
 
-    Material RECOVERY_COMPASS = MaterialImpl.get("recovery_compass");
+    Material MILK_BUCKET = MaterialImpl.get("minecraft:milk_bucket");
 
-    Material BUNDLE = MaterialImpl.get("bundle");
+    Material PUFFERFISH_BUCKET = MaterialImpl.get("minecraft:pufferfish_bucket");
 
-    Material WHITE_BUNDLE = MaterialImpl.get("white_bundle");
+    Material SALMON_BUCKET = MaterialImpl.get("minecraft:salmon_bucket");
 
-    Material ORANGE_BUNDLE = MaterialImpl.get("orange_bundle");
+    Material COD_BUCKET = MaterialImpl.get("minecraft:cod_bucket");
 
-    Material MAGENTA_BUNDLE = MaterialImpl.get("magenta_bundle");
+    Material TROPICAL_FISH_BUCKET = MaterialImpl.get("minecraft:tropical_fish_bucket");
 
-    Material LIGHT_BLUE_BUNDLE = MaterialImpl.get("light_blue_bundle");
+    Material AXOLOTL_BUCKET = MaterialImpl.get("minecraft:axolotl_bucket");
 
-    Material YELLOW_BUNDLE = MaterialImpl.get("yellow_bundle");
+    Material TADPOLE_BUCKET = MaterialImpl.get("minecraft:tadpole_bucket");
 
-    Material LIME_BUNDLE = MaterialImpl.get("lime_bundle");
+    Material BRICK = MaterialImpl.get("minecraft:brick");
 
-    Material PINK_BUNDLE = MaterialImpl.get("pink_bundle");
+    Material CLAY_BALL = MaterialImpl.get("minecraft:clay_ball");
 
-    Material GRAY_BUNDLE = MaterialImpl.get("gray_bundle");
+    Material DRIED_KELP_BLOCK = MaterialImpl.get("minecraft:dried_kelp_block");
 
-    Material LIGHT_GRAY_BUNDLE = MaterialImpl.get("light_gray_bundle");
+    Material PAPER = MaterialImpl.get("minecraft:paper");
 
-    Material CYAN_BUNDLE = MaterialImpl.get("cyan_bundle");
+    Material BOOK = MaterialImpl.get("minecraft:book");
 
-    Material PURPLE_BUNDLE = MaterialImpl.get("purple_bundle");
+    Material SLIME_BALL = MaterialImpl.get("minecraft:slime_ball");
 
-    Material BLUE_BUNDLE = MaterialImpl.get("blue_bundle");
+    Material EGG = MaterialImpl.get("minecraft:egg");
 
-    Material BROWN_BUNDLE = MaterialImpl.get("brown_bundle");
+    Material BLUE_EGG = MaterialImpl.get("minecraft:blue_egg");
 
-    Material GREEN_BUNDLE = MaterialImpl.get("green_bundle");
+    Material BROWN_EGG = MaterialImpl.get("minecraft:brown_egg");
 
-    Material RED_BUNDLE = MaterialImpl.get("red_bundle");
+    Material COMPASS = MaterialImpl.get("minecraft:compass");
 
-    Material BLACK_BUNDLE = MaterialImpl.get("black_bundle");
+    Material RECOVERY_COMPASS = MaterialImpl.get("minecraft:recovery_compass");
 
-    Material FISHING_ROD = MaterialImpl.get("fishing_rod");
+    Material BUNDLE = MaterialImpl.get("minecraft:bundle");
 
-    Material CLOCK = MaterialImpl.get("clock");
+    Material WHITE_BUNDLE = MaterialImpl.get("minecraft:white_bundle");
 
-    Material SPYGLASS = MaterialImpl.get("spyglass");
+    Material ORANGE_BUNDLE = MaterialImpl.get("minecraft:orange_bundle");
 
-    Material GLOWSTONE_DUST = MaterialImpl.get("glowstone_dust");
+    Material MAGENTA_BUNDLE = MaterialImpl.get("minecraft:magenta_bundle");
 
-    Material COD = MaterialImpl.get("cod");
+    Material LIGHT_BLUE_BUNDLE = MaterialImpl.get("minecraft:light_blue_bundle");
 
-    Material SALMON = MaterialImpl.get("salmon");
+    Material YELLOW_BUNDLE = MaterialImpl.get("minecraft:yellow_bundle");
 
-    Material TROPICAL_FISH = MaterialImpl.get("tropical_fish");
+    Material LIME_BUNDLE = MaterialImpl.get("minecraft:lime_bundle");
 
-    Material PUFFERFISH = MaterialImpl.get("pufferfish");
+    Material PINK_BUNDLE = MaterialImpl.get("minecraft:pink_bundle");
 
-    Material COOKED_COD = MaterialImpl.get("cooked_cod");
+    Material GRAY_BUNDLE = MaterialImpl.get("minecraft:gray_bundle");
 
-    Material COOKED_SALMON = MaterialImpl.get("cooked_salmon");
+    Material LIGHT_GRAY_BUNDLE = MaterialImpl.get("minecraft:light_gray_bundle");
 
-    Material INK_SAC = MaterialImpl.get("ink_sac");
+    Material CYAN_BUNDLE = MaterialImpl.get("minecraft:cyan_bundle");
 
-    Material GLOW_INK_SAC = MaterialImpl.get("glow_ink_sac");
+    Material PURPLE_BUNDLE = MaterialImpl.get("minecraft:purple_bundle");
 
-    Material COCOA_BEANS = MaterialImpl.get("cocoa_beans");
+    Material BLUE_BUNDLE = MaterialImpl.get("minecraft:blue_bundle");
 
-    Material WHITE_DYE = MaterialImpl.get("white_dye");
+    Material BROWN_BUNDLE = MaterialImpl.get("minecraft:brown_bundle");
 
-    Material ORANGE_DYE = MaterialImpl.get("orange_dye");
+    Material GREEN_BUNDLE = MaterialImpl.get("minecraft:green_bundle");
 
-    Material MAGENTA_DYE = MaterialImpl.get("magenta_dye");
+    Material RED_BUNDLE = MaterialImpl.get("minecraft:red_bundle");
 
-    Material LIGHT_BLUE_DYE = MaterialImpl.get("light_blue_dye");
+    Material BLACK_BUNDLE = MaterialImpl.get("minecraft:black_bundle");
 
-    Material YELLOW_DYE = MaterialImpl.get("yellow_dye");
+    Material FISHING_ROD = MaterialImpl.get("minecraft:fishing_rod");
 
-    Material LIME_DYE = MaterialImpl.get("lime_dye");
+    Material CLOCK = MaterialImpl.get("minecraft:clock");
 
-    Material PINK_DYE = MaterialImpl.get("pink_dye");
+    Material SPYGLASS = MaterialImpl.get("minecraft:spyglass");
 
-    Material GRAY_DYE = MaterialImpl.get("gray_dye");
+    Material GLOWSTONE_DUST = MaterialImpl.get("minecraft:glowstone_dust");
 
-    Material LIGHT_GRAY_DYE = MaterialImpl.get("light_gray_dye");
+    Material COD = MaterialImpl.get("minecraft:cod");
 
-    Material CYAN_DYE = MaterialImpl.get("cyan_dye");
+    Material SALMON = MaterialImpl.get("minecraft:salmon");
 
-    Material PURPLE_DYE = MaterialImpl.get("purple_dye");
+    Material TROPICAL_FISH = MaterialImpl.get("minecraft:tropical_fish");
 
-    Material BLUE_DYE = MaterialImpl.get("blue_dye");
+    Material PUFFERFISH = MaterialImpl.get("minecraft:pufferfish");
 
-    Material BROWN_DYE = MaterialImpl.get("brown_dye");
+    Material COOKED_COD = MaterialImpl.get("minecraft:cooked_cod");
 
-    Material GREEN_DYE = MaterialImpl.get("green_dye");
+    Material COOKED_SALMON = MaterialImpl.get("minecraft:cooked_salmon");
 
-    Material RED_DYE = MaterialImpl.get("red_dye");
+    Material INK_SAC = MaterialImpl.get("minecraft:ink_sac");
 
-    Material BLACK_DYE = MaterialImpl.get("black_dye");
+    Material GLOW_INK_SAC = MaterialImpl.get("minecraft:glow_ink_sac");
 
-    Material BONE_MEAL = MaterialImpl.get("bone_meal");
+    Material COCOA_BEANS = MaterialImpl.get("minecraft:cocoa_beans");
 
-    Material BONE = MaterialImpl.get("bone");
+    Material WHITE_DYE = MaterialImpl.get("minecraft:white_dye");
 
-    Material SUGAR = MaterialImpl.get("sugar");
+    Material ORANGE_DYE = MaterialImpl.get("minecraft:orange_dye");
 
-    Material CAKE = MaterialImpl.get("cake");
+    Material MAGENTA_DYE = MaterialImpl.get("minecraft:magenta_dye");
 
-    Material WHITE_BED = MaterialImpl.get("white_bed");
+    Material LIGHT_BLUE_DYE = MaterialImpl.get("minecraft:light_blue_dye");
 
-    Material ORANGE_BED = MaterialImpl.get("orange_bed");
+    Material YELLOW_DYE = MaterialImpl.get("minecraft:yellow_dye");
 
-    Material MAGENTA_BED = MaterialImpl.get("magenta_bed");
+    Material LIME_DYE = MaterialImpl.get("minecraft:lime_dye");
 
-    Material LIGHT_BLUE_BED = MaterialImpl.get("light_blue_bed");
+    Material PINK_DYE = MaterialImpl.get("minecraft:pink_dye");
 
-    Material YELLOW_BED = MaterialImpl.get("yellow_bed");
+    Material GRAY_DYE = MaterialImpl.get("minecraft:gray_dye");
 
-    Material LIME_BED = MaterialImpl.get("lime_bed");
+    Material LIGHT_GRAY_DYE = MaterialImpl.get("minecraft:light_gray_dye");
 
-    Material PINK_BED = MaterialImpl.get("pink_bed");
+    Material CYAN_DYE = MaterialImpl.get("minecraft:cyan_dye");
 
-    Material GRAY_BED = MaterialImpl.get("gray_bed");
+    Material PURPLE_DYE = MaterialImpl.get("minecraft:purple_dye");
 
-    Material LIGHT_GRAY_BED = MaterialImpl.get("light_gray_bed");
+    Material BLUE_DYE = MaterialImpl.get("minecraft:blue_dye");
 
-    Material CYAN_BED = MaterialImpl.get("cyan_bed");
+    Material BROWN_DYE = MaterialImpl.get("minecraft:brown_dye");
 
-    Material PURPLE_BED = MaterialImpl.get("purple_bed");
+    Material GREEN_DYE = MaterialImpl.get("minecraft:green_dye");
 
-    Material BLUE_BED = MaterialImpl.get("blue_bed");
+    Material RED_DYE = MaterialImpl.get("minecraft:red_dye");
 
-    Material BROWN_BED = MaterialImpl.get("brown_bed");
+    Material BLACK_DYE = MaterialImpl.get("minecraft:black_dye");
 
-    Material GREEN_BED = MaterialImpl.get("green_bed");
+    Material BONE_MEAL = MaterialImpl.get("minecraft:bone_meal");
 
-    Material RED_BED = MaterialImpl.get("red_bed");
+    Material BONE = MaterialImpl.get("minecraft:bone");
 
-    Material BLACK_BED = MaterialImpl.get("black_bed");
+    Material SUGAR = MaterialImpl.get("minecraft:sugar");
 
-    Material COOKIE = MaterialImpl.get("cookie");
+    Material CAKE = MaterialImpl.get("minecraft:cake");
 
-    Material CRAFTER = MaterialImpl.get("crafter");
+    Material WHITE_BED = MaterialImpl.get("minecraft:white_bed");
 
-    Material FILLED_MAP = MaterialImpl.get("filled_map");
+    Material ORANGE_BED = MaterialImpl.get("minecraft:orange_bed");
 
-    Material SHEARS = MaterialImpl.get("shears");
+    Material MAGENTA_BED = MaterialImpl.get("minecraft:magenta_bed");
 
-    Material MELON_SLICE = MaterialImpl.get("melon_slice");
+    Material LIGHT_BLUE_BED = MaterialImpl.get("minecraft:light_blue_bed");
 
-    Material DRIED_KELP = MaterialImpl.get("dried_kelp");
+    Material YELLOW_BED = MaterialImpl.get("minecraft:yellow_bed");
 
-    Material PUMPKIN_SEEDS = MaterialImpl.get("pumpkin_seeds");
+    Material LIME_BED = MaterialImpl.get("minecraft:lime_bed");
 
-    Material MELON_SEEDS = MaterialImpl.get("melon_seeds");
+    Material PINK_BED = MaterialImpl.get("minecraft:pink_bed");
 
-    Material BEEF = MaterialImpl.get("beef");
+    Material GRAY_BED = MaterialImpl.get("minecraft:gray_bed");
 
-    Material COOKED_BEEF = MaterialImpl.get("cooked_beef");
+    Material LIGHT_GRAY_BED = MaterialImpl.get("minecraft:light_gray_bed");
 
-    Material CHICKEN = MaterialImpl.get("chicken");
+    Material CYAN_BED = MaterialImpl.get("minecraft:cyan_bed");
 
-    Material COOKED_CHICKEN = MaterialImpl.get("cooked_chicken");
+    Material PURPLE_BED = MaterialImpl.get("minecraft:purple_bed");
 
-    Material ROTTEN_FLESH = MaterialImpl.get("rotten_flesh");
+    Material BLUE_BED = MaterialImpl.get("minecraft:blue_bed");
 
-    Material ENDER_PEARL = MaterialImpl.get("ender_pearl");
+    Material BROWN_BED = MaterialImpl.get("minecraft:brown_bed");
 
-    Material BLAZE_ROD = MaterialImpl.get("blaze_rod");
+    Material GREEN_BED = MaterialImpl.get("minecraft:green_bed");
 
-    Material GHAST_TEAR = MaterialImpl.get("ghast_tear");
+    Material RED_BED = MaterialImpl.get("minecraft:red_bed");
 
-    Material GOLD_NUGGET = MaterialImpl.get("gold_nugget");
+    Material BLACK_BED = MaterialImpl.get("minecraft:black_bed");
 
-    Material NETHER_WART = MaterialImpl.get("nether_wart");
+    Material COOKIE = MaterialImpl.get("minecraft:cookie");
 
-    Material GLASS_BOTTLE = MaterialImpl.get("glass_bottle");
+    Material CRAFTER = MaterialImpl.get("minecraft:crafter");
 
-    Material POTION = MaterialImpl.get("potion");
+    Material FILLED_MAP = MaterialImpl.get("minecraft:filled_map");
 
-    Material SPIDER_EYE = MaterialImpl.get("spider_eye");
+    Material SHEARS = MaterialImpl.get("minecraft:shears");
 
-    Material FERMENTED_SPIDER_EYE = MaterialImpl.get("fermented_spider_eye");
+    Material MELON_SLICE = MaterialImpl.get("minecraft:melon_slice");
 
-    Material BLAZE_POWDER = MaterialImpl.get("blaze_powder");
+    Material DRIED_KELP = MaterialImpl.get("minecraft:dried_kelp");
 
-    Material MAGMA_CREAM = MaterialImpl.get("magma_cream");
+    Material PUMPKIN_SEEDS = MaterialImpl.get("minecraft:pumpkin_seeds");
 
-    Material BREWING_STAND = MaterialImpl.get("brewing_stand");
+    Material MELON_SEEDS = MaterialImpl.get("minecraft:melon_seeds");
 
-    Material CAULDRON = MaterialImpl.get("cauldron");
+    Material BEEF = MaterialImpl.get("minecraft:beef");
 
-    Material ENDER_EYE = MaterialImpl.get("ender_eye");
+    Material COOKED_BEEF = MaterialImpl.get("minecraft:cooked_beef");
 
-    Material GLISTERING_MELON_SLICE = MaterialImpl.get("glistering_melon_slice");
+    Material CHICKEN = MaterialImpl.get("minecraft:chicken");
 
-    Material ARMADILLO_SPAWN_EGG = MaterialImpl.get("armadillo_spawn_egg");
+    Material COOKED_CHICKEN = MaterialImpl.get("minecraft:cooked_chicken");
 
-    Material ALLAY_SPAWN_EGG = MaterialImpl.get("allay_spawn_egg");
+    Material ROTTEN_FLESH = MaterialImpl.get("minecraft:rotten_flesh");
 
-    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("axolotl_spawn_egg");
+    Material ENDER_PEARL = MaterialImpl.get("minecraft:ender_pearl");
 
-    Material BAT_SPAWN_EGG = MaterialImpl.get("bat_spawn_egg");
+    Material BLAZE_ROD = MaterialImpl.get("minecraft:blaze_rod");
 
-    Material BEE_SPAWN_EGG = MaterialImpl.get("bee_spawn_egg");
+    Material GHAST_TEAR = MaterialImpl.get("minecraft:ghast_tear");
 
-    Material BLAZE_SPAWN_EGG = MaterialImpl.get("blaze_spawn_egg");
+    Material GOLD_NUGGET = MaterialImpl.get("minecraft:gold_nugget");
 
-    Material BOGGED_SPAWN_EGG = MaterialImpl.get("bogged_spawn_egg");
+    Material NETHER_WART = MaterialImpl.get("minecraft:nether_wart");
 
-    Material BREEZE_SPAWN_EGG = MaterialImpl.get("breeze_spawn_egg");
+    Material GLASS_BOTTLE = MaterialImpl.get("minecraft:glass_bottle");
 
-    Material CAT_SPAWN_EGG = MaterialImpl.get("cat_spawn_egg");
+    Material POTION = MaterialImpl.get("minecraft:potion");
 
-    Material CAMEL_SPAWN_EGG = MaterialImpl.get("camel_spawn_egg");
+    Material SPIDER_EYE = MaterialImpl.get("minecraft:spider_eye");
 
-    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get("cave_spider_spawn_egg");
+    Material FERMENTED_SPIDER_EYE = MaterialImpl.get("minecraft:fermented_spider_eye");
 
-    Material CHICKEN_SPAWN_EGG = MaterialImpl.get("chicken_spawn_egg");
+    Material BLAZE_POWDER = MaterialImpl.get("minecraft:blaze_powder");
 
-    Material COD_SPAWN_EGG = MaterialImpl.get("cod_spawn_egg");
+    Material MAGMA_CREAM = MaterialImpl.get("minecraft:magma_cream");
 
-    Material COW_SPAWN_EGG = MaterialImpl.get("cow_spawn_egg");
+    Material BREWING_STAND = MaterialImpl.get("minecraft:brewing_stand");
 
-    Material CREEPER_SPAWN_EGG = MaterialImpl.get("creeper_spawn_egg");
+    Material CAULDRON = MaterialImpl.get("minecraft:cauldron");
 
-    Material DOLPHIN_SPAWN_EGG = MaterialImpl.get("dolphin_spawn_egg");
+    Material ENDER_EYE = MaterialImpl.get("minecraft:ender_eye");
 
-    Material DONKEY_SPAWN_EGG = MaterialImpl.get("donkey_spawn_egg");
+    Material GLISTERING_MELON_SLICE = MaterialImpl.get("minecraft:glistering_melon_slice");
 
-    Material DROWNED_SPAWN_EGG = MaterialImpl.get("drowned_spawn_egg");
+    Material ARMADILLO_SPAWN_EGG = MaterialImpl.get("minecraft:armadillo_spawn_egg");
 
-    Material ELDER_GUARDIAN_SPAWN_EGG = MaterialImpl.get("elder_guardian_spawn_egg");
+    Material ALLAY_SPAWN_EGG = MaterialImpl.get("minecraft:allay_spawn_egg");
 
-    Material ENDER_DRAGON_SPAWN_EGG = MaterialImpl.get("ender_dragon_spawn_egg");
+    Material AXOLOTL_SPAWN_EGG = MaterialImpl.get("minecraft:axolotl_spawn_egg");
 
-    Material ENDERMAN_SPAWN_EGG = MaterialImpl.get("enderman_spawn_egg");
+    Material BAT_SPAWN_EGG = MaterialImpl.get("minecraft:bat_spawn_egg");
 
-    Material ENDERMITE_SPAWN_EGG = MaterialImpl.get("endermite_spawn_egg");
+    Material BEE_SPAWN_EGG = MaterialImpl.get("minecraft:bee_spawn_egg");
 
-    Material EVOKER_SPAWN_EGG = MaterialImpl.get("evoker_spawn_egg");
+    Material BLAZE_SPAWN_EGG = MaterialImpl.get("minecraft:blaze_spawn_egg");
 
-    Material FOX_SPAWN_EGG = MaterialImpl.get("fox_spawn_egg");
+    Material BOGGED_SPAWN_EGG = MaterialImpl.get("minecraft:bogged_spawn_egg");
 
-    Material FROG_SPAWN_EGG = MaterialImpl.get("frog_spawn_egg");
+    Material BREEZE_SPAWN_EGG = MaterialImpl.get("minecraft:breeze_spawn_egg");
 
-    Material GHAST_SPAWN_EGG = MaterialImpl.get("ghast_spawn_egg");
+    Material CAT_SPAWN_EGG = MaterialImpl.get("minecraft:cat_spawn_egg");
 
-    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("glow_squid_spawn_egg");
+    Material CAMEL_SPAWN_EGG = MaterialImpl.get("minecraft:camel_spawn_egg");
 
-    Material GOAT_SPAWN_EGG = MaterialImpl.get("goat_spawn_egg");
+    Material CAVE_SPIDER_SPAWN_EGG = MaterialImpl.get("minecraft:cave_spider_spawn_egg");
 
-    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get("guardian_spawn_egg");
+    Material CHICKEN_SPAWN_EGG = MaterialImpl.get("minecraft:chicken_spawn_egg");
 
-    Material HOGLIN_SPAWN_EGG = MaterialImpl.get("hoglin_spawn_egg");
+    Material COD_SPAWN_EGG = MaterialImpl.get("minecraft:cod_spawn_egg");
 
-    Material HORSE_SPAWN_EGG = MaterialImpl.get("horse_spawn_egg");
+    Material COW_SPAWN_EGG = MaterialImpl.get("minecraft:cow_spawn_egg");
 
-    Material HUSK_SPAWN_EGG = MaterialImpl.get("husk_spawn_egg");
+    Material CREEPER_SPAWN_EGG = MaterialImpl.get("minecraft:creeper_spawn_egg");
 
-    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get("iron_golem_spawn_egg");
+    Material DOLPHIN_SPAWN_EGG = MaterialImpl.get("minecraft:dolphin_spawn_egg");
 
-    Material LLAMA_SPAWN_EGG = MaterialImpl.get("llama_spawn_egg");
+    Material DONKEY_SPAWN_EGG = MaterialImpl.get("minecraft:donkey_spawn_egg");
 
-    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get("magma_cube_spawn_egg");
+    Material DROWNED_SPAWN_EGG = MaterialImpl.get("minecraft:drowned_spawn_egg");
 
-    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("mooshroom_spawn_egg");
+    Material ELDER_GUARDIAN_SPAWN_EGG = MaterialImpl.get("minecraft:elder_guardian_spawn_egg");
 
-    Material MULE_SPAWN_EGG = MaterialImpl.get("mule_spawn_egg");
+    Material ENDER_DRAGON_SPAWN_EGG = MaterialImpl.get("minecraft:ender_dragon_spawn_egg");
 
-    Material OCELOT_SPAWN_EGG = MaterialImpl.get("ocelot_spawn_egg");
+    Material ENDERMAN_SPAWN_EGG = MaterialImpl.get("minecraft:enderman_spawn_egg");
 
-    Material PANDA_SPAWN_EGG = MaterialImpl.get("panda_spawn_egg");
+    Material ENDERMITE_SPAWN_EGG = MaterialImpl.get("minecraft:endermite_spawn_egg");
 
-    Material PARROT_SPAWN_EGG = MaterialImpl.get("parrot_spawn_egg");
+    Material EVOKER_SPAWN_EGG = MaterialImpl.get("minecraft:evoker_spawn_egg");
 
-    Material PHANTOM_SPAWN_EGG = MaterialImpl.get("phantom_spawn_egg");
+    Material FOX_SPAWN_EGG = MaterialImpl.get("minecraft:fox_spawn_egg");
 
-    Material PIG_SPAWN_EGG = MaterialImpl.get("pig_spawn_egg");
+    Material FROG_SPAWN_EGG = MaterialImpl.get("minecraft:frog_spawn_egg");
 
-    Material PIGLIN_SPAWN_EGG = MaterialImpl.get("piglin_spawn_egg");
+    Material GHAST_SPAWN_EGG = MaterialImpl.get("minecraft:ghast_spawn_egg");
 
-    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get("piglin_brute_spawn_egg");
+    Material HAPPY_GHAST_SPAWN_EGG = MaterialImpl.get("minecraft:happy_ghast_spawn_egg");
 
-    Material PILLAGER_SPAWN_EGG = MaterialImpl.get("pillager_spawn_egg");
+    Material GLOW_SQUID_SPAWN_EGG = MaterialImpl.get("minecraft:glow_squid_spawn_egg");
 
-    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get("polar_bear_spawn_egg");
+    Material GOAT_SPAWN_EGG = MaterialImpl.get("minecraft:goat_spawn_egg");
 
-    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get("pufferfish_spawn_egg");
+    Material GUARDIAN_SPAWN_EGG = MaterialImpl.get("minecraft:guardian_spawn_egg");
 
-    Material RABBIT_SPAWN_EGG = MaterialImpl.get("rabbit_spawn_egg");
+    Material HOGLIN_SPAWN_EGG = MaterialImpl.get("minecraft:hoglin_spawn_egg");
 
-    Material RAVAGER_SPAWN_EGG = MaterialImpl.get("ravager_spawn_egg");
+    Material HORSE_SPAWN_EGG = MaterialImpl.get("minecraft:horse_spawn_egg");
 
-    Material SALMON_SPAWN_EGG = MaterialImpl.get("salmon_spawn_egg");
+    Material HUSK_SPAWN_EGG = MaterialImpl.get("minecraft:husk_spawn_egg");
 
-    Material SHEEP_SPAWN_EGG = MaterialImpl.get("sheep_spawn_egg");
+    Material IRON_GOLEM_SPAWN_EGG = MaterialImpl.get("minecraft:iron_golem_spawn_egg");
 
-    Material SHULKER_SPAWN_EGG = MaterialImpl.get("shulker_spawn_egg");
+    Material LLAMA_SPAWN_EGG = MaterialImpl.get("minecraft:llama_spawn_egg");
 
-    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get("silverfish_spawn_egg");
+    Material MAGMA_CUBE_SPAWN_EGG = MaterialImpl.get("minecraft:magma_cube_spawn_egg");
 
-    Material SKELETON_SPAWN_EGG = MaterialImpl.get("skeleton_spawn_egg");
+    Material MOOSHROOM_SPAWN_EGG = MaterialImpl.get("minecraft:mooshroom_spawn_egg");
 
-    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get("skeleton_horse_spawn_egg");
+    Material MULE_SPAWN_EGG = MaterialImpl.get("minecraft:mule_spawn_egg");
 
-    Material SLIME_SPAWN_EGG = MaterialImpl.get("slime_spawn_egg");
+    Material OCELOT_SPAWN_EGG = MaterialImpl.get("minecraft:ocelot_spawn_egg");
 
-    Material SNIFFER_SPAWN_EGG = MaterialImpl.get("sniffer_spawn_egg");
+    Material PANDA_SPAWN_EGG = MaterialImpl.get("minecraft:panda_spawn_egg");
 
-    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get("snow_golem_spawn_egg");
+    Material PARROT_SPAWN_EGG = MaterialImpl.get("minecraft:parrot_spawn_egg");
 
-    Material SPIDER_SPAWN_EGG = MaterialImpl.get("spider_spawn_egg");
+    Material PHANTOM_SPAWN_EGG = MaterialImpl.get("minecraft:phantom_spawn_egg");
 
-    Material SQUID_SPAWN_EGG = MaterialImpl.get("squid_spawn_egg");
+    Material PIG_SPAWN_EGG = MaterialImpl.get("minecraft:pig_spawn_egg");
 
-    Material STRAY_SPAWN_EGG = MaterialImpl.get("stray_spawn_egg");
+    Material PIGLIN_SPAWN_EGG = MaterialImpl.get("minecraft:piglin_spawn_egg");
 
-    Material STRIDER_SPAWN_EGG = MaterialImpl.get("strider_spawn_egg");
+    Material PIGLIN_BRUTE_SPAWN_EGG = MaterialImpl.get("minecraft:piglin_brute_spawn_egg");
 
-    Material TADPOLE_SPAWN_EGG = MaterialImpl.get("tadpole_spawn_egg");
+    Material PILLAGER_SPAWN_EGG = MaterialImpl.get("minecraft:pillager_spawn_egg");
 
-    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get("trader_llama_spawn_egg");
+    Material POLAR_BEAR_SPAWN_EGG = MaterialImpl.get("minecraft:polar_bear_spawn_egg");
 
-    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get("tropical_fish_spawn_egg");
+    Material PUFFERFISH_SPAWN_EGG = MaterialImpl.get("minecraft:pufferfish_spawn_egg");
 
-    Material TURTLE_SPAWN_EGG = MaterialImpl.get("turtle_spawn_egg");
+    Material RABBIT_SPAWN_EGG = MaterialImpl.get("minecraft:rabbit_spawn_egg");
 
-    Material VEX_SPAWN_EGG = MaterialImpl.get("vex_spawn_egg");
+    Material RAVAGER_SPAWN_EGG = MaterialImpl.get("minecraft:ravager_spawn_egg");
 
-    Material VILLAGER_SPAWN_EGG = MaterialImpl.get("villager_spawn_egg");
+    Material SALMON_SPAWN_EGG = MaterialImpl.get("minecraft:salmon_spawn_egg");
 
-    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get("vindicator_spawn_egg");
+    Material SHEEP_SPAWN_EGG = MaterialImpl.get("minecraft:sheep_spawn_egg");
 
-    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get("wandering_trader_spawn_egg");
+    Material SHULKER_SPAWN_EGG = MaterialImpl.get("minecraft:shulker_spawn_egg");
 
-    Material WARDEN_SPAWN_EGG = MaterialImpl.get("warden_spawn_egg");
+    Material SILVERFISH_SPAWN_EGG = MaterialImpl.get("minecraft:silverfish_spawn_egg");
 
-    Material WITCH_SPAWN_EGG = MaterialImpl.get("witch_spawn_egg");
+    Material SKELETON_SPAWN_EGG = MaterialImpl.get("minecraft:skeleton_spawn_egg");
 
-    Material WITHER_SPAWN_EGG = MaterialImpl.get("wither_spawn_egg");
+    Material SKELETON_HORSE_SPAWN_EGG = MaterialImpl.get("minecraft:skeleton_horse_spawn_egg");
 
-    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get("wither_skeleton_spawn_egg");
+    Material SLIME_SPAWN_EGG = MaterialImpl.get("minecraft:slime_spawn_egg");
 
-    Material WOLF_SPAWN_EGG = MaterialImpl.get("wolf_spawn_egg");
+    Material SNIFFER_SPAWN_EGG = MaterialImpl.get("minecraft:sniffer_spawn_egg");
 
-    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get("zoglin_spawn_egg");
+    Material SNOW_GOLEM_SPAWN_EGG = MaterialImpl.get("minecraft:snow_golem_spawn_egg");
 
-    Material CREAKING_SPAWN_EGG = MaterialImpl.get("creaking_spawn_egg");
+    Material SPIDER_SPAWN_EGG = MaterialImpl.get("minecraft:spider_spawn_egg");
 
-    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get("zombie_spawn_egg");
+    Material SQUID_SPAWN_EGG = MaterialImpl.get("minecraft:squid_spawn_egg");
 
-    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get("zombie_horse_spawn_egg");
+    Material STRAY_SPAWN_EGG = MaterialImpl.get("minecraft:stray_spawn_egg");
 
-    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get("zombie_villager_spawn_egg");
+    Material STRIDER_SPAWN_EGG = MaterialImpl.get("minecraft:strider_spawn_egg");
 
-    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get("zombified_piglin_spawn_egg");
+    Material TADPOLE_SPAWN_EGG = MaterialImpl.get("minecraft:tadpole_spawn_egg");
 
-    Material EXPERIENCE_BOTTLE = MaterialImpl.get("experience_bottle");
+    Material TRADER_LLAMA_SPAWN_EGG = MaterialImpl.get("minecraft:trader_llama_spawn_egg");
 
-    Material FIRE_CHARGE = MaterialImpl.get("fire_charge");
+    Material TROPICAL_FISH_SPAWN_EGG = MaterialImpl.get("minecraft:tropical_fish_spawn_egg");
 
-    Material WIND_CHARGE = MaterialImpl.get("wind_charge");
+    Material TURTLE_SPAWN_EGG = MaterialImpl.get("minecraft:turtle_spawn_egg");
 
-    Material WRITABLE_BOOK = MaterialImpl.get("writable_book");
+    Material VEX_SPAWN_EGG = MaterialImpl.get("minecraft:vex_spawn_egg");
 
-    Material WRITTEN_BOOK = MaterialImpl.get("written_book");
+    Material VILLAGER_SPAWN_EGG = MaterialImpl.get("minecraft:villager_spawn_egg");
 
-    Material BREEZE_ROD = MaterialImpl.get("breeze_rod");
+    Material VINDICATOR_SPAWN_EGG = MaterialImpl.get("minecraft:vindicator_spawn_egg");
 
-    Material MACE = MaterialImpl.get("mace");
+    Material WANDERING_TRADER_SPAWN_EGG = MaterialImpl.get("minecraft:wandering_trader_spawn_egg");
 
-    Material ITEM_FRAME = MaterialImpl.get("item_frame");
+    Material WARDEN_SPAWN_EGG = MaterialImpl.get("minecraft:warden_spawn_egg");
 
-    Material GLOW_ITEM_FRAME = MaterialImpl.get("glow_item_frame");
+    Material WITCH_SPAWN_EGG = MaterialImpl.get("minecraft:witch_spawn_egg");
 
-    Material FLOWER_POT = MaterialImpl.get("flower_pot");
+    Material WITHER_SPAWN_EGG = MaterialImpl.get("minecraft:wither_spawn_egg");
 
-    Material CARROT = MaterialImpl.get("carrot");
+    Material WITHER_SKELETON_SPAWN_EGG = MaterialImpl.get("minecraft:wither_skeleton_spawn_egg");
 
-    Material POTATO = MaterialImpl.get("potato");
+    Material WOLF_SPAWN_EGG = MaterialImpl.get("minecraft:wolf_spawn_egg");
 
-    Material BAKED_POTATO = MaterialImpl.get("baked_potato");
+    Material ZOGLIN_SPAWN_EGG = MaterialImpl.get("minecraft:zoglin_spawn_egg");
 
-    Material POISONOUS_POTATO = MaterialImpl.get("poisonous_potato");
+    Material CREAKING_SPAWN_EGG = MaterialImpl.get("minecraft:creaking_spawn_egg");
 
-    Material MAP = MaterialImpl.get("map");
+    Material ZOMBIE_SPAWN_EGG = MaterialImpl.get("minecraft:zombie_spawn_egg");
 
-    Material GOLDEN_CARROT = MaterialImpl.get("golden_carrot");
+    Material ZOMBIE_HORSE_SPAWN_EGG = MaterialImpl.get("minecraft:zombie_horse_spawn_egg");
 
-    Material SKELETON_SKULL = MaterialImpl.get("skeleton_skull");
+    Material ZOMBIE_VILLAGER_SPAWN_EGG = MaterialImpl.get("minecraft:zombie_villager_spawn_egg");
 
-    Material WITHER_SKELETON_SKULL = MaterialImpl.get("wither_skeleton_skull");
+    Material ZOMBIFIED_PIGLIN_SPAWN_EGG = MaterialImpl.get("minecraft:zombified_piglin_spawn_egg");
 
-    Material PLAYER_HEAD = MaterialImpl.get("player_head");
+    Material EXPERIENCE_BOTTLE = MaterialImpl.get("minecraft:experience_bottle");
 
-    Material ZOMBIE_HEAD = MaterialImpl.get("zombie_head");
+    Material FIRE_CHARGE = MaterialImpl.get("minecraft:fire_charge");
 
-    Material CREEPER_HEAD = MaterialImpl.get("creeper_head");
+    Material WIND_CHARGE = MaterialImpl.get("minecraft:wind_charge");
 
-    Material DRAGON_HEAD = MaterialImpl.get("dragon_head");
+    Material WRITABLE_BOOK = MaterialImpl.get("minecraft:writable_book");
 
-    Material PIGLIN_HEAD = MaterialImpl.get("piglin_head");
+    Material WRITTEN_BOOK = MaterialImpl.get("minecraft:written_book");
 
-    Material NETHER_STAR = MaterialImpl.get("nether_star");
+    Material BREEZE_ROD = MaterialImpl.get("minecraft:breeze_rod");
 
-    Material PUMPKIN_PIE = MaterialImpl.get("pumpkin_pie");
+    Material MACE = MaterialImpl.get("minecraft:mace");
 
-    Material FIREWORK_ROCKET = MaterialImpl.get("firework_rocket");
+    Material ITEM_FRAME = MaterialImpl.get("minecraft:item_frame");
 
-    Material FIREWORK_STAR = MaterialImpl.get("firework_star");
+    Material GLOW_ITEM_FRAME = MaterialImpl.get("minecraft:glow_item_frame");
 
-    Material ENCHANTED_BOOK = MaterialImpl.get("enchanted_book");
+    Material FLOWER_POT = MaterialImpl.get("minecraft:flower_pot");
 
-    Material NETHER_BRICK = MaterialImpl.get("nether_brick");
+    Material CARROT = MaterialImpl.get("minecraft:carrot");
 
-    Material RESIN_BRICK = MaterialImpl.get("resin_brick");
+    Material POTATO = MaterialImpl.get("minecraft:potato");
 
-    Material PRISMARINE_SHARD = MaterialImpl.get("prismarine_shard");
+    Material BAKED_POTATO = MaterialImpl.get("minecraft:baked_potato");
 
-    Material PRISMARINE_CRYSTALS = MaterialImpl.get("prismarine_crystals");
+    Material POISONOUS_POTATO = MaterialImpl.get("minecraft:poisonous_potato");
 
-    Material RABBIT = MaterialImpl.get("rabbit");
+    Material MAP = MaterialImpl.get("minecraft:map");
 
-    Material COOKED_RABBIT = MaterialImpl.get("cooked_rabbit");
+    Material GOLDEN_CARROT = MaterialImpl.get("minecraft:golden_carrot");
 
-    Material RABBIT_STEW = MaterialImpl.get("rabbit_stew");
+    Material SKELETON_SKULL = MaterialImpl.get("minecraft:skeleton_skull");
 
-    Material RABBIT_FOOT = MaterialImpl.get("rabbit_foot");
+    Material WITHER_SKELETON_SKULL = MaterialImpl.get("minecraft:wither_skeleton_skull");
 
-    Material RABBIT_HIDE = MaterialImpl.get("rabbit_hide");
+    Material PLAYER_HEAD = MaterialImpl.get("minecraft:player_head");
 
-    Material ARMOR_STAND = MaterialImpl.get("armor_stand");
+    Material ZOMBIE_HEAD = MaterialImpl.get("minecraft:zombie_head");
 
-    Material IRON_HORSE_ARMOR = MaterialImpl.get("iron_horse_armor");
+    Material CREEPER_HEAD = MaterialImpl.get("minecraft:creeper_head");
 
-    Material GOLDEN_HORSE_ARMOR = MaterialImpl.get("golden_horse_armor");
+    Material DRAGON_HEAD = MaterialImpl.get("minecraft:dragon_head");
 
-    Material DIAMOND_HORSE_ARMOR = MaterialImpl.get("diamond_horse_armor");
+    Material PIGLIN_HEAD = MaterialImpl.get("minecraft:piglin_head");
 
-    Material LEATHER_HORSE_ARMOR = MaterialImpl.get("leather_horse_armor");
+    Material NETHER_STAR = MaterialImpl.get("minecraft:nether_star");
 
-    Material LEAD = MaterialImpl.get("lead");
+    Material PUMPKIN_PIE = MaterialImpl.get("minecraft:pumpkin_pie");
 
-    Material NAME_TAG = MaterialImpl.get("name_tag");
+    Material FIREWORK_ROCKET = MaterialImpl.get("minecraft:firework_rocket");
 
-    Material COMMAND_BLOCK_MINECART = MaterialImpl.get("command_block_minecart");
+    Material FIREWORK_STAR = MaterialImpl.get("minecraft:firework_star");
 
-    Material MUTTON = MaterialImpl.get("mutton");
+    Material ENCHANTED_BOOK = MaterialImpl.get("minecraft:enchanted_book");
 
-    Material COOKED_MUTTON = MaterialImpl.get("cooked_mutton");
+    Material NETHER_BRICK = MaterialImpl.get("minecraft:nether_brick");
 
-    Material WHITE_BANNER = MaterialImpl.get("white_banner");
+    Material RESIN_BRICK = MaterialImpl.get("minecraft:resin_brick");
 
-    Material ORANGE_BANNER = MaterialImpl.get("orange_banner");
+    Material PRISMARINE_SHARD = MaterialImpl.get("minecraft:prismarine_shard");
 
-    Material MAGENTA_BANNER = MaterialImpl.get("magenta_banner");
+    Material PRISMARINE_CRYSTALS = MaterialImpl.get("minecraft:prismarine_crystals");
 
-    Material LIGHT_BLUE_BANNER = MaterialImpl.get("light_blue_banner");
+    Material RABBIT = MaterialImpl.get("minecraft:rabbit");
 
-    Material YELLOW_BANNER = MaterialImpl.get("yellow_banner");
+    Material COOKED_RABBIT = MaterialImpl.get("minecraft:cooked_rabbit");
 
-    Material LIME_BANNER = MaterialImpl.get("lime_banner");
+    Material RABBIT_STEW = MaterialImpl.get("minecraft:rabbit_stew");
 
-    Material PINK_BANNER = MaterialImpl.get("pink_banner");
+    Material RABBIT_FOOT = MaterialImpl.get("minecraft:rabbit_foot");
 
-    Material GRAY_BANNER = MaterialImpl.get("gray_banner");
+    Material RABBIT_HIDE = MaterialImpl.get("minecraft:rabbit_hide");
 
-    Material LIGHT_GRAY_BANNER = MaterialImpl.get("light_gray_banner");
+    Material ARMOR_STAND = MaterialImpl.get("minecraft:armor_stand");
 
-    Material CYAN_BANNER = MaterialImpl.get("cyan_banner");
+    Material IRON_HORSE_ARMOR = MaterialImpl.get("minecraft:iron_horse_armor");
 
-    Material PURPLE_BANNER = MaterialImpl.get("purple_banner");
+    Material GOLDEN_HORSE_ARMOR = MaterialImpl.get("minecraft:golden_horse_armor");
 
-    Material BLUE_BANNER = MaterialImpl.get("blue_banner");
+    Material DIAMOND_HORSE_ARMOR = MaterialImpl.get("minecraft:diamond_horse_armor");
 
-    Material BROWN_BANNER = MaterialImpl.get("brown_banner");
+    Material LEATHER_HORSE_ARMOR = MaterialImpl.get("minecraft:leather_horse_armor");
 
-    Material GREEN_BANNER = MaterialImpl.get("green_banner");
+    Material LEAD = MaterialImpl.get("minecraft:lead");
 
-    Material RED_BANNER = MaterialImpl.get("red_banner");
+    Material NAME_TAG = MaterialImpl.get("minecraft:name_tag");
 
-    Material BLACK_BANNER = MaterialImpl.get("black_banner");
+    Material COMMAND_BLOCK_MINECART = MaterialImpl.get("minecraft:command_block_minecart");
 
-    Material END_CRYSTAL = MaterialImpl.get("end_crystal");
+    Material MUTTON = MaterialImpl.get("minecraft:mutton");
 
-    Material CHORUS_FRUIT = MaterialImpl.get("chorus_fruit");
+    Material COOKED_MUTTON = MaterialImpl.get("minecraft:cooked_mutton");
 
-    Material POPPED_CHORUS_FRUIT = MaterialImpl.get("popped_chorus_fruit");
+    Material WHITE_BANNER = MaterialImpl.get("minecraft:white_banner");
 
-    Material TORCHFLOWER_SEEDS = MaterialImpl.get("torchflower_seeds");
+    Material ORANGE_BANNER = MaterialImpl.get("minecraft:orange_banner");
 
-    Material PITCHER_POD = MaterialImpl.get("pitcher_pod");
+    Material MAGENTA_BANNER = MaterialImpl.get("minecraft:magenta_banner");
 
-    Material BEETROOT = MaterialImpl.get("beetroot");
+    Material LIGHT_BLUE_BANNER = MaterialImpl.get("minecraft:light_blue_banner");
 
-    Material BEETROOT_SEEDS = MaterialImpl.get("beetroot_seeds");
+    Material YELLOW_BANNER = MaterialImpl.get("minecraft:yellow_banner");
 
-    Material BEETROOT_SOUP = MaterialImpl.get("beetroot_soup");
+    Material LIME_BANNER = MaterialImpl.get("minecraft:lime_banner");
 
-    Material DRAGON_BREATH = MaterialImpl.get("dragon_breath");
+    Material PINK_BANNER = MaterialImpl.get("minecraft:pink_banner");
 
-    Material SPLASH_POTION = MaterialImpl.get("splash_potion");
+    Material GRAY_BANNER = MaterialImpl.get("minecraft:gray_banner");
 
-    Material SPECTRAL_ARROW = MaterialImpl.get("spectral_arrow");
+    Material LIGHT_GRAY_BANNER = MaterialImpl.get("minecraft:light_gray_banner");
 
-    Material TIPPED_ARROW = MaterialImpl.get("tipped_arrow");
+    Material CYAN_BANNER = MaterialImpl.get("minecraft:cyan_banner");
 
-    Material LINGERING_POTION = MaterialImpl.get("lingering_potion");
+    Material PURPLE_BANNER = MaterialImpl.get("minecraft:purple_banner");
 
-    Material SHIELD = MaterialImpl.get("shield");
+    Material BLUE_BANNER = MaterialImpl.get("minecraft:blue_banner");
 
-    Material TOTEM_OF_UNDYING = MaterialImpl.get("totem_of_undying");
+    Material BROWN_BANNER = MaterialImpl.get("minecraft:brown_banner");
 
-    Material SHULKER_SHELL = MaterialImpl.get("shulker_shell");
+    Material GREEN_BANNER = MaterialImpl.get("minecraft:green_banner");
 
-    Material IRON_NUGGET = MaterialImpl.get("iron_nugget");
+    Material RED_BANNER = MaterialImpl.get("minecraft:red_banner");
 
-    Material KNOWLEDGE_BOOK = MaterialImpl.get("knowledge_book");
+    Material BLACK_BANNER = MaterialImpl.get("minecraft:black_banner");
 
-    Material DEBUG_STICK = MaterialImpl.get("debug_stick");
+    Material END_CRYSTAL = MaterialImpl.get("minecraft:end_crystal");
 
-    Material MUSIC_DISC_13 = MaterialImpl.get("music_disc_13");
+    Material CHORUS_FRUIT = MaterialImpl.get("minecraft:chorus_fruit");
 
-    Material MUSIC_DISC_CAT = MaterialImpl.get("music_disc_cat");
+    Material POPPED_CHORUS_FRUIT = MaterialImpl.get("minecraft:popped_chorus_fruit");
 
-    Material MUSIC_DISC_BLOCKS = MaterialImpl.get("music_disc_blocks");
+    Material TORCHFLOWER_SEEDS = MaterialImpl.get("minecraft:torchflower_seeds");
 
-    Material MUSIC_DISC_CHIRP = MaterialImpl.get("music_disc_chirp");
+    Material PITCHER_POD = MaterialImpl.get("minecraft:pitcher_pod");
 
-    Material MUSIC_DISC_CREATOR = MaterialImpl.get("music_disc_creator");
+    Material BEETROOT = MaterialImpl.get("minecraft:beetroot");
 
-    Material MUSIC_DISC_CREATOR_MUSIC_BOX = MaterialImpl.get("music_disc_creator_music_box");
+    Material BEETROOT_SEEDS = MaterialImpl.get("minecraft:beetroot_seeds");
 
-    Material MUSIC_DISC_FAR = MaterialImpl.get("music_disc_far");
+    Material BEETROOT_SOUP = MaterialImpl.get("minecraft:beetroot_soup");
 
-    Material MUSIC_DISC_MALL = MaterialImpl.get("music_disc_mall");
+    Material DRAGON_BREATH = MaterialImpl.get("minecraft:dragon_breath");
 
-    Material MUSIC_DISC_MELLOHI = MaterialImpl.get("music_disc_mellohi");
+    Material SPLASH_POTION = MaterialImpl.get("minecraft:splash_potion");
 
-    Material MUSIC_DISC_STAL = MaterialImpl.get("music_disc_stal");
+    Material SPECTRAL_ARROW = MaterialImpl.get("minecraft:spectral_arrow");
 
-    Material MUSIC_DISC_STRAD = MaterialImpl.get("music_disc_strad");
+    Material TIPPED_ARROW = MaterialImpl.get("minecraft:tipped_arrow");
 
-    Material MUSIC_DISC_WARD = MaterialImpl.get("music_disc_ward");
+    Material LINGERING_POTION = MaterialImpl.get("minecraft:lingering_potion");
 
-    Material MUSIC_DISC_11 = MaterialImpl.get("music_disc_11");
+    Material SHIELD = MaterialImpl.get("minecraft:shield");
 
-    Material MUSIC_DISC_WAIT = MaterialImpl.get("music_disc_wait");
+    Material TOTEM_OF_UNDYING = MaterialImpl.get("minecraft:totem_of_undying");
 
-    Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get("music_disc_otherside");
+    Material SHULKER_SHELL = MaterialImpl.get("minecraft:shulker_shell");
 
-    Material MUSIC_DISC_RELIC = MaterialImpl.get("music_disc_relic");
+    Material IRON_NUGGET = MaterialImpl.get("minecraft:iron_nugget");
 
-    Material MUSIC_DISC_5 = MaterialImpl.get("music_disc_5");
+    Material KNOWLEDGE_BOOK = MaterialImpl.get("minecraft:knowledge_book");
 
-    Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("music_disc_pigstep");
+    Material DEBUG_STICK = MaterialImpl.get("minecraft:debug_stick");
 
-    Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("music_disc_precipice");
+    Material MUSIC_DISC_13 = MaterialImpl.get("minecraft:music_disc_13");
 
-    Material DISC_FRAGMENT_5 = MaterialImpl.get("disc_fragment_5");
+    Material MUSIC_DISC_CAT = MaterialImpl.get("minecraft:music_disc_cat");
 
-    Material TRIDENT = MaterialImpl.get("trident");
+    Material MUSIC_DISC_BLOCKS = MaterialImpl.get("minecraft:music_disc_blocks");
 
-    Material NAUTILUS_SHELL = MaterialImpl.get("nautilus_shell");
+    Material MUSIC_DISC_CHIRP = MaterialImpl.get("minecraft:music_disc_chirp");
 
-    Material HEART_OF_THE_SEA = MaterialImpl.get("heart_of_the_sea");
+    Material MUSIC_DISC_CREATOR = MaterialImpl.get("minecraft:music_disc_creator");
 
-    Material CROSSBOW = MaterialImpl.get("crossbow");
+    Material MUSIC_DISC_CREATOR_MUSIC_BOX = MaterialImpl.get("minecraft:music_disc_creator_music_box");
 
-    Material SUSPICIOUS_STEW = MaterialImpl.get("suspicious_stew");
+    Material MUSIC_DISC_FAR = MaterialImpl.get("minecraft:music_disc_far");
 
-    Material LOOM = MaterialImpl.get("loom");
+    Material MUSIC_DISC_MALL = MaterialImpl.get("minecraft:music_disc_mall");
 
-    Material FLOWER_BANNER_PATTERN = MaterialImpl.get("flower_banner_pattern");
+    Material MUSIC_DISC_MELLOHI = MaterialImpl.get("minecraft:music_disc_mellohi");
 
-    Material CREEPER_BANNER_PATTERN = MaterialImpl.get("creeper_banner_pattern");
+    Material MUSIC_DISC_STAL = MaterialImpl.get("minecraft:music_disc_stal");
 
-    Material SKULL_BANNER_PATTERN = MaterialImpl.get("skull_banner_pattern");
+    Material MUSIC_DISC_STRAD = MaterialImpl.get("minecraft:music_disc_strad");
 
-    Material MOJANG_BANNER_PATTERN = MaterialImpl.get("mojang_banner_pattern");
+    Material MUSIC_DISC_WARD = MaterialImpl.get("minecraft:music_disc_ward");
 
-    Material GLOBE_BANNER_PATTERN = MaterialImpl.get("globe_banner_pattern");
+    Material MUSIC_DISC_11 = MaterialImpl.get("minecraft:music_disc_11");
 
-    Material PIGLIN_BANNER_PATTERN = MaterialImpl.get("piglin_banner_pattern");
+    Material MUSIC_DISC_WAIT = MaterialImpl.get("minecraft:music_disc_wait");
 
-    Material FLOW_BANNER_PATTERN = MaterialImpl.get("flow_banner_pattern");
+    Material MUSIC_DISC_OTHERSIDE = MaterialImpl.get("minecraft:music_disc_otherside");
 
-    Material GUSTER_BANNER_PATTERN = MaterialImpl.get("guster_banner_pattern");
+    Material MUSIC_DISC_RELIC = MaterialImpl.get("minecraft:music_disc_relic");
 
-    Material FIELD_MASONED_BANNER_PATTERN = MaterialImpl.get("field_masoned_banner_pattern");
+    Material MUSIC_DISC_5 = MaterialImpl.get("minecraft:music_disc_5");
 
-    Material BORDURE_INDENTED_BANNER_PATTERN = MaterialImpl.get("bordure_indented_banner_pattern");
+    Material MUSIC_DISC_PIGSTEP = MaterialImpl.get("minecraft:music_disc_pigstep");
 
-    Material GOAT_HORN = MaterialImpl.get("goat_horn");
+    Material MUSIC_DISC_PRECIPICE = MaterialImpl.get("minecraft:music_disc_precipice");
 
-    Material COMPOSTER = MaterialImpl.get("composter");
+    Material MUSIC_DISC_TEARS = MaterialImpl.get("minecraft:music_disc_tears");
 
-    Material BARREL = MaterialImpl.get("barrel");
+    Material DISC_FRAGMENT_5 = MaterialImpl.get("minecraft:disc_fragment_5");
 
-    Material SMOKER = MaterialImpl.get("smoker");
+    Material TRIDENT = MaterialImpl.get("minecraft:trident");
 
-    Material BLAST_FURNACE = MaterialImpl.get("blast_furnace");
+    Material NAUTILUS_SHELL = MaterialImpl.get("minecraft:nautilus_shell");
 
-    Material CARTOGRAPHY_TABLE = MaterialImpl.get("cartography_table");
+    Material HEART_OF_THE_SEA = MaterialImpl.get("minecraft:heart_of_the_sea");
 
-    Material FLETCHING_TABLE = MaterialImpl.get("fletching_table");
+    Material CROSSBOW = MaterialImpl.get("minecraft:crossbow");
 
-    Material GRINDSTONE = MaterialImpl.get("grindstone");
+    Material SUSPICIOUS_STEW = MaterialImpl.get("minecraft:suspicious_stew");
 
-    Material SMITHING_TABLE = MaterialImpl.get("smithing_table");
+    Material LOOM = MaterialImpl.get("minecraft:loom");
 
-    Material STONECUTTER = MaterialImpl.get("stonecutter");
+    Material FLOWER_BANNER_PATTERN = MaterialImpl.get("minecraft:flower_banner_pattern");
 
-    Material BELL = MaterialImpl.get("bell");
+    Material CREEPER_BANNER_PATTERN = MaterialImpl.get("minecraft:creeper_banner_pattern");
 
-    Material LANTERN = MaterialImpl.get("lantern");
+    Material SKULL_BANNER_PATTERN = MaterialImpl.get("minecraft:skull_banner_pattern");
 
-    Material SOUL_LANTERN = MaterialImpl.get("soul_lantern");
+    Material MOJANG_BANNER_PATTERN = MaterialImpl.get("minecraft:mojang_banner_pattern");
 
-    Material SWEET_BERRIES = MaterialImpl.get("sweet_berries");
+    Material GLOBE_BANNER_PATTERN = MaterialImpl.get("minecraft:globe_banner_pattern");
 
-    Material GLOW_BERRIES = MaterialImpl.get("glow_berries");
+    Material PIGLIN_BANNER_PATTERN = MaterialImpl.get("minecraft:piglin_banner_pattern");
 
-    Material CAMPFIRE = MaterialImpl.get("campfire");
+    Material FLOW_BANNER_PATTERN = MaterialImpl.get("minecraft:flow_banner_pattern");
 
-    Material SOUL_CAMPFIRE = MaterialImpl.get("soul_campfire");
+    Material GUSTER_BANNER_PATTERN = MaterialImpl.get("minecraft:guster_banner_pattern");
 
-    Material SHROOMLIGHT = MaterialImpl.get("shroomlight");
+    Material FIELD_MASONED_BANNER_PATTERN = MaterialImpl.get("minecraft:field_masoned_banner_pattern");
 
-    Material HONEYCOMB = MaterialImpl.get("honeycomb");
+    Material BORDURE_INDENTED_BANNER_PATTERN = MaterialImpl.get("minecraft:bordure_indented_banner_pattern");
 
-    Material BEE_NEST = MaterialImpl.get("bee_nest");
+    Material GOAT_HORN = MaterialImpl.get("minecraft:goat_horn");
 
-    Material BEEHIVE = MaterialImpl.get("beehive");
+    Material COMPOSTER = MaterialImpl.get("minecraft:composter");
 
-    Material HONEY_BOTTLE = MaterialImpl.get("honey_bottle");
+    Material BARREL = MaterialImpl.get("minecraft:barrel");
 
-    Material HONEYCOMB_BLOCK = MaterialImpl.get("honeycomb_block");
+    Material SMOKER = MaterialImpl.get("minecraft:smoker");
 
-    Material LODESTONE = MaterialImpl.get("lodestone");
+    Material BLAST_FURNACE = MaterialImpl.get("minecraft:blast_furnace");
 
-    Material CRYING_OBSIDIAN = MaterialImpl.get("crying_obsidian");
+    Material CARTOGRAPHY_TABLE = MaterialImpl.get("minecraft:cartography_table");
 
-    Material BLACKSTONE = MaterialImpl.get("blackstone");
+    Material FLETCHING_TABLE = MaterialImpl.get("minecraft:fletching_table");
 
-    Material BLACKSTONE_SLAB = MaterialImpl.get("blackstone_slab");
+    Material GRINDSTONE = MaterialImpl.get("minecraft:grindstone");
 
-    Material BLACKSTONE_STAIRS = MaterialImpl.get("blackstone_stairs");
+    Material SMITHING_TABLE = MaterialImpl.get("minecraft:smithing_table");
 
-    Material GILDED_BLACKSTONE = MaterialImpl.get("gilded_blackstone");
+    Material STONECUTTER = MaterialImpl.get("minecraft:stonecutter");
 
-    Material POLISHED_BLACKSTONE = MaterialImpl.get("polished_blackstone");
+    Material BELL = MaterialImpl.get("minecraft:bell");
 
-    Material POLISHED_BLACKSTONE_SLAB = MaterialImpl.get("polished_blackstone_slab");
+    Material LANTERN = MaterialImpl.get("minecraft:lantern");
 
-    Material POLISHED_BLACKSTONE_STAIRS = MaterialImpl.get("polished_blackstone_stairs");
+    Material SOUL_LANTERN = MaterialImpl.get("minecraft:soul_lantern");
 
-    Material CHISELED_POLISHED_BLACKSTONE = MaterialImpl.get("chiseled_polished_blackstone");
+    Material SWEET_BERRIES = MaterialImpl.get("minecraft:sweet_berries");
 
-    Material POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("polished_blackstone_bricks");
+    Material GLOW_BERRIES = MaterialImpl.get("minecraft:glow_berries");
 
-    Material POLISHED_BLACKSTONE_BRICK_SLAB = MaterialImpl.get("polished_blackstone_brick_slab");
+    Material CAMPFIRE = MaterialImpl.get("minecraft:campfire");
 
-    Material POLISHED_BLACKSTONE_BRICK_STAIRS = MaterialImpl.get("polished_blackstone_brick_stairs");
+    Material SOUL_CAMPFIRE = MaterialImpl.get("minecraft:soul_campfire");
 
-    Material CRACKED_POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("cracked_polished_blackstone_bricks");
+    Material SHROOMLIGHT = MaterialImpl.get("minecraft:shroomlight");
 
-    Material RESPAWN_ANCHOR = MaterialImpl.get("respawn_anchor");
+    Material HONEYCOMB = MaterialImpl.get("minecraft:honeycomb");
 
-    Material CANDLE = MaterialImpl.get("candle");
+    Material BEE_NEST = MaterialImpl.get("minecraft:bee_nest");
 
-    Material WHITE_CANDLE = MaterialImpl.get("white_candle");
+    Material BEEHIVE = MaterialImpl.get("minecraft:beehive");
 
-    Material ORANGE_CANDLE = MaterialImpl.get("orange_candle");
+    Material HONEY_BOTTLE = MaterialImpl.get("minecraft:honey_bottle");
 
-    Material MAGENTA_CANDLE = MaterialImpl.get("magenta_candle");
+    Material HONEYCOMB_BLOCK = MaterialImpl.get("minecraft:honeycomb_block");
 
-    Material LIGHT_BLUE_CANDLE = MaterialImpl.get("light_blue_candle");
+    Material LODESTONE = MaterialImpl.get("minecraft:lodestone");
 
-    Material YELLOW_CANDLE = MaterialImpl.get("yellow_candle");
+    Material CRYING_OBSIDIAN = MaterialImpl.get("minecraft:crying_obsidian");
 
-    Material LIME_CANDLE = MaterialImpl.get("lime_candle");
+    Material BLACKSTONE = MaterialImpl.get("minecraft:blackstone");
 
-    Material PINK_CANDLE = MaterialImpl.get("pink_candle");
+    Material BLACKSTONE_SLAB = MaterialImpl.get("minecraft:blackstone_slab");
 
-    Material GRAY_CANDLE = MaterialImpl.get("gray_candle");
+    Material BLACKSTONE_STAIRS = MaterialImpl.get("minecraft:blackstone_stairs");
 
-    Material LIGHT_GRAY_CANDLE = MaterialImpl.get("light_gray_candle");
+    Material GILDED_BLACKSTONE = MaterialImpl.get("minecraft:gilded_blackstone");
 
-    Material CYAN_CANDLE = MaterialImpl.get("cyan_candle");
+    Material POLISHED_BLACKSTONE = MaterialImpl.get("minecraft:polished_blackstone");
 
-    Material PURPLE_CANDLE = MaterialImpl.get("purple_candle");
+    Material POLISHED_BLACKSTONE_SLAB = MaterialImpl.get("minecraft:polished_blackstone_slab");
 
-    Material BLUE_CANDLE = MaterialImpl.get("blue_candle");
+    Material POLISHED_BLACKSTONE_STAIRS = MaterialImpl.get("minecraft:polished_blackstone_stairs");
 
-    Material BROWN_CANDLE = MaterialImpl.get("brown_candle");
+    Material CHISELED_POLISHED_BLACKSTONE = MaterialImpl.get("minecraft:chiseled_polished_blackstone");
 
-    Material GREEN_CANDLE = MaterialImpl.get("green_candle");
+    Material POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("minecraft:polished_blackstone_bricks");
 
-    Material RED_CANDLE = MaterialImpl.get("red_candle");
+    Material POLISHED_BLACKSTONE_BRICK_SLAB = MaterialImpl.get("minecraft:polished_blackstone_brick_slab");
 
-    Material BLACK_CANDLE = MaterialImpl.get("black_candle");
+    Material POLISHED_BLACKSTONE_BRICK_STAIRS = MaterialImpl.get("minecraft:polished_blackstone_brick_stairs");
 
-    Material SMALL_AMETHYST_BUD = MaterialImpl.get("small_amethyst_bud");
+    Material CRACKED_POLISHED_BLACKSTONE_BRICKS = MaterialImpl.get("minecraft:cracked_polished_blackstone_bricks");
 
-    Material MEDIUM_AMETHYST_BUD = MaterialImpl.get("medium_amethyst_bud");
+    Material RESPAWN_ANCHOR = MaterialImpl.get("minecraft:respawn_anchor");
 
-    Material LARGE_AMETHYST_BUD = MaterialImpl.get("large_amethyst_bud");
+    Material CANDLE = MaterialImpl.get("minecraft:candle");
 
-    Material AMETHYST_CLUSTER = MaterialImpl.get("amethyst_cluster");
+    Material WHITE_CANDLE = MaterialImpl.get("minecraft:white_candle");
 
-    Material POINTED_DRIPSTONE = MaterialImpl.get("pointed_dripstone");
+    Material ORANGE_CANDLE = MaterialImpl.get("minecraft:orange_candle");
 
-    Material OCHRE_FROGLIGHT = MaterialImpl.get("ochre_froglight");
+    Material MAGENTA_CANDLE = MaterialImpl.get("minecraft:magenta_candle");
 
-    Material VERDANT_FROGLIGHT = MaterialImpl.get("verdant_froglight");
+    Material LIGHT_BLUE_CANDLE = MaterialImpl.get("minecraft:light_blue_candle");
 
-    Material PEARLESCENT_FROGLIGHT = MaterialImpl.get("pearlescent_froglight");
+    Material YELLOW_CANDLE = MaterialImpl.get("minecraft:yellow_candle");
 
-    Material FROGSPAWN = MaterialImpl.get("frogspawn");
+    Material LIME_CANDLE = MaterialImpl.get("minecraft:lime_candle");
 
-    Material ECHO_SHARD = MaterialImpl.get("echo_shard");
+    Material PINK_CANDLE = MaterialImpl.get("minecraft:pink_candle");
 
-    Material BRUSH = MaterialImpl.get("brush");
+    Material GRAY_CANDLE = MaterialImpl.get("minecraft:gray_candle");
 
-    Material NETHERITE_UPGRADE_SMITHING_TEMPLATE = MaterialImpl.get("netherite_upgrade_smithing_template");
+    Material LIGHT_GRAY_CANDLE = MaterialImpl.get("minecraft:light_gray_candle");
 
-    Material SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("sentry_armor_trim_smithing_template");
+    Material CYAN_CANDLE = MaterialImpl.get("minecraft:cyan_candle");
 
-    Material DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("dune_armor_trim_smithing_template");
+    Material PURPLE_CANDLE = MaterialImpl.get("minecraft:purple_candle");
 
-    Material COAST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("coast_armor_trim_smithing_template");
+    Material BLUE_CANDLE = MaterialImpl.get("minecraft:blue_candle");
 
-    Material WILD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("wild_armor_trim_smithing_template");
+    Material BROWN_CANDLE = MaterialImpl.get("minecraft:brown_candle");
 
-    Material WARD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("ward_armor_trim_smithing_template");
+    Material GREEN_CANDLE = MaterialImpl.get("minecraft:green_candle");
 
-    Material EYE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("eye_armor_trim_smithing_template");
+    Material RED_CANDLE = MaterialImpl.get("minecraft:red_candle");
 
-    Material VEX_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("vex_armor_trim_smithing_template");
+    Material BLACK_CANDLE = MaterialImpl.get("minecraft:black_candle");
 
-    Material TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("tide_armor_trim_smithing_template");
+    Material SMALL_AMETHYST_BUD = MaterialImpl.get("minecraft:small_amethyst_bud");
 
-    Material SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("snout_armor_trim_smithing_template");
+    Material MEDIUM_AMETHYST_BUD = MaterialImpl.get("minecraft:medium_amethyst_bud");
 
-    Material RIB_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("rib_armor_trim_smithing_template");
+    Material LARGE_AMETHYST_BUD = MaterialImpl.get("minecraft:large_amethyst_bud");
 
-    Material SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("spire_armor_trim_smithing_template");
+    Material AMETHYST_CLUSTER = MaterialImpl.get("minecraft:amethyst_cluster");
 
-    Material WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("wayfinder_armor_trim_smithing_template");
+    Material POINTED_DRIPSTONE = MaterialImpl.get("minecraft:pointed_dripstone");
 
-    Material SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("shaper_armor_trim_smithing_template");
+    Material OCHRE_FROGLIGHT = MaterialImpl.get("minecraft:ochre_froglight");
 
-    Material SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("silence_armor_trim_smithing_template");
+    Material VERDANT_FROGLIGHT = MaterialImpl.get("minecraft:verdant_froglight");
 
-    Material RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("raiser_armor_trim_smithing_template");
+    Material PEARLESCENT_FROGLIGHT = MaterialImpl.get("minecraft:pearlescent_froglight");
 
-    Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("host_armor_trim_smithing_template");
+    Material FROGSPAWN = MaterialImpl.get("minecraft:frogspawn");
 
-    Material FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("flow_armor_trim_smithing_template");
+    Material ECHO_SHARD = MaterialImpl.get("minecraft:echo_shard");
 
-    Material BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("bolt_armor_trim_smithing_template");
+    Material BRUSH = MaterialImpl.get("minecraft:brush");
 
-    Material ANGLER_POTTERY_SHERD = MaterialImpl.get("angler_pottery_sherd");
+    Material NETHERITE_UPGRADE_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:netherite_upgrade_smithing_template");
 
-    Material ARCHER_POTTERY_SHERD = MaterialImpl.get("archer_pottery_sherd");
+    Material SENTRY_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:sentry_armor_trim_smithing_template");
 
-    Material ARMS_UP_POTTERY_SHERD = MaterialImpl.get("arms_up_pottery_sherd");
+    Material DUNE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:dune_armor_trim_smithing_template");
 
-    Material BLADE_POTTERY_SHERD = MaterialImpl.get("blade_pottery_sherd");
+    Material COAST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:coast_armor_trim_smithing_template");
 
-    Material BREWER_POTTERY_SHERD = MaterialImpl.get("brewer_pottery_sherd");
+    Material WILD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:wild_armor_trim_smithing_template");
 
-    Material BURN_POTTERY_SHERD = MaterialImpl.get("burn_pottery_sherd");
+    Material WARD_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:ward_armor_trim_smithing_template");
 
-    Material DANGER_POTTERY_SHERD = MaterialImpl.get("danger_pottery_sherd");
+    Material EYE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:eye_armor_trim_smithing_template");
 
-    Material EXPLORER_POTTERY_SHERD = MaterialImpl.get("explorer_pottery_sherd");
+    Material VEX_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:vex_armor_trim_smithing_template");
 
-    Material FLOW_POTTERY_SHERD = MaterialImpl.get("flow_pottery_sherd");
+    Material TIDE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:tide_armor_trim_smithing_template");
 
-    Material FRIEND_POTTERY_SHERD = MaterialImpl.get("friend_pottery_sherd");
+    Material SNOUT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:snout_armor_trim_smithing_template");
 
-    Material GUSTER_POTTERY_SHERD = MaterialImpl.get("guster_pottery_sherd");
+    Material RIB_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:rib_armor_trim_smithing_template");
 
-    Material HEART_POTTERY_SHERD = MaterialImpl.get("heart_pottery_sherd");
+    Material SPIRE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:spire_armor_trim_smithing_template");
 
-    Material HEARTBREAK_POTTERY_SHERD = MaterialImpl.get("heartbreak_pottery_sherd");
+    Material WAYFINDER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:wayfinder_armor_trim_smithing_template");
 
-    Material HOWL_POTTERY_SHERD = MaterialImpl.get("howl_pottery_sherd");
+    Material SHAPER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:shaper_armor_trim_smithing_template");
 
-    Material MINER_POTTERY_SHERD = MaterialImpl.get("miner_pottery_sherd");
+    Material SILENCE_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:silence_armor_trim_smithing_template");
 
-    Material MOURNER_POTTERY_SHERD = MaterialImpl.get("mourner_pottery_sherd");
+    Material RAISER_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:raiser_armor_trim_smithing_template");
 
-    Material PLENTY_POTTERY_SHERD = MaterialImpl.get("plenty_pottery_sherd");
+    Material HOST_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:host_armor_trim_smithing_template");
 
-    Material PRIZE_POTTERY_SHERD = MaterialImpl.get("prize_pottery_sherd");
+    Material FLOW_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:flow_armor_trim_smithing_template");
 
-    Material SCRAPE_POTTERY_SHERD = MaterialImpl.get("scrape_pottery_sherd");
+    Material BOLT_ARMOR_TRIM_SMITHING_TEMPLATE = MaterialImpl.get("minecraft:bolt_armor_trim_smithing_template");
 
-    Material SHEAF_POTTERY_SHERD = MaterialImpl.get("sheaf_pottery_sherd");
+    Material ANGLER_POTTERY_SHERD = MaterialImpl.get("minecraft:angler_pottery_sherd");
 
-    Material SHELTER_POTTERY_SHERD = MaterialImpl.get("shelter_pottery_sherd");
+    Material ARCHER_POTTERY_SHERD = MaterialImpl.get("minecraft:archer_pottery_sherd");
 
-    Material SKULL_POTTERY_SHERD = MaterialImpl.get("skull_pottery_sherd");
+    Material ARMS_UP_POTTERY_SHERD = MaterialImpl.get("minecraft:arms_up_pottery_sherd");
 
-    Material SNORT_POTTERY_SHERD = MaterialImpl.get("snort_pottery_sherd");
+    Material BLADE_POTTERY_SHERD = MaterialImpl.get("minecraft:blade_pottery_sherd");
 
-    Material COPPER_GRATE = MaterialImpl.get("copper_grate");
+    Material BREWER_POTTERY_SHERD = MaterialImpl.get("minecraft:brewer_pottery_sherd");
 
-    Material EXPOSED_COPPER_GRATE = MaterialImpl.get("exposed_copper_grate");
+    Material BURN_POTTERY_SHERD = MaterialImpl.get("minecraft:burn_pottery_sherd");
 
-    Material WEATHERED_COPPER_GRATE = MaterialImpl.get("weathered_copper_grate");
+    Material DANGER_POTTERY_SHERD = MaterialImpl.get("minecraft:danger_pottery_sherd");
 
-    Material OXIDIZED_COPPER_GRATE = MaterialImpl.get("oxidized_copper_grate");
+    Material EXPLORER_POTTERY_SHERD = MaterialImpl.get("minecraft:explorer_pottery_sherd");
 
-    Material WAXED_COPPER_GRATE = MaterialImpl.get("waxed_copper_grate");
+    Material FLOW_POTTERY_SHERD = MaterialImpl.get("minecraft:flow_pottery_sherd");
 
-    Material WAXED_EXPOSED_COPPER_GRATE = MaterialImpl.get("waxed_exposed_copper_grate");
+    Material FRIEND_POTTERY_SHERD = MaterialImpl.get("minecraft:friend_pottery_sherd");
 
-    Material WAXED_WEATHERED_COPPER_GRATE = MaterialImpl.get("waxed_weathered_copper_grate");
+    Material GUSTER_POTTERY_SHERD = MaterialImpl.get("minecraft:guster_pottery_sherd");
 
-    Material WAXED_OXIDIZED_COPPER_GRATE = MaterialImpl.get("waxed_oxidized_copper_grate");
+    Material HEART_POTTERY_SHERD = MaterialImpl.get("minecraft:heart_pottery_sherd");
 
-    Material COPPER_BULB = MaterialImpl.get("copper_bulb");
+    Material HEARTBREAK_POTTERY_SHERD = MaterialImpl.get("minecraft:heartbreak_pottery_sherd");
 
-    Material EXPOSED_COPPER_BULB = MaterialImpl.get("exposed_copper_bulb");
+    Material HOWL_POTTERY_SHERD = MaterialImpl.get("minecraft:howl_pottery_sherd");
 
-    Material WEATHERED_COPPER_BULB = MaterialImpl.get("weathered_copper_bulb");
+    Material MINER_POTTERY_SHERD = MaterialImpl.get("minecraft:miner_pottery_sherd");
 
-    Material OXIDIZED_COPPER_BULB = MaterialImpl.get("oxidized_copper_bulb");
+    Material MOURNER_POTTERY_SHERD = MaterialImpl.get("minecraft:mourner_pottery_sherd");
 
-    Material WAXED_COPPER_BULB = MaterialImpl.get("waxed_copper_bulb");
+    Material PLENTY_POTTERY_SHERD = MaterialImpl.get("minecraft:plenty_pottery_sherd");
 
-    Material WAXED_EXPOSED_COPPER_BULB = MaterialImpl.get("waxed_exposed_copper_bulb");
+    Material PRIZE_POTTERY_SHERD = MaterialImpl.get("minecraft:prize_pottery_sherd");
 
-    Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get("waxed_weathered_copper_bulb");
+    Material SCRAPE_POTTERY_SHERD = MaterialImpl.get("minecraft:scrape_pottery_sherd");
 
-    Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get("waxed_oxidized_copper_bulb");
+    Material SHEAF_POTTERY_SHERD = MaterialImpl.get("minecraft:sheaf_pottery_sherd");
 
-    Material TRIAL_SPAWNER = MaterialImpl.get("trial_spawner");
+    Material SHELTER_POTTERY_SHERD = MaterialImpl.get("minecraft:shelter_pottery_sherd");
 
-    Material TRIAL_KEY = MaterialImpl.get("trial_key");
+    Material SKULL_POTTERY_SHERD = MaterialImpl.get("minecraft:skull_pottery_sherd");
 
-    Material OMINOUS_TRIAL_KEY = MaterialImpl.get("ominous_trial_key");
+    Material SNORT_POTTERY_SHERD = MaterialImpl.get("minecraft:snort_pottery_sherd");
 
-    Material VAULT = MaterialImpl.get("vault");
+    Material COPPER_GRATE = MaterialImpl.get("minecraft:copper_grate");
 
-    Material OMINOUS_BOTTLE = MaterialImpl.get("ominous_bottle");
+    Material EXPOSED_COPPER_GRATE = MaterialImpl.get("minecraft:exposed_copper_grate");
+
+    Material WEATHERED_COPPER_GRATE = MaterialImpl.get("minecraft:weathered_copper_grate");
+
+    Material OXIDIZED_COPPER_GRATE = MaterialImpl.get("minecraft:oxidized_copper_grate");
+
+    Material WAXED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_copper_grate");
+
+    Material WAXED_EXPOSED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_exposed_copper_grate");
+
+    Material WAXED_WEATHERED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_weathered_copper_grate");
+
+    Material WAXED_OXIDIZED_COPPER_GRATE = MaterialImpl.get("minecraft:waxed_oxidized_copper_grate");
+
+    Material COPPER_BULB = MaterialImpl.get("minecraft:copper_bulb");
+
+    Material EXPOSED_COPPER_BULB = MaterialImpl.get("minecraft:exposed_copper_bulb");
+
+    Material WEATHERED_COPPER_BULB = MaterialImpl.get("minecraft:weathered_copper_bulb");
+
+    Material OXIDIZED_COPPER_BULB = MaterialImpl.get("minecraft:oxidized_copper_bulb");
+
+    Material WAXED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_copper_bulb");
+
+    Material WAXED_EXPOSED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_exposed_copper_bulb");
+
+    Material WAXED_WEATHERED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_weathered_copper_bulb");
+
+    Material WAXED_OXIDIZED_COPPER_BULB = MaterialImpl.get("minecraft:waxed_oxidized_copper_bulb");
+
+    Material TRIAL_SPAWNER = MaterialImpl.get("minecraft:trial_spawner");
+
+    Material TRIAL_KEY = MaterialImpl.get("minecraft:trial_key");
+
+    Material OMINOUS_TRIAL_KEY = MaterialImpl.get("minecraft:ominous_trial_key");
+
+    Material VAULT = MaterialImpl.get("minecraft:vault");
+
+    Material OMINOUS_BOTTLE = MaterialImpl.get("minecraft:ominous_bottle");
 }
