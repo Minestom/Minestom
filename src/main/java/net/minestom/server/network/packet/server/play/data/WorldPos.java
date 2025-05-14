@@ -12,7 +12,6 @@ public record WorldPos(@NotNull String dimension, @NotNull Point blockPosition) 
             NetworkBuffer.STRING, WorldPos::dimension,
             NetworkBuffer.BLOCK_POSITION, WorldPos::blockPosition,
             WorldPos::new);
-    public static final NetworkBuffer.Type<WorldPos> OPT_NETWORK_TYPE = NETWORK_TYPE.optional();
     public static final Codec<WorldPos> CODEC = StructCodec.struct(
             "dimension", Codec.STRING, WorldPos::dimension,
             "pos", Codec.BLOCK_POSITION, WorldPos::blockPosition,
