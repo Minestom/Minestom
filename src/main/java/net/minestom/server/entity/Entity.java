@@ -1398,6 +1398,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param potion The potion to add
      */
     public void addEffect(@NotNull Potion potion) {
+        EntityPrePotionAddEvent event = new EntityPrePotionAddEvent(this, potion);
+        EventDispatcher.call(event);
+
+        if (event.isCancelled()) return;
+
         removeEffect(potion.effect());
         this.effects.add(new TimedPotion(potion, getAliveTicks()));
         potion.sendAddPacket(this);
