@@ -469,6 +469,11 @@ public sealed class MetadataDef {
         public static final Entry<VillagerMeta.VillagerData> VARIANT = index(0, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
     }
 
+    public static final class HappyGhast extends AgeableMob {
+        public static final Entry<Boolean> IS_LEASH_HOLDER = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> STAYS_STILL = index(1, Metadata::Boolean, false);
+    }
+
     public static final class IronGolem extends Mob {
         public static final Entry<Byte> IRON_GOLEM_FLAGS = index(0, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_PLAYER_CREATED = bitMask(0, (byte) 0x01, false);
