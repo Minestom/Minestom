@@ -39,6 +39,8 @@ interface StatisticTypes {
 
     StatisticType PIG_ONE_CM = StatisticTypeImpl.get("minecraft:pig_one_cm");
 
+    StatisticType HAPPY_GHAST_ONE_CM = StatisticTypeImpl.get("minecraft:happy_ghast_one_cm");
+
     StatisticType HORSE_ONE_CM = StatisticTypeImpl.get("minecraft:horse_one_cm");
 
     StatisticType AVIATE_ONE_CM = StatisticTypeImpl.get("minecraft:aviate_one_cm");

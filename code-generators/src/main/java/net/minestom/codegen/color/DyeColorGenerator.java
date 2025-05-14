@@ -134,9 +134,10 @@ public class DyeColorGenerator extends MinestomCodeGenerator {
             String dyeColorName = dyeColorObject.get("name").getAsString();
             dyeColorEnum.addEnumConstant(toConstant(dyeColorName), TypeSpec.anonymousClassBuilder(
                             "new $T(0x$L), new $T(0x$L), new $T(0x$L), $L",
-                            colorCN, Integer.toString(dyeColorObject.get("textureDiffuseColor").getAsInt(), 16),
-                            colorCN, Integer.toString(dyeColorObject.get("textColor").getAsInt(), 16),
-                            colorCN, Integer.toString(dyeColorObject.get("fireworkColor").getAsInt(), 16),
+                            colorCN, Integer.toHexString(dyeColorObject.get("textureDiffuseColor").getAsInt()),
+                            // Chop 2 because we don't care about the alpha in this context.
+                            colorCN, Integer.toHexString(dyeColorObject.get("textColor").getAsInt()).substring(2),
+                            colorCN, Integer.toHexString(dyeColorObject.get("fireworkColor").getAsInt()),
                             dyeColorObject.get("mapColorId").getAsInt()
                     ).build()
             );

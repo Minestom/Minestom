@@ -909,6 +909,22 @@ interface SoundEvents {
 
     SoundEvent ENTITY_DONKEY_JUMP = BuiltinSoundEvent.get("minecraft:entity.donkey.jump");
 
+    SoundEvent BLOCK_DRIED_GHAST_BREAK = BuiltinSoundEvent.get("minecraft:block.dried_ghast.break");
+
+    SoundEvent BLOCK_DRIED_GHAST_STEP = BuiltinSoundEvent.get("minecraft:block.dried_ghast.step");
+
+    SoundEvent BLOCK_DRIED_GHAST_FALL = BuiltinSoundEvent.get("minecraft:block.dried_ghast.fall");
+
+    SoundEvent BLOCK_DRIED_GHAST_AMBIENT = BuiltinSoundEvent.get("minecraft:block.dried_ghast.ambient");
+
+    SoundEvent BLOCK_DRIED_GHAST_AMBIENT_WATER = BuiltinSoundEvent.get("minecraft:block.dried_ghast.ambient_water");
+
+    SoundEvent BLOCK_DRIED_GHAST_PLACE = BuiltinSoundEvent.get("minecraft:block.dried_ghast.place");
+
+    SoundEvent BLOCK_DRIED_GHAST_PLACE_IN_WATER = BuiltinSoundEvent.get("minecraft:block.dried_ghast.place_in_water");
+
+    SoundEvent BLOCK_DRIED_GHAST_TRANSITION = BuiltinSoundEvent.get("minecraft:block.dried_ghast.transition");
+
     SoundEvent BLOCK_DRIPSTONE_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.dripstone_block.break");
 
     SoundEvent BLOCK_DRIPSTONE_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.dripstone_block.step");
@@ -918,6 +934,8 @@ interface SoundEvents {
     SoundEvent BLOCK_DRIPSTONE_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.dripstone_block.hit");
 
     SoundEvent BLOCK_DRIPSTONE_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.dripstone_block.fall");
+
+    SoundEvent BLOCK_DRY_GRASS_AMBIENT = BuiltinSoundEvent.get("minecraft:block.dry_grass.ambient");
 
     SoundEvent BLOCK_POINTED_DRIPSTONE_BREAK = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.break");
 
@@ -1241,6 +1259,14 @@ interface SoundEvents {
 
     SoundEvent ENTITY_GHAST_WARN = BuiltinSoundEvent.get("minecraft:entity.ghast.warn");
 
+    SoundEvent ENTITY_GHASTLING_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.ghastling.ambient");
+
+    SoundEvent ENTITY_GHASTLING_DEATH = BuiltinSoundEvent.get("minecraft:entity.ghastling.death");
+
+    SoundEvent ENTITY_GHASTLING_HURT = BuiltinSoundEvent.get("minecraft:entity.ghastling.hurt");
+
+    SoundEvent ENTITY_GHASTLING_SPAWN = BuiltinSoundEvent.get("minecraft:entity.ghastling.spawn");
+
     SoundEvent BLOCK_GILDED_BLACKSTONE_BREAK = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.break");
 
     SoundEvent BLOCK_GILDED_BLACKSTONE_FALL = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.fall");
@@ -1377,6 +1403,14 @@ interface SoundEvents {
 
     SoundEvent BLOCK_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("minecraft:block.hanging_sign.place");
 
+    SoundEvent ENTITY_HAPPY_GHAST_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.ambient");
+
+    SoundEvent ENTITY_HAPPY_GHAST_DEATH = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.death");
+
+    SoundEvent ENTITY_HAPPY_GHAST_HURT = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.hurt");
+
+    SoundEvent ENTITY_HAPPY_GHAST_RIDING = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.riding");
+
     SoundEvent BLOCK_HEAVY_CORE_BREAK = BuiltinSoundEvent.get("minecraft:block.heavy_core.break");
 
     SoundEvent BLOCK_HEAVY_CORE_FALL = BuiltinSoundEvent.get("minecraft:block.heavy_core.fall");
@@ -1438,6 +1472,14 @@ interface SoundEvents {
     SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.close_shutter");
 
     SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = BuiltinSoundEvent.get("minecraft:block.trial_spawner.eject_item");
+
+    SoundEvent ENTITY_HAPPY_GHAST_EQUIP = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.equip");
+
+    SoundEvent ENTITY_HAPPY_GHAST_UNEQUIP = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.unequip");
+
+    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_UP = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.harness_goggles_up");
+
+    SoundEvent ENTITY_HAPPY_GHAST_HARNESS_GOGGLES_DOWN = BuiltinSoundEvent.get("minecraft:entity.happy_ghast.harness_goggles_down");
 
     SoundEvent ITEM_HOE_TILL = BuiltinSoundEvent.get("minecraft:item.hoe.till");
 
@@ -1858,6 +1900,8 @@ interface SoundEvents {
     SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get("minecraft:music_disc.creator_music_box");
 
     SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get("minecraft:music_disc.precipice");
+
+    SoundEvent MUSIC_DISC_TEARS = BuiltinSoundEvent.get("minecraft:music_disc.tears");
 
     SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get("minecraft:music.dragon");
 
@@ -2363,8 +2407,6 @@ interface SoundEvents {
 
     SoundEvent BLOCK_POWDER_SNOW_STEP = BuiltinSoundEvent.get("minecraft:block.powder_snow.step");
 
-    SoundEvent ENTITY_PUFFER_FISH_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.ambient");
-
     SoundEvent ENTITY_PUFFER_FISH_BLOW_OUT = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.blow_out");
 
     SoundEvent ENTITY_PUFFER_FISH_BLOW_UP = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.blow_up");
@@ -2467,8 +2509,6 @@ interface SoundEvents {
 
     SoundEvent BLOCK_SAND_IDLE = BuiltinSoundEvent.get("minecraft:block.sand.idle");
 
-    SoundEvent BLOCK_SAND_WIND = BuiltinSoundEvent.get("minecraft:block.sand.wind");
-
     SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get("minecraft:block.scaffolding.break");
 
     SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get("minecraft:block.scaffolding.fall");
@@ -2550,6 +2590,8 @@ interface SoundEvents {
     SoundEvent ENTITY_SHEEP_SHEAR = BuiltinSoundEvent.get("minecraft:entity.sheep.shear");
 
     SoundEvent ENTITY_SHEEP_STEP = BuiltinSoundEvent.get("minecraft:entity.sheep.step");
+
+    SoundEvent ITEM_SHEARS_SNIP = BuiltinSoundEvent.get("minecraft:item.shears.snip");
 
     SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get("minecraft:item.shield.block");
 
