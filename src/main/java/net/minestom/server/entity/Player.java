@@ -256,6 +256,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
                 .withDynamic(Identity.UUID, this::getUuid)
                 .withDynamic(Identity.NAME, this::getUsername)
                 .withDynamic(Identity.DISPLAY_NAME, this::getDisplayName)
+                .withDynamic(Identity.LOCALE, this::getLocale)
                 .build();
 
         // When in configuration state no metadata updates can be sent.
