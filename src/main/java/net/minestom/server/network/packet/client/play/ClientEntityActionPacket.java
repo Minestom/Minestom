@@ -17,8 +17,6 @@ public record ClientEntityActionPacket(int playerId, @NotNull Action action,
             ClientEntityActionPacket::new);
 
     public enum Action {
-        START_SNEAKING,
-        STOP_SNEAKING,
         LEAVE_BED,
         START_SPRINTING,
         STOP_SPRINTING,
