@@ -15,8 +15,9 @@ jobs:
       - name: Set up JDK ${{ env.JAVA_VERSION }}
         uses: actions/setup-java@v4
         with:
+          distribution: temurin
+          cache: gradle
           java-version: ${{ env.JAVA_VERSION }}
-          distribution: 'zulu'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
       - name: Build javadoc
