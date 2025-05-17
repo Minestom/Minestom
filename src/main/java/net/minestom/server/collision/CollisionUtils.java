@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.function.Function;
 
 @ApiStatus.Internal
@@ -177,8 +178,13 @@ public final class CollisionUtils {
         return newPosition;
     }
 
+    @ApiStatus.Internal
+    public static Shape parseBlockShape(Map<Shape, Shape> shapeCache, String collision, String occlusion, boolean occludes, int lightEmission) {
+        return ShapeImpl.parseBlockFromRegistry(shapeCache, collision, occlusion, occludes, lightEmission);
+    }
+
     public static Shape parseBlockShape(String collision, String occlusion, Registry.BlockEntry blockEntry) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
+        return ShapeImpl.parseBlockFromRegistry(null, collision, occlusion, blockEntry.occludes(), blockEntry.lightEmission());
     }
 
     /**

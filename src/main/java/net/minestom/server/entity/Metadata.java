@@ -12,6 +12,7 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.particle.Particle;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
@@ -163,6 +164,10 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 
+    public static Entry<WorldPos> OptionalWorldPos(@Nullable WorldPos value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_OPT_GLOBAL_POSITION, value, WorldPos.NETWORK_TYPE.optional());
+    }
+
     public static Entry<Holder<PaintingVariant>> PaintingVariant(@NotNull Holder<PaintingVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PAINTING_VARIANT, value, PaintingVariant.NETWORK_TYPE);
     }
@@ -183,7 +188,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 
-    private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
+    static final AtomicInteger NEXT_ID = new AtomicInteger(0);
 
     public static final byte TYPE_BYTE = nextId();
     public static final byte TYPE_VARINT = nextId();

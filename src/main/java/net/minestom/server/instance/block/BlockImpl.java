@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
@@ -14,10 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 record BlockImpl(@NotNull Registry.BlockEntry registry,
                  long propertiesArray,
@@ -34,12 +32,21 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
 
     // Block state -> block object
-    private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
+    private static final List<Block> BLOCK_STATE_MAP;
     // Block id -> valid property keys (order is important for lookup)
-    private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
+    private static final List<PropertyType[]> PROPERTIES_TYPE;
     // Block id -> Map<Properties, Block>
-    private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
+    private static final List<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES;
+    private static final Registry.Container<Block> CONTAINER;
+
+    static {
+        // TODO(registry) generate constants for the default sizes.
+        ObjectArray<Block> blockStateMap = ObjectArray.singleThread();
+        ObjectArray<PropertyType[]> propertiesType = ObjectArray.singleThread();
+        ObjectArray<Long2ObjectArrayMap<BlockImpl>> possibleStates = ObjectArray.singleThread();
+        Map<Shape, Shape> shapesCache = new HashMap<>();
+
+        Registry.Container<Block> blockContainer = Registry.createStaticContainer(Registry.Resource.BLOCKS,
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
                 final Registry.Properties stateObject = properties.section("states");
@@ -65,7 +72,7 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         propertyTypes = new PropertyType[0];
                     }
                 }
-                PROPERTIES_TYPE.set(blockId, propertyTypes);
+                propertiesType.set(blockId, propertyTypes);
 
                 // Retrieve block states
                 {
@@ -86,23 +93,23 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                         }
 
                         var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
-                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
+                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties, shapesCache),
                                 propertiesValue, null, null);
-                        BLOCK_STATE_MAP.set(block.stateId(), block);
+                        blockStateMap.set(block.stateId(), block);
                         propertiesKeys[propertiesOffset] = propertiesValue;
                         blocksValues[propertiesOffset++] = block;
                     }
-                    POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
+                    possibleStates.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
                 }
                 // Register default state
                 final int defaultState = properties.getInt("defaultStateId");
-                return getState(defaultState);
+                return blockStateMap.get(defaultState);
             });
-
-    static {
-        PROPERTIES_TYPE.trim();
-        BLOCK_STATE_MAP.trim();
-        POSSIBLE_STATES.trim();
+        // Convert all to immutable lists, and trim the arrays
+        PROPERTIES_TYPE = propertiesType.toList();
+        BLOCK_STATE_MAP = blockStateMap.toList();
+        POSSIBLE_STATES = possibleStates.toList();
+        CONTAINER = blockContainer;
     }
 
     static Block get(@NotNull String namespace) {

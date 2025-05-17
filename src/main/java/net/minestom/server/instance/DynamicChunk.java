@@ -47,7 +47,7 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
 public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
 
-    protected List<Section> sections;
+    protected final List<Section> sections;
 
     private boolean needsCompleteHeightmapRefresh = true;
 
@@ -64,9 +64,15 @@ public class DynamicChunk extends Chunk {
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
+        // Required to be here because the super call populates the min and max section.
         var sectionsTemp = new Section[maxSection - minSection];
         Arrays.setAll(sectionsTemp, value -> new Section());
         this.sections = List.of(sectionsTemp);
+    }
+
+    protected DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ, @NotNull List<Section> sections) {
+        super(instance, chunkX, chunkZ, true);
+        this.sections = List.copyOf(sections);
     }
 
     @Override
@@ -238,8 +244,8 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ);
-        dynamicChunk.sections = sections.stream().map(Section::clone).toList();
+        var sections = this.sections.stream().map(Section::clone).toList();
+        DynamicChunk dynamicChunk = new DynamicChunk(instance, chunkX, chunkZ, sections);
         dynamicChunk.entries.putAll(entries);
         return dynamicChunk;
     }
