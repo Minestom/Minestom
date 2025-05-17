@@ -28,7 +28,7 @@ final class MetadataImpl {
     private static final List<Metadata.Entry<?>> EMPTY_VALUES;
 
     static {
-        final ObjectArray<Metadata.Entry<?>> emptyValues = ObjectArray.singleThread(30);
+        final ObjectArray<Metadata.Entry<?>> emptyValues = ObjectArray.singleThread(NEXT_ID.get());
         emptyValues.set(TYPE_BYTE, Byte((byte) 0));
         emptyValues.set(TYPE_VARINT, VarInt(0));
         emptyValues.set(TYPE_LONG, VarLong(0L));

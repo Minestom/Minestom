@@ -188,7 +188,7 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_QUATERNION, value, NetworkBuffer.QUATERNION);
     }
 
-    private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
+    static final AtomicInteger NEXT_ID = new AtomicInteger(0);
 
     public static final byte TYPE_BYTE = nextId();
     public static final byte TYPE_VARINT = nextId();
