@@ -143,15 +143,14 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return lightData.occlusionBoundingBoxes;
     }
 
-    static final Map<ShapeImpl, ShapeImpl> SHAPES = new ConcurrentHashMap<>();
-
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, int lightEmission) {
+    static ShapeImpl parseBlockFromRegistry(Map<Shape, Shape> shapeCache, String collision, String occlusion, boolean occludes, int lightEmission) {
         BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
         BoundingBox[] occlusionBoundingBoxes = occludes ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
         final CollisionData collisionData = collisionData(List.of(collisionBoundingBoxes));
         final LightData lightData = lightData(List.of(occlusionBoundingBoxes), lightEmission);
         final ShapeImpl shape = new ShapeImpl(collisionData, lightData);
-        return SHAPES.computeIfAbsent(shape, k -> k);
+        if (shapeCache != null) return (ShapeImpl) shapeCache.computeIfAbsent(shape, k -> k);
+        return shape;
     }
 
     private static BoundingBox[] parseRegistryBoundingBoxString(String str) {

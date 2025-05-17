@@ -44,8 +44,8 @@ public final class Registry {
     static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main) {
-        return new BlockEntry(namespace, main, null);
+    public static BlockEntry block(String namespace, @NotNull Properties main, Map<Shape, Shape> shapeCache) {
+        return new BlockEntry(namespace, main, shapeCache, null);
     }
 
     @ApiStatus.Internal
@@ -271,7 +271,7 @@ public final class Registry {
         private final boolean signalSource;
         private final Properties custom;
 
-        private BlockEntry(String namespace, Properties main, Properties custom) {
+        private BlockEntry(String namespace, Properties main, Map<Shape, Shape> shapeCache, Properties custom) {
             this.custom = custom;
             this.key = Key.key(namespace);
             this.id = main.getInt("id");
@@ -307,7 +307,7 @@ public final class Registry {
             {
                 final String collision = main.getString("collisionShape");
                 final String occlusion = main.getString("occlusionShape");
-                this.shape = CollisionUtils.parseBlockShape(collision, occlusion, this.occludes, this.lightEmission);
+                this.shape = CollisionUtils.parseBlockShape(shapeCache, collision, occlusion, this.occludes, this.lightEmission);
             }
             this.redstoneConductor = main.getBoolean("redstoneConductor");
             this.signalSource = main.getBoolean("signalSource", false);
