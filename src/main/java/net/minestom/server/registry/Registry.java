@@ -91,8 +91,9 @@ public final class Registry {
         InputStream resourceStream = Registry.class.getClassLoader().getResourceAsStream(resource.name);
 
         // 2. Try to load from working directory
-        if (resourceStream == null && Files.exists(Path.of(resource.name))) {
-            resourceStream = Files.newInputStream(Path.of(resource.name));
+        final Path path = Path.of(resource.name);
+        if (resourceStream == null && Files.exists(path)) {
+            resourceStream = Files.newInputStream(path);
         }
 
         // 3. Not found :(
@@ -112,7 +113,7 @@ public final class Registry {
         } catch (IOException e) {
             MinecraftServer.getExceptionManager().handleException(e);
         }
-        return map;
+        return Map.copyOf(map);
     }
 
     @ApiStatus.Internal
@@ -416,7 +417,7 @@ public final class Registry {
 
     public static final class MaterialEntry implements Entry {
         private final Key key;
-        private final Properties main;
+        private final Properties components;
         private final int id;
         private final String translationKey;
         private final Supplier<Block> blockSupplier;
@@ -426,7 +427,7 @@ public final class Registry {
         private final Properties custom;
 
         private MaterialEntry(String namespace, Properties main, Properties custom) {
-            this.main = main;
+            this.components = main.section("components");
             this.custom = custom;
             this.key = Key.key(namespace);
             this.id = main.getInt("id");
@@ -465,7 +466,7 @@ public final class Registry {
             if (prototype == null) {
                 final Transcoder<Object> coder = new RegistryTranscoder<>(Transcoder.JAVA, MinecraftServer.process());
                 DataComponentMap.Builder builder = DataComponentMap.builder();
-                for (Map.Entry<String, Object> entry : main.section("components")) {
+                for (Map.Entry<String, Object> entry : components) {
                     //noinspection unchecked
                     DataComponent<Object> component = (DataComponent<Object>) DataComponent.fromKey(entry.getKey());
                     Check.notNull(component, "Unknown component {0} in {1}", entry.getKey(), key);
@@ -543,15 +544,16 @@ public final class Registry {
             this.boundingBox = new BoundingBox(this.width, this.height, this.width);
 
             // Attachments
-            this.entityOffsets = new HashMap<>();
+            Map<String, List<Double>> entityOffsets = new HashMap<>();
             Properties attachments = main.section("attachments");
             if (attachments != null) {
                 var allAttachments = attachments.asMap().keySet();
                 for (String key : allAttachments) {
                     var offset = attachments.getNestedDoubleArray(key);
-                    this.entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
+                    entityOffsets.put(key, offset.getFirst()); // It's an array of an array with a single element, as of 1.21.3 we only need to grab a single array of 3 doubles
                 }
             }
+            this.entityOffsets = Map.copyOf(entityOffsets);
 
             this.custom = custom;
         }
@@ -726,23 +728,27 @@ public final class Registry {
                 reader.beginArray();
                 while (reader.hasNext()) list.add(readObject(reader));
                 reader.endArray();
-                yield list;
+                yield List.copyOf(list);
             }
             case BEGIN_OBJECT -> {
                 Map<String, Object> map = new HashMap<>();
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName(), readObject(reader));
                 reader.endObject();
-                yield map;
+                yield Map.copyOf(map);
             }
-            case STRING -> reader.nextString();
+            case STRING -> reader.nextString().intern();
             case NUMBER -> ToNumberPolicy.LONG_OR_DOUBLE.readNumber(reader);
             case BOOLEAN -> reader.nextBoolean();
             default -> throw new IllegalStateException("Invalid peek: " + reader.peek());
         };
     }
 
-    record PropertiesMap(Map<String, Object> map) implements Properties {
+    record PropertiesMap(@NotNull Map<String, Object> map) implements Properties {
+        public PropertiesMap {
+            map = Map.copyOf(map);
+        }
+
         @Override
         public String getString(String name, String defaultValue) {
             var element = element(name);
