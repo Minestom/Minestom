@@ -277,8 +277,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             if (resolved != null && resolved != content.resolved())
                 return false;
 
-            if (pages == null) return true;
-            return pages.test(content.pages());
+            return pages == null || pages.test(content.pages());
         }
 
         record PagePredicate(Component contents) implements Predicate<FilteredText<Component>> {
@@ -353,7 +352,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             var trim = holder.get(DataComponents.TRIM);
             if (trim == null) return false;
-            if (material != null && material.contains(trim.material().resolve(MinecraftServer.getTrimMaterialRegistry())))
+            if (material != null && !material.contains(trim.material().resolve(MinecraftServer.getTrimMaterialRegistry())))
                 return false;
             return pattern == null || pattern.contains(trim.pattern().resolve(MinecraftServer.getTrimPatternRegistry()));
         }
