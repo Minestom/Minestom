@@ -3,29 +3,42 @@ package net.minestom.server.gamedata.tags;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Handles loading and caching of tags.
  */
 public final class TagManager {
-    private final Map<Tag.BasicType, List<Tag>> tagMap = new ConcurrentHashMap<>();
+    private final Map<Tag.BasicType, List<Tag>> tagMap;
 
     public TagManager() {
         // Load required tags from files
-        for (var type : Tag.BasicType.values()) {
-            if (type.getResource() == null || type.getFunction() == null) continue;
-            final var json = net.minestom.server.registry.Registry.load(type.getResource());
-            final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
-            json.keySet().forEach(tagName -> {
-                final var tag = new Tag(Key.key(tagName), getValues(json, tagName));
-                tagIdentifierMap.add(tag);
-            });
-        }
+        this.tagMap = Arrays.stream(Tag.BasicType.values())
+                .filter(type -> type.getResource() != null && type.getFunction() != null)
+                .map(type -> {
+                    var json = Registry.load(type.getResource());
+                    if (json.isEmpty()) return null;
+                    var tags = json.keySet().stream()
+                                    .map(tagName -> new Tag(Key.key(tagName), getValues(json, tagName)))
+                                    .toList();
+                    // Create a list copy because we already know there should be no nulls.
+                    return Map.entry(type, List.copyOf(tags));
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (existing, incoming) -> List.copyOf(
+                                Stream.concat(existing.stream(), incoming.stream()).toList()
+                        )
+                ));
+
     }
 
     public @Nullable Tag getTag(Tag.BasicType type, String namespace) {
@@ -37,8 +50,8 @@ public final class TagManager {
         return null;
     }
 
-    public Map<Tag.BasicType, List<Tag>> getTagMap() {
-        return Collections.unmodifiableMap(tagMap);
+    public @Unmodifiable Map<Tag.BasicType, @Unmodifiable List<Tag>> getTagMap() {
+        return tagMap;
     }
 
     public TagsPacket packet(Registries registries) {
@@ -68,6 +81,6 @@ public final class TagManager {
                 result.add(Key.key(tagString));
             }
         });
-        return result;
+        return Set.copyOf(result);
     }
 }

@@ -10,9 +10,8 @@ import net.minestom.server.registry.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.BiFunction;
@@ -30,7 +29,7 @@ public final class Tag implements ProtocolObject, Keyed {
      */
     public Tag(@NotNull Key name) {
         this.name = name;
-        this.values = new HashSet<>();
+        this.values = Set.of();
     }
 
     /**
@@ -38,7 +37,7 @@ public final class Tag implements ProtocolObject, Keyed {
      */
     public Tag(@NotNull Key name, @NotNull Set<Key> values) {
         this.name = name;
-        this.values = new HashSet<>(values);
+        this.values = Set.copyOf(values);
     }
 
     /**
@@ -56,8 +55,8 @@ public final class Tag implements ProtocolObject, Keyed {
      *
      * @return immutable set of values present in this tag
      */
-    public @NotNull Set<Key> getValues() {
-        return Collections.unmodifiableSet(values);
+    public @NotNull @Unmodifiable Set<Key> getValues() {
+        return values;
     }
 
     @Contract(pure = true)
