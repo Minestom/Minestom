@@ -151,7 +151,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            Iterable<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
+            List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
             return items().test(itemStacks);
         }
     }
@@ -164,7 +164,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
         @Override
         public boolean test(DataComponent.Holder holder) {
-            Iterable<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
+            List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
             return items().test(itemStacks);
         }
     }
@@ -303,7 +303,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             if (attributes == null) return false;
             return modifiers.test(attributes.modifiers().stream().map(modifier -> new Entry(
                     modifier.attribute(), modifier.modifier().id(), modifier.modifier().amount(), modifier.modifier().operation(), modifier.slot()
-            ))::iterator);
+            )).toList());
         }
 
         record Entry(Attribute attribute, Key id, Double amount, AttributeOperation operation,
