@@ -56,6 +56,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record Enchantments(@NotNull List<Enchantment> children) implements DataComponentPredicate {
         public static Codec<Enchantments> CODEC = Enchantment.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
+        public Enchantments {
+            children = List.copyOf(children);
+        }
+
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
             return children.stream().allMatch(enchantment -> enchantment.test(holder));
@@ -94,6 +98,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record StoredEnchantments(@NotNull List<StoredEnchantment> children) implements DataComponentPredicate {
         public static Codec<StoredEnchantments> CODEC = StoredEnchantment.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
+
+        public StoredEnchantments {
+            children = List.copyOf(children);
+        }
 
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
@@ -355,6 +363,15 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record ArmorTrim(@Nullable List<TrimMaterial> material,
                      @Nullable List<TrimPattern> pattern) implements DataComponentPredicate {
 
+        public ArmorTrim {
+            if (material != null) {
+                material = List.copyOf(material);
+            }
+            if (pattern != null) {
+                pattern = List.copyOf(pattern);
+            }
+        }
+
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
                 "material", TrimMaterial.CODEC.transform(holder -> holder.resolve(MinecraftServer.getTrimMaterialRegistry()), Holder.Direct::new).listOrSingle().optional(), ArmorTrim::material,
                 "pattern", TrimPattern.CODEC.transform(holder -> holder.resolve(MinecraftServer.getTrimPatternRegistry()), Holder.Direct::new).listOrSingle().optional(), ArmorTrim::pattern,
@@ -372,6 +389,12 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record JukeboxPlayable(@Nullable List<Key> songs) implements DataComponentPredicate {
+
+        public JukeboxPlayable {
+            if (songs != null) {
+                songs = List.copyOf(songs);
+            }
+        }
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
                 "song", JukeboxSong.CODEC.transform(DynamicRegistry.Key::key, DynamicRegistry.Key::of).listOrSingle().optional(), JukeboxPlayable::songs,
