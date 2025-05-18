@@ -170,7 +170,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
-            return items == null || items.test(itemStacks);
+            return items == null || items.test(itemStacks != null ? itemStacks.stream().filter(item -> !item.isAir()).toList() : List.of());
         }
     }
 
@@ -184,7 +184,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         @Override
         public boolean test(DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
-            return items == null || items.test(itemStacks);
+            return items == null || items.test(itemStacks != null ? itemStacks : List.of());
         }
     }
 
