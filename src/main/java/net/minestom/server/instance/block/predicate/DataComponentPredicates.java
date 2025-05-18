@@ -24,6 +24,12 @@ import java.util.stream.Collectors;
 public record DataComponentPredicates(@Nullable DataComponentMap exact,
                                       @Nullable Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
+    public DataComponentPredicates {
+        if (predicates != null) {
+            predicates = Map.copyOf(predicates);
+        }
+    }
+
     public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
             "min", Codec.INT, Range.Int::min,
             "max", Codec.INT, Range.Int::max,
