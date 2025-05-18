@@ -14,6 +14,8 @@ import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Range;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,9 +23,9 @@ import java.util.function.Predicate;
 import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 
 public record ItemPredicate(
-        List<Material> items,
-        Range.Int count,
-        DataComponentPredicates predicates
+        @Nullable List<Material> items,
+        @Nullable Range.Int count,
+        @Nullable DataComponentPredicates predicates
 ) implements Predicate<ItemStack> {
 
     public static final Codec<ItemPredicate> CODEC = StructCodec.struct(
@@ -48,20 +50,20 @@ public record ItemPredicate(
             }
     );
 
-    public ItemPredicate(List<Material> items) {
+    public ItemPredicate(@NotNull List<Material> items) {
         this(items, null, null);
     }
 
-    public ItemPredicate(Range.Int count, List<Material> items) {
+    public ItemPredicate(@NotNull Range.Int count, List<Material> items) {
         this(items, count, null);
     }
 
-    public ItemPredicate(DataComponentPredicates predicates) {
+    public ItemPredicate(@NotNull DataComponentPredicates predicates) {
         this(null, null, predicates);
     }
 
     @Override
-    public boolean test(ItemStack itemStack) {
+    public boolean test(@NotNull ItemStack itemStack) {
         if (items != null && !items.contains(itemStack.material()))
             return false;
         if (count != null && !count.inRange(itemStack.amount()))

@@ -24,6 +24,8 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.utils.Range;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
@@ -31,7 +33,7 @@ import java.util.function.Predicate;
 
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
 
-    record Damage(Range.Int durability, Range.Int damage) implements DataComponentPredicate {
+    record Damage(@Nullable Range.Int durability, @Nullable Range.Int damage) implements DataComponentPredicate {
         public static Codec<Damage> CODEC = StructCodec.struct(
                 "durability", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::durability,
                 "damage", DataComponentPredicates.INT_RANGE_CODEC.optional(), Damage::damage,
@@ -39,7 +41,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             Integer damageValue = holder.get(DataComponents.DAMAGE);
             if (damageValue == null) {
                 return false;
@@ -51,17 +53,18 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Enchantments(List<Enchantment> children) implements DataComponentPredicate {
+    record Enchantments(@NotNull List<Enchantment> children) implements DataComponentPredicate {
         public static Codec<Enchantments> CODEC = Enchantment.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             return children.stream().allMatch(enchantment -> enchantment.test(holder));
         }
     }
 
+    @ApiStatus.Internal
     record Enchantment(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
-                       Range.Int levels) {
+                       @Nullable Range.Int levels) {
 
         public static Codec<Enchantment> CODEC = StructCodec.struct(
                 "enchantments", ObjectSet.<net.minestom.server.item.enchant.Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(), Enchantment::enchantments,
@@ -69,7 +72,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 Enchantment::new
         );
 
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             EnchantmentList holderEnchants = holder.get(DataComponents.ENCHANTMENTS);
             if (holderEnchants == null) {
                 return false;
@@ -89,18 +92,18 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record StoredEnchantments(List<StoredEnchantment> children) implements DataComponentPredicate {
+    record StoredEnchantments(@NotNull List<StoredEnchantment> children) implements DataComponentPredicate {
         public static Codec<StoredEnchantments> CODEC = StoredEnchantment.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             return children.stream().allMatch(enchantment -> enchantment.test(holder));
         }
     }
 
     record StoredEnchantment(
             @Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
-            Range.Int levels) {
+            @Nullable Range.Int levels) {
 
         public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
                 "enchantments", ObjectSet.<net.minestom.server.item.enchant.Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(), StoredEnchantment::enchantments,
@@ -108,7 +111,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 StoredEnchantment::new
         );
 
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             EnchantmentList holderEnchants = holder.get(DataComponents.STORED_ENCHANTMENTS);
             if (holderEnchants == null) {
                 return false;
@@ -128,75 +131,77 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Potions(ObjectSet<PotionType> potionTypes) implements DataComponentPredicate {
+    record Potions(@Nullable ObjectSet<PotionType> potionTypes) implements DataComponentPredicate {
         public static Codec<Potions> CODEC = ObjectSet.<PotionType>codec(Tag.BasicType.POTION_EFFECTS).transform(Potions::new, Potions::potionTypes).optional();
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
+            if (potionTypes == null) return false;
             var potion = holder.get(DataComponents.POTION_CONTENTS);
-            if (potion == null) return false;
+            if (potion == null || potion.potion() == null) return false;
             return potionTypes.contains(potion.potion());
         }
     }
 
-    record CustomData(BinaryTag nbt) implements DataComponentPredicate {
+    record CustomData(@NotNull BinaryTag nbt) implements DataComponentPredicate {
         public static Codec<CustomData> CODEC = Codec.NBT.transform(CustomData::new, CustomData::nbt);
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             net.minestom.server.item.component.CustomData other = holder.get(DataComponents.CUSTOM_DATA);
             return other != null && other.nbt().equals(nbt);
         }
     }
 
-    record Container(CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
+    record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
         public static Codec<Container> CODEC = StructCodec.struct(
-                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC), Container::items,
+                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC).optional(), Container::items,
                 Container::new
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
-            return items().test(itemStacks);
+            return items == null || items.test(itemStacks);
         }
     }
 
-    record BundleContents(CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
+    record BundleContents(
+            @Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
         public static Codec<BundleContents> CODEC = StructCodec.struct(
-                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC), BundleContents::items,
+                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC).optional(), BundleContents::items,
                 BundleContents::new
         );
 
         @Override
         public boolean test(DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
-            return items().test(itemStacks);
+            return items == null || items.test(itemStacks);
         }
     }
 
     record Fireworks(
-            CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
-            Range.Int flightDuration) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
+            @Nullable Range.Int flightDuration) implements DataComponentPredicate {
 
         public static final Codec<Fireworks> CODEC = StructCodec.struct(
-                "explosions", CollectionPredicate.createCodec(FireworkExplosionPredicate.CODEC), Fireworks::explosions,
-                "flight_duration", DataComponentPredicates.INT_RANGE_CODEC.optional(), Fireworks::flightDuration,
+                "explosions", CollectionPredicate.createCodec(FireworkExplosionPredicate.CODEC).optional(), Fireworks::explosions,
+                "flight_duration", DataComponentPredicates.INT_RANGE_CODEC.optional().optional(), Fireworks::flightDuration,
                 Fireworks::new
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             FireworkList fireworks = holder.get(DataComponents.FIREWORKS);
             if (fireworks == null) return false;
             if (flightDuration != null && !flightDuration.inRange(fireworks.flightDuration()))
                 return false;
-            return explosions.test(fireworks.explosions());
+            return explosions == null || explosions.test(fireworks.explosions());
         }
 
-        record FireworkExplosionPredicate(net.minestom.server.item.component.FireworkExplosion.Shape shape,
-                                          Boolean hasTwinkle,
-                                          Boolean hasTrail) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
+        record FireworkExplosionPredicate(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+                                          @Nullable Boolean hasTwinkle,
+                                          @Nullable Boolean hasTrail) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
 
             public static final Codec<FireworkExplosionPredicate> CODEC = StructCodec.struct(
                     "shape", Codec.Enum(net.minestom.server.item.component.FireworkExplosion.Shape.class).optional(), FireworkExplosionPredicate::shape,
@@ -206,7 +211,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             );
 
             @Override
-            public boolean test(net.minestom.server.item.component.FireworkExplosion explosion) {
+            public boolean test(@Nullable net.minestom.server.item.component.FireworkExplosion explosion) {
                 if (explosion == null) {
                     return false;
                 }
@@ -217,46 +222,47 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record FireworkExplosion(Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
+    record FireworkExplosion(@NotNull Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
         public static final Codec<FireworkExplosion> CODEC = Fireworks.FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             net.minestom.server.item.component.FireworkExplosion explosion = holder.get(DataComponents.FIREWORK_EXPLOSION);
             return delegate.test(explosion);
         }
     }
 
     record WritableBook(
-            CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements DataComponentPredicate {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             if (pages == null) return true;
             WritableBookContent content = holder.get(DataComponents.WRITABLE_BOOK_CONTENT);
             if (content == null) return false;
             return pages.test(content.pages());
         }
 
-        record PagePredicate(String contents) implements Predicate<FilteredText<String>> {
+        record PagePredicate(@NotNull String contents) implements Predicate<FilteredText<String>> {
 
             public static final Codec<PagePredicate> CODEC = Codec.STRING.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
-            public boolean test(FilteredText<String> text) {
+            public boolean test(@NotNull FilteredText<String> text) {
                 return text.text().equals(contents);
             }
         }
 
     }
 
-    record WrittenBook(CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages, String author,
-                       String title,
-                       Range.Int generation, Boolean resolved) implements DataComponentPredicate {
+    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
+                       @Nullable String author,
+                       @Nullable String title,
+                       @Nullable Range.Int generation, @Nullable Boolean resolved) implements DataComponentPredicate {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WrittenBook::pages,
@@ -268,7 +274,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             WrittenBookContent content = holder.get(DataComponents.WRITTEN_BOOK_CONTENT);
             if (content == null) return false;
 
@@ -284,18 +290,18 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages == null || pages.test(content.pages());
         }
 
-        record PagePredicate(Component contents) implements Predicate<FilteredText<Component>> {
+        record PagePredicate(@NotNull Component contents) implements Predicate<FilteredText<Component>> {
             public static final Codec<PagePredicate> CODEC = Codec.COMPONENT.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
-            public boolean test(FilteredText<Component> text) {
+            public boolean test(@NotNull FilteredText<Component> text) {
                 return text.text().equals(contents);
             }
         }
     }
 
     record AttributeModifiers(
-            CollectionPredicate<Entry, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<Entry, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
 
         public static final Codec<AttributeModifiers> CODEC = StructCodec.struct(
                 "modifiers", CollectionPredicate.createCodec(AttributeModifierPredicate.CODEC).optional(), AttributeModifiers::modifiers,
@@ -303,7 +309,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             if (modifiers == null) return true;
             AttributeList attributes = holder.get(DataComponents.ATTRIBUTE_MODIFIERS);
             if (attributes == null) return false;
@@ -312,13 +318,15 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             )).toList());
         }
 
-        record Entry(Attribute attribute, Key id, Double amount, AttributeOperation operation,
-                     EquipmentSlotGroup slot) {
+        record Entry(@NotNull Attribute attribute, @NotNull Key id, @NotNull Double amount,
+                     @NotNull AttributeOperation operation,
+                     @NotNull EquipmentSlotGroup slot) {
         }
 
-        record AttributeModifierPredicate(Attribute attribute, Key id, Range.Double amount,
-                                          AttributeOperation operation,
-                                          EquipmentSlotGroup slot) implements Predicate<Entry> {
+        record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
+                                          @Nullable Range.Double amount,
+                                          @Nullable AttributeOperation operation,
+                                          @Nullable EquipmentSlotGroup slot) implements Predicate<Entry> {
 
             public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
                     "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
@@ -330,7 +338,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             );
 
             @Override
-            public boolean test(Entry other) {
+            public boolean test(@NotNull Entry other) {
                 if (attribute != null && !attribute.key().equals(other.attribute.key()))
                     return false;
                 if (id != null && !id.equals(other.id))
@@ -344,7 +352,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record ArmorTrim(List<TrimMaterial> material, List<TrimPattern> pattern) implements DataComponentPredicate {
+    record ArmorTrim(@Nullable List<TrimMaterial> material,
+                     @Nullable List<TrimPattern> pattern) implements DataComponentPredicate {
 
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
                 "material", TrimMaterial.CODEC.transform(holder -> holder.resolve(MinecraftServer.getTrimMaterialRegistry()), Holder.Direct::new).listOrSingle().optional(), ArmorTrim::material,
@@ -353,7 +362,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             var trim = holder.get(DataComponents.TRIM);
             if (trim == null) return false;
             if (material != null && !material.contains(trim.material().resolve(MinecraftServer.getTrimMaterialRegistry())))
@@ -362,7 +371,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record JukeboxPlayable(List<Key> songs) implements DataComponentPredicate {
+    record JukeboxPlayable(@Nullable List<Key> songs) implements DataComponentPredicate {
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
                 "song", JukeboxSong.CODEC.transform(DynamicRegistry.Key::key, DynamicRegistry.Key::of).listOrSingle().optional(), JukeboxPlayable::songs,
@@ -370,10 +379,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             var song = holder.get(DataComponents.JUKEBOX_PLAYABLE);
             if (song == null) return false;
-            return songs.contains(song.reference());
+            return songs == null || songs.contains(song.reference());
         }
     }
 }
