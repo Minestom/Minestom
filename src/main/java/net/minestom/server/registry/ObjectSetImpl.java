@@ -21,6 +21,11 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         public boolean contains(@NotNull Key namespace) {
             return false;
         }
+
+        @Override
+        public Iterable<Key> keys() {
+            return List.of();
+        }
     }
 
     record Entries<T extends ProtocolObject>(@NotNull List<Key> entries) implements ObjectSetImpl<T> {
@@ -32,6 +37,11 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         @Override
         public boolean contains(@NotNull Key key) {
             return entries.contains(key);
+        }
+
+        @Override
+        public Iterable<Key> keys() {
+            return entries;
         }
     }
 
@@ -70,6 +80,11 @@ sealed interface ObjectSetImpl<T extends ProtocolObject> extends ObjectSet<T> pe
         @Override
         public boolean contains(@NotNull Key key) {
             return value().contains(key);
+        }
+
+        @Override
+        public Iterable<Key> keys() {
+            return value();
         }
     }
 

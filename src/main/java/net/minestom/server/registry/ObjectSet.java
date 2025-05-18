@@ -54,4 +54,6 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
 
     boolean contains(@NotNull Key namespace);
 
+    Iterable<Key> keys();
+
 }
