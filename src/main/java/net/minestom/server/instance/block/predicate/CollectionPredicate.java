@@ -33,6 +33,10 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
 
     public record Contains<T, P extends Predicate<T>>(@NotNull List<P> predicates) implements Predicate<Collection<T>> {
 
+        public Contains {
+            predicates = List.copyOf(predicates);
+        }
+
         public static <T, P extends Predicate<T>> @NotNull Codec<Contains<T, P>> createCodec(Codec<P> codec) {
             return codec.listOrSingle().transform(Contains::new, Contains::predicates);
         }
@@ -53,9 +57,15 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         }
     }
 
-    public record Count<T, P extends Predicate<T>>(@NotNull List<Entry<T, P>> entries) implements Predicate<Collection<T>> {
+    public record Count<T, P extends Predicate<T>>(
+            @NotNull List<Entry<T, P>> entries) implements Predicate<Collection<T>> {
 
-        record Entry<T, P extends Predicate<T>>(@NotNull P predicate, @NotNull Range.Int count) implements Predicate<Collection<T>> {
+        public Count {
+            entries = List.copyOf(entries);
+        }
+
+        record Entry<T, P extends Predicate<T>>(@NotNull P predicate,
+                                                @NotNull Range.Int count) implements Predicate<Collection<T>> {
             public static <T, P extends Predicate<T>> @NotNull Codec<Entry<T, P>> createCodec(Codec<P> codec) {
                 return StructCodec.struct(
                         "test", codec, Entry::predicate,
