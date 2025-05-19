@@ -43,7 +43,7 @@ public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable NbtPredicate nbt,
-        @Nullable DataComponentPredicates componentPredicates
+        @NotNull DataComponentPredicates componentPredicates
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
@@ -121,12 +121,14 @@ public record BlockPredicate(
             return false;
         if (state != null && !state.test(block))
             return false;
-        if (nbt != null && !nbt.test(BlockUtils.extractClientNbt(block)))
+        if (nbt != null && (block.nbt() == null || !nbt.test(BlockUtils.extractClientNbt(block))))
             return false;
-        if (componentPredicates == null)
+        if (componentPredicates.exact() == null && componentPredicates.predicates() == null)
             return true;
+        if (block.nbt() == null)
+            return false; // If a block has no NBT (it's not a block entity), any component predicates must return false
 
-        CompoundBinaryTag componentsTag = block.nbt() != null ? block.nbt().getCompound("components") : CompoundBinaryTag.empty();
+        CompoundBinaryTag componentsTag = block.nbt().getCompound("components");
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
         Result<DataComponentMap> result = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag);
         switch (result) {
