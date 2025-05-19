@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
@@ -132,6 +133,10 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record CustomData(@NotNull NbtPredicate nbt) implements DataComponentPredicate {
         public static Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
+
+        public CustomData(@Nullable CompoundBinaryTag nbt) {
+            this(new NbtPredicate(nbt));
+        }
 
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {

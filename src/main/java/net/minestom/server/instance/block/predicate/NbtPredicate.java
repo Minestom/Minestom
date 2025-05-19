@@ -66,7 +66,7 @@ public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate
         if (standard instanceof CompoundBinaryTag standardCompound) {
             CompoundBinaryTag comparisonCompound = ((CompoundBinaryTag) comparison);
             for (String key : standardCompound.keySet()) {
-                if (!compareNBT(comparisonCompound.get(key), comparisonCompound.get(key))) {
+                if (!compareNBT(standardCompound.get(key), comparisonCompound.get(key))) {
                     return false;
                 }
             }
