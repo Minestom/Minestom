@@ -6,8 +6,6 @@ import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.codec.Transcoder;
-import net.minestom.server.component.DataComponent;
-import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.predicate.DataComponentPredicates;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -68,25 +66,7 @@ public record ItemPredicate(
             return false;
         if (count != null && !count.inRange(itemStack.amount()))
             return false;
-        if (predicates == null)
-            return true;
 
-        // Construct a DataComponentMap with ALL the item's components, including the default ones originating from the item's material
-        DataComponentMap.Builder builder = itemStack.material().prototype().toBuilder();
-        DataComponentMap patch = itemStack.componentPatch();
-
-        for (DataComponent.Value value : patch.entrySet()) {
-            copy(patch, builder, value.component());
-        }
-
-        return predicates.test(builder.build());
-    }
-
-    private <T> void copy(DataComponentMap source, DataComponentMap.Builder target, DataComponent<T> key) {
-        if (source.has(key)) {
-            T value = source.get(key);
-            assert value != null;
-            target.set(key, value);
-        }
+        return predicates == null || predicates.test(itemStack);
     }
 }
