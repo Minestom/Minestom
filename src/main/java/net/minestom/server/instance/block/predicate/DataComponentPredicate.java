@@ -24,7 +24,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.utils.Range;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -53,89 +52,70 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Enchantments(@NotNull List<Enchantment> children) implements DataComponentPredicate {
-        public static Codec<Enchantments> CODEC = Enchantment.CODEC.list().transform(Enchantments::new, Enchantments::children);
+    record EnchantmentListPredicate(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
+                                    @Nullable Range.Int levels) implements Predicate<EnchantmentList> {
+
+        public static Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
+                "enchantments", ObjectSet.<net.minestom.server.item.enchant.Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(), EnchantmentListPredicate::enchantments,
+                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), EnchantmentListPredicate::levels,
+                EnchantmentListPredicate::new
+        );
+
+        @Override
+        public boolean test(@NotNull EnchantmentList enchantmentList) {
+            if (enchantments != null) {
+                for (Key key : enchantments.keys()) {
+                    DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e = DynamicRegistry.Key.of(key);
+                    if (enchantmentList.has(e) && (levels == null || levels.inRange(enchantmentList.level(e)))) {
+                        return true;
+                    }
+                }
+                return false;
+            } else if (levels != null) {
+                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
+                return enchantmentList.enchantments().entrySet().stream().anyMatch(entry -> levels.inRange(entry.getValue()));
+            } else {
+                // If neither are specified, the predicate returns true when the item has any enchantments
+                return enchantmentList.enchantments().isEmpty();
+            }
+        }
+    }
+
+    record Enchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+        public static Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
             children = List.copyOf(children);
         }
 
+        public Enchantments(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
+                            @Nullable Range.Int levels) {
+            this(List.of(new EnchantmentListPredicate(enchantments, levels)));
+        }
+
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
-            return children.stream().allMatch(enchantment -> enchantment.test(holder));
+            EnchantmentList enchantments = holder.get(DataComponents.ENCHANTMENTS);
+            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
     }
 
-    @ApiStatus.Internal
-    record Enchantment(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
-                       @Nullable Range.Int levels) {
-
-        public static Codec<Enchantment> CODEC = StructCodec.struct(
-                "enchantments", ObjectSet.<net.minestom.server.item.enchant.Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(), Enchantment::enchantments,
-                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), Enchantment::levels,
-                Enchantment::new
-        );
-
-        public boolean test(@NotNull DataComponent.Holder holder) {
-            EnchantmentList holderEnchants = holder.get(DataComponents.ENCHANTMENTS);
-            if (holderEnchants == null) {
-                return false;
-            }
-            if (enchantments == null) {
-                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
-            }
-            for (Key key : enchantments.keys()) {
-                DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e = DynamicRegistry.Key.of(key);
-                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    record StoredEnchantments(@NotNull List<StoredEnchantment> children) implements DataComponentPredicate {
-        public static Codec<StoredEnchantments> CODEC = StoredEnchantment.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
+    record StoredEnchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+        public static Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
             children = List.copyOf(children);
         }
 
+        public StoredEnchantments(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
+                            @Nullable Range.Int levels) {
+            this(List.of(new EnchantmentListPredicate(enchantments, levels)));
+        }
+
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
-            return children.stream().allMatch(enchantment -> enchantment.test(holder));
-        }
-    }
-
-    record StoredEnchantment(
-            @Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
-            @Nullable Range.Int levels) {
-
-        public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
-                "enchantments", ObjectSet.<net.minestom.server.item.enchant.Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(), StoredEnchantment::enchantments,
-                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), StoredEnchantment::levels,
-                StoredEnchantment::new
-        );
-
-        public boolean test(@NotNull DataComponent.Holder holder) {
-            EnchantmentList holderEnchants = holder.get(DataComponents.STORED_ENCHANTMENTS);
-            if (holderEnchants == null) {
-                return false;
-            }
-            if (enchantments == null) {
-                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
-            }
-            for (Key key : enchantments.keys()) {
-                DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e = DynamicRegistry.Key.of(key);
-                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
-                    return true;
-                }
-            }
-
-            return false;
+            EnchantmentList enchantments = holder.get(DataComponents.STORED_ENCHANTMENTS);
+            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
     }
 
