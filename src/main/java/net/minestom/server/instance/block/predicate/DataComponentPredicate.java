@@ -100,7 +100,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record StoredEnchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+    record StoredEnchantments(
+            @NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
         public static Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
@@ -108,7 +109,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
 
         public StoredEnchantments(@Nullable ObjectSet<net.minestom.server.item.enchant.Enchantment> enchantments,
-                            @Nullable Range.Int levels) {
+                                  @Nullable Range.Int levels) {
             this(List.of(new EnchantmentListPredicate(enchantments, levels)));
         }
 
@@ -293,7 +294,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record AttributeModifiers(
-            @Nullable CollectionPredicate<Entry, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
 
         public static final Codec<AttributeModifiers> CODEC = StructCodec.struct(
                 "modifiers", CollectionPredicate.createCodec(AttributeModifierPredicate.CODEC).optional(), AttributeModifiers::modifiers,
@@ -305,20 +306,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             if (modifiers == null) return true;
             AttributeList attributes = holder.get(DataComponents.ATTRIBUTE_MODIFIERS);
             if (attributes == null) return false;
-            return modifiers.test(attributes.modifiers().stream().map(modifier -> new Entry(
-                    modifier.attribute(), modifier.modifier().id(), modifier.modifier().amount(), modifier.modifier().operation(), modifier.slot()
-            )).toList());
-        }
-
-        record Entry(@NotNull Attribute attribute, @NotNull Key id, @NotNull Double amount,
-                     @NotNull AttributeOperation operation,
-                     @NotNull EquipmentSlotGroup slot) {
+            return modifiers.test(attributes.modifiers());
         }
 
         record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
                                           @Nullable Range.Double amount,
                                           @Nullable AttributeOperation operation,
-                                          @Nullable EquipmentSlotGroup slot) implements Predicate<Entry> {
+                                          @Nullable EquipmentSlotGroup slot) implements Predicate<AttributeList.Modifier> {
 
             public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
                     "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
@@ -330,16 +324,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             );
 
             @Override
-            public boolean test(@NotNull Entry other) {
-                if (attribute != null && !attribute.key().equals(other.attribute.key()))
+            public boolean test(AttributeList.Modifier other) {
+                if (attribute != null && !attribute.key().equals(other.attribute().key()))
                     return false;
-                if (id != null && !id.equals(other.id))
+                if (id != null && !id.equals(other.modifier().id()))
                     return false;
-                if (amount != null && !amount.inRange(other.amount))
+                if (amount != null && !amount.inRange(other.modifier().amount()))
                     return false;
-                if (operation != null && !operation.equals(other.operation))
+                if (operation != null && !operation.equals(other.modifier().operation()))
                     return false;
-                return slot == null || slot.equals(other.slot);
+                return slot == null || slot.equals(other.slot());
             }
         }
     }
