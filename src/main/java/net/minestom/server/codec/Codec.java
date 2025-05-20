@@ -137,6 +137,10 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
                 List::of, list -> list.isEmpty() ? null : list.getFirst()));
     }
 
+    default @NotNull Codec<List<T>> listOrSingle() {
+        return listOrSingle(Integer.MAX_VALUE);
+    }
+
     default @NotNull Codec<Set<T>> set(int maxSize) {
         return new CodecImpl.SetImpl<>(Codec.this, maxSize);
     }
