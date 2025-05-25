@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 public record DataComponentPredicates(@Nullable DataComponentMap exact,
                                       @Nullable Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
+    public static DataComponentPredicates EMPTY = new DataComponentPredicates(null, null);
+
     public DataComponentPredicates {
         if (predicates != null) {
             predicates = Map.copyOf(predicates);
@@ -120,40 +122,6 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
                 return builder.build();
             });
 
-    /**
-     * A network type for a tuple of a {@link DataComponent}'s ID and its value.
-     * A list of these is used to serialize {@link DataComponentPredicates#exact}.
-     */
-    private static final NetworkBuffer.Type<DataComponent.Value> componentNetworkType = new NetworkBuffer.Type<>() {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, DataComponent.Value value) {
-            //noinspection unchecked
-            DataComponent<Object> component = (DataComponent<Object>) value.component();
-            NetworkBuffer.VAR_INT.write(buffer, component.id());
-            component.write(buffer, value.value());
-        }
-
-        @Override
-        public DataComponent.Value read(@NotNull NetworkBuffer buffer) {
-            int componentId = NetworkBuffer.VAR_INT.read(buffer);
-            DataComponent<?> component = DataComponent.fromId(componentId);
-            Object value = component.read(buffer);
-            return new DataComponent.Value(component, value);
-        }
-    };
-
-    private static final NetworkBuffer.Type<DataComponentMap> componentsNetworkType = componentNetworkType.list().transform(
-            list -> {
-                DataComponentMap.Builder builder = DataComponentMap.builder();
-                for (DataComponent.Value value : list) {
-                    //noinspection unchecked
-                    builder.set((DataComponent<Object>) value.component(), value.value());
-                }
-                return builder.build();
-            },
-            (DataComponentMap map) -> map == null ? List.of() : map.entrySet().stream().toList()
-    );
-
     private static final NetworkBuffer.Type<Map<ComponentPredicateType, DataComponentPredicate>> predicateNetworkType = new NetworkBuffer.Type<>() {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Map<ComponentPredicateType, DataComponentPredicate> value) {
@@ -198,8 +166,13 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
 
     public static final NetworkBuffer.Type<DataComponentPredicates> NETWORK_TYPE = new NetworkBuffer.Type<>() {
 
+        private static final NetworkBuffer.Type<DataComponentMap> nullableComponentMapType = DataComponent.MAP_NETWORK_TYPE.transform(
+                Function.identity(),
+                map -> Objects.requireNonNullElse(map, DataComponentMap.EMPTY) // When encoding a DataComponentMap, if it's null, encode it as empty
+        );
+
         private static final NetworkBuffer.Type<DataComponentPredicates> delegate = NetworkBufferTemplate.template(
-                componentsNetworkType, DataComponentPredicates::exact,
+                nullableComponentMapType, DataComponentPredicates::exact,
                 predicateNetworkType, DataComponentPredicates::predicates,
                 DataComponentPredicates::new
         );

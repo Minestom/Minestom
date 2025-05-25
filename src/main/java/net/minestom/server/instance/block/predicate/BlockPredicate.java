@@ -112,7 +112,7 @@ public record BlockPredicate(
         this.blocks = blocks;
         this.state = state;
         this.nbt = nbt;
-        this.componentPredicates = Objects.requireNonNullElseGet(componentPredicates, () -> new DataComponentPredicates(null, null));
+        this.componentPredicates = Objects.requireNonNullElse(componentPredicates, DataComponentPredicates.EMPTY);
     }
 
     @Override
@@ -123,7 +123,7 @@ public record BlockPredicate(
             return false;
         if (nbt != null && (block.nbt() == null || !nbt.test(BlockUtils.extractClientNbt(block))))
             return false;
-        if (componentPredicates.exact() == null && componentPredicates.predicates() == null)
+        if ((componentPredicates.exact() == null || componentPredicates.exact().isEmpty()) && (componentPredicates.predicates() == null || componentPredicates.predicates().isEmpty()))
             return true;
         if (block.nbt() == null)
             return false; // If a block has no NBT (it's not a block entity), any component predicates must return false
