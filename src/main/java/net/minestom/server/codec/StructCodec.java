@@ -31,6 +31,11 @@ public interface StructCodec<R> extends Codec<R> {
         return encodeToMap(coder, value, coder.createMap());
     }
 
+    @Override
+    default StructCodec<R> orElse(@NotNull Codec<R> other) {
+        throw new UnsupportedOperationException("or else for struct codec impl");
+    }
+    
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
         return new StructCodec<>() {
             @Override
