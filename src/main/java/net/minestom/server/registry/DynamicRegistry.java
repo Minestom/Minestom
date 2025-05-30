@@ -35,6 +35,14 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
         return registry.compact();
     }
 
+    @SafeVarargs
+    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull String id, @NotNull Map.Entry<net.kyori.adventure.key.Key, T>... entries) {
+        var registry = new DynamicRegistryImpl<T>(id, null);
+        for (var entry : entries)
+            registry.register(entry.getKey(), entry.getValue(), null);
+        return registry;
+    }
+
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key) {
         return new DynamicRegistryImpl<>(key, null);
