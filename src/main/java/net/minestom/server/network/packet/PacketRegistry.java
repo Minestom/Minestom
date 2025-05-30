@@ -107,7 +107,8 @@ public interface PacketRegistry<T> {
                     entry(ClientKeepAlivePacket.class, ClientKeepAlivePacket.SERIALIZER),
                     entry(ClientPongPacket.class, ClientPongPacket.SERIALIZER),
                     entry(ClientResourcePackStatusPacket.class, ClientResourcePackStatusPacket.SERIALIZER),
-                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER)
+                    entry(ClientSelectKnownPacksPacket.class, ClientSelectKnownPacksPacket.SERIALIZER),
+                    entry(ClientCustomClickActionPacket.class, ClientCustomClickActionPacket.SERIALIZER)
             );
         }
 
