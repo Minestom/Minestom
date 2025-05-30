@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
@@ -98,6 +99,14 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
 
     static <T> @NotNull Codec<T> ForwardRef(@NotNull Supplier<Codec<T>> func) {
         return new CodecImpl.ForwardRefImpl<>(func);
+    }
+
+    static <T> @NotNull StructCodec<T> RegistryTaggedUnion(
+            @NotNull Registry<StructCodec<? extends T>> registry,
+            @NotNull Function<T, StructCodec<? extends T>> serializerGetter,
+            @NotNull String key
+    ) {
+        return Codec.RegistryTaggedUnion((ignored) -> registry, serializerGetter, key);
     }
 
     static <T> @NotNull StructCodec<T> RegistryTaggedUnion(
