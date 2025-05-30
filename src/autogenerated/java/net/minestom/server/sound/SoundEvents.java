@@ -1537,6 +1537,8 @@ interface SoundEvents {
 
     SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get("minecraft:entity.horse.armor");
 
+    SoundEvent ITEM_HORSE_ARMOR_UNEQUIP = BuiltinSoundEvent.get("minecraft:item.horse_armor.unequip");
+
     SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get("minecraft:entity.horse.breathe");
 
     SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get("minecraft:entity.horse.death");
@@ -1679,9 +1681,11 @@ interface SoundEvents {
 
     SoundEvent BLOCK_LEAF_LITTER_FALL = BuiltinSoundEvent.get("minecraft:block.leaf_litter.fall");
 
-    SoundEvent ENTITY_LEASH_KNOT_BREAK = BuiltinSoundEvent.get("minecraft:entity.leash_knot.break");
+    SoundEvent ITEM_LEAD_UNTIED = BuiltinSoundEvent.get("minecraft:item.lead.untied");
 
-    SoundEvent ENTITY_LEASH_KNOT_PLACE = BuiltinSoundEvent.get("minecraft:entity.leash_knot.place");
+    SoundEvent ITEM_LEAD_TIED = BuiltinSoundEvent.get("minecraft:item.lead.tied");
+
+    SoundEvent ITEM_LEAD_BREAK = BuiltinSoundEvent.get("minecraft:item.lead.break");
 
     SoundEvent BLOCK_LEVER_CLICK = BuiltinSoundEvent.get("minecraft:block.lever.click");
 
@@ -1708,6 +1712,8 @@ interface SoundEvents {
     SoundEvent ENTITY_LLAMA_STEP = BuiltinSoundEvent.get("minecraft:entity.llama.step");
 
     SoundEvent ENTITY_LLAMA_SWAG = BuiltinSoundEvent.get("minecraft:entity.llama.swag");
+
+    SoundEvent ITEM_LLAMA_CARPET_UNEQUIP = BuiltinSoundEvent.get("minecraft:item.llama_carpet.unequip");
 
     SoundEvent ENTITY_MAGMA_CUBE_DEATH_SMALL = BuiltinSoundEvent.get("minecraft:entity.magma_cube.death_small");
 
@@ -3450,4 +3456,6 @@ interface SoundEvents {
     SoundEvent EVENT_MOB_EFFECT_TRIAL_OMEN = BuiltinSoundEvent.get("minecraft:event.mob_effect.trial_omen");
 
     SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get("minecraft:event.mob_effect.raid_omen");
+
+    SoundEvent ITEM_SADDLE_UNEQUIP = BuiltinSoundEvent.get("minecraft:item.saddle.unequip");
 }
