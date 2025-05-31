@@ -1,5 +1,6 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.util.RGBLike;
@@ -9,9 +10,10 @@ import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.component.*;
+import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
@@ -45,7 +47,7 @@ public final class ItemComponent {
     public static final DataComponent<BlockPredicates> CAN_PLACE_ON = register("can_place_on", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     public static final DataComponent<BlockPredicates> CAN_BREAK = register("can_break", BlockPredicates.NETWORK_TYPE, BlockPredicates.NBT_TYPE);
     public static final DataComponent<AttributeList> ATTRIBUTE_MODIFIERS = register("attribute_modifiers", AttributeList.NETWORK_TYPE, AttributeList.NBT_TYPE);
-    public static final DataComponent<Integer> CUSTOM_MODEL_DATA = register("custom_model_data", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
+    public static final DataComponent<CustomModelData> CUSTOM_MODEL_DATA = register("custom_model_data", CustomModelData.NETWORK_TYPE, CustomModelData.NBT_TYPE);
     public static final DataComponent<Unit> HIDE_ADDITIONAL_TOOLTIP = register("hide_additional_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Unit> HIDE_TOOLTIP = register("hide_tooltip", NetworkBuffer.UNIT, BinaryTagSerializer.UNIT);
     public static final DataComponent<Integer> REPAIR_COST = register("repair_cost", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
@@ -81,7 +83,7 @@ public final class ItemComponent {
     public static final DataComponent<CustomData> ENTITY_DATA = register("entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<CustomData> BUCKET_ENTITY_DATA = register("bucket_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
     public static final DataComponent<CustomData> BLOCK_ENTITY_DATA = register("block_entity_data", CustomData.NETWORK_TYPE, CustomData.NBT_TYPE);
-    public static final DataComponent<String> INSTRUMENT = register("instrument", NetworkBuffer.STRING, BinaryTagSerializer.STRING);
+    public static final DataComponent<DynamicRegistry.Key<Instrument>> INSTRUMENT = register("instrument", Instrument.NETWORK_TYPE, Instrument.NBT_TYPE);
     public static final DataComponent<Integer> OMINOUS_BOTTLE_AMPLIFIER = register("ominous_bottle_amplifier", NetworkBuffer.VAR_INT, BinaryTagSerializer.INT);
     public static final DataComponent<JukeboxPlayable> JUKEBOX_PLAYABLE = register("jukebox_playable", JukeboxPlayable.NETWORK_TYPE, JukeboxPlayable.NBT_TYPE);
     public static final DataComponent<List<String>> RECIPES = register("recipes", NetworkBuffer.STRING.list(Short.MAX_VALUE), BinaryTagSerializer.STRING.list());
@@ -101,14 +103,14 @@ public final class ItemComponent {
     public static final DataComponent<SeededContainerLoot> CONTAINER_LOOT = register("container_loot", null, SeededContainerLoot.NBT_TYPE);
 
     public static final NetworkBuffer.Type<DataComponentMap> PATCH_NETWORK_TYPE = DataComponentMap.patchNetworkType(ItemComponent::fromId);
-    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromNamespaceId);
+    public static final BinaryTagSerializer<DataComponentMap> PATCH_NBT_TYPE = DataComponentMap.patchNbtType(ItemComponent::fromId, ItemComponent::fromKey);
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull String namespaceId) {
-        return NAMESPACES.get(namespaceId);
+    public static @Nullable DataComponent<?> fromKey(@NotNull String key) {
+        return NAMESPACES.get(key);
     }
 
-    public static @Nullable DataComponent<?> fromNamespaceId(@NotNull NamespaceID namespaceId) {
-        return fromNamespaceId(namespaceId.asString());
+    public static @Nullable DataComponent<?> fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     public static @Nullable DataComponent<?> fromId(int id) {
@@ -120,7 +122,7 @@ public final class ItemComponent {
     }
 
     static <T> DataComponent<T> register(@NotNull String name, @Nullable NetworkBuffer.Type<T> network, @Nullable BinaryTagSerializer<T> nbt) {
-        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), NamespaceID.from(name), network, nbt);
+        DataComponent<T> impl = DataComponent.createHeadless(NAMESPACES.size(), Key.key(name), network, nbt);
         NAMESPACES.put(impl.name(), impl);
         IDS.set(impl.id(), impl);
         return impl;

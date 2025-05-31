@@ -164,10 +164,10 @@ public class ArgumentTypeTest {
         var arg = ArgumentType.ItemStack("item_stack");
         assertArg(arg, ItemStack.AIR, "air");
         assertArg(arg, ItemStack.of(Material.GLASS_PANE).withTag(Tag.String("tag"), "value"), "glass_pane{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5), "glass_pane[custom_model_data=5]");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).withTag(Tag.String("tag"), "value"), "glass_pane[custom_model_data=5]{tag:value}");
-        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.CUSTOM_MODEL_DATA, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
-                "glass_pane[custom_model_data=5,minecraft:custom_data={hi:232}]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5), "glass_pane[repair_cost=5]");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5).withTag(Tag.String("tag"), "value"), "glass_pane[repair_cost=5]{tag:value}");
+        assertArg(arg, ItemStack.of(Material.GLASS_PANE).with(ItemComponent.REPAIR_COST, 5).with(ItemComponent.CUSTOM_DATA, new CustomData(CompoundBinaryTag.builder().putInt("hi", 232).build())).withTag(Tag.String("tag"), "value"),
+                "glass_pane[repair_cost=5,minecraft:custom_data={hi:232}]{tag:value}");
     }
 
     @Test
@@ -282,8 +282,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14 +255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), "-3 ~14 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 14 ~+255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, true, false), "-3 ~14 +255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 14 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), "~-3 ~14 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), "^-3 ^14 ^+255");
 
@@ -306,8 +306,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14.25");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 ~14.25");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 ~14.25");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 ~14.25");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 ~14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, true), "~-3 ~14.25");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, false, true), "^-3 ^14.25");
 
@@ -327,8 +327,8 @@ public class ArgumentTypeTest {
 
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, false), "-3 14.25 +255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, false, false), "~-3 14.25 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, true, false), "-3 ~14.25 +255");
-        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.ABSOLUTE, false, false, true), "-3 14.25 ~+255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, true, false), "-3 ~14.25 +255");
+        assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, false, false, true), "-3 14.25 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.RELATIVE, true, true, true), "~-3 ~14.25 ~+255");
         assertArg(arg, new RelativeVec(vec, RelativeVec.CoordinateType.LOCAL, true, true, true), "^-3 ^14.25 ^+255");
 

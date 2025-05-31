@@ -1,8 +1,8 @@
 package net.minestom.server.gamedata.tags;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.utils.NamespaceID;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -22,7 +22,7 @@ public final class TagManager {
             final var json = net.minestom.server.registry.Registry.load(type.getResource());
             final var tagIdentifierMap = tagMap.computeIfAbsent(type, s -> new CopyOnWriteArrayList<>());
             json.keySet().forEach(tagName -> {
-                final var tag = new Tag(NamespaceID.from(tagName), getValues(json, tagName));
+                final var tag = new Tag(Key.key(tagName), getValues(json, tagName));
                 tagIdentifierMap.add(tag);
             });
         }
@@ -57,15 +57,15 @@ public final class TagManager {
         return new TagsPacket(registryList);
     }
 
-    private Set<NamespaceID> getValues(Map<String, Map<String, Object>> main, String value) {
+    private Set<Key> getValues(Map<String, Map<String, Object>> main, String value) {
         Map<String, Object> tagObject = main.get(value);
         final List<String> tagValues = (List<String>) tagObject.get("values");
-        Set<NamespaceID> result = new HashSet<>(tagValues.size());
+        Set<Key> result = new HashSet<>(tagValues.size());
         tagValues.forEach(tagString -> {
             if (tagString.startsWith("#")) {
                 result.addAll(getValues(main, tagString.substring(1)));
             } else {
-                result.add(NamespaceID.from(tagString));
+                result.add(Key.key(tagString));
             }
         });
         return result;

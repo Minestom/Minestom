@@ -1,5 +1,6 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIOExt;
@@ -14,7 +15,6 @@ import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,7 +56,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
-        final Material material = Material.fromNamespaceId(reader.readNamespaceId());
+        final Material material = Material.fromKey(reader.readKey());
         if (material == null)
             throw new ArgumentSyntaxException("Material is invalid", input, INVALID_MATERIAL);
         if (!reader.hasMore()) {
@@ -69,8 +69,8 @@ public class ArgumentItemStack extends Argument<ItemStack> {
         if (reader.peek() == '[') {
             reader.consume('[');
             do {
-                final NamespaceID componentId = reader.readNamespaceId();
-                final DataComponent<?> component = ItemComponent.fromNamespaceId(componentId);
+                final Key componentId = reader.readKey();
+                final DataComponent<?> component = ItemComponent.fromKey(componentId);
                 if (component == null)
                     throw new ArgumentSyntaxException("Unknown item component", input, INVALID_COMPONENT);
 
@@ -139,13 +139,13 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             index++;
         }
 
-        public @NotNull NamespaceID readNamespaceId() {
+        public @NotNull Key readKey() {
             char c;
             int start = index;
             while (hasMore() && (c = peek()) != '{' && c != '[' && c != '=') {
                 index++;
             }
-            return NamespaceID.from(input.substring(start, index));
+            return Key.key(input.substring(start, index));
         }
 
         public @NotNull BinaryTag readTag() {

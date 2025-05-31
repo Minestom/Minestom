@@ -1,5 +1,6 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
@@ -7,7 +8,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
@@ -19,7 +19,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
 
     static @NotNull TrimPattern create(
-            @NotNull NamespaceID assetId,
+            @NotNull Key assetId,
             @NotNull Material template,
             @NotNull Component description,
             boolean decal
@@ -44,7 +44,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
         );
     }
 
-    @NotNull NamespaceID assetId();
+    @NotNull Key assetId();
 
     @NotNull Material template();
 
@@ -56,7 +56,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
     @Nullable Registry.TrimPatternEntry registry();
 
     final class Builder {
-        private NamespaceID assetId;
+        private Key assetId;
         private Material template;
         private Component description;
         private boolean decal;
@@ -66,11 +66,11 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder assetId(@NotNull String assetId) {
-            return assetId(NamespaceID.from(assetId));
+            return assetId(Key.key(assetId));
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder assetId(@NotNull NamespaceID assetId) {
+        public @NotNull Builder assetId(@NotNull Key assetId) {
             this.assetId = assetId;
             return this;
         }

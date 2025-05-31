@@ -1,6 +1,7 @@
 package net.minestom.server.instance.anvil;
 
 import it.unimi.dsi.fastutil.ints.*;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
@@ -13,7 +14,6 @@ import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palettes;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +35,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class AnvilLoader implements IChunkLoader {
     private final static Logger LOGGER = LoggerFactory.getLogger(AnvilLoader.class);
     private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
-    private final static int PLAINS_ID = BIOME_REGISTRY.getId(NamespaceID.from("minecraft:plains"));
+    private final static int PLAINS_ID = BIOME_REGISTRY.getId(Key.key("minecraft:plains"));
 
     private final ReentrantLock fileCreationLock = new ReentrantLock();
     private final Map<String, RegionFile> alreadyLoaded = new ConcurrentHashMap<>();
@@ -134,23 +134,32 @@ public class AnvilLoader implements IChunkLoader {
     private @Nullable RegionFile getMCAFile(int chunkX, int chunkZ) {
         final int regionX = CoordConversion.chunkToRegion(chunkX);
         final int regionZ = CoordConversion.chunkToRegion(chunkZ);
-        return alreadyLoaded.computeIfAbsent(RegionFile.getFileName(regionX, regionZ), n -> {
-            final Path regionPath = this.regionPath.resolve(n);
-            if (!Files.exists(regionPath)) {
-                return null;
-            }
-            perRegionLoadedChunksLock.lock();
-            try {
-                Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
-                assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
-                return new RegionFile(regionPath);
-            } catch (IOException e) {
-                MinecraftServer.getExceptionManager().handleException(e);
-                return null;
-            } finally {
-                perRegionLoadedChunksLock.unlock();
-            }
-        });
+        final String fileName = RegionFile.getFileName(regionX, regionZ);
+
+        final RegionFile loadedFile = alreadyLoaded.get(fileName);
+
+        if (loadedFile != null) return loadedFile;
+
+        perRegionLoadedChunksLock.lock();
+        try {
+            return alreadyLoaded.computeIfAbsent(fileName, n -> {
+                final Path regionPath = this.regionPath.resolve(n);
+                if (!Files.exists(regionPath)) {
+                    return null;
+                }
+
+                try {
+                    Set<IntIntImmutablePair> previousVersion = perRegionLoadedChunks.put(new IntIntImmutablePair(regionX, regionZ), new HashSet<>());
+                    assert previousVersion == null : "The AnvilLoader cache should not already have data for this region.";
+                    return new RegionFile(regionPath);
+                } catch (IOException e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                    return null;
+                }
+            });
+        } finally {
+            perRegionLoadedChunksLock.unlock();
+        }
     }
 
     private void loadSections(@NotNull Chunk chunk, @NotNull CompoundBinaryTag chunkData) {
@@ -241,7 +250,7 @@ public class AnvilLoader implements IChunkLoader {
             if (blockName.equals("minecraft:air")) {
                 convertedPalette[i] = Block.AIR;
             } else {
-                Block block = Objects.requireNonNull(Block.fromNamespaceId(blockName), "Unknown block " + blockName);
+                Block block = Objects.requireNonNull(Block.fromKey(blockName), "Unknown block " + blockName);
                 // Properties
                 final Map<String, String> properties = new HashMap<>();
                 CompoundBinaryTag propertiesNBT = paletteEntry.getCompound("Properties");
@@ -269,7 +278,7 @@ public class AnvilLoader implements IChunkLoader {
         int[] convertedPalette = new int[paletteTag.size()];
         for (int i = 0; i < convertedPalette.length; i++) {
             final String name = paletteTag.getString(i);
-            int biomeId = BIOME_REGISTRY.getId(NamespaceID.from(name));
+            int biomeId = BIOME_REGISTRY.getId(Key.key(name));
             if (biomeId == -1) biomeId = PLAINS_ID;
             convertedPalette[i] = biomeId;
         }
@@ -440,7 +449,7 @@ public class AnvilLoader implements IChunkLoader {
                                     blockEntityTag.put(originalNBT);
                                 }
                                 if (handler != null) {
-                                    blockEntityTag.putString("id", handler.getNamespaceId().asString());
+                                    blockEntityTag.putString("id", handler.getKey().asString());
                                 }
                                 blockEntityTag.putInt("x", x + Chunk.CHUNK_SIZE_X * chunk.getChunkX());
                                 blockEntityTag.putInt("y", y);

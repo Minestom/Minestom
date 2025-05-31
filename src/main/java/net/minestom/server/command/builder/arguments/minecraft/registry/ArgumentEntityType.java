@@ -22,7 +22,7 @@ public class ArgumentEntityType extends ArgumentRegistry<EntityType> {
 
     @Override
     public EntityType getRegistry(@NotNull String value) {
-        return EntityType.fromNamespaceId(value);
+        return EntityType.fromKey(value);
     }
 
     @Override

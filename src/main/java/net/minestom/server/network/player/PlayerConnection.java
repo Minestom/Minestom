@@ -1,5 +1,6 @@
 package net.minestom.server.network.player;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.crypto.PlayerPublicKey;
@@ -16,7 +17,6 @@ import net.minestom.server.network.packet.server.common.DisconnectPacket;
 import net.minestom.server.network.packet.server.configuration.SelectKnownPacksPacket;
 import net.minestom.server.network.packet.server.login.LoginDisconnectPacket;
 import net.minestom.server.network.plugin.LoginPluginMessageProcessor;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public abstract class PlayerConnection {
 
     private CompletableFuture<List<SelectKnownPacksPacket.Entry>> knownPacksFuture = null; // Present only when waiting for a response from the client.
 
-    private final Map<NamespaceID, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
+    private final Map<Key, CompletableFuture<byte @Nullable []>> pendingCookieRequests = new ConcurrentHashMap<>();
 
     public PlayerConnection() {
         this.online = true;
@@ -221,14 +221,14 @@ public abstract class PlayerConnection {
             throw new IllegalStateException("Cannot fetch cookie in PlayerProvider, use AsyncPlayerPreLoginEvent or AsyncPlayerConfigurationEvent");
         }
         CompletableFuture<byte[]> future = new CompletableFuture<>();
-        pendingCookieRequests.put(NamespaceID.from(key), future);
+        pendingCookieRequests.put(Key.key(key), future);
         sendPacket(new CookieRequestPacket(key));
         return future;
     }
 
     @ApiStatus.Internal
     public void receiveCookieResponse(@NotNull String key, byte @Nullable [] data) {
-        CompletableFuture<byte[]> future = pendingCookieRequests.remove(NamespaceID.from(key));
+        CompletableFuture<byte[]> future = pendingCookieRequests.remove(Key.key(key));
         if (future != null) {
             future.complete(data);
         }

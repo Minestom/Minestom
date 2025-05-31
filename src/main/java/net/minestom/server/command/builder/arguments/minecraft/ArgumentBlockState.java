@@ -40,7 +40,7 @@ public class ArgumentBlockState extends Argument<Block> {
 
         if (nbtIndex == -1) {
             // Only block name
-            final Block block = Block.fromNamespaceId(input);
+            final Block block = Block.fromKey(input);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
             return block;
@@ -49,7 +49,7 @@ public class ArgumentBlockState extends Argument<Block> {
                 throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
             // Block state
             final String blockName = input.substring(0, nbtIndex);
-            Block block = Block.fromNamespaceId(blockName);
+            Block block = Block.fromKey(blockName);
             if (block == null)
                 throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
 

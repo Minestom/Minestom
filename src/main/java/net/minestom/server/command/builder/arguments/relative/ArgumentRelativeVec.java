@@ -8,7 +8,6 @@ import net.minestom.server.utils.StringUtils;
 import net.minestom.server.utils.location.RelativeVec;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Set;
 import java.util.function.Function;
 
 import static net.minestom.server.utils.location.RelativeVec.CoordinateType.*;
@@ -20,7 +19,6 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
     private static final char RELATIVE_CHAR = '~';
     private static final char LOCAL_CHAR = '^';
-    private static final Set<Character> MODIFIER_CHARS = Set.of(RELATIVE_CHAR, LOCAL_CHAR);
 
     public static final int INVALID_NUMBER_COUNT_ERROR = 1;
     public static final int INVALID_NUMBER_ERROR = 2;
@@ -47,41 +45,56 @@ abstract class ArgumentRelativeVec extends Argument<RelativeVec> {
 
         double[] coordinates = new double[split.length];
         boolean[] isRelative = new boolean[split.length];
-        RelativeVec.CoordinateType type = null;
+        boolean isLocalType = false;
+
         for (int i = 0; i < split.length; i++) {
             final String element = split[i];
             try {
                 final char modifierChar = element.charAt(0);
-                if (MODIFIER_CHARS.contains(modifierChar)) {
-                    isRelative[i] = true;
 
-                    if (type == null) {
-                        type = modifierChar == LOCAL_CHAR ? LOCAL : RELATIVE;
-                    } else if ((type == LOCAL) != (modifierChar == LOCAL_CHAR)) {
-                        throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
+                if (isLocalType && modifierChar != LOCAL_CHAR) {
+                    throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
+                }
+
+                switch (modifierChar) {
+                    case LOCAL_CHAR: {
+                        isLocalType = true;
+                        // Everything in local has to be relative. Fall through.
                     }
-
-                    if (element.length() > 1) {
+                    case RELATIVE_CHAR: {
+                        isRelative[i] = true;
+                        if (element.length() == 1) break;
                         final String potentialNumber = element.substring(1);
                         coordinates[i] = getRelativeNumberParser().apply(potentialNumber).doubleValue();
+                        break;
                     }
-                } else {
-                    if (type == null) {
-                        type = ABSOLUTE;
-                    } else if (type == LOCAL) {
-                        throw new ArgumentSyntaxException("Cannot mix world & local coordinates (everything must either use ^ or not)", input, MIXED_TYPE_ERROR);
+                    default: {
+                        coordinates[i] = getAbsoluteNumberParser().apply(element).doubleValue();
+                        break;
                     }
-                    coordinates[i] = getAbsoluteNumberParser().apply(element).doubleValue();
                 }
             } catch (NumberFormatException e) {
                 throw new ArgumentSyntaxException("Invalid number", input, INVALID_NUMBER_ERROR);
             }
         }
 
+        final boolean xRelative = isRelative[0];
+        final boolean yRelative = split.length == 3 && isRelative[1];
+        final boolean zRelative = isRelative[split.length == 3 ? 2 : 1];
+
+        final RelativeVec.CoordinateType type;
+        if (isLocalType) {
+            type = LOCAL;
+        } else if (xRelative || yRelative || zRelative) {
+            type = RELATIVE;
+        } else {
+            type = ABSOLUTE;
+        }
+
         return new RelativeVec(split.length == 3 ?
                 new Vec(coordinates[0], coordinates[1], coordinates[2]) : new Vec(coordinates[0], coordinates[1]),
                 type,
-                isRelative[0], split.length == 3 && isRelative[1], isRelative[split.length == 3 ? 2 : 1]);
+                xRelative, yRelative, zRelative);
     }
 
     /**

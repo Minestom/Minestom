@@ -2,8 +2,8 @@ package net.minestom.server.instance.block;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -29,8 +29,8 @@ public final class BlockManager {
         blockHandlerMap.put(namespace, handlerSupplier);
     }
 
-    public void registerHandler(@NotNull NamespaceID namespace, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
-        registerHandler(namespace.toString(), handlerSupplier);
+    public void registerHandler(@NotNull Key key, @NotNull Supplier<@NotNull BlockHandler> handlerSupplier) {
+        registerHandler(key.toString(), handlerSupplier);
     }
 
     public @Nullable BlockHandler getHandler(@NotNull String namespace) {
