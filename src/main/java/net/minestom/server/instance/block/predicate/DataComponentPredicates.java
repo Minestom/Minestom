@@ -61,7 +61,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
         TRIM("trim", DataComponentPredicate.ArmorTrim.CODEC),
         JUKEBOX_PLAYABLE("jukebox_playable", DataComponentPredicate.JukeboxPlayable.CODEC);
 
-        private static final Map<String, ComponentPredicateType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ComponentPredicateType::name, Function.identity()));
+        private static final Map<String, ComponentPredicateType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ComponentPredicateType::getName, Function.identity()));
         public static final NetworkBuffer.Type<ComponentPredicateType> NETWORK_TYPE = NetworkBuffer.Enum(ComponentPredicateType.class);
         public static final Codec<ComponentPredicateType> CODEC = Codec.STRING.transform(BY_NAME::get, ComponentPredicateType::name);
 
