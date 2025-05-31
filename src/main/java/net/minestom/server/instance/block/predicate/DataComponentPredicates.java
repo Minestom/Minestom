@@ -117,7 +117,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
                     //noinspection unchecked
                     Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) entry.getKey().getCodec();
                     BinaryTag value = codec.encode(coder, entry.getValue()).orElseThrow();
-                    builder.put(entry.getKey().name(), value);
+                    builder.put(entry.getKey().getName(), value);
                 }
                 return builder.build();
             });
