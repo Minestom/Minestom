@@ -115,7 +115,8 @@ public class BlockBreakCalculation {
         Pos eye = player.getPosition().add(0, player.getEyeHeight(), 0);
         Block block = instance.getBlock(eye);
 
-        if (!WATER_TAG.contains(Fluid.fromKey(block.key()))) {
+        final Fluid fluid = Fluid.fromKey(block.key());
+        if (fluid == null || !WATER_TAG.contains(fluid)) {
             return false;
         }
         float fluidHeight = getFluidHeight(player.getInstance(), x, y, z, block);

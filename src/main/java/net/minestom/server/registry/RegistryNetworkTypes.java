@@ -5,9 +5,9 @@ import net.minestom.server.utils.Either;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 final class RegistryNetworkTypes {
 
@@ -102,7 +102,7 @@ final class RegistryNetworkTypes {
             } else if (count == 0) {
                 return RegistryTag.empty();
             } else {
-                final Set<RegistryKey<T>> keys = new HashSet<>(count);
+                final List<RegistryKey<T>> keys = new ArrayList<>(count);
                 for (int i = 0; i < count; i++) {
                     final int id = buffer.read(NetworkBuffer.VAR_INT);
                     final var key = registry.getKey(id);
