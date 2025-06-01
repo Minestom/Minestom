@@ -12,10 +12,11 @@ public record DialogActionButton(
         int width,
         @Nullable DialogAction action
 ) {
+    public static final int DEFAULT_WIDTH = 150;
     public static final StructCodec<DialogActionButton> CODEC = StructCodec.struct(
             "label", Codec.COMPONENT, DialogActionButton::label,
             "tooltip", Codec.COMPONENT.optional(), DialogActionButton::tooltip,
-            "width", Codec.INT.optional(150), DialogActionButton::width,
+            "width", Codec.INT.optional(DEFAULT_WIDTH), DialogActionButton::width,
             "action", DialogAction.CODEC.optional(), DialogActionButton::action,
             DialogActionButton::new);
 }

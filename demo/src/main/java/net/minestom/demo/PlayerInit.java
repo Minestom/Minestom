@@ -1,7 +1,5 @@
 package net.minestom.demo;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.FeatureFlag;
@@ -10,11 +8,10 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.codec.Codec;
-import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.dialog.*;
 import net.minestom.server.entity.*;
 import net.minestom.server.entity.damage.Damage;
 import net.minestom.server.event.Event;
@@ -168,9 +165,35 @@ public class PlayerInit {
                 }
             })
             .addListener(PlayerChatEvent.class, event -> {
-                var json = new Gson().fromJson("{  \"type\": \"minecraft:simple_input_form\",  \"title\": { \"text\": \"Are you sure you want to confirm?\" },  \"inputs\": [    {      \"type\": \"minecraft:text\",      \"key\": \"text_input\",      \"label\": \"Enter some text\"    },    {      \"type\": \"minecraft:boolean\",      \"key\": \"boolean\",      \"label\": \"Checkbox\"    },    {      \"type\": \"minecraft:single_option\",      \"key\": \"options\",      \"label\": \"Checkbox\",      \"options\": [        {          \"id\": \"option1\",          \"display\": \"Option 1\"        },        {          \"id\": \"option2\",          \"display\": \"Option 2\"        },        {          \"id\": \"option3\",          \"display\": \"Option 3\"        }      ]    },    {      \"type\": \"minecraft:number_range\",      \"key\": \"number\",      \"label\": \"Number range\",      \"start\": 0,      \"end\": 500,      \"steps\": 500,      \"initial\": 250    }  ],  \"action\": { \"label\": \"Done\", \"id\": \"submit\", \"on_submit\": { \"type\": \"command_template\", \"template\": \"tellraw @a 'text value: \\\"$(text_input)\\\"\\\\ncheckbox value: \\\"$(boolean)\\\"\\\\nmulti option value: \\\"$(options)\\\"\\\\nrange value: \\\"$(number)\\\"'\" } }}", JsonElement.class);
-                var nbt = Codec.RawValue.of(Transcoder.JSON, json).convertTo(Transcoder.NBT).orElseThrow();
-                event.getPlayer().sendPacket(new ShowDialogPacket(nbt));
+                var dialog = new Dialog.MultiAction(
+                        new DialogMetadata(
+                                Component.text("Are you sure you want to confirm?"),
+                                null, true, false,
+                                DialogAfterAction.CLOSE,
+                                List.of(
+                                        new DialogBody.PlainMessage(Component.text("plain message here"), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                        new DialogBody.Item(ItemStack.of(Material.DIAMOND, 5),
+                                                new DialogBody.PlainMessage(Component.text("item message"), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                                false, true, 16, 16)
+                                ),
+                                List.of(
+                                        new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH, Component.text("Enter some text"), true, "", 100, null),
+                                        new DialogInput.Boolean("bool", Component.text("Checkbox"), false, "true", "false"),
+                                        new DialogInput.SingleOption("single_option", DialogInput.DEFAULT_WIDTH, List.of(
+                                                new DialogInput.SingleOption.Option("option1", Component.text("Option 1"), true),
+                                                new DialogInput.SingleOption.Option("option2", Component.text("Option 2"), false),
+                                                new DialogInput.SingleOption.Option("option3", Component.text("Option 3"), false)
+                                        ), Component.text("Single option"), true),
+                                        new DialogInput.NumberRange("number_range", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f)
+                                )
+                        ),
+                        List.of(new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)),
+                        null,
+                        1
+                );
+
+                event.getPlayer().sendPacket(new ShowDialogPacket(dialog));
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
