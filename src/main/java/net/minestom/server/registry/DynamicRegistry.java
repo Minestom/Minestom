@@ -2,6 +2,7 @@ package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.item.enchant.Enchantment;
@@ -30,14 +31,6 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     @SafeVarargs
     static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull Key key, @NotNull Map.Entry<net.kyori.adventure.key.Key, T>... entries) {
         var registry = new DynamicRegistryImpl<T>(key, null);
-        for (var entry : entries)
-            registry.register(entry.getKey(), entry.getValue(), null);
-        return registry;
-    }
-
-    @SafeVarargs
-    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull String id, @NotNull Map.Entry<net.kyori.adventure.key.Key, T>... entries) {
-        var registry = new DynamicRegistryImpl<T>(id, null);
         for (var entry : entries)
             registry.register(entry.getKey(), entry.getValue(), null);
         return registry;
@@ -102,6 +95,21 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
                 return registry;
             }
         }, registry, resource, null, codec);
+        return registry;
+    }
+
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
+            @NotNull Key key, @NotNull Codec<Dialog> codec,
+            @NotNull RegistryData.Resource resource, @NotNull Registries registries
+    ) {
+        final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+            @Override
+            public @NotNull DynamicRegistry<Dialog> dialog() {
+                return registry;
+            }
+        }, registry, resource, null);
         return registry;
     }
 

@@ -273,7 +273,7 @@ public interface PacketRegistry<T> {
                     entry(CustomReportDetailsPacket.class, CustomReportDetailsPacket.SERIALIZER),
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
                     entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
-                    entry(ShowDialogPacket.class, ShowDialogPacket.CONFIG_SERIALIZER)
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
         }
 
@@ -419,7 +419,7 @@ public interface PacketRegistry<T> {
                     entry(ServerLinksPacket.class, ServerLinksPacket.SERIALIZER),
                     entry(TrackedWaypointPacket.class, TrackedWaypointPacket.SERIALIZER),
                     entry(ClearDialogPacket.class, ClearDialogPacket.SERIALIZER),
-                    entry(ShowDialogPacket.class, ShowDialogPacket.PLAY_SERIALIZER)
+                    entry(ShowDialogPacket.class, ShowDialogPacket.SERIALIZER)
             );
         }
 
