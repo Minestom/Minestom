@@ -61,7 +61,6 @@ public class Generators {
         // Dynamic registries
         generator.generateKeys(resource("chat_type.json"), "net.minestom.server.message", "ChatType");
         generator.generateKeys(resource("dimension_type.json"), "net.minestom.server.world", "DimensionType");
-        generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
         generator.generateKeys(resource("damage_type.json"), "net.minestom.server.entity.damage", "DamageType");
         generator.generateKeys(resource("trim_material.json"), "net.minestom.server.item.armor", "TrimMaterial");
         generator.generateKeys(resource("trim_pattern.json"), "net.minestom.server.item.armor", "TrimPattern");
@@ -77,6 +76,7 @@ public class Generators {
         generator.generateKeys(resource("cow_variant.json"), "net.minestom.server.entity.metadata.animal", "CowVariant");
         generator.generateKeys(resource("frog_variant.json"), "net.minestom.server.entity.metadata.animal", "FrogVariant");
         generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
+        generator.generateKeys(resource("worldgen/biome.json"), "net.minestom.server.world.biome", "Biome");
 
         LOGGER.info("Finished generating code");
     }

@@ -16,11 +16,10 @@ import java.util.Collection;
  * file (see {@link net.minestom.server.component.DataComponent} for example).
  *
  * @param <T> The value type of the component
- *
  * @see net.minestom.server.component.DataComponent
  * @see EffectComponent
  */
-public sealed interface DataComponent<T> extends StaticProtocolObject, Codec<T> permits DataComponentImpl {
+public sealed interface DataComponent<T> extends StaticProtocolObject<DataComponent<T>>, Codec<T> permits DataComponentImpl {
 
     @NotNull NetworkBuffer.Type<DataComponent<?>> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(DataComponent::fromId, DataComponent::id);
     @NotNull Codec<DataComponent<?>> CODEC = Codec.STRING.transform(DataComponent::fromKey, DataComponent::name);
