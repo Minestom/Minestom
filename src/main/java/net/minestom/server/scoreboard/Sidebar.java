@@ -164,7 +164,7 @@ public class Sidebar implements Scoreboard {
      * @param id           The identifier of the {@link ScoreboardLine}
      * @param numberFormat The new number format for the {@link ScoreboardLine}
      */
-    public void updateNumberFormat(@NotNull String id, NumberFormat numberFormat) {
+    public void updateLineNumberFormat(@NotNull String id, NumberFormat numberFormat) {
         final ScoreboardLine scoreboardLine = getLine(id);
         if (scoreboardLine != null) {
             scoreboardLine.numberFormat = numberFormat;
