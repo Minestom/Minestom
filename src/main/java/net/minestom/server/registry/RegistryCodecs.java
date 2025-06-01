@@ -145,6 +145,9 @@ final class RegistryCodecs {
                         new Result.Ok<>(coder.createString(backed.key().hashedKey()));
                 case net.minestom.server.registry.RegistryTagImpl.Empty() -> new Result.Ok<>(coder.emptyList());
                 case net.minestom.server.registry.RegistryTagImpl.Direct(var entries) -> {
+                    if (entries.isEmpty()) yield new Result.Ok<>(coder.emptyList());
+                    if (entries.size() == 1)
+                        yield new Result.Ok<>(coder.createString(entries.getFirst().key().asString()));
                     final Transcoder.ListBuilder<D> result = coder.createList(entries.size());
                     for (final RegistryKey<T> key : entries)
                         result.add(coder.createString(key.key().asString()));

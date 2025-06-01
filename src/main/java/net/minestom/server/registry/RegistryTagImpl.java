@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -47,7 +48,7 @@ final class RegistryTagImpl {
 
         @Override
         public boolean contains(@NotNull RegistryKey<T> value) {
-            return entries.contains(value);
+            return entries.contains(value instanceof RegistryKeyImpl<T> key ? key : new RegistryKeyImpl<>(value.key()));
         }
 
         @Override
@@ -79,10 +80,10 @@ final class RegistryTagImpl {
         }
     }
 
-    record Direct<T>(@NotNull Set<RegistryKey<T>> keys) implements RegistryTag<T> {
+    record Direct<T>(@NotNull List<RegistryKey<T>> keys) implements RegistryTag<T> {
         @Override
         public boolean contains(@NotNull RegistryKey<T> value) {
-            return keys.contains(value);
+            return keys.contains(value instanceof RegistryKeyImpl<T> key ? key : new RegistryKeyImpl<>(value.key()));
         }
 
         @Override

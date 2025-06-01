@@ -5,7 +5,7 @@ import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 
 /**
  * {@link RegistryTag} is a collection of keys from a particular registry.
@@ -35,12 +35,12 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
     @SafeVarargs
     static <T> @NotNull RegistryTag<T> direct(@NotNull RegistryKey<T>... keys) {
         if (keys.length == 0) return empty();
-        return new RegistryTagImpl.Direct<>(Set.of(keys));
+        return new RegistryTagImpl.Direct<>(List.of(keys));
     }
 
     static <T> @NotNull RegistryTag<T> direct(@NotNull Collection<RegistryKey<T>> values) {
         if (values.isEmpty()) return empty();
-        return new RegistryTagImpl.Direct<>(Set.copyOf(values));
+        return new RegistryTagImpl.Direct<>(List.copyOf(values));
     }
 
     boolean contains(@NotNull RegistryKey<T> value);
