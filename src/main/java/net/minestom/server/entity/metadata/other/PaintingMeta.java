@@ -7,7 +7,7 @@ import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.entity.metadata.EntityMeta;
 import net.minestom.server.entity.metadata.ObjectDataProvider;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +23,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
      * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull DynamicRegistry.Key<PaintingVariant> getVariant() {
+    public @NotNull Holder<PaintingVariant> getVariant() {
         return metadata.get(MetadataDef.Painting.VARIANT);
     }
 
@@ -31,7 +31,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
      * @deprecated use {@link net.minestom.server.component.DataComponents#PAINTING_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull DynamicRegistry.Key<PaintingVariant> value) {
+    public void setVariant(@NotNull Holder<PaintingVariant> value) {
         metadata.set(MetadataDef.Painting.VARIANT, value);
     }
 
@@ -73,7 +73,7 @@ public class PaintingMeta extends EntityMeta implements ObjectDataProvider {
     @SuppressWarnings("unchecked")
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
         if (component == DataComponents.PAINTING_VARIANT)
-            setVariant((DynamicRegistry.Key<PaintingVariant>) value);
+            setVariant((Holder<PaintingVariant>) value);
         else super.set(component, value);
     }
 

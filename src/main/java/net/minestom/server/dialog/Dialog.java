@@ -4,23 +4,40 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ObjectSet;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.*;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
 
-public sealed interface Dialog {
-    @NotNull Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap("dialog_type",
+public sealed interface Dialog extends Holder.Direct<Dialog> {
+    @NotNull Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
+            Key.key("minecraft:dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),
             Map.entry(Key.key("server_links"), ServerLinks.CODEC),
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
             Map.entry(Key.key("multi_action"), MultiAction.CODEC),
             Map.entry(Key.key("confirmation"), Confirmation.CODEC));
-    @NotNull Codec<Dialog> CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec, "type");
+    @NotNull Codec<Dialog> REGISTRY_CODEC = Codec.RegistryTaggedUnion(REGISTRY, Dialog::codec, "type");
+    @NotNull NetworkBuffer.Type<Dialog> REGISTRY_NETWORK_TYPE = NetworkBuffer.TypedNBT(REGISTRY_CODEC);
+
+    @NotNull NetworkBuffer.Type<Holder<Dialog>> NETWORK_TYPE = Holder.networkType(Registries::dialog, REGISTRY_NETWORK_TYPE);
+    @NotNull Codec<Holder<Dialog>> CODEC = Holder.codec(Registries::dialog, REGISTRY_CODEC);
+
+    /**
+     * <p>Creates a new registry for dialogs, loading the vanilla dialogs.</p>
+     *
+     * @see net.minestom.server.MinecraftServer to get an existing instance of the registry
+     */
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<Dialog> createDefaultRegistry(@NotNull Registries registries) {
+        return DynamicRegistry.createForDialogWithSelfReferentialLoadingNightmare(
+                Key.key("minecraft:dialog"), REGISTRY_CODEC, RegistryData.Resource.DIALOGS, registries
+        );
+    }
 
     record Notice(@NotNull DialogMetadata metadata, @NotNull DialogActionButton action) implements Dialog {
         public static final DialogActionButton DEFAULT_ACTION = new DialogActionButton(Component.translatable("gui.ok"), null, 150, null);
@@ -55,13 +72,13 @@ public sealed interface Dialog {
 
     record DialogList(
             @NotNull DialogMetadata metadata,
-            @NotNull ObjectSet<Dialog> dialogs,
+            @NotNull HolderSet<Dialog> dialogs,
             @Nullable DialogActionButton exitAction,
             int columns, int buttonWidth
     ) implements Dialog {
         public static final @NotNull StructCodec<DialogList> CODEC = StructCodec.struct(
                 StructCodec.INLINE, DialogMetadata.CODEC, DialogList::metadata,
-                "dialogs", ObjectSet.<Dialog>codec(null), DialogList::dialogs, // TODO
+                "dialogs", HolderSet.codec(Registries::dialog, Dialog.REGISTRY_CODEC), DialogList::dialogs,
                 "exit_action", DialogActionButton.CODEC.optional(), DialogList::exitAction,
                 "columns", Codec.INT.optional(2), DialogList::columns,
                 "button_width", Codec.INT.optional(150), DialogList::buttonWidth,
