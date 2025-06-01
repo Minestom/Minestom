@@ -6,12 +6,15 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
+public sealed interface TrimPattern extends Holder.Direct<TrimPattern>, TrimPatterns permits TrimPatternImpl {
     @NotNull NetworkBuffer.Type<TrimPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, TrimPattern::assetId,
             NetworkBuffer.COMPONENT, TrimPattern::description,
@@ -45,7 +48,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:trim_pattern", REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
+        return DynamicRegistry.create(Key.key("minecraft:trim_pattern"), REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
     }
 
     @NotNull Key assetId();

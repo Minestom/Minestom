@@ -4,117 +4,135 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
-public final class StaticRegistry<T extends StaticProtocolObject> implements Registry<T> {
-    private final String id;
-    private final Map<String, T> namespaces;
-    private final ObjectArray<T> ids;
-    private final List<T> values;
+/**
+ * A registry for holding static vanilla registry data. Not generally user modifiable, always immutable.
+ */
+@ApiStatus.Internal
+final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registry<T> {
+    private final Key key;
+    private final Map<Key, T> keyToValue;
+    private final Map<T, RegistryKey<T>> valueToKey;
+    private final ObjectArray<T> idToValue;
 
-    private final Map<String, ObjectSetImpl.TagV2<T>> tags;
+    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new ConcurrentHashMap<>();
 
     StaticRegistry(
-            @NotNull String id,
-            @NotNull Map<String, T> namespaces,
+            @NotNull Key key,
+            @NotNull Map<Key, T> namespaces,
             @NotNull ObjectArray<T> ids,
-            @NotNull Map<String, ObjectSetImpl.TagV2<T>> tags
+            @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags
     ) {
-        this.id = id;
-        this.namespaces = Map.copyOf(namespaces);
-        this.ids = ids;
-        this.ids.trim();
+        this.key = key;
+        this.keyToValue = Map.copyOf(namespaces);
+        var valueToKey = new HashMap<T, RegistryKey<T>>(namespaces.size());
+        for (var entry : namespaces.entrySet())
+            valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
+        this.valueToKey = Map.copyOf(valueToKey);
+        this.idToValue = ids;
+        this.idToValue.trim();
 
-        //noinspection unchecked
-        this.values = List.of(ids.arrayCopy((Class<T>) StaticProtocolObject.class));
-
-        this.tags = Map.copyOf(tags);
+        this.tags.putAll(tags);
     }
 
     @Override
-    public @NotNull String id() {
-        return this.id;
+    public @NotNull Key key() {
+        return this.key;
     }
 
     @Override
     public @Nullable T get(int id) {
-        return ids.get(id);
+        return this.idToValue.get(id);
     }
 
     @Override
     public @Nullable T get(@NotNull Key key) {
-        return namespaces.get(key.asString());
+        return this.keyToValue.get(key);
     }
 
     @Override
-    public DynamicRegistry.@Nullable Key<T> getKey(int id) {
-        final T value = ids.get(id);
-        return value == null ? null : DynamicRegistry.Key.of(value.key());
+    public @Nullable RegistryKey<T> getKey(int id) {
+        final T value = this.idToValue.get(id);
+        return value == null ? null : new RegistryKeyImpl<>(value.key());
     }
 
     @Override
-    public DynamicRegistry.Key<T> getKey(@NotNull T value) {
-        return DynamicRegistry.Key.of(value.key());
+    public @Nullable RegistryKey<T> getKey(@NotNull T value) {
+        return this.valueToKey.get(value);
     }
 
     @Override
-    public @Nullable Key getName(int id) {
-        final T value = ids.get(id);
-        return value == null ? null : value.key();
+    public @Nullable RegistryKey<T> getKey(@NotNull Key key) {
+        return this.keyToValue.containsKey(key) ? new RegistryKeyImpl<>(key) : null;
     }
 
     @Override
-    public @NotNull DataPack getPack(int id) {
-        return DataPack.MINECRAFT_CORE;
+    public int getId(@NotNull RegistryKey<T> key) {
+        final T value = this.keyToValue.get(key.key());
+        if (value == null) return -1; // Not found
+        return this.valueToKey.get(value) != null ? value.id() : -1;
     }
 
     @Override
-    public @NotNull DataPack getPack(DynamicRegistry.@NotNull Key<T> key) {
-        return DataPack.MINECRAFT_CORE;
+    public @Nullable DataPack getPack(int id) {
+        // Static registries are always in the core data pack
+        return this.idToValue.get(id) != null ? DataPack.MINECRAFT_CORE : null;
     }
 
     @Override
-    public int getId(@NotNull Key id) {
-        final T value = get(id);
-        return value == null ? -1 : value.id();
+    public int size() {
+        return this.keyToValue.size();
     }
 
     @Override
-    public @Nullable ObjectSet<T> getTag(DynamicRegistry.@NotNull Key<T> key) {
-        return tags.get(key.key().asString());
+    public @NotNull Collection<RegistryKey<T>> keys() {
+        return this.valueToKey.values();
     }
 
     @Override
-    public @NotNull List<T> values() {
-        return values;
+    public @NotNull Collection<T> values() {
+        return this.valueToKey.keySet();
     }
 
     @Override
-    public @NotNull Collection<ObjectSet<T>> tags() {
-        //noinspection unchecked
-        return (Collection<ObjectSet<T>>) (Object) tags.values();
+    public @Nullable RegistryTag<T> getTag(@NotNull TagKey<T> key) {
+        return this.tags.get(key);
+    }
+
+    @Override
+    public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
+        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+    }
+
+    @Override
+    public boolean removeTag(@NotNull TagKey<T> key) {
+        return this.tags.remove(key) != null;
+    }
+
+    @Override
+    public @NotNull Collection<RegistryTag<T>> tags() {
+        return Collections.unmodifiableCollection(this.tags.values());
     }
 
     @Override
     public TagsPacket.@NotNull Registry tagRegistry() {
-        throw new UnsupportedOperationException("todo");
+        final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
+        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+            final int[] entries = new int[tag.size()];
+            int i = 0;
+            for (var staticEntry : tag) {
+                entries[i++] = staticEntry instanceof StaticProtocolObject<T> po
+                        ? po.id() : getId(staticEntry);
+            }
+            tagList.add(new TagsPacket.Tag(tag.key().key().asString(), entries));
+        }
+        return new TagsPacket.Registry(key().asString(), tagList);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof StaticRegistry<?> registry)) return false;
-        return Objects.equals(id, registry.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

@@ -1,12 +1,12 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.entity.EquipmentSlotGroup;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.*;
@@ -16,15 +16,15 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public sealed interface Enchantment extends ProtocolObject, Enchantments permits EnchantmentImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Enchantment>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::enchantment, false);
-    @NotNull Codec<DynamicRegistry.Key<Enchantment>> CODEC = Codec.RegistryKey(Registries::enchantment);
+public sealed interface Enchantment extends Enchantments permits EnchantmentImpl {
+    @NotNull NetworkBuffer.Type<RegistryKey<Enchantment>> NETWORK_TYPE = RegistryKey.networkType(Registries::enchantment);
+    @NotNull Codec<RegistryKey<Enchantment>> CODEC = RegistryKey.codec(Registries::enchantment);
 
     @NotNull Codec<Enchantment> REGISTRY_CODEC = StructCodec.struct(
             "description", Codec.COMPONENT, Enchantment::description,
-            "exclusive_set", ObjectSet.<Enchantment>codec(Tag.BasicType.ENCHANTMENTS).optional(ObjectSet.empty()), Enchantment::exclusiveSet,
-            "supported_items", ObjectSet.codec(Tag.BasicType.ITEMS), Enchantment::supportedItems,
-            "primary_items", ObjectSet.<Material>codec(Tag.BasicType.ITEMS).optional(), Enchantment::primaryItems,
+            "exclusive_set", RegistryTag.codec(Registries::enchantment).optional(RegistryTag.empty()), Enchantment::exclusiveSet,
+            "supported_items", RegistryTag.codec(Registries::material), Enchantment::supportedItems,
+            "primary_items", RegistryTag.codec(Registries::material).optional(), Enchantment::primaryItems,
             "weight", Codec.INT, Enchantment::weight,
             "max_level", Codec.INT, Enchantment::maxLevel,
             "min_cost", Cost.CODEC, Enchantment::minCost,
@@ -45,16 +45,18 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
-        return DynamicRegistry.create("minecraft:enchantment", REGISTRY_CODEC, registries, RegistryData.Resource.ENCHANTMENTS);
+        return DynamicRegistry.createForEnchantmentsWithSelfReferentialLoadingNightmare(
+                Key.key("minecraft:enchantment"), REGISTRY_CODEC, RegistryData.Resource.ENCHANTMENTS, registries
+        );
     }
 
     @NotNull Component description();
 
-    @NotNull ObjectSet<Enchantment> exclusiveSet();
+    @NotNull RegistryTag<Enchantment> exclusiveSet();
 
-    @NotNull ObjectSet<Material> supportedItems();
+    @NotNull RegistryTag<Material> supportedItems();
 
-    @Nullable ObjectSet<Material> primaryItems();
+    @Nullable RegistryTag<Material> primaryItems();
 
     int weight();
 
@@ -93,9 +95,9 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
 
     class Builder {
         private Component description = Component.empty();
-        private ObjectSet<Enchantment> exclusiveSet = ObjectSet.empty();
-        private ObjectSet<Material> supportedItems = ObjectSet.empty();
-        private ObjectSet<Material> primaryItems = ObjectSet.empty();
+        private RegistryTag<Enchantment> exclusiveSet = RegistryTag.empty();
+        private RegistryTag<Material> supportedItems = RegistryTag.empty();
+        private RegistryTag<Material> primaryItems = RegistryTag.empty();
         private int weight = 1;
         private int maxLevel = 1;
         private Cost minCost = Cost.DEFAULT;
@@ -112,17 +114,17 @@ public sealed interface Enchantment extends ProtocolObject, Enchantments permits
             return this;
         }
 
-        public @NotNull Builder exclusiveSet(@NotNull ObjectSet<Enchantment> exclusiveSet) {
+        public @NotNull Builder exclusiveSet(@NotNull RegistryTag<Enchantment> exclusiveSet) {
             this.exclusiveSet = exclusiveSet;
             return this;
         }
 
-        public @NotNull Builder supportedItems(@NotNull ObjectSet<Material> supportedItems) {
+        public @NotNull Builder supportedItems(@NotNull RegistryTag<Material> supportedItems) {
             this.supportedItems = supportedItems;
             return this;
         }
 
-        public @NotNull Builder primaryItems(@NotNull ObjectSet<Material> primaryItems) {
+        public @NotNull Builder primaryItems(@NotNull RegistryTag<Material> primaryItems) {
             this.primaryItems = primaryItems;
             return this;
         }

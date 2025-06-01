@@ -8,9 +8,10 @@ import net.minestom.server.codec.Transcoder.MapLike;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.gamedata.DataPack;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -228,8 +229,8 @@ final class CodecImpl {
     }
 
     record UnionImpl<T, R, T1 extends T, TR extends R>(@NotNull String keyField, @NotNull Codec<T> keyCodec,
-                           @NotNull Function<T, StructCodec<TR>> serializers,
-                           @NotNull Function<R, T1> keyFunc) implements StructCodec<R> {
+                                                       @NotNull Function<T, StructCodec<TR>> serializers,
+                                                       @NotNull Function<R, T1> keyFunc) implements StructCodec<R> {
 
         @SuppressWarnings("unchecked")
         @Override
@@ -254,35 +255,6 @@ final class CodecImpl {
 
             map.put(keyField, keyValue);
             return serializer.encodeToMap(coder, (TR) value, map);
-        }
-    }
-
-    record RegistryKeyImpl<T>(@NotNull Registries.Selector<T> selector) implements Codec<DynamicRegistry.Key<T>> {
-        @Override
-        public @NotNull <D> Result<DynamicRegistry.Key<T>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            if (!(coder instanceof RegistryTranscoder<D> context))
-                return new Result.Error<>("Missing registries in transcoder");
-            final var registry = selector.select(context.registries());
-
-            final Result<String> keyResult = coder.getString(value);
-            if (!(keyResult instanceof Result.Ok(@KeyPattern String keyStr)))
-                return keyResult.cast();
-            final DynamicRegistry.Key<T> key = DynamicRegistry.Key.of(Key.key(keyStr));
-            if (registry.getId(key) == -1)
-                return new Result.Error<>("no registry value: " + key);
-            return new Result.Ok<>(key);
-        }
-
-        @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, DynamicRegistry.@Nullable Key<T> value) {
-            if (value == null) return new Result.Error<>("null");
-            if (!(coder instanceof RegistryTranscoder<D> context))
-                return new Result.Error<>("Missing registries in transcoder");
-            final var registry = selector.select(context.registries());
-
-            if (registry.getId(value) == -1)
-                return new Result.Error<>("no registry value: " + value);
-            return new Result.Ok<>(coder.createString(value.name()));
         }
     }
 
@@ -315,12 +287,12 @@ final class CodecImpl {
 
             //noinspection unchecked
             final StructCodec<T> innerCodec = (StructCodec<T>) valueToCodec.apply(value);
-            final DynamicRegistry.Key<StructCodec<? extends T>> type = registry.getKey(innerCodec);
+            final RegistryKey<StructCodec<? extends T>> type = registry.getKey(innerCodec);
             if (type == null) return new Result.Error<>("Unregistered serializer for: " + value);
             if (context.forClient() && registry.getPack(type) != DataPack.MINECRAFT_CORE)
                 return new Result.Ok<>(null);
 
-            map.put(key, coder.createString(type.name()));
+            map.put(key, coder.createString(type.key().asString()));
             return innerCodec.encodeToMap(coder, value, map);
         }
     }
@@ -415,6 +387,28 @@ final class CodecImpl {
                     (int) value.y(),
                     (int) value.z()
             }));
+        }
+    }
+
+    record EitherImpl<L, R>(@NotNull Codec<L> leftCodec, @NotNull Codec<R> rightCodec) implements Codec<Either<L, R>> {
+        @Override
+        public @NotNull <D> Result<Either<L, R>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
+            final Result<L> leftResult = leftCodec.decode(coder, value);
+            if (leftResult instanceof Result.Ok(L leftValue))
+                return new Result.Ok<>(Either.left(leftValue));
+            final Result<R> rightResult = rightCodec.decode(coder, value);
+            if (rightResult instanceof Result.Ok(R rightValue))
+                return new Result.Ok<>(Either.right(rightValue));
+            return new Result.Error<>("Failed to decode Either: " + leftResult + ", " + rightResult);
+        }
+
+        @Override
+        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Either<L, R> value) {
+            if (value == null) return new Result.Error<>("null");
+            return switch (value) {
+                case Either.Left(L leftValue) -> leftCodec.encode(coder, leftValue);
+                case Either.Right(R rightValue) -> rightCodec.encode(coder, rightValue);
+            };
         }
     }
 

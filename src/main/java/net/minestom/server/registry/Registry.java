@@ -1,5 +1,7 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import org.jetbrains.annotations.ApiStatus;
@@ -7,57 +9,89 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
-public sealed interface Registry<T> permits StaticRegistry, DynamicRegistry {
-
-    @NotNull String id();
+public sealed interface Registry<T> extends Keyed permits StaticRegistry, DynamicRegistry {
 
     @Nullable T get(int id);
-    @Nullable T get(@NotNull net.kyori.adventure.key.Key key);
-    default @Nullable T get(@NotNull DynamicRegistry.Key<T> key) {
+    @Nullable T get(@NotNull Key key);
+    default @Nullable T get(@NotNull RegistryKey<T> key) {
         return get(key.key());
     }
 
-    @Nullable DynamicRegistry.Key<T> getKey(int id);
-    @Nullable DynamicRegistry.Key<T> getKey(@NotNull T value);
-    @Nullable net.kyori.adventure.key.Key getName(int id);
+    @Nullable RegistryKey<T> getKey(int id);
+    @Nullable RegistryKey<T> getKey(@NotNull T value);
+    @Nullable RegistryKey<T> getKey(@NotNull Key key);
+
+    /**
+     * Returns the protocol ID associated with the given {@link RegistryKey}, or -1 if none is registered.
+     */
+    int getId(@NotNull RegistryKey<T> key);
+
     @Nullable DataPack getPack(int id);
-    default @Nullable DataPack getPack(@NotNull DynamicRegistry.Key<T> key) {
+    default @Nullable DataPack getPack(@NotNull RegistryKey<T> key) {
         final int id = getId(key);
         return id == -1 ? null : getPack(id);
     }
 
     /**
-     * Returns the protocol ID associated with the given {@link net.kyori.adventure.key.Key}, or -1 if none is registered.
+     * Returns the number of entries present in this registry.
      */
-    int getId(@NotNull net.kyori.adventure.key.Key id);
+    int size();
 
     /**
-     * Returns the protocol ID associated with the given {@link DynamicRegistry.Key}, or -1 if none is registered.
-     */
-    default int getId(@NotNull DynamicRegistry.Key<T> key) {
-        return getId(key.key());
-    }
-
-    /**
-     * Get a tag by its key (without hash prefix).
+     * <p>Returns the keys in this registry as an immutable list.</p>
      *
-     * @param key The key of the tag
-     * @return The tag, or null if not found
+     * <p>Note: The list order is not guaranteed, and the contents are not guaranteed to update with the registry,
+     * it should be fetched again for updated values.</p>
+     *
+     * @return An immutable collection of the keys in this registry.
      */
-    @Nullable ObjectSet<T> getTag(@NotNull DynamicRegistry.Key<T> key);
+    @NotNull Collection<RegistryKey<T>> keys();
 
     /**
-     * <p>Returns the entries in this registry as an immutable list. The indices in the returned list correspond
-     * to the protocol ID of each entry.</p>
+     * <p>Returns the entries in this registry as an immutable list.</p>
      *
-     * <p>Note: The returned list is not guaranteed to update with the registry,
+     * <p>Note: The list order is not guaranteed, and the contents are not guaranteed to update with the registry,
      * it should be fetched again for updated values.</p>
      *
      * @return An immutable list of the entries in this registry.
      */
-    @NotNull List<T> values();
+    @NotNull Collection<T> values();
+
+    // Tags
+
+    /**
+     * Get a tag by its key.
+     *
+     * @param key The key of the tag
+     * @return The tag, or null if not found
+     */
+    @Nullable RegistryTag<T> getTag(@NotNull TagKey<T> key);
+    default @Nullable RegistryTag<T> getTag(@NotNull Key key) {
+        return getTag(new TagKeyImpl<>(key));
+    }
+    /**
+     * Get a tag by its key, or create it if it does not exist.
+     *
+     * <p><b>Note that if a tag is created by this operation, it will not be added to clients who previously received tags.
+     * You must resend updated registry tags manually for this to take effect. Referencing a tag for which the client
+     * is not aware will result in an immediate clientside disconnect.</b></p>
+     *
+     * @param key The key of the tag
+     * @return The tag, never null
+     */
+    @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key);
+
+    /**
+     * Removes the given tag from this registry if it exists.
+     *
+     * <p>Note that this does _not_ remove the tag from clients who have previously received tags.
+     * You must resend updated registry tags manually for this to take effect.</p>
+     *
+     * @param key The registry tag to remove.
+     * @return True if the tag was removed, false if it did not exist in this registry.
+     */
+    boolean removeTag(@NotNull TagKey<T> key);
 
     /**
      * <p>Returns the available tags in this registry.</p>
@@ -67,7 +101,7 @@ public sealed interface Registry<T> permits StaticRegistry, DynamicRegistry {
      *
      * @return An immutable collection of the tags in this registry.
      */
-    @NotNull Collection<ObjectSet<T>> tags();
+    @NotNull Collection<RegistryTag<T>> tags();
 
     @ApiStatus.Internal
     @NotNull TagsPacket.Registry tagRegistry();

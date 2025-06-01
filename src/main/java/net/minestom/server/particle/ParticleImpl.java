@@ -6,14 +6,13 @@ import net.minestom.server.color.Color;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
-    static final StaticRegistry<Particle> REGISTRY = RegistryData.createStaticRegistry(
-            RegistryData.Resource.PARTICLES, "minecraft:particle",
+    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:particle"),
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
     static @UnknownNullability Particle get(@NotNull String key) {

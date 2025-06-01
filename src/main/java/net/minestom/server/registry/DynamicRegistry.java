@@ -1,59 +1,42 @@
 package net.minestom.server.registry;
 
-import net.kyori.adventure.key.Keyed;
+import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.packet.server.SendablePacket;
 import org.jetbrains.annotations.ApiStatus;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
+import java.util.Map;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
- * using a {@link Key} object as opposed to the record type. For example, a biome should be stored as
- * `DynamicRegistry.Key Biome`, as opposed to `Biome` directly.</p>
+ * using a {@link RegistryKey} object as opposed to the record type. For example, a biome should be stored as
+ * `RegistryKey Biome`, as opposed to `Biome` directly.</p>
  *
  * <p>Builtin registries should be accessed via a {@link Registries} instance (currently implemented by
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
  * @param <T> The type of the registry entries
- *
  * @see Registries
  */
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
-    /**
-     * A key for a {@link ProtocolObject} in a {@link DynamicRegistry}.
-     *
-     * @param <T> Unused, except to provide compile-time safety and self documentation.
-     */
-    sealed interface Key<T> extends Keyed permits DynamicRegistryImpl.KeyImpl {
-
-        static <T> @NotNull Key<T> of(@NotNull String namespace) {
-            return new DynamicRegistryImpl.KeyImpl<>(net.kyori.adventure.key.Key.key(namespace));
-        }
-
-        static <T> @NotNull Key<T> of(@NotNull net.kyori.adventure.key.Key key) {
-            return new DynamicRegistryImpl.KeyImpl<>(key);
-        }
-
-        @Contract(pure = true)
-        @NotNull
-        net.kyori.adventure.key.Key key();
-
-        @Contract(pure = true)
-        default @NotNull String name() {
-            return key().asString();
-        }
+    @SafeVarargs
+    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull Key key, @NotNull Map.Entry<net.kyori.adventure.key.Key, T>... entries) {
+        var registry = new DynamicRegistryImpl<T>(key, null);
+        for (var entry : entries)
+            registry.register(entry.getKey(), entry.getValue(), null);
+        return registry;
     }
 
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id) {
-        return new DynamicRegistryImpl<>(id, null);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key) {
+        return new DynamicRegistryImpl<>(key, null);
     }
 
     /**
@@ -62,8 +45,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec) {
-        return new DynamicRegistryImpl<>(id, codec);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec) {
+        return new DynamicRegistryImpl<>(key, codec);
     }
 
     /**
@@ -72,8 +55,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull RegistryData.Resource resource) {
-        return create(id, codec, null, resource, null);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @NotNull RegistryData.Resource resource) {
+        return create(key, codec, null, resource, null);
     }
 
     /**
@@ -82,8 +65,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource) {
-        return create(id, codec, registries, resource, null);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource) {
+        return create(key, codec, registries, resource, null);
     }
 
     /**
@@ -92,9 +75,24 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator) {
+        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator);
+        return registry;
+    }
+
+    @ApiStatus.Internal
+    static @NotNull DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
+            @NotNull Key key, @NotNull Codec<Enchantment> codec,
+            @NotNull RegistryData.Resource resource, @NotNull Registries registries
+    ) {
+        final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
+        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+            @Override
+            public @NotNull DynamicRegistry<Enchantment> enchantment() {
+                return registry;
+            }
+        }, registry, resource, null);
         return registry;
     }
 
@@ -111,23 +109,21 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @param object The entry to register
      * @return The new ID of the registered object
      */
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object) {
+    default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object) {
         return register(net.kyori.adventure.key.Key.key(id), object, null);
     }
 
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object) {
+    default @NotNull RegistryKey<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object) {
         return register(id, object, null);
     }
 
     @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
+    default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
         return register(net.kyori.adventure.key.Key.key(id), object, pack);
     }
 
     @ApiStatus.Internal
-    default @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object, @Nullable DataPack pack) {
-        return register(id, object);
-    }
+    @NotNull RegistryKey<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object, @Nullable DataPack pack);
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -151,7 +147,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
      * exclude vanilla entries if one has been overridden (e.g. via {@link #register(net.kyori.adventure.key.Key, T)}.</p>
      *
-     * @param registries Registries provider
+     * @param registries     Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */

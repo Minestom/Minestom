@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,8 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
             "asset_id", Codec.KEY, CatVariant::assetId,
             CatVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<CatVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::catVariant, false);
-    @NotNull Codec<DynamicRegistry.Key<CatVariant>> NBT_TYPE = Codec.RegistryKey(Registries::catVariant);
+    @NotNull NetworkBuffer.Type<RegistryKey<CatVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::catVariant);
+    @NotNull Codec<RegistryKey<CatVariant>> NBT_TYPE = RegistryKey.codec(Registries::catVariant);
 
     static @NotNull CatVariant create(@NotNull Key assetId) {
         return new CatVariantImpl(assetId);
@@ -29,7 +30,7 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:cat_variant", REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
+        return DynamicRegistry.create(Key.key("minecraft:cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
     }
 
     @NotNull Key assetId();

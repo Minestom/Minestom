@@ -27,6 +27,7 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -69,6 +70,11 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
+    public static FluidEntry fluid(String namespace, @NotNull Properties main) {
+        return new FluidEntry(namespace, main, null);
+    }
+
+    @ApiStatus.Internal
     public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
         return new PotionEffectEntry(namespace, main, null);
     }
@@ -86,24 +92,33 @@ public final class RegistryData {
         return new BlockSoundTypeEntry(namespace, properties);
     }
 
-    public static @NotNull InputStream loadRegistryFile(@NotNull Resource resource) throws IOException {
+    /**
+     * @param path The path without a leading slash, e.g. "blocks.json"
+     */
+    public static @Nullable InputStream loadRegistryFile(@NotNull String path) throws IOException {
         // 1. Try to load from jar resources
-        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(resource.name);
+        InputStream resourceStream = RegistryData.class.getClassLoader().getResourceAsStream(path);
 
         // 2. Try to load from working directory
-        if (resourceStream == null && Files.exists(Path.of(resource.name))) {
-            resourceStream = Files.newInputStream(Path.of(resource.name));
+        final Path filesystemPath = Path.of(path);
+        if (resourceStream == null && Files.exists(filesystemPath)) {
+            resourceStream = Files.newInputStream(filesystemPath);
         }
 
         // 3. Not found :(
-        Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
         return resourceStream;
     }
 
     @ApiStatus.Internal
-    public static Map<String, Map<String, Object>> load(Resource resource) {
+    public static Map<String, Map<String, Object>> load(String resourcePath, boolean required) {
         Map<String, Map<String, Object>> map = new HashMap<>();
-        try (InputStream resourceStream = loadRegistryFile(resource)) {
+        try (InputStream resourceStream = loadRegistryFile(resourcePath)) {
+            if (resourceStream == null) {
+                if (required) {
+                    throw new FileNotFoundException("Resource not found: " + resourcePath);
+                }
+                return map; // Return empty map if not required
+            }
             try (JsonReader reader = new JsonReader(new InputStreamReader(resourceStream))) {
                 reader.beginObject();
                 while (reader.hasNext()) map.put(reader.nextName(), (Map<String, Object>) readObject(reader));
@@ -115,111 +130,81 @@ public final class RegistryData {
         return map;
     }
 
+    /**
+     * Instantiates a static registry from a resource file. The resource file is resolved using the registryKey
+     * first from the classpath, then from the working directory.
+     *
+     * <p>The data file should be at <code>/{registryKey.path()}.json</code></p>.
+     *
+     * <p>Tags will be loaded from <code>/tags/{registryKey.path()}.json</code></p>
+     */
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject> StaticRegistry<T> createStaticRegistry(Resource resource, String registryId, Loader<T> loader) {
-        var entries = RegistryData.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
+    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull Key registryKey, @NotNull Loader<T> loader) {
+        // Create the registry (data)
+        var entries = RegistryData.load(String.format("%s.json", registryKey.value()), true);
+        Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.entrySet()) {
             final String namespace = entry.getKey();
             final Properties properties = Properties.fromMap(entry.getValue());
             final T value = loader.get(namespace, properties);
             ids.set(value.id(), value);
-            namespaces.put(value.name(), value);
+            namespaces.put(value.key(), value);
         }
-        return new StaticRegistry<>(registryId, namespaces, ids, Map.of());
+        final Registry<T> registry = new StaticRegistry<>(registryKey, namespaces, ids, Map.of());
+
+        // Load tags if they exist
+        loadTags(registry, registryKey);
+
+        return registry;
     }
 
-    @ApiStatus.Internal
-    public static <T extends StaticProtocolObject> StaticRegistry<T> createStaticRegistryWithTags(Resource resource, Resource tagsResource, String registryId, Loader<T> loader) {
-        // Resources
-        var entries = RegistryData.load(resource);
-        Map<String, T> namespaces = new HashMap<>(entries.size());
-        ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
-        for (var entry : entries.entrySet()) {
-            final String namespace = entry.getKey();
-            final Properties properties = Properties.fromMap(entry.getValue());
-            final T value = loader.get(namespace, properties);
-            ids.set(value.id(), value);
-            namespaces.put(value.name(), value);
-        }
-
-        // Tags
-        final var tagJson = RegistryData.load(tagsResource);
-        final var tags = new HashMap<String, ObjectSetImpl.TagV2<T>>(tagJson.size());
+    public static <T> void loadTags(@NotNull Registry<T> registry, @NotNull Key registryKey) {
+        final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
         tagJson.keySet().forEach(tagName -> {
-            final ObjectSetImpl.TagV2<T> tag = new ObjectSetImpl.TagV2<>(DynamicRegistry.Key.of(tagName.substring(1)));
-            getTagValues(tag, tagJson, tagName);
-            tags.put(tag.key().asString(), tag);
+            final var tag = registry.getOrCreateTag(new TagKeyImpl<>(Key.key(tagName)));
+            getTagValues((RegistryTagImpl.Backed<? extends StaticProtocolObject>) tag, tagJson, tagName);
         });
-
-        return new StaticRegistry<>(registryId, namespaces, ids, tags);
     }
 
-    private static <T extends StaticProtocolObject> void getTagValues(@NotNull ObjectSetImpl.TagV2<T> result, Map<String, Map<String, Object>> main, String value) {
+    private static <T extends StaticProtocolObject<T>> void getTagValues(@NotNull RegistryTagImpl.Backed<T> tag, Map<String, Map<String, Object>> main, String value) {
         Map<String, Object> tagObject = main.get(value);
         final List<String> tagValues = (List<String>) tagObject.get("values");
         tagValues.forEach(tagString -> {
             if (tagString.startsWith("#")) {
-                getTagValues(result, main, tagString.substring(1));
+                getTagValues(tag, main, tagString.substring(1));
             } else {
-                result.entries().add(Key.key(tagString));
+                tag.add(RegistryKey.unsafeOf(tagString));
             }
         });
     }
 
-    public interface Loader<T extends ProtocolObject> {
+    public interface Loader<T extends StaticProtocolObject<T>> {
         T get(String namespace, Properties properties);
     }
 
     @ApiStatus.Internal
     public enum Resource {
-        // Static Registries
-        BLOCKS("blocks.json"),
-        BLOCK_TAGS("tags/block.json"),
-        ITEMS("items.json"),
-        ITEM_TAGS("tags/item.json"),
-        ENTITY_TYPES("entities.json"),
-        ENTITY_TYPE_TAGS("tags/entity_type.json"),
-        GAME_EVENTS("game_events.json"),
-        GAME_EVENT_TAGS("tags/game_event.json"),
-
         // Dynamic Registries
-        CHAT_TYPES("chat_types.json"),
-        DIMENSION_TYPES("dimension_types.json"),
-        BIOMES("biomes.json"),
-        DAMAGE_TYPES("damage_types.json"),
-        TRIM_MATERIALS("trim_materials.json"),
-        TRIM_PATTERNS("trim_patterns.json"),
-        BANNER_PATTERNS("banner_patterns.json"),
-        ENCHANTMENTS("enchantments.json"),
-        PAINTING_VARIANTS("painting_variants.json"),
-        JUKEBOX_SONGS("jukebox_songs.json"),
-        INSTRUMENTS("instruments.json"),
-        WOLF_VARIANTS("wolf_variants.json"),
-        WOLF_SOUND_VARIANTS("wolf_sound_variants.json"),
-        CAT_VARIANTS("cat_variants.json"),
-        CHICKEN_VARIANTS("chicken_variants.json"),
-        COW_VARIANTS("cow_variants.json"),
-        FROG_VARIANTS("frog_variants.json"),
-        PIG_VARIANTS("pig_variants.json"),
-
-        // "banner_pattern", "damage_type", "enchantment", "fluid", "instrument", "painting_variant", "worldgen/biome"
-
-        // The rest to be categorized
-        FEATURE_FLAGS("feature_flags.json"),
-        SOUNDS("sounds.json"),
-        STATISTICS("custom_statistics.json"),
-        POTION_EFFECTS("potion_effects.json"),
-        POTION_TYPES("potions.json"),
-        PARTICLES("particles.json"),
-        FLUID_TAGS("tags/fluid.json"),
-        ENCHANTMENT_TAGS("tags/enchantment.json"),
-        BIOME_TAGS("tags/biome.json"),
-        ATTRIBUTES("attributes.json"),
-        VILLAGER_PROFESSIONS("villager_professions.json"),
-        INSTRUMENT_TAGS("tags/instrument.json"),
-        BLOCK_SOUND_TYPES("block_sound_types.json");
+        BANNER_PATTERNS("banner_pattern.json"),
+        BIOMES("biome.json"),
+        CAT_VARIANTS("cat_variant.json"),
+        CHAT_TYPES("chat_type.json"),
+        CHICKEN_VARIANTS("chicken_variant.json"),
+        COW_VARIANTS("cow_variant.json"),
+        DAMAGE_TYPES("damage_type.json"),
+        DIALOGS("dialog.json"),
+        DIMENSION_TYPES("dimension_type.json"),
+        ENCHANTMENTS("enchantment.json"),
+        FROG_VARIANTS("frog_variant.json"),
+        JUKEBOX_SONGS("jukebox_song.json"),
+        INSTRUMENTS("instrument.json"),
+        PAINTING_VARIANTS("painting_variant.json"),
+        PIG_VARIANTS("pig_variant.json"),
+        TRIM_MATERIALS("trim_material.json"),
+        TRIM_PATTERNS("trim_pattern.json"),
+        WOLF_VARIANTS("wolf_variant.json"),
+        WOLF_SOUND_VARIANTS("wolf_sound_variant.json");
 
         private final String name;
 
@@ -659,10 +644,13 @@ public final class RegistryData {
 
     public record FeatureFlagEntry(Key key, int id, Properties custom) implements Entry {
         public FeatureFlagEntry(String namespace, Properties main, Properties custom) {
-            this(Key.key(namespace),
-                    main.getInt("id"),
-                    null
-            );
+            this(Key.key(namespace), main.getInt("id"), custom);
+        }
+    }
+
+    public record FluidEntry(Key key, int id, Properties custom) implements Entry {
+        public FluidEntry(String namespace, Properties main, Properties custom) {
+            this(Key.key(namespace), main.getInt("id"), custom);
         }
     }
 

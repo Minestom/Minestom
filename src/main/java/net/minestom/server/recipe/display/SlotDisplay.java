@@ -5,6 +5,7 @@ import net.minestom.server.adventure.ComponentHolder;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +25,8 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         public static final NetworkBuffer.Type<Empty> NETWORK_TYPE = NetworkBuffer.UNIT.transform(
                 buffer -> INSTANCE, empty -> Unit.INSTANCE);
 
-        private Empty() {}
+        private Empty() {
+        }
     }
 
     final class AnyFuel implements SlotDisplay {
@@ -33,7 +35,8 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         public static final NetworkBuffer.Type<AnyFuel> NETWORK_TYPE = NetworkBuffer.UNIT.transform(
                 buffer -> INSTANCE, empty -> Unit.INSTANCE);
 
-        private AnyFuel() {}
+        private AnyFuel() {
+        }
     }
 
     record Item(@NotNull Material material) implements SlotDisplay {
@@ -58,9 +61,9 @@ public sealed interface SlotDisplay extends ComponentHolder<SlotDisplay> {
         }
     }
 
-    record Tag(@NotNull String tagKey) implements SlotDisplay {
+    record Tag(@NotNull TagKey<Material> tag) implements SlotDisplay {
         public static final NetworkBuffer.Type<Tag> NETWORK_TYPE = NetworkBufferTemplate.template(
-                NetworkBuffer.STRING, Tag::tagKey,
+                TagKey.networkType(ignored -> Material.staticRegistry()), Tag::tag,
                 Tag::new);
     }
 

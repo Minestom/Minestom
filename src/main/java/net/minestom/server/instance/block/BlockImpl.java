@@ -5,8 +5,8 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.StaticRegistry;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.MergedMap;
@@ -41,8 +41,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<Properties, Block>
     private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    static final StaticRegistry<Block> REGISTRY = RegistryData.createStaticRegistryWithTags(
-            RegistryData.Resource.BLOCKS, RegistryData.Resource.BLOCK_TAGS, "minecraft:block",
+    static final Registry<Block> REGISTRY = RegistryData.createStaticRegistry(
+            Key.key("minecraft:block"),
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
                 final RegistryData.Properties stateObject = properties.section("states");

@@ -1,14 +1,15 @@
 package net.minestom.server.item.enchant;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,7 +23,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends EntityEffect>> registry = DynamicRegistry.create("minestom:enchantment_value_effect");
+        final DynamicRegistry<StructCodec<? extends EntityEffect>> registry = DynamicRegistry.create(Key.key("minestom:enchantment_value_effect"));
         registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("apply_mob_effect", ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
         registry.register("change_item_damage", ChangeItemDamage.CODEC, DataPack.MINECRAFT_CORE);
@@ -57,14 +58,14 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     }
 
     record ApplyPotionEffect(
-            @NotNull ObjectSet<PotionEffect> toApply,
+            @NotNull RegistryTag<PotionEffect> toApply,
             @NotNull LevelBasedValue minDuration,
             @NotNull LevelBasedValue maxDuration,
             @NotNull LevelBasedValue minAmplifier,
             @NotNull LevelBasedValue maxAmplifier
     ) implements EntityEffect, LocationEffect {
         public static final StructCodec<ApplyPotionEffect> CODEC = StructCodec.struct(
-                "to_apply", ObjectSet.codec(Tag.BasicType.POTION_EFFECTS), ApplyPotionEffect::toApply,
+                "to_apply", RegistryTag.codec(Registries::potionEffect), ApplyPotionEffect::toApply,
                 "min_duration", LevelBasedValue.CODEC, ApplyPotionEffect::minDuration,
                 "max_duration", LevelBasedValue.CODEC, ApplyPotionEffect::maxDuration,
                 "min_amplifier", LevelBasedValue.CODEC, ApplyPotionEffect::minAmplifier,
@@ -79,7 +80,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
     }
 
     record DamageEntity(
-            @NotNull DynamicRegistry.Key<DamageType> damageType,
+            @NotNull RegistryKey<DamageType> damageType,
             @NotNull LevelBasedValue minDamage,
             @NotNull LevelBasedValue maxDamage
     ) implements EntityEffect, LocationEffect {

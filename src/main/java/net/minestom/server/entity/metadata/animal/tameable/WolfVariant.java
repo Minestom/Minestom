@@ -7,6 +7,7 @@ import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -18,8 +19,8 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
             "assets", Assets.CODEC, WolfVariant::assets,
             WolfVariantImpl::new);
 
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfVariant, false);
-    @NotNull Codec<DynamicRegistry.Key<WolfVariant>> CODEC = Codec.RegistryKey(Registries::wolfVariant);
+    @NotNull NetworkBuffer.Type<RegistryKey<WolfVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfVariant);
+    @NotNull Codec<RegistryKey<WolfVariant>> CODEC = RegistryKey.codec(Registries::wolfVariant);
 
     static @NotNull WolfVariant create(@NotNull Assets assets) {
         return new WolfVariantImpl(assets);
@@ -40,7 +41,7 @@ public sealed interface WolfVariant extends WolfVariants permits WolfVariantImpl
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:wolf_variant", REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
+        return DynamicRegistry.create(Key.key("minecraft:wolf_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_VARIANTS);
     }
 
     @NotNull Assets assets();
