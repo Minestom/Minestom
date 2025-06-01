@@ -1,14 +1,13 @@
 package net.minestom.server.entity.attribute;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
-import net.minestom.server.registry.StaticRegistry;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 record AttributeImpl(@NotNull RegistryData.AttributeEntry registry) implements Attribute {
-    static final StaticRegistry<Attribute> REGISTRY = RegistryData.createStaticRegistry(
-            RegistryData.Resource.ATTRIBUTES, "minecraft:attribute",
+    static final Registry<Attribute> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:attribute"),
             (namespace, properties) -> new AttributeImpl(RegistryData.attribute(namespace, properties)));
 
     static @UnknownNullability Attribute get(@NotNull String namespace) {

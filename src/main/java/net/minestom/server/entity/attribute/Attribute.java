@@ -12,7 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface Attribute extends StaticProtocolObject, Attributes permits AttributeImpl {
+public sealed interface Attribute extends StaticProtocolObject<Attribute>, Attributes permits AttributeImpl {
     @NotNull NetworkBuffer.Type<Attribute> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Attribute::fromId, Attribute::id);
     @NotNull Codec<Attribute> CODEC = Codec.STRING.transform(AttributeImpl::get, Attribute::name);
 

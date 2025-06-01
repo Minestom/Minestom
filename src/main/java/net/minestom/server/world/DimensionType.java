@@ -5,7 +5,6 @@ import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
@@ -16,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * https://minecraft.wiki/w/Custom_dimension
  */
-public sealed interface DimensionType extends ProtocolObject, DimensionTypes permits DimensionTypeImpl {
+public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
 
     @NotNull Key OVERWORLD_EFFECTS = Key.key("minecraft:overworld");
 
@@ -66,7 +65,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:dimension_type", REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
+        return DynamicRegistry.create(Key.key("minecraft:dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean ultrawarm();

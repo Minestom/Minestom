@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
@@ -25,7 +26,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
 
     @NotNull
     NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
@@ -209,6 +210,10 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
 
     static @Nullable Block fromBlockId(int blockId) {
         return BlockImpl.REGISTRY.get(blockId);
+    }
+
+    static @NotNull Registry<Block> staticRegistry() {
+        return BlockImpl.REGISTRY;
     }
 
     @FunctionalInterface

@@ -10,7 +10,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionType extends StaticProtocolObject, PotionTypes permits PotionTypeImpl {
+public sealed interface PotionType extends StaticProtocolObject<PotionType>, PotionTypes permits PotionTypeImpl {
 
     @NotNull NetworkBuffer.Type<PotionType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionType::fromId, PotionType::id);
     @NotNull Codec<PotionType> CODEC = Codec.KEY.transform(PotionType::fromKey, PotionType::key);

@@ -13,10 +13,10 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.item.component.Equippable;
+import net.minestom.server.item.component.InstrumentComponent;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
-import net.minestom.server.registry.Holder;
 import org.jetbrains.annotations.NotNull;
 
 public class UseItemListener {
@@ -99,7 +99,7 @@ public class UseItemListener {
     }
 
     private static int getInstrumentTime(@NotNull ItemStack itemStack) {
-        final Holder.Lazy<Instrument> holder = itemStack.get(DataComponents.INSTRUMENT);
+        final InstrumentComponent holder = itemStack.get(DataComponents.INSTRUMENT);
         if (holder == null) return 0;
 
         final Instrument instrument = holder.resolve(MinecraftServer.getInstrumentRegistry());

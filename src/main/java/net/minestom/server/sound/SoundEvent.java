@@ -8,7 +8,6 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.ProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +17,7 @@ import java.util.Collection;
 /**
  * Can represent a builtin/vanilla sound or a custom sound.
  */
-public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
+public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
     @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -108,8 +107,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
     /**
      * Create a custom sound event. The namespace should match a sound provided in the resource pack.
      *
-     * @param key the key of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull String key, @Nullable Float range) {
@@ -119,8 +118,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
     /**
      * Create a custom sound event. The {@link Key} should match a sound provided in the resource pack.
      *
-     * @param key the key of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull Key key, @Nullable Float range) {

@@ -24,7 +24,7 @@ import java.util.Objects;
 import static net.minestom.server.network.NetworkBuffer.VAR_INT;
 import static net.minestom.server.network.NetworkBuffer.VECTOR3D;
 
-public sealed interface Particle extends StaticProtocolObject, Particles permits Particle.Block, Particle.BlockMarker,
+public sealed interface Particle extends StaticProtocolObject<Particle>, Particles permits Particle.Block, Particle.BlockMarker,
         Particle.Dust, Particle.DustColorTransition, Particle.DustPillar, Particle.EntityEffect, Particle.FallingDust,
         Particle.Item, Particle.SculkCharge, Particle.Shriek, Particle.Simple, Particle.Vibration, Particle.Trail,
         Particle.BlockCrumble, Particle.TintedLeaves {

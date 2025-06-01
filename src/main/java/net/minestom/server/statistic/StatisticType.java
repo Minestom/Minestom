@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface StatisticType extends StaticProtocolObject, StatisticTypes permits StatisticTypeImpl {
+public sealed interface StatisticType extends StaticProtocolObject<StatisticType>, StatisticTypes permits StatisticTypeImpl {
 
     static @NotNull Collection<@NotNull StatisticType> values() {
         return StatisticTypeImpl.REGISTRY.values();

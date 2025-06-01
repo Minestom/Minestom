@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface FeatureFlag extends StaticProtocolObject, FeatureFlags permits FeatureFlagImpl {
+public sealed interface FeatureFlag extends StaticProtocolObject<FeatureFlag>, FeatureFlags permits FeatureFlagImpl {
 
     static @NotNull Collection<@NotNull FeatureFlag> values() {
         return FeatureFlagImpl.REGISTRY.values();

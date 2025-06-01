@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
@@ -12,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects permits PotionEffectImpl {
+public sealed interface PotionEffect extends StaticProtocolObject<PotionEffect>, PotionEffects permits PotionEffectImpl {
     @NotNull NetworkBuffer.Type<PotionEffect> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(PotionEffect::fromId, PotionEffect::id);
     @NotNull Codec<PotionEffect> CODEC = Codec.KEY.transform(PotionEffect::fromKey, PotionEffect::key);
 
@@ -43,5 +44,9 @@ public sealed interface PotionEffect extends StaticProtocolObject, PotionEffects
 
     static @Nullable PotionEffect fromId(int id) {
         return PotionEffectImpl.REGISTRY.get(id);
+    }
+
+    static @NotNull Registry<PotionEffect> staticRegistry() {
+        return PotionEffectImpl.REGISTRY;
     }
 }
