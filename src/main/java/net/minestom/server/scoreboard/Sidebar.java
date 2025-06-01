@@ -159,6 +159,20 @@ public class Sidebar implements Scoreboard {
     }
 
     /**
+     * Updates a {@link ScoreboardLine} number format through the given identifier.
+     *
+     * @param id           The identifier of the {@link ScoreboardLine}
+     * @param numberFormat The new number format for the {@link ScoreboardLine}
+     */
+    public void updateLineNumberFormat(@NotNull String id, NumberFormat numberFormat) {
+        final ScoreboardLine scoreboardLine = getLine(id);
+        if (scoreboardLine != null) {
+            scoreboardLine.numberFormat = numberFormat;
+            sendPacketsToViewers(scoreboardLine.getNumberFormatPacket(objectiveName, numberFormat));
+        }
+    }
+
+    /**
      * Gets a {@link ScoreboardLine} through the given identifier
      *
      * @param id The identifier of the line
@@ -367,6 +381,17 @@ public class Sidebar implements Scoreboard {
         private UpdateScorePacket getLineScoreUpdatePacket(String objectiveName, int score) {
             //TODO displayName acts as a suffix to the objective name, find way to handle elegantly
             return new UpdateScorePacket(entityName, objectiveName, score, Component.empty(), numberFormat);
+        }
+
+        /**
+         * Gets a number format update packet
+         *
+         * @param objectiveName The objective name to be updated
+         * @param numberFormat  The new number format
+         * @return a {@link UpdateScorePacket}
+         */
+        private UpdateScorePacket getNumberFormatPacket(String objectiveName, NumberFormat numberFormat) {
+            return new UpdateScorePacket(entityName, objectiveName, line, Component.empty(), numberFormat);
         }
 
         /**
