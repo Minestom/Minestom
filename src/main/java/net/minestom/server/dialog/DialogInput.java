@@ -14,7 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 public sealed interface DialogInput {
-    @NotNull Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap("input_control_type",
+    int DEFAULT_WIDTH = 200;
+
+    @NotNull Registry<StructCodec<? extends DialogInput>> REGISTRY = DynamicRegistry.fromMap(
+            Key.key("minecraft:input_control_type"),
             Map.entry(Key.key("boolean"), Boolean.CODEC),
             Map.entry(Key.key("number_range"), NumberRange.CODEC),
             Map.entry(Key.key("single_option"), SingleOption.CODEC),
@@ -22,12 +25,14 @@ public sealed interface DialogInput {
     @NotNull StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
 
     record Boolean(
+            @NotNull String key,
             @NotNull Component label,
             boolean initial,
             @NotNull String onTrue,
             @NotNull String onFalse
     ) implements DialogInput {
         public static final StructCodec<Boolean> CODEC = StructCodec.struct(
+                "key", Codec.STRING, Boolean::key,
                 "label", Codec.COMPONENT, Boolean::label,
                 "initial", StructCodec.BOOLEAN.optional(false), Boolean::initial,
                 "on_true", StructCodec.STRING.optional("true"), Boolean::onTrue,
@@ -41,7 +46,7 @@ public sealed interface DialogInput {
     }
 
     record NumberRange(
-            int width,
+            @NotNull String key, int width,
             @NotNull Component label,
             @NotNull String labelFormat,
             float start, float end,
@@ -49,7 +54,8 @@ public sealed interface DialogInput {
             @Nullable Float step
     ) implements DialogInput {
         public static final StructCodec<NumberRange> CODEC = StructCodec.struct(
-                "width", Codec.INT.optional(200), NumberRange::width,
+                "key", Codec.STRING, NumberRange::key,
+                "width", Codec.INT.optional(DEFAULT_WIDTH), NumberRange::width,
                 "label", Codec.COMPONENT, NumberRange::label,
                 "label_format", Codec.STRING.optional("options.generic_value"), NumberRange::labelFormat,
                 "start", Codec.FLOAT, NumberRange::start,
@@ -65,13 +71,14 @@ public sealed interface DialogInput {
     }
 
     record SingleOption(
-            int width,
+            @NotNull String key, int width,
             @NotNull List<Option> options,
             @NotNull Component label,
             boolean labelVisible
     ) implements DialogInput {
         public static final StructCodec<SingleOption> CODEC = StructCodec.struct(
-                "width", Codec.INT.optional(200), SingleOption::width,
+                "key", Codec.STRING, SingleOption::key,
+                "width", Codec.INT.optional(DEFAULT_WIDTH), SingleOption::width,
                 "options", Option.CODEC.list(), SingleOption::options,
                 "label", Codec.COMPONENT, SingleOption::label,
                 "label_visible", Codec.BOOLEAN.optional(true), SingleOption::labelVisible,
@@ -101,7 +108,7 @@ public sealed interface DialogInput {
     }
 
     record Text(
-            int width,
+            @NotNull String key, int width,
             @NotNull Component label,
             boolean labelVisible,
             @NotNull String initial,
@@ -109,7 +116,8 @@ public sealed interface DialogInput {
             @Nullable Multiline multiline
     ) implements DialogInput {
         public static final StructCodec<Text> CODEC = StructCodec.struct(
-                "width", Codec.INT.optional(200), Text::width,
+                "key", Codec.STRING, Text::key,
+                "width", Codec.INT.optional(DEFAULT_WIDTH), Text::width,
                 "label", Codec.COMPONENT, Text::label,
                 "label_visible", Codec.BOOLEAN.optional(true), Text::labelVisible,
                 "initial", Codec.STRING.optional(""), Text::initial,

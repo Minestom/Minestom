@@ -265,6 +265,7 @@ public final class ConnectionManager {
             player.sendPacket(registries.chatType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.dimensionType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.biome().registryDataPacket(registries, excludeVanilla));
+            player.sendPacket(registries.dialog().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.damageType().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimMaterial().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.trimPattern().registryDataPacket(registries, excludeVanilla));
@@ -394,6 +395,7 @@ public final class ConnectionManager {
         entries.add(registries.blocks().tagRegistry());
         entries.add(registries.catVariant().tagRegistry());
         entries.add(registries.damageType().tagRegistry());
+        entries.add(registries.dialog().tagRegistry());
         entries.add(registries.enchantment().tagRegistry());
         entries.add(registries.entityType().tagRegistry());
         entries.add(registries.fluid().tagRegistry());
