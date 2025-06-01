@@ -21,7 +21,8 @@ import java.util.Map;
  * Until adventure supports these properly they are duplicated.</p>
  */
 public sealed interface DialogAction {
-    @NotNull Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap("dialog_action_type",
+    @NotNull Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap(
+            Key.key("minecraft:dialog_action_type"),
             Map.entry(Key.key("open_url"), OpenUrl.CODEC),
             Map.entry(Key.key("run_command"), RunCommand.CODEC),
             Map.entry(Key.key("suggest_command"), SuggestCommand.CODEC),
@@ -68,7 +69,7 @@ public sealed interface DialogAction {
 
     record ShowDialog(@NotNull Holder<Dialog> dialog) implements DialogAction {
         public static final StructCodec<ShowDialog> CODEC = StructCodec.struct(
-                "dialog", Holder.codec(Registries::dialog, Dialog.CODEC), ShowDialog::dialog,
+                "dialog", Holder.codec(Registries::dialog, Dialog.REGISTRY_CODEC), ShowDialog::dialog,
                 ShowDialog::new);
 
         @Override
