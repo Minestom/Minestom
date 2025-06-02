@@ -5,11 +5,11 @@ import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.collision.Shape;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
-import net.minestom.server.utils.collection.MergedMap;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +17,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,76 +37,88 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     private static final int MAX_VALUES = 1 << BITS_PER_INDEX;
 
     // Block state -> block object
-    private static final ObjectArray<Block> BLOCK_STATE_MAP = ObjectArray.singleThread();
+    private static final List<Block> BLOCK_STATE_MAP;
     // Block id -> valid property keys (order is important for lookup)
-    private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
+    private static final List<PropertyType[]> PROPERTIES_TYPE;
     // Block id -> Map<Properties, Block>
-    private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    static final Registry<Block> REGISTRY = RegistryData.createStaticRegistry(
-            Key.key("minecraft:block"),
-            (namespace, properties) -> {
-                final int blockId = properties.getInt("id");
-                final RegistryData.Properties stateObject = properties.section("states");
-
-                // Retrieve properties
-                PropertyType[] propertyTypes;
-                {
-                    RegistryData.Properties stateProperties = properties.section("properties");
-                    if (stateProperties != null) {
-                        final int stateCount = stateProperties.size();
-                        if (stateCount > MAX_STATES) {
-                            throw new IllegalStateException("Too many properties for block " + namespace);
-                        }
-                        propertyTypes = new PropertyType[stateCount];
-                        int i = 0;
-                        for (var entry : stateProperties) {
-                            final var k = entry.getKey();
-                            final var v = (List<String>) entry.getValue();
-                            assert v.size() < MAX_VALUES;
-                            propertyTypes[i++] = new PropertyType(k, v);
-                        }
-                    } else {
-                        propertyTypes = new PropertyType[0];
-                    }
-                }
-                PROPERTIES_TYPE.set(blockId, propertyTypes);
-
-                // Retrieve block states
-                {
-                    final int propertiesCount = stateObject.size();
-                    long[] propertiesKeys = new long[propertiesCount];
-                    BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
-                    int propertiesOffset = 0;
-                    for (var stateEntry : stateObject) {
-                        final String query = stateEntry.getKey();
-                        final var stateOverride = (Map<String, Object>) stateEntry.getValue();
-                        final var propertyMap = BlockUtils.parseProperties(query);
-                        assert propertyTypes.length == propertyMap.size();
-                        long propertiesValue = 0;
-                        for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
-                            final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
-                            final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
-                            propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
-                        }
-
-                        var mainProperties = RegistryData.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
-                        final BlockImpl block = new BlockImpl(RegistryData.block(namespace, mainProperties),
-                                propertiesValue, null, null);
-                        BLOCK_STATE_MAP.set(block.stateId(), block);
-                        propertiesKeys[propertiesOffset] = propertiesValue;
-                        blocksValues[propertiesOffset++] = block;
-                    }
-                    POSSIBLE_STATES.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
-                }
-                // Register default state
-                final int defaultState = properties.getInt("defaultStateId");
-                return getState(defaultState);
-            });
+    private static final List<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES;
+    static final Registry<Block> REGISTRY;
 
     static {
-        PROPERTIES_TYPE.trim();
-        BLOCK_STATE_MAP.trim();
-        POSSIBLE_STATES.trim();
+        //TODO compute default sizes from the registry data
+        ObjectArray<Block> blockStateMap = ObjectArray.singleThread();
+        ObjectArray<PropertyType[]> propertiesType = ObjectArray.singleThread();
+        ObjectArray<Long2ObjectArrayMap<BlockImpl>> possibleStates = ObjectArray.singleThread();
+        HashMap<Object, Shape> shapeCache = new HashMap<>();
+
+        // Retrieve properties
+        // Retrieve block states
+        // Register default state
+        REGISTRY = RegistryData.createStaticRegistry(
+                Key.key("minecraft:block"),
+                (namespace, properties) -> {
+                    final int blockId = properties.getInt("id");
+                    final RegistryData.Properties stateObject = properties.section("states");
+
+                    // Retrieve properties
+                    PropertyType[] propertyTypes;
+                    {
+                        RegistryData.Properties stateProperties = properties.section("properties");
+                        if (stateProperties != null) {
+                            final int stateCount = stateProperties.size();
+                            if (stateCount > MAX_STATES) {
+                                throw new IllegalStateException("Too many properties for block " + namespace);
+                            }
+                            propertyTypes = new PropertyType[stateCount];
+                            int i = 0;
+                            for (var entry : stateProperties) {
+                                final var k = entry.getKey();
+                                final var v = (List<String>) entry.getValue();
+                                assert v.size() < MAX_VALUES;
+                                propertyTypes[i++] = new PropertyType(k, v);
+                            }
+                        } else {
+                            propertyTypes = new PropertyType[0];
+                        }
+                    }
+                    propertiesType.set(blockId, propertyTypes);
+
+                    final RegistryData.BlockEntry baseBlockEntry = RegistryData.block(namespace, properties, shapeCache, null, null);
+
+                    // Retrieve block states
+                    {
+                        final int propertiesCount = stateObject.size();
+                        long[] propertiesKeys = new long[propertiesCount];
+                        BlockImpl[] blocksValues = new BlockImpl[propertiesCount];
+                        int propertiesOffset = 0;
+                        for (var stateEntry : stateObject) {
+                            final String query = stateEntry.getKey();
+                            final var stateOverride = (Map<String, Object>) stateEntry.getValue();
+                            final var propertyMap = BlockUtils.parseProperties(query);
+                            assert propertyTypes.length == propertyMap.size();
+                            long propertiesValue = 0;
+                            for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
+                                final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
+                                final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
+                                propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
+                            }
+
+                            final RegistryData.BlockEntry entryOverride = RegistryData.block(namespace, RegistryData.Properties.fromMap(stateOverride), shapeCache, baseBlockEntry, properties);
+                            final BlockImpl block = new BlockImpl(entryOverride,
+                                    propertiesValue, null, null);
+                            blockStateMap.set(block.stateId(), block);
+                            propertiesKeys[propertiesOffset] = propertiesValue;
+                            blocksValues[propertiesOffset++] = block;
+                        }
+                        possibleStates.set(blockId, new Long2ObjectArrayMap<>(propertiesKeys, blocksValues, propertiesOffset));
+                    }
+                    // Register default state
+                    final int defaultState = properties.getInt("defaultStateId");
+                    return blockStateMap.get(defaultState);
+                });
+        BLOCK_STATE_MAP = blockStateMap.toList();
+        PROPERTIES_TYPE = propertiesType.toList();
+        POSSIBLE_STATES = possibleStates.toList();
     }
 
     static @UnknownNullability Block get(@NotNull String key) {

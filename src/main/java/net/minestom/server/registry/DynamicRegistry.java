@@ -27,11 +27,11 @@ import java.util.Map;
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
     @SafeVarargs
-    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull Key key, @NotNull Map.Entry<net.kyori.adventure.key.Key, T>... entries) {
+    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull Key key, @NotNull Map.Entry<Key, T>... entries) {
         var registry = new DynamicRegistryImpl<T>(key, null);
         for (var entry : entries)
             registry.register(entry.getKey(), entry.getValue(), null);
-        return registry;
+        return registry.compress();
     }
 
     @ApiStatus.Internal
@@ -78,7 +78,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator);
-        return registry;
+        return registry.compress();
     }
 
     @ApiStatus.Internal
@@ -93,7 +93,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
                 return registry;
             }
         }, registry, resource, null);
-        return registry;
+        return registry.compress();
     }
 
     /**
@@ -110,20 +110,20 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @return The new ID of the registered object
      */
     default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object) {
-        return register(net.kyori.adventure.key.Key.key(id), object, null);
+        return register(Key.key(id), object, null);
     }
 
-    default @NotNull RegistryKey<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object) {
+    default @NotNull RegistryKey<T> register(@NotNull Key id, @NotNull T object) {
         return register(id, object, null);
     }
 
     @ApiStatus.Internal
     default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
-        return register(net.kyori.adventure.key.Key.key(id), object, pack);
+        return register(Key.key(id), object, pack);
     }
 
     @ApiStatus.Internal
-    @NotNull RegistryKey<T> register(@NotNull net.kyori.adventure.key.Key id, @NotNull T object, @Nullable DataPack pack);
+    @NotNull RegistryKey<T> register(@NotNull Key id, @NotNull T object, @Nullable DataPack pack);
 
     /**
      * <p>Removes an object from this registry.</p>
@@ -141,11 +141,11 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @return True if the object was removed, false if it was not present
      * @throws UnsupportedOperationException If the system property <code>minestom.registry.unsafe-remove</code> is not set to <code>true</code>
      */
-    boolean remove(@NotNull net.kyori.adventure.key.Key key) throws UnsupportedOperationException;
+    boolean remove(@NotNull Key key) throws UnsupportedOperationException;
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
-     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(net.kyori.adventure.key.Key, T)}.</p>
+     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(Key, T)}.</p>
      *
      * @param registries     Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries

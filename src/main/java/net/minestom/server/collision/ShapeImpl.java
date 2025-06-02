@@ -6,6 +6,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.BlockFace;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
 
     record LightData(List<BoundingBox> occlusionBoundingBoxes,
                      byte blockOcclusion, byte airOcclusion,
-                     int lightEmission) {
+                     byte lightEmission) {
         public LightData {
             occlusionBoundingBoxes = List.copyOf(occlusionBoundingBoxes);
         }
@@ -143,15 +144,12 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return lightData.occlusionBoundingBoxes;
     }
 
-    static final Map<ShapeImpl, ShapeImpl> SHAPES = new ConcurrentHashMap<>();
-
-    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, int lightEmission) {
+    static ShapeImpl parseBlockFromRegistry(String collision, String occlusion, boolean occludes, byte lightEmission) {
         BoundingBox[] collisionBoundingBoxes = parseRegistryBoundingBoxString(collision);
         BoundingBox[] occlusionBoundingBoxes = occludes ? parseRegistryBoundingBoxString(occlusion) : new BoundingBox[0];
         final CollisionData collisionData = collisionData(List.of(collisionBoundingBoxes));
         final LightData lightData = lightData(List.of(occlusionBoundingBoxes), lightEmission);
-        final ShapeImpl shape = new ShapeImpl(collisionData, lightData);
-        return SHAPES.computeIfAbsent(shape, k -> k);
+        return new ShapeImpl(collisionData, lightData);
     }
 
     private static BoundingBox[] parseRegistryBoundingBoxString(String str) {
@@ -216,7 +214,7 @@ public record ShapeImpl(CollisionData collisionData, LightData lightData) implem
         return new CollisionData(collisionBoundingBoxes, relativeStart, relativeEnd, fullCollisionFaces);
     }
 
-    private static LightData lightData(List<BoundingBox> occlusionBoundingBoxes, int lightEmission) {
+    private static LightData lightData(List<BoundingBox> occlusionBoundingBoxes, byte lightEmission) {
         byte fullFaces = 0;
         byte airFaces = 0;
         for (BlockFace f : BlockFace.values()) {
