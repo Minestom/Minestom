@@ -2,12 +2,14 @@ package net.minestom.demo;
 
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -40,6 +42,7 @@ import net.minestom.server.network.packet.server.common.CustomReportDetailsPacke
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.common.ShowDialogPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
@@ -167,17 +170,18 @@ public class PlayerInit {
             .addListener(PlayerChatEvent.class, event -> {
                 var dialog = new Dialog.MultiAction(
                         new DialogMetadata(
-                                Component.text("Are you sure you want to confirm?"),
+                                Component.text("Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))),
                                 null, true, false,
                                 DialogAfterAction.CLOSE,
                                 List.of(
-                                        new DialogBody.PlainMessage(Component.text("plain message here"), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                        new DialogBody.PlainMessage(Component.text("plain message here").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), DialogBody.PlainMessage.DEFAULT_WIDTH),
                                         new DialogBody.Item(ItemStack.of(Material.DIAMOND, 5),
                                                 new DialogBody.PlainMessage(Component.text("item message"), DialogBody.PlainMessage.DEFAULT_WIDTH),
                                                 false, true, 16, 16)
                                 ),
                                 List.of(
-                                        new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH, Component.text("Enter some text"), true, "", 100, null),
+                                        new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH * 2, Component.text("Enter some text")
+                                                .hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), true, "", Integer.MAX_VALUE, new DialogInput.Text.Multiline(15, null)),
                                         new DialogInput.Boolean("bool", Component.text("Checkbox"), false, "true", "false"),
                                         new DialogInput.SingleOption("single_option", DialogInput.DEFAULT_WIDTH, List.of(
                                                 new DialogInput.SingleOption.Option("option1", Component.text("Option 1"), true),
@@ -185,13 +189,27 @@ public class PlayerInit {
                                                 new DialogInput.SingleOption.Option("option3", Component.text("Option 3"), false)
                                         ), Component.text("Single option"), true),
                                         new DialogInput.NumberRange("number_range", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r2ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r3ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r4ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r5ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                                "options.generic_value", 0, 500, 250f, 1f),
+                                        new DialogInput.NumberRange("number_r6ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
                                                 "options.generic_value", 0, 500, 250f, 1f)
                                 )
                         ),
-                        List.of(new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)),
-                        null,
-                        1
+                        List.of(
+                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null),
+                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)
+                        ),
+                        null, 2
                 );
+                var coder = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
+                System.out.println(Dialog.REGISTRY_CODEC.encode(coder, dialog).orElseThrow().toString());
 
                 event.getPlayer().sendPacket(new ShowDialogPacket(dialog));
             })
