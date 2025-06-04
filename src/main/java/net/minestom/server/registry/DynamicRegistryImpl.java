@@ -228,7 +228,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return new RegistryDataPacket(id, entries);
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
         Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
         try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
@@ -241,7 +241,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
             for (Map.Entry<String, JsonElement> entry : entries) {
                 final String namespace = entry.getKey();
-                final Result<T> valueResult = registry.codec().decode(transcoder, entry.getValue());
+                final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
                     registry.register(namespace, value, DataPack.MINECRAFT_CORE);
                 } else {
