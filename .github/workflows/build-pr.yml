@@ -10,19 +10,17 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v3
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 21
-      - name: Cache Gradle packages
-        uses: actions/cache@v3
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-          restore-keys: ${{ runner.os }}-gradle
+          # Allow caching for all branches in our repo;
+          # this is so we don't get evicted, see Cache Optimization in action docs for more info
+          cache-read-only: ${{ github.repository_owner != 'Minestom' }}
       - name: Build on ${{ matrix.os }}
         run: ./gradlew test
   publish:
@@ -33,11 +31,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
       - id: vars
-        run: echo "short_commit_hash=${GITHUB_SHA::10}" >> $GITHUB_OUTPUT
+        run: |
+          export ACTUAL=${{ github.event.pull_request.head.sha }}
+          echo "short_commit_hash=${ACTUAL::10}" >> $GITHUB_OUTPUT
       - name: Publish Artifacts
         env:
           MINESTOM_VERSION: ${{ github.head_ref }}-${{ steps.vars.outputs.short_commit_hash }}
           MINESTOM_CHANNEL: snapshot
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
         run: |
           ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository
-          echo "Version: ${SHORT_COMMIT_HASH}" >> $GITHUB_STEP_SUMMARY
+          echo "Version: ${MINESTOM_VERSION}" >> $GITHUB_STEP_SUMMARY

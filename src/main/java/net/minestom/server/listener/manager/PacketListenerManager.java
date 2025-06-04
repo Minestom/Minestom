@@ -81,6 +81,8 @@ public final class PacketListenerManager {
         setPlayListener(ClientAnimationPacket.class, AnimationListener::animationListener);
         setPlayListener(ClientInteractEntityPacket.class, UseEntityListener::useEntityListener);
         setPlayListener(ClientUseItemPacket.class, UseItemListener::useItemListener);
+        setPlayListener(ClientPickItemFromBlockPacket.class, PlayerPickListener::playerPickBlockListener);
+        setPlayListener(ClientPickItemFromEntityPacket.class, PlayerPickListener::playerPickEntityListener);
         setPlayListener(ClientStatusPacket.class, PlayStatusListener::listener);
         setPlayListener(ClientSettingsPacket.class, SettingsListener::listener);
         setPlayListener(ClientCreativeInventoryActionPacket.class, CreativeInventoryActionListener::listener);
@@ -99,6 +101,7 @@ public final class PacketListenerManager {
         setListener(ConnectionState.PLAY, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
         setPlayListener(ClientNameItemPacket.class, AnvilListener::nameItemListener);
         setPlayListener(ClientTickEndPacket.class, PlayerTickListener::listener);
+        setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
         setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
     }

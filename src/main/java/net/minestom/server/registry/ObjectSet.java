@@ -1,8 +1,8 @@
 package net.minestom.server.registry;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +20,7 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
         return (ObjectSet<T>) ObjectSetImpl.Empty.INSTANCE;
     }
 
-    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<NamespaceID> entries) {
+    static <T extends ProtocolObject> @NotNull ObjectSet<T> of(@NotNull Collection<Key> entries) {
         return new ObjectSetImpl.Entries<>(java.util.List.copyOf(entries));
     }
 
@@ -45,13 +45,13 @@ public sealed interface ObjectSet<T extends ProtocolObject> permits ObjectSetImp
      * @return True if this set contains the object, false otherwise.
      */
     default boolean contains(@NotNull StaticProtocolObject object) {
-        return contains(object.namespace());
+        return contains(object.key());
     }
 
     default boolean contains(@NotNull DynamicRegistry.Key<T> key) {
-        return contains(key.namespace());
+        return contains(key.key());
     }
 
-    boolean contains(@NotNull NamespaceID namespace);
+    boolean contains(@NotNull Key namespace);
 
 }

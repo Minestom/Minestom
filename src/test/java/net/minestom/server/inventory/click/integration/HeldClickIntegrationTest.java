@@ -35,7 +35,7 @@ public class HeldClickIntegrationTest {
         // Empty
         {
             listener.followup(event -> {
-                assertNull(event.getInventory()); // Player inventory
+                assertEquals(event.getInventory(), inventory);
                 assertTrue(event.getSlot() == 4 || event.getSlot() == 5);
                 assertEquals(ClickType.CHANGE_HELD, event.getClickType());
 
@@ -49,7 +49,7 @@ public class HeldClickIntegrationTest {
         // Swap air
         {
             listener.followup(event -> {
-                assertNull(event.getInventory()); // Player inventory
+                assertEquals(event.getInventory(), inventory);
                 assertTrue(event.getSlot() == 1 || event.getSlot() == 0);
                 assertEquals(ClickType.CHANGE_HELD, event.getClickType());
 

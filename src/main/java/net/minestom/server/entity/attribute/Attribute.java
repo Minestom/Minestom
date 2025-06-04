@@ -1,9 +1,9 @@
 package net.minestom.server.entity.attribute;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -19,8 +19,8 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
     @NotNull Registry.AttributeEntry registry();
 
     @Override
-    default @NotNull NamespaceID namespace() {
-        return registry().namespace();
+    default @NotNull Key key() {
+        return registry().key();
     }
 
     @Override
@@ -48,12 +48,12 @@ public sealed interface Attribute extends StaticProtocolObject, Attributes permi
         return AttributeImpl.values();
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull String namespaceID) {
-        return AttributeImpl.getSafe(namespaceID);
+    static @Nullable Attribute fromKey(@NotNull String key) {
+        return AttributeImpl.getSafe(key);
     }
 
-    static @Nullable Attribute fromNamespaceId(@NotNull NamespaceID namespaceID) {
-        return fromNamespaceId(namespaceID.asString());
+    static @Nullable Attribute fromKey(@NotNull Key key) {
+        return fromKey(key.asString());
     }
 
     static @Nullable Attribute fromId(int id) {

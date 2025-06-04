@@ -1,5 +1,6 @@
 package net.minestom.server.entity;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.coordinate.Point;
@@ -32,7 +33,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.thread.Acquirable;
-import net.minestom.server.utils.NamespaceID;
 import net.minestom.server.utils.block.BlockIterator;
 import net.minestom.server.utils.time.Cooldown;
 import net.minestom.server.utils.time.TimeUnit;
@@ -47,13 +47,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class LivingEntity extends Entity implements EquipmentHandler {
 
-    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(NamespaceID.from("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
+    private static final AttributeModifier SPRINTING_SPEED_MODIFIER = new AttributeModifier(Key.key("minecraft:sprinting"), 0.3, AttributeOperation.MULTIPLY_TOTAL);
 
     /**
      * IDs of modifiers that are protected from removal by methods like {@link AttributeInstance#clearModifiers()}.
      */
     @ApiStatus.Internal
-    public static final Set<NamespaceID> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
+    public static final Set<Key> PROTECTED_MODIFIERS = Set.of(SPRINTING_SPEED_MODIFIER.id());
 
     // ItemStack pickup
     protected boolean canPickupItem;
@@ -198,19 +198,17 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         // Items picking
         if (canPickupItem() && itemPickupCooldown.isReady(time)) {
             itemPickupCooldown.refreshLastUpdate(time);
-            final Point loweredPosition = position.sub(0, .5, 0);
             this.instance.getEntityTracker().nearbyEntities(position, expandedBoundingBox.width(),
                     EntityTracker.Target.ITEMS, itemEntity -> {
                         if (this instanceof Player player && !itemEntity.isViewer(player)) return;
                         if (!itemEntity.isPickable()) return;
-                        if (expandedBoundingBox.intersectEntity(loweredPosition, itemEntity)) {
-                            PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
-                            EventDispatcher.callCancellable(pickupItemEvent, () -> {
-                                final ItemStack item = itemEntity.getItemStack();
-                                sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
-                                itemEntity.remove();
-                            });
-                        }
+                        if (!expandedBoundingBox.intersectEntity(position, itemEntity)) return;
+                        final PickupItemEvent pickupItemEvent = new PickupItemEvent(this, itemEntity);
+                        EventDispatcher.callCancellable(pickupItemEvent, () -> {
+                            final ItemStack item = itemEntity.getItemStack();
+                            sendPacketToViewersAndSelf(new CollectItemPacket(itemEntity.getEntityId(), getEntityId(), item.amount()));
+                            itemEntity.remove();
+                        });
                     });
         }
     }
@@ -338,10 +336,13 @@ public class LivingEntity extends Entity implements EquipmentHandler {
             float remainingDamage = entityDamageEvent.getDamage().getAmount();
 
             if (entityDamageEvent.shouldAnimate()) {
-                sendPacketToViewersAndSelf(new EntityAnimationPacket(getEntityId(), EntityAnimationPacket.Animation.TAKE_DAMAGE));
+                sendPacketToViewersAndSelf(new DamageEventPacket(
+                        getEntityId(), damage.getTypeId(),
+                        damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1,
+                        damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1,
+                        damage.getSourcePosition()
+                ));
             }
-
-            sendPacketToViewersAndSelf(new DamageEventPacket(getEntityId(), damage.getTypeId(), damage.getAttacker() == null ? 0 : damage.getAttacker().getEntityId() + 1, damage.getSource() == null ? 0 : damage.getSource().getEntityId() + 1, damage.getSourcePosition()));
 
             // Additional hearts support
             if (this instanceof Player player) {
@@ -543,7 +544,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
     @Override
     public void setBoundingBox(BoundingBox boundingBox) {
         super.setBoundingBox(boundingBox);
-        this.expandedBoundingBox = boundingBox.expand(1, .5, 1);
+        this.expandedBoundingBox = boundingBox.growSymmetrically(1, .5, 1);
     }
 
     /**
