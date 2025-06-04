@@ -2,6 +2,8 @@ package net.minestom.server.item.enchant;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.gamedata.tags.Tag;
@@ -9,8 +11,10 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -107,8 +111,32 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record Explode(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<Explode> CODEC = StructCodec.struct(Explode::new);
+    record Explode(
+            boolean attributeToUser,
+            @Nullable DynamicRegistry.Key<DamageType> damageType,
+            @Nullable LevelBasedValue knockbackMultiplier,
+            @Nullable Codec.RawValue immuneBlocks,
+            @NotNull Point offset,
+            @NotNull LevelBasedValue radius,
+            boolean createFire,
+            @NotNull Codec.RawValue blockInteraction,
+            @NotNull Codec.RawValue smallParticle,
+            @NotNull Codec.RawValue largeParticle,
+            @NotNull SoundEvent sound
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<Explode> CODEC = StructCodec.struct(
+                "attribute_to_user", Codec.BOOLEAN.optional(false), Explode::attributeToUser,
+                "damage_type", DamageType.CODEC.optional(), Explode::damageType,
+                "knockback_multiplier", LevelBasedValue.CODEC.optional(), Explode::knockbackMultiplier,
+                "immune_blocks", Codec.RAW_VALUE.optional(), Explode::immuneBlocks,
+                "offset", Codec.VECTOR3D.optional(Vec.ZERO), Explode::offset,
+                "radius", LevelBasedValue.CODEC, Explode::radius,
+                "create_fire", Codec.BOOLEAN.optional(false), Explode::createFire,
+                "block_interaction", Codec.RAW_VALUE, Explode::blockInteraction,
+                "small_particle", Codec.RAW_VALUE, Explode::smallParticle,
+                "large_particle", Codec.RAW_VALUE, Explode::largeParticle,
+                "sound", SoundEvent.CODEC, Explode::sound,
+                Explode::new);
 
         @Override
         public @NotNull StructCodec<Explode> codec() {
@@ -128,8 +156,16 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record PlaySound(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(PlaySound::new);
+    record PlaySound(
+            @NotNull SoundEvent soundEvent,
+            @NotNull Codec.RawValue volume,
+            @NotNull Codec.RawValue pitch
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<PlaySound> CODEC = StructCodec.struct(
+                "sound_event", SoundEvent.CODEC, PlaySound::soundEvent,
+                "volume", Codec.RAW_VALUE, PlaySound::volume,
+                "pitch", Codec.RAW_VALUE, PlaySound::pitch,
+                PlaySound::new);
 
         @Override
         public @NotNull StructCodec<PlaySound> codec() {
@@ -137,8 +173,18 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ReplaceBlock(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<ReplaceBlock> CODEC = StructCodec.struct(ReplaceBlock::new);
+    record ReplaceBlock(
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue predicate,
+            @NotNull Codec.RawValue blockState,
+            @Nullable Codec.RawValue triggerGameEvent
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<ReplaceBlock> CODEC = StructCodec.struct(
+                "offset", Codec.RAW_VALUE, ReplaceBlock::offset,
+                "predicate", Codec.RAW_VALUE, ReplaceBlock::predicate,
+                "block_state", Codec.RAW_VALUE, ReplaceBlock::blockState,
+                "trigger_game_event", Codec.RAW_VALUE, ReplaceBlock::triggerGameEvent,
+                ReplaceBlock::new);
 
         @Override
         public @NotNull StructCodec<ReplaceBlock> codec() {
@@ -146,8 +192,22 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record ReplaceDisc(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<ReplaceDisc> CODEC = StructCodec.struct(ReplaceDisc::new);
+    record ReplaceDisc(
+            @NotNull LevelBasedValue radius,
+            @NotNull LevelBasedValue height,
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue predicate,
+            @NotNull Codec.RawValue blockState,
+            @Nullable Codec.RawValue triggerGameEvent
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<ReplaceDisc> CODEC = StructCodec.struct(
+                "radius", LevelBasedValue.CODEC, ReplaceDisc::radius,
+                "height", LevelBasedValue.CODEC, ReplaceDisc::height,
+                "offset", Codec.RAW_VALUE, ReplaceDisc::offset,
+                "predicate", Codec.RAW_VALUE.optional(), ReplaceDisc::predicate,
+                "block_state", Codec.RAW_VALUE, ReplaceDisc::blockState,
+                "trigger_game_event", Codec.RAW_VALUE.optional(), ReplaceDisc::triggerGameEvent,
+                ReplaceDisc::new);
 
         @Override
         public @NotNull StructCodec<ReplaceDisc> codec() {
@@ -168,8 +228,16 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SetBlockProperties(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<SetBlockProperties> CODEC = StructCodec.struct(SetBlockProperties::new);
+    record SetBlockProperties(
+            @NotNull Codec.RawValue properties,
+            @NotNull Codec.RawValue offset,
+            @Nullable Codec.RawValue triggerGameEvent
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<SetBlockProperties> CODEC = StructCodec.struct(
+                "properties", Codec.RAW_VALUE, SetBlockProperties::properties,
+                "offset", Codec.RAW_VALUE, SetBlockProperties::offset,
+                "trigger_game_event", Codec.RAW_VALUE.optional(), SetBlockProperties::triggerGameEvent,
+                SetBlockProperties::new);
 
         @Override
         public @NotNull StructCodec<SetBlockProperties> codec() {
@@ -177,8 +245,22 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SpawnParticles(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<SpawnParticles> CODEC = StructCodec.struct(SpawnParticles::new);
+    record SpawnParticles(
+            @NotNull Codec.RawValue particle,
+            @NotNull Codec.RawValue horizontalPosition,
+            @NotNull Codec.RawValue verticalPosition,
+            @NotNull Codec.RawValue horizontalVelocity,
+            @NotNull Codec.RawValue verticalVelocity,
+            @NotNull Codec.RawValue speed
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<SpawnParticles> CODEC = StructCodec.struct(
+                "particle", Codec.RAW_VALUE, SpawnParticles::particle,
+                "horizontal_position", Codec.RAW_VALUE, SpawnParticles::horizontalPosition,
+                "vertical_position", Codec.RAW_VALUE, SpawnParticles::verticalPosition,
+                "horizontal_velocity", Codec.RAW_VALUE, SpawnParticles::horizontalVelocity,
+                "vertical_velocity", Codec.RAW_VALUE, SpawnParticles::verticalVelocity,
+                "speed", Codec.RAW_VALUE, SpawnParticles::speed,
+                SpawnParticles::new);
 
         @Override
         public @NotNull StructCodec<SpawnParticles> codec() {
@@ -186,8 +268,14 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
         }
     }
 
-    record SummonEntity(/* todo */) implements EntityEffect, LocationEffect {
-        public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(SummonEntity::new);
+    record SummonEntity(
+            @NotNull Codec.RawValue entityTypes,
+            boolean joinTeam
+    ) implements EntityEffect, LocationEffect {
+        public static final StructCodec<SummonEntity> CODEC = StructCodec.struct(
+                "entity_types", Codec.RAW_VALUE, SummonEntity::entityTypes,
+                "join_team", Codec.BOOLEAN.optional(false), SummonEntity::joinTeam,
+                SummonEntity::new);
 
         @Override
         public @NotNull StructCodec<SummonEntity> codec() {

@@ -18,6 +18,13 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
             "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
             "effects", BiomeEffects.CODEC.optional(BiomeEffects.PLAINS_EFFECTS), Biome::effects,
             Biome::create);
+    @NotNull Codec<Biome> NETWORK_CODEC = StructCodec.struct(
+            "temperature", Codec.FLOAT, Biome::temperature,
+            "downfall", Codec.FLOAT, Biome::downfall,
+            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+            "temperature_modifier", TemperatureModifier.CODEC, Biome::temperatureModifier,
+            "effects", BiomeEffects.CODEC, Biome::effects,
+            Biome::create);
 
     static @NotNull Biome create(float temperature, float downfall, boolean hasPrecipitation,
                                  @NotNull TemperatureModifier temperatureModifier, @NotNull BiomeEffects effects) {
@@ -36,10 +43,11 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:worldgen/biome", REGISTRY_CODEC, null, Registry.Resource.BIOMES,
+                "minecraft:worldgen/biome", NETWORK_CODEC, null, Registry.Resource.BIOMES,
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
-                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0
+                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0,
+                REGISTRY_CODEC
         );
     }
 
