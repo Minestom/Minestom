@@ -135,7 +135,7 @@ final class ObjectArrayImpl {
         @Override
         public @NotNull List<@NotNull T> toList() {
             // Trim the array to the maximum size, it internally will be copied regardless.
-            final T[] array = Arrays.copyOf(this.array, this.max);
+            final T[] array = Arrays.copyOf(this.array, this.max + 1);
             return List.of(array);
         }
     }
