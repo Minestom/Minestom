@@ -1,6 +1,11 @@
 package net.minestom.server.utils.collection;
 
-import org.jetbrains.annotations.*;
+import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.UnknownNullability;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.List;
 
@@ -44,6 +49,7 @@ public sealed interface ObjectArray<T>
     /**
      * Copies the array into a list.
      * Requires all elements to be present and indexed from 0.
+     *
      * @return List of the array elements
      */
     @Contract(pure = true)
