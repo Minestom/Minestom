@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
@@ -22,7 +23,6 @@ import java.util.List;
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
  * @param <T> The type of the registry entries
- *
  * @see Registries
  */
 public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
@@ -74,7 +74,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @NotNull Registry.Resource resource) {
-        return create(id, codec, null, resource, null);
+        return create(id, codec, null, resource, null, null);
     }
 
     /**
@@ -84,7 +84,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource) {
-        return create(id, codec, registries, resource, null);
+        return create(id, codec, registries, resource, null, null);
     }
 
     /**
@@ -93,9 +93,9 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull String id, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(id, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator);
+        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
         return registry;
     }
 
@@ -197,7 +197,7 @@ public sealed interface DynamicRegistry<T> permits DynamicRegistryImpl {
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
      * exclude vanilla entries if one has been overridden (e.g. via {@link #register(net.kyori.adventure.key.Key, T)}.</p>
      *
-     * @param registries Registries provider
+     * @param registries     Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries
      * @return A {@link SendablePacket} containing the registry data
      */
