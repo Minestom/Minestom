@@ -1002,4 +1002,17 @@ public abstract class Instance implements Block.Getter, Block.Setter,
             LightingChunk.relightSection(chunk.getInstance(), chunk.chunkX, sectionCoordinate, chunk.chunkZ);
         return light.getLevel(coordX, coordY, coordZ);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Instance instance = (Instance) o;
+        return registered == instance.registered && Double.compare(targetBorderDiameter, instance.targetBorderDiameter) == 0 && remainingWorldBorderTransitionTicks == instance.remainingWorldBorderTransitionTicks && worldAge == instance.worldAge && time == instance.time && timeRate == instance.timeRate && timeSynchronizationTicks == instance.timeSynchronizationTicks && remainingRainTransitionTicks == instance.remainingRainTransitionTicks && remainingThunderTransitionTicks == instance.remainingThunderTransitionTicks && lastTickAge == instance.lastTickAge && Objects.equals(dimensionType, instance.dimensionType) && Objects.equals(cachedDimensionType, instance.cachedDimensionType) && Objects.equals(dimensionName, instance.dimensionName) && Objects.equals(worldBorder, instance.worldBorder) && Objects.equals(weather, instance.weather) && Objects.equals(transitioningWeather, instance.transitioningWeather) && Objects.equals(entityTracker, instance.entityTracker) && Objects.equals(blockRetriever, instance.blockRetriever) && Objects.equals(uuid, instance.uuid) && Objects.equals(tagHandler, instance.tagHandler) && Objects.equals(scheduler, instance.scheduler) && Objects.equals(eventNode, instance.eventNode) && Objects.equals(explosionSupplier, instance.explosionSupplier) && Objects.equals(pointers, instance.pointers);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(registered, dimensionType, cachedDimensionType, dimensionName, worldBorder, targetBorderDiameter, remainingWorldBorderTransitionTicks, worldAge, time, timeRate, timeSynchronizationTicks, weather, transitioningWeather, remainingRainTransitionTicks, remainingThunderTransitionTicks, lastTickAge, entityTracker, blockRetriever, uuid, tagHandler, scheduler, eventNode, explosionSupplier, pointers);
+    }
 }

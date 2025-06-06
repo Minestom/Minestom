@@ -93,7 +93,7 @@ public final class InstanceManager {
     }
 
     /**
-     * Creates and register a {@link SharedInstance}.
+     * Creates and registers a {@link SharedInstance}.
      *
      * @param instanceContainer the container assigned to the shared instance
      * @return the created {@link SharedInstance}

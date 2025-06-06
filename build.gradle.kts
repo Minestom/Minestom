@@ -1,5 +1,3 @@
-import java.time.Duration
-
 plugins {
     `java-library`
     alias(libs.plugins.blossom)
@@ -10,7 +8,7 @@ plugins {
 }
 
 // Read env vars (used for publishing generally)
-version = System.getenv("MINESTOM_VERSION") ?: "dev"
+version = System.getenv("MINESTOM_VERSION") ?: "tiltmc"
 val channel = System.getenv("MINESTOM_CHANNEL") ?: "local" // local, snapshot, release
 val javaVersion = System.getenv("JAVA_VERSION") ?: "21"
 
@@ -118,7 +116,7 @@ tasks {
         }
     }
 
-    nexusPublishing {
+    /*nexusPublishing {
         useStaging.set(true)
         this.packageGroup.set("net.minestom")
 
@@ -136,65 +134,69 @@ tasks {
                 password.set(System.getenv("SONATYPE_PASSWORD"))
             }
         }
-    }
+    }*/
 
-    publishing.publications.create<MavenPublication>("maven") {
-        groupId = "net.minestom"
-        // todo: decide on publishing scheme
-        artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
-        version = project.version.toString()
+    publishing {
+        publications {
+            create<MavenPublication>("maven") {
+                groupId = "net.minestom"
+                artifactId = if (channel == "snapshot") "minestom-snapshots" else "minestom-snapshots"
+                version = project.version.toString()
 
-        from(project.components["java"])
+                val javaComponent = project.components.getByName("java")
+                from(javaComponent)
 
-        pom {
-            name.set(this@create.artifactId)
-            description.set(shortDescription)
-            url.set("https://github.com/minestom/minestom")
+                pom {
+                    name.set(artifactId)
+                    description.set(shortDescription)
+                    url.set("https://github.com/minestom/minestom")
 
-            licenses {
-                license {
-                    name.set("Apache 2.0")
-                    url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
+                    licenses {
+                        license {
+                            name.set("Apache 2.0")
+                            url.set("https://github.com/minestom/minestom/blob/main/LICENSE")
+                        }
+                    }
+
+                    developers {
+                        developer { id.set("TheMode") }
+                        developer {
+                            id.set("mworzala")
+                            name.set("Matt Worzala")
+                            email.set("matt@hollowcube.dev")
+                        }
+                    }
+
+                    issueManagement {
+                        system.set("GitHub")
+                        url.set("https://github.com/minestom/minestom/issues")
+                    }
+
+                    scm {
+                        connection.set("scm:git:git://github.com/minestom/minestom.git")
+                        developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
+                        url.set("https://github.com/minestom/minestom")
+                        tag.set("HEAD")
+                    }
+
+                    ciManagement {
+                        system.set("Github Actions")
+                        url.set("https://github.com/minestom/minestom/actions")
+                    }
                 }
-            }
-
-            developers {
-                developer {
-                    id.set("TheMode")
-                }
-                developer {
-                    id.set("mworzala")
-                    name.set("Matt Worzala")
-                    email.set("matt@hollowcube.dev")
-                }
-            }
-
-            issueManagement {
-                system.set("GitHub")
-                url.set("https://github.com/minestom/minestom/issues")
-            }
-
-            scm {
-                connection.set("scm:git:git://github.com/minestom/minestom.git")
-                developerConnection.set("scm:git:git@github.com:minestom/minestom.git")
-                url.set("https://github.com/minestom/minestom")
-                tag.set("HEAD")
-            }
-
-            ciManagement {
-                system.set("Github Actions")
-                url.set("https://github.com/minestom/minestom/actions")
             }
         }
-    }
 
-    signing {
-        isRequired = System.getenv("CI") != null
-
-        val privateKey = System.getenv("GPG_PRIVATE_KEY")
-        val keyPassphrase = System.getenv()["GPG_PASSPHRASE"]
-        useInMemoryPgpKeys(privateKey, keyPassphrase)
-
-        sign(publishing.publications)
+        repositories {
+            maven {
+                url = uri("https://maven.hapily.me/releases")
+                credentials {
+                    username = (project.findProperty("repoHapilyUsername") as? String)
+                            ?: throw GradleException("Missing global property 'repoHapilyUsername'")
+                    password = (project.findProperty("repoHapilyPassword") as? String)
+                            ?: throw GradleException("Missing global property 'repoHapilyPassword'")
+                }
+            }
+        }
     }
 }
