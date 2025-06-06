@@ -13,7 +13,6 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
 import net.minestom.server.gamedata.tags.TagManager;
-import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
@@ -36,9 +35,7 @@ import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.snapshot.*;
-import net.minestom.server.thread.Acquirable;
-import net.minestom.server.thread.ThreadDispatcher;
-import net.minestom.server.thread.ThreadProvider;
+import net.minestom.server.thread.*;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.collection.MappedCollection;
@@ -56,7 +53,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
-final class ServerProcessImpl implements ServerProcess {
+final class ServerProcessImpl<P extends Tickable> implements ServerProcess {
     private static final Logger LOGGER = LoggerFactory.getLogger(ServerProcessImpl.class);
 
     private final ExceptionManager exception;
@@ -96,13 +93,14 @@ final class ServerProcessImpl implements ServerProcess {
 
     private final Server server;
 
-    private final ThreadDispatcher<Chunk> dispatcher;
+    private final ThreadDispatcher<P> dispatcher;
+    private final ThreadDispatcherHandler<P> dispatcherHandler;
     private final Ticker ticker;
 
     private final AtomicBoolean started = new AtomicBoolean();
     private final AtomicBoolean stopped = new AtomicBoolean();
 
-    public ServerProcessImpl() {
+    public ServerProcessImpl(ThreadDispatcherHandler<P> dispatcherHandler) {
         this.exception = new ExceptionManager();
 
         // The order of initialization here is relevant, we must load the enchantment util registries before the vanilla data is loaded.
@@ -142,7 +140,9 @@ final class ServerProcessImpl implements ServerProcess {
 
         this.server = new Server(packetParser);
 
-        this.dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), ServerFlag.DISPATCHER_THREADS);
+        this.dispatcher = ThreadDispatcher.of(dispatcherHandler.provider(), ServerFlag.DISPATCHER_THREADS);
+        dispatcherHandler.setupDispatcher(this.dispatcher);
+        this.dispatcherHandler = dispatcherHandler;
         this.ticker = new TickerImpl();
     }
 
@@ -307,8 +307,13 @@ final class ServerProcessImpl implements ServerProcess {
     }
 
     @Override
-    public @NotNull ThreadDispatcher<Chunk> dispatcher() {
+    public @NotNull ThreadDispatcher<P> dispatcher() {
         return dispatcher;
+    }
+
+    @Override
+    public @NotNull ThreadDispatcherHandler<P> dispatcherHandler() {
+        return dispatcherHandler;
     }
 
     @Override

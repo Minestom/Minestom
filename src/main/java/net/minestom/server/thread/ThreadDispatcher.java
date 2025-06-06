@@ -1,15 +1,18 @@
 package net.minestom.server.thread;
 
 import net.minestom.server.Tickable;
+import net.minestom.server.instance.Instance;
 import org.jctools.queues.MessagePassingQueue;
 import org.jctools.queues.MpscUnboundedArrayQueue;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.function.IntFunction;
+import java.util.stream.IntStream;
 
 /**
  * ThreadDispatcher can be used to dispatch updates (ticks) across a number of "partitions" (such as chunks) that
@@ -236,7 +239,9 @@ public final class ThreadDispatcher<P> {
         this.partitions.put(partition, partitionEntry);
         this.partitionUpdateQueue.add(partition);
         if (partition instanceof Tickable tickable) {
-            processUpdatedElement(tickable, partition);
+            if (!(tickable instanceof Instance)) { // Instances are ticked separately by server process
+                processUpdatedElement(tickable, partition);
+            }
         }
     }
 
@@ -276,6 +281,20 @@ public final class ThreadDispatcher<P> {
                 ((AcquirableImpl<?>) acquirableSource.acquirable()).updateThread(partitionEntry.thread());
             }
         }
+    }
+
+    /**
+     * Finds the thread with the least amount of partitions assigned.
+     * <p>
+     * Useful for thread providers.
+     *
+     * @return null Integer if there are no threads, otherwise Integer of the index of the thread with the least amount of partitions assigned.
+     */
+    public @Nullable Integer getIndexOfLeastOccupiedThread() {
+        return IntStream.range(0, threads.size())
+                .boxed()
+                .min(Comparator.comparingInt(i -> threads.get(i).entries().size()))
+                .orElse(null);
     }
 
     /**

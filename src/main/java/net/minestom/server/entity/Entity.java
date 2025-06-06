@@ -767,7 +767,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     @ApiStatus.Internal
     protected void refreshCurrentChunk(Chunk currentChunk) {
         this.currentChunk = currentChunk;
-        MinecraftServer.process().dispatcher().updateElement(this, currentChunk);
+        MinecraftServer.process().dispatcherHandler().onEntityRefreshCurrentChunk(this, currentChunk);
     }
 
     /**
@@ -811,6 +811,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             try {
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
+                MinecraftServer.process().dispatcherHandler().onEntitySetInstance(this, instance);
                 if (this instanceof Player player) {
                     player.sendPacket(instance.createInitializeWorldBorderPacket());
                     player.sendPacket(instance.createTimePacket());
@@ -1488,7 +1489,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         Set<Entity> leashedEntities = getLeashedEntities();
         leashedEntities.forEach(entity -> entity.setLeashHolder(null));
 
-        MinecraftServer.process().dispatcher().removeElement(this);
+        MinecraftServer.process().dispatcherHandler().onEntityRemoval(this);
         this.removed = true;
         if (!permanent) {
             // Reset some state to be ready for re-use
