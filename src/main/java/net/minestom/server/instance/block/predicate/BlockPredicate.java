@@ -2,13 +2,13 @@ package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
-import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +36,8 @@ import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
-        @Nullable CompoundBinaryTag nbt
+        @Nullable CompoundBinaryTag nbt,
+        @NotNull DataComponentPredicates components
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
@@ -53,42 +54,14 @@ public record BlockPredicate(
             RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
             PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
             NBT_COMPOUND.optional(), BlockPredicate::nbt,
-            BlockPredicate::new
-    );
-    // TODO(1.21.5): this also has a new field to match components.
-    public static final Codec<BlockPredicate> CODEC = Codec.UNIT
-            .transform(ignored -> NONE, ignored -> Unit.INSTANCE);
-
-//    public static final BinaryTagSerializer<BlockPredicate> NBT_TYPE = new BinaryTagSerializer<>() {
-//        @Override
-//        public @NotNull BinaryTag write(@NotNull BlockPredicate value) {
-//            CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-//            if (value.blocks != null)
-//                builder.put("blocks", BlockTypeFilter.CODEC.write(value.blocks));
-//            if (value.state != null)
-//                builder.put("state", PropertiesPredicate.NBT_TYPE.write(value.state));
-//            if (value.nbt != null)
-//                builder.put("nbt", value.nbt);
-//            return builder.build();
-//        }
-//
-//        @Override
-//        public @NotNull BlockPredicate read(@NotNull BinaryTag tag) {
-//            if (!(tag instanceof CompoundBinaryTag compound)) return BlockPredicate.ALL;
-//
-//            BinaryTag entry;
-//            BlockTypeFilter blocks = null;
-//            if ((entry = compound.get("blocks")) != null)
-//                blocks = BlockTypeFilter.CODEC.read(entry);
-//            PropertiesPredicate state = null;
-//            if ((entry = compound.get("state")) != null)
-//                state = PropertiesPredicate.NBT_TYPE.read(entry);
-//            CompoundBinaryTag nbt = null;
-//            if ((entry = compound.get("nbt")) != null)
-//                nbt = BinaryTagSerializer.COMPOUND_COERCED.read(entry);
-//            return new BlockPredicate(blocks, state, nbt);
-//        }
-//    };
+            DataComponentPredicates.NETWORK_TYPE, BlockPredicate::components,
+            BlockPredicate::new);
+    public static final StructCodec<BlockPredicate> CODEC = StructCodec.struct(
+            "blocks", RegistryTag.codec(Registries::blocks).optional(), BlockPredicate::blocks,
+            "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
+            "nbt", Codec.NBT_COMPOUND.optional(), BlockPredicate::nbt,
+            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::components,
+            BlockPredicate::new);
 
     public BlockPredicate(@NotNull RegistryTag<Block> blocks) {
         this(blocks, null, null);
@@ -104,6 +77,10 @@ public record BlockPredicate(
 
     public BlockPredicate(@NotNull CompoundBinaryTag nbt) {
         this(null, null, nbt);
+    }
+
+    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt) {
+        this(blocks, state, nbt, DataComponentPredicates.EMPTY);
     }
 
     @Override
