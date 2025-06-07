@@ -11,6 +11,16 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Predicate;
 
+/**
+ * A generic predicate to match against a collection of items.
+ * <p>
+ * If any fields are null, they are ignored in {@link #test}. If all fields are null, {@link #test} returns {@code true}.
+ * @param contains A set of sub-predicates which all must return true for this CollectionPredicate to return true
+ * @param counts A set of sub-predicates which all must match a certain number of times for this CollectionPredicate to return true
+ * @param size An acceptable range for the collection's size
+ * @param <T> Type of item in the collection
+ * @param <P> A Predicate that matches against items of type {@code T}
+ */
 public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<T, P> contains,
                                                              @Nullable Count<T, P> counts,
                                                              @Nullable Range.Int size) implements Predicate<Collection<T>> {
