@@ -11,6 +11,6 @@ import org.jetbrains.annotations.Nullable;
 public record ClientCustomClickActionPacket(@NotNull Key key, @Nullable BinaryTag payload) implements ClientPacket {
     public static final NetworkBuffer.Type<ClientCustomClickActionPacket> SERIALIZER = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, ClientCustomClickActionPacket::key,
-            NetworkBuffer.NBT.optional(), ClientCustomClickActionPacket::payload,
+            NetworkBuffer.NBT.optional().lengthPrefixed(65536), ClientCustomClickActionPacket::payload,
             ClientCustomClickActionPacket::new);
 }
