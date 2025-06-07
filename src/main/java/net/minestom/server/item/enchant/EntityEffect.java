@@ -114,7 +114,7 @@ public non-sealed interface EntityEffect extends Enchantment.Effect {
 
     record Explode(
             boolean attributeToUser,
-            @Nullable DynamicRegistry.Key<DamageType> damageType,
+            @Nullable RegistryKey<DamageType> damageType,
             @Nullable LevelBasedValue knockbackMultiplier,
             @Nullable Codec.RawValue immuneBlocks,
             @NotNull Point offset,
