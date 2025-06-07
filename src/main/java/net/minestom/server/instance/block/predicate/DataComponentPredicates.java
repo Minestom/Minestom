@@ -14,14 +14,15 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public record DataComponentPredicates(DataComponentMap exact,
-                                      Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
+public record DataComponentPredicates(@Nullable DataComponentMap exact,
+                                      @Nullable Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
     public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
             "min", Codec.INT, Range.Int::min,
@@ -56,27 +57,30 @@ public record DataComponentPredicates(DataComponentMap exact,
         public static final NetworkBuffer.Type<ComponentPredicateType> NETWORK_TYPE = NetworkBuffer.Enum(ComponentPredicateType.class);
         public static final Codec<ComponentPredicateType> CODEC = Codec.STRING.transform(BY_NAME::get, ComponentPredicateType::name);
 
-        private final String name;
-        private final Codec<? extends DataComponentPredicate> codec;
+        private final @NotNull String name;
+        private final @NotNull Codec<? extends DataComponentPredicate> codec;
 
-        ComponentPredicateType(String name, Codec<? extends DataComponentPredicate> codec) {
+        ComponentPredicateType(@NotNull String name, @NotNull Codec<? extends DataComponentPredicate> codec) {
             this.name = name;
             this.codec = codec;
         }
 
-        public String getName() {
+        public @NotNull String getName() {
             return name;
         }
 
-        public Codec<? extends DataComponentPredicate> getCodec() {
+        public @NotNull Codec<? extends DataComponentPredicate> getCodec() {
             return codec;
         }
 
-        public static ComponentPredicateType getByName(String name) {
+        public static @Nullable ComponentPredicateType getByName(String name) {
             return BY_NAME.get(name);
         }
 
-        public static ComponentPredicateType getById(int id) {
+        public static @NotNull ComponentPredicateType getById(int id) {
+            if (id < 0 || id >= values().length) {
+                throw new IllegalArgumentException("Invalid ComponentPredicateType ID: " + id);
+            }
             return values()[id];
         }
     }
@@ -88,6 +92,9 @@ public record DataComponentPredicates(DataComponentMap exact,
                 final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
                 for (var entry : nbt) {
                     ComponentPredicateType type = ComponentPredicateType.getByName(entry.getKey());
+                    if (type == null) {
+                        throw new IllegalArgumentException("Invalid data component predicate type: " + entry.getKey());
+                    }
                     Codec<? extends DataComponentPredicate> codec = type.getCodec();
                     DataComponentPredicate value = codec.decode(coder, entry.getValue()).orElseThrow();
                     map.put(type, value);
