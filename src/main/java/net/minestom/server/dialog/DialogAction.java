@@ -102,7 +102,7 @@ public sealed interface DialogAction {
 
     record Custom(@NotNull Key key, @Nullable BinaryTag payload) implements DialogAction {
         public static final StructCodec<Custom> CODEC = StructCodec.struct(
-                "key", Codec.KEY, Custom::key,
+                "id", Codec.KEY, Custom::key,
                 "payload", Codec.NBT.optional(), Custom::payload,
                 Custom::new);
 
@@ -125,7 +125,7 @@ public sealed interface DialogAction {
 
     record DynamicCustom(@NotNull Key key, @Nullable CompoundBinaryTag additions) implements DialogAction {
         public static final StructCodec<DynamicCustom> CODEC = StructCodec.struct(
-                "key", Codec.KEY, DynamicCustom::key,
+                "id", Codec.KEY, DynamicCustom::key,
                 "additions", Codec.NBT_COMPOUND.optional(), DynamicCustom::additions,
                 DynamicCustom::new);
 
