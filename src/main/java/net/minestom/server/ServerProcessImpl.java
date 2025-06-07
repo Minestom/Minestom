@@ -6,6 +6,7 @@ import net.minestom.server.adventure.bossbar.BossBarManager;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.damage.DamageType;
 import net.minestom.server.entity.metadata.animal.ChickenVariant;
@@ -73,6 +74,7 @@ final class ServerProcessImpl implements ServerProcess {
     private final DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects;
 
     private final DynamicRegistry<ChatType> chatType;
+    private final DynamicRegistry<Dialog> dialog;
     private final DynamicRegistry<DimensionType> dimensionType;
     private final DynamicRegistry<Biome> biome;
     private final DynamicRegistry<DamageType> damageType;
@@ -125,6 +127,7 @@ final class ServerProcessImpl implements ServerProcess {
         this.enchantmentLocationEffects = LocationEffect.createDefaultRegistry();
 
         this.chatType = ChatType.createDefaultRegistry();
+        this.dialog = Dialog.createDefaultRegistry(this);
         this.dimensionType = DimensionType.createDefaultRegistry();
         this.biome = Biome.createDefaultRegistry();
         this.damageType = DamageType.createDefaultRegistry();
@@ -166,6 +169,11 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull ExceptionManager exception() {
         return exception;
+    }
+
+    @Override
+    public @NotNull DynamicRegistry<Dialog> dialog() {
+        return dialog;
     }
 
     @Override

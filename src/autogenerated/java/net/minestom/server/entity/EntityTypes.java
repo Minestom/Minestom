@@ -117,6 +117,8 @@ interface EntityTypes {
 
     EntityType GHAST = EntityTypeImpl.get("minecraft:ghast");
 
+    EntityType HAPPY_GHAST = EntityTypeImpl.get("minecraft:happy_ghast");
+
     EntityType GIANT = EntityTypeImpl.get("minecraft:giant");
 
     EntityType GLOW_ITEM_FRAME = EntityTypeImpl.get("minecraft:glow_item_frame");
