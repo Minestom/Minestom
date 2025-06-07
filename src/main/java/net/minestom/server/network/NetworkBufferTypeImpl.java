@@ -654,6 +654,28 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record LengthPrefixedType<T>(@NotNull Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
+            final byte[] componentData = NetworkBuffer.makeArray(b -> parent.write(b, value), buffer.registries());
+            buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final int length = buffer.read(VAR_INT);
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
+
+            final long availableBytes = buffer.readableBytes();
+            Check.argCondition(length > availableBytes, "Value is too long (length: {0}, available: {1})", length, availableBytes);
+            final T value = parent.read(buffer);
+            Check.argCondition(buffer.readableBytes() != availableBytes - length, "Value is too short (length: {0}, available: {1})", length, availableBytes);
+
+            return value;
+        }
+    }
+
     final class LazyType<T> implements NetworkBufferTypeImpl<T> {
         private final @NotNull Supplier<NetworkBuffer.@NotNull Type<T>> supplier;
         private Type<T> type;
