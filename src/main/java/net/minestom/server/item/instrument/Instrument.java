@@ -1,17 +1,21 @@
 package net.minestom.server.item.instrument;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public sealed interface Instrument extends ProtocolObject, Instruments permits InstrumentImpl {
+public sealed interface Instrument extends Holder.Direct<Instrument>, Instruments permits InstrumentImpl {
     @NotNull NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             SoundEvent.NETWORK_TYPE, Instrument::soundEvent,
             NetworkBuffer.FLOAT, Instrument::useDuration,
@@ -48,7 +52,7 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:instrument", REGISTRY_CODEC, Registry.Resource.INSTRUMENTS);
+        return DynamicRegistry.create(Key.key("minecraft:instrument"), REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
     }
 
     @NotNull SoundEvent soundEvent();

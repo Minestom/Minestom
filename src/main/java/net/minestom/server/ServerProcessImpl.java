@@ -20,7 +20,6 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.server.ServerTickMonitorEvent;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.InstanceManager;
@@ -105,7 +104,6 @@ final class ServerProcessImpl implements ServerProcess {
     private final BenchmarkManager benchmark;
     private final AdvancementManager advancement;
     private final BossBarManager bossBar;
-    private final TagManager tag;
 
     private final Server server;
 
@@ -158,7 +156,6 @@ final class ServerProcessImpl implements ServerProcess {
         this.benchmark = new BenchmarkManager();
         this.advancement = new AdvancementManager();
         this.bossBar = new BossBarManager();
-        this.tag = new TagManager();
 
         this.server = new Server(packetParser);
 
@@ -319,11 +316,6 @@ final class ServerProcessImpl implements ServerProcess {
     @Override
     public @NotNull BossBarManager bossBar() {
         return bossBar;
-    }
-
-    @Override
-    public @NotNull TagManager tag() {
-        return tag;
     }
 
     @Override

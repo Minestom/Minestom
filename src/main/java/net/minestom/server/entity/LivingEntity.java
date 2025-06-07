@@ -5,7 +5,6 @@ import net.kyori.adventure.sound.Sound.Source;
 import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.attribute.AttributeInstance;
@@ -30,7 +29,7 @@ import net.minestom.server.network.ConnectionState;
 import net.minestom.server.network.packet.server.LazyPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.player.PlayerConnection;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.thread.Acquirable;
@@ -157,7 +156,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         EventDispatcher.call(entityEquipEvent);
         return entityEquipEvent.getEquippedItem();
     }
-    
+
     /**
      * Updates the current attributes of the living entity based on
      *
@@ -314,7 +313,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
         remainingFireTicks = fireTicks;
     }
 
-    public boolean damage(@NotNull DynamicRegistry.Key<DamageType> type, float amount) {
+    public boolean damage(@NotNull RegistryKey<DamageType> type, float amount) {
         return damage(new Damage(type, null, null, null, amount));
     }
 
@@ -387,7 +386,7 @@ public class LivingEntity extends Entity implements EquipmentHandler {
      * @param type the type of damage
      * @return true if this entity is immune to the given type of damage
      */
-    public boolean isImmune(@NotNull DynamicRegistry.Key<DamageType> type) {
+    public boolean isImmune(@NotNull RegistryKey<DamageType> type) {
         if (type.equals(DamageType.OUT_OF_WORLD)) {
             return false;
         }

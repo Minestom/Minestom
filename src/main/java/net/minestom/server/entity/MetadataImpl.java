@@ -14,7 +14,6 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.Holder;
 import net.minestom.server.utils.Direction;
 import net.minestom.server.utils.collection.ObjectArray;
 import org.jetbrains.annotations.NotNull;
@@ -55,7 +54,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos
-        EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(new Holder.Reference<>(PaintingVariant.KEBAB)));
+        EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
         EMPTY_VALUES.set(TYPE_ARMADILLO_STATE, ArmadilloState(ArmadilloMeta.State.IDLE));
         EMPTY_VALUES.set(TYPE_VECTOR3, Vector3(Vec.ZERO));

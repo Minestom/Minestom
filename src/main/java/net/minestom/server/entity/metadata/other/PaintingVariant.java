@@ -6,16 +6,13 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public sealed interface PaintingVariant extends PaintingVariants permits PaintingVariantImpl {
+public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, PaintingVariants permits PaintingVariantImpl {
     @NotNull NetworkBuffer.Type<PaintingVariant> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.KEY, PaintingVariant::assetId,
             NetworkBuffer.INT, PaintingVariant::width,
@@ -31,8 +28,13 @@ public sealed interface PaintingVariant extends PaintingVariants permits Paintin
             "author", Codec.COMPONENT.optional(), PaintingVariant::author,
             PaintingVariant::create);
 
+    // For some unknown reason, the network type still uses a holder even though the codec does not.
+    // This appears to be a mistake since stopping inline values was explicitly mentioned as a change in snapshot notes.
+    // It would also not work on vanilla as serializing a painting entity with inline variant would fail.
+    // However, we don't serialize painting entities, so we can allow this :) Use at your own risk.
     @NotNull NetworkBuffer.Type<Holder<PaintingVariant>> NETWORK_TYPE = Holder.networkType(Registries::paintingVariant, REGISTRY_NETWORK_TYPE);
-    @NotNull Codec<Holder<PaintingVariant>> CODEC = Holder.codec(Registries::paintingVariant, REGISTRY_CODEC);
+    @NotNull Codec<Holder<PaintingVariant>> CODEC = RegistryKey.codec(Registries::paintingVariant)
+            .transform(key -> key, Holder::asKey);
 
     static @NotNull PaintingVariant create(
             @NotNull Key assetId,
@@ -54,7 +56,7 @@ public sealed interface PaintingVariant extends PaintingVariants permits Paintin
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<PaintingVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:painting_variant", REGISTRY_CODEC, Registry.Resource.PAINTING_VARIANTS);
+        return DynamicRegistry.create(Key.key("minecraft:painting_variant"), REGISTRY_CODEC, RegistryData.Resource.PAINTING_VARIANTS);
     }
 
     @NotNull Key assetId();

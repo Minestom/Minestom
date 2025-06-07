@@ -13,8 +13,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -139,15 +139,15 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<CowVariant>> CowVariant(@NotNull DynamicRegistry.Key<CowVariant> value) {
+    public static Entry<RegistryKey<CowVariant>> CowVariant(@NotNull RegistryKey<CowVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_COW_VARIANT, value, CowVariant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<WolfVariant>> WolfVariant(@NotNull DynamicRegistry.Key<WolfVariant> value) {
+    public static Entry<RegistryKey<WolfVariant>> WolfVariant(@NotNull RegistryKey<WolfVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_WOLF_VARIANT, value, WolfVariant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<WolfSoundVariant>> WolfSoundVariant(@NotNull DynamicRegistry.Key<WolfSoundVariant> value) {
+    public static Entry<RegistryKey<WolfSoundVariant>> WolfSoundVariant(@NotNull RegistryKey<WolfSoundVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_WOLF_SOUND_VARIANT, value, WolfSoundVariant.NETWORK_TYPE);
     }
 
@@ -155,11 +155,11 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogMeta.Variant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<PigVariant>> PigVariant(@NotNull DynamicRegistry.Key<PigVariant> value) {
+    public static Entry<RegistryKey<PigVariant>> PigVariant(@NotNull RegistryKey<PigVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PIG_VARIANT, value, PigVariant.NETWORK_TYPE);
     }
 
-    public static Entry<DynamicRegistry.Key<ChickenVariant>> ChickenVariant(@NotNull DynamicRegistry.Key<ChickenVariant> value) {
+    public static Entry<RegistryKey<ChickenVariant>> ChickenVariant(@NotNull RegistryKey<ChickenVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_CHICKEN_VARIANT, value, ChickenVariant.NETWORK_TYPE);
     }
 

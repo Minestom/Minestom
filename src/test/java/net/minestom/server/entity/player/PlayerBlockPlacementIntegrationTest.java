@@ -7,12 +7,12 @@ import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.instance.block.predicate.PropertiesPredicate;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,9 +52,9 @@ public class PlayerBlockPlacementIntegrationTest {
 
     private static Stream<Arguments> placeBlockFromAdventureModeParams() {
         return Stream.of(
-                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.ACACIA_STAIRS)))),
-                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.ACACIA_STAIRS), PropertiesPredicate.exact("facing", "south"), null))),
-                Arguments.of(Block.AMETHYST_BLOCK, new BlockPredicates(new BlockPredicate(new BlockTypeFilter.Blocks(Block.AMETHYST_BLOCK))))
+                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(Block.ACACIA_STAIRS))),
+                Arguments.of(Block.ACACIA_STAIRS.withProperty("facing", "south"), new BlockPredicates(new BlockPredicate(RegistryTag.direct(Block.ACACIA_STAIRS), PropertiesPredicate.exact("facing", "south"), null))),
+                Arguments.of(Block.AMETHYST_BLOCK, new BlockPredicates(new BlockPredicate(Block.AMETHYST_BLOCK)))
         );
     }
 

@@ -2,28 +2,16 @@ package net.minestom.server.potion;
 
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 record PotionTypeImpl(Key key, int id) implements PotionType {
-    private static final Registry.Container<PotionType> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_TYPES,
+    static final Registry<PotionType> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:potion_type"),
             (namespace, properties) -> new PotionTypeImpl(Key.key(namespace), properties.getInt("id")));
 
-    static PotionType get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static PotionType getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static PotionType getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<PotionType> values() {
-        return CONTAINER.values();
+    static @UnknownNullability PotionType get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

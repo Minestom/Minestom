@@ -45,7 +45,7 @@ public class ItemComponentReadWriteTest {
     @Test
     public void testReadWrite() throws IOException {
         var componentEntries = new ArrayList<>(EXTRA_CASES.entrySet());
-        try (InputStream is = ItemComponentReadWriteTest.class.getResourceAsStream("/items.json")) {
+        try (InputStream is = ItemComponentReadWriteTest.class.getResourceAsStream("/item.json")) {
             Check.notNull(is, "items.json not found");
 
             var object = GSON.fromJson(new InputStreamReader(is), JsonObject.class);
@@ -71,28 +71,28 @@ public class ItemComponentReadWriteTest {
             // This is pretty cursed but we need to serialize and reparse because the JsonPrimitive number implementation changes
             // When reading from a string it has LazilyParsedNumber which is NOT equal to `new JsonPrimitive(1)` for example.
             var actualParsed = GSON.fromJson(actual.toString(), JsonElement.class);
+            var inputParsed = GSON.fromJson(input.toString(), JsonElement.class);
 
             // Need to rewrite because adventure formats slightly different from vanilla.
-            assertEquals(input, actualParsed, () -> "\n--- " + component.name() + " (NBT) ---\n" +
+            assertEquals(inputParsed, actualParsed, () -> "\n--- " + component.name() + " (NBT) ---\n" +
                     "EXP: " + input + "\n" +
                     "ACT: " + actualParsed.toString());
 
             if (component.isSynced()) {
-                try {
-                    var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
-                    component.write(buffer, value);
-                    var comp2 = component.read(buffer);
-                    var expected2 = assertOk(component.encode(CODER, comp2));
-                    assertEquals(expected2, actual, () -> "\n--- " + component.name() + " (NETWORK) ---\n" +
-                            "EXP: " + expected2 + "\n" +
-                            "ACT: " + actual);
-                } catch (UnsupportedOperationException ignored) {
-                    // TODO(1.21.5) implement ObjectSet network type writer
-                }
+                var buffer = NetworkBuffer.resizableBuffer(MinecraftServer.process());
+                component.write(buffer, value);
+                var comp2 = component.read(buffer);
+                var expected2 = assertOk(component.encode(CODER, comp2));
+                assertEquals(expected2, actual, () -> "\n--- " + component.name() + " (NETWORK) ---\n" +
+                        "EXP: " + expected2 + "\n" +
+                        "ACT: " + actual);
             }
         } catch (AssertionError | Exception e) {
             throw new AssertionError(component.name() + " failed on \"" + input + "\"", e);
         }
+    }
+
+    private static void assertEqualsJson(@NotNull JsonElement expected, @NotNull JsonElement actual) {
 
     }
 }
