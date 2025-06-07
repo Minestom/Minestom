@@ -109,7 +109,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
             public @NotNull DynamicRegistry<Dialog> dialog() {
                 return registry;
             }
-        }, registry, resource, null);
+        }, registry, resource, null, codec);
         return registry;
     }
 
