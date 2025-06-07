@@ -22,6 +22,7 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -135,12 +136,12 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+    public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome.key());
+        var id = BIOME_REGISTRY.getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
@@ -215,13 +216,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+    public @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
-        DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
+        RegistryKey<Biome> biome = BIOME_REGISTRY.getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }

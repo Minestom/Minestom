@@ -14,8 +14,8 @@ import net.minestom.server.entity.metadata.villager.VillagerMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -196,7 +196,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Painting extends MetadataDef {
-        public static final Entry<Holder<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, new Holder.Reference<>(PaintingVariant.KEBAB));
+        public static final Entry<Holder<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingVariant.KEBAB);
     }
 
     public static final class ItemEntity extends MetadataDef {
@@ -382,17 +382,17 @@ public sealed class MetadataDef {
     }
 
     public static final class Chicken extends AgeableMob {
-        public static final Entry<DynamicRegistry.Key<ChickenVariant>> VARIANT = index(0, Metadata::ChickenVariant, ChickenVariant.TEMPERATE);
+        public static final Entry<RegistryKey<ChickenVariant>> VARIANT = index(0, Metadata::ChickenVariant, ChickenVariant.TEMPERATE);
     }
 
     public static final class Cow extends AgeableMob {
-        public static final Entry<DynamicRegistry.Key<CowVariant>> VARIANT = index(0, Metadata::CowVariant, CowVariant.TEMPERATE);
+        public static final Entry<RegistryKey<CowVariant>> VARIANT = index(0, Metadata::CowVariant, CowVariant.TEMPERATE);
     }
 
     public static final class Pig extends AgeableMob {
         public static final Entry<Boolean> HAS_SADDLE = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> BOOST_TIME = index(1, Metadata::VarInt, 0);
-        public static final Entry<DynamicRegistry.Key<PigVariant>> VARIANT = index(2, Metadata::PigVariant, PigVariant.TEMPERATE);
+        public static final Entry<RegistryKey<PigVariant>> VARIANT = index(2, Metadata::PigVariant, PigVariant.TEMPERATE);
     }
 
     public static final class Rabbit extends AgeableMob {
@@ -452,8 +452,8 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_BEGGING = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(1, Metadata::VarInt, 14);
         public static final Entry<Integer> ANGER_TIME = index(2, Metadata::VarInt, 0);
-        public static final Entry<DynamicRegistry.Key<WolfVariant>> VARIANT = index(3, Metadata::WolfVariant, WolfVariant.PALE);
-        public static final Entry<DynamicRegistry.Key<WolfSoundVariant>> SOUND_VARIANT = index(4, Metadata::WolfSoundVariant, WolfSoundVariant.CLASSIC);
+        public static final Entry<RegistryKey<WolfVariant>> VARIANT = index(3, Metadata::WolfVariant, WolfVariant.PALE);
+        public static final Entry<RegistryKey<WolfSoundVariant>> SOUND_VARIANT = index(4, Metadata::WolfSoundVariant, WolfSoundVariant.CLASSIC);
     }
 
     public static final class Parrot extends TameableAnimal {

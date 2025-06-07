@@ -1,9 +1,11 @@
 package net.minestom.server.entity;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public sealed interface EntityType extends StaticProtocolObject, EntityTypes permits EntityTypeImpl {
+public sealed interface EntityType extends StaticProtocolObject<EntityType>, EntityTypes permits EntityTypeImpl {
     NetworkBuffer.Type<EntityType> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(EntityType::fromId, EntityType::id);
     Codec<EntityType> CODEC = Codec.INT.transform(EntityType::fromId, EntityType::id);
 
@@ -21,7 +23,7 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
      * @return the entity registry
      */
     @Contract(pure = true)
-    @NotNull Registry.EntityEntry registry();
+    @NotNull RegistryData.EntityEntry registry();
 
     @Override
     default @NotNull Key key() {
@@ -42,18 +44,22 @@ public sealed interface EntityType extends StaticProtocolObject, EntityTypes per
     }
 
     static @NotNull Collection<@NotNull EntityType> values() {
-        return EntityTypeImpl.values();
+        return EntityTypeImpl.REGISTRY.values();
     }
 
-    static EntityType fromKey(@NotNull String key) {
-        return EntityTypeImpl.getSafe(key);
+    static @Nullable EntityType fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
-    static EntityType fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+    static @Nullable EntityType fromKey(@NotNull Key key) {
+        return EntityTypeImpl.REGISTRY.get(key);
     }
 
     static @Nullable EntityType fromId(int id) {
-        return EntityTypeImpl.getId(id);
+        return EntityTypeImpl.REGISTRY.get(id);
+    }
+
+    static @NotNull Registry<EntityType> staticRegistry() {
+        return EntityTypeImpl.REGISTRY;
     }
 }

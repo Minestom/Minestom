@@ -74,6 +74,7 @@ import net.minestom.server.network.player.GameProfile;
 import net.minestom.server.network.player.PlayerConnection;
 import net.minestom.server.recipe.RecipeManager;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.scoreboard.BelowNameTag;
 import net.minestom.server.scoreboard.Team;
 import net.minestom.server.snapshot.EntitySnapshot;
@@ -286,7 +287,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         this.pendingInstance = null;
 
         this.removed = false;
-        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType().key());
+        this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(spawnInstance.getDimensionType());
 
         final JoinGamePacket joinGamePacket = new JoinGamePacket(
                 getEntityId(), this.hardcore, List.of(), 0,
@@ -1652,7 +1653,7 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
      *
      * @param dimensionType the new player dimension
      */
-    protected void sendDimension(@NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull String dimensionName) {
+    protected void sendDimension(@NotNull RegistryKey<DimensionType> dimensionType, @NotNull String dimensionName) {
         Check.argCondition(instance.getDimensionName().equals(dimensionName),
                 "The dimension needs to be different than the current one!");
         this.dimensionTypeId = DIMENSION_TYPE_REGISTRY.getId(dimensionType);

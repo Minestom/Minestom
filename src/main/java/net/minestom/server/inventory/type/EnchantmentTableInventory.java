@@ -7,6 +7,7 @@ import net.minestom.server.inventory.InventoryProperty;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -76,7 +77,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @return the enchantment shown in the slot, null if it is hidden
      */
-    public DynamicRegistry.Key<Enchantment> getEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot) {
+    public RegistryKey<Enchantment> getEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot) {
         final int id = enchantmentShown[enchantmentSlot.ordinal()];
         if (id == -1) return null;
         return ENCHANTMENT_REGISTRY.getKey(id);
@@ -90,7 +91,7 @@ public class EnchantmentTableInventory extends Inventory {
      * @param enchantmentSlot the enchantment slot
      * @param enchantment     the enchantment
      */
-    public void setEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot, @Nullable DynamicRegistry.Key<Enchantment> enchantment) {
+    public void setEnchantmentShown(@NotNull EnchantmentSlot enchantmentSlot, @Nullable RegistryKey<Enchantment> enchantment) {
         final short id = enchantment == null ? -1 : (short) ENCHANTMENT_REGISTRY.getId(enchantment);
         switch (enchantmentSlot) {
             case TOP -> sendProperty(InventoryProperty.ENCHANTMENT_TABLE_ENCH_ID_TOP, id);

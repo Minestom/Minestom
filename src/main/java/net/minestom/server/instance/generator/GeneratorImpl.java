@@ -7,6 +7,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
@@ -236,7 +237,7 @@ public final class GeneratorImpl {
                                       GenSection genSection, boolean fork) implements GenericModifier {
 
         @Override
-        public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+        public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
@@ -285,7 +286,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fillBiome(@NotNull DynamicRegistry.Key<Biome> biome) {
+        public void fillBiome(@NotNull RegistryKey<Biome> biome) {
             if (fork) throw new IllegalStateException("Cannot modify biomes of a fork");
             final int id = biomeRegistry.getId(biome);
             Check.argCondition(id == -1, "Biome has not been registered: {0}", biome);
@@ -322,7 +323,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+        public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
             checkBorder(x, y, z);
             final GenerationUnit section = findAbsoluteSection(x, y, z);
             y -= start.y();
@@ -374,7 +375,7 @@ public final class GeneratorImpl {
         }
 
         @Override
-        public void fillBiome(@NotNull DynamicRegistry.Key<Biome> biome) {
+        public void fillBiome(@NotNull RegistryKey<Biome> biome) {
             for (GenerationUnit section : sections) {
                 section.modifier().fillBiome(biome);
             }

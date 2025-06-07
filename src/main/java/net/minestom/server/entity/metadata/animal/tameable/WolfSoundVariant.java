@@ -1,18 +1,20 @@
 package net.minestom.server.entity.metadata.animal.tameable;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfSoundVariantImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<WolfSoundVariant>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::wolfSoundVariant, false);
-    @NotNull Codec<DynamicRegistry.Key<WolfSoundVariant>> CODEC = Codec.RegistryKey(Registries::wolfSoundVariant);
+    @NotNull NetworkBuffer.Type<RegistryKey<WolfSoundVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::wolfSoundVariant);
+    @NotNull Codec<RegistryKey<WolfSoundVariant>> CODEC = RegistryKey.codec(Registries::wolfSoundVariant);
 
     Codec<WolfSoundVariant> REGISTRY_CODEC = StructCodec.struct(
             "ambient_sound", SoundEvent.CODEC, WolfSoundVariant::ambientSound,
@@ -30,7 +32,7 @@ public sealed interface WolfSoundVariant extends WolfSoundVariants permits WolfS
      */
     @ApiStatus.Internal
     static DynamicRegistry<WolfSoundVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:wolf_sound_variant", REGISTRY_CODEC, Registry.Resource.WOLF_SOUND_VARIANTS);
+        return DynamicRegistry.create(Key.key("minecraft:wolf_sound_variant"), REGISTRY_CODEC, RegistryData.Resource.WOLF_SOUND_VARIANTS);
     }
 
     static @NotNull WolfSoundVariant create(

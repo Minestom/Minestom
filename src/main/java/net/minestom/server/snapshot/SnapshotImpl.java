@@ -8,7 +8,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.utils.collection.IntMappedArray;
@@ -46,7 +46,7 @@ public final class SnapshotImpl {
     }
 
     public record Instance(AtomicReference<ServerSnapshot> serverRef,
-                           DynamicRegistry.Key<DimensionType> dimensionType, long worldAge, long time,
+                           RegistryKey<DimensionType> dimensionType, long worldAge, long time,
                            Map<Long, AtomicReference<ChunkSnapshot>> chunksMap,
                            int[] entitiesIds,
                            TagReadable tagReadable) implements InstanceSnapshot {
@@ -101,11 +101,11 @@ public final class SnapshotImpl {
         }
 
         @Override
-        public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+        public @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
             final Section section = sections[globalToChunk(y) - minSection];
             final int id = section.biomePalette()
                     .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
-            DynamicRegistry.Key<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
+            RegistryKey<Biome> key = MinecraftServer.getBiomeRegistry().getKey(id);
             Check.notNull(key, "Biome with id {0} is not registered", id);
             return key;
         }
