@@ -1,21 +1,20 @@
 package net.minestom.server.entity.pathfinding.followers;
 
-import net.minestom.server.collision.CollisionUtils;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.attribute.Attribute;
+import net.minestom.server.entity.pathfinding.PathWalker;
 import net.minestom.server.utils.position.PositionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class GroundNodeFollower implements NodeFollower {
-    private final Entity entity;
+    private final PathWalker pathWalker;
 
-    public GroundNodeFollower(@NotNull Entity entity) {
-        this.entity = entity;
+    public GroundNodeFollower(@NotNull PathWalker pathWalker) {
+        this.pathWalker = pathWalker;
     }
 
     /**
@@ -27,7 +26,7 @@ public class GroundNodeFollower implements NodeFollower {
      * @param speed     define how far the entity will move
      */
     public void moveTowards(@NotNull Point direction, double speed, @NotNull Point lookAt) {
-        final Pos position = entity.getPosition();
+        final Pos position = pathWalker.getPosition();
         final double dx = direction.x() - position.x();
         final double dy = direction.y() - position.y();
         final double dz = direction.z() - position.z();
@@ -48,29 +47,28 @@ public class GroundNodeFollower implements NodeFollower {
         final float yaw = PositionUtils.getLookYaw(dxLook, dzLook);
         final float pitch = PositionUtils.getLookPitch(dxLook, dyLook, dzLook);
 
-        final var physicsResult = CollisionUtils.handlePhysics(entity, new Vec(speedX, 0, speedZ));
-        this.entity.refreshPosition(Pos.fromPoint(physicsResult.newPosition()).withView(yaw, pitch));
+        pathWalker.updateNewPosition(new Vec(speedX, 0, speedZ), yaw, pitch);
     }
 
     @Override
     public void jump(@Nullable Point point, @Nullable Point target) {
-        if (entity.isOnGround()) {
+        if (pathWalker.isOnGround()) {
             jump(4f);
         }
     }
 
     @Override
     public boolean isAtPoint(@NotNull Point point) {
-        return entity.getPosition().sameBlock(point);
+        return pathWalker.getPosition().sameBlock(point);
     }
 
     public void jump(float height) {
-        this.entity.setVelocity(new Vec(0, height * 2.5f, 0));
+        this.pathWalker.setVelocity(new Vec(0, height * 2.5f, 0));
     }
 
     @Override
     public double movementSpeed() {
-        if (entity instanceof LivingEntity living) {
+        if (pathWalker instanceof LivingEntity living) {
             return living.getAttribute(Attribute.MOVEMENT_SPEED).getValue();
         }
 

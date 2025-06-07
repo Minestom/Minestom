@@ -36,24 +36,24 @@ public class ClosestEntityTargetTest {
         assertEquals(5, instance.getEntities().size(), "Not all entities are in the instance");
 
         assertNull(
-                new ClosestEntityTarget(self, 1, e -> true).findTarget(),
+                new ClosestEntityTarget(1, e -> true).findTargetEntity(self),
                 "Entity targets it self"
         );
 
         assertEquals(spider,
-                new ClosestEntityTarget(self, 20, e -> e.getEntityType() == EntityType.SPIDER).findTarget(),
+                new ClosestEntityTarget(20, e -> e.getEntityType() == EntityType.SPIDER).findTargetEntity(self),
                 "The closest spider was not selected"
         );
 
         assertNull(
-                new ClosestEntityTarget(self, 2, e -> e.getEntityType() == EntityType.SPIDER).findTarget(),
+                new ClosestEntityTarget(2, e -> e.getEntityType() == EntityType.SPIDER).findTargetEntity(self),
                 "Range distance is not being considered"
         );
 
         zombie.remove();
 
         assertNull(
-                new ClosestEntityTarget(self, 20, e -> e.getEntityType() == EntityType.ZOMBIE).findTarget(),
+                new ClosestEntityTarget(20, e -> e.getEntityType() == EntityType.ZOMBIE).findTargetEntity(self),
                 "Removed entities are included in target selection"
         );
 

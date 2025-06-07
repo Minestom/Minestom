@@ -9,9 +9,9 @@ public class ZombieCreature extends EntityCreature {
 
     public ZombieCreature() {
         super(EntityType.ZOMBIE);
-        addAIGroup(
+        setAIGroup(
                 new EntityAIGroupBuilder()
-                        .addGoalSelector(new RandomLookAroundGoal(this, 20))
+                        .addAIGoal(new RandomLookAroundGoal(this, 20))
                         .build()
         );
     }

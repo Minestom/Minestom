@@ -4,13 +4,15 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
-import net.minestom.server.entity.ai.GoalSelector;
+import net.minestom.server.entity.ai.AIGoal;
+import net.minestom.server.entity.ai.target.ClosestEntityTarget;
 import net.minestom.server.entity.pathfinding.Navigator;
 import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
+import java.util.List;
 
-public class FollowTargetGoal extends GoalSelector {
+public class FollowTargetGoal extends AIGoal {
     private final Duration pathDuration;
     private long lastUpdateTime = 0;
     private boolean forceEnd = false;
@@ -25,14 +27,14 @@ public class FollowTargetGoal extends GoalSelector {
      * @param pathDuration   the time between each path update (to check if the target moved)
      */
     public FollowTargetGoal(@NotNull EntityCreature entityCreature, @NotNull Duration pathDuration) {
-        super(entityCreature);
+        super(entityCreature, List.of(new ClosestEntityTarget(10, e -> true)), 0);
         this.pathDuration = pathDuration;
     }
 
     @Override
     public boolean shouldStart() {
         Entity target = entityCreature.getTarget();
-        if (target == null) target = findTarget();
+        if (target == null) target = findTargetEntity();
         if (target == null) return false;
         final boolean result = target.getPosition().distanceSquared(entityCreature.getPosition()) >= 2 * 2;
         if (result) {

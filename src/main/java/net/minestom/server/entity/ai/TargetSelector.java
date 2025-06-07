@@ -1,5 +1,6 @@
 package net.minestom.server.entity.ai;
 
+import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.EntityCreature;
 import org.jetbrains.annotations.NotNull;
@@ -9,13 +10,7 @@ import org.jetbrains.annotations.Nullable;
  * The target selector is called each time the entity receives an "attack" instruction
  * without having a target.
  */
-public abstract class TargetSelector {
-
-    protected final EntityCreature entityCreature;
-
-    public TargetSelector(@NotNull EntityCreature entityCreature) {
-        this.entityCreature = entityCreature;
-    }
+public interface TargetSelector {
 
     /**
      * Finds the target.
@@ -26,15 +21,14 @@ public abstract class TargetSelector {
      * @return the target, null if not any
      */
     @Nullable
-    public abstract Entity findTarget();
+    Entity findTargetEntity(@NotNull EntityCreature entityCreature);
 
     /**
-     * Gets the entity linked to this target selector.
-     *
-     * @return the entity
+     * Finds the target position
+     * <p>
+     * Returning null means that this target selector is not meant to find positions, or did not find a valid positions, and the next {@link TargetSelector} will be called until the end of the list or a valid position is found.
+     * @return The position found, if valid
      */
-    @NotNull
-    public EntityCreature getEntityCreature() {
-        return entityCreature;
-    }
+    @Nullable
+    Pos findTargetPosition(@NotNull EntityCreature entityCreature);
 }
