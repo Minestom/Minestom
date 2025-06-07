@@ -389,7 +389,6 @@ public final class ConnectionManager {
         // The following are the registries which contain tags used by the vanilla client.
         // We don't care about registries unused by the client.
         final Registries registries = MinecraftServer.process();
-        entries.add(registries.biome().tagRegistry());
         entries.add(registries.bannerPattern().tagRegistry());
         entries.add(registries.biome().tagRegistry());
         entries.add(registries.blocks().tagRegistry());
