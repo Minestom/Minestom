@@ -6,8 +6,8 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.ThrowingFunction;
 import net.minestom.server.utils.UUIDUtils;
 import net.minestom.server.utils.Unit;
@@ -100,16 +100,16 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return new CodecImpl.ForwardRefImpl<>(func);
     }
 
-    static <T> @NotNull Codec<DynamicRegistry.Key<T>> RegistryKey(@NotNull Registries.Selector<T> selector) {
-        return new CodecImpl.RegistryKeyImpl<>(selector);
-    }
-
     static <T> @NotNull StructCodec<T> RegistryTaggedUnion(
             @NotNull Registries.Selector<StructCodec<? extends T>> registrySelector,
             @NotNull Function<T, StructCodec<? extends T>> serializerGetter,
             @NotNull String key
     ) {
         return new CodecImpl.RegistryTaggedUnionImpl<>(registrySelector, serializerGetter, key);
+    }
+
+    static <L, R> @NotNull Codec<Either<L, R>> Either(@NotNull Codec<L> leftCodec, @NotNull Codec<R> rightCodec) {
+        return new CodecImpl.EitherImpl<>(leftCodec, rightCodec);
     }
 
     default @NotNull Codec<@Nullable T> optional() {
@@ -135,6 +135,10 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     default @NotNull Codec<List<T>> listOrSingle(int maxSize) {
         return Codec.this.list(maxSize).orElse(Codec.this.transform(
                 List::of, list -> list.isEmpty() ? null : list.getFirst()));
+    }
+
+    default @NotNull Codec<List<T>> listOrSingle() {
+        return this.listOrSingle(Integer.MAX_VALUE);
     }
 
     default @NotNull Codec<Set<T>> set(int maxSize) {

@@ -1,12 +1,16 @@
 package net.minestom.server.item.armor;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.Material;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.*;
+import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -14,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterialImpl {
+public sealed interface TrimMaterial extends Holder.Direct<TrimMaterial>, TrimMaterials permits TrimMaterialImpl {
     @NotNull NetworkBuffer.Type<TrimMaterial> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
             NetworkBuffer.STRING, TrimMaterial::assetName,
             NetworkBuffer.STRING.mapValue(NetworkBuffer.STRING), TrimMaterial::overrideArmorMaterials,
@@ -48,7 +52,7 @@ public sealed interface TrimMaterial extends ProtocolObject permits TrimMaterial
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimMaterial> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:trim_material", REGISTRY_CODEC, Registry.Resource.TRIM_MATERIALS);
+        return DynamicRegistry.create(Key.key("minecraft:trim_material"), REGISTRY_CODEC, RegistryData.Resource.TRIM_MATERIALS);
     }
 
     @NotNull String assetName();

@@ -1,32 +1,31 @@
 package net.minestom.server.utils.block;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.attribute.Attribute;
-import net.minestom.server.gamedata.tags.Tag;
-import net.minestom.server.gamedata.tags.Tag.BasicType;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.item.ItemStack;
+import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Tool;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 public class BlockBreakCalculation {
 
     public static final int UNBREAKABLE = -1;
-    private static final Tag WATER_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.FLUIDS, "minecraft:water"));
+    private static final RegistryTag<Fluid> WATER_TAG = Fluid.staticRegistry().getOrCreateTag(TagKey.ofHash("#minecraft:water"));
     // The vanilla client checks for bamboo breaking speed with item instanceof SwordItem.
     // We could either check all sword ID's, or the sword tag.
     // Since tags are immutable, checking the tag seems easier to understand
-    private static final Tag SWORD_TAG = Objects.requireNonNull(MinecraftServer.getTagManager().getTag(BasicType.ITEMS, "minecraft:swords"));
+    private static final RegistryTag<Material> SWORD_TAG = Material.staticRegistry().getOrCreateTag(TagKey.ofHash("#minecraft:swords"));
 
     /**
      * Calculates the block break time in ticks
@@ -41,7 +40,7 @@ public class BlockBreakCalculation {
         // Taken from minecraft wiki Breaking#Calculation
         // https://minecraft.wiki/w/Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
-        Registry.BlockEntry registry = block.registry();
+        RegistryData.BlockEntry registry = block.registry();
         double blockHardness = registry.hardness();
         if (blockHardness == -1) {
             // Bedrock, barrier, and unbreakable blocks
@@ -50,7 +49,7 @@ public class BlockBreakCalculation {
         ItemStack item = player.getItemInMainHand();
         // Bamboo is hard-coded in client
         if (block.id() == Block.BAMBOO.id() || block.id() == Block.BAMBOO_SAPLING.id()) {
-            if (SWORD_TAG.contains(item.material().key())) {
+            if (SWORD_TAG.contains(item.material())) {
                 return 0;
             }
         }
@@ -116,7 +115,8 @@ public class BlockBreakCalculation {
         Pos eye = player.getPosition().add(0, player.getEyeHeight(), 0);
         Block block = instance.getBlock(eye);
 
-        if (!WATER_TAG.contains(block.key())) {
+        final Fluid fluid = Fluid.fromKey(block.key());
+        if (fluid == null || !WATER_TAG.contains(fluid)) {
             return false;
         }
         float fluidHeight = getFluidHeight(player.getInstance(), x, y, z, block);

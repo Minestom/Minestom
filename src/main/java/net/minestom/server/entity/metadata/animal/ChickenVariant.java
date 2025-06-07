@@ -6,7 +6,8 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,33 +18,8 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
             "asset_id", Codec.KEY, ChickenVariant::assetId,
             ChickenVariantImpl::new);
 
-    // The type of a chicken variant is an EitherHolder, except that the Holder is only a reference and does not add 1 to the value
-    // Effectively this type just allows decoding as a Key or an ID in the registry. Its implemented inline here
-    // because this pattern is not currently used anywhere else to my(matt) knowledge.
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> NETWORK_TYPE = new NetworkBuffer.Type<>() {
-        private final NetworkBuffer.Type<DynamicRegistry.Key<ChickenVariant>> idCodec = NetworkBuffer.RegistryKey(Registries::chickenVariant, false);
-
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<ChickenVariant> value) {
-            final var registries = buffer.registries();
-            final int id = registries != null ? registries.chickenVariant().getId(value) : -1;
-            if (id == -1) {
-                buffer.write(NetworkBuffer.BOOLEAN, false);
-                buffer.write(NetworkBuffer.KEY, value.key());
-            } else {
-                buffer.write(NetworkBuffer.BOOLEAN, true);
-                buffer.write(NetworkBuffer.VAR_INT, id);
-            }
-        }
-
-        @Override
-        public DynamicRegistry.Key<ChickenVariant> read(@NotNull NetworkBuffer buffer) {
-            if (buffer.read(NetworkBuffer.BOOLEAN))
-                return buffer.read(idCodec);
-            return DynamicRegistry.Key.of(buffer.read(NetworkBuffer.KEY));
-        }
-    };
-    @NotNull Codec<DynamicRegistry.Key<ChickenVariant>> CODEC = Codec.RegistryKey(Registries::chickenVariant);
+    @NotNull NetworkBuffer.Type<RegistryKey<ChickenVariant>> NETWORK_TYPE = RegistryKey.networkType(Registries::chickenVariant);
+    @NotNull Codec<RegistryKey<ChickenVariant>> CODEC = RegistryKey.codec(Registries::chickenVariant);
 
     static @NotNull ChickenVariant create(@NotNull Model model, @NotNull Key assetId) {
         return new ChickenVariantImpl(model, assetId);
@@ -56,7 +32,7 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:chicken_variant", REGISTRY_CODEC, Registry.Resource.CHICKEN_VARIANTS);
+        return DynamicRegistry.create(Key.key("minecraft:chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
     }
 
     @NotNull Model model();

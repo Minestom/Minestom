@@ -4,13 +4,13 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Integer> enchantments) {
+public record EnchantmentList(@NotNull Map<RegistryKey<Enchantment>, Integer> enchantments) {
     public static final EnchantmentList EMPTY = new EnchantmentList(Map.of());
 
     public static final NetworkBuffer.Type<EnchantmentList> NETWORK_TYPE = NetworkBufferTemplate.template(
@@ -23,26 +23,26 @@ public record EnchantmentList(@NotNull Map<DynamicRegistry.Key<Enchantment>, Int
         enchantments = Map.copyOf(enchantments);
     }
 
-    public EnchantmentList(@NotNull DynamicRegistry.Key<Enchantment> enchantment, int level) {
+    public EnchantmentList(@NotNull RegistryKey<Enchantment> enchantment, int level) {
         this(Map.of(enchantment, level));
     }
 
-    public boolean has(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
+    public boolean has(@NotNull RegistryKey<Enchantment> enchantment) {
         return enchantments.containsKey(enchantment);
     }
 
-    public int level(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
+    public int level(@NotNull RegistryKey<Enchantment> enchantment) {
         return enchantments.getOrDefault(enchantment, 0);
     }
 
-    public @NotNull EnchantmentList with(@NotNull DynamicRegistry.Key<Enchantment> enchantment, int level) {
-        Map<DynamicRegistry.Key<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
+    public @NotNull EnchantmentList with(@NotNull RegistryKey<Enchantment> enchantment, int level) {
+        Map<RegistryKey<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.put(enchantment, level);
         return new EnchantmentList(newEnchantments);
     }
 
-    public @NotNull EnchantmentList remove(@NotNull DynamicRegistry.Key<Enchantment> enchantment) {
-        Map<DynamicRegistry.Key<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
+    public @NotNull EnchantmentList remove(@NotNull RegistryKey<Enchantment> enchantment) {
+        Map<RegistryKey<Enchantment>, Integer> newEnchantments = new HashMap<>(enchantments);
         newEnchantments.remove(enchantment);
         return new EnchantmentList(newEnchantments);
     }

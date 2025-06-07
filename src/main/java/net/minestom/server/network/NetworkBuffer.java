@@ -8,9 +8,9 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityPose;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.utils.Direction;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.crypto.KeyUtils;
 import org.jetbrains.annotations.NotNull;
@@ -79,10 +79,6 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
     Type<Direction> DIRECTION = Enum(Direction.class);
     Type<EntityPose> POSE = Enum(EntityPose.class);
 
-    static <T> @NotNull Type<DynamicRegistry.Key<T>> RegistryKey(@NotNull Function<Registries, DynamicRegistry<T>> selector, boolean holder) {
-        return new NetworkBufferTypeImpl.RegistryTypeType<>(selector, holder);
-    }
-
     // Combinators
 
     static <E extends Enum<E>> @NotNull Type<E> Enum(@NotNull Class<E> enumClass) {
@@ -110,7 +106,12 @@ public sealed interface NetworkBuffer permits NetworkBufferImpl {
         return new NetworkBufferTypeImpl.TypedNbtType<>(serializer);
     }
 
-    <T> void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
+    static <L, R> @NotNull Type<Either<L, R>> Either(@NotNull NetworkBuffer.Type<L> left, @NotNull NetworkBuffer.Type<R> right) {
+        return new NetworkBufferTypeImpl.EitherType<>(left, right);
+    }
+
+    <T>
+    void write(@NotNull Type<T> type, @UnknownNullability T value) throws IndexOutOfBoundsException;
 
     <T> @UnknownNullability T read(@NotNull Type<T> type) throws IndexOutOfBoundsException;
 

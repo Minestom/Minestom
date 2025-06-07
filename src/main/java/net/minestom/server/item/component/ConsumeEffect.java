@@ -2,12 +2,12 @@ package net.minestom.server.item.component;
 
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.potion.CustomPotionEffect;
 import net.minestom.server.potion.PotionEffect;
-import net.minestom.server.registry.ObjectSet;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.validate.Check;
@@ -43,12 +43,12 @@ public sealed interface ConsumeEffect {
         }
     }
 
-    record RemoveEffects(@NotNull ObjectSet<PotionEffect> effects) implements ConsumeEffect {
+    record RemoveEffects(@NotNull RegistryTag<PotionEffect> effects) implements ConsumeEffect {
         public static final NetworkBuffer.Type<RemoveEffects> NETWORK_TYPE = NetworkBufferTemplate.template(
-                ObjectSet.networkType(Tag.BasicType.POTION_EFFECTS), RemoveEffects::effects,
+                RegistryTag.networkType(Registries::potionEffect), RemoveEffects::effects,
                 RemoveEffects::new);
         public static final StructCodec<RemoveEffects> CODEC = StructCodec.struct(
-                "effects", ObjectSet.codec(Tag.BasicType.POTION_EFFECTS), RemoveEffects::effects,
+                "effects", RegistryTag.codec(Registries::potionEffect), RemoveEffects::effects,
                 RemoveEffects::new);
     }
 

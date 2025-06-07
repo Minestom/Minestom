@@ -3,9 +3,10 @@ package net.minestom.server.item.component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.predicate.BlockTypeFilter;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,16 +30,16 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
             "can_destroy_blocks_in_creative", Codec.BOOLEAN.optional(true), Tool::canDestroyBlocksInCreative,
             Tool::new);
 
-    public record Rule(@NotNull BlockTypeFilter blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
+    public record Rule(@NotNull RegistryTag<Block> blocks, @Nullable Float speed, @Nullable Boolean correctForDrops) {
 
         public static final NetworkBuffer.Type<Rule> NETWORK_TYPE = NetworkBufferTemplate.template(
-                BlockTypeFilter.NETWORK_TYPE, Rule::blocks,
+                RegistryTag.networkType(Registries::blocks), Rule::blocks,
                 NetworkBuffer.FLOAT.optional(), Rule::speed,
                 NetworkBuffer.BOOLEAN.optional(), Rule::correctForDrops,
                 Rule::new
         );
         public static final Codec<Rule> CODEC = StructCodec.struct(
-                "blocks", BlockTypeFilter.CODEC, Rule::blocks,
+                "blocks", RegistryTag.codec(Registries::blocks), Rule::blocks,
                 "speed", Codec.FLOAT.optional(), Rule::speed,
                 "correct_for_drops", Codec.BOOLEAN.optional(), Rule::correctForDrops,
                 Rule::new);
@@ -46,7 +47,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
 
     public boolean isCorrectForDrops(@NotNull Block block) {
         for (Rule rule : rules) {
-            if (rule.correctForDrops != null && rule.blocks.test(block)) {
+            if (rule.correctForDrops != null && rule.blocks.contains(block)) {
                 // First matching rule is picked, other rules are ignored
                 return rule.correctForDrops;
             }
@@ -56,7 +57,7 @@ public record Tool(@NotNull List<Rule> rules, float defaultMiningSpeed, int dama
 
     public float getSpeed(@NotNull Block block) {
         for (Rule rule : rules) {
-            if (rule.speed != null && rule.blocks.test(block)) {
+            if (rule.speed != null && rule.blocks.contains(block)) {
                 // First matching rule is picked, other rules are ignored
                 return rule.speed;
             }

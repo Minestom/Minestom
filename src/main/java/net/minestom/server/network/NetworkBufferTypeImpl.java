@@ -11,9 +11,9 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
@@ -21,7 +21,9 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.UTFDataFormatException;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
@@ -697,6 +699,32 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
+    record EitherType<L, R>(
+            @NotNull NetworkBuffer.Type<L> left,
+            @NotNull NetworkBuffer.Type<R> right
+    ) implements NetworkBuffer.Type<Either<L, R>> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, Either<L, R> value) {
+            switch (value) {
+                case Either.Left(L leftValue) -> {
+                    buffer.write(BOOLEAN, true);
+                    buffer.write(left, leftValue);
+                }
+                case Either.Right(R rightValue) -> {
+                    buffer.write(BOOLEAN, false);
+                    buffer.write(right, rightValue);
+                }
+            }
+        }
+
+        @Override
+        public Either<L, R> read(@NotNull NetworkBuffer buffer) {
+            if (buffer.read(BOOLEAN))
+                return Either.left(buffer.read(left));
+            return Either.right(buffer.read(right));
+        }
+    }
+
     record TransformType<T, S>(@NotNull Type<T> parent, @NotNull Function<T, S> to,
                                @NotNull Function<S, T> from) implements NetworkBufferTypeImpl<S> {
         @Override
@@ -801,36 +829,6 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             var serializer = serializers.apply(key);
             if (serializer == null) throw new UnsupportedOperationException("Unrecognized type: " + key);
             return serializer.read(buffer);
-        }
-    }
-
-    record RegistryTypeType<T>(
-            @NotNull Function<Registries, DynamicRegistry<T>> selector,
-            boolean holder
-    ) implements NetworkBufferTypeImpl<DynamicRegistry.Key<T>> {
-        @Override
-        public void write(@NotNull NetworkBuffer buffer, DynamicRegistry.Key<T> value) {
-            final Registries registries = impl(buffer).registries;
-            Check.stateCondition(registries == null, "Buffer does not have registries");
-            final DynamicRegistry<T> registry = selector.apply(registries);
-            // "Holder" references can either be a registry entry or the entire object itself. The id is zero if the
-            // entire object follows, but we only support registry objects currently so always offset by 1.
-            // FIXME: Support sending the entire registry object instead of an ID reference.
-            final int id = registry.getId(value) + (holder ? 1 : 0);
-            Check.argCondition(id == -1, "Key is not registered: {0} > {1}", registry, value);
-            buffer.write(VAR_INT, id);
-        }
-
-        @Override
-        public DynamicRegistry.Key<T> read(@NotNull NetworkBuffer buffer) {
-            final Registries registries = impl(buffer).registries;
-            Check.stateCondition(registries == null, "Buffer does not have registries");
-            DynamicRegistry<T> registry = selector.apply(registries);
-            // See note above about holder references.
-            final int id = buffer.read(VAR_INT) + (holder ? -1 : 0);
-            final DynamicRegistry.Key<T> key = registry.getKey(id);
-            Check.argCondition(key == null, "No such ID in registry: {0} > {1}", registry, id);
-            return key;
         }
     }
 

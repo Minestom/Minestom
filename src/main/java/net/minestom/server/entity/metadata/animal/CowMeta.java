@@ -6,6 +6,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +19,7 @@ public class CowMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#COW_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull DynamicRegistry.Key<CowVariant> getVariant() {
+    public @NotNull RegistryKey<CowVariant> getVariant() {
         return metadata.get(MetadataDef.Cow.VARIANT);
     }
 
@@ -26,7 +27,7 @@ public class CowMeta extends AnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#COW_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull DynamicRegistry.Key<CowVariant> variant) {
+    public void setVariant(@NotNull RegistryKey<CowVariant> variant) {
         metadata.set(MetadataDef.Cow.VARIANT, variant);
     }
 
@@ -42,7 +43,7 @@ public class CowMeta extends AnimalMeta {
     @SuppressWarnings("unchecked")
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
         if (component == DataComponents.COW_VARIANT)
-            setVariant((DynamicRegistry.Key<CowVariant>) value);
+            setVariant((RegistryKey<CowVariant>) value);
         else super.set(component, value);
     }
 

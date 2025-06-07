@@ -1,22 +1,23 @@
 package net.minestom.server.entity.damage;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
-public sealed interface DamageType extends ProtocolObject, DamageTypes permits DamageTypeImpl {
+public sealed interface DamageType extends DamageTypes permits DamageTypeImpl {
     @NotNull Codec<DamageType> REGISTRY_CODEC = StructCodec.struct(
             "exhaustion", Codec.FLOAT, DamageType::exhaustion,
             "message_id", Codec.STRING, DamageType::messageId,
             "scaling", Codec.STRING, DamageType::scaling,
             DamageType::create);
 
-    @NotNull Codec<DynamicRegistry.Key<DamageType>> CODEC = Codec.RegistryKey(Registries::damageType);
+    @NotNull Codec<RegistryKey<DamageType>> CODEC = RegistryKey.codec(Registries::damageType);
 
     static @NotNull DamageType create(
             float exhaustion,
@@ -37,7 +38,7 @@ public sealed interface DamageType extends ProtocolObject, DamageTypes permits D
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DamageType> createDefaultRegistry() {
-        return DynamicRegistry.create("minecraft:damage_type", REGISTRY_CODEC, Registry.Resource.DAMAGE_TYPES);
+        return DynamicRegistry.create(Key.key("minecraft:damage_type"), REGISTRY_CODEC, RegistryData.Resource.DAMAGE_TYPES);
     }
 
     float exhaustion();

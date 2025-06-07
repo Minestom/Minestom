@@ -6,6 +6,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
@@ -32,7 +34,7 @@ import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
  * @param nbt    The block nbt to match.
  */
 public record BlockPredicate(
-        @Nullable BlockTypeFilter blocks,
+        @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable CompoundBinaryTag nbt
 ) implements Predicate<Block> {
@@ -48,7 +50,7 @@ public record BlockPredicate(
     public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null);
 
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
-            BlockTypeFilter.NETWORK_TYPE.optional(), BlockPredicate::blocks,
+            RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
             PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
             NBT_COMPOUND.optional(), BlockPredicate::nbt,
             BlockPredicate::new
@@ -88,12 +90,12 @@ public record BlockPredicate(
 //        }
 //    };
 
-    public BlockPredicate(@NotNull BlockTypeFilter blocks) {
+    public BlockPredicate(@NotNull RegistryTag<Block> blocks) {
         this(blocks, null, null);
     }
 
     public BlockPredicate(@NotNull Block... blocks) {
-        this(new BlockTypeFilter.Blocks(blocks));
+        this(RegistryTag.direct(blocks));
     }
 
     public BlockPredicate(@NotNull PropertiesPredicate state) {
@@ -106,7 +108,7 @@ public record BlockPredicate(
 
     @Override
     public boolean test(@NotNull Block block) {
-        if (blocks != null && !blocks.test(block))
+        if (blocks != null && !blocks.contains(block))
             return false;
         if (state != null && !state.test(block))
             return false;

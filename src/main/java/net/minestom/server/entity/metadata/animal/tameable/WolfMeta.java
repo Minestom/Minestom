@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public class WolfMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull DynamicRegistry.Key<WolfVariant> getVariant() {
+    public @NotNull RegistryKey<WolfVariant> getVariant() {
         return metadata.get(MetadataDef.Wolf.VARIANT);
     }
 
@@ -59,7 +59,7 @@ public class WolfMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull DynamicRegistry.Key<WolfVariant> value) {
+    public void setVariant(@NotNull RegistryKey<WolfVariant> value) {
         metadata.set(MetadataDef.Wolf.VARIANT, value);
     }
 
@@ -67,7 +67,7 @@ public class WolfMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull DynamicRegistry.Key<WolfSoundVariant> getSoundVariant() {
+    public @NotNull RegistryKey<WolfSoundVariant> getSoundVariant() {
         return metadata.get(MetadataDef.Wolf.SOUND_VARIANT);
     }
 
@@ -75,7 +75,7 @@ public class WolfMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#WOLF_SOUND_VARIANT} instead.
      */
     @Deprecated
-    public void setSoundVariant(@NotNull DynamicRegistry.Key<WolfSoundVariant> value) {
+    public void setSoundVariant(@NotNull RegistryKey<WolfSoundVariant> value) {
         metadata.set(MetadataDef.Wolf.SOUND_VARIANT, value);
     }
 
@@ -95,9 +95,9 @@ public class WolfMeta extends TameableAnimalMeta {
     @SuppressWarnings("unchecked")
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
         if (component == DataComponents.WOLF_VARIANT)
-            setVariant((DynamicRegistry.Key<WolfVariant>) value);
+            setVariant((RegistryKey<WolfVariant>) value);
         else if (component == DataComponents.WOLF_SOUND_VARIANT)
-            setSoundVariant((DynamicRegistry.Key<WolfSoundVariant>) value);
+            setSoundVariant((RegistryKey<WolfSoundVariant>) value);
         else if (component == DataComponents.WOLF_COLLAR)
             setCollarColor((DyeColor) value);
         else super.set(component, value);

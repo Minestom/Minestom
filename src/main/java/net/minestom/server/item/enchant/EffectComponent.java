@@ -4,9 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.item.crossbow.CrossbowChargingSounds;
-import net.minestom.server.registry.ObjectSet;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Unit;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -48,7 +46,7 @@ public class EffectComponent {
     public static final DataComponent<List<ConditionalEffect<ValueEffect>>> REPAIR_WITH_XP = register("repair_with_xp", ConditionalEffect.codec(ValueEffect.CODEC).list());
     public static final DataComponent<ValueEffect> CROSSBOW_CHARGE_TIME = register("crossbow_charge_time", ValueEffect.CODEC);
     public static final DataComponent<List<CrossbowChargingSounds>> CROSSBOW_CHARGING_SOUNDS = register("crossbow_charging_sounds", CrossbowChargingSounds.NBT_TYPE.list());
-    public static final DataComponent<List<ObjectSet<SoundEvent>>> TRIDENT_SOUND = register("trident_sound", ObjectSet.<SoundEvent>codec(Tag.BasicType.SOUND_EVENTS).list());
+    public static final DataComponent<List<SoundEvent>> TRIDENT_SOUND = register("trident_sound", SoundEvent.CODEC.list());
     public static final DataComponent<Unit> PREVENT_EQUIPMENT_DROP = register("prevent_equipment_drop", Codec.UNIT);
     public static final DataComponent<Unit> PREVENT_ARMOR_CHANGE = register("prevent_armor_change", Codec.UNIT);
     public static final DataComponent<ValueEffect> TRIDENT_SPIN_ATTACK_STRENGTH = register("trident_spin_attack_strength", ValueEffect.CODEC);

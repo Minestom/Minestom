@@ -77,7 +77,7 @@ public class CodeGenerator {
         }
 
         ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
-        ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "DynamicRegistry", "Key");
+        ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
         ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
 
         JsonObject json;
@@ -103,7 +103,7 @@ public class CodeGenerator {
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
                                     // TypeClass.STONE = NamespaceID.from("minecraft:stone")
-                                    "$T.of($S)",
+                                    "$T.unsafeOf($S)",
                                     registryKeyClass,
                                     namespace
                             )

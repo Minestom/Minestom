@@ -1,13 +1,13 @@
 package net.minestom.server.sound;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.key.Keyed;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.ProtocolObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ import java.util.Collection;
 /**
  * Can represent a builtin/vanilla sound or a custom sound.
  */
-public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
+public sealed interface SoundEvent extends Keyed, Sound.Type, SoundEvents permits BuiltinSoundEvent, CustomSoundEvent {
 
     @NotNull NetworkBuffer.Type<SoundEvent> NETWORK_TYPE = new NetworkBuffer.Type<>() {
         @Override
@@ -35,7 +35,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
         @Override
         public SoundEvent read(@NotNull NetworkBuffer buffer) {
             int id = buffer.read(NetworkBuffer.VAR_INT) - 1;
-            if (id != -1) return BuiltinSoundEvent.getId(id);
+            if (id != -1) return BuiltinSoundEvent.REGISTRY.get(id);
 
             return new CustomSoundEvent(buffer.read(NetworkBuffer.KEY),
                     buffer.read(NetworkBuffer.FLOAT.optional()));
@@ -46,7 +46,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
         public @NotNull <D> Result<SoundEvent> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
             final Result<String> stringResult = coder.getString(value);
             if (stringResult instanceof Result.Ok(String string)) {
-                final SoundEvent soundEvent = BuiltinSoundEvent.getSafe(string);
+                final SoundEvent soundEvent = BuiltinSoundEvent.get(string);
                 if (soundEvent == null) return new Result.Error<>("Unknown sound event: " + string);
                 return new Result.Ok<>(soundEvent);
             }
@@ -71,7 +71,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * Get all the builtin sound events. Resource pack sounds will never be returned from this method.
      */
     static @NotNull Collection<? extends SoundEvent> values() {
-        return BuiltinSoundEvent.values();
+        return BuiltinSoundEvent.REGISTRY.values();
     }
 
     /**
@@ -80,8 +80,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @param key the key of the sound event
      * @return the sound event, or null if not found
      */
-    static @Nullable SoundEvent fromKey(@NotNull String key) {
-        return BuiltinSoundEvent.getSafe(key);
+    static @Nullable SoundEvent fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     /**
@@ -91,7 +91,7 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @return the sound event, or null if not found
      */
     static @Nullable SoundEvent fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return BuiltinSoundEvent.REGISTRY.get(key);
     }
 
     /**
@@ -101,14 +101,14 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
      * @return the sound event, or null if not found
      */
     static @Nullable SoundEvent fromId(int id) {
-        return BuiltinSoundEvent.getId(id);
+        return BuiltinSoundEvent.REGISTRY.get(id);
     }
 
     /**
      * Create a custom sound event. The namespace should match a sound provided in the resource pack.
      *
-     * @param key the key of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull String key, @Nullable Float range) {
@@ -118,8 +118,8 @@ public sealed interface SoundEvent extends ProtocolObject, Keyed, Sound.Type, So
     /**
      * Create a custom sound event. The {@link Key} should match a sound provided in the resource pack.
      *
-     * @param key the key of the custom sound event
-     * @param range       the range of the sound event, or null for (legacy) dynamic range
+     * @param key   the key of the custom sound event
+     * @param range the range of the sound event, or null for (legacy) dynamic range
      * @return the custom sound event
      */
     static @NotNull SoundEvent of(@NotNull Key key, @Nullable Float range) {

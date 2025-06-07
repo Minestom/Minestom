@@ -1,9 +1,8 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.ServerFlag;
@@ -13,6 +12,7 @@ import net.minestom.server.codec.Transcoder;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
+import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.network.packet.server.configuration.RegistryDataPacket;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
@@ -32,47 +32,29 @@ import java.util.concurrent.locks.ReentrantLock;
 final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private static final UnsupportedOperationException UNSAFE_REMOVE_EXCEPTION = new UnsupportedOperationException("Unsafe remove is disabled. Enable by setting the system property 'minestom.registry.unsafe-ops' to 'true'");
 
-    record KeyImpl<T>(@NotNull net.kyori.adventure.key.Key key) implements Key<T> {
-
-        @Override
-        public String toString() {
-            return key.asString();
-        }
-
-        @Override
-        public int hashCode() {
-            return key.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            KeyImpl<?> key = (KeyImpl<?>) obj;
-            return this.key.equals(key.key);
-        }
-    }
-
     private Registries registries = null;
-    private CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
+    private final CachedPacket vanillaRegistryDataPacket = new CachedPacket(() -> createRegistryDataPacket(registries, true));
 
     private final ReentrantLock lock = new ReentrantLock(); // Protects writes
-    private final List<T> entryById = new CopyOnWriteArrayList<>();
-    private final Map<net.kyori.adventure.key.Key, T> entryByName = new ConcurrentHashMap<>();
-    private final List<net.kyori.adventure.key.Key> idByName = new CopyOnWriteArrayList<>();
+    private final List<T> idToValue = new CopyOnWriteArrayList<>();
+    private final List<RegistryKey<T>> idToKey = new CopyOnWriteArrayList<>();
+    private final Map<Key, T> keyToValue = new ConcurrentHashMap<>();
+    private final Map<T, RegistryKey<T>> valueToKey = new ConcurrentHashMap<>();
     private final List<DataPack> packById = new CopyOnWriteArrayList<>();
 
-    private final String id;
+    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new ConcurrentHashMap<>();
+
+    private final Key key;
     private final Codec<T> codec;
 
-    DynamicRegistryImpl(@NotNull String id, @Nullable Codec<T> codec) {
-        this.id = id;
+    DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec) {
+        this.key = key;
         this.codec = codec;
     }
 
     @Override
-    public @NotNull String id() {
-        return id;
+    public @NotNull Key key() {
+        return this.key;
     }
 
     public @UnknownNullability Codec<T> codec() {
@@ -81,56 +63,42 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @Nullable T get(int id) {
-        if (id < 0 || id >= entryById.size()) {
+        if (id < 0 || id >= idToValue.size())
             return null;
-        }
-        return entryById.get(id);
+        return idToValue.get(id);
     }
 
     @Override
-    public @Nullable T get(@NotNull net.kyori.adventure.key.Key namespace) {
-        return entryByName.get(namespace);
+    public @Nullable T get(@NotNull Key key) {
+        return keyToValue.get(key);
     }
 
     @Override
-    public @Nullable Key<T> getKey(@NotNull T value) {
-        int index = entryById.indexOf(value);
-        return index == -1 ? null : getKey(index);
-    }
-
-    @Override
-    public @Nullable Key<T> getKey(int id) {
-        if (id < 0 || id >= entryById.size())
+    public @Nullable RegistryKey<T> getKey(int id) {
+        if (id < 0 || id >= idToKey.size())
             return null;
-        return Key.of(idByName.get(id));
+        return idToKey.get(id);
     }
 
     @Override
-    public @Nullable net.kyori.adventure.key.Key getName(int id) {
-        if (id < 0 || id >= entryById.size())
+    public @Nullable RegistryKey<T> getKey(@NotNull T value) {
+        return valueToKey.get(value);
+    }
+
+    @Override
+    public @Nullable RegistryKey<T> getKey(@NotNull Key key) {
+        if (!keyToValue.containsKey(key))
             return null;
-        return idByName.get(id);
+        return new RegistryKeyImpl<>(key);
     }
 
     @Override
-    public @Nullable DataPack getPack(int id) {
-        if (id < 0 || id >= packById.size())
-            return null;
-        return packById.get(id);
+    public int getId(@NotNull RegistryKey<T> key) {
+        return idToKey.indexOf(key);
     }
 
     @Override
-    public int getId(@NotNull net.kyori.adventure.key.Key id) {
-        return idByName.indexOf(id);
-    }
-
-    @Override
-    public @NotNull List<T> values() {
-        return Collections.unmodifiableList(entryById);
-    }
-
-    @Override
-    public @NotNull DynamicRegistry.Key<T> register(@NotNull net.kyori.adventure.key.Key namespaceId, @NotNull T object, @Nullable DataPack pack) {
+    public @NotNull RegistryKey<T> register(@NotNull Key key, @NotNull T object, @Nullable DataPack pack) {
         // This check is disabled in tests because we remake server processes over and over.
         // todo: re-enable this check
 //        Check.stateCondition((!DebugUtils.INSIDE_TEST && MinecraftServer.process() != null && !MinecraftServer.isStarted()) && !ServerFlag.REGISTRY_LATE_REGISTER,
@@ -141,46 +109,98 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
-            entryByName.put(namespaceId, object);
+            final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
+            int id = idToKey.indexOf(registryKey);
+            keyToValue.put(key, object);
+            valueToKey.put(object, registryKey);
             if (id == -1) {
-                idByName.add(namespaceId);
-                entryById.add(object);
+                idToValue.add(object);
+                idToKey.add(registryKey);
                 packById.add(pack);
             } else {
-                idByName.set(id, namespaceId);
-                entryById.set(id, object);
+                idToValue.set(id, object);
+                idToKey.set(id, registryKey);
                 packById.set(id, pack);
             }
-            if (vanillaRegistryDataPacket != null) {
-                vanillaRegistryDataPacket.invalidate();
-            }
-            return Key.of(namespaceId);
+
+            vanillaRegistryDataPacket.invalidate();
+            return registryKey;
         } finally {
             lock.unlock();
         }
     }
 
     @Override
-    public boolean remove(@NotNull net.kyori.adventure.key.Key namespaceId) throws UnsupportedOperationException {
+    public boolean remove(@NotNull Key key) throws UnsupportedOperationException {
         if (!ServerFlag.REGISTRY_UNSAFE_OPS) throw UNSAFE_REMOVE_EXCEPTION;
 
         lock.lock();
         try {
-            int id = idByName.indexOf(namespaceId);
+            final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
+            int id = idToKey.indexOf(registryKey);
             if (id == -1) return false;
 
-            entryById.remove(id);
-            entryByName.remove(namespaceId);
-            idByName.remove(id);
+            // Remove value from all mappings (shifting down indices)
+            idToValue.remove(id);
+            idToKey.remove(registryKey);
+            var value = keyToValue.remove(key);
+            valueToKey.remove(value);
             packById.remove(id);
-            if (vanillaRegistryDataPacket != null) {
-                vanillaRegistryDataPacket.invalidate();
+
+            // Remove all references from tags
+            for (final var tag : tags.values()) {
+                tag.remove(registryKey);
             }
+
+            vanillaRegistryDataPacket.invalidate();
             return true;
         } finally {
             lock.unlock();
         }
+    }
+
+    @Override
+    public @Nullable DataPack getPack(int id) {
+        if (id < 0 || id >= packById.size())
+            return null;
+        return packById.get(id);
+    }
+
+    @Override
+    public int size() {
+        return idToValue.size();
+    }
+
+    @Override
+    public @NotNull Collection<RegistryKey<T>> keys() {
+        return Collections.unmodifiableCollection(idToKey);
+    }
+
+    @Override
+    public @NotNull Collection<T> values() {
+        return Collections.unmodifiableCollection(idToValue);
+    }
+
+    // Tags
+
+    @Override
+    public @Nullable RegistryTag<T> getTag(@NotNull TagKey<T> key) {
+        return this.tags.get(key);
+    }
+
+    @Override
+    public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
+        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+    }
+
+    @Override
+    public boolean removeTag(@NotNull TagKey<T> key) {
+        return this.tags.remove(key) != null;
+    }
+
+    @Override
+    public @NotNull Collection<RegistryTag<T>> tags() {
+        return Collections.unmodifiableCollection(this.tags.values());
     }
 
     @Override
@@ -198,11 +218,24 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return createRegistryDataPacket(registries, false);
     }
 
+    @Override
+    public TagsPacket.@NotNull Registry tagRegistry() {
+        final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
+        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+            final int[] entries = new int[tag.size()];
+            int i = 0;
+            for (var registryKey : tag)
+                entries[i++] = idToKey.indexOf(registryKey);
+            tagList.add(new TagsPacket.Tag(tag.key().key().asString(), entries));
+        }
+        return new TagsPacket.Registry(key().asString(), tagList);
+    }
+
     private @NotNull RegistryDataPacket createRegistryDataPacket(@NotNull Registries registries, boolean excludeVanilla) {
         Check.notNull(codec, "Cannot create registry data packet for server-only registry");
         Transcoder<BinaryTag> transcoder = new RegistryTranscoder<>(Transcoder.NBT, registries);
-        List<RegistryDataPacket.Entry> entries = new ArrayList<>(entryById.size());
-        for (int i = 0; i < entryById.size(); i++) {
+        List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
+        for (int i = 0; i < idToValue.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
             // Right now we very much only support the minecraft:core (vanilla) 'pack'. Any entry which was not loaded
@@ -212,31 +245,31 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             // the time of writing). Datagen currently behaves kind of badly in that the registry inspecting generators
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
-            T entry = entryById.get(i);
+            T entry = idToValue.get(i);
             DataPack pack = packById.get(i);
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
                     data = (CompoundBinaryTag) tag;
                 } else {
-                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + id);
+                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + key);
                 }
             }
             //noinspection DataFlowIssue
-            entries.add(new RegistryDataPacket.Entry(getKey(i).name(), data));
+            entries.add(new RegistryDataPacket.Entry(getKey(i).key().asString(), data));
         }
-        return new RegistryDataPacket(id, entries);
+        return new RegistryDataPacket(key.asString(), entries);
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull Registry.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
         Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
-        try (InputStream resourceStream = Registry.loadRegistryFile(resource)) {
+        try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
-            final JsonElement json = Registry.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
+            final JsonElement json = RegistryData.GSON.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8), JsonElement.class);
             if (!(json instanceof JsonObject root))
-                throw new IllegalStateException("Failed to load registry " + registry.id() + ": expected a JSON object, got " + json);
+                throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries) : Transcoder.JSON;
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false, true) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
             if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
             for (Map.Entry<String, JsonElement> entry : entries) {
@@ -245,9 +278,12 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 if (valueResult instanceof Result.Ok(T value)) {
                     registry.register(namespace, value, DataPack.MINECRAFT_CORE);
                 } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.id() + ": " + valueResult);
+                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
                 }
             }
+
+            // Load tags if present
+            RegistryData.loadTags(registry, registry.key());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

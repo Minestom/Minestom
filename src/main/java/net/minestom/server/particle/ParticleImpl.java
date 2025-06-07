@@ -7,28 +7,16 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Collection;
+import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
-    private static final Registry.Container<Particle> CONTAINER = Registry.createStaticContainer(Registry.Resource.PARTICLES,
+    static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:particle"),
             (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
 
-    static Particle get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Particle getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Particle getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<Particle> values() {
-        return CONTAINER.values();
+    static @UnknownNullability Particle get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     private static Particle defaultParticle(@NotNull Key key, int id) {

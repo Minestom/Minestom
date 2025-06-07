@@ -10,7 +10,6 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -244,10 +243,6 @@ public final class MinecraftServer implements MinecraftConstants {
 
     public static AdvancementManager getAdvancementManager() {
         return serverProcess.advancement();
-    }
-
-    public static TagManager getTagManager() {
-        return serverProcess.tag();
     }
 
     public static @NotNull DynamicRegistry<ChatType> getChatTypeRegistry() {

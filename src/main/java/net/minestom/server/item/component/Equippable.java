@@ -4,10 +4,10 @@ import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.EquipmentSlot;
-import net.minestom.server.gamedata.tags.Tag;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.registry.ObjectSet;
+import net.minestom.server.registry.Registries;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,7 +17,7 @@ public record Equippable(
         @NotNull SoundEvent equipSound,
         @Nullable String assetId,
         @Nullable String cameraOverlay,
-        @Nullable ObjectSet<EntityType> allowedEntities,
+        @Nullable RegistryTag<EntityType> allowedEntities,
         boolean dispensable,
         boolean swappable,
         boolean damageOnHurt,
@@ -28,7 +28,7 @@ public record Equippable(
             SoundEvent.NETWORK_TYPE, Equippable::equipSound,
             NetworkBuffer.STRING.optional(), Equippable::assetId,
             NetworkBuffer.STRING.optional(), Equippable::cameraOverlay,
-            ObjectSet.<EntityType>networkType(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
+            RegistryTag.networkType(Registries::entityType).optional(), Equippable::allowedEntities,
             NetworkBuffer.BOOLEAN, Equippable::dispensable,
             NetworkBuffer.BOOLEAN, Equippable::swappable,
             NetworkBuffer.BOOLEAN, Equippable::damageOnHurt,
@@ -39,7 +39,7 @@ public record Equippable(
             "equip_sound", SoundEvent.CODEC.optional(SoundEvent.ITEM_ARMOR_EQUIP_GENERIC), Equippable::equipSound,
             "asset_id", Codec.STRING.optional(), Equippable::assetId,
             "camera_overlay", Codec.STRING.optional(), Equippable::cameraOverlay,
-            "allowed_entities", ObjectSet.<EntityType>codec(Tag.BasicType.ENTITY_TYPES).optional(), Equippable::allowedEntities,
+            "allowed_entities", RegistryTag.codec(Registries::entityType).optional(), Equippable::allowedEntities,
             "dispensable", Codec.BOOLEAN.optional(true), Equippable::dispensable,
             "swappable", Codec.BOOLEAN.optional(true), Equippable::swappable,
             "damage_on_hurt", Codec.BOOLEAN.optional(true), Equippable::damageOnHurt,
@@ -62,7 +62,7 @@ public record Equippable(
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract);
     }
 
-    public @NotNull Equippable withAllowedEntities(@Nullable ObjectSet<EntityType> allowedEntities) {
+    public @NotNull Equippable withAllowedEntities(@Nullable RegistryTag<EntityType> allowedEntities) {
         return new Equippable(slot, equipSound, assetId, cameraOverlay, allowedEntities, dispensable, swappable, damageOnHurt, equipOnInteract);
     }
 
