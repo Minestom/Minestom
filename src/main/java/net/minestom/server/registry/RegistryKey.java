@@ -37,7 +37,20 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
      */
     @ApiStatus.Internal
     static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull String key) {
-        return new RegistryKeyImpl<>(Key.key(key));
+        return unsafeOf(Key.key(key));
+    }
+
+    /**
+     * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
+     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     */
+    @ApiStatus.Internal
+    static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull Key key) {
+        return new RegistryKeyImpl<>(key);
+    }
+
+    default @NotNull String name() {
+        return key().asString();
     }
 
 }

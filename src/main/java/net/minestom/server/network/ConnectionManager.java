@@ -178,6 +178,10 @@ public final class ConnectionManager {
         return player;
     }
 
+    public void sendRegistryTags(@NotNull Player player) {
+        player.sendPacket(cachedTagsPacket);
+    }
+
     // This is a somewhat weird implementation where connectionmanager owns the caching of tags.
     // There should be no registry->connectionmanager communication.
     @ApiStatus.Internal
@@ -277,7 +281,7 @@ public final class ConnectionManager {
             player.sendPacket(registries.frogVariant().registryDataPacket(registries, excludeVanilla));
             player.sendPacket(registries.pigVariant().registryDataPacket(registries, excludeVanilla));
 
-            player.sendPacket(cachedTagsPacket);
+            sendRegistryTags(player);
         }
 
         // Wait for pending resource packs if any
