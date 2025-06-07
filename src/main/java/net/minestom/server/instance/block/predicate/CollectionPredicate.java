@@ -31,6 +31,9 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
                 (size == null || size.inRange(collection.size()));
     }
 
+    /**
+     * A predicate that requires that all of its sub-predicates match at least once.
+     */
     public record Contains<T, P extends Predicate<T>>(@NotNull List<P> predicates) implements Predicate<Collection<T>> {
 
         public Contains {
@@ -57,6 +60,10 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         }
     }
 
+    /**
+     * A predicate that counts the number of matching sub-predicates
+     * and tests whether it's in the <code>count</code> range.
+     */
     public record Count<T, P extends Predicate<T>>(
             @NotNull List<Entry<T, P>> entries) implements Predicate<Collection<T>> {
 
@@ -64,7 +71,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
             entries = List.copyOf(entries);
         }
 
-        record Entry<T, P extends Predicate<T>>(@NotNull P predicate,
+        public record Entry<T, P extends Predicate<T>>(@NotNull P predicate,
                                                 @NotNull Range.Int count) implements Predicate<Collection<T>> {
             public static <T, P extends Predicate<T>> @NotNull Codec<Entry<T, P>> createCodec(Codec<P> codec) {
                 return StructCodec.struct(
@@ -92,6 +99,48 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
                 }
             }
             return true;
+        }
+    }
+
+    public static @NotNull <T, P extends Predicate<T>> CollectionPredicate.Builder<T, P> builder() {
+        return new CollectionPredicate.Builder<>();
+    }
+
+    public static class Builder<T, P extends Predicate<T>> {
+
+        private final List<P> containsList = new ArrayList<>();
+        private final List<Count.Entry<T, P>> countList = new ArrayList<>();
+        private Range.Int size;
+
+        private Builder() {
+        }
+
+        /**
+         * Specifies that <code>predicate</code> must match at least once.
+         */
+        public Builder<T, P> mustContain(P predicate) {
+            containsList.add(predicate);
+            return this;
+        }
+
+        /**
+         * Specifies that the number of times that <code>predicate</code> matches must fall in the <code>count</code> range.
+         */
+        public Builder<T, P> mustMatchCount(P predicate, Range.Int count) {
+            countList.add(new Count.Entry<>(predicate, count));
+            return this;
+        }
+
+        /**
+         * Specifies that the collection's size must be inside the <code>size</code> range.
+         */
+        public Builder<T, P> matchSize(Range.Int size) {
+            this.size = size;
+            return this;
+        }
+
+        public CollectionPredicate<T, P> build() {
+            return new CollectionPredicate<>(new Contains<>(containsList), new Count<>(countList), size);
         }
     }
 }
