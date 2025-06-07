@@ -11,9 +11,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Comparator;
-import java.util.List;
-import java.util.Objects;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
@@ -94,7 +93,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
             public @NotNull DynamicRegistry<Enchantment> enchantment() {
                 return registry;
             }
-        }, registry, resource, null);
+        }, registry, resource, null, codec);
         return registry;
     }
 
