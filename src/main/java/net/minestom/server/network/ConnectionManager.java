@@ -49,7 +49,7 @@ public final class ConnectionManager {
     private static final Component TIMEOUT_TEXT = Component.text("Timeout", NamedTextColor.RED);
     private static final Component SHUTDOWN_TEXT = Component.text("Server shutting down");
 
-    private CachedPacket cachedTagsPacket = new CachedPacket(this::createTagsPacket);
+    private final CachedPacket cachedTagsPacket = new CachedPacket(this::createTagsPacket);
 
     // All players once their Player object has been instantiated.
     private final Map<PlayerConnection, Player> connectionPlayerMap = new ConcurrentHashMap<>();
