@@ -2,7 +2,11 @@ package net.minestom.server.event.player;
 
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
+import net.minestom.server.instance.Chunk;
+import net.minestom.server.network.packet.server.play.data.ChunkData;
+import net.minestom.server.network.packet.server.play.data.LightData;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Called when a player receive a new chunk data.
@@ -11,6 +15,9 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
 
     private final Player player;
     private final int chunkX, chunkZ;
+
+    private ChunkData chunkData;
+    private LightData lightData;
 
     public PlayerChunkLoadEvent(@NotNull Player player, int chunkX, int chunkZ) {
         this.player = player;
@@ -34,6 +41,57 @@ public class PlayerChunkLoadEvent implements PlayerInstanceEvent {
      */
     public int getChunkZ() {
         return chunkZ;
+    }
+
+    /**
+     * Sets both the block and light data from the provided {@link Chunk}, replacing what would be sent to the client
+     * otherwise.
+     *
+     * @param chunk the chunk from which to extract block and light data
+     */
+    public void setData(@NotNull Chunk chunk) {
+        this.chunkData = chunk.getChunkData();
+        this.lightData = chunk.getLightData();
+    }
+
+    /**
+     * Sets the chunk data for this event, replacing what would be sent to the client otherwise. Should often be used
+     * alongside {@link PlayerChunkLoadEvent#setLightData(LightData)} to prevent lighting glitches on the client.
+     *
+     * @param chunkData the overriding chunk data
+     * @see Chunk#getChunkData()
+     */
+    public void setChunkData(@Nullable ChunkData chunkData) {
+        this.chunkData = chunkData;
+    }
+
+    /**
+     * Sets the light data for this event, replacing what would be sent to the client otherwise. Should often be used
+     * alongside {@link PlayerChunkLoadEvent#setChunkData(ChunkData)} to prevent lighting glitches on the client.
+     *
+     * @param lightData the overriding chunk data
+     * @see Chunk#getLightData()
+     */
+    public void setLightData(@Nullable LightData lightData) {
+        this.lightData = lightData;
+    }
+
+    /**
+     * The overriding {@link ChunkData}. {@code null} indicates the instance chunk's data will be used instead.
+     *
+     * @return the overriding chunk data
+     */
+    public ChunkData chunkData() {
+        return chunkData;
+    }
+
+    /**
+     * The overriding {@link LightData}. {@code null} indicates the instance chunk's data will be used instead.
+     *
+     * @return the overriding chunk data
+     */
+    public LightData lightData() {
+        return lightData;
     }
 
     @Override
