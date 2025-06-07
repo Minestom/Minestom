@@ -1,7 +1,6 @@
 package net.minestom.server.instance.block.predicate;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
@@ -127,13 +126,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record CustomData(@NotNull BinaryTag nbt) implements DataComponentPredicate {
-        public static Codec<CustomData> CODEC = Codec.NBT.transform(CustomData::new, CustomData::nbt);
+    record CustomData(@NotNull NbtPredicate nbt) implements DataComponentPredicate {
+        public static Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
 
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
             net.minestom.server.item.component.CustomData other = holder.get(DataComponents.CUSTOM_DATA);
-            return other != null && other.nbt().equals(nbt);
+            return other != null && nbt.test(other.nbt());
         }
     }
 
