@@ -27,6 +27,7 @@ import net.minestom.server.item.enchant.ValueEffect;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.message.ChatType;
 import net.minestom.server.potion.PotionEffect;
+import net.minestom.server.potion.PotionType;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +53,10 @@ public interface Registries {
 
     default @NotNull Registry<PotionEffect> potionEffect() {
         return PotionEffect.staticRegistry();
+    }
+
+    default @NotNull Registry<PotionType> potionType() {
+        return PotionType.staticRegistry();
     }
 
     default @NotNull Registry<EntityType> entityType() {
@@ -139,6 +144,11 @@ public interface Registries {
         @Override
         public @NotNull Registry<PotionEffect> potionEffect() {
             return delegate.potionEffect();
+        }
+
+        @Override
+        public @NotNull Registry<PotionType> potionType() {
+            return delegate.potionType();
         }
 
         @Override

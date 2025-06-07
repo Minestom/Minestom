@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.predicate;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.component.DataComponent;
@@ -19,8 +18,7 @@ import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.item.component.*;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.*;
 import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.Nullable;
 
@@ -58,11 +56,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Enchantment(@Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
+    record Enchantment(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
                        Range.Int levels) {
 
         public static Codec<Enchantment> CODEC = StructCodec.struct(
-                "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), Enchantment::enchantments,
+                "enchantments", RegistryTag.codec(Registries::enchantment).optional(), Enchantment::enchantments,
                 "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), Enchantment::levels,
                 Enchantment::new
         );
@@ -76,8 +74,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
                 return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
             }
-            for (DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e : enchantments) {
-                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
+            for (RegistryKey<net.minestom.server.item.enchant.Enchantment> key : enchantments) {
+                if (holderEnchants.has(key) && (levels == null || levels.inRange(holderEnchants.level(key)))) {
                     return true;
                 }
             }
@@ -96,11 +94,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record StoredEnchantment(
-            @Nullable List<DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment>> enchantments,
+            @Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
             Range.Int levels) {
 
         public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
-                "enchantments", net.minestom.server.item.enchant.Enchantment.CODEC.listOrSingle().optional(), StoredEnchantment::enchantments,
+                "enchantments", RegistryTag.codec(Registries::enchantment).optional(), StoredEnchantment::enchantments,
                 "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), StoredEnchantment::levels,
                 StoredEnchantment::new
         );
@@ -114,8 +112,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
                 return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
             }
-            for (DynamicRegistry.Key<net.minestom.server.item.enchant.Enchantment> e : enchantments) {
-                if (holderEnchants.has(e) && (levels == null || levels.inRange(holderEnchants.level(e)))) {
+            for (RegistryKey<net.minestom.server.item.enchant.Enchantment> key : enchantments) {
+                if (holderEnchants.has(key) && (levels == null || levels.inRange(holderEnchants.level(key)))) {
                     return true;
                 }
             }
@@ -124,13 +122,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Potions(List<PotionType> potionTypes) implements DataComponentPredicate {
-        public static Codec<Potions> CODEC = PotionType.CODEC.listOrSingle().transform(Potions::new, Potions::potionTypes);
+    record Potions(RegistryTag<PotionType> potionTypes) implements DataComponentPredicate {
+        public static Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType).transform(Potions::new, Potions::potionTypes).optional();
 
         @Override
         public boolean test(DataComponent.Holder holder) {
             var potion = holder.get(DataComponents.POTION_CONTENTS);
-            if (potion == null) return false;
+            if (potion == null || potion.potion() == null) return false;
             return potionTypes.contains(potion.potion());
         }
     }
@@ -340,11 +338,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record ArmorTrim(List<TrimMaterial> material, List<TrimPattern> pattern) implements DataComponentPredicate {
+    record ArmorTrim(RegistryTag<TrimMaterial> material, RegistryTag<TrimPattern> pattern) implements DataComponentPredicate {
 
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
-                "material", TrimMaterial.CODEC.transform(holder -> holder.resolve(MinecraftServer.getTrimMaterialRegistry()), Holder.Direct::new).listOrSingle().optional(), ArmorTrim::material,
-                "pattern", TrimPattern.CODEC.transform(holder -> holder.resolve(MinecraftServer.getTrimPatternRegistry()), Holder.Direct::new).listOrSingle().optional(), ArmorTrim::pattern,
+                "material", RegistryTag.codec(Registries::trimMaterial).optional(), ArmorTrim::material,
+                "pattern", RegistryTag.codec(Registries::trimPattern).optional(), ArmorTrim::pattern,
                 ArmorTrim::new
         );
 
@@ -352,16 +350,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             var trim = holder.get(DataComponents.TRIM);
             if (trim == null) return false;
-            if (material != null && !material.contains(trim.material().resolve(MinecraftServer.getTrimMaterialRegistry())))
+            if (material != null && !trim.material().isDirect() && !material.contains(trim.material().asKey()))
                 return false;
-            return pattern == null || pattern.contains(trim.pattern().resolve(MinecraftServer.getTrimPatternRegistry()));
+            return pattern == null || (!trim.pattern().isDirect() && pattern.contains(trim.pattern().asKey()));
         }
     }
 
-    record JukeboxPlayable(List<Key> songs) implements DataComponentPredicate {
+    record JukeboxPlayable(RegistryTag<JukeboxSong> songs) implements DataComponentPredicate {
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
-                "song", JukeboxSong.CODEC.transform(DynamicRegistry.Key::key, DynamicRegistry.Key::of).listOrSingle().optional(), JukeboxPlayable::songs,
+                "song", RegistryTag.codec(Registries::jukeboxSong).optional(), JukeboxPlayable::songs,
                 JukeboxPlayable::new
         );
 
@@ -369,7 +367,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(DataComponent.Holder holder) {
             var song = holder.get(DataComponents.JUKEBOX_PLAYABLE);
             if (song == null) return false;
-            return songs.contains(song.reference());
+            return songs.contains(song);
         }
     }
 }
