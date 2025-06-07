@@ -3,6 +3,7 @@ package net.minestom.server.registry;
 import net.minestom.server.MinecraftServer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -14,6 +15,11 @@ final class RegistryTagImpl {
 
     record Empty() implements RegistryTag<Object> {
         public static final Empty INSTANCE = new Empty();
+
+        @Override
+        public @Nullable TagKey<Object> key() {
+            return null;
+        }
 
         @Override
         public boolean contains(@NotNull RegistryKey<Object> value) {
@@ -81,6 +87,11 @@ final class RegistryTagImpl {
     }
 
     record Direct<T>(@NotNull List<RegistryKey<T>> keys) implements RegistryTag<T> {
+        @Override
+        public @Nullable TagKey<T> key() {
+            return null;
+        }
+
         @Override
         public boolean contains(@NotNull RegistryKey<T> value) {
             return keys.contains(value instanceof RegistryKeyImpl<T> key ? key : new RegistryKeyImpl<>(value.key()));

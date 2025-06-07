@@ -3,6 +3,7 @@ package net.minestom.server.registry;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.List;
@@ -42,6 +43,8 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
         if (values.isEmpty()) return empty();
         return new RegistryTagImpl.Direct<>(List.copyOf(values));
     }
+
+    @Nullable TagKey<T> key();
 
     boolean contains(@NotNull RegistryKey<T> value);
 
