@@ -45,6 +45,7 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
+import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -118,7 +119,7 @@ public class PlayerInit {
                 ItemStack itemStack = ItemStack.builder(Material.STONE)
                         .amount(64)
                         .set(DataComponents.CAN_PLACE_ON, new BlockPredicates(List.of(
-                                new BlockPredicate(new BlockTypeFilter.Blocks(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, null),
+                                new BlockPredicate(RegistryTag.direct(Block.OAK_SIGN), PropertiesPredicate.exact("rotation", "1"), null, null),
                                 new BlockPredicate(CompoundBinaryTag.builder().put("Owner", StringBinaryTag.stringBinaryTag("test")).build()),
                                 new BlockPredicate(
                                         DataComponentMap.builder().set(DataComponents.BEES, List.of(new Bee(CustomData.EMPTY, 10, 5))).build()
