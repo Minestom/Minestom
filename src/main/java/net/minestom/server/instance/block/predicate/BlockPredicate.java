@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
-
 /**
  * <p>A predicate to filter blocks based on their name, properties, and/or nbt.</p>
  *
@@ -44,7 +42,7 @@ import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
 public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
-        @Nullable CompoundBinaryTag nbt,
+        @Nullable NbtPredicate nbt,
         @Nullable DataComponentPredicates componentPredicates
 ) implements Predicate<Block> {
     /**
@@ -61,7 +59,7 @@ public record BlockPredicate(
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
             PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
-            NBT_COMPOUND.optional(), BlockPredicate::nbt,
+            NbtPredicate.NETWORK_TYPE.optional(), BlockPredicate::nbt,
             DataComponentPredicates.NETWORK_TYPE, BlockPredicate::componentPredicates,
             BlockPredicate::new
     );
@@ -69,7 +67,7 @@ public record BlockPredicate(
     public static final Codec<BlockPredicate> CODEC = StructCodec.struct(
             "blocks", RegistryTag.codec(Registries::blocks).optional(), BlockPredicate::blocks,
             "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
-            "nbt", Codec.NBT_COMPOUND.optional(), BlockPredicate::nbt,
+            "nbt", NbtPredicate.CODEC.optional(), BlockPredicate::nbt,
             StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::componentPredicates,
             BlockPredicate::new
     );
@@ -87,6 +85,10 @@ public record BlockPredicate(
     }
 
     public BlockPredicate(@NotNull CompoundBinaryTag nbt) {
+        this(new NbtPredicate(nbt));
+    }
+
+    public BlockPredicate(@NotNull NbtPredicate nbt) {
         this(null, null, nbt, null);
     }
 
@@ -102,11 +104,11 @@ public record BlockPredicate(
         this(null, null, null, predicates);
     }
 
-    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt) {
+    public BlockPredicate(RegistryTag<Block> blocks, PropertiesPredicate state, NbtPredicate nbt) {
         this(blocks, state, nbt, null);
     }
 
-    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt, @Nullable DataComponentPredicates componentPredicates) {
+    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt, @Nullable DataComponentPredicates componentPredicates) {
         this.blocks = blocks;
         this.state = state;
         this.nbt = nbt;
@@ -119,7 +121,7 @@ public record BlockPredicate(
             return false;
         if (state != null && !state.test(block))
             return false;
-        if (nbt != null && !Objects.equals(nbt, BlockUtils.extractClientNbt(block)))
+        if (nbt != null && !nbt.test(BlockUtils.extractClientNbt(block)))
             return false;
         if (componentPredicates == null)
             return true;
