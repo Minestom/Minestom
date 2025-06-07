@@ -1,14 +1,21 @@
 package net.minestom.server.instance.block.predicate;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.Result;
 import net.minestom.server.codec.StructCodec;
+import net.minestom.server.codec.Transcoder;
+import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.block.BlockUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,42 +36,46 @@ import static net.minestom.server.network.NetworkBuffer.NBT_COMPOUND;
  * {@link BlockHandler#getBlockEntityTags()}. This is relevant because this structure
  * is used for matching adventure mode blocks and must line up with client prediction.</p>
  *
- * @param blocks The block names/tags to match.
- * @param state  The block properties to match.
- * @param nbt    The block nbt to match.
+ * @param blocks              The block names/tags to match.
+ * @param state               The block properties to match.
+ * @param nbt                 The block nbt to match.
+ * @param componentPredicates Predicates to match a block entity's stored data components
  */
 public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable CompoundBinaryTag nbt,
-        @NotNull DataComponentPredicates components
+        @Nullable DataComponentPredicates componentPredicates
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
      */
-    public static final BlockPredicate ALL = new BlockPredicate(null, null, null);
+    public static final BlockPredicate ALL = new BlockPredicate(null, null, null, null);
     /**
      * <p>Matches no blocks.</p>
      *
-     * <p>Works based on the property that an exact property will never match a property which doesnt exist on any block.</p>
+     * <p>Works based on the property that an exact property will never match a property which doesn't exist on any block.</p>
      */
-    public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null);
+    public static final BlockPredicate NONE = new BlockPredicate(null, new PropertiesPredicate(Map.of("no_such_property", new PropertiesPredicate.ValuePredicate.Exact("never"))), null, null);
 
     public static final NetworkBuffer.Type<BlockPredicate> NETWORK_TYPE = NetworkBufferTemplate.template(
             RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
             PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
             NBT_COMPOUND.optional(), BlockPredicate::nbt,
-            DataComponentPredicates.NETWORK_TYPE, BlockPredicate::components,
-            BlockPredicate::new);
-    public static final StructCodec<BlockPredicate> CODEC = StructCodec.struct(
+            DataComponentPredicates.NETWORK_TYPE, BlockPredicate::componentPredicates,
+            BlockPredicate::new
+    );
+
+    public static final Codec<BlockPredicate> CODEC = StructCodec.struct(
             "blocks", RegistryTag.codec(Registries::blocks).optional(), BlockPredicate::blocks,
             "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
             "nbt", Codec.NBT_COMPOUND.optional(), BlockPredicate::nbt,
-            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::components,
-            BlockPredicate::new);
+            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::componentPredicates,
+            BlockPredicate::new
+    );
 
     public BlockPredicate(@NotNull RegistryTag<Block> blocks) {
-        this(blocks, null, null);
+        this(blocks, null, null, null);
     }
 
     public BlockPredicate(@NotNull Block... blocks) {
@@ -72,15 +83,27 @@ public record BlockPredicate(
     }
 
     public BlockPredicate(@NotNull PropertiesPredicate state) {
-        this(null, state, null);
+        this(null, state, null, null);
     }
 
     public BlockPredicate(@NotNull CompoundBinaryTag nbt) {
-        this(null, null, nbt);
+        this(null, null, nbt, null);
+    }
+
+    public BlockPredicate(@NotNull DataComponentMap components) {
+        this(null, null, null, new DataComponentPredicates(components, null));
+    }
+
+    public BlockPredicate(@NotNull Map<String, DataComponentPredicate> predicates) {
+        this(null, null, null, new DataComponentPredicates(null, predicates));
+    }
+
+    public BlockPredicate(@NotNull DataComponentPredicates predicates) {
+        this(null, null, null, predicates);
     }
 
     public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt) {
-        this(blocks, state, nbt, DataComponentPredicates.EMPTY);
+        this(blocks, state, nbt, null);
     }
 
     @Override
@@ -89,6 +112,19 @@ public record BlockPredicate(
             return false;
         if (state != null && !state.test(block))
             return false;
-        return nbt == null || Objects.equals(nbt, BlockUtils.extractClientNbt(block));
+        if (nbt != null && !Objects.equals(nbt, BlockUtils.extractClientNbt(block)))
+            return false;
+        if (componentPredicates == null)
+            return true;
+
+        CompoundBinaryTag componentsTag = block.nbt() != null ? block.nbt().getCompound("components") : CompoundBinaryTag.empty();
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        Result<DataComponentMap> result = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag);
+        switch (result) {
+            case Result.Ok(DataComponentMap components) -> {
+                return componentPredicates.test(components);
+            }
+            case Result.Error<DataComponentMap> error -> throw new IllegalStateException(error.message());
+        }
     }
 }
