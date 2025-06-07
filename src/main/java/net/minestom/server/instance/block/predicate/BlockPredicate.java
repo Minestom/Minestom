@@ -106,7 +106,7 @@ public record BlockPredicate(
         this(blocks, state, nbt, null);
     }
 
-    public BlockPredicate(@Nullable BlockTypeFilter blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt, @Nullable DataComponentPredicates componentPredicates) {
+    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable CompoundBinaryTag nbt, @Nullable DataComponentPredicates componentPredicates) {
         this.blocks = blocks;
         this.state = state;
         this.nbt = nbt;
