@@ -49,7 +49,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record EnchantmentListPredicate(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+    record EnchantmentListPredicate(@Nullable RegistryTag<Enchantment> enchantments,
                                     @Nullable Range.Int levels) implements Predicate<EnchantmentList> {
 
         public static Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
@@ -169,6 +169,28 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
+    record FireworkExplosionPredicate(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+                                      @Nullable Boolean hasTwinkle,
+                                      @Nullable Boolean hasTrail) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
+
+        public static final Codec<FireworkExplosionPredicate> CODEC = StructCodec.struct(
+                "shape", Codec.Enum(net.minestom.server.item.component.FireworkExplosion.Shape.class).optional(), FireworkExplosionPredicate::shape,
+                "has_twinkle", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTwinkle,
+                "has_trail", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTrail,
+                FireworkExplosionPredicate::new
+        );
+
+        @Override
+        public boolean test(@Nullable net.minestom.server.item.component.FireworkExplosion explosion) {
+            if (explosion == null) {
+                return false;
+            }
+            return (this.shape == null || this.shape == explosion.shape()) &&
+                    (this.hasTwinkle == null || this.hasTwinkle == explosion.hasTwinkle()) &&
+                    (this.hasTrail == null || this.hasTrail == explosion.hasTrail());
+        }
+    }
+
     record Fireworks(
             @Nullable CollectionPredicate<net.minestom.server.item.component.FireworkExplosion, FireworkExplosionPredicate> explosions,
             @Nullable Range.Int flightDuration) implements DataComponentPredicate {
@@ -187,32 +209,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             return explosions == null || explosions.test(fireworks.explosions());
         }
-
-        record FireworkExplosionPredicate(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
-                                          @Nullable Boolean hasTwinkle,
-                                          @Nullable Boolean hasTrail) implements Predicate<net.minestom.server.item.component.FireworkExplosion> {
-
-            public static final Codec<FireworkExplosionPredicate> CODEC = StructCodec.struct(
-                    "shape", Codec.Enum(net.minestom.server.item.component.FireworkExplosion.Shape.class).optional(), FireworkExplosionPredicate::shape,
-                    "has_twinkle", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTwinkle,
-                    "has_trail", Codec.BOOLEAN.optional(), FireworkExplosionPredicate::hasTrail,
-                    FireworkExplosionPredicate::new
-            );
-
-            @Override
-            public boolean test(@Nullable net.minestom.server.item.component.FireworkExplosion explosion) {
-                if (explosion == null) {
-                    return false;
-                }
-                return (this.shape == null || this.shape == explosion.shape()) &&
-                        (this.hasTwinkle == null || this.hasTwinkle == explosion.hasTwinkle()) &&
-                        (this.hasTrail == null || this.hasTrail == explosion.hasTrail());
-            }
-        }
     }
 
     record FireworkExplosion(@NotNull Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
         public static final Codec<FireworkExplosion> CODEC = Fireworks.FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
+
+        public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
+                                 @Nullable Boolean hasTwinkle,
+                                 @Nullable Boolean hasTrail) {
+            this(new Fireworks.FireworkExplosionPredicate(shape, hasTwinkle, hasTrail));
+        }
 
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
@@ -222,7 +228,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record WritableBook(
-            @Nullable CollectionPredicate<FilteredText<String>, WritableBook.PagePredicate> pages) implements DataComponentPredicate {
+            @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements DataComponentPredicate {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
                 "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
@@ -236,7 +242,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages.test(content.pages());
         }
 
-        record PagePredicate(@NotNull String contents) implements Predicate<FilteredText<String>> {
+        public record PagePredicate(@NotNull String contents) implements Predicate<FilteredText<String>> {
 
             public static final Codec<PagePredicate> CODEC = Codec.STRING.transform(PagePredicate::new, PagePredicate::contents);
 
@@ -248,7 +254,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     }
 
-    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, WrittenBook.PagePredicate> pages,
+    record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, PagePredicate> pages,
                        @Nullable String author,
                        @Nullable String title,
                        @Nullable Range.Int generation, @Nullable Boolean resolved) implements DataComponentPredicate {
@@ -279,13 +285,41 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             return pages == null || pages.test(content.pages());
         }
 
-        record PagePredicate(@NotNull Component contents) implements Predicate<FilteredText<Component>> {
+        public record PagePredicate(@NotNull Component contents) implements Predicate<FilteredText<Component>> {
             public static final Codec<PagePredicate> CODEC = Codec.COMPONENT.transform(PagePredicate::new, PagePredicate::contents);
 
             @Override
             public boolean test(@NotNull FilteredText<Component> text) {
                 return text.text().equals(contents);
             }
+        }
+    }
+
+    record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
+                                      @Nullable Range.Double amount,
+                                      @Nullable AttributeOperation operation,
+                                      @Nullable EquipmentSlotGroup slot) implements Predicate<AttributeList.Modifier> {
+
+        public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
+                "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
+                "id", Codec.KEY.optional(), AttributeModifierPredicate::id,
+                "amount", DataComponentPredicates.DOUBLE_RANGE_CODEC.optional(), AttributeModifierPredicate::amount,
+                "operation", AttributeOperation.CODEC.optional(), AttributeModifierPredicate::operation,
+                "slot", EquipmentSlotGroup.CODEC.optional(), AttributeModifierPredicate::slot,
+                AttributeModifierPredicate::new
+        );
+
+        @Override
+        public boolean test(AttributeList.Modifier other) {
+            if (attribute != null && !attribute.key().equals(other.attribute().key()))
+                return false;
+            if (id != null && !id.equals(other.modifier().id()))
+                return false;
+            if (amount != null && !amount.inRange(other.modifier().amount()))
+                return false;
+            if (operation != null && !operation.equals(other.modifier().operation()))
+                return false;
+            return slot == null || slot.equals(other.slot());
         }
     }
 
@@ -303,34 +337,6 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             AttributeList attributes = holder.get(DataComponents.ATTRIBUTE_MODIFIERS);
             if (attributes == null) return false;
             return modifiers.test(attributes.modifiers());
-        }
-
-        record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
-                                          @Nullable Range.Double amount,
-                                          @Nullable AttributeOperation operation,
-                                          @Nullable EquipmentSlotGroup slot) implements Predicate<AttributeList.Modifier> {
-
-            public static final Codec<AttributeModifierPredicate> CODEC = StructCodec.struct(
-                    "attribute", Attribute.CODEC.optional(), AttributeModifierPredicate::attribute,
-                    "id", Codec.KEY.optional(), AttributeModifierPredicate::id,
-                    "amount", DataComponentPredicates.DOUBLE_RANGE_CODEC.optional(), AttributeModifierPredicate::amount,
-                    "operation", AttributeOperation.CODEC.optional(), AttributeModifierPredicate::operation,
-                    "slot", EquipmentSlotGroup.CODEC.optional(), AttributeModifierPredicate::slot,
-                    AttributeModifierPredicate::new
-            );
-
-            @Override
-            public boolean test(AttributeList.Modifier other) {
-                if (attribute != null && !attribute.key().equals(other.attribute().key()))
-                    return false;
-                if (id != null && !id.equals(other.modifier().id()))
-                    return false;
-                if (amount != null && !amount.inRange(other.modifier().amount()))
-                    return false;
-                if (operation != null && !operation.equals(other.modifier().operation()))
-                    return false;
-                return slot == null || slot.equals(other.slot());
-            }
         }
     }
 
