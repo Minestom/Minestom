@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Called with {@link LivingEntity#damage(net.minestom.server.registry.DynamicRegistry.Key, float)}.
+ * Called with {@link LivingEntity#damage(net.minestom.server.registry.RegistryKey, float)}.
  */
 public class EntityDamageEvent implements EntityInstanceEvent, CancellableEvent {
 

@@ -2,29 +2,39 @@ package net.minestom.server.item.armor;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
-import net.minestom.server.item.Material;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public sealed interface TrimPattern extends ProtocolObject permits TrimPatternImpl {
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<TrimPattern>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::trimPattern, true);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<TrimPattern>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::trimPattern);
+public sealed interface TrimPattern extends Holder.Direct<TrimPattern>, TrimPatterns permits TrimPatternImpl {
+    @NotNull NetworkBuffer.Type<TrimPattern> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+            NetworkBuffer.KEY, TrimPattern::assetId,
+            NetworkBuffer.COMPONENT, TrimPattern::description,
+            NetworkBuffer.BOOLEAN, TrimPattern::isDecal,
+            TrimPattern::create);
+    @NotNull Codec<TrimPattern> REGISTRY_CODEC = StructCodec.struct(
+            "asset_id", Codec.KEY, TrimPattern::assetId,
+            "description", Codec.COMPONENT, TrimPattern::description,
+            "decal", Codec.BOOLEAN, TrimPattern::isDecal,
+            TrimPattern::create);
+
+    @NotNull NetworkBuffer.Type<Holder<TrimPattern>> NETWORK_TYPE = Holder.networkType(Registries::trimPattern, REGISTRY_NETWORK_TYPE);
+    @NotNull Codec<Holder<TrimPattern>> CODEC = Holder.codec(Registries::trimPattern, REGISTRY_CODEC);
 
     static @NotNull TrimPattern create(
             @NotNull Key assetId,
-            @NotNull Material template,
             @NotNull Component description,
             boolean decal
     ) {
-        return new TrimPatternImpl(assetId, template, description, decal, null);
+        return new TrimPatternImpl(assetId, description, decal);
     }
 
     static @NotNull Builder builder() {
@@ -38,26 +48,17 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:trim_pattern", TrimPatternImpl.REGISTRY_NBT_TYPE, Registry.Resource.TRIM_PATTERNS,
-                (namespace, props) -> new TrimPatternImpl(Registry.trimPattern(namespace, props))
-        );
+        return DynamicRegistry.create(Key.key("minecraft:trim_pattern"), REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
     }
 
     @NotNull Key assetId();
-
-    @NotNull Material template();
 
     @NotNull Component description();
 
     boolean isDecal();
 
-    @Contract(pure = true)
-    @Nullable Registry.TrimPatternEntry registry();
-
     final class Builder {
         private Key assetId;
-        private Material template;
         private Component description;
         private boolean decal;
 
@@ -76,12 +77,6 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder template(@NotNull Material template) {
-            this.template = template;
-            return this;
-        }
-
-        @Contract(value = "_ -> this", pure = true)
         public @NotNull Builder description(@NotNull Component description) {
             this.description = description;
             return this;
@@ -95,7 +90,7 @@ public sealed interface TrimPattern extends ProtocolObject permits TrimPatternIm
 
         @Contract(pure = true)
         public @NotNull TrimPattern build() {
-            return new TrimPatternImpl(assetId, template, description, decal, null);
+            return new TrimPatternImpl(assetId, description, decal);
         }
     }
 }

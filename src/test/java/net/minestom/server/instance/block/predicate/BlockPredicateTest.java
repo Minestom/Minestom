@@ -112,7 +112,7 @@ public class BlockPredicateTest {
 
     @Test
     public void blockAlone() {
-        var predicate = new BlockPredicate(new BlockTypeFilter.Blocks(Block.STONE));
+        var predicate = new BlockPredicate(Block.STONE);
         assertTrue(predicate.test(Block.STONE));
         assertFalse(predicate.test(Block.DIRT));
     }

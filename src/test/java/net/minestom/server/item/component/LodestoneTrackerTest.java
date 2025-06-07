@@ -1,8 +1,8 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.item.ItemComponent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public class LodestoneTrackerTest extends AbstractItemComponentTest<LodestoneTra
 
     @Override
     protected @NotNull DataComponent<LodestoneTracker> component() {
-        return ItemComponent.LODESTONE_TRACKER;
+        return DataComponents.LODESTONE_TRACKER;
     }
 
     @Override

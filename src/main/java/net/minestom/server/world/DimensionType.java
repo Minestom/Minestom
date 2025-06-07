@@ -1,8 +1,12 @@
 package net.minestom.server.world;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.utils.Unit;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -11,10 +15,44 @@ import org.jetbrains.annotations.Nullable;
 /**
  * https://minecraft.wiki/w/Custom_dimension
  */
-public sealed interface DimensionType extends ProtocolObject, DimensionTypes permits DimensionTypeImpl {
+public sealed interface DimensionType extends DimensionTypes permits DimensionTypeImpl {
+
+    @NotNull Key OVERWORLD_EFFECTS = Key.key("minecraft:overworld");
 
     int VANILLA_MIN_Y = -64;
     int VANILLA_MAX_Y = 319;
+
+    @NotNull Codec<DimensionType> REGISTRY_CODEC = StructCodec.struct(
+            "ultrawarm", Codec.BOOLEAN, DimensionType::ultrawarm,
+            "natural", Codec.BOOLEAN, DimensionType::natural,
+            "coordinate_scale", Codec.DOUBLE, DimensionType::coordinateScale,
+            "has_skylight", Codec.BOOLEAN, DimensionType::hasSkylight,
+            "has_ceiling", Codec.BOOLEAN, DimensionType::hasCeiling,
+            "ambient_light", Codec.FLOAT, DimensionType::ambientLight,
+            "fixed_time", Codec.LONG.optional(), DimensionType::fixedTime,
+            "piglin_safe", Codec.BOOLEAN, DimensionType::piglinSafe,
+            "bed_works", Codec.BOOLEAN, DimensionType::bedWorks,
+            "respawn_anchor_works", Codec.BOOLEAN, DimensionType::respawnAnchorWorks,
+            "has_raids", Codec.BOOLEAN, DimensionType::hasRaids,
+            "logical_height", Codec.INT, DimensionType::logicalHeight,
+            "min_y", Codec.INT, DimensionType::minY,
+            "height", Codec.INT, DimensionType::height,
+            "infiniburn", Codec.STRING, DimensionType::infiniburn,
+            "effects", Codec.KEY.optional(OVERWORLD_EFFECTS), DimensionType::effects,
+            "monster_spawn_block_light_limit", Codec.INT, DimensionType::monsterSpawnBlockLightLimit,
+            "monster_spawn_light_level", Codec.INT.orElse(Codec.UNIT.transform(ignored -> 0, ignored -> Unit.INSTANCE)), DimensionType::monsterSpawnLightLevel,
+            DimensionType::create);
+
+    static @NotNull DimensionType create(
+            boolean ultrawarm, boolean natural, double coordinateScale, boolean hasSkylight, boolean hasCeiling,
+            float ambientLight, @Nullable Long fixedTime, boolean piglinSafe, boolean bedWorks, boolean respawnAnchorWorks,
+            boolean hasRaids, int logicalHeight, int minY, int height, @NotNull String infiniburn, @NotNull Key effects,
+            int monsterSpawnBlockLightLimit, int monsterSpawnLightLevel
+    ) {
+        return new DimensionTypeImpl(ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
+                fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
+                infiniburn, effects, monsterSpawnBlockLightLimit, monsterSpawnLightLevel);
+    }
 
     static @NotNull Builder builder() {
         return new Builder();
@@ -27,10 +65,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<DimensionType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:dimension_type", DimensionTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.DIMENSION_TYPES,
-                (namespace, props) -> new DimensionTypeImpl(Registry.dimensionType(namespace, props))
-        );
+        return DynamicRegistry.create(Key.key("minecraft:dimension_type"), REGISTRY_CODEC, RegistryData.Resource.DIMENSION_TYPES);
     }
 
     boolean ultrawarm();
@@ -67,7 +102,11 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
 
     @NotNull String infiniburn();
 
-    @NotNull String effects();
+    @NotNull Key effects();
+
+    int monsterSpawnBlockLightLimit();
+
+    int monsterSpawnLightLevel();
 
     default int totalHeight() {
         return minY() + height();
@@ -90,7 +129,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         private int minY = VANILLA_MIN_Y;
         private int height = VANILLA_MAX_Y - VANILLA_MIN_Y + 1;
         private String infiniburn = "#minecraft:infiniburn_overworld";
-        private String effects = "minecraft:overworld";
+        private Key effects = OVERWORLD_EFFECTS;
 
         private Builder() {
         }
@@ -186,7 +225,12 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
         }
 
         @Contract(value = "_ -> this", pure = true)
-        public @NotNull Builder effects(@NotNull String effects) {
+        public @NotNull Builder effects(@KeyPattern @NotNull String effects) {
+            return effects(Key.key(effects));
+        }
+
+        @Contract(value = "_ -> this", pure = true)
+        public @NotNull Builder effects(@NotNull Key effects) {
             this.effects = effects;
             return this;
         }
@@ -196,7 +240,7 @@ public sealed interface DimensionType extends ProtocolObject, DimensionTypes per
             return new DimensionTypeImpl(
                     ultrawarm, natural, coordinateScale, hasSkylight, hasCeiling, ambientLight,
                     fixedTime, piglinSafe, bedWorks, respawnAnchorWorks, hasRaids, logicalHeight, minY, height,
-                    infiniburn, effects, null
+                    infiniburn, effects, 0, 0
             );
         }
     }

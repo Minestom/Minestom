@@ -1,7 +1,7 @@
 package net.minestom.server.listener;
 
 import net.minestom.server.MinecraftServer;
-import net.minestom.server.entity.EquipmentSlot;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.event.EventDispatcher;
@@ -9,15 +9,14 @@ import net.minestom.server.event.item.PlayerBeginItemUseEvent;
 import net.minestom.server.event.player.PlayerUseItemEvent;
 import net.minestom.server.inventory.PlayerInventory;
 import net.minestom.server.item.ItemAnimation;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.Consumable;
 import net.minestom.server.item.component.Equippable;
+import net.minestom.server.item.component.InstrumentComponent;
 import net.minestom.server.item.instrument.Instrument;
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
-import net.minestom.server.registry.DynamicRegistry;
 import org.jetbrains.annotations.NotNull;
 
 public class UseItemListener {
@@ -26,7 +25,7 @@ public class UseItemListener {
         final PlayerHand hand = packet.hand();
         final ItemStack itemStack = player.getItemInHand(hand);
         final Material material = itemStack.material();
-        final Consumable consumable = itemStack.get(ItemComponent.CONSUMABLE);
+        final Consumable consumable = itemStack.get(DataComponents.CONSUMABLE);
 
         // The following item animations and use item times come from vanilla.
         // These items do not yet use components, but hopefully they will in the future
@@ -91,8 +90,8 @@ public class UseItemListener {
         }
 
         // If the item was not usable, we can try to do an equipment swap with it.
-        final Equippable equippable = itemStack.get(ItemComponent.EQUIPPABLE);
-        if (equippable != null && equippable.swappable() && equippable.slot() != EquipmentSlot.BODY) {
+        final Equippable equippable = itemStack.get(DataComponents.EQUIPPABLE);
+        if (equippable != null && equippable.swappable() && equippable.slot().armorSlot() > 0) {
             final ItemStack currentlyEquipped = player.getEquipment(equippable.slot());
             player.setEquipment(equippable.slot(), itemStack);
             player.setItemInHand(hand, currentlyEquipped);
@@ -100,10 +99,10 @@ public class UseItemListener {
     }
 
     private static int getInstrumentTime(@NotNull ItemStack itemStack) {
-        final DynamicRegistry.Key<Instrument> instrumentName = itemStack.get(ItemComponent.INSTRUMENT);
-        if (instrumentName == null) return 0;
+        final InstrumentComponent holder = itemStack.get(DataComponents.INSTRUMENT);
+        if (holder == null) return 0;
 
-        final Instrument instrument = MinecraftServer.getInstrumentRegistry().get(instrumentName);
+        final Instrument instrument = holder.resolve(MinecraftServer.getInstrumentRegistry());
         if (instrument == null) return 0;
 
         return instrument.useDurationTicks();

@@ -1,19 +1,26 @@
 package net.minestom.server.message;
 
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatTypeImpl {
+public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes permits ChatTypeImpl {
+
+    @NotNull Codec<ChatType> REGISTRY_CODEC = StructCodec.struct(
+            "chat", ChatTypeDecoration.CODEC, ChatType::chat,
+            "narration", ChatTypeDecoration.CODEC, ChatType::narration,
+            ChatType::create);
 
     static @NotNull ChatType create(
             @NotNull ChatTypeDecoration chat,
             @NotNull ChatTypeDecoration narration
     ) {
-        return new ChatTypeImpl(chat, narration, null);
+        return new ChatTypeImpl(chat, narration);
     }
 
     static @NotNull Builder builder() {
@@ -28,18 +35,12 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:chat_type", ChatTypeImpl.REGISTRY_NBT_TYPE, Registry.Resource.CHAT_TYPES,
-                (namespace, props) -> new ChatTypeImpl(Registry.chatType(namespace, props))
-        );
+        return DynamicRegistry.create(Key.key("minecraft:chat_type"), REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
     }
 
     @NotNull ChatTypeDecoration chat();
 
     @NotNull ChatTypeDecoration narration();
-
-    @Override
-    @Nullable Registry.ChatTypeEntry registry();
 
     final class Builder {
         private ChatTypeDecoration chat;
@@ -59,7 +60,7 @@ public sealed interface ChatType extends ProtocolObject, ChatTypes permits ChatT
         }
 
         public @NotNull ChatType build() {
-            return new ChatTypeImpl(chat, narration, null);
+            return new ChatTypeImpl(chat, narration);
         }
     }
 }

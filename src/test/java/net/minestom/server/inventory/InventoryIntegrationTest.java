@@ -2,6 +2,7 @@ package net.minestom.server.inventory;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.event.inventory.InventoryOpenEvent;
 import net.minestom.server.event.item.ItemDropEvent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -10,6 +11,8 @@ import net.minestom.server.utils.inventory.PlayerInventoryUtils;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
+
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -216,5 +219,27 @@ public class InventoryIntegrationTest {
             assertEquals(35, slot.slot());
             assertEquals(MAGIC_STACK, slot.itemStack());
         });
+    }
+
+    @Test
+    public void testEventNode(Env env) {
+        var instance = env.createFlatInstance();
+        var connection = env.createConnection();
+
+        var player = connection.connect(instance, new Pos(0, 42, 0));
+        assertEquals(instance, player.getInstance());
+
+        Inventory inventory = new Inventory(InventoryType.CHEST_6_ROW, Component.empty());
+        AtomicBoolean called = new AtomicBoolean(false);
+        inventory.eventNode().addListener(
+                InventoryOpenEvent.class,
+                event -> {
+                    assertSame(inventory, event.getInventory());
+                    called.set(true);
+                }
+        );
+
+        player.openInventory(inventory);
+        assertTrue(called.get(), "InventoryOpenEvent not fired");
     }
 }

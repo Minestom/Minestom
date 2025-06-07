@@ -13,7 +13,7 @@ public record UpdateLightPacket(int chunkX, int chunkZ,
     public static final NetworkBuffer.Type<UpdateLightPacket> SERIALIZER = NetworkBufferTemplate.template(
             VAR_INT, UpdateLightPacket::chunkX,
             VAR_INT, UpdateLightPacket::chunkZ,
-            LightData.SERIALIZER, UpdateLightPacket::lightData,
+            LightData.NETWORK_TYPE, UpdateLightPacket::lightData,
             UpdateLightPacket::new
     );
 }

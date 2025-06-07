@@ -3,8 +3,10 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.MergedMap;
@@ -19,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-record BlockImpl(@NotNull Registry.BlockEntry registry,
+record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
                  @Nullable CompoundBinaryTag nbt,
                  @Nullable BlockHandler handler) implements Block {
@@ -39,15 +41,16 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
     private static final ObjectArray<PropertyType[]> PROPERTIES_TYPE = ObjectArray.singleThread();
     // Block id -> Map<Properties, Block>
     private static final ObjectArray<Long2ObjectArrayMap<BlockImpl>> POSSIBLE_STATES = ObjectArray.singleThread();
-    private static final Registry.Container<Block> CONTAINER = Registry.createStaticContainer(Registry.Resource.BLOCKS,
+    static final Registry<Block> REGISTRY = RegistryData.createStaticRegistry(
+            Key.key("minecraft:block"),
             (namespace, properties) -> {
                 final int blockId = properties.getInt("id");
-                final Registry.Properties stateObject = properties.section("states");
+                final RegistryData.Properties stateObject = properties.section("states");
 
                 // Retrieve properties
                 PropertyType[] propertyTypes;
                 {
-                    Registry.Properties stateProperties = properties.section("properties");
+                    RegistryData.Properties stateProperties = properties.section("properties");
                     if (stateProperties != null) {
                         final int stateCount = stateProperties.size();
                         if (stateCount > MAX_STATES) {
@@ -85,8 +88,8 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
                             propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
                         }
 
-                        var mainProperties = Registry.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
-                        final BlockImpl block = new BlockImpl(Registry.block(namespace, mainProperties),
+                        var mainProperties = RegistryData.Properties.fromMap(new MergedMap<>(stateOverride, properties.asMap()));
+                        final BlockImpl block = new BlockImpl(RegistryData.block(namespace, mainProperties),
                                 propertiesValue, null, null);
                         BLOCK_STATE_MAP.set(block.stateId(), block);
                         propertiesKeys[propertiesOffset] = propertiesValue;
@@ -105,24 +108,12 @@ record BlockImpl(@NotNull Registry.BlockEntry registry,
         POSSIBLE_STATES.trim();
     }
 
-    static Block get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static Block getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static Block getId(int id) {
-        return CONTAINER.getId(id);
+    static @UnknownNullability Block get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     static Block getState(int stateId) {
         return BLOCK_STATE_MAP.get(stateId);
-    }
-
-    static Collection<Block> values() {
-        return CONTAINER.values();
     }
 
     @Override

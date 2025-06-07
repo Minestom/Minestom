@@ -96,14 +96,15 @@ public interface Palette {
                     case PaletteSingle single -> {
                         buffer.write(BYTE, (byte) 0);
                         buffer.write(VAR_INT, single.value());
-                        buffer.write(VAR_INT, 0);
                     }
                     case PaletteIndirect indirect -> {
                         buffer.write(BYTE, (byte) value.bitsPerEntry());
                         if (indirect.bitsPerEntry() <= indirect.maxBitsPerEntry()) { // Palette index
                             buffer.write(VAR_INT.list(), indirect.paletteToValueList);
                         }
-                        buffer.write(LONG_ARRAY, indirect.values);
+                        for (long l : indirect.values) {
+                            buffer.write(LONG, l);
+                        }
                     }
                     default -> throw new UnsupportedOperationException("Unsupported palette type: " + value.getClass());
                 }
@@ -115,12 +116,15 @@ public interface Palette {
                 if (bitsPerEntry == 0) {
                     // Single valued 0-0
                     final int value = buffer.read(VAR_INT);
-                    buffer.read(VAR_INT); // Skip size
                     return new PaletteSingle((byte) dimension, value);
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
-                    final long[] data = buffer.read(LONG_ARRAY);
+                    int entriesPerLong = 64 / bitsPerEntry;
+                    final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
+                    for (int i = 0; i < data.length; i++) {
+                        data[i] = buffer.read(LONG);
+                    }
                     return new PaletteIndirect(dimension, maxIndirect, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             palette, data);

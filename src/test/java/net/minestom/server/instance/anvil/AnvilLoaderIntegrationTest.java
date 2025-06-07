@@ -6,7 +6,7 @@ import net.minestom.server.instance.Section;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.world.biome.Biome;
 import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
@@ -104,7 +104,7 @@ public class AnvilLoaderIntegrationTest {
                 for (int y = 0; y < 16; y++) {
                     for (int x = 0; x < 16; x++) {
                         for (int z = 0; z < 16; z++) {
-                            DynamicRegistry.Key<Biome> b = chunk.getBiome(x, y, z);
+                            RegistryKey<Biome> b = chunk.getBiome(x, y, z);
                             assertEquals(Biome.PLAINS, b);
                         }
                     }
