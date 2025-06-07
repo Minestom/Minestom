@@ -11,6 +11,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.block.predicate.DataComponentPredicates;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -46,8 +48,10 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
     public void testSingleBlockNbtInput() throws IOException {
         var tag = MinestomAdventure.tagStringIO().asTag("{blocks:'minecraft:stone'}");
         var component = assertOk(DataComponents.CAN_PLACE_ON.decode(Transcoder.NBT, tag));
-        var expected = new BlockPredicates(new BlockPredicate(Block.STONE));
+        var expected = new BlockPredicates(new BlockPredicate(RegistryTag.direct(RegistryKey.unsafeOf("minecraft:stone"))));
         assertEquals(expected, component);
+        assertEquals(1, component.predicates().getFirst().blocks().size());
+        assertTrue(component.predicates().getFirst().blocks().contains(Block.STONE));
     }
 
     @Test
