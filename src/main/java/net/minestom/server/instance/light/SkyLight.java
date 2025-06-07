@@ -59,7 +59,10 @@ final class SkyLight implements Light {
             if (neighborSection == null) continue;
 
             Palette otherPalette = paletteLookup.palette(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            if (otherPalette == null) continue;
+
             Light otherLight = lightLookup.light(neighborSection.blockX(), neighborSection.blockY(), neighborSection.blockZ());
+            if (otherLight == null) continue;
 
             for (int bx = 0; bx < 16; bx++) {
                 for (int by = 0; by < 16; by++) {

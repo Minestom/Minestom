@@ -7,6 +7,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -70,11 +71,11 @@ public interface Light {
 
     @FunctionalInterface
     interface LightLookup {
-        Light light(int x, int y, int z);
+        @Nullable Light light(int x, int y, int z);
     }
 
     @FunctionalInterface
     interface PaletteLookup {
-        Palette palette(int x, int y, int z);
+        @Nullable Palette palette(int x, int y, int z);
     }
 }
