@@ -16,6 +16,7 @@ import net.minestom.server.item.armor.TrimMaterial;
 import net.minestom.server.item.armor.TrimPattern;
 import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.item.component.*;
+import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.*;
@@ -48,86 +49,69 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         }
     }
 
-    record Enchantments(@NotNull List<Enchantment> children) implements DataComponentPredicate {
-        public static Codec<Enchantments> CODEC = Enchantment.CODEC.list().transform(Enchantments::new, Enchantments::children);
+    record EnchantmentListPredicate(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+                                    @Nullable Range.Int levels) implements Predicate<EnchantmentList> {
+
+        public static Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
+                "enchantments", RegistryTag.codec(Registries::enchantment).optional(), EnchantmentListPredicate::enchantments,
+                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), EnchantmentListPredicate::levels,
+                EnchantmentListPredicate::new
+        );
+
+        @Override
+        public boolean test(@NotNull EnchantmentList enchantmentList) {
+            if (enchantments != null) {
+                for (RegistryKey<Enchantment> key : enchantments) {
+                    if (enchantmentList.has(key) && (levels == null || levels.inRange(enchantmentList.level(key)))) {
+                        return true;
+                    }
+                }
+                return false;
+            } else if (levels != null) {
+                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
+                return enchantmentList.enchantments().entrySet().stream().anyMatch(entry -> levels.inRange(entry.getValue()));
+            } else {
+                // If neither are specified, the predicate returns true when the item has any enchantments
+                return enchantmentList.enchantments().isEmpty();
+            }
+        }
+    }
+
+    record Enchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+        public static Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
             children = List.copyOf(children);
         }
 
+        public Enchantments(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+                            @Nullable Range.Int levels) {
+            this(List.of(new EnchantmentListPredicate(enchantments, levels)));
+        }
+
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
-            return children.stream().allMatch(enchantment -> enchantment.test(holder));
+            EnchantmentList enchantments = holder.get(DataComponents.ENCHANTMENTS);
+            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
     }
 
-    record Enchantment(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
-                       @Nullable Range.Int levels) {
-
-        public static Codec<Enchantment> CODEC = StructCodec.struct(
-                "enchantments", RegistryTag.codec(Registries::enchantment).optional(), Enchantment::enchantments,
-                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), Enchantment::levels,
-                Enchantment::new
-        );
-
-        public boolean test(@NotNull DataComponent.Holder holder) {
-            EnchantmentList holderEnchants = holder.get(DataComponents.ENCHANTMENTS);
-            if (holderEnchants == null) {
-                return false;
-            }
-            if (enchantments == null) {
-                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
-            }
-            for (RegistryKey<net.minestom.server.item.enchant.Enchantment> key : enchantments) {
-                if (holderEnchants.has(key) && (levels == null || levels.inRange(holderEnchants.level(key)))) {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-    }
-
-    record StoredEnchantments(@NotNull List<StoredEnchantment> children) implements DataComponentPredicate {
-        public static Codec<StoredEnchantments> CODEC = StoredEnchantment.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
+    record StoredEnchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
+        public static Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
             children = List.copyOf(children);
         }
 
+        public StoredEnchantments(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+                            @Nullable Range.Int levels) {
+            this(List.of(new EnchantmentListPredicate(enchantments, levels)));
+        }
+
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
-            return children.stream().allMatch(enchantment -> enchantment.test(holder));
-        }
-    }
-
-    record StoredEnchantment(
-            @Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
-            @Nullable Range.Int levels) {
-
-        public static Codec<StoredEnchantment> CODEC = StructCodec.struct(
-                "enchantments", RegistryTag.codec(Registries::enchantment).optional(), StoredEnchantment::enchantments,
-                "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), StoredEnchantment::levels,
-                StoredEnchantment::new
-        );
-
-        public boolean test(@NotNull DataComponent.Holder holder) {
-            EnchantmentList holderEnchants = holder.get(DataComponents.STORED_ENCHANTMENTS);
-            if (holderEnchants == null) {
-                return false;
-            }
-            if (enchantments == null) {
-                // If `enchantments` is not specified, the predicate returns true when any enchantment matches the specified `level`
-                return holderEnchants.enchantments().entrySet().stream().anyMatch(entry -> levels == null || levels.inRange(entry.getValue()));
-            }
-            for (RegistryKey<net.minestom.server.item.enchant.Enchantment> key : enchantments) {
-                if (holderEnchants.has(key) && (levels == null || levels.inRange(holderEnchants.level(key)))) {
-                    return true;
-                }
-            }
-
-            return false;
+            EnchantmentList enchantments = holder.get(DataComponents.STORED_ENCHANTMENTS);
+            return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
         }
     }
 
@@ -354,15 +338,6 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     record ArmorTrim(@Nullable RegistryTag<TrimMaterial> material, @Nullable RegistryTag<TrimPattern> pattern) implements DataComponentPredicate {
 
-        public ArmorTrim {
-            if (material != null) {
-                material = List.copyOf(material);
-            }
-            if (pattern != null) {
-                pattern = List.copyOf(pattern);
-            }
-        }
-
         public static final Codec<ArmorTrim> CODEC = StructCodec.struct(
                 "material", RegistryTag.codec(Registries::trimMaterial).optional(), ArmorTrim::material,
                 "pattern", RegistryTag.codec(Registries::trimPattern).optional(), ArmorTrim::pattern,
@@ -380,12 +355,6 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     }
 
     record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements DataComponentPredicate {
-
-        public JukeboxPlayable {
-            if (songs != null) {
-                songs = List.copyOf(songs);
-            }
-        }
 
         public static final Codec<JukeboxPlayable> CODEC = StructCodec.struct(
                 "song", RegistryTag.codec(Registries::jukeboxSong).optional(), JukeboxPlayable::songs,
