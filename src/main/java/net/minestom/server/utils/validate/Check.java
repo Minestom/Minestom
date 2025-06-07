@@ -49,6 +49,11 @@ public final class Check {
         throw new IllegalArgumentException(reason);
     }
 
+    @Contract("_, _ -> fail")
+    public static void fail(@NotNull String reason, Object... arguments) {
+        throw new IllegalArgumentException(MessageFormat.format(reason, arguments));
+    }
+
     @Contract("true, _ -> fail")
     public static void stateCondition(boolean condition, @NotNull String reason) {
         if (condition) {
