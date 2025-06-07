@@ -1,5 +1,7 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.HoverEvent;
@@ -203,15 +205,17 @@ public class PlayerInit {
                                 )
                         ),
                         List.of(
-                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null),
+                                new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, new DialogAction.DynamicCustom(Key.key("done_action"), null)),
                                 new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)
                         ),
                         null, 2
                 );
                 var coder = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
-                System.out.println(Dialog.REGISTRY_CODEC.encode(coder, dialog).orElseThrow().toString());
 
                 event.getPlayer().sendPacket(new ShowDialogPacket(dialog));
+            })
+            .addListener(PlayerCustomClickEvent.class, event -> {
+                System.out.println(event.getKey() + " -> " + (event.getPayload() == null ? "null" : TagStringIOExt.writeTag(event.getPayload())));
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());
