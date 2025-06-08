@@ -31,6 +31,7 @@ import java.util.List;
 public class Main {
 
     public static void main(String[] args) {
+        System.setProperty("minestom.new-socket-write-lock", "true");
         MinecraftServer.setCompressionThreshold(0);
 
         MinecraftServer minecraftServer = MinecraftServer.init();
