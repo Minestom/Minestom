@@ -1,13 +1,11 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.ListBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.book.FilteredText;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -24,35 +22,14 @@ public record WrittenBookContent(@NotNull FilteredText<String> title, @NotNull S
             VAR_INT, WrittenBookContent::generation,
             FilteredText.COMPONENT_NETWORK_TYPE.list(100), WrittenBookContent::pages,
             BOOLEAN, WrittenBookContent::resolved,
-            WrittenBookContent::new
-    );
-
-    public static final @NotNull BinaryTagSerializer<WrittenBookContent> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(
-            compound -> {
-                ListBinaryTag pagesTag = compound.getList("pages");
-                List<FilteredText<Component>> pages = pagesTag.stream()
-                        .map(FilteredText.COMPONENT_NBT_TYPE::read)
-                        .toList();
-                FilteredText<String> title = FilteredText.STRING_NBT_TYPE.read(compound.get("title"));
-                String author = compound.getString("author");
-                int generation = compound.getInt("generation");
-                boolean resolved = compound.getBoolean("resolved");
-                return new WrittenBookContent(title, author, generation, pages, resolved);
-            },
-            value -> {
-                ListBinaryTag.Builder<BinaryTag> pagesTag = ListBinaryTag.builder();
-                for (FilteredText<Component> page : value.pages) {
-                    pagesTag.add(FilteredText.COMPONENT_NBT_TYPE.write(page));
-                }
-                return CompoundBinaryTag.builder()
-                        .put("pages", pagesTag.build())
-                        .put("title", FilteredText.STRING_NBT_TYPE.write(value.title))
-                        .putString("author", value.author)
-                        .putInt("generation", value.generation)
-                        .putBoolean("resolved", value.resolved)
-                        .build();
-            }
-    );
+            WrittenBookContent::new);
+    public static final Codec<WrittenBookContent> CODEC = StructCodec.struct(
+            "title", FilteredText.STRING_CODEC, WrittenBookContent::title,
+            "author", Codec.STRING, WrittenBookContent::author,
+            "generation", Codec.INT.optional(0), WrittenBookContent::generation,
+            "pages", FilteredText.COMPONENT_CODEC.list(100).optional(List.of()), WrittenBookContent::pages,
+            "resolved", Codec.BOOLEAN.optional(false), WrittenBookContent::resolved,
+            WrittenBookContent::new);
 
     public WrittenBookContent {
         pages = List.copyOf(pages);

@@ -1,28 +1,17 @@
 package net.minestom.server.potion;
 
+import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.Collection;
+record PotionEffectImpl(RegistryData.PotionEffectEntry registry) implements PotionEffect {
+    static final Registry<PotionEffect> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:potion_effect"),
+            (namespace, properties) -> new PotionEffectImpl(RegistryData.potionEffect(namespace, properties)));
 
-record PotionEffectImpl(Registry.PotionEffectEntry registry) implements PotionEffect {
-    private static final Registry.Container<PotionEffect> CONTAINER = Registry.createStaticContainer(Registry.Resource.POTION_EFFECTS,
-            (namespace, properties) -> new PotionEffectImpl(Registry.potionEffect(namespace, properties)));
-
-    static PotionEffect get(@NotNull String namespace) {
-        return CONTAINER.get(namespace);
-    }
-
-    static PotionEffect getSafe(@NotNull String namespace) {
-        return CONTAINER.getSafe(namespace);
-    }
-
-    static PotionEffect getId(int id) {
-        return CONTAINER.getId(id);
-    }
-
-    static Collection<PotionEffect> values() {
-        return CONTAINER.values();
+    static @UnknownNullability PotionEffect get(@NotNull String key) {
+        return REGISTRY.get(Key.key(key));
     }
 
     @Override

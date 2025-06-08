@@ -1,10 +1,11 @@
 package net.minestom.server.adventure.serializer.nbt;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.*;
-import net.kyori.adventure.nbt.api.BinaryTagHolder;
 import net.kyori.adventure.text.*;
 import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.DataComponentValue;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
@@ -14,10 +15,7 @@ import net.minestom.server.utils.validate.Check;
 import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 //todo write tests for me!!
 final class NbtComponentSerializerImpl implements NbtComponentSerializer {
@@ -143,9 +141,9 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         // Interactivity
         var insertion = compound.getString("insertion");
         if (!insertion.isEmpty()) style.insertion(insertion);
-        var clickEvent = compound.getCompound("clickEvent");
+        var clickEvent = compound.getCompound("click_event");
         if (clickEvent.size() > 0) style.clickEvent(deserializeClickEvent(clickEvent));
-        var hoverEvent = compound.getCompound("hoverEvent");
+        var hoverEvent = compound.getCompound("hover_event");
         if (hoverEvent.size() > 0) style.hoverEvent(deserializeHoverEvent(hoverEvent));
 
         return style.build();
@@ -218,35 +216,86 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         Check.notNull(actionName, "Click event must have an action field");
         var action = ClickEvent.Action.NAMES.value(actionName);
         Check.notNull(action, "Unknown click event action: " + actionName);
-        var value = compound.getString("value");
-        Check.notNull(value, "Click event must have a value field");
-        return ClickEvent.clickEvent(action, value);
+        switch (action) {
+            case OPEN_URL -> {
+                var value = compound.getString("url");
+                Check.notNull(value, "Click event of type open_url must have a url field");
+                return ClickEvent.clickEvent(action, value);
+            }
+            case OPEN_FILE -> {
+                var value = compound.getString("path");
+                Check.notNull(value, "Click event of type open_file must have a path field");
+                return ClickEvent.clickEvent(action, value);
+            }
+            case RUN_COMMAND, SUGGEST_COMMAND -> {
+                var value = compound.getString("command");
+                Check.notNull(value, "Click event of type run_command or suggest_command must have a command field");
+                return ClickEvent.clickEvent(action, value);
+            }
+            case CHANGE_PAGE -> {
+                var value = compound.getInt("page");
+                Check.notNull(value, "Click event of type change_page must have a page field");
+                return ClickEvent.clickEvent(action, String.valueOf(value));
+            }
+            case COPY_TO_CLIPBOARD -> {
+                var value = compound.getString("value");
+                Check.notNull(value, "Click event of type copy_to_clipboard must have a value field");
+                return ClickEvent.clickEvent(action, value);
+            }
+        }
+        throw new UnsupportedOperationException("Unknown click event action: " + action);
     }
 
     private @NotNull HoverEvent<?> deserializeHoverEvent(@NotNull CompoundBinaryTag compound) {
         var actionName = compound.getString("action");
         Check.notNull(actionName, "Hover event must have an action field");
-        var contents = compound.getCompound("contents");
-        Check.notNull(contents, "Hover event must have a contents field");
 
         var action = HoverEvent.Action.NAMES.value(actionName);
         if (action == HoverEvent.Action.SHOW_TEXT) {
+            var contents = compound.getCompound("value");
+            Check.notNull(contents, "Hover event of type show_text must have a value field");
             return HoverEvent.showText(deserializeComponent(contents));
         } else if (action == HoverEvent.Action.SHOW_ITEM) {
-            @Subst("minecraft:stick") var id = contents.getString("id");
+            @Subst("minecraft:stick") var id = compound.getString("id");
             Check.notNull(id, "Show item hover event must have an id field");
-            var count = contents.getInt("count");
-            var tag = contents.getString("tag");
-            var binaryTag = tag.isEmpty() ? null : BinaryTagHolder.binaryTagHolder(tag);
-            return HoverEvent.showItem(Key.key(id), count, binaryTag);
+            var count = compound.getInt("count", 1);
+
+            final Map<Key, DataComponentValue> dataComponents = new HashMap<>();
+            final CompoundBinaryTag dataComponentsCompound = compound.getCompound("components");
+            if (!dataComponentsCompound.isEmpty()) {
+                for (final Map.Entry<String, ? extends BinaryTag> entry : dataComponentsCompound) {
+                    @KeyPattern final String name = entry.getKey();
+                    if (name.startsWith("!")) {
+                        dataComponents.put(Key.key(name.substring(1)), DataComponentValue.removed());
+                    } else {
+                        dataComponents.put(Key.key(name), NbtDataComponentValue.nbtDataComponentValue(entry.getValue()));
+                    }
+                }
+            }
+
+            return HoverEvent.showItem(Key.key(id), count, dataComponents);
         } else if (action == HoverEvent.Action.SHOW_ENTITY) {
-            var name = contents.getCompound("name");
+            var name = compound.getCompound("name");
             var nameComponent = name.size() == 0 ? null : deserializeComponent(name);
-            @Subst("minecraft:pig") var type = contents.getString("type");
+
+            @Subst("minecraft:pig") var type = compound.getString("id");
             Check.notNull(type, "Show entity hover event must have a type field");
-            var id = contents.getString("id");
-            Check.notNull(id, "Show entity hover event must have an id field");
-            return HoverEvent.showEntity(Key.key(type), UUID.fromString(id), nameComponent);
+
+            UUID uuid; // The UUID can be formatted as either an array of 4 integers or a string
+            BinaryTag uuidTag = compound.get("uuid");
+            Check.notNull(uuidTag, "Show entity hover event must have a uuid field");
+            switch (uuidTag) {
+                case IntArrayBinaryTag tag -> {
+                    Check.argCondition(tag.size() == 4, "Show entity hover event UUID must have a length of 4 when formatted as an array of integers");
+                    long mostSignificantBits = ((long) tag.get(0) << 32) | (tag.get(1) & 0xFFFFFFFFL);
+                    long leastSignificantBits = ((long) tag.get(2) << 32) | (tag.get(3) & 0xFFFFFFFFL);
+                    uuid = new UUID(mostSignificantBits, leastSignificantBits);
+                }
+                case StringBinaryTag tag -> uuid = UUID.fromString(tag.value());
+                default -> throw new IllegalArgumentException("Show entity hover event must have a uuid field");
+            }
+
+            return HoverEvent.showEntity(Key.key(type), uuid, nameComponent);
         } else {
             throw new UnsupportedOperationException("Unknown hover event action: " + actionName);
         }
@@ -339,9 +388,9 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
         var insertion = style.insertion();
         if (insertion != null) compound.putString("insertion", insertion);
         var clickEvent = style.clickEvent();
-        if (clickEvent != null) compound.put("clickEvent", serializeClickEvent(clickEvent));
+        if (clickEvent != null) compound.put("click_event", serializeClickEvent(clickEvent));
         var hoverEvent = style.hoverEvent();
-        if (hoverEvent != null) compound.put("hoverEvent", serializeHoverEvent(hoverEvent));
+        if (hoverEvent != null) compound.put("hover_event", serializeHoverEvent(hoverEvent));
 
         return compound.build();
     }
@@ -354,41 +403,64 @@ final class NbtComponentSerializerImpl implements NbtComponentSerializer {
     }
 
     private @NotNull BinaryTag serializeClickEvent(@NotNull ClickEvent event) {
-        return CompoundBinaryTag.builder()
-                .putString("action", event.action().toString())
-                .putString("value", event.value())
-                .build();
+        CompoundBinaryTag.Builder compound = CompoundBinaryTag.builder()
+                .putString("action", event.action().toString());
+        switch (event.action()) {
+            case OPEN_URL -> {
+                return compound.putString("url", event.value()).build();
+            }
+            case OPEN_FILE -> {
+                return compound.putString("path", event.value()).build();
+            }
+            case RUN_COMMAND, SUGGEST_COMMAND -> {
+                return compound.putString("command", event.value()).build();
+            }
+            case CHANGE_PAGE -> {
+                return compound.putString("page", event.value()).build();
+            }
+            case COPY_TO_CLIPBOARD -> {
+                return compound.putString("value", event.value()).build();
+            }
+            default -> {
+                return compound.build();
+            }
+        }
     }
 
     @SuppressWarnings("unchecked")
     private @NotNull BinaryTag serializeHoverEvent(@NotNull HoverEvent<?> event) {
         CompoundBinaryTag.Builder compound = CompoundBinaryTag.builder();
 
-        //todo surely there is a better way to do this?
         compound.putString("action", event.action().toString());
         if (event.action() == HoverEvent.Action.SHOW_TEXT) {
             var value = ((HoverEvent<Component>) event).value();
-            compound.put("contents", serializeComponent(value));
+            compound.put("value", serializeComponent(value));
         } else if (event.action() == HoverEvent.Action.SHOW_ITEM) {
             var value = ((HoverEvent<HoverEvent.ShowItem>) event).value();
 
-            CompoundBinaryTag.Builder itemCompound = CompoundBinaryTag.builder();
-            itemCompound.putString("id", value.item().asString());
-            if (value.count() != 1) itemCompound.putInt("count", value.count());
-            var tag = value.nbt();
-            if (tag != null) itemCompound.putString("tag", tag.string());
+            compound.putString("id", value.item().asString());
+            if (value.count() != 1) compound.putInt("count", value.count());
 
-            compound.put("contents", itemCompound.build());
+            final Map<Key, NbtDataComponentValue> dataComponents = value.dataComponentsAs(NbtDataComponentValue.class);
+            if (!dataComponents.isEmpty()) {
+                final CompoundBinaryTag.Builder dataComponentsCompound = CompoundBinaryTag.builder();
+                for (final Map.Entry<Key, NbtDataComponentValue> entry : dataComponents.entrySet()) {
+                    final BinaryTag dataComponentValue = entry.getValue().value();
+                    if (dataComponentValue == null) {
+                        dataComponentsCompound.put("!" + entry.getKey().asString(), CompoundBinaryTag.empty());
+                    } else {
+                        dataComponentsCompound.put(entry.getKey().asString(), dataComponentValue);
+                    }
+                }
+                compound.put("components", dataComponentsCompound.build());
+            }
         } else if (event.action() == HoverEvent.Action.SHOW_ENTITY) {
             var value = ((HoverEvent<HoverEvent.ShowEntity>) event).value();
 
-            CompoundBinaryTag.Builder entityCompound = CompoundBinaryTag.builder();
             var name = value.name();
-            if (name != null) entityCompound.put("name", serializeComponent(name));
-            entityCompound.putString("type", value.type().asString());
-            entityCompound.putString("id", value.id().toString());
-
-            compound.put("contents", entityCompound.build());
+            if (name != null) compound.put("name", serializeComponent(name));
+            compound.putString("id", value.type().asString());
+            compound.putString("uuid", value.id().toString());
         } else {
             throw new UnsupportedOperationException("Unknown hover event action: " + event.action());
         }

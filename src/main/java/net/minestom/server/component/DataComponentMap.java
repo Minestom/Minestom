@@ -1,13 +1,14 @@
 package net.minestom.server.component;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.Unit;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 
@@ -29,34 +30,40 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         return new DataComponentMapImpl.PatchBuilderImpl(new Int2ObjectArrayMap<>());
     }
 
-    /**
-     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
-     */
     @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> nbtType(
-            @NotNull IntFunction<DataComponent<?>> idToType,
-            @NotNull Function<String, DataComponent<?>> nameToType
-    ) {
-        return new DataComponentMapImpl.NbtType(idToType, nameToType, false);
+    static @NotNull NetworkBuffer.Type<DataComponentMap> networkType(
+            @NotNull IntFunction<DataComponent<?>> idToType) {
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, false, true);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType) {
-        return new DataComponentMapImpl.PatchNetworkType(idToType);
+    static @NotNull Codec<DataComponentMap> codec(
+            @NotNull IntFunction<DataComponent<?>> idToType,
+            @NotNull Function<String, DataComponent<?>> nameToType
+    ) {
+        return new DataComponentMapImpl.CodecImpl(idToType, nameToType, false);
     }
 
     /**
      * Creates a network type for the given component type. For internal use only, get the value from the target component class.
      */
     @ApiStatus.Internal
-    static @NotNull BinaryTagSerializer<DataComponentMap> patchNbtType(
+    static @NotNull NetworkBuffer.Type<DataComponentMap> patchNetworkType(@NotNull IntFunction<DataComponent<?>> idToType, boolean trusted) {
+        return new DataComponentMapImpl.NetworkTypeImpl(idToType, true, trusted);
+    }
+
+    /**
+     * Creates a network type for the given component type. For internal use only, get the value from the target component class.
+     */
+    @ApiStatus.Internal
+    static @NotNull Codec<DataComponentMap> patchCodec(
             @NotNull IntFunction<DataComponent<?>> idToType,
             @NotNull Function<String, DataComponent<?>> nameToType
     ) {
-        return new DataComponentMapImpl.NbtType(idToType, nameToType, true);
+        return new DataComponentMapImpl.CodecImpl(idToType, nameToType, true);
     }
 
     static @NotNull DataComponentMap diff(@NotNull DataComponentMap prototype, @NotNull DataComponentMap patch) {
@@ -83,6 +90,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
 
         return new DataComponentMapImpl(diff);
     }
+
+    boolean isEmpty();
 
     /**
      * Does a 'patch'ed has against the given prototype. That is, this map is treated as the primary source, but if
@@ -124,6 +133,8 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
      */
     @NotNull DataComponentMap remove(@NotNull DataComponent<?> component);
 
+    @NotNull Collection<DataComponent.Value> entrySet();
+
     @NotNull Builder toBuilder();
 
     @NotNull PatchBuilder toPatchBuilder();
@@ -137,7 +148,6 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         }
 
         @NotNull DataComponentMap build();
-
     }
 
     sealed interface PatchBuilder extends DataComponent.Holder permits DataComponentMapImpl.PatchBuilderImpl {
@@ -151,7 +161,6 @@ public sealed interface DataComponentMap extends DataComponent.Holder permits Da
         @NotNull PatchBuilder remove(@NotNull DataComponent<?> component);
 
         @NotNull DataComponentMap build();
-
     }
 
 }

@@ -70,19 +70,19 @@ public class CodeGenerator {
                 outputFolder);
     }
 
-    public void generateKeys(InputStream resourceFile, String packageName, String typeName, String generatedName) {
+    public void generateKeys(InputStream resourceFile, String packageName, String typeName) {
         if (resourceFile == null) {
             LOGGER.error("Failed to find (keys) resource file for " + typeName);
             return;
         }
 
         ClassName typeClass = ClassName.bestGuess(packageName + "." + typeName); // Use bestGuess to handle nested class
-        ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "DynamicRegistry", "Key");
+        ClassName registryKeyClass = ClassName.get("net.minestom.server.registry", "RegistryKey");
         ParameterizedTypeName typedRegistryKeyClass = ParameterizedTypeName.get(registryKeyClass, typeClass);
 
         JsonObject json;
         json = GSON.fromJson(new InputStreamReader(resourceFile), JsonObject.class);
-        ClassName materialsCN = ClassName.get(packageName, generatedName);
+        ClassName materialsCN = ClassName.get(packageName, typeName + "s");
         // BlockConstants class
         TypeSpec.Builder blockConstantsClass = TypeSpec.interfaceBuilder(materialsCN)
                 // Add @SuppressWarnings("unused")
@@ -103,7 +103,7 @@ public class CodeGenerator {
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
                                     // TypeClass.STONE = NamespaceID.from("minecraft:stone")
-                                    "$T.of($S)",
+                                    "$T.unsafeOf($S)",
                                     registryKeyClass,
                                     namespace
                             )

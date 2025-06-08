@@ -3,7 +3,7 @@ package net.minestom.server.snapshot;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.TagReadable;
 import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
@@ -16,7 +16,7 @@ import java.util.Objects;
 
 public sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.Getter, TagReadable
         permits SnapshotImpl.Instance {
-    @NotNull DynamicRegistry.Key<DimensionType> dimensionType();
+    @NotNull RegistryKey<DimensionType> dimensionType();
 
     long worldAge();
 
@@ -29,7 +29,7 @@ public sealed interface InstanceSnapshot extends Snapshot, Block.Getter, Biome.G
     }
 
     @Override
-    default @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+    default @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
         ChunkSnapshot chunk = chunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z));
         return Objects.requireNonNull(chunk).getBiome(x, y, z);
     }

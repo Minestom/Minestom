@@ -22,6 +22,7 @@ import net.minestom.server.network.packet.server.play.UpdateLightPacket;
 import net.minestom.server.network.packet.server.play.data.ChunkData;
 import net.minestom.server.network.packet.server.play.data.LightData;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.ChunkSnapshot;
 import net.minestom.server.snapshot.SnapshotImpl;
 import net.minestom.server.snapshot.SnapshotUpdater;
@@ -135,12 +136,12 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome) {
+    public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {
         assertLock();
         this.chunkCache.invalidate();
         Section section = getSectionAt(y);
 
-        var id = BIOME_REGISTRY.getId(biome.key());
+        var id = BIOME_REGISTRY.getId(biome);
         if (id == -1) throw new IllegalStateException("Biome has not been registered: " + biome.key());
 
         section.biomePalette().set(
@@ -171,11 +172,11 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void loadHeightmapsFromNBT(CompoundBinaryTag heightmapsNBT) {
-        if (heightmapsNBT.get(motionBlockingHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(motionBlockingHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             motionBlockingHeightmap().loadFrom(array.value());
         }
 
-        if (heightmapsNBT.get(worldSurfaceHeightmap().NBTName()) instanceof LongArrayBinaryTag array) {
+        if (heightmapsNBT.get(worldSurfaceHeightmap().type().name()) instanceof LongArrayBinaryTag array) {
             worldSurfaceHeightmap().loadFrom(array.value());
         }
     }
@@ -215,13 +216,13 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z) {
+    public @NotNull RegistryKey<Biome> getBiome(int x, int y, int z) {
         assertLock();
         final Section section = getSectionAt(y);
         final int id = section.biomePalette()
                 .get(globalToSectionRelative(x) / 4, globalToSectionRelative(y) / 4, globalToSectionRelative(z) / 4);
 
-        DynamicRegistry.Key<Biome> biome = BIOME_REGISTRY.getKey(id);
+        RegistryKey<Biome> biome = BIOME_REGISTRY.getKey(id);
         Check.notNull(biome, "Biome with id {0} is not registered", id);
         return biome;
     }
@@ -257,9 +258,9 @@ public class DynamicChunk extends Chunk {
 
     private @NotNull ChunkDataPacket createChunkPacket() {
         final byte[] data;
-        final CompoundBinaryTag heightmapsNBT;
+        final Map<Heightmap.Type, long[]> heightmaps;
         synchronized (this) {
-            heightmapsNBT = getHeightmapNBT();
+            heightmaps = getHeightmaps();
 
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
@@ -271,7 +272,7 @@ public class DynamicChunk extends Chunk {
         }
 
         return new ChunkDataPacket(chunkX, chunkZ,
-                new ChunkData(heightmapsNBT, data, entries),
+                new ChunkData(heightmaps, data, entries),
                 createLightData(true)
         );
     }
@@ -313,12 +314,12 @@ public class DynamicChunk extends Chunk {
         );
     }
 
-    protected CompoundBinaryTag getHeightmapNBT() {
+    protected Map<Heightmap.Type, long[]> getHeightmaps() {
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        return CompoundBinaryTag.builder()
-                .putLongArray(motionBlocking.NBTName(), motionBlocking.getNBT())
-                .putLongArray(worldSurface.NBTName(), worldSurface.getNBT())
-                .build();
+        return Map.of(
+                motionBlocking.type(), motionBlocking.getNBT(),
+                worldSurface.type(), worldSurface.getNBT()
+        );
     }
 
     private void calculateFullHeightmap() {

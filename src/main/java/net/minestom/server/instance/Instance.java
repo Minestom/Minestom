@@ -35,6 +35,7 @@ import net.minestom.server.network.packet.server.play.BlockActionPacket;
 import net.minestom.server.network.packet.server.play.InitializeWorldBorderPacket;
 import net.minestom.server.network.packet.server.play.TimeUpdatePacket;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.snapshot.*;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -72,7 +73,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     private boolean registered;
 
-    private final DynamicRegistry.Key<DimensionType> dimensionType;
+    private final RegistryKey<DimensionType> dimensionType;
     private final DimensionType cachedDimensionType; // Cached to prevent self-destruction if the registry is changed, and to avoid the lookups.
     private final String dimensionName;
 
@@ -119,30 +120,30 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, dimensionType.key());
     }
 
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public Instance(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, dimensionName);
     }
 
     /**
      * Creates a new instance.
      *
-     * @param uuid      the {@link UUID} of the instance
+     * @param uuid          the {@link UUID} of the instance
      * @param dimensionType the {@link DimensionType} of the instance
      */
-    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public Instance(@NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry, @NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this.uuid = uuid;
         this.dimensionType = dimensionType;
         this.cachedDimensionType = dimensionTypeRegistry.get(dimensionType);
@@ -409,7 +410,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
      *
      * @return the dimension of the instance
      */
-    public DynamicRegistry.Key<DimensionType> getDimensionType() {
+    public RegistryKey<DimensionType> getDimensionType() {
         return dimensionType;
     }
 
@@ -439,7 +440,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     /**
      * Sets the age of this instance in tick. It will send the age to all players.
      * Will send new age to all players in the instance, unaffected by {@link #getTimeSynchronizationTicks()}
-     * 
+     *
      * @param worldAge the age of this instance in tick
      */
     public void setWorldAge(long worldAge) {

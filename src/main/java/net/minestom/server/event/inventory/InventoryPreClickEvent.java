@@ -5,10 +5,9 @@ import net.minestom.server.event.trait.CancellableEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.event.trait.PlayerInstanceEvent;
 import net.minestom.server.inventory.AbstractInventory;
-import net.minestom.server.inventory.click.ClickType;
+import net.minestom.server.inventory.click.Click;
 import net.minestom.server.item.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Called before {@link InventoryClickEvent}, used to potentially cancel the click.
@@ -17,23 +16,16 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
 
     private final AbstractInventory inventory;
     private final Player player;
-    private final int slot;
-    private final ClickType clickType;
-    private ItemStack clickedItem;
-    private ItemStack cursorItem;
+    private Click click;
 
     private boolean cancelled;
 
-    public InventoryPreClickEvent(@Nullable AbstractInventory inventory,
+    public InventoryPreClickEvent(@NotNull AbstractInventory inventory,
                                   @NotNull Player player,
-                                  int slot, @NotNull ClickType clickType,
-                                  @NotNull ItemStack clicked, @NotNull ItemStack cursor) {
+                                  @NotNull Click click) {
         this.inventory = inventory;
         this.player = player;
-        this.slot = slot;
-        this.clickType = clickType;
-        this.clickedItem = clicked;
-        this.cursorItem = cursor;
+        this.click = click;
     }
 
     /**
@@ -47,60 +39,36 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     /**
-     * Gets the clicked slot number.
-     *
-     * @return the clicked slot number
+     * Gets the player's click.
+     */
+    public @NotNull Click getClick() {
+        return click;
+    }
+
+    /**
+     * Sets the player's click.
+     */
+    public void setClick(@NotNull Click click) {
+        this.click = click;
+    }
+
+    /**
+     * Returns the clicked slot. This is only for convenience and may return -999 (a meaningless number), as some clicks
+     * don't have a relevant slot (drag clicks and some drops). See {@link Click#slot()} for details.
      */
     public int getSlot() {
-        return slot;
+        return this.click.slot();
     }
 
     /**
-     * Gets the click type.
-     *
-     * @return the click type
+     * Returns the clicked item. Some clicks involve more than a single item, like drops or clicks outside the inventory
+     * menu; in these cases, the cursor is returned.
      */
-    @NotNull
-    public ClickType getClickType() {
-        return clickType;
-    }
+    public @NotNull ItemStack getClickedItem() {
+        int slot = getSlot();
 
-    /**
-     * Gets the item who have been clicked.
-     *
-     * @return the clicked item
-     */
-    @NotNull
-    public ItemStack getClickedItem() {
-        return clickedItem;
-    }
-
-    /**
-     * Changes the clicked item.
-     *
-     * @param clickedItem the clicked item
-     */
-    public void setClickedItem(@NotNull ItemStack clickedItem) {
-        this.clickedItem = clickedItem;
-    }
-
-    /**
-     * Gets the item who was in the player cursor.
-     *
-     * @return the cursor item
-     */
-    @NotNull
-    public ItemStack getCursorItem() {
-        return cursorItem;
-    }
-
-    /**
-     * Changes the cursor item.
-     *
-     * @param cursorItem the cursor item
-     */
-    public void setCursorItem(@NotNull ItemStack cursorItem) {
-        this.cursorItem = cursorItem;
+        return slot == -999 ? player.getInventory().getCursorItem()
+                : this.inventory.getItemStack(slot);
     }
 
     @Override
@@ -114,7 +82,7 @@ public class InventoryPreClickEvent implements InventoryEvent, PlayerInstanceEve
     }
 
     @Override
-    public @Nullable AbstractInventory getInventory() {
+    public @NotNull AbstractInventory getInventory() {
         return inventory;
     }
 }

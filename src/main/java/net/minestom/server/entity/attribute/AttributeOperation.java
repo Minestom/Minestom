@@ -1,18 +1,18 @@
 package net.minestom.server.entity.attribute;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.Nullable;
 
 public enum AttributeOperation {
     ADD_VALUE(0),
-    MULTIPLY_BASE(1),
-    MULTIPLY_TOTAL(2);
+    ADD_MULTIPLIED_BASE(1),
+    ADD_MULTIPLIED_TOTAL(2);
 
     public static final NetworkBuffer.Type<AttributeOperation> NETWORK_TYPE = NetworkBuffer.Enum(AttributeOperation.class);
-    public static final BinaryTagSerializer<AttributeOperation> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(AttributeOperation.class);
+    public static final Codec<AttributeOperation> CODEC = Codec.Enum(AttributeOperation.class);
 
-    private static final AttributeOperation[] VALUES = new AttributeOperation[]{ADD_VALUE, MULTIPLY_BASE, MULTIPLY_TOTAL};
+    private static final AttributeOperation[] VALUES = new AttributeOperation[]{ADD_VALUE, ADD_MULTIPLIED_BASE, ADD_MULTIPLIED_TOTAL};
     private final int id;
 
     AttributeOperation(int id) {
