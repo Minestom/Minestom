@@ -177,12 +177,6 @@ public final class CollisionUtils {
         return newPosition;
     }
 
-    @ApiStatus.Internal
-    public static ShapeImpl parseBlockShape(String collision, String occlusion, boolean occludes, byte lightEmission) {
-        return ShapeImpl.parseBlockFromRegistry(collision, occlusion, occludes, lightEmission);
-    }
-
-    @ApiStatus.Internal
     public static Shape parseBlockShape(Map<Object, Object> internCache, String collision, String occlusion, boolean occludes, byte lightEmission) {
         record ShapeEntry(String collision, String occlusion, boolean occludes, byte lightEmission) {} // Easy way to Hashcode
         ShapeEntry entry = new ShapeEntry(collision, occlusion, occludes, lightEmission);
