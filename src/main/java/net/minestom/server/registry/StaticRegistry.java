@@ -40,7 +40,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
         for (var entry : namespaces.entrySet())
             valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
         this.valueToKey = Map.copyOf(valueToKey);
-        this.idToValue = List.copyOf(ids.toList());
+        this.idToValue = ids.toList();
         this.tags = new ConcurrentHashMap<>(tags);
     }
 
