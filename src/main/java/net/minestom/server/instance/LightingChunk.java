@@ -99,6 +99,10 @@ public class LightingChunk extends DynamicChunk {
         super(instance, chunkX, chunkZ);
     }
 
+    protected LightingChunk(@NotNull Instance instance, int chunkX, int chunkZ, @NotNull List<Section> sections) {
+        super(instance, chunkX, chunkZ, sections);
+    }
+
     private boolean checkSkyOcclusion(Block block) {
         if (block == Block.AIR) return false;
         if (DIFFUSE_SKY_LIGHT.contains(block.key())) return true;
@@ -561,8 +565,8 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public @NotNull Chunk copy(@NotNull Instance instance, int chunkX, int chunkZ) {
-        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ);
-        lightingChunk.sections = sections.stream().map(Section::clone).toList();
+        var sections = this.sections.stream().map(Section::clone).toList();
+        LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
     }

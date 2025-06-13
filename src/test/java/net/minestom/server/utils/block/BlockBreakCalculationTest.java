@@ -53,6 +53,11 @@ public class BlockBreakCalculationTest {
         assertBreak(5.625, 37, 217, 217, -1);
     }
 
+    @Test
+    public void testBedrock() {
+        assertEquals(BlockBreakCalculation.UNBREAKABLE, breakTicks(Block.BEDROCK, player));
+    }
+
     @BeforeEach
     void setupPlayer(Env env) {
         final var instance = env.createFlatInstance();

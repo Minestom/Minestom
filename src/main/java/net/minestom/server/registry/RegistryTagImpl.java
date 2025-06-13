@@ -69,14 +69,14 @@ final class RegistryTagImpl {
 
         @ApiStatus.Internal
         void add(@NotNull RegistryKey<T> key) {
-            entries.add(key);
-            invalidate();
+            if (entries.add(key))
+                invalidate();
         }
 
         @ApiStatus.Internal
         void remove(@NotNull RegistryKey<T> key) {
-            entries.remove(key);
-            invalidate();
+            if (entries.remove(key))
+                invalidate();
         }
 
         private void invalidate() {
@@ -87,6 +87,10 @@ final class RegistryTagImpl {
     }
 
     record Direct<T>(@NotNull List<RegistryKey<T>> keys) implements RegistryTag<T> {
+        public Direct {
+            keys = List.copyOf(keys);
+        }
+
         @Override
         public @Nullable TagKey<T> key() {
             return null;

@@ -30,7 +30,7 @@ public sealed interface RegistryTag<T> extends HolderSet<T>, Iterable<RegistryKe
 
     static <T> @NotNull RegistryTag<T> empty() {
         //noinspection unchecked
-        return (RegistryTag<T>) net.minestom.server.registry.RegistryTagImpl.Empty.INSTANCE;
+        return (RegistryTag<T>) RegistryTagImpl.Empty.INSTANCE;
     }
 
     @SafeVarargs
