@@ -235,29 +235,31 @@ public final class RegistryData {
     }
 
     public static final class BlockEntry implements Entry {
+        private static final byte AIR_OFFSET = 1 << 0;
+        private static final byte LIQUID_OFFSET = 1 << 1;
+        private static final byte SOLID_OFFSET = 1 << 2;
+        private static final byte OCCLUDES_OFFSET = 1 << 3;
+        private static final byte REQUIRES_TOOL_OFFSET = 1 << 4;
+        private static final byte REPLACEABLE_OFFSET = 1 << 5;
+        private static final byte REDSTONE_CONDUCTOR_OFFSET = 1 << 6;
+        private static final byte SIGNAL_SOURCE_OFFSET = -1 << 7; // 2's complement
+
         private final Key key;
         private final int id;
         private final int stateId;
         private final String translationKey;
-        private final double hardness;
-        private final double explosionResistance;
-        private final double friction;
-        private final double speedFactor;
-        private final double jumpFactor;
-        private final boolean air;
-        private final boolean solid;
-        private final boolean liquid;
-        private final boolean occludes;
-        private final boolean requiresTool;
+        private final float hardness;
+        private final float explosionResistance;
+        private final float friction;
+        private final float speedFactor;
+        private final float jumpFactor;
+        private final byte packedFlags;
         private final byte lightEmission;
-        private final boolean replaceable;
         private final @Nullable Key blockEntity;
         private final int blockEntityId;
         private final @Nullable Material material;
         private final @Nullable BlockSoundType blockSoundType;
         private final Shape shape;
-        private final boolean redstoneConductor;
-        private final boolean signalSource;
 
         private BlockEntry(String namespace, Properties main, @NotNull Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
@@ -265,18 +267,18 @@ public final class RegistryData {
             this.id = fromParent(parent, BlockEntry::id, main, "id", Properties::getInt, null);
             this.stateId = fromParent(parent, BlockEntry::stateId, main, "stateId", Properties::getInt, 0); // Parent doesnt have stateId; so we default to 0
             this.translationKey = fromParent(parent, BlockEntry::translationKey, main, "translationKey", Properties::getString, null);
-            this.hardness = fromParent(parent, BlockEntry::hardness, main, "hardness", Properties::getDouble, null);
-            this.explosionResistance = fromParent(parent, BlockEntry::explosionResistance, main, "explosionResistance", Properties::getDouble, null);
-            this.friction = fromParent(parent, BlockEntry::friction, main, "friction", Properties::getDouble, null);
-            this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getDouble, 1.0);
-            this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getDouble, 1.0);
-            this.air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
-            this.solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
-            this.liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
-            this.occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
-            this.requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
+            this.hardness = fromParent(parent, BlockEntry::hardness, main, "hardness", Properties::getFloat, null);
+            this.explosionResistance = fromParent(parent, BlockEntry::explosionResistance, main, "explosionResistance", Properties::getFloat, null);
+            this.friction = fromParent(parent, BlockEntry::friction, main, "friction", Properties::getFloat, 0.6f);
+            this.speedFactor = fromParent(parent, BlockEntry::speedFactor, main, "speedFactor", Properties::getFloat, 1.0f);
+            this.jumpFactor = fromParent(parent, BlockEntry::jumpFactor, main, "jumpFactor", Properties::getFloat, 1.0f);
+            var air = fromParent(parent, BlockEntry::isAir, main, "air", Properties::getBoolean, false);
+            var solid = fromParent(parent, BlockEntry::isSolid, main, "solid", Properties::getBoolean, null);
+            var liquid = fromParent(parent, BlockEntry::isLiquid, main, "liquid", Properties::getBoolean, false);
+            var occludes = fromParent(parent, BlockEntry::occludes, main, "occludes", Properties::getBoolean, true);
+            var requiresTool = fromParent(parent, BlockEntry::requiresTool, main, "requiresTool", Properties::getBoolean, true);
             this.lightEmission = fromParent(parent, BlockEntry::lightEmission, main, "lightEmission", Properties::getInt, 0).byteValue();
-            this.replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
+            var replaceable = fromParent(parent, BlockEntry::isReplaceable, main, "replaceable", Properties::getBoolean, false);
             this.blockSoundType = fromParent(parent, BlockEntry::getBlockSoundType, main, "soundType", (properties, string) -> {
                 final String soundTypeKey = properties.getString(string);
                 return soundTypeKey != null ? BlockSoundType.fromKey(soundTypeKey) : null;
@@ -298,18 +300,28 @@ public final class RegistryData {
                     String collision = properties.getString(string);
                     String occlusion = properties.getString("occlusionShape");
                     if (parent == null || parentProperties == null)  // No parent, so we can just parse the shape
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, this.occludes, this.lightEmission);
+                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
                     // TODO make this condition just change the condition; like adding lightData if emission just changes.
-                    if (collision != null || occlusion != null || this.occludes != parent.occludes || this.lightEmission != parent.lightEmission) {
+                    if (collision != null || occlusion != null || occludes != parent.occludes() || this.lightEmission != parent.lightEmission) {
                         if (collision == null) collision = parentProperties.getString(string);
                         if (occlusion == null) occlusion = parentProperties.getString("occlusionShape");
-                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, this.occludes, this.lightEmission);
+                        return CollisionUtils.parseBlockShape(internCache, collision, occlusion, occludes, this.lightEmission);
                     }
                     return parent.collisionShape();
                 }, null);
             }
-            this.redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
-            this.signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
+            var redstoneConductor = fromParent(parent, BlockEntry::isRedstoneConductor, main, "redstoneConductor", Properties::getBoolean, null);
+            var signalSource = fromParent(parent, BlockEntry::isSignalSource, main, "signalSource", Properties::getBoolean, false);
+            this.packedFlags = (byte) (
+                    (air ? AIR_OFFSET : 0) |
+                    (liquid ? LIQUID_OFFSET : 0) |
+                    (solid ? SOLID_OFFSET : 0) |
+                    (occludes ? OCCLUDES_OFFSET : 0) |
+                    (requiresTool ? REQUIRES_TOOL_OFFSET : 0) |
+                    (replaceable ? REPLACEABLE_OFFSET : 0) |
+                    (redstoneConductor ? REDSTONE_CONDUCTOR_OFFSET : 0) |
+                    (signalSource ? SIGNAL_SOURCE_OFFSET : 0)
+            );
         }
 
         private static <R>  R fromParent(@Nullable BlockEntry parent, @NotNull Function<BlockEntry, R> parentProperty,
@@ -347,44 +359,44 @@ public final class RegistryData {
             return translationKey;
         }
 
-        public double hardness() {
+        public float hardness() {
             return hardness;
         }
 
-        public double explosionResistance() {
+        public float explosionResistance() {
             return explosionResistance;
         }
 
-        public double friction() {
+        public float friction() {
             return friction;
         }
 
-        public double speedFactor() {
+        public float speedFactor() {
             return speedFactor;
         }
 
-        public double jumpFactor() {
+        public float jumpFactor() {
             return jumpFactor;
         }
 
         public boolean isAir() {
-            return air;
+            return (packedFlags & AIR_OFFSET) != 0;
         }
 
         public boolean isSolid() {
-            return solid;
+            return (packedFlags & SOLID_OFFSET) != 0;
         }
 
         public boolean isLiquid() {
-            return liquid;
+            return (packedFlags & LIQUID_OFFSET) != 0;
         }
 
         public boolean occludes() {
-            return occludes;
+            return (packedFlags & OCCLUDES_OFFSET) != 0;
         }
 
         public boolean requiresTool() {
-            return requiresTool;
+            return (packedFlags & REQUIRES_TOOL_OFFSET) != 0;
         }
 
         public int lightEmission() {
@@ -392,7 +404,7 @@ public final class RegistryData {
         }
 
         public boolean isReplaceable() {
-            return replaceable;
+            return (packedFlags & REPLACEABLE_OFFSET) != 0;
         }
 
         public boolean isBlockEntity() {
@@ -412,11 +424,11 @@ public final class RegistryData {
         }
 
         public boolean isRedstoneConductor() {
-            return redstoneConductor;
+            return (packedFlags & REDSTONE_CONDUCTOR_OFFSET) != 0;
         }
 
         public boolean isSignalSource() {
-            return signalSource;
+            return (packedFlags & SIGNAL_SOURCE_OFFSET) != 0;
         }
 
         public Shape collisionShape() {
