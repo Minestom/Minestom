@@ -1,6 +1,7 @@
 package net.minestom.server.instance;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.collision.Shape;
 import net.minestom.server.coordinate.CoordConversion;
@@ -391,20 +392,24 @@ public class LightingChunk extends DynamicChunk {
 
             final Palette blockPalette = section.blockPalette();
             CompletableFuture<Void> task = CompletableFuture.runAsync(() -> {
-                final Set<Point> toAdd = switch (queueType) {
-                    case INTERNAL -> light.calculateInternal(blockPalette,
-                            chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
-                            lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
-                            lightLookup);
-                    case EXTERNAL -> light.calculateExternal(blockPalette,
-                            Light.getNeighbors(chunk, point.blockY()),
-                            lightLookup, paletteLookup);
-                };
+                try {
+                    final Set<Point> toAdd = switch (queueType) {
+                        case INTERNAL -> light.calculateInternal(blockPalette,
+                                chunk.getChunkX(), point.blockY(), chunk.getChunkZ(),
+                                lightingChunk.getOcclusionMap(), chunk.instance.getCachedDimensionType().maxY(),
+                                lightLookup);
+                        case EXTERNAL -> light.calculateExternal(blockPalette,
+                                Light.getNeighbors(chunk, point.blockY()),
+                                lightLookup, paletteLookup);
+                    };
 
-                sections.add(light);
+                    sections.add(light);
 
-                light.flip();
-                newQueue.addAll(toAdd);
+                    light.flip();
+                    newQueue.addAll(toAdd);
+                } catch (Exception e) {
+                    MinecraftServer.getExceptionManager().handleException(e);
+                }
             }, pool);
 
             tasks.add(task);
