@@ -8,7 +8,12 @@ import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -19,9 +24,9 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     private final Key key;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
-    private final ObjectArray<T> idToValue;
+    private final List<T> idToValue;
 
-    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new ConcurrentHashMap<>();
+    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
 
     StaticRegistry(
             @NotNull Key key,
@@ -35,10 +40,8 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
         for (var entry : namespaces.entrySet())
             valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
         this.valueToKey = Map.copyOf(valueToKey);
-        this.idToValue = ids;
-        this.idToValue.trim();
-
-        this.tags.putAll(tags);
+        this.idToValue = ids.toList();
+        this.tags = new ConcurrentHashMap<>(tags);
     }
 
     @Override
