@@ -5,7 +5,6 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
-import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
@@ -20,6 +19,7 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.BlockPredicates;
+import net.minestom.server.item.component.Tool;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.server.play.AcknowledgeBlockChangePacket;
 import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
@@ -120,16 +120,22 @@ public final class PlayerDiggingListener {
     }
 
     private static boolean shouldPreventBreaking(@NotNull Player player, Block block) {
-        if (player.getGameMode() == GameMode.SPECTATOR) {
+        final ItemStack itemInMainHand = player.getItemInMainHand();
+
+        return switch (player.getGameMode()) {
             // Spectators can't break blocks
-            return true;
-        } else if (player.getGameMode() == GameMode.ADVENTURE) {
-            // Check if the item can break the block with the current item
-            final ItemStack itemInMainHand = player.getItemInMainHand();
-            final BlockPredicates breakPredicate = itemInMainHand.get(DataComponents.CAN_BREAK, BlockPredicates.NEVER);
-            return !breakPredicate.test(block);
-        }
-        return false;
+            case SPECTATOR -> true;
+            // Check if the currently held item can break the block
+            case ADVENTURE -> !itemInMainHand
+                    .get(DataComponents.CAN_BREAK, BlockPredicates.NEVER)
+                    .test(block);
+            // Certain tools (swords, tridents, maces) can't break blocks in creative
+            case CREATIVE -> {
+                final Tool tool = itemInMainHand.get(DataComponents.TOOL);
+                yield tool != null && !tool.canDestroyBlocksInCreative();
+            }
+            default -> false;
+        };
     }
 
     private static void dropStack(Player player) {
