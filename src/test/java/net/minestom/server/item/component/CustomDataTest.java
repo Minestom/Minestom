@@ -49,6 +49,6 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
                 .set(Tag.Integer("num").path("test"), 5)
                 .build();
         final String snbt = TagStringIOExt.writeTag(item.get(DataComponents.CUSTOM_DATA).nbt());
-        assertEquals("{test:{num:5}}", snbt, "CustomData serialization should match expected SNBT format");
+        assertEquals("{test:{num:5}}", snbt);
     }
 }
