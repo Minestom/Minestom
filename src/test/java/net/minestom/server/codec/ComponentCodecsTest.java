@@ -13,7 +13,7 @@ class ComponentCodecsTest {
 
     @Test
     void readExpandFromStringInList() throws Exception {
-        var input = TagStringIO.builder().acceptHeterogeneousLists(true).build().asTag("{extra:[{color:\"red\",text:\"Hello\"},\" World\"],text:\"\"}");
+        var input = TagStringIO.builder().acceptHeterogeneousLists(true).build().asCompound("{extra:[{color:\"red\",text:\"Hello\"},\" World\"],text:\"\"}");
         var actual = ComponentCodecs.COMPONENT.decode(Transcoder.NBT, input).orElseThrow();
         var expected = Component.text()
                 .append(Component.text("Hello", NamedTextColor.RED))
