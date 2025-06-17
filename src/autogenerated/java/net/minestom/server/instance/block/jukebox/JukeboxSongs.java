@@ -27,6 +27,8 @@ interface JukeboxSongs {
 
     RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.unsafeOf("minecraft:otherside");
 
+    RegistryKey<JukeboxSong> TEARS = RegistryKey.unsafeOf("minecraft:tears");
+
     RegistryKey<JukeboxSong> MELLOHI = RegistryKey.unsafeOf("minecraft:mellohi");
 
     RegistryKey<JukeboxSong> MALL = RegistryKey.unsafeOf("minecraft:mall");
