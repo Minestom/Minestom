@@ -6,7 +6,7 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.*;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
@@ -442,7 +442,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Cat extends TameableAnimal {
-        public static final Entry<CatMeta.Variant> VARIANT = index(0, Metadata::CatVariant, CatMeta.Variant.BLACK);
+        public static final Entry<RegistryKey<CatVariant>> VARIANT = index(0, Metadata::CatVariant, CatVariant.BLACK);
         public static final Entry<Boolean> IS_LYING = index(1, Metadata::Boolean, false);
         public static final Entry<Boolean> IS_RELAXED = index(2, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(3, Metadata::VarInt, 14);

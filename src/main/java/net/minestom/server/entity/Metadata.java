@@ -4,7 +4,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.metadata.animal.*;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
@@ -135,8 +135,8 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_POSE, value, NetworkBuffer.POSE);
     }
 
-    public static Entry<CatMeta.Variant> CatVariant(@NotNull CatMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatMeta.Variant.NETWORK_TYPE);
+    public static Entry<RegistryKey<CatVariant>> CatVariant(@NotNull RegistryKey<CatVariant> value) {
+        return new MetadataImpl.EntryImpl<>(TYPE_CAT_VARIANT, value, CatVariant.NETWORK_TYPE);
     }
 
     public static Entry<RegistryKey<CowVariant>> CowVariant(@NotNull RegistryKey<CowVariant> value) {
