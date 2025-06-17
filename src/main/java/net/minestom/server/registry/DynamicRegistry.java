@@ -32,7 +32,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
         var registry = new DynamicRegistryImpl<T>(key, null);
         for (var entry : entries)
             registry.register(entry.getKey(), entry.getValue(), null);
-        return registry.compress();
+        return registry.compact();
     }
 
     @ApiStatus.Internal
@@ -79,7 +79,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
         DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
-        return registry.compress();
+        return registry.compact();
     }
 
     @ApiStatus.Internal
@@ -94,7 +94,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
                 return registry;
             }
         }, registry, resource, null, codec);
-        return registry.compress();
+        return registry.compact();
     }
 
     /**

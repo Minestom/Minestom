@@ -68,22 +68,19 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         this.tags = new ConcurrentHashMap<>();
     }
 
-    // Used to create static but dynamic registries when compressing behind the disabled unsafe ops flag.
+    // Used to create compressed registries
     DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
                         @NotNull List<RegistryKey<T>> idToKey, @NotNull Map<Key, T> keyToValue,
                         @NotNull Map<T, RegistryKey<T>> valueToKey, @NotNull List<DataPack> packById,
                         @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
         this.key = key;
         this.codec = codec;
-
-        assert canCompress()
-                : "Registry " + key + " should not be immutable if unsafe operations are enabled";
-        this.idToValue = List.copyOf(idToValue);
-        this.idToKey = List.copyOf(idToKey);
-        this.keyToValue = Map.copyOf(keyToValue);
-        this.valueToKey = Map.copyOf(valueToKey);
-        this.packById = List.copyOf(packById);
-        this.tags = new ConcurrentHashMap<>(tags);
+        this.idToValue = idToValue;
+        this.idToKey = idToKey;
+        this.keyToValue = keyToValue;
+        this.valueToKey = valueToKey;
+        this.packById = packById;
+        this.tags = tags;
     }
 
     @Override
@@ -133,8 +130,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @NotNull RegistryKey<T> register(@NotNull Key key, @NotNull T object, @Nullable DataPack pack) {
-        if (canCompress() && MinecraftServer.process() != null && MinecraftServer.isStarted())
-            throw UNSAFE_REMOVE_EXCEPTION;
+        if (isFrozen()) throw UNSAFE_REMOVE_EXCEPTION;
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -158,7 +154,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public boolean remove(@NotNull Key key) throws UnsupportedOperationException {
-        if (canCompress()) throw UNSAFE_REMOVE_EXCEPTION;
+        if (isFrozen()) throw UNSAFE_REMOVE_EXCEPTION;
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
@@ -264,7 +260,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         // Copy to avoid concurrent modification issues while iterating, as we are not synchronized on the registry
         final List<T> idToValue;
         final List<DataPack> packById;
-        if (!canCompress()) {
+        if (!canFreeze()) {
             synchronized (REGISTRY_LOCK) {
                 idToValue = List.copyOf(this.idToValue);
                 packById = List.copyOf(this.packById);
@@ -301,19 +297,40 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     /**
-     * Attempts to create a copy with mostly immutable registry with the same data
-     * This is useful for dropping the concurrency overhead, post-registration.
+     * Attempts to create a copy with compressed data structures.
+     * Also performs a freeze operation if available; {@link #canFreeze()}.
      *
      * @return A safe copy of this registry
      * @implNote Requires the system property <code>minestom.registry.unsafe-ops</code> to be set to <code>false</code>
      */
     @Contract(pure = true)
-    @NotNull DynamicRegistryImpl<T> compress() {
-        if (!canCompress()) return this;
-        return new DynamicRegistryImpl<>(key, codec, idToValue, idToKey, keyToValue, valueToKey, packById, tags);
+    @NotNull DynamicRegistryImpl<T> compact() {
+        if (canFreeze())
+            return new DynamicRegistryImpl<>(key, codec,
+                    List.copyOf(idToValue),
+                    List.copyOf(idToKey),
+                    Map.copyOf(keyToValue),
+                    Map.copyOf(valueToKey),
+                    List.copyOf(packById),
+                    new ConcurrentHashMap<>(tags)
+            );
+
+        // Create new instances so they are trimmed to size without downcasting.
+        return new DynamicRegistryImpl<>(key, codec,
+                new ArrayList<>(idToValue),
+                new ArrayList<>(idToKey),
+                new HashMap<>(keyToValue),
+                new HashMap<>(valueToKey),
+                new ArrayList<>(packById),
+                new ConcurrentHashMap<>(tags)
+        );
     }
 
-    static boolean canCompress() {
+    static boolean isFrozen() {
+        return canFreeze() && MinecraftServer.process() != null && MinecraftServer.isStarted();
+    }
+
+    static boolean canFreeze() {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
