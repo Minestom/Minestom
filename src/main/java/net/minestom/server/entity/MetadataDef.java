@@ -400,8 +400,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Turtle extends AgeableMob {
-        public static final Entry<Boolean> HAS_EGG = index(1, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_LAYING_EGG = index(2, Metadata::Boolean, false);
+        public static final Entry<Boolean> HAS_EGG = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_LAYING_EGG = index(1, Metadata::Boolean, false);
     }
 
     public static final class PolarBear extends AgeableMob {
