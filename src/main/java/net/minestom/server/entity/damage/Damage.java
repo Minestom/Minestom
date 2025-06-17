@@ -7,6 +7,7 @@ import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.LivingEntity;
 import net.minestom.server.entity.Player;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.Taggable;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
 public class Damage implements Taggable {
     private static final DynamicRegistry<DamageType> DAMAGE_TYPE_REGISTRY = MinecraftServer.getDamageTypeRegistry();
 
-    private final DynamicRegistry.Key<DamageType> typeKey;
+    private final RegistryKey<DamageType> typeKey;
     private final DamageType type;
     private final Entity source;
     private final Entity attacker;
@@ -35,13 +36,13 @@ public class Damage implements Taggable {
     /**
      * Creates a new damage type.
      *
-     * @param attacker The attacker that initiated this damage
-     * @param source The source of the damage. For direct hits (melee), this will be the same as the attacker. For indirect hits (projectiles), this will be the projectile
-     * @param type the type of this damage
-     * @param amount amount of damage
+     * @param attacker       The attacker that initiated this damage
+     * @param source         The source of the damage. For direct hits (melee), this will be the same as the attacker. For indirect hits (projectiles), this will be the projectile
+     * @param type           the type of this damage
+     * @param amount         amount of damage
      * @param sourcePosition The position of the source of damage
      */
-    public Damage(@NotNull DynamicRegistry.Key<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
+    public Damage(@NotNull RegistryKey<DamageType> type, @Nullable Entity source, @Nullable Entity attacker, @Nullable Point sourcePosition, float amount) {
         this.typeKey = type;
         this.type = DAMAGE_TYPE_REGISTRY.get(type);
         Check.argCondition(this.type == null, "Damage type is not registered: {0}", type);
@@ -58,15 +59,18 @@ public class Damage implements Taggable {
      *
      * @return the damage type
      */
-    public @NotNull DynamicRegistry.Key<DamageType> getType() {
+    public @NotNull RegistryKey<DamageType> getType() {
         return typeKey;
     }
 
     /**
      * Gets the integer id of the damage type that has been set
+     *
      * @return The integer id of the damage type
      */
-    public int getTypeId() { return DAMAGE_TYPE_REGISTRY.getId(typeKey); }
+    public int getTypeId() {
+        return DAMAGE_TYPE_REGISTRY.getId(typeKey);
+    }
 
     /**
      * Gets the "attacker" of the damage.
@@ -115,7 +119,7 @@ public class Damage implements Taggable {
      *
      * @param shooter    the shooter
      * @param projectile the actual projectile
-     * @param amount amount of damage
+     * @param amount     amount of damage
      * @return a new {@link EntityProjectileDamage}
      */
     public static @NotNull Damage fromProjectile(@Nullable Entity shooter, @NotNull Entity projectile, float amount) {
@@ -144,7 +148,7 @@ public class Damage implements Taggable {
         return new EntityDamage(entity, amount);
     }
 
-    public static @NotNull PositionalDamage fromPosition(@NotNull DynamicRegistry.Key<DamageType> type, @NotNull Point sourcePosition, float amount) {
+    public static @NotNull PositionalDamage fromPosition(@NotNull RegistryKey<DamageType> type, @NotNull Point sourcePosition, float amount) {
         return new PositionalDamage(type, sourcePosition, amount);
     }
 

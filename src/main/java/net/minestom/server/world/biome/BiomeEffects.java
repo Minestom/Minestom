@@ -1,13 +1,11 @@
 package net.minestom.server.world.biome;
 
-import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.color.Color;
 import net.minestom.server.sound.Music;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
-import net.minestom.server.utils.nbt.BinaryTagTemplate;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,38 +27,40 @@ public record BiomeEffects(
         @Nullable List<WeightedMusic> music,
         @Nullable Float musicVolume
 ) {
-    public static final BinaryTagSerializer<BiomeEffects> NBT_TYPE = BinaryTagTemplate.object(
-            "fog_color", Color.NBT_TYPE, BiomeEffects::fogColor,
-            "sky_color", Color.NBT_TYPE, BiomeEffects::skyColor,
-            "water_color", Color.NBT_TYPE, BiomeEffects::waterColor,
-            "water_fog_color", Color.NBT_TYPE, BiomeEffects::waterFogColor,
-            "foliage_color", Color.NBT_TYPE.optional(), BiomeEffects::foliageColor,
-            "grass_color", Color.NBT_TYPE.optional(), BiomeEffects::grassColor,
-            "grass_color_modifier", GrassColorModifier.NBT_TYPE.optional(GrassColorModifier.NONE), BiomeEffects::grassColorModifier,
-            "particle", Particle.NBT_TYPE.optional(), BiomeEffects::biomeParticle,
-            "ambient_sound", SoundEvent.NBT_TYPE.optional(), BiomeEffects::ambientSound,
-            "mood_sound", MoodSound.NBT_TYPE.optional(), BiomeEffects::moodSound,
-            "additions_sound", AdditionsSound.NBT_TYPE.optional(), BiomeEffects::additionsSound,
-            "music", WeightedMusic.NBT_TYPE.list().optional(), BiomeEffects::music,
-            "music_volume", BinaryTagSerializer.FLOAT.optional(), BiomeEffects::musicVolume,
+    public static final BiomeEffects PLAINS_EFFECTS = BiomeEffects.builder()
+            .fogColor(new Color(0xC0D8FF))
+            .skyColor(new Color(0x78A7FF))
+            .waterColor(new Color(0x3F76E4))
+            .waterFogColor(new Color(0x50533))
+            .build();
+
+    public static final Codec<BiomeEffects> CODEC = StructCodec.struct(
+            "fog_color", Color.CODEC, BiomeEffects::fogColor,
+            "sky_color", Color.CODEC, BiomeEffects::skyColor,
+            "water_color", Color.CODEC, BiomeEffects::waterColor,
+            "water_fog_color", Color.CODEC, BiomeEffects::waterFogColor,
+            "foliage_color", Color.CODEC.optional(), BiomeEffects::foliageColor,
+            "grass_color", Color.CODEC.optional(), BiomeEffects::grassColor,
+            "grass_color_modifier", GrassColorModifier.CODEC.optional(GrassColorModifier.NONE), BiomeEffects::grassColorModifier,
+            "particle", Particle.CODEC.optional(), BiomeEffects::biomeParticle,
+            "ambient_sound", SoundEvent.CODEC.optional(), BiomeEffects::ambientSound,
+            "mood_sound", MoodSound.CODEC.optional(), BiomeEffects::moodSound,
+            "additions_sound", AdditionsSound.CODEC.optional(), BiomeEffects::additionsSound,
+            "music", WeightedMusic.CODEC.list().optional(), BiomeEffects::music,
+            "music_volume", Codec.FLOAT.optional(), BiomeEffects::musicVolume,
             BiomeEffects::new);
 
     public enum GrassColorModifier {
         NONE, DARK_FOREST, SWAMP;
 
-        public static final BinaryTagSerializer<GrassColorModifier> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(GrassColorModifier.class);
+        public static final Codec<GrassColorModifier> CODEC = Codec.Enum(GrassColorModifier.class);
     }
 
     public record Particle(float probability, net.minestom.server.particle.Particle particle) {
-        public static final BinaryTagSerializer<Particle> NBT_TYPE = new BinaryTagSerializer<>() {
-            @Override
-            public @NotNull BinaryTag write(@NotNull Context context, @NotNull BiomeEffects.Particle value) {
-                return CompoundBinaryTag.builder()
-                        .putFloat("probability", value.probability())
-                        .put("options", value.particle().toNbt())
-                        .build();
-            }
-        };
+        public static final Codec<Particle> CODEC = StructCodec.struct(
+                "probability", Codec.FLOAT, Particle::probability,
+                "options", net.minestom.server.particle.Particle.CODEC, Particle::particle,
+                Particle::new);
     }
 
     public record MoodSound(
@@ -69,11 +69,11 @@ public record BiomeEffects(
             int blockSearchExtent,
             double offset
     ) {
-        public static final BinaryTagSerializer<MoodSound> NBT_TYPE = BinaryTagTemplate.object(
-                "sound", SoundEvent.NBT_TYPE, MoodSound::sound,
-                "tick_delay", BinaryTagSerializer.INT, MoodSound::tickDelay,
-                "block_search_extent", BinaryTagSerializer.INT, MoodSound::blockSearchExtent,
-                "offset", BinaryTagSerializer.DOUBLE, MoodSound::offset,
+        public static final Codec<MoodSound> CODEC = StructCodec.struct(
+                "sound", SoundEvent.CODEC, MoodSound::sound,
+                "tick_delay", Codec.INT, MoodSound::tickDelay,
+                "block_search_extent", Codec.INT, MoodSound::blockSearchExtent,
+                "offset", Codec.DOUBLE, MoodSound::offset,
                 MoodSound::new);
     }
 
@@ -81,16 +81,16 @@ public record BiomeEffects(
             @NotNull SoundEvent sound,
             double tickChance
     ) {
-        public static final BinaryTagSerializer<AdditionsSound> NBT_TYPE = BinaryTagTemplate.object(
-                "sound", SoundEvent.NBT_TYPE, AdditionsSound::sound,
-                "tick_chance", BinaryTagSerializer.DOUBLE, AdditionsSound::tickChance,
+        public static final Codec<AdditionsSound> CODEC = StructCodec.struct(
+                "sound", SoundEvent.CODEC, AdditionsSound::sound,
+                "tick_chance", Codec.DOUBLE, AdditionsSound::tickChance,
                 AdditionsSound::new);
     }
 
     public record WeightedMusic(@NotNull Music music, int wieght) {
-        public static final BinaryTagSerializer<WeightedMusic> NBT_TYPE = BinaryTagTemplate.object(
-                "data", Music.NBT_TYPE, WeightedMusic::music,
-                "weight", BinaryTagSerializer.INT, WeightedMusic::wieght,
+        public static final Codec<WeightedMusic> CODEC = StructCodec.struct(
+                "data", Music.CODEC, WeightedMusic::music,
+                "weight", Codec.INT, WeightedMusic::wieght,
                 WeightedMusic::new);
     }
 

@@ -1,10 +1,11 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.tag.Tag;
+import net.minestom.server.tag.TagHandler;
 import net.minestom.server.tag.TagReadable;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -23,17 +24,18 @@ public record CustomData(@NotNull CompoundBinaryTag nbt) implements TagReadable 
         }
     };
 
-    public static final BinaryTagSerializer<CustomData> NBT_TYPE = BinaryTagSerializer.COMPOUND.map(CustomData::new, CustomData::nbt);
+    public static final Codec<CustomData> CODEC = Codec.NBT_COMPOUND
+            .transform(CustomData::new, CustomData::nbt);
 
     @Override
     public <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
-        return tag.read(nbt);
+        final TagHandler tagHandler = TagHandler.fromCompound(nbt);
+        return tagHandler.getTag(tag);
     }
 
     public <T> @NotNull CustomData withTag(@NotNull Tag<T> tag, T value) {
-        CompoundBinaryTag.Builder builder = CompoundBinaryTag.builder();
-        builder.put(nbt);
-        tag.write(builder, value);
-        return new CustomData(builder.build());
+        TagHandler tagHandler = TagHandler.fromCompound(nbt);
+        tagHandler.setTag(tag, value);
+        return new CustomData(tagHandler.asCompound());
     }
 }

@@ -203,7 +203,9 @@ interface EntityTypes {
 
     EntityType POLAR_BEAR = EntityTypeImpl.get("minecraft:polar_bear");
 
-    EntityType POTION = EntityTypeImpl.get("minecraft:potion");
+    EntityType SPLASH_POTION = EntityTypeImpl.get("minecraft:splash_potion");
+
+    EntityType LINGERING_POTION = EntityTypeImpl.get("minecraft:lingering_potion");
 
     EntityType PUFFERFISH = EntityTypeImpl.get("minecraft:pufferfish");
 

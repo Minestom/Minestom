@@ -1,22 +1,51 @@
 package net.minestom.server.item;
 
+import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponentMap;
-import net.minestom.server.item.component.*;
+import net.minestom.server.component.DataComponents;
+import net.minestom.server.item.component.CustomData;
+import net.minestom.server.item.component.TooltipDisplay;
+import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.tag.Tag;
-import net.minestom.server.utils.Unit;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 
 record ItemStackImpl(Material material, int amount, DataComponentMap components) implements ItemStack {
+
+    static @NotNull NetworkBuffer.Type<ItemStack> networkType(@NotNull NetworkBuffer.Type<DataComponentMap> componentPatchType) {
+        return new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, ItemStack value) {
+                if (value.isAir()) {
+                    buffer.write(NetworkBuffer.VAR_INT, 0);
+                    return;
+                }
+
+                buffer.write(NetworkBuffer.VAR_INT, value.amount());
+                buffer.write(NetworkBuffer.VAR_INT, value.material().id());
+                buffer.write(componentPatchType, ((ItemStackImpl) value).components());
+            }
+
+            @Override
+            public ItemStack read(@NotNull NetworkBuffer buffer) {
+                int amount = buffer.read(NetworkBuffer.VAR_INT);
+                if (amount <= 0) return ItemStack.AIR;
+                Material material = Material.fromId(buffer.read(NetworkBuffer.VAR_INT));
+                DataComponentMap components = buffer.read(componentPatchType);
+                return ItemStackImpl.create(material, amount, components);
+            }
+        };
+    }
 
     static ItemStack create(Material material, int amount, DataComponentMap components) {
         if (amount <= 0) return AIR;
@@ -39,7 +68,14 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
         // max stack size of 64. If we did not do this, #isSimilar would return false for these two items because of
         // their different patches.
         // It is worth noting that the client would handle both cases perfectly fine.
-        components = DataComponentMap.diff(material.prototype(), components);
+        if (components != DataComponentMap.EMPTY) {
+            components = DataComponentMap.diff(material.prototype(), components);
+        }
+    }
+
+    @Override
+    public @NotNull DataComponentMap componentPatch() {
+        return this.components;
     }
 
     @Override
@@ -89,42 +125,32 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
+    public @NotNull ItemStack damage(int amount) {
+        final Integer damage = get(DataComponents.DAMAGE);
+        if (damage == null) return this;
+        final Integer maxDamage = get(DataComponents.MAX_DAMAGE);
+        if (maxDamage != null && damage + amount >= maxDamage) {
+            return ItemStack.AIR;
+        } else {
+            return with(DataComponents.DAMAGE, damage + amount);
+        }
+    }
+
+    @Override
     public boolean isSimilar(@NotNull ItemStack itemStack) {
         return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
     }
 
     @Override
     public @NotNull CompoundBinaryTag toItemNBT() {
-        return (CompoundBinaryTag) NBT_TYPE.write(this);
+        final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
+        return (CompoundBinaryTag) CODEC.encode(coder, this).orElseThrow("Invalid NBT for ItemStack");
     }
 
     @Override
     @Contract(value = "-> new", pure = true)
     public @NotNull ItemStack.Builder builder() {
         return new Builder(material, amount, components.toPatchBuilder());
-    }
-
-    static @NotNull ItemStack fromCompound(@NotNull CompoundBinaryTag tag) {
-        String id = tag.getString("id");
-        Material material = Material.fromKey(id);
-        Check.notNull(material, "Unknown material: {0}", id);
-        int count = tag.getInt("count", 1);
-
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        DataComponentMap patch = ItemComponent.PATCH_NBT_TYPE.read(context, tag.getCompound("components"));
-        return new ItemStackImpl(material, count, patch);
-    }
-
-    static @NotNull CompoundBinaryTag toCompound(@NotNull ItemStack itemStack) {
-        CompoundBinaryTag.Builder tag = CompoundBinaryTag.builder();
-        tag.putString("id", itemStack.material().name());
-        tag.putInt("count", itemStack.amount());
-
-        BinaryTagSerializer.Context context = new BinaryTagSerializer.ContextWithRegistries(MinecraftServer.process(), false);
-        CompoundBinaryTag components = (CompoundBinaryTag) ItemComponent.PATCH_NBT_TYPE.write(context, ((ItemStackImpl) itemStack).components);
-        if (components.size() > 0) tag.put("components", components);
-
-        return tag.build();
     }
 
     static final class Builder implements ItemStack.Builder {
@@ -170,30 +196,20 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
 
         @Override
         public <T> ItemStack.@NotNull Builder set(@NotNull Tag<T> tag, @Nullable T value) {
-            components.set(ItemComponent.CUSTOM_DATA, components.get(ItemComponent.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
+            components.set(DataComponents.CUSTOM_DATA, components.get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
             return this;
         }
 
         @Override
         public ItemStack.@NotNull Builder hideExtraTooltip() {
-            AttributeList attributeModifiers = components.get(ItemComponent.ATTRIBUTE_MODIFIERS);
-            components.set(ItemComponent.ATTRIBUTE_MODIFIERS, attributeModifiers == null
-                    ? new AttributeList(List.of(), false) : attributeModifiers.withTooltip(false));
-            Unbreakable unbreakable = components.get(ItemComponent.UNBREAKABLE);
-            if (unbreakable != null) components.set(ItemComponent.UNBREAKABLE, new Unbreakable(false));
-            ArmorTrim armorTrim = components.get(ItemComponent.TRIM);
-            if (armorTrim != null) components.set(ItemComponent.TRIM, armorTrim.withTooltip(false));
-            BlockPredicates canBreak = components.get(ItemComponent.CAN_BREAK);
-            if (canBreak != null) components.set(ItemComponent.CAN_BREAK, canBreak.withTooltip(false));
-            BlockPredicates canPlaceOn = components.get(ItemComponent.CAN_PLACE_ON);
-            if (canPlaceOn != null) components.set(ItemComponent.CAN_PLACE_ON, canPlaceOn.withTooltip(false));
-            DyedItemColor dyedColor = components.get(ItemComponent.DYED_COLOR);
-            if (dyedColor != null) components.set(ItemComponent.DYED_COLOR, dyedColor.withTooltip(false));
-            EnchantmentList enchantments = components.get(ItemComponent.ENCHANTMENTS);
-            if (enchantments != null) components.set(ItemComponent.ENCHANTMENTS, enchantments.withTooltip(false));
-            JukeboxPlayable jukeboxPlayable = components.get(ItemComponent.JUKEBOX_PLAYABLE);
-            if (jukeboxPlayable != null) components.set(ItemComponent.JUKEBOX_PLAYABLE, jukeboxPlayable.withTooltip(false));
-            return set(ItemComponent.HIDE_ADDITIONAL_TOOLTIP, Unit.INSTANCE);
+            return set(DataComponents.TOOLTIP_DISPLAY, new TooltipDisplay(false, Set.of(
+                    DataComponents.BANNER_PATTERNS, DataComponents.BEES, DataComponents.BLOCK_ENTITY_DATA,
+                    DataComponents.BLOCK_STATE, DataComponents.BUNDLE_CONTENTS, DataComponents.CHARGED_PROJECTILES,
+                    DataComponents.CONTAINER, DataComponents.CONTAINER_LOOT, DataComponents.FIREWORK_EXPLOSION,
+                    DataComponents.FIREWORKS, DataComponents.INSTRUMENT, DataComponents.MAP_ID,
+                    DataComponents.PAINTING_VARIANT, DataComponents.POT_DECORATIONS, DataComponents.POTION_CONTENTS,
+                    DataComponents.TROPICAL_FISH_PATTERN, DataComponents.WRITTEN_BOOK_CONTENT
+            )));
         }
 
         @Override

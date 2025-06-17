@@ -5,16 +5,18 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
-import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
-import net.minestom.server.entity.metadata.animal.FrogMeta;
-import net.minestom.server.entity.metadata.animal.SnifferMeta;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.*;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
+import net.minestom.server.entity.metadata.villager.VillagerMeta;
+import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
-import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.Holder;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.Nullable;
 
@@ -92,6 +94,10 @@ public sealed class MetadataDef {
         public static final Entry<Byte> ALIGNMENT = byteMask(4, (byte) 0x18, 3, (byte) 0);
         public static final Entry<Boolean> ALIGN_LEFT = bitMask(4, (byte) 0x08, false);
         public static final Entry<Boolean> ALIGN_RIGHT = bitMask(4, (byte) 0x10, false);
+    }
+
+    public static final class ExperienceOrb extends MetadataDef {
+        public static final Entry<Integer> VALUE = index(0, Metadata::VarInt, 0);
     }
 
     public static final class ThrownItemProjectile extends MetadataDef {
@@ -191,7 +197,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Painting extends MetadataDef {
-        public static final Entry<DynamicRegistry.Key<PaintingMeta.Variant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingMeta.Variant.KEBAB);
+        public static final Entry<Holder<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingVariant.KEBAB);
     }
 
     public static final class ItemEntity extends MetadataDef {
@@ -277,7 +283,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Salmon extends AbstractFish {
-        public static final Entry<String> VARIANT = index(0, Metadata::String, "");
+        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.SMALL.ordinal());
     }
 
     public static final class TropicalFish extends AbstractFish {
@@ -341,7 +347,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Fox extends AgeableMob {
-        public static final Entry<Integer> TYPE = index(0, Metadata::VarInt, 0);
+        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
         public static final Entry<Byte> FOX_FLAGS = index(1, Metadata::Byte, (byte) 0);
         public static final Entry<Boolean> IS_SITTING = bitMask(1, (byte) 0x01, false);
         public static final Entry<Boolean> IS_CROUCHING = bitMask(1, (byte) 0x04, false);
@@ -376,9 +382,18 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_ON_BACK = bitMask(5, (byte) 0x10, false);
     }
 
+    public static final class Chicken extends AgeableMob {
+        public static final Entry<RegistryKey<ChickenVariant>> VARIANT = index(0, Metadata::ChickenVariant, ChickenVariant.TEMPERATE);
+    }
+
+    public static final class Cow extends AgeableMob {
+        public static final Entry<RegistryKey<CowVariant>> VARIANT = index(0, Metadata::CowVariant, CowVariant.TEMPERATE);
+    }
+
     public static final class Pig extends AgeableMob {
         public static final Entry<Boolean> HAS_SADDLE = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> BOOST_TIME = index(1, Metadata::VarInt, 0);
+        public static final Entry<RegistryKey<PigVariant>> VARIANT = index(2, Metadata::PigVariant, PigVariant.TEMPERATE);
     }
 
     public static final class Rabbit extends AgeableMob {
@@ -386,12 +401,8 @@ public sealed class MetadataDef {
     }
 
     public static final class Turtle extends AgeableMob {
-        public static final Entry<Point> HOME_POS = index(0, Metadata::BlockPosition, Vec.ZERO);
-        public static final Entry<Boolean> HAS_EGG = index(1, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_LAYING_EGG = index(2, Metadata::Boolean, false);
-        public static final Entry<Point> TRAVEL_POS = index(3, Metadata::BlockPosition, Vec.ZERO);
-        public static final Entry<Boolean> IS_GOING_HOME = index(4, Metadata::Boolean, false);
-        public static final Entry<Boolean> IS_TRAVELING = index(5, Metadata::Boolean, false);
+        public static final Entry<Boolean> HAS_EGG = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> IS_LAYING_EGG = index(1, Metadata::Boolean, false);
     }
 
     public static final class PolarBear extends AgeableMob {
@@ -399,7 +410,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Mooshroom extends AgeableMob {
-        public static final Entry<String> VARIANT = index(0, Metadata::String, "red");
+        public static final Entry<Integer> VARIANT = index(0, Metadata::VarInt, 0);
     }
 
     public static final class Hoglin extends AgeableMob {
@@ -432,7 +443,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Cat extends TameableAnimal {
-        public static final Entry<CatMeta.Variant> VARIANT = index(0, Metadata::CatVariant, CatMeta.Variant.BLACK);
+        public static final Entry<RegistryKey<CatVariant>> VARIANT = index(0, Metadata::CatVariant, CatVariant.BLACK);
         public static final Entry<Boolean> IS_LYING = index(1, Metadata::Boolean, false);
         public static final Entry<Boolean> IS_RELAXED = index(2, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(3, Metadata::VarInt, 14);
@@ -442,7 +453,8 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_BEGGING = index(0, Metadata::Boolean, false);
         public static final Entry<Integer> COLLAR_COLOR = index(1, Metadata::VarInt, 14);
         public static final Entry<Integer> ANGER_TIME = index(2, Metadata::VarInt, 0);
-        public static final Entry<DynamicRegistry.Key<WolfMeta.Variant>> VARIANT = index(3, Metadata::WolfVariant, WolfMeta.Variant.PALE);
+        public static final Entry<RegistryKey<WolfVariant>> VARIANT = index(3, Metadata::WolfVariant, WolfVariant.PALE);
+        public static final Entry<RegistryKey<WolfSoundVariant>> SOUND_VARIANT = index(4, Metadata::WolfSoundVariant, WolfSoundVariant.CLASSIC);
     }
 
     public static final class Parrot extends TameableAnimal {
@@ -454,7 +466,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Villager extends AbstractVillager {
-        public static final Entry<int[]> VARIANT = index(0, Metadata::VillagerData, new int[]{0, 0, 0});
+        public static final Entry<VillagerMeta.VillagerData> VARIANT = index(0, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
     }
 
     public static final class IronGolem extends Mob {
@@ -558,7 +570,7 @@ public sealed class MetadataDef {
 
     public static final class ZombieVillager extends Mob {
         public static final Entry<Boolean> IS_CONVERTING = index(0, Metadata::Boolean, false);
-        public static final Entry<int[]> VILLAGER_DATA = index(1, Metadata::VillagerData, new int[]{0, 0, 0});
+        public static final Entry<VillagerMeta.VillagerData> VILLAGER_DATA = index(1, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
     }
 
     public static final class Enderman extends Mob {

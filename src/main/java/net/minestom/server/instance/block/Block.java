@@ -1,12 +1,14 @@
 package net.minestom.server.instance.block;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.StaticProtocolObject;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.tag.TagReadable;
@@ -24,7 +26,7 @@ import java.util.function.BiPredicate;
  * <p>
  * Implementations are expected to be immutable.
  */
-public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks permits BlockImpl {
+public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, Blocks permits BlockImpl {
 
     @NotNull
     NetworkBuffer.Type<Block> NETWORK_TYPE = NetworkBuffer.VAR_INT.transform(Block::fromStateId, Block::stateId);
@@ -124,6 +126,20 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     @NotNull Map<String, String> properties();
 
     /**
+     * Returns the block states as a string.
+     * <p>
+     * The format is `block_name[property1=value1,property2=value2,...]`.
+     * <p>
+     * More portable than {@link #stateId()} across game versions, but less efficient.
+     * Do not rely on exact string comparison as properties order may vary, use {@link #fromState(String)}.
+     *
+     * @return the block properties as a string
+     * @see #fromState(String)
+     */
+    @Contract(pure = true)
+    @NotNull String state();
+
+    /**
      * Returns this block type with default properties, no tags and no handler.
      * As found in the {@link Blocks} listing.
      *
@@ -154,10 +170,12 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
      * @return the block registry
      */
     @Contract(pure = true)
-    @NotNull Registry.BlockEntry registry();
+    @NotNull RegistryData.BlockEntry registry();
 
     @Override
-    default @NotNull Key key() { return registry().key(); }
+    default @NotNull Key key() {
+        return registry().key();
+    }
 
     @Override
     default int id() {
@@ -189,15 +207,19 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @NotNull Collection<@NotNull Block> values() {
-        return BlockImpl.values();
+        return BlockImpl.REGISTRY.values();
     }
 
-    static @Nullable Block fromKey(@NotNull String key) {
-        return BlockImpl.getSafe(key);
+    static @Nullable Block fromKey(@KeyPattern @NotNull String key) {
+        return fromKey(Key.key(key));
     }
 
     static @Nullable Block fromKey(@NotNull Key key) {
-        return fromKey(key.asString());
+        return BlockImpl.REGISTRY.get(key);
+    }
+
+    static @Nullable Block fromState(@NotNull String state) {
+        return BlockImpl.parseState(state);
     }
 
     static @Nullable Block fromStateId(int stateId) {
@@ -205,7 +227,11 @@ public sealed interface Block extends StaticProtocolObject, TagReadable, Blocks 
     }
 
     static @Nullable Block fromBlockId(int blockId) {
-        return BlockImpl.getId(blockId);
+        return BlockImpl.REGISTRY.get(blockId);
+    }
+
+    static @NotNull Registry<Block> staticRegistry() {
+        return BlockImpl.REGISTRY;
     }
 
     @FunctionalInterface

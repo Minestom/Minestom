@@ -4,13 +4,13 @@ import net.kyori.adventure.text.Component;
 import net.minestom.server.command.builder.Command;
 import net.minestom.server.command.builder.arguments.ArgumentType;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.EnchantmentList;
@@ -130,7 +130,7 @@ public class TestInstabreakCommand extends Command {
 
     private void giveItems(Player player) {
         List<ItemStack> items = new ArrayList<>();
-        items.add(ItemStack.builder(Material.SHEARS).set(ItemComponent.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
+        items.add(ItemStack.builder(Material.SHEARS).set(DataComponents.ENCHANTMENTS, EnchantmentList.EMPTY.with(Enchantment.EFFICIENCY, 5)).build());
         items.add(ItemStack.builder(Material.WHITE_WOOL).amount(64).build());
         items.add(ItemStack.builder(Material.STONE).amount(64).build());
         items.add(ItemStack.of(Material.DIAMOND_SWORD));
