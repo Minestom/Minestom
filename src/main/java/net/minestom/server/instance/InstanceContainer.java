@@ -120,6 +120,8 @@ public class InstanceContainer extends Instance {
         setChunkSupplier(DynamicChunk::new);
         setChunkLoader(Objects.requireNonNullElse(loader, DEFAULT_LOADER));
         this.chunkLoader.loadInstance(this);
+        // last block change starts at instance creation time
+        refreshLastBlockChangeTime();
     }
 
     @Override
@@ -156,7 +158,7 @@ public class InstanceContainer extends Instance {
 
         synchronized (chunk) {
             // Refresh the last block change time
-            this.lastBlockChangeTime = System.currentTimeMillis();
+            this.lastBlockChangeTime = System.nanoTime();
             final BlockVec blockPosition = new BlockVec(x, y, z);
             if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
                 // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
@@ -577,7 +579,7 @@ public class InstanceContainer extends Instance {
     /**
      * Gets the last time at which a block changed.
      *
-     * @return the time at which the last block changed in milliseconds, 0 if never
+     * @return the time at which the last block changed in nanoseconds. Only use this to calculate delta times
      */
     public long getLastBlockChangeTime() {
         return lastBlockChangeTime;
@@ -589,7 +591,7 @@ public class InstanceContainer extends Instance {
      * Useful if you change blocks values directly using a {@link Chunk} object.
      */
     public void refreshLastBlockChangeTime() {
-        this.lastBlockChangeTime = System.currentTimeMillis();
+        this.lastBlockChangeTime = System.nanoTime();
     }
 
     @Override
