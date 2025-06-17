@@ -6,7 +6,7 @@ import net.minestom.server.component.DataComponents;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.entity.MetadataHolder;
-import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +21,7 @@ public class CatMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
      */
     @Deprecated
-    public @NotNull CatMeta.Variant getVariant() {
+    public @NotNull RegistryKey<CatVariant> getVariant() {
         return metadata.get(MetadataDef.Cat.VARIANT);
     }
 
@@ -29,7 +29,7 @@ public class CatMeta extends TameableAnimalMeta {
      * @deprecated use {@link net.minestom.server.component.DataComponents#CAT_VARIANT} instead.
      */
     @Deprecated
-    public void setVariant(@NotNull CatMeta.Variant value) {
+    public void setVariant(@NotNull RegistryKey<CatVariant> value) {
         metadata.set(MetadataDef.Cat.VARIANT, value);
     }
 
@@ -78,26 +78,10 @@ public class CatMeta extends TameableAnimalMeta {
     @Override
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
         if (component == DataComponents.CAT_VARIANT)
-            setVariant((CatMeta.Variant) value);
+            setVariant((RegistryKey<CatVariant>) value);
         else if (component == DataComponents.CAT_COLLAR)
             setCollarColor((DyeColor) value);
         else super.set(component, value);
-    }
-
-    public enum Variant {
-        TABBY,
-        BLACK,
-        RED,
-        SIAMESE,
-        BRITISH_SHORTHAIR,
-        CALICO,
-        PERSIAN,
-        RAGDOLL,
-        WHITE,
-        JELLIE,
-        ALL_BLACK;
-
-        public static final NetworkBuffer.Type<Variant> NETWORK_TYPE = NetworkBuffer.Enum(Variant.class);
     }
 
 }
