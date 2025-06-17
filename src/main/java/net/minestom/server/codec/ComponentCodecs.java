@@ -44,7 +44,7 @@ public final class ComponentCodecs {
 
     public static final Codec<ShadowColor> SHADOW_COLOR = Codec.INT.transform(ShadowColor::shadowColor, ShadowColor::value);
 
-    private static final @Nullable Boolean stateToBool(@NotNull TextDecoration.State state) {
+    private static @Nullable Boolean stateToBool(@NotNull TextDecoration.State state) {
         return switch (state) {
             case NOT_SET -> null;
             case FALSE -> false;
@@ -67,7 +67,7 @@ public final class ComponentCodecs {
             "command", Codec.STRING, ClickEvent::value,
             ClickEvent::openUrl);
     private static final StructCodec<ClickEvent> CLICK_EVENT_CHANGE_PAGE = StructCodec.struct(
-            "url", new CodecImpl.IntAsStringImpl(), ClickEvent::value,
+            "page", new CodecImpl.IntAsStringImpl(), ClickEvent::value,
             ClickEvent::openUrl);
     private static final StructCodec<ClickEvent> CLICK_EVENT_COPY_TO_CLIPBOARD = StructCodec.struct(
             "value", Codec.STRING, ClickEvent::value,
@@ -81,6 +81,9 @@ public final class ComponentCodecs {
             case SUGGEST_COMMAND -> CLICK_EVENT_SUGGEST_COMMAND;
             case CHANGE_PAGE -> CLICK_EVENT_CHANGE_PAGE;
             case COPY_TO_CLIPBOARD -> CLICK_EVENT_COPY_TO_CLIPBOARD;
+            // 1.21.6 features
+            case SHOW_DIALOG, CUSTOM ->
+                    throw new UnsupportedOperationException("Unknown click event action: " + action);
         };
     }
 
