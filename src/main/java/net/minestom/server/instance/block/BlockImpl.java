@@ -199,10 +199,12 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
 
     @Override
     public @NotNull String state() {
-        if (properties().isEmpty()) return name();
-        StringBuilder builder = new StringBuilder(name());
+        final String name = name();
+        final Map<String, String> properties = properties();
+        if (properties.isEmpty()) return name;
+        StringBuilder builder = new StringBuilder(name);
         builder.append('[');
-        for (var entry : properties().entrySet()) {
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
             builder.append(entry.getKey())
                     .append('=')
                     .append(entry.getValue())
