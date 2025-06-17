@@ -7,41 +7,43 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface JukeboxSongs {
-    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.unsafeOf("precipice");
+    RegistryKey<JukeboxSong> PRECIPICE = RegistryKey.unsafeOf("minecraft:precipice");
 
-    RegistryKey<JukeboxSong> STAL = RegistryKey.unsafeOf("stal");
+    RegistryKey<JukeboxSong> STAL = RegistryKey.unsafeOf("minecraft:stal");
 
-    RegistryKey<JukeboxSong> STRAD = RegistryKey.unsafeOf("strad");
+    RegistryKey<JukeboxSong> STRAD = RegistryKey.unsafeOf("minecraft:strad");
 
-    RegistryKey<JukeboxSong> CREATOR_MUSIC_BOX = RegistryKey.unsafeOf("creator_music_box");
+    RegistryKey<JukeboxSong> CREATOR_MUSIC_BOX = RegistryKey.unsafeOf("minecraft:creator_music_box");
 
-    RegistryKey<JukeboxSong> _13 = RegistryKey.unsafeOf("13");
+    RegistryKey<JukeboxSong> _13 = RegistryKey.unsafeOf("minecraft:13");
 
-    RegistryKey<JukeboxSong> RELIC = RegistryKey.unsafeOf("relic");
+    RegistryKey<JukeboxSong> RELIC = RegistryKey.unsafeOf("minecraft:relic");
 
-    RegistryKey<JukeboxSong> FAR = RegistryKey.unsafeOf("far");
+    RegistryKey<JukeboxSong> FAR = RegistryKey.unsafeOf("minecraft:far");
 
-    RegistryKey<JukeboxSong> BLOCKS = RegistryKey.unsafeOf("blocks");
+    RegistryKey<JukeboxSong> BLOCKS = RegistryKey.unsafeOf("minecraft:blocks");
 
-    RegistryKey<JukeboxSong> _5 = RegistryKey.unsafeOf("5");
+    RegistryKey<JukeboxSong> _5 = RegistryKey.unsafeOf("minecraft:5");
 
-    RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.unsafeOf("otherside");
+    RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.unsafeOf("minecraft:otherside");
 
-    RegistryKey<JukeboxSong> MELLOHI = RegistryKey.unsafeOf("mellohi");
+    RegistryKey<JukeboxSong> TEARS = RegistryKey.unsafeOf("minecraft:tears");
 
-    RegistryKey<JukeboxSong> MALL = RegistryKey.unsafeOf("mall");
+    RegistryKey<JukeboxSong> MELLOHI = RegistryKey.unsafeOf("minecraft:mellohi");
 
-    RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("chirp");
+    RegistryKey<JukeboxSong> MALL = RegistryKey.unsafeOf("minecraft:mall");
 
-    RegistryKey<JukeboxSong> CREATOR = RegistryKey.unsafeOf("creator");
+    RegistryKey<JukeboxSong> CHIRP = RegistryKey.unsafeOf("minecraft:chirp");
 
-    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("pigstep");
+    RegistryKey<JukeboxSong> CREATOR = RegistryKey.unsafeOf("minecraft:creator");
 
-    RegistryKey<JukeboxSong> WARD = RegistryKey.unsafeOf("ward");
+    RegistryKey<JukeboxSong> PIGSTEP = RegistryKey.unsafeOf("minecraft:pigstep");
 
-    RegistryKey<JukeboxSong> CAT = RegistryKey.unsafeOf("cat");
+    RegistryKey<JukeboxSong> WARD = RegistryKey.unsafeOf("minecraft:ward");
 
-    RegistryKey<JukeboxSong> WAIT = RegistryKey.unsafeOf("wait");
+    RegistryKey<JukeboxSong> CAT = RegistryKey.unsafeOf("minecraft:cat");
 
-    RegistryKey<JukeboxSong> _11 = RegistryKey.unsafeOf("11");
+    RegistryKey<JukeboxSong> WAIT = RegistryKey.unsafeOf("minecraft:wait");
+
+    RegistryKey<JukeboxSong> _11 = RegistryKey.unsafeOf("minecraft:11");
 }
