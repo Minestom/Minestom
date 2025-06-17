@@ -5,6 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.command.ArgumentParserType;
@@ -20,7 +21,6 @@ import net.minestom.server.item.component.CustomData;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -42,7 +42,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
     public ArgumentItemStack(String id) {
         super(id, true);
-        this.tagStringIO = TagStringIO.tagStringIO();
+        this.tagStringIO = MinestomAdventure.tagStringIO();
     }
 
     public ArgumentItemStack(String id, @NotNull TagStringIO tagParser) {
@@ -66,7 +66,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
      */
     @Deprecated
     public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, TagStringIO.tagStringIO());
+        return staticParse(input, MinestomAdventure.tagStringIO());
     }
 
     /**

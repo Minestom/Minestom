@@ -2,7 +2,7 @@ package net.minestom.server.instance;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
@@ -68,7 +68,7 @@ public class InstanceBlockPacketIntegrationTest {
         final Block block;
         final CompoundBinaryTag data;
         try {
-            data = TagStringIO.tagStringIO().asCompound("{\"is_waxed\":1B}");
+            data = MinestomAdventure.tagStringIO().asCompound("{\"is_waxed\":1B}");
             block = Block.OAK_SIGN.withHandler(signHandler).withNbt(data);
         } catch (Exception ex) {
             throw new RuntimeException(ex);

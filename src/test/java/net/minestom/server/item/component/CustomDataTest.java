@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
@@ -49,7 +49,7 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
         final ItemStack item = ItemStack.builder(Material.STICK)
                 .set(Tag.Integer("num").path("test"), 5)
                 .build();
-        final String snbt = TagStringIO.tagStringIO().asString(item.get(DataComponents.CUSTOM_DATA).nbt());
+        final String snbt = MinestomAdventure.tagStringIO().asString(item.get(DataComponents.CUSTOM_DATA).nbt());
         assertEquals("{test:{num:5}}", snbt);
     }
 }

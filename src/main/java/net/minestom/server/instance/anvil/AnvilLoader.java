@@ -3,6 +3,7 @@ package net.minestom.server.instance.anvil;
 import it.unimi.dsi.fastutil.ints.*;
 import net.kyori.adventure.nbt.*;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.IChunkLoader;
@@ -260,7 +261,7 @@ public class AnvilLoader implements IChunkLoader {
                     } else {
                         try {
                             LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
-                                    propertiesNBT, property.getKey(), TagStringIO.tagStringIO().asString(property.getValue()));
+                                    propertiesNBT, property.getKey(), MinestomAdventure.tagStringIO().asString(property.getValue()));
                         } catch (IOException e) {
                             LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
                         }

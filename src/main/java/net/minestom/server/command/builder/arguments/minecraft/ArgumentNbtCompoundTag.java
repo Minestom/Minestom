@@ -2,6 +2,7 @@ package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIO;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
@@ -24,7 +25,7 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
 
     public ArgumentNbtCompoundTag(String id) {
         super(id, true);
-        this.tagStringIO = TagStringIO.tagStringIO();
+        this.tagStringIO = MinestomAdventure.tagStringIO();
     }
 
     public ArgumentNbtCompoundTag(String id, @NotNull TagStringIO parser) {

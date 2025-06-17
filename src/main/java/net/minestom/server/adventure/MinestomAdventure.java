@@ -18,10 +18,18 @@ import java.util.function.BiFunction;
  */
 public final class MinestomAdventure {
     /**
+     * See {@link MinestomAdventure#tagStringIO()}
+     */
+    private static final TagStringIO tagStringIO = TagStringIO.builder()
+            .emitHeterogeneousLists(true)
+            .acceptHeterogeneousLists(true)
+            .build();
+
+    /**
      * A codec to convert between strings and NBT.
      */
     public static final Codec<CompoundBinaryTag, String, IOException, IOException> NBT_CODEC
-            = Codec.codec(TagStringIO.tagStringIO()::asCompound, TagStringIO.tagStringIO()::asString);
+            = Codec.codec(tagStringIO::asCompound, tagStringIO::asString);
 
     /**
      * If components should be automatically translated in outgoing packets.
@@ -33,6 +41,17 @@ public final class MinestomAdventure {
     private static Locale defaultLocale = Locale.getDefault();
 
     private MinestomAdventure() {
+    }
+
+    /**
+     * Gets the {@link TagStringIO} instance used to convert SNBT.
+     * This instance should be used for all Adventure related SNBT parsing and serialization.
+     * @implNote This instance of the {@link TagStringIO} is configured to accept and emit heterogeneous lists
+     *
+     * @return the tag string IO instance
+     */
+    public static @NotNull TagStringIO tagStringIO() {
+        return tagStringIO;
     }
 
     /**
