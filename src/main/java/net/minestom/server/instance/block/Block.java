@@ -128,7 +128,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     /**
      * Returns the block states as a string.
      * <p>
-     * The format is `block_name[property1=value1;property2=value2;...]`.
+     * The format is `block_name[property1=value1,property2=value2,...]`.
      * <p>
      * More portable than {@link #stateId()} across game versions, but less efficient.
      * Do not rely on exact string comparison as properties order may vary, use {@link #fromState(String)}.
