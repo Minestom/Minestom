@@ -293,8 +293,11 @@ final class NetworkBufferImpl implements NetworkBuffer {
         }
     }
 
-    private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
-    private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+    // Use the JVM lazy loading to ignore these until compression is required.
+    static class CompressionHolder {
+        private static final ObjectPool<Deflater> DEFLATER_POOL = ObjectPool.pool(Deflater::new);
+        private static final ObjectPool<Inflater> INFLATER_POOL = ObjectPool.pool(Inflater::new);
+    }
 
     @Override
     public long compress(long start, long length, NetworkBuffer output) {
@@ -305,7 +308,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         ByteBuffer input = bufferSlice((int) start, (int) length);
         ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
-        Deflater deflater = DEFLATER_POOL.get();
+        Deflater deflater = CompressionHolder.DEFLATER_POOL.get();
         try {
             deflater.setInput(input);
             deflater.finish();
@@ -314,7 +317,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            DEFLATER_POOL.add(deflater);
+            CompressionHolder.DEFLATER_POOL.add(deflater);
         }
     }
 
@@ -327,7 +330,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
         ByteBuffer input = bufferSlice((int) start, (int) length);
         ByteBuffer outputBuffer = impl(output).bufferSlice((int) output.writeIndex(), (int) output.writableBytes());
 
-        Inflater inflater = INFLATER_POOL.get();
+        Inflater inflater = CompressionHolder.INFLATER_POOL.get();
         try {
             inflater.setInput(input);
             final int bytes = inflater.inflate(outputBuffer);
@@ -335,7 +338,7 @@ final class NetworkBufferImpl implements NetworkBuffer {
             output.advanceWrite(bytes);
             return bytes;
         } finally {
-            INFLATER_POOL.add(inflater);
+            CompressionHolder.INFLATER_POOL.add(inflater);
         }
     }
 

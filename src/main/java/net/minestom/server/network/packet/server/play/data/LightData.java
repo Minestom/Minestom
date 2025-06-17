@@ -16,6 +16,15 @@ public record LightData(
         @NotNull List<byte[]> skyLight,
         @NotNull List<byte[]> blockLight
 ) {
+    public LightData {
+        skyMask = (BitSet) skyMask.clone();
+        blockMask = (BitSet) blockMask.clone();
+        emptySkyMask = (BitSet) emptySkyMask.clone();
+        emptyBlockMask = (BitSet) emptyBlockMask.clone();
+        skyLight = List.copyOf(skyLight);
+        blockLight = List.copyOf(blockLight);
+    }
+
     public static final int MAX_SECTIONS = 4096 / 16;
 
     public static final NetworkBuffer.Type<LightData> NETWORK_TYPE = NetworkBufferTemplate.template(

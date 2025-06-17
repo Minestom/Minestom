@@ -19,6 +19,9 @@ public sealed interface HolderSet<T> permits HolderSet.Direct, RegistryTag {
     }
 
     record Direct<T extends Holder.Direct<T>>(@NotNull List<T> values) implements HolderSet<T>, Iterable<T> {
+        public Direct {
+            values = List.copyOf(values);
+        }
 
         @SafeVarargs
         public Direct(@NotNull T... values) {
