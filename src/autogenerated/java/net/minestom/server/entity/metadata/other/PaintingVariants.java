@@ -7,103 +7,103 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface PaintingVariants {
-    RegistryKey<PaintingVariant> BOUQUET = RegistryKey.unsafeOf("minecraft:bouquet");
+    RegistryKey<PaintingVariant> BOUQUET = RegistryKey.unsafeOf("bouquet");
 
-    RegistryKey<PaintingVariant> WITHER = RegistryKey.unsafeOf("minecraft:wither");
+    RegistryKey<PaintingVariant> WITHER = RegistryKey.unsafeOf("wither");
 
-    RegistryKey<PaintingVariant> ALBAN = RegistryKey.unsafeOf("minecraft:alban");
+    RegistryKey<PaintingVariant> ALBAN = RegistryKey.unsafeOf("alban");
 
-    RegistryKey<PaintingVariant> UNPACKED = RegistryKey.unsafeOf("minecraft:unpacked");
+    RegistryKey<PaintingVariant> UNPACKED = RegistryKey.unsafeOf("unpacked");
 
-    RegistryKey<PaintingVariant> AZTEC = RegistryKey.unsafeOf("minecraft:aztec");
+    RegistryKey<PaintingVariant> AZTEC = RegistryKey.unsafeOf("aztec");
 
-    RegistryKey<PaintingVariant> MATCH = RegistryKey.unsafeOf("minecraft:match");
+    RegistryKey<PaintingVariant> MATCH = RegistryKey.unsafeOf("match");
 
-    RegistryKey<PaintingVariant> FINDING = RegistryKey.unsafeOf("minecraft:finding");
+    RegistryKey<PaintingVariant> FINDING = RegistryKey.unsafeOf("finding");
 
-    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("minecraft:baroque");
+    RegistryKey<PaintingVariant> BAROQUE = RegistryKey.unsafeOf("baroque");
 
-    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("minecraft:endboss");
+    RegistryKey<PaintingVariant> ENDBOSS = RegistryKey.unsafeOf("endboss");
 
-    RegistryKey<PaintingVariant> ORB = RegistryKey.unsafeOf("minecraft:orb");
+    RegistryKey<PaintingVariant> ORB = RegistryKey.unsafeOf("orb");
 
-    RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.unsafeOf("minecraft:aztec2");
+    RegistryKey<PaintingVariant> AZTEC2 = RegistryKey.unsafeOf("aztec2");
 
-    RegistryKey<PaintingVariant> SUNFLOWERS = RegistryKey.unsafeOf("minecraft:sunflowers");
+    RegistryKey<PaintingVariant> SUNFLOWERS = RegistryKey.unsafeOf("sunflowers");
 
-    RegistryKey<PaintingVariant> CHANGING = RegistryKey.unsafeOf("minecraft:changing");
+    RegistryKey<PaintingVariant> CHANGING = RegistryKey.unsafeOf("changing");
 
-    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.unsafeOf("minecraft:wasteland");
+    RegistryKey<PaintingVariant> WASTELAND = RegistryKey.unsafeOf("wasteland");
 
-    RegistryKey<PaintingVariant> DONKEY_KONG = RegistryKey.unsafeOf("minecraft:donkey_kong");
+    RegistryKey<PaintingVariant> DONKEY_KONG = RegistryKey.unsafeOf("donkey_kong");
 
-    RegistryKey<PaintingVariant> BUST = RegistryKey.unsafeOf("minecraft:bust");
+    RegistryKey<PaintingVariant> BUST = RegistryKey.unsafeOf("bust");
 
-    RegistryKey<PaintingVariant> POOL = RegistryKey.unsafeOf("minecraft:pool");
+    RegistryKey<PaintingVariant> POOL = RegistryKey.unsafeOf("pool");
 
-    RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.unsafeOf("minecraft:pigscene");
+    RegistryKey<PaintingVariant> PIGSCENE = RegistryKey.unsafeOf("pigscene");
 
-    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.unsafeOf("minecraft:burning_skull");
+    RegistryKey<PaintingVariant> BURNING_SKULL = RegistryKey.unsafeOf("burning_skull");
 
-    RegistryKey<PaintingVariant> FIRE = RegistryKey.unsafeOf("minecraft:fire");
+    RegistryKey<PaintingVariant> FIRE = RegistryKey.unsafeOf("fire");
 
-    RegistryKey<PaintingVariant> SEA = RegistryKey.unsafeOf("minecraft:sea");
+    RegistryKey<PaintingVariant> SEA = RegistryKey.unsafeOf("sea");
 
-    RegistryKey<PaintingVariant> SUNSET = RegistryKey.unsafeOf("minecraft:sunset");
+    RegistryKey<PaintingVariant> SUNSET = RegistryKey.unsafeOf("sunset");
 
-    RegistryKey<PaintingVariant> POND = RegistryKey.unsafeOf("minecraft:pond");
+    RegistryKey<PaintingVariant> POND = RegistryKey.unsafeOf("pond");
 
-    RegistryKey<PaintingVariant> HUMBLE = RegistryKey.unsafeOf("minecraft:humble");
+    RegistryKey<PaintingVariant> HUMBLE = RegistryKey.unsafeOf("humble");
 
-    RegistryKey<PaintingVariant> TIDES = RegistryKey.unsafeOf("minecraft:tides");
+    RegistryKey<PaintingVariant> TIDES = RegistryKey.unsafeOf("tides");
 
-    RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.unsafeOf("minecraft:prairie_ride");
+    RegistryKey<PaintingVariant> PRAIRIE_RIDE = RegistryKey.unsafeOf("prairie_ride");
 
-    RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("minecraft:fern");
+    RegistryKey<PaintingVariant> FERN = RegistryKey.unsafeOf("fern");
 
-    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("minecraft:passage");
+    RegistryKey<PaintingVariant> PASSAGE = RegistryKey.unsafeOf("passage");
 
-    RegistryKey<PaintingVariant> LOWMIST = RegistryKey.unsafeOf("minecraft:lowmist");
+    RegistryKey<PaintingVariant> LOWMIST = RegistryKey.unsafeOf("lowmist");
 
-    RegistryKey<PaintingVariant> COURBET = RegistryKey.unsafeOf("minecraft:courbet");
+    RegistryKey<PaintingVariant> COURBET = RegistryKey.unsafeOf("courbet");
 
-    RegistryKey<PaintingVariant> WANDERER = RegistryKey.unsafeOf("minecraft:wanderer");
+    RegistryKey<PaintingVariant> WANDERER = RegistryKey.unsafeOf("wanderer");
 
-    RegistryKey<PaintingVariant> BACKYARD = RegistryKey.unsafeOf("minecraft:backyard");
+    RegistryKey<PaintingVariant> BACKYARD = RegistryKey.unsafeOf("backyard");
 
-    RegistryKey<PaintingVariant> EARTH = RegistryKey.unsafeOf("minecraft:earth");
+    RegistryKey<PaintingVariant> EARTH = RegistryKey.unsafeOf("earth");
 
-    RegistryKey<PaintingVariant> SKULL_AND_ROSES = RegistryKey.unsafeOf("minecraft:skull_and_roses");
+    RegistryKey<PaintingVariant> SKULL_AND_ROSES = RegistryKey.unsafeOf("skull_and_roses");
 
-    RegistryKey<PaintingVariant> CAVEBIRD = RegistryKey.unsafeOf("minecraft:cavebird");
+    RegistryKey<PaintingVariant> CAVEBIRD = RegistryKey.unsafeOf("cavebird");
 
-    RegistryKey<PaintingVariant> FIGHTERS = RegistryKey.unsafeOf("minecraft:fighters");
+    RegistryKey<PaintingVariant> FIGHTERS = RegistryKey.unsafeOf("fighters");
 
-    RegistryKey<PaintingVariant> COTAN = RegistryKey.unsafeOf("minecraft:cotan");
+    RegistryKey<PaintingVariant> COTAN = RegistryKey.unsafeOf("cotan");
 
-    RegistryKey<PaintingVariant> CREEBET = RegistryKey.unsafeOf("minecraft:creebet");
+    RegistryKey<PaintingVariant> CREEBET = RegistryKey.unsafeOf("creebet");
 
-    RegistryKey<PaintingVariant> OWLEMONS = RegistryKey.unsafeOf("minecraft:owlemons");
+    RegistryKey<PaintingVariant> OWLEMONS = RegistryKey.unsafeOf("owlemons");
 
-    RegistryKey<PaintingVariant> GRAHAM = RegistryKey.unsafeOf("minecraft:graham");
+    RegistryKey<PaintingVariant> GRAHAM = RegistryKey.unsafeOf("graham");
 
-    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("minecraft:meditative");
+    RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("meditative");
 
-    RegistryKey<PaintingVariant> KEBAB = RegistryKey.unsafeOf("minecraft:kebab");
+    RegistryKey<PaintingVariant> KEBAB = RegistryKey.unsafeOf("kebab");
 
-    RegistryKey<PaintingVariant> STAGE = RegistryKey.unsafeOf("minecraft:stage");
+    RegistryKey<PaintingVariant> STAGE = RegistryKey.unsafeOf("stage");
 
-    RegistryKey<PaintingVariant> BOMB = RegistryKey.unsafeOf("minecraft:bomb");
+    RegistryKey<PaintingVariant> BOMB = RegistryKey.unsafeOf("bomb");
 
-    RegistryKey<PaintingVariant> PLANT = RegistryKey.unsafeOf("minecraft:plant");
+    RegistryKey<PaintingVariant> PLANT = RegistryKey.unsafeOf("plant");
 
-    RegistryKey<PaintingVariant> WATER = RegistryKey.unsafeOf("minecraft:water");
+    RegistryKey<PaintingVariant> WATER = RegistryKey.unsafeOf("water");
 
-    RegistryKey<PaintingVariant> POINTER = RegistryKey.unsafeOf("minecraft:pointer");
+    RegistryKey<PaintingVariant> POINTER = RegistryKey.unsafeOf("pointer");
 
-    RegistryKey<PaintingVariant> SKELETON = RegistryKey.unsafeOf("minecraft:skeleton");
+    RegistryKey<PaintingVariant> SKELETON = RegistryKey.unsafeOf("skeleton");
 
-    RegistryKey<PaintingVariant> VOID = RegistryKey.unsafeOf("minecraft:void");
+    RegistryKey<PaintingVariant> VOID = RegistryKey.unsafeOf("void");
 
-    RegistryKey<PaintingVariant> WIND = RegistryKey.unsafeOf("minecraft:wind");
+    RegistryKey<PaintingVariant> WIND = RegistryKey.unsafeOf("wind");
 }

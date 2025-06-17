@@ -5,33 +5,33 @@ package net.minestom.server.entity;
  */
 @SuppressWarnings("unused")
 interface VillagerProfessions {
-    VillagerProfession NONE = VillagerProfessionImpl.get("minecraft:none");
+    VillagerProfession NONE = VillagerProfessionImpl.get("none");
 
-    VillagerProfession ARMORER = VillagerProfessionImpl.get("minecraft:armorer");
+    VillagerProfession ARMORER = VillagerProfessionImpl.get("armorer");
 
-    VillagerProfession BUTCHER = VillagerProfessionImpl.get("minecraft:butcher");
+    VillagerProfession BUTCHER = VillagerProfessionImpl.get("butcher");
 
-    VillagerProfession CARTOGRAPHER = VillagerProfessionImpl.get("minecraft:cartographer");
+    VillagerProfession CARTOGRAPHER = VillagerProfessionImpl.get("cartographer");
 
-    VillagerProfession CLERIC = VillagerProfessionImpl.get("minecraft:cleric");
+    VillagerProfession CLERIC = VillagerProfessionImpl.get("cleric");
 
-    VillagerProfession FARMER = VillagerProfessionImpl.get("minecraft:farmer");
+    VillagerProfession FARMER = VillagerProfessionImpl.get("farmer");
 
-    VillagerProfession FISHERMAN = VillagerProfessionImpl.get("minecraft:fisherman");
+    VillagerProfession FISHERMAN = VillagerProfessionImpl.get("fisherman");
 
-    VillagerProfession FLETCHER = VillagerProfessionImpl.get("minecraft:fletcher");
+    VillagerProfession FLETCHER = VillagerProfessionImpl.get("fletcher");
 
-    VillagerProfession LEATHERWORKER = VillagerProfessionImpl.get("minecraft:leatherworker");
+    VillagerProfession LEATHERWORKER = VillagerProfessionImpl.get("leatherworker");
 
-    VillagerProfession LIBRARIAN = VillagerProfessionImpl.get("minecraft:librarian");
+    VillagerProfession LIBRARIAN = VillagerProfessionImpl.get("librarian");
 
-    VillagerProfession MASON = VillagerProfessionImpl.get("minecraft:mason");
+    VillagerProfession MASON = VillagerProfessionImpl.get("mason");
 
-    VillagerProfession NITWIT = VillagerProfessionImpl.get("minecraft:nitwit");
+    VillagerProfession NITWIT = VillagerProfessionImpl.get("nitwit");
 
-    VillagerProfession SHEPHERD = VillagerProfessionImpl.get("minecraft:shepherd");
+    VillagerProfession SHEPHERD = VillagerProfessionImpl.get("shepherd");
 
-    VillagerProfession TOOLSMITH = VillagerProfessionImpl.get("minecraft:toolsmith");
+    VillagerProfession TOOLSMITH = VillagerProfessionImpl.get("toolsmith");
 
-    VillagerProfession WEAPONSMITH = VillagerProfessionImpl.get("minecraft:weaponsmith");
+    VillagerProfession WEAPONSMITH = VillagerProfessionImpl.get("weaponsmith");
 }

@@ -8,10 +8,12 @@ import net.minestom.codegen.worldevent.WorldEventGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.lang.model.SourceVersion;
 import java.io.File;
 import java.io.InputStream;
+import java.util.Locale;
 
-public class Generators {
+public final class Generators {
     private static final Logger LOGGER = LoggerFactory.getLogger(Generators.class);
 
     public static void main(String[] args) {
@@ -79,6 +81,21 @@ public class Generators {
         generator.generateKeys(resource("pig_variant.json"), "net.minestom.server.entity.metadata.animal", "PigVariant");
 
         LOGGER.info("Finished generating code");
+    }
+
+    public static String namespaceToConstant(String namespace) {
+        String constant = namespace
+                .replace("minecraft:", "")
+                .replace(".", "_")
+                .toUpperCase(Locale.ROOT);
+        if (!SourceVersion.isName(constant)) {
+            constant = "_" + constant;
+        }
+        return constant;
+    }
+
+    public static String namespaceShort(String namespace) {
+        return namespace.replaceFirst("minecraft:", "");
     }
 
     private static InputStream resource(String name) {

@@ -7,19 +7,19 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface Instruments {
-    RegistryKey<Instrument> ADMIRE_GOAT_HORN = RegistryKey.unsafeOf("minecraft:admire_goat_horn");
+    RegistryKey<Instrument> ADMIRE_GOAT_HORN = RegistryKey.unsafeOf("admire_goat_horn");
 
-    RegistryKey<Instrument> SING_GOAT_HORN = RegistryKey.unsafeOf("minecraft:sing_goat_horn");
+    RegistryKey<Instrument> SING_GOAT_HORN = RegistryKey.unsafeOf("sing_goat_horn");
 
-    RegistryKey<Instrument> YEARN_GOAT_HORN = RegistryKey.unsafeOf("minecraft:yearn_goat_horn");
+    RegistryKey<Instrument> YEARN_GOAT_HORN = RegistryKey.unsafeOf("yearn_goat_horn");
 
-    RegistryKey<Instrument> SEEK_GOAT_HORN = RegistryKey.unsafeOf("minecraft:seek_goat_horn");
+    RegistryKey<Instrument> SEEK_GOAT_HORN = RegistryKey.unsafeOf("seek_goat_horn");
 
-    RegistryKey<Instrument> DREAM_GOAT_HORN = RegistryKey.unsafeOf("minecraft:dream_goat_horn");
+    RegistryKey<Instrument> DREAM_GOAT_HORN = RegistryKey.unsafeOf("dream_goat_horn");
 
-    RegistryKey<Instrument> FEEL_GOAT_HORN = RegistryKey.unsafeOf("minecraft:feel_goat_horn");
+    RegistryKey<Instrument> FEEL_GOAT_HORN = RegistryKey.unsafeOf("feel_goat_horn");
 
-    RegistryKey<Instrument> CALL_GOAT_HORN = RegistryKey.unsafeOf("minecraft:call_goat_horn");
+    RegistryKey<Instrument> CALL_GOAT_HORN = RegistryKey.unsafeOf("call_goat_horn");
 
-    RegistryKey<Instrument> PONDER_GOAT_HORN = RegistryKey.unsafeOf("minecraft:ponder_goat_horn");
+    RegistryKey<Instrument> PONDER_GOAT_HORN = RegistryKey.unsafeOf("ponder_goat_horn");
 }

@@ -7,9 +7,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface ChickenVariants {
-    RegistryKey<ChickenVariant> WARM = RegistryKey.unsafeOf("minecraft:warm");
+    RegistryKey<ChickenVariant> WARM = RegistryKey.unsafeOf("warm");
 
-    RegistryKey<ChickenVariant> COLD = RegistryKey.unsafeOf("minecraft:cold");
+    RegistryKey<ChickenVariant> COLD = RegistryKey.unsafeOf("cold");
 
-    RegistryKey<ChickenVariant> TEMPERATE = RegistryKey.unsafeOf("minecraft:temperate");
+    RegistryKey<ChickenVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
 }
