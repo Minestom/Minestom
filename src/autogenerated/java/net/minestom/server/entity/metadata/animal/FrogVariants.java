@@ -7,9 +7,9 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface FrogVariants {
-    RegistryKey<FrogVariant> WARM = RegistryKey.unsafeOf("minecraft:warm");
+    RegistryKey<FrogVariant> WARM = RegistryKey.unsafeOf("warm");
 
-    RegistryKey<FrogVariant> COLD = RegistryKey.unsafeOf("minecraft:cold");
+    RegistryKey<FrogVariant> COLD = RegistryKey.unsafeOf("cold");
 
-    RegistryKey<FrogVariant> TEMPERATE = RegistryKey.unsafeOf("minecraft:temperate");
+    RegistryKey<FrogVariant> TEMPERATE = RegistryKey.unsafeOf("temperate");
 }

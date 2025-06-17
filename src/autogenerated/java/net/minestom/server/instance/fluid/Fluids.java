@@ -5,13 +5,13 @@ package net.minestom.server.instance.fluid;
  */
 @SuppressWarnings("unused")
 interface Fluids {
-    Fluid EMPTY = FluidImpl.get("minecraft:empty");
+    Fluid EMPTY = FluidImpl.get("empty");
 
-    Fluid FLOWING_WATER = FluidImpl.get("minecraft:flowing_water");
+    Fluid FLOWING_WATER = FluidImpl.get("flowing_water");
 
-    Fluid WATER = FluidImpl.get("minecraft:water");
+    Fluid WATER = FluidImpl.get("water");
 
-    Fluid FLOWING_LAVA = FluidImpl.get("minecraft:flowing_lava");
+    Fluid FLOWING_LAVA = FluidImpl.get("flowing_lava");
 
-    Fluid LAVA = FluidImpl.get("minecraft:lava");
+    Fluid LAVA = FluidImpl.get("lava");
 }

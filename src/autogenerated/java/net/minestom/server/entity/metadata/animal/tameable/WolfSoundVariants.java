@@ -7,17 +7,17 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface WolfSoundVariants {
-    RegistryKey<WolfSoundVariant> SAD = RegistryKey.unsafeOf("minecraft:sad");
+    RegistryKey<WolfSoundVariant> SAD = RegistryKey.unsafeOf("sad");
 
-    RegistryKey<WolfSoundVariant> PUGLIN = RegistryKey.unsafeOf("minecraft:puglin");
+    RegistryKey<WolfSoundVariant> PUGLIN = RegistryKey.unsafeOf("puglin");
 
-    RegistryKey<WolfSoundVariant> CUTE = RegistryKey.unsafeOf("minecraft:cute");
+    RegistryKey<WolfSoundVariant> CUTE = RegistryKey.unsafeOf("cute");
 
-    RegistryKey<WolfSoundVariant> GRUMPY = RegistryKey.unsafeOf("minecraft:grumpy");
+    RegistryKey<WolfSoundVariant> GRUMPY = RegistryKey.unsafeOf("grumpy");
 
-    RegistryKey<WolfSoundVariant> BIG = RegistryKey.unsafeOf("minecraft:big");
+    RegistryKey<WolfSoundVariant> BIG = RegistryKey.unsafeOf("big");
 
-    RegistryKey<WolfSoundVariant> ANGRY = RegistryKey.unsafeOf("minecraft:angry");
+    RegistryKey<WolfSoundVariant> ANGRY = RegistryKey.unsafeOf("angry");
 
-    RegistryKey<WolfSoundVariant> CLASSIC = RegistryKey.unsafeOf("minecraft:classic");
+    RegistryKey<WolfSoundVariant> CLASSIC = RegistryKey.unsafeOf("classic");
 }
