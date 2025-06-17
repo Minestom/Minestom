@@ -54,7 +54,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     @NotNull
     @Override
     public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, TagStringIO.tagStringIO());
+        return staticParse(input, tagStringIO);
     }
 
     @Override
