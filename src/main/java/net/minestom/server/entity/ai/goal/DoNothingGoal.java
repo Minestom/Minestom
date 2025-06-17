@@ -5,6 +5,7 @@ import net.minestom.server.entity.ai.GoalSelector;
 import net.minestom.server.utils.MathUtils;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class DoNothingGoal extends GoalSelector {
 
@@ -23,7 +24,7 @@ public class DoNothingGoal extends GoalSelector {
      */
     public DoNothingGoal(EntityCreature entityCreature, long time, float chance) {
         super(entityCreature);
-        this.time = time;
+        this.time = TimeUnit.MILLISECONDS.toNanos(time);
         this.chance = MathUtils.clamp(chance, 0, 1);
     }
 
@@ -34,7 +35,7 @@ public class DoNothingGoal extends GoalSelector {
 
     @Override
     public boolean shouldEnd() {
-        return System.currentTimeMillis() - startTime >= time;
+        return System.nanoTime() - startTime >= time;
     }
 
     @Override
@@ -44,7 +45,7 @@ public class DoNothingGoal extends GoalSelector {
 
     @Override
     public void start() {
-        this.startTime = System.currentTimeMillis();
+        this.startTime = System.nanoTime();
     }
 
     @Override

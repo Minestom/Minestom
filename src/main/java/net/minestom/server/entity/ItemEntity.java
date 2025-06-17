@@ -38,7 +38,9 @@ public class ItemEntity extends Entity {
     private float mergeRange = 1;
     private boolean previousOnGround = false;
 
+    // Spawn time in System#nanoTime
     private long spawnTime;
+    // pickup delay in nanos
     private long pickupDelay;
 
     public ItemEntity(@NotNull ItemStack itemStack) {
@@ -108,7 +110,7 @@ public class ItemEntity extends Entity {
 
     @Override
     public void spawn() {
-        this.spawnTime = System.currentTimeMillis();
+        this.spawnTime = System.nanoTime();
     }
 
     @Override
@@ -145,7 +147,7 @@ public class ItemEntity extends Entity {
      * @return true if the item is pickable, false otherwise
      */
     public boolean isPickable() {
-        return pickable && (System.currentTimeMillis() - getSpawnTime() >= pickupDelay);
+        return pickable && getTimeSinceSpawn() >= pickupDelay;
     }
 
     /**
@@ -223,12 +225,23 @@ public class ItemEntity extends Entity {
     }
 
     /**
-     * Used to know if the ItemEntity can be pickup.
+     * Used to know if the ItemEntity can be picked up.
      *
-     * @return the time in milliseconds since this entity has spawn
+     * @return the elapsed time in milliseconds since this entity has spawned
+     * @deprecated use {@link #getTimeSinceSpawn()} instead, does the same thing with better naming
      */
+    @Deprecated(forRemoval = true)
     public long getSpawnTime() {
-        return spawnTime;
+        return getTimeSinceSpawn();
+    }
+    
+    /**
+     * Used to know if the ItemEntity can be picked up.
+     *
+     * @return the elapsed time in milliseconds since this entity has spawned
+     */
+    public long getTimeSinceSpawn() {
+        return java.util.concurrent.TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - spawnTime);
     }
 
     @ApiStatus.Experimental
