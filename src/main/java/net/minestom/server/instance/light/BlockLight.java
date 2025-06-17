@@ -8,6 +8,7 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,9 +17,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class BlockLight implements Light {
-    private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+    private byte @Nullable [] content;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
@@ -136,8 +137,9 @@ final class BlockLight implements Light {
     @Override
     @ApiStatus.Internal
     public void set(byte[] copyArray) {
-        this.content = copyArray.clone();
-        this.contentPropagation = this.content;
+        var content = copyArray.clone();
+        this.content = content;
+        this.contentPropagation = content;
         this.isValidBorders = true;
         this.needsSend.set(true);
     }
@@ -149,7 +151,9 @@ final class BlockLight implements Light {
 
     @Override
     public byte @NotNull [] array() {
+        var content = this.content;
         if (content == null) return new byte[0];
+        var contentPropagation = this.contentPropagation;
         if (contentPropagation == null) return content;
         var res = LightCompute.bake(contentPropagation, content);
         if (res == EMPTY_CONTENT) return new byte[0];
@@ -158,8 +162,10 @@ final class BlockLight implements Light {
 
     @Override
     public int getLevel(int x, int y, int z) {
+        var content = this.content;
         if (content == null) return 0;
         int index = x | (z << 4) | (y << 8);
+        var contentPropagation = this.contentPropagation;
         if (contentPropagation == null) return LightCompute.getLight(content, index);
         return Math.max(LightCompute.getLight(contentPropagation, index), LightCompute.getLight(content, index));
     }
@@ -201,7 +207,8 @@ final class BlockLight implements Light {
         }
         ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
         final byte[] contentPropagationTemp = LightCompute.compute(blockPalette, queue);
-        this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
+        var contentPropagationSwap = this.contentPropagationSwap;
+        this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap == null ? EMPTY_CONTENT : contentPropagationSwap, contentPropagationTemp);
         // Propagate changes to neighbors and self
         Set<Point> toUpdate = new HashSet<>();
         for (int i = 0; i < neighbors.length; i++) {
