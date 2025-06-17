@@ -1,7 +1,6 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.adventure.MinestomAdventure;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;

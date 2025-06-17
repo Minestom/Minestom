@@ -1,6 +1,5 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
