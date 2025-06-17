@@ -5,73 +5,73 @@ package net.minestom.server.entity.attribute;
  */
 @SuppressWarnings("unused")
 interface Attributes {
-    Attribute ARMOR = AttributeImpl.get("minecraft:armor");
+    Attribute ARMOR = AttributeImpl.get("armor");
 
-    Attribute ARMOR_TOUGHNESS = AttributeImpl.get("minecraft:armor_toughness");
+    Attribute ARMOR_TOUGHNESS = AttributeImpl.get("armor_toughness");
 
-    Attribute ATTACK_DAMAGE = AttributeImpl.get("minecraft:attack_damage");
+    Attribute ATTACK_DAMAGE = AttributeImpl.get("attack_damage");
 
-    Attribute ATTACK_KNOCKBACK = AttributeImpl.get("minecraft:attack_knockback");
+    Attribute ATTACK_KNOCKBACK = AttributeImpl.get("attack_knockback");
 
-    Attribute ATTACK_SPEED = AttributeImpl.get("minecraft:attack_speed");
+    Attribute ATTACK_SPEED = AttributeImpl.get("attack_speed");
 
-    Attribute BLOCK_BREAK_SPEED = AttributeImpl.get("minecraft:block_break_speed");
+    Attribute BLOCK_BREAK_SPEED = AttributeImpl.get("block_break_speed");
 
-    Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get("minecraft:block_interaction_range");
+    Attribute BLOCK_INTERACTION_RANGE = AttributeImpl.get("block_interaction_range");
 
-    Attribute BURNING_TIME = AttributeImpl.get("minecraft:burning_time");
+    Attribute BURNING_TIME = AttributeImpl.get("burning_time");
 
-    Attribute CAMERA_DISTANCE = AttributeImpl.get("minecraft:camera_distance");
+    Attribute CAMERA_DISTANCE = AttributeImpl.get("camera_distance");
 
-    Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:explosion_knockback_resistance");
+    Attribute EXPLOSION_KNOCKBACK_RESISTANCE = AttributeImpl.get("explosion_knockback_resistance");
 
-    Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get("minecraft:entity_interaction_range");
+    Attribute ENTITY_INTERACTION_RANGE = AttributeImpl.get("entity_interaction_range");
 
-    Attribute FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("minecraft:fall_damage_multiplier");
+    Attribute FALL_DAMAGE_MULTIPLIER = AttributeImpl.get("fall_damage_multiplier");
 
-    Attribute FLYING_SPEED = AttributeImpl.get("minecraft:flying_speed");
+    Attribute FLYING_SPEED = AttributeImpl.get("flying_speed");
 
-    Attribute FOLLOW_RANGE = AttributeImpl.get("minecraft:follow_range");
+    Attribute FOLLOW_RANGE = AttributeImpl.get("follow_range");
 
-    Attribute GRAVITY = AttributeImpl.get("minecraft:gravity");
+    Attribute GRAVITY = AttributeImpl.get("gravity");
 
-    Attribute JUMP_STRENGTH = AttributeImpl.get("minecraft:jump_strength");
+    Attribute JUMP_STRENGTH = AttributeImpl.get("jump_strength");
 
-    Attribute KNOCKBACK_RESISTANCE = AttributeImpl.get("minecraft:knockback_resistance");
+    Attribute KNOCKBACK_RESISTANCE = AttributeImpl.get("knockback_resistance");
 
-    Attribute LUCK = AttributeImpl.get("minecraft:luck");
+    Attribute LUCK = AttributeImpl.get("luck");
 
-    Attribute MAX_ABSORPTION = AttributeImpl.get("minecraft:max_absorption");
+    Attribute MAX_ABSORPTION = AttributeImpl.get("max_absorption");
 
-    Attribute MAX_HEALTH = AttributeImpl.get("minecraft:max_health");
+    Attribute MAX_HEALTH = AttributeImpl.get("max_health");
 
-    Attribute MINING_EFFICIENCY = AttributeImpl.get("minecraft:mining_efficiency");
+    Attribute MINING_EFFICIENCY = AttributeImpl.get("mining_efficiency");
 
-    Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:movement_efficiency");
+    Attribute MOVEMENT_EFFICIENCY = AttributeImpl.get("movement_efficiency");
 
-    Attribute MOVEMENT_SPEED = AttributeImpl.get("minecraft:movement_speed");
+    Attribute MOVEMENT_SPEED = AttributeImpl.get("movement_speed");
 
-    Attribute OXYGEN_BONUS = AttributeImpl.get("minecraft:oxygen_bonus");
+    Attribute OXYGEN_BONUS = AttributeImpl.get("oxygen_bonus");
 
-    Attribute SAFE_FALL_DISTANCE = AttributeImpl.get("minecraft:safe_fall_distance");
+    Attribute SAFE_FALL_DISTANCE = AttributeImpl.get("safe_fall_distance");
 
-    Attribute SCALE = AttributeImpl.get("minecraft:scale");
+    Attribute SCALE = AttributeImpl.get("scale");
 
-    Attribute SNEAKING_SPEED = AttributeImpl.get("minecraft:sneaking_speed");
+    Attribute SNEAKING_SPEED = AttributeImpl.get("sneaking_speed");
 
-    Attribute SPAWN_REINFORCEMENTS = AttributeImpl.get("minecraft:spawn_reinforcements");
+    Attribute SPAWN_REINFORCEMENTS = AttributeImpl.get("spawn_reinforcements");
 
-    Attribute STEP_HEIGHT = AttributeImpl.get("minecraft:step_height");
+    Attribute STEP_HEIGHT = AttributeImpl.get("step_height");
 
-    Attribute SUBMERGED_MINING_SPEED = AttributeImpl.get("minecraft:submerged_mining_speed");
+    Attribute SUBMERGED_MINING_SPEED = AttributeImpl.get("submerged_mining_speed");
 
-    Attribute SWEEPING_DAMAGE_RATIO = AttributeImpl.get("minecraft:sweeping_damage_ratio");
+    Attribute SWEEPING_DAMAGE_RATIO = AttributeImpl.get("sweeping_damage_ratio");
 
-    Attribute TEMPT_RANGE = AttributeImpl.get("minecraft:tempt_range");
+    Attribute TEMPT_RANGE = AttributeImpl.get("tempt_range");
 
-    Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("minecraft:water_movement_efficiency");
+    Attribute WATER_MOVEMENT_EFFICIENCY = AttributeImpl.get("water_movement_efficiency");
 
-    Attribute WAYPOINT_TRANSMIT_RANGE = AttributeImpl.get("minecraft:waypoint_transmit_range");
+    Attribute WAYPOINT_TRANSMIT_RANGE = AttributeImpl.get("waypoint_transmit_range");
 
-    Attribute WAYPOINT_RECEIVE_RANGE = AttributeImpl.get("minecraft:waypoint_receive_range");
+    Attribute WAYPOINT_RECEIVE_RANGE = AttributeImpl.get("waypoint_receive_range");
 }
