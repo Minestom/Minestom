@@ -298,23 +298,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     /**
      * Attempts to create a copy with compressed data structures.
-     * Also performs a freeze operation if available; {@link #canFreeze()}.
      *
      * @return A safe copy of this registry
-     * @implNote Requires the system property <code>minestom.registry.unsafe-ops</code> to be set to <code>false</code>
      */
     @Contract(pure = true)
     @NotNull DynamicRegistryImpl<T> compact() {
-        if (canFreeze())
-            return new DynamicRegistryImpl<>(key, codec,
-                    List.copyOf(idToValue),
-                    List.copyOf(idToKey),
-                    Map.copyOf(keyToValue),
-                    Map.copyOf(valueToKey),
-                    List.copyOf(packById),
-                    new ConcurrentHashMap<>(tags)
-            );
-
         // Create new instances so they are trimmed to size without downcasting.
         return new DynamicRegistryImpl<>(key, codec,
                 new ArrayList<>(idToValue),
