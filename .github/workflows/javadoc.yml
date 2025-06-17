@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build and deploy Javadoc
     env:
-      JAVA_VERSION: 23
+      JAVA_VERSION: 24
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK ${{ env.JAVA_VERSION }}
