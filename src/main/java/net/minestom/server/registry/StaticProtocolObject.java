@@ -1,11 +1,11 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.key.Keyed;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-public interface StaticProtocolObject extends ProtocolObject, Keyed {
+public interface StaticProtocolObject<T> extends RegistryKey<T> {
 
     @Contract(pure = true)
     default @NotNull String name() {
@@ -18,4 +18,8 @@ public interface StaticProtocolObject extends ProtocolObject, Keyed {
 
     @Contract(pure = true)
     int id();
+
+    default @Nullable Object registry() {
+        return null;
+    }
 }

@@ -27,6 +27,7 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
@@ -90,26 +91,26 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @NotNull Key dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @NotNull Key dimensionName) {
         this(uuid, dimensionType, null, dimensionName);
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader) {
         this(uuid, dimensionType, loader, dimensionType.key());
     }
 
-    public InstanceContainer(@NotNull UUID uuid, @NotNull DynamicRegistry.Key<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
+    public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType, @Nullable IChunkLoader loader, @NotNull Key dimensionName) {
         this(MinecraftServer.getDimensionTypeRegistry(), uuid, dimensionType, loader, dimensionName);
     }
 
     public InstanceContainer(
             @NotNull DynamicRegistry<DimensionType> dimensionTypeRegistry,
             @NotNull UUID uuid,
-            @NotNull DynamicRegistry.Key<DimensionType> dimensionType,
+            @NotNull RegistryKey<DimensionType> dimensionType,
             @Nullable IChunkLoader loader,
             @NotNull Key dimensionName
     ) {

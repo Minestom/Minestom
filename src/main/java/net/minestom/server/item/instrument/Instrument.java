@@ -1,22 +1,36 @@
 package net.minestom.server.item.instrument;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.ServerFlag;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
+import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.sound.SoundEvent;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public sealed interface Instrument extends ProtocolObject, Instruments permits InstrumentImpl {
+public sealed interface Instrument extends Holder.Direct<Instrument>, Instruments permits InstrumentImpl {
+    @NotNull NetworkBuffer.Type<Instrument> REGISTRY_NETWORK_TYPE = NetworkBufferTemplate.template(
+            SoundEvent.NETWORK_TYPE, Instrument::soundEvent,
+            NetworkBuffer.FLOAT, Instrument::useDuration,
+            NetworkBuffer.FLOAT, Instrument::range,
+            NetworkBuffer.COMPONENT, Instrument::description,
+            InstrumentImpl::new);
+    @NotNull Codec<Instrument> REGISTRY_CODEC = StructCodec.struct(
+            "sound_event", SoundEvent.CODEC, Instrument::soundEvent,
+            "use_duration", Codec.FLOAT, Instrument::useDuration,
+            "range", Codec.FLOAT, Instrument::range,
+            "description", Codec.COMPONENT, Instrument::description,
+            InstrumentImpl::new);
 
-    @NotNull NetworkBuffer.Type<DynamicRegistry.Key<Instrument>> NETWORK_TYPE = NetworkBuffer.RegistryKey(Registries::instrument, true);
-    @NotNull BinaryTagSerializer<DynamicRegistry.Key<Instrument>> NBT_TYPE = BinaryTagSerializer.registryKey(Registries::instrument);
+    @NotNull NetworkBuffer.Type<Holder<Instrument>> NETWORK_TYPE = Holder.networkType(Registries::instrument, REGISTRY_NETWORK_TYPE);
+    @NotNull Codec<Holder<Instrument>> CODEC = Holder.codec(Registries::instrument, REGISTRY_CODEC);
 
     static @NotNull Instrument create(
             @NotNull SoundEvent soundEvent,
@@ -38,10 +52,7 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Instrument> createDefaultRegistry() {
-        return DynamicRegistry.create(
-                "minecraft:instrument", InstrumentImpl.REGISTRY_NBT_TYPE, Registry.Resource.INSTRUMENTS,
-                (namespace, props) -> new InstrumentImpl(Registry.instrument(namespace, props))
-        );
+        return DynamicRegistry.create(Key.key("minecraft:instrument"), REGISTRY_CODEC, RegistryData.Resource.INSTRUMENTS);
     }
 
     @NotNull SoundEvent soundEvent();
@@ -55,9 +66,6 @@ public sealed interface Instrument extends ProtocolObject, Instruments permits I
     float range();
 
     @NotNull Component description();
-
-    @Override
-    @Nullable Registry.InstrumentEntry registry();
 
     final class Builder {
         private SoundEvent soundEvent;

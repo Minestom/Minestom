@@ -5,11 +5,11 @@ package net.minestom.server;
  */
 @SuppressWarnings("unused")
 interface FeatureFlags {
-    FeatureFlag REDSTONE_EXPERIMENTS = FeatureFlagImpl.get("minecraft:redstone_experiments");
+    FeatureFlag REDSTONE_EXPERIMENTS = FeatureFlagImpl.get("redstone_experiments");
 
-    FeatureFlag VANILLA = FeatureFlagImpl.get("minecraft:vanilla");
+    FeatureFlag VANILLA = FeatureFlagImpl.get("vanilla");
 
-    FeatureFlag TRADE_REBALANCE = FeatureFlagImpl.get("minecraft:trade_rebalance");
+    FeatureFlag TRADE_REBALANCE = FeatureFlagImpl.get("trade_rebalance");
 
-    FeatureFlag MINECART_IMPROVEMENTS = FeatureFlagImpl.get("minecraft:minecart_improvements");
+    FeatureFlag MINECART_IMPROVEMENTS = FeatureFlagImpl.get("minecart_improvements");
 }

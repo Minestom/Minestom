@@ -1,9 +1,13 @@
 package net.minestom.server.command;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,105 +26,109 @@ public enum ArgumentParserType implements StaticProtocolObject {
 
     STRING(Key.key("brigadier:string")),
 
-    ENTITY(Key.key("minecraft:entity")),
+    ENTITY(Key.key("entity")),
 
-    GAME_PROFILE(Key.key("minecraft:game_profile")),
+    GAME_PROFILE(Key.key("game_profile")),
 
-    BLOCK_POS(Key.key("minecraft:block_pos")),
+    BLOCK_POS(Key.key("block_pos")),
 
-    COLUMN_POS(Key.key("minecraft:column_pos")),
+    COLUMN_POS(Key.key("column_pos")),
 
-    VEC3(Key.key("minecraft:vec3")),
+    VEC3(Key.key("vec3")),
 
-    VEC2(Key.key("minecraft:vec2")),
+    VEC2(Key.key("vec2")),
 
-    BLOCK_STATE(Key.key("minecraft:block_state")),
+    BLOCK_STATE(Key.key("block_state")),
 
-    BLOCK_PREDICATE(Key.key("minecraft:block_predicate")),
+    BLOCK_PREDICATE(Key.key("block_predicate")),
 
-    ITEM_STACK(Key.key("minecraft:item_stack")),
+    ITEM_STACK(Key.key("item_stack")),
 
-    ITEM_PREDICATE(Key.key("minecraft:item_predicate")),
+    ITEM_PREDICATE(Key.key("item_predicate")),
 
-    COLOR(Key.key("minecraft:color")),
+    COLOR(Key.key("color")),
 
-    COMPONENT(Key.key("minecraft:component")),
+    COMPONENT(Key.key("component")),
 
-    STYLE(Key.key("minecraft:style")),
+    STYLE(Key.key("style")),
 
-    MESSAGE(Key.key("minecraft:message")),
+    MESSAGE(Key.key("message")),
 
-    NBT_COMPOUND_TAG(Key.key("minecraft:nbt_compound_tag")),
+    NBT_COMPOUND_TAG(Key.key("nbt_compound_tag")),
 
-    NBT_TAG(Key.key("minecraft:nbt_tag")),
+    NBT_TAG(Key.key("nbt_tag")),
 
-    NBT_PATH(Key.key("minecraft:nbt_path")),
+    NBT_PATH(Key.key("nbt_path")),
 
-    OBJECTIVE(Key.key("minecraft:objective")),
+    OBJECTIVE(Key.key("objective")),
 
-    OBJECTIVE_CRITERIA(Key.key("minecraft:objective_criteria")),
+    OBJECTIVE_CRITERIA(Key.key("objective_criteria")),
 
-    OPERATION(Key.key("minecraft:operation")),
+    OPERATION(Key.key("operation")),
 
-    PARTICLE(Key.key("minecraft:particle")),
+    PARTICLE(Key.key("particle")),
 
-    ANGLE(Key.key("minecraft:angle")),
+    ANGLE(Key.key("angle")),
 
-    ROTATION(Key.key("minecraft:rotation")),
+    ROTATION(Key.key("rotation")),
 
-    SCOREBOARD_SLOT(Key.key("minecraft:scoreboard_slot")),
+    SCOREBOARD_SLOT(Key.key("scoreboard_slot")),
 
-    SCORE_HOLDER(Key.key("minecraft:score_holder")),
+    SCORE_HOLDER(Key.key("score_holder")),
 
-    SWIZZLE(Key.key("minecraft:swizzle")),
+    SWIZZLE(Key.key("swizzle")),
 
-    TEAM(Key.key("minecraft:team")),
+    TEAM(Key.key("team")),
 
-    ITEM_SLOT(Key.key("minecraft:item_slot")),
+    ITEM_SLOT(Key.key("item_slot")),
 
-    ITEM_SLOTS(Key.key("minecraft:item_slots")),
+    ITEM_SLOTS(Key.key("item_slots")),
 
-    RESOURCE_LOCATION(Key.key("minecraft:resource_location")),
+    RESOURCE_LOCATION(Key.key("resource_location")),
 
-    FUNCTION(Key.key("minecraft:function")),
+    FUNCTION(Key.key("function")),
 
-    ENTITY_ANCHOR(Key.key("minecraft:entity_anchor")),
+    ENTITY_ANCHOR(Key.key("entity_anchor")),
 
-    INT_RANGE(Key.key("minecraft:int_range")),
+    INT_RANGE(Key.key("int_range")),
 
-    FLOAT_RANGE(Key.key("minecraft:float_range")),
+    FLOAT_RANGE(Key.key("float_range")),
 
-    DIMENSION(Key.key("minecraft:dimension")),
+    DIMENSION(Key.key("dimension")),
 
-    GAMEMODE(Key.key("minecraft:gamemode")),
+    GAMEMODE(Key.key("gamemode")),
 
-    TIME(Key.key("minecraft:time")),
+    TIME(Key.key("time")),
 
-    RESOURCE_OR_TAG(Key.key("minecraft:resource_or_tag")),
+    RESOURCE_OR_TAG(Key.key("resource_or_tag")),
 
-    RESOURCE_OR_TAG_KEY(Key.key("minecraft:resource_or_tag_key")),
+    RESOURCE_OR_TAG_KEY(Key.key("resource_or_tag_key")),
 
-    RESOURCE(Key.key("minecraft:resource")),
+    RESOURCE(Key.key("resource")),
 
-    RESOURCE_KEY(Key.key("minecraft:resource_key")),
+    RESOURCE_KEY(Key.key("resource_key")),
 
-    TEMPLATE_MIRROR(Key.key("minecraft:template_mirror")),
+    RESOURCE_SELECTOR(Key.key("resource_selector")),
 
-    TEMPLATE_ROTATION(Key.key("minecraft:template_rotation")),
+    TEMPLATE_MIRROR(Key.key("template_mirror")),
 
-    HEIGHTMAP(Key.key("minecraft:heightmap")),
+    TEMPLATE_ROTATION(Key.key("template_rotation")),
 
-    LOOT_TABLE(Key.key("minecraft:loot_table")),
+    HEIGHTMAP(Key.key("heightmap")),
 
-    LOOT_PREDICATE(Key.key("minecraft:loot_predicate")),
+    LOOT_TABLE(Key.key("loot_table")),
 
-    LOOT_MODIFIER(Key.key("minecraft:loot_modifier")),
+    LOOT_PREDICATE(Key.key("loot_predicate")),
 
-    UUID(Key.key("minecraft:uuid"));
+    LOOT_MODIFIER(Key.key("loot_modifier")),
+
+    UUID(Key.key("uuid"));
+
+    private static final Map<Key, ArgumentParserType> BY_KEY = Arrays.stream(values()).collect(Collectors.toMap(ArgumentParserType::key, Function.identity()));
 
     public static final NetworkBuffer.Type<ArgumentParserType> NETWORK_TYPE = NetworkBuffer.Enum(ArgumentParserType.class);
 
-    public static final BinaryTagSerializer<ArgumentParserType> NBT_TYPE = BinaryTagSerializer.fromEnumKeyed(ArgumentParserType.class);
+    public static final Codec<ArgumentParserType> CODEC = Codec.KEY.transform(BY_KEY::get, ArgumentParserType::key);
 
     private final Key key;
 

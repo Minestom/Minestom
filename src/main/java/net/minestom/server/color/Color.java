@@ -1,9 +1,9 @@
 package net.minestom.server.color;
 
 import net.kyori.adventure.util.RGBLike;
+import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.utils.MathUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,8 +21,8 @@ public class Color implements RGBLike {
             Color::new,
             color -> Color.fromRGBLike(color).asRGB()
     );
-    public static final BinaryTagSerializer<RGBLike> NBT_TYPE = BinaryTagSerializer.INT
-            .map(Color::new, color -> Color.fromRGBLike(color).asRGB());
+    public static final Codec<RGBLike> CODEC = Codec.INT
+            .transform(Color::new, color -> Color.fromRGBLike(color).asRGB());
 
     public static final RGBLike WHITE = new Color(255, 255, 255);
 

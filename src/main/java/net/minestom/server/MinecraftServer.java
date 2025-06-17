@@ -3,13 +3,13 @@ package net.minestom.server;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minestom.server.advancements.AdvancementManager;
 import net.minestom.server.adventure.bossbar.BossBarManager;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.entity.damage.DamageType;
-import net.minestom.server.entity.metadata.animal.tameable.WolfMeta;
-import net.minestom.server.entity.metadata.other.PaintingMeta;
+import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
+import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.exception.ExceptionManager;
-import net.minestom.server.gamedata.tags.TagManager;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.BlockManager;
 import net.minestom.server.instance.block.banner.BannerPattern;
@@ -33,7 +33,6 @@ import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
 import net.minestom.server.timer.SchedulerManager;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.Difficulty;
 import net.minestom.server.world.DimensionType;
@@ -246,10 +245,6 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.advancement();
     }
 
-    public static TagManager getTagManager() {
-        return serverProcess.tag();
-    }
-
     public static @NotNull DynamicRegistry<ChatType> getChatTypeRegistry() {
         return serverProcess.chatType();
     }
@@ -278,7 +273,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.bannerPattern();
     }
 
-    public static @NotNull DynamicRegistry<WolfMeta.Variant> getWolfVariantRegistry() {
+    public static @NotNull DynamicRegistry<WolfVariant> getWolfVariantRegistry() {
         return serverProcess.wolfVariant();
     }
 
@@ -286,7 +281,7 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.enchantment();
     }
 
-    public static @NotNull DynamicRegistry<PaintingMeta.Variant> getPaintingVariantRegistry() {
+    public static @NotNull DynamicRegistry<PaintingVariant> getPaintingVariantRegistry() {
         return serverProcess.paintingVariant();
     }
 
@@ -298,19 +293,19 @@ public final class MinecraftServer implements MinecraftConstants {
         return serverProcess.instrument();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends LevelBasedValue>> enchantmentLevelBasedValues() {
         return process().enchantmentLevelBasedValues();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends ValueEffect>> enchantmentValueEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends ValueEffect>> enchantmentValueEffects() {
         return process().enchantmentValueEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends EntityEffect>> enchantmentEntityEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects() {
         return process().enchantmentEntityEffects();
     }
 
-    public static @NotNull DynamicRegistry<BinaryTagSerializer<? extends LocationEffect>> enchantmentLocationEffects() {
+    public static @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
         return process().enchantmentLocationEffects();
     }
 

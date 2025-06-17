@@ -5,3305 +5,3407 @@ package net.minestom.server.sound;
  */
 @SuppressWarnings("unused")
 interface SoundEvents {
-    SoundEvent ENTITY_ALLAY_AMBIENT_WITH_ITEM = BuiltinSoundEvent.get("minecraft:entity.allay.ambient_with_item");
+    SoundEvent ENTITY_ALLAY_AMBIENT_WITH_ITEM = BuiltinSoundEvent.get("entity.allay.ambient_with_item");
 
-    SoundEvent ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM = BuiltinSoundEvent.get("minecraft:entity.allay.ambient_without_item");
+    SoundEvent ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM = BuiltinSoundEvent.get("entity.allay.ambient_without_item");
 
-    SoundEvent ENTITY_ALLAY_DEATH = BuiltinSoundEvent.get("minecraft:entity.allay.death");
+    SoundEvent ENTITY_ALLAY_DEATH = BuiltinSoundEvent.get("entity.allay.death");
 
-    SoundEvent ENTITY_ALLAY_HURT = BuiltinSoundEvent.get("minecraft:entity.allay.hurt");
+    SoundEvent ENTITY_ALLAY_HURT = BuiltinSoundEvent.get("entity.allay.hurt");
 
-    SoundEvent ENTITY_ALLAY_ITEM_GIVEN = BuiltinSoundEvent.get("minecraft:entity.allay.item_given");
+    SoundEvent ENTITY_ALLAY_ITEM_GIVEN = BuiltinSoundEvent.get("entity.allay.item_given");
 
-    SoundEvent ENTITY_ALLAY_ITEM_TAKEN = BuiltinSoundEvent.get("minecraft:entity.allay.item_taken");
+    SoundEvent ENTITY_ALLAY_ITEM_TAKEN = BuiltinSoundEvent.get("entity.allay.item_taken");
 
-    SoundEvent ENTITY_ALLAY_ITEM_THROWN = BuiltinSoundEvent.get("minecraft:entity.allay.item_thrown");
+    SoundEvent ENTITY_ALLAY_ITEM_THROWN = BuiltinSoundEvent.get("entity.allay.item_thrown");
 
-    SoundEvent AMBIENT_CAVE = BuiltinSoundEvent.get("minecraft:ambient.cave");
+    SoundEvent AMBIENT_CAVE = BuiltinSoundEvent.get("ambient.cave");
 
-    SoundEvent AMBIENT_BASALT_DELTAS_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.basalt_deltas.additions");
+    SoundEvent AMBIENT_BASALT_DELTAS_ADDITIONS = BuiltinSoundEvent.get("ambient.basalt_deltas.additions");
 
-    SoundEvent AMBIENT_BASALT_DELTAS_LOOP = BuiltinSoundEvent.get("minecraft:ambient.basalt_deltas.loop");
+    SoundEvent AMBIENT_BASALT_DELTAS_LOOP = BuiltinSoundEvent.get("ambient.basalt_deltas.loop");
 
-    SoundEvent AMBIENT_BASALT_DELTAS_MOOD = BuiltinSoundEvent.get("minecraft:ambient.basalt_deltas.mood");
+    SoundEvent AMBIENT_BASALT_DELTAS_MOOD = BuiltinSoundEvent.get("ambient.basalt_deltas.mood");
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.crimson_forest.additions");
+    SoundEvent AMBIENT_CRIMSON_FOREST_ADDITIONS = BuiltinSoundEvent.get("ambient.crimson_forest.additions");
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_LOOP = BuiltinSoundEvent.get("minecraft:ambient.crimson_forest.loop");
+    SoundEvent AMBIENT_CRIMSON_FOREST_LOOP = BuiltinSoundEvent.get("ambient.crimson_forest.loop");
 
-    SoundEvent AMBIENT_CRIMSON_FOREST_MOOD = BuiltinSoundEvent.get("minecraft:ambient.crimson_forest.mood");
+    SoundEvent AMBIENT_CRIMSON_FOREST_MOOD = BuiltinSoundEvent.get("ambient.crimson_forest.mood");
 
-    SoundEvent AMBIENT_NETHER_WASTES_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.nether_wastes.additions");
+    SoundEvent AMBIENT_NETHER_WASTES_ADDITIONS = BuiltinSoundEvent.get("ambient.nether_wastes.additions");
 
-    SoundEvent AMBIENT_NETHER_WASTES_LOOP = BuiltinSoundEvent.get("minecraft:ambient.nether_wastes.loop");
+    SoundEvent AMBIENT_NETHER_WASTES_LOOP = BuiltinSoundEvent.get("ambient.nether_wastes.loop");
 
-    SoundEvent AMBIENT_NETHER_WASTES_MOOD = BuiltinSoundEvent.get("minecraft:ambient.nether_wastes.mood");
+    SoundEvent AMBIENT_NETHER_WASTES_MOOD = BuiltinSoundEvent.get("ambient.nether_wastes.mood");
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.soul_sand_valley.additions");
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_ADDITIONS = BuiltinSoundEvent.get("ambient.soul_sand_valley.additions");
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_LOOP = BuiltinSoundEvent.get("minecraft:ambient.soul_sand_valley.loop");
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_LOOP = BuiltinSoundEvent.get("ambient.soul_sand_valley.loop");
 
-    SoundEvent AMBIENT_SOUL_SAND_VALLEY_MOOD = BuiltinSoundEvent.get("minecraft:ambient.soul_sand_valley.mood");
+    SoundEvent AMBIENT_SOUL_SAND_VALLEY_MOOD = BuiltinSoundEvent.get("ambient.soul_sand_valley.mood");
 
-    SoundEvent AMBIENT_WARPED_FOREST_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.warped_forest.additions");
+    SoundEvent AMBIENT_WARPED_FOREST_ADDITIONS = BuiltinSoundEvent.get("ambient.warped_forest.additions");
 
-    SoundEvent AMBIENT_WARPED_FOREST_LOOP = BuiltinSoundEvent.get("minecraft:ambient.warped_forest.loop");
+    SoundEvent AMBIENT_WARPED_FOREST_LOOP = BuiltinSoundEvent.get("ambient.warped_forest.loop");
 
-    SoundEvent AMBIENT_WARPED_FOREST_MOOD = BuiltinSoundEvent.get("minecraft:ambient.warped_forest.mood");
+    SoundEvent AMBIENT_WARPED_FOREST_MOOD = BuiltinSoundEvent.get("ambient.warped_forest.mood");
 
-    SoundEvent AMBIENT_UNDERWATER_ENTER = BuiltinSoundEvent.get("minecraft:ambient.underwater.enter");
+    SoundEvent AMBIENT_UNDERWATER_ENTER = BuiltinSoundEvent.get("ambient.underwater.enter");
 
-    SoundEvent AMBIENT_UNDERWATER_EXIT = BuiltinSoundEvent.get("minecraft:ambient.underwater.exit");
+    SoundEvent AMBIENT_UNDERWATER_EXIT = BuiltinSoundEvent.get("ambient.underwater.exit");
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP = BuiltinSoundEvent.get("minecraft:ambient.underwater.loop");
+    SoundEvent AMBIENT_UNDERWATER_LOOP = BuiltinSoundEvent.get("ambient.underwater.loop");
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS = BuiltinSoundEvent.get("minecraft:ambient.underwater.loop.additions");
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS = BuiltinSoundEvent.get("ambient.underwater.loop.additions");
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE = BuiltinSoundEvent.get("minecraft:ambient.underwater.loop.additions.rare");
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_RARE = BuiltinSoundEvent.get("ambient.underwater.loop.additions.rare");
 
-    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE = BuiltinSoundEvent.get("minecraft:ambient.underwater.loop.additions.ultra_rare");
+    SoundEvent AMBIENT_UNDERWATER_LOOP_ADDITIONS_ULTRA_RARE = BuiltinSoundEvent.get("ambient.underwater.loop.additions.ultra_rare");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.amethyst_block.break");
+    SoundEvent BLOCK_AMETHYST_BLOCK_BREAK = BuiltinSoundEvent.get("block.amethyst_block.break");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_CHIME = BuiltinSoundEvent.get("minecraft:block.amethyst_block.chime");
+    SoundEvent BLOCK_AMETHYST_BLOCK_CHIME = BuiltinSoundEvent.get("block.amethyst_block.chime");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.amethyst_block.fall");
+    SoundEvent BLOCK_AMETHYST_BLOCK_FALL = BuiltinSoundEvent.get("block.amethyst_block.fall");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.amethyst_block.hit");
+    SoundEvent BLOCK_AMETHYST_BLOCK_HIT = BuiltinSoundEvent.get("block.amethyst_block.hit");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.amethyst_block.place");
+    SoundEvent BLOCK_AMETHYST_BLOCK_PLACE = BuiltinSoundEvent.get("block.amethyst_block.place");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_RESONATE = BuiltinSoundEvent.get("minecraft:block.amethyst_block.resonate");
+    SoundEvent BLOCK_AMETHYST_BLOCK_RESONATE = BuiltinSoundEvent.get("block.amethyst_block.resonate");
 
-    SoundEvent BLOCK_AMETHYST_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.amethyst_block.step");
+    SoundEvent BLOCK_AMETHYST_BLOCK_STEP = BuiltinSoundEvent.get("block.amethyst_block.step");
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_BREAK = BuiltinSoundEvent.get("minecraft:block.amethyst_cluster.break");
+    SoundEvent BLOCK_AMETHYST_CLUSTER_BREAK = BuiltinSoundEvent.get("block.amethyst_cluster.break");
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_FALL = BuiltinSoundEvent.get("minecraft:block.amethyst_cluster.fall");
+    SoundEvent BLOCK_AMETHYST_CLUSTER_FALL = BuiltinSoundEvent.get("block.amethyst_cluster.fall");
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_HIT = BuiltinSoundEvent.get("minecraft:block.amethyst_cluster.hit");
+    SoundEvent BLOCK_AMETHYST_CLUSTER_HIT = BuiltinSoundEvent.get("block.amethyst_cluster.hit");
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_PLACE = BuiltinSoundEvent.get("minecraft:block.amethyst_cluster.place");
+    SoundEvent BLOCK_AMETHYST_CLUSTER_PLACE = BuiltinSoundEvent.get("block.amethyst_cluster.place");
 
-    SoundEvent BLOCK_AMETHYST_CLUSTER_STEP = BuiltinSoundEvent.get("minecraft:block.amethyst_cluster.step");
+    SoundEvent BLOCK_AMETHYST_CLUSTER_STEP = BuiltinSoundEvent.get("block.amethyst_cluster.step");
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_BREAK = BuiltinSoundEvent.get("minecraft:block.ancient_debris.break");
+    SoundEvent BLOCK_ANCIENT_DEBRIS_BREAK = BuiltinSoundEvent.get("block.ancient_debris.break");
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_STEP = BuiltinSoundEvent.get("minecraft:block.ancient_debris.step");
+    SoundEvent BLOCK_ANCIENT_DEBRIS_STEP = BuiltinSoundEvent.get("block.ancient_debris.step");
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_PLACE = BuiltinSoundEvent.get("minecraft:block.ancient_debris.place");
+    SoundEvent BLOCK_ANCIENT_DEBRIS_PLACE = BuiltinSoundEvent.get("block.ancient_debris.place");
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_HIT = BuiltinSoundEvent.get("minecraft:block.ancient_debris.hit");
+    SoundEvent BLOCK_ANCIENT_DEBRIS_HIT = BuiltinSoundEvent.get("block.ancient_debris.hit");
 
-    SoundEvent BLOCK_ANCIENT_DEBRIS_FALL = BuiltinSoundEvent.get("minecraft:block.ancient_debris.fall");
+    SoundEvent BLOCK_ANCIENT_DEBRIS_FALL = BuiltinSoundEvent.get("block.ancient_debris.fall");
 
-    SoundEvent BLOCK_ANVIL_BREAK = BuiltinSoundEvent.get("minecraft:block.anvil.break");
+    SoundEvent BLOCK_ANVIL_BREAK = BuiltinSoundEvent.get("block.anvil.break");
 
-    SoundEvent BLOCK_ANVIL_DESTROY = BuiltinSoundEvent.get("minecraft:block.anvil.destroy");
+    SoundEvent BLOCK_ANVIL_DESTROY = BuiltinSoundEvent.get("block.anvil.destroy");
 
-    SoundEvent BLOCK_ANVIL_FALL = BuiltinSoundEvent.get("minecraft:block.anvil.fall");
+    SoundEvent BLOCK_ANVIL_FALL = BuiltinSoundEvent.get("block.anvil.fall");
 
-    SoundEvent BLOCK_ANVIL_HIT = BuiltinSoundEvent.get("minecraft:block.anvil.hit");
+    SoundEvent BLOCK_ANVIL_HIT = BuiltinSoundEvent.get("block.anvil.hit");
 
-    SoundEvent BLOCK_ANVIL_LAND = BuiltinSoundEvent.get("minecraft:block.anvil.land");
+    SoundEvent BLOCK_ANVIL_LAND = BuiltinSoundEvent.get("block.anvil.land");
 
-    SoundEvent BLOCK_ANVIL_PLACE = BuiltinSoundEvent.get("minecraft:block.anvil.place");
+    SoundEvent BLOCK_ANVIL_PLACE = BuiltinSoundEvent.get("block.anvil.place");
 
-    SoundEvent BLOCK_ANVIL_STEP = BuiltinSoundEvent.get("minecraft:block.anvil.step");
+    SoundEvent BLOCK_ANVIL_STEP = BuiltinSoundEvent.get("block.anvil.step");
 
-    SoundEvent BLOCK_ANVIL_USE = BuiltinSoundEvent.get("minecraft:block.anvil.use");
+    SoundEvent BLOCK_ANVIL_USE = BuiltinSoundEvent.get("block.anvil.use");
 
-    SoundEvent ENTITY_ARMADILLO_EAT = BuiltinSoundEvent.get("minecraft:entity.armadillo.eat");
+    SoundEvent ENTITY_ARMADILLO_EAT = BuiltinSoundEvent.get("entity.armadillo.eat");
 
-    SoundEvent ENTITY_ARMADILLO_HURT = BuiltinSoundEvent.get("minecraft:entity.armadillo.hurt");
+    SoundEvent ENTITY_ARMADILLO_HURT = BuiltinSoundEvent.get("entity.armadillo.hurt");
 
-    SoundEvent ENTITY_ARMADILLO_HURT_REDUCED = BuiltinSoundEvent.get("minecraft:entity.armadillo.hurt_reduced");
+    SoundEvent ENTITY_ARMADILLO_HURT_REDUCED = BuiltinSoundEvent.get("entity.armadillo.hurt_reduced");
 
-    SoundEvent ENTITY_ARMADILLO_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.armadillo.ambient");
+    SoundEvent ENTITY_ARMADILLO_AMBIENT = BuiltinSoundEvent.get("entity.armadillo.ambient");
 
-    SoundEvent ENTITY_ARMADILLO_STEP = BuiltinSoundEvent.get("minecraft:entity.armadillo.step");
+    SoundEvent ENTITY_ARMADILLO_STEP = BuiltinSoundEvent.get("entity.armadillo.step");
 
-    SoundEvent ENTITY_ARMADILLO_DEATH = BuiltinSoundEvent.get("minecraft:entity.armadillo.death");
+    SoundEvent ENTITY_ARMADILLO_DEATH = BuiltinSoundEvent.get("entity.armadillo.death");
 
-    SoundEvent ENTITY_ARMADILLO_ROLL = BuiltinSoundEvent.get("minecraft:entity.armadillo.roll");
+    SoundEvent ENTITY_ARMADILLO_ROLL = BuiltinSoundEvent.get("entity.armadillo.roll");
 
-    SoundEvent ENTITY_ARMADILLO_LAND = BuiltinSoundEvent.get("minecraft:entity.armadillo.land");
+    SoundEvent ENTITY_ARMADILLO_LAND = BuiltinSoundEvent.get("entity.armadillo.land");
 
-    SoundEvent ENTITY_ARMADILLO_SCUTE_DROP = BuiltinSoundEvent.get("minecraft:entity.armadillo.scute_drop");
+    SoundEvent ENTITY_ARMADILLO_SCUTE_DROP = BuiltinSoundEvent.get("entity.armadillo.scute_drop");
 
-    SoundEvent ENTITY_ARMADILLO_UNROLL_FINISH = BuiltinSoundEvent.get("minecraft:entity.armadillo.unroll_finish");
+    SoundEvent ENTITY_ARMADILLO_UNROLL_FINISH = BuiltinSoundEvent.get("entity.armadillo.unroll_finish");
 
-    SoundEvent ENTITY_ARMADILLO_PEEK = BuiltinSoundEvent.get("minecraft:entity.armadillo.peek");
+    SoundEvent ENTITY_ARMADILLO_PEEK = BuiltinSoundEvent.get("entity.armadillo.peek");
 
-    SoundEvent ENTITY_ARMADILLO_UNROLL_START = BuiltinSoundEvent.get("minecraft:entity.armadillo.unroll_start");
+    SoundEvent ENTITY_ARMADILLO_UNROLL_START = BuiltinSoundEvent.get("entity.armadillo.unroll_start");
 
-    SoundEvent ENTITY_ARMADILLO_BRUSH = BuiltinSoundEvent.get("minecraft:entity.armadillo.brush");
+    SoundEvent ENTITY_ARMADILLO_BRUSH = BuiltinSoundEvent.get("entity.armadillo.brush");
 
-    SoundEvent ITEM_ARMOR_EQUIP_CHAIN = BuiltinSoundEvent.get("minecraft:item.armor.equip_chain");
+    SoundEvent ITEM_ARMOR_EQUIP_CHAIN = BuiltinSoundEvent.get("item.armor.equip_chain");
 
-    SoundEvent ITEM_ARMOR_EQUIP_DIAMOND = BuiltinSoundEvent.get("minecraft:item.armor.equip_diamond");
+    SoundEvent ITEM_ARMOR_EQUIP_DIAMOND = BuiltinSoundEvent.get("item.armor.equip_diamond");
 
-    SoundEvent ITEM_ARMOR_EQUIP_ELYTRA = BuiltinSoundEvent.get("minecraft:item.armor.equip_elytra");
+    SoundEvent ITEM_ARMOR_EQUIP_ELYTRA = BuiltinSoundEvent.get("item.armor.equip_elytra");
 
-    SoundEvent ITEM_ARMOR_EQUIP_GENERIC = BuiltinSoundEvent.get("minecraft:item.armor.equip_generic");
+    SoundEvent ITEM_ARMOR_EQUIP_GENERIC = BuiltinSoundEvent.get("item.armor.equip_generic");
 
-    SoundEvent ITEM_ARMOR_EQUIP_GOLD = BuiltinSoundEvent.get("minecraft:item.armor.equip_gold");
+    SoundEvent ITEM_ARMOR_EQUIP_GOLD = BuiltinSoundEvent.get("item.armor.equip_gold");
 
-    SoundEvent ITEM_ARMOR_EQUIP_IRON = BuiltinSoundEvent.get("minecraft:item.armor.equip_iron");
+    SoundEvent ITEM_ARMOR_EQUIP_IRON = BuiltinSoundEvent.get("item.armor.equip_iron");
 
-    SoundEvent ITEM_ARMOR_EQUIP_LEATHER = BuiltinSoundEvent.get("minecraft:item.armor.equip_leather");
+    SoundEvent ITEM_ARMOR_EQUIP_LEATHER = BuiltinSoundEvent.get("item.armor.equip_leather");
 
-    SoundEvent ITEM_ARMOR_EQUIP_NETHERITE = BuiltinSoundEvent.get("minecraft:item.armor.equip_netherite");
+    SoundEvent ITEM_ARMOR_EQUIP_NETHERITE = BuiltinSoundEvent.get("item.armor.equip_netherite");
 
-    SoundEvent ITEM_ARMOR_EQUIP_TURTLE = BuiltinSoundEvent.get("minecraft:item.armor.equip_turtle");
+    SoundEvent ITEM_ARMOR_EQUIP_TURTLE = BuiltinSoundEvent.get("item.armor.equip_turtle");
 
-    SoundEvent ITEM_ARMOR_EQUIP_WOLF = BuiltinSoundEvent.get("minecraft:item.armor.equip_wolf");
+    SoundEvent ITEM_ARMOR_EQUIP_WOLF = BuiltinSoundEvent.get("item.armor.equip_wolf");
 
-    SoundEvent ITEM_ARMOR_UNEQUIP_WOLF = BuiltinSoundEvent.get("minecraft:item.armor.unequip_wolf");
+    SoundEvent ITEM_ARMOR_UNEQUIP_WOLF = BuiltinSoundEvent.get("item.armor.unequip_wolf");
 
-    SoundEvent ENTITY_ARMOR_STAND_BREAK = BuiltinSoundEvent.get("minecraft:entity.armor_stand.break");
+    SoundEvent ENTITY_ARMOR_STAND_BREAK = BuiltinSoundEvent.get("entity.armor_stand.break");
 
-    SoundEvent ENTITY_ARMOR_STAND_FALL = BuiltinSoundEvent.get("minecraft:entity.armor_stand.fall");
+    SoundEvent ENTITY_ARMOR_STAND_FALL = BuiltinSoundEvent.get("entity.armor_stand.fall");
 
-    SoundEvent ENTITY_ARMOR_STAND_HIT = BuiltinSoundEvent.get("minecraft:entity.armor_stand.hit");
+    SoundEvent ENTITY_ARMOR_STAND_HIT = BuiltinSoundEvent.get("entity.armor_stand.hit");
 
-    SoundEvent ENTITY_ARMOR_STAND_PLACE = BuiltinSoundEvent.get("minecraft:entity.armor_stand.place");
+    SoundEvent ENTITY_ARMOR_STAND_PLACE = BuiltinSoundEvent.get("entity.armor_stand.place");
 
-    SoundEvent ENTITY_ARROW_HIT = BuiltinSoundEvent.get("minecraft:entity.arrow.hit");
+    SoundEvent ENTITY_ARROW_HIT = BuiltinSoundEvent.get("entity.arrow.hit");
 
-    SoundEvent ENTITY_ARROW_HIT_PLAYER = BuiltinSoundEvent.get("minecraft:entity.arrow.hit_player");
+    SoundEvent ENTITY_ARROW_HIT_PLAYER = BuiltinSoundEvent.get("entity.arrow.hit_player");
 
-    SoundEvent ENTITY_ARROW_SHOOT = BuiltinSoundEvent.get("minecraft:entity.arrow.shoot");
+    SoundEvent ENTITY_ARROW_SHOOT = BuiltinSoundEvent.get("entity.arrow.shoot");
 
-    SoundEvent ITEM_AXE_STRIP = BuiltinSoundEvent.get("minecraft:item.axe.strip");
+    SoundEvent ITEM_AXE_STRIP = BuiltinSoundEvent.get("item.axe.strip");
 
-    SoundEvent ITEM_AXE_SCRAPE = BuiltinSoundEvent.get("minecraft:item.axe.scrape");
+    SoundEvent ITEM_AXE_SCRAPE = BuiltinSoundEvent.get("item.axe.scrape");
 
-    SoundEvent ITEM_AXE_WAX_OFF = BuiltinSoundEvent.get("minecraft:item.axe.wax_off");
+    SoundEvent ITEM_AXE_WAX_OFF = BuiltinSoundEvent.get("item.axe.wax_off");
 
-    SoundEvent ENTITY_AXOLOTL_ATTACK = BuiltinSoundEvent.get("minecraft:entity.axolotl.attack");
+    SoundEvent ENTITY_AXOLOTL_ATTACK = BuiltinSoundEvent.get("entity.axolotl.attack");
 
-    SoundEvent ENTITY_AXOLOTL_DEATH = BuiltinSoundEvent.get("minecraft:entity.axolotl.death");
+    SoundEvent ENTITY_AXOLOTL_DEATH = BuiltinSoundEvent.get("entity.axolotl.death");
 
-    SoundEvent ENTITY_AXOLOTL_HURT = BuiltinSoundEvent.get("minecraft:entity.axolotl.hurt");
+    SoundEvent ENTITY_AXOLOTL_HURT = BuiltinSoundEvent.get("entity.axolotl.hurt");
 
-    SoundEvent ENTITY_AXOLOTL_IDLE_AIR = BuiltinSoundEvent.get("minecraft:entity.axolotl.idle_air");
+    SoundEvent ENTITY_AXOLOTL_IDLE_AIR = BuiltinSoundEvent.get("entity.axolotl.idle_air");
 
-    SoundEvent ENTITY_AXOLOTL_IDLE_WATER = BuiltinSoundEvent.get("minecraft:entity.axolotl.idle_water");
+    SoundEvent ENTITY_AXOLOTL_IDLE_WATER = BuiltinSoundEvent.get("entity.axolotl.idle_water");
 
-    SoundEvent ENTITY_AXOLOTL_SPLASH = BuiltinSoundEvent.get("minecraft:entity.axolotl.splash");
+    SoundEvent ENTITY_AXOLOTL_SPLASH = BuiltinSoundEvent.get("entity.axolotl.splash");
 
-    SoundEvent ENTITY_AXOLOTL_SWIM = BuiltinSoundEvent.get("minecraft:entity.axolotl.swim");
+    SoundEvent ENTITY_AXOLOTL_SWIM = BuiltinSoundEvent.get("entity.axolotl.swim");
 
-    SoundEvent BLOCK_AZALEA_BREAK = BuiltinSoundEvent.get("minecraft:block.azalea.break");
+    SoundEvent BLOCK_AZALEA_BREAK = BuiltinSoundEvent.get("block.azalea.break");
 
-    SoundEvent BLOCK_AZALEA_FALL = BuiltinSoundEvent.get("minecraft:block.azalea.fall");
+    SoundEvent BLOCK_AZALEA_FALL = BuiltinSoundEvent.get("block.azalea.fall");
 
-    SoundEvent BLOCK_AZALEA_HIT = BuiltinSoundEvent.get("minecraft:block.azalea.hit");
+    SoundEvent BLOCK_AZALEA_HIT = BuiltinSoundEvent.get("block.azalea.hit");
 
-    SoundEvent BLOCK_AZALEA_PLACE = BuiltinSoundEvent.get("minecraft:block.azalea.place");
+    SoundEvent BLOCK_AZALEA_PLACE = BuiltinSoundEvent.get("block.azalea.place");
 
-    SoundEvent BLOCK_AZALEA_STEP = BuiltinSoundEvent.get("minecraft:block.azalea.step");
+    SoundEvent BLOCK_AZALEA_STEP = BuiltinSoundEvent.get("block.azalea.step");
 
-    SoundEvent BLOCK_AZALEA_LEAVES_BREAK = BuiltinSoundEvent.get("minecraft:block.azalea_leaves.break");
+    SoundEvent BLOCK_AZALEA_LEAVES_BREAK = BuiltinSoundEvent.get("block.azalea_leaves.break");
 
-    SoundEvent BLOCK_AZALEA_LEAVES_FALL = BuiltinSoundEvent.get("minecraft:block.azalea_leaves.fall");
+    SoundEvent BLOCK_AZALEA_LEAVES_FALL = BuiltinSoundEvent.get("block.azalea_leaves.fall");
 
-    SoundEvent BLOCK_AZALEA_LEAVES_HIT = BuiltinSoundEvent.get("minecraft:block.azalea_leaves.hit");
+    SoundEvent BLOCK_AZALEA_LEAVES_HIT = BuiltinSoundEvent.get("block.azalea_leaves.hit");
 
-    SoundEvent BLOCK_AZALEA_LEAVES_PLACE = BuiltinSoundEvent.get("minecraft:block.azalea_leaves.place");
+    SoundEvent BLOCK_AZALEA_LEAVES_PLACE = BuiltinSoundEvent.get("block.azalea_leaves.place");
 
-    SoundEvent BLOCK_AZALEA_LEAVES_STEP = BuiltinSoundEvent.get("minecraft:block.azalea_leaves.step");
+    SoundEvent BLOCK_AZALEA_LEAVES_STEP = BuiltinSoundEvent.get("block.azalea_leaves.step");
 
-    SoundEvent BLOCK_BAMBOO_BREAK = BuiltinSoundEvent.get("minecraft:block.bamboo.break");
+    SoundEvent BLOCK_BAMBOO_BREAK = BuiltinSoundEvent.get("block.bamboo.break");
 
-    SoundEvent BLOCK_BAMBOO_FALL = BuiltinSoundEvent.get("minecraft:block.bamboo.fall");
+    SoundEvent BLOCK_BAMBOO_FALL = BuiltinSoundEvent.get("block.bamboo.fall");
 
-    SoundEvent BLOCK_BAMBOO_HIT = BuiltinSoundEvent.get("minecraft:block.bamboo.hit");
+    SoundEvent BLOCK_BAMBOO_HIT = BuiltinSoundEvent.get("block.bamboo.hit");
 
-    SoundEvent BLOCK_BAMBOO_PLACE = BuiltinSoundEvent.get("minecraft:block.bamboo.place");
+    SoundEvent BLOCK_BAMBOO_PLACE = BuiltinSoundEvent.get("block.bamboo.place");
 
-    SoundEvent BLOCK_BAMBOO_STEP = BuiltinSoundEvent.get("minecraft:block.bamboo.step");
+    SoundEvent BLOCK_BAMBOO_STEP = BuiltinSoundEvent.get("block.bamboo.step");
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_BREAK = BuiltinSoundEvent.get("minecraft:block.bamboo_sapling.break");
+    SoundEvent BLOCK_BAMBOO_SAPLING_BREAK = BuiltinSoundEvent.get("block.bamboo_sapling.break");
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_HIT = BuiltinSoundEvent.get("minecraft:block.bamboo_sapling.hit");
+    SoundEvent BLOCK_BAMBOO_SAPLING_HIT = BuiltinSoundEvent.get("block.bamboo_sapling.hit");
 
-    SoundEvent BLOCK_BAMBOO_SAPLING_PLACE = BuiltinSoundEvent.get("minecraft:block.bamboo_sapling.place");
+    SoundEvent BLOCK_BAMBOO_SAPLING_PLACE = BuiltinSoundEvent.get("block.bamboo_sapling.place");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BREAK = BuiltinSoundEvent.get("minecraft:block.bamboo_wood.break");
+    SoundEvent BLOCK_BAMBOO_WOOD_BREAK = BuiltinSoundEvent.get("block.bamboo_wood.break");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FALL = BuiltinSoundEvent.get("minecraft:block.bamboo_wood.fall");
+    SoundEvent BLOCK_BAMBOO_WOOD_FALL = BuiltinSoundEvent.get("block.bamboo_wood.fall");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HIT = BuiltinSoundEvent.get("minecraft:block.bamboo_wood.hit");
+    SoundEvent BLOCK_BAMBOO_WOOD_HIT = BuiltinSoundEvent.get("block.bamboo_wood.hit");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PLACE = BuiltinSoundEvent.get("minecraft:block.bamboo_wood.place");
+    SoundEvent BLOCK_BAMBOO_WOOD_PLACE = BuiltinSoundEvent.get("block.bamboo_wood.place");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_STEP = BuiltinSoundEvent.get("minecraft:block.bamboo_wood.step");
+    SoundEvent BLOCK_BAMBOO_WOOD_STEP = BuiltinSoundEvent.get("block.bamboo_wood.step");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_door.close");
+    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("block.bamboo_wood_door.close");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_door.open");
+    SoundEvent BLOCK_BAMBOO_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("block.bamboo_wood_door.open");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_trapdoor.close");
+    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.bamboo_wood_trapdoor.close");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_trapdoor.open");
+    SoundEvent BLOCK_BAMBOO_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.bamboo_wood_trapdoor.open");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_button.click_off");
+    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("block.bamboo_wood_button.click_off");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_button.click_on");
+    SoundEvent BLOCK_BAMBOO_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("block.bamboo_wood_button.click_on");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_pressure_plate.click_off");
+    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.bamboo_wood_pressure_plate.click_off");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_pressure_plate.click_on");
+    SoundEvent BLOCK_BAMBOO_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.bamboo_wood_pressure_plate.click_on");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_fence_gate.close");
+    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("block.bamboo_wood_fence_gate.close");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_fence_gate.open");
+    SoundEvent BLOCK_BAMBOO_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("block.bamboo_wood_fence_gate.open");
 
-    SoundEvent BLOCK_BARREL_CLOSE = BuiltinSoundEvent.get("minecraft:block.barrel.close");
+    SoundEvent BLOCK_BARREL_CLOSE = BuiltinSoundEvent.get("block.barrel.close");
 
-    SoundEvent BLOCK_BARREL_OPEN = BuiltinSoundEvent.get("minecraft:block.barrel.open");
+    SoundEvent BLOCK_BARREL_OPEN = BuiltinSoundEvent.get("block.barrel.open");
 
-    SoundEvent BLOCK_BASALT_BREAK = BuiltinSoundEvent.get("minecraft:block.basalt.break");
+    SoundEvent BLOCK_BASALT_BREAK = BuiltinSoundEvent.get("block.basalt.break");
 
-    SoundEvent BLOCK_BASALT_STEP = BuiltinSoundEvent.get("minecraft:block.basalt.step");
+    SoundEvent BLOCK_BASALT_STEP = BuiltinSoundEvent.get("block.basalt.step");
 
-    SoundEvent BLOCK_BASALT_PLACE = BuiltinSoundEvent.get("minecraft:block.basalt.place");
+    SoundEvent BLOCK_BASALT_PLACE = BuiltinSoundEvent.get("block.basalt.place");
 
-    SoundEvent BLOCK_BASALT_HIT = BuiltinSoundEvent.get("minecraft:block.basalt.hit");
+    SoundEvent BLOCK_BASALT_HIT = BuiltinSoundEvent.get("block.basalt.hit");
 
-    SoundEvent BLOCK_BASALT_FALL = BuiltinSoundEvent.get("minecraft:block.basalt.fall");
+    SoundEvent BLOCK_BASALT_FALL = BuiltinSoundEvent.get("block.basalt.fall");
 
-    SoundEvent ENTITY_BAT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.bat.ambient");
+    SoundEvent ENTITY_BAT_AMBIENT = BuiltinSoundEvent.get("entity.bat.ambient");
 
-    SoundEvent ENTITY_BAT_DEATH = BuiltinSoundEvent.get("minecraft:entity.bat.death");
+    SoundEvent ENTITY_BAT_DEATH = BuiltinSoundEvent.get("entity.bat.death");
 
-    SoundEvent ENTITY_BAT_HURT = BuiltinSoundEvent.get("minecraft:entity.bat.hurt");
+    SoundEvent ENTITY_BAT_HURT = BuiltinSoundEvent.get("entity.bat.hurt");
 
-    SoundEvent ENTITY_BAT_LOOP = BuiltinSoundEvent.get("minecraft:entity.bat.loop");
+    SoundEvent ENTITY_BAT_LOOP = BuiltinSoundEvent.get("entity.bat.loop");
 
-    SoundEvent ENTITY_BAT_TAKEOFF = BuiltinSoundEvent.get("minecraft:entity.bat.takeoff");
+    SoundEvent ENTITY_BAT_TAKEOFF = BuiltinSoundEvent.get("entity.bat.takeoff");
 
-    SoundEvent BLOCK_BEACON_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.beacon.activate");
+    SoundEvent BLOCK_BEACON_ACTIVATE = BuiltinSoundEvent.get("block.beacon.activate");
 
-    SoundEvent BLOCK_BEACON_AMBIENT = BuiltinSoundEvent.get("minecraft:block.beacon.ambient");
+    SoundEvent BLOCK_BEACON_AMBIENT = BuiltinSoundEvent.get("block.beacon.ambient");
 
-    SoundEvent BLOCK_BEACON_DEACTIVATE = BuiltinSoundEvent.get("minecraft:block.beacon.deactivate");
+    SoundEvent BLOCK_BEACON_DEACTIVATE = BuiltinSoundEvent.get("block.beacon.deactivate");
 
-    SoundEvent BLOCK_BEACON_POWER_SELECT = BuiltinSoundEvent.get("minecraft:block.beacon.power_select");
+    SoundEvent BLOCK_BEACON_POWER_SELECT = BuiltinSoundEvent.get("block.beacon.power_select");
 
-    SoundEvent ENTITY_BEE_DEATH = BuiltinSoundEvent.get("minecraft:entity.bee.death");
+    SoundEvent ENTITY_BEE_DEATH = BuiltinSoundEvent.get("entity.bee.death");
 
-    SoundEvent ENTITY_BEE_HURT = BuiltinSoundEvent.get("minecraft:entity.bee.hurt");
+    SoundEvent ENTITY_BEE_HURT = BuiltinSoundEvent.get("entity.bee.hurt");
 
-    SoundEvent ENTITY_BEE_LOOP_AGGRESSIVE = BuiltinSoundEvent.get("minecraft:entity.bee.loop_aggressive");
+    SoundEvent ENTITY_BEE_LOOP_AGGRESSIVE = BuiltinSoundEvent.get("entity.bee.loop_aggressive");
 
-    SoundEvent ENTITY_BEE_LOOP = BuiltinSoundEvent.get("minecraft:entity.bee.loop");
+    SoundEvent ENTITY_BEE_LOOP = BuiltinSoundEvent.get("entity.bee.loop");
 
-    SoundEvent ENTITY_BEE_STING = BuiltinSoundEvent.get("minecraft:entity.bee.sting");
+    SoundEvent ENTITY_BEE_STING = BuiltinSoundEvent.get("entity.bee.sting");
 
-    SoundEvent ENTITY_BEE_POLLINATE = BuiltinSoundEvent.get("minecraft:entity.bee.pollinate");
+    SoundEvent ENTITY_BEE_POLLINATE = BuiltinSoundEvent.get("entity.bee.pollinate");
 
-    SoundEvent BLOCK_BEEHIVE_DRIP = BuiltinSoundEvent.get("minecraft:block.beehive.drip");
+    SoundEvent BLOCK_BEEHIVE_DRIP = BuiltinSoundEvent.get("block.beehive.drip");
 
-    SoundEvent BLOCK_BEEHIVE_ENTER = BuiltinSoundEvent.get("minecraft:block.beehive.enter");
+    SoundEvent BLOCK_BEEHIVE_ENTER = BuiltinSoundEvent.get("block.beehive.enter");
 
-    SoundEvent BLOCK_BEEHIVE_EXIT = BuiltinSoundEvent.get("minecraft:block.beehive.exit");
+    SoundEvent BLOCK_BEEHIVE_EXIT = BuiltinSoundEvent.get("block.beehive.exit");
 
-    SoundEvent BLOCK_BEEHIVE_SHEAR = BuiltinSoundEvent.get("minecraft:block.beehive.shear");
+    SoundEvent BLOCK_BEEHIVE_SHEAR = BuiltinSoundEvent.get("block.beehive.shear");
 
-    SoundEvent BLOCK_BEEHIVE_WORK = BuiltinSoundEvent.get("minecraft:block.beehive.work");
+    SoundEvent BLOCK_BEEHIVE_WORK = BuiltinSoundEvent.get("block.beehive.work");
 
-    SoundEvent BLOCK_BELL_USE = BuiltinSoundEvent.get("minecraft:block.bell.use");
+    SoundEvent BLOCK_BELL_USE = BuiltinSoundEvent.get("block.bell.use");
 
-    SoundEvent BLOCK_BELL_RESONATE = BuiltinSoundEvent.get("minecraft:block.bell.resonate");
+    SoundEvent BLOCK_BELL_RESONATE = BuiltinSoundEvent.get("block.bell.resonate");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_BREAK = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.break");
+    SoundEvent BLOCK_BIG_DRIPLEAF_BREAK = BuiltinSoundEvent.get("block.big_dripleaf.break");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_FALL = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.fall");
+    SoundEvent BLOCK_BIG_DRIPLEAF_FALL = BuiltinSoundEvent.get("block.big_dripleaf.fall");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_HIT = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.hit");
+    SoundEvent BLOCK_BIG_DRIPLEAF_HIT = BuiltinSoundEvent.get("block.big_dripleaf.hit");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_PLACE = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.place");
+    SoundEvent BLOCK_BIG_DRIPLEAF_PLACE = BuiltinSoundEvent.get("block.big_dripleaf.place");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_STEP = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.step");
+    SoundEvent BLOCK_BIG_DRIPLEAF_STEP = BuiltinSoundEvent.get("block.big_dripleaf.step");
 
-    SoundEvent ENTITY_BLAZE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.blaze.ambient");
+    SoundEvent ENTITY_BLAZE_AMBIENT = BuiltinSoundEvent.get("entity.blaze.ambient");
 
-    SoundEvent ENTITY_BLAZE_BURN = BuiltinSoundEvent.get("minecraft:entity.blaze.burn");
+    SoundEvent ENTITY_BLAZE_BURN = BuiltinSoundEvent.get("entity.blaze.burn");
 
-    SoundEvent ENTITY_BLAZE_DEATH = BuiltinSoundEvent.get("minecraft:entity.blaze.death");
+    SoundEvent ENTITY_BLAZE_DEATH = BuiltinSoundEvent.get("entity.blaze.death");
 
-    SoundEvent ENTITY_BLAZE_HURT = BuiltinSoundEvent.get("minecraft:entity.blaze.hurt");
+    SoundEvent ENTITY_BLAZE_HURT = BuiltinSoundEvent.get("entity.blaze.hurt");
 
-    SoundEvent ENTITY_BLAZE_SHOOT = BuiltinSoundEvent.get("minecraft:entity.blaze.shoot");
+    SoundEvent ENTITY_BLAZE_SHOOT = BuiltinSoundEvent.get("entity.blaze.shoot");
 
-    SoundEvent ENTITY_BOAT_PADDLE_LAND = BuiltinSoundEvent.get("minecraft:entity.boat.paddle_land");
+    SoundEvent ENTITY_BOAT_PADDLE_LAND = BuiltinSoundEvent.get("entity.boat.paddle_land");
 
-    SoundEvent ENTITY_BOAT_PADDLE_WATER = BuiltinSoundEvent.get("minecraft:entity.boat.paddle_water");
+    SoundEvent ENTITY_BOAT_PADDLE_WATER = BuiltinSoundEvent.get("entity.boat.paddle_water");
 
-    SoundEvent ENTITY_BOGGED_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.bogged.ambient");
+    SoundEvent ENTITY_BOGGED_AMBIENT = BuiltinSoundEvent.get("entity.bogged.ambient");
 
-    SoundEvent ENTITY_BOGGED_DEATH = BuiltinSoundEvent.get("minecraft:entity.bogged.death");
+    SoundEvent ENTITY_BOGGED_DEATH = BuiltinSoundEvent.get("entity.bogged.death");
 
-    SoundEvent ENTITY_BOGGED_HURT = BuiltinSoundEvent.get("minecraft:entity.bogged.hurt");
+    SoundEvent ENTITY_BOGGED_HURT = BuiltinSoundEvent.get("entity.bogged.hurt");
 
-    SoundEvent ENTITY_BOGGED_SHEAR = BuiltinSoundEvent.get("minecraft:entity.bogged.shear");
+    SoundEvent ENTITY_BOGGED_SHEAR = BuiltinSoundEvent.get("entity.bogged.shear");
 
-    SoundEvent ENTITY_BOGGED_STEP = BuiltinSoundEvent.get("minecraft:entity.bogged.step");
+    SoundEvent ENTITY_BOGGED_STEP = BuiltinSoundEvent.get("entity.bogged.step");
 
-    SoundEvent BLOCK_BONE_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.bone_block.break");
+    SoundEvent BLOCK_BONE_BLOCK_BREAK = BuiltinSoundEvent.get("block.bone_block.break");
 
-    SoundEvent BLOCK_BONE_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.bone_block.fall");
+    SoundEvent BLOCK_BONE_BLOCK_FALL = BuiltinSoundEvent.get("block.bone_block.fall");
 
-    SoundEvent BLOCK_BONE_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.bone_block.hit");
+    SoundEvent BLOCK_BONE_BLOCK_HIT = BuiltinSoundEvent.get("block.bone_block.hit");
 
-    SoundEvent BLOCK_BONE_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.bone_block.place");
+    SoundEvent BLOCK_BONE_BLOCK_PLACE = BuiltinSoundEvent.get("block.bone_block.place");
 
-    SoundEvent BLOCK_BONE_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.bone_block.step");
+    SoundEvent BLOCK_BONE_BLOCK_STEP = BuiltinSoundEvent.get("block.bone_block.step");
 
-    SoundEvent ITEM_BONE_MEAL_USE = BuiltinSoundEvent.get("minecraft:item.bone_meal.use");
+    SoundEvent ITEM_BONE_MEAL_USE = BuiltinSoundEvent.get("item.bone_meal.use");
 
-    SoundEvent ITEM_BOOK_PAGE_TURN = BuiltinSoundEvent.get("minecraft:item.book.page_turn");
+    SoundEvent ITEM_BOOK_PAGE_TURN = BuiltinSoundEvent.get("item.book.page_turn");
 
-    SoundEvent ITEM_BOOK_PUT = BuiltinSoundEvent.get("minecraft:item.book.put");
+    SoundEvent ITEM_BOOK_PUT = BuiltinSoundEvent.get("item.book.put");
 
-    SoundEvent BLOCK_BLASTFURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get("minecraft:block.blastfurnace.fire_crackle");
+    SoundEvent BLOCK_BLASTFURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get("block.blastfurnace.fire_crackle");
 
-    SoundEvent ITEM_BOTTLE_EMPTY = BuiltinSoundEvent.get("minecraft:item.bottle.empty");
+    SoundEvent ITEM_BOTTLE_EMPTY = BuiltinSoundEvent.get("item.bottle.empty");
 
-    SoundEvent ITEM_BOTTLE_FILL = BuiltinSoundEvent.get("minecraft:item.bottle.fill");
+    SoundEvent ITEM_BOTTLE_FILL = BuiltinSoundEvent.get("item.bottle.fill");
 
-    SoundEvent ITEM_BOTTLE_FILL_DRAGONBREATH = BuiltinSoundEvent.get("minecraft:item.bottle.fill_dragonbreath");
+    SoundEvent ITEM_BOTTLE_FILL_DRAGONBREATH = BuiltinSoundEvent.get("item.bottle.fill_dragonbreath");
 
-    SoundEvent ENTITY_BREEZE_CHARGE = BuiltinSoundEvent.get("minecraft:entity.breeze.charge");
+    SoundEvent ENTITY_BREEZE_CHARGE = BuiltinSoundEvent.get("entity.breeze.charge");
 
-    SoundEvent ENTITY_BREEZE_DEFLECT = BuiltinSoundEvent.get("minecraft:entity.breeze.deflect");
+    SoundEvent ENTITY_BREEZE_DEFLECT = BuiltinSoundEvent.get("entity.breeze.deflect");
 
-    SoundEvent ENTITY_BREEZE_INHALE = BuiltinSoundEvent.get("minecraft:entity.breeze.inhale");
+    SoundEvent ENTITY_BREEZE_INHALE = BuiltinSoundEvent.get("entity.breeze.inhale");
 
-    SoundEvent ENTITY_BREEZE_IDLE_GROUND = BuiltinSoundEvent.get("minecraft:entity.breeze.idle_ground");
+    SoundEvent ENTITY_BREEZE_IDLE_GROUND = BuiltinSoundEvent.get("entity.breeze.idle_ground");
 
-    SoundEvent ENTITY_BREEZE_IDLE_AIR = BuiltinSoundEvent.get("minecraft:entity.breeze.idle_air");
+    SoundEvent ENTITY_BREEZE_IDLE_AIR = BuiltinSoundEvent.get("entity.breeze.idle_air");
 
-    SoundEvent ENTITY_BREEZE_SHOOT = BuiltinSoundEvent.get("minecraft:entity.breeze.shoot");
+    SoundEvent ENTITY_BREEZE_SHOOT = BuiltinSoundEvent.get("entity.breeze.shoot");
 
-    SoundEvent ENTITY_BREEZE_JUMP = BuiltinSoundEvent.get("minecraft:entity.breeze.jump");
+    SoundEvent ENTITY_BREEZE_JUMP = BuiltinSoundEvent.get("entity.breeze.jump");
 
-    SoundEvent ENTITY_BREEZE_LAND = BuiltinSoundEvent.get("minecraft:entity.breeze.land");
+    SoundEvent ENTITY_BREEZE_LAND = BuiltinSoundEvent.get("entity.breeze.land");
 
-    SoundEvent ENTITY_BREEZE_SLIDE = BuiltinSoundEvent.get("minecraft:entity.breeze.slide");
+    SoundEvent ENTITY_BREEZE_SLIDE = BuiltinSoundEvent.get("entity.breeze.slide");
 
-    SoundEvent ENTITY_BREEZE_DEATH = BuiltinSoundEvent.get("minecraft:entity.breeze.death");
+    SoundEvent ENTITY_BREEZE_DEATH = BuiltinSoundEvent.get("entity.breeze.death");
 
-    SoundEvent ENTITY_BREEZE_HURT = BuiltinSoundEvent.get("minecraft:entity.breeze.hurt");
+    SoundEvent ENTITY_BREEZE_HURT = BuiltinSoundEvent.get("entity.breeze.hurt");
 
-    SoundEvent ENTITY_BREEZE_WHIRL = BuiltinSoundEvent.get("minecraft:entity.breeze.whirl");
+    SoundEvent ENTITY_BREEZE_WHIRL = BuiltinSoundEvent.get("entity.breeze.whirl");
 
-    SoundEvent ENTITY_BREEZE_WIND_BURST = BuiltinSoundEvent.get("minecraft:entity.breeze.wind_burst");
+    SoundEvent ENTITY_BREEZE_WIND_BURST = BuiltinSoundEvent.get("entity.breeze.wind_burst");
 
-    SoundEvent BLOCK_BREWING_STAND_BREW = BuiltinSoundEvent.get("minecraft:block.brewing_stand.brew");
+    SoundEvent BLOCK_BREWING_STAND_BREW = BuiltinSoundEvent.get("block.brewing_stand.brew");
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = BuiltinSoundEvent.get("minecraft:item.brush.brushing.generic");
+    SoundEvent ITEM_BRUSH_BRUSHING_GENERIC = BuiltinSoundEvent.get("item.brush.brushing.generic");
 
-    SoundEvent ITEM_BRUSH_BRUSHING_SAND = BuiltinSoundEvent.get("minecraft:item.brush.brushing.sand");
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND = BuiltinSoundEvent.get("item.brush.brushing.sand");
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL = BuiltinSoundEvent.get("minecraft:item.brush.brushing.gravel");
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL = BuiltinSoundEvent.get("item.brush.brushing.gravel");
 
-    SoundEvent ITEM_BRUSH_BRUSHING_SAND_COMPLETE = BuiltinSoundEvent.get("minecraft:item.brush.brushing.sand.complete");
+    SoundEvent ITEM_BRUSH_BRUSHING_SAND_COMPLETE = BuiltinSoundEvent.get("item.brush.brushing.sand.complete");
 
-    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = BuiltinSoundEvent.get("minecraft:item.brush.brushing.gravel.complete");
+    SoundEvent ITEM_BRUSH_BRUSHING_GRAVEL_COMPLETE = BuiltinSoundEvent.get("item.brush.brushing.gravel.complete");
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_BUBBLE_POP = BuiltinSoundEvent.get("minecraft:block.bubble_column.bubble_pop");
+    SoundEvent BLOCK_BUBBLE_COLUMN_BUBBLE_POP = BuiltinSoundEvent.get("block.bubble_column.bubble_pop");
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT = BuiltinSoundEvent.get("minecraft:block.bubble_column.upwards_ambient");
+    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_AMBIENT = BuiltinSoundEvent.get("block.bubble_column.upwards_ambient");
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE = BuiltinSoundEvent.get("minecraft:block.bubble_column.upwards_inside");
+    SoundEvent BLOCK_BUBBLE_COLUMN_UPWARDS_INSIDE = BuiltinSoundEvent.get("block.bubble_column.upwards_inside");
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT = BuiltinSoundEvent.get("minecraft:block.bubble_column.whirlpool_ambient");
+    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_AMBIENT = BuiltinSoundEvent.get("block.bubble_column.whirlpool_ambient");
 
-    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = BuiltinSoundEvent.get("minecraft:block.bubble_column.whirlpool_inside");
+    SoundEvent BLOCK_BUBBLE_COLUMN_WHIRLPOOL_INSIDE = BuiltinSoundEvent.get("block.bubble_column.whirlpool_inside");
 
-    SoundEvent UI_HUD_BUBBLE_POP = BuiltinSoundEvent.get("minecraft:ui.hud.bubble_pop");
+    SoundEvent UI_HUD_BUBBLE_POP = BuiltinSoundEvent.get("ui.hud.bubble_pop");
 
-    SoundEvent ITEM_BUCKET_EMPTY = BuiltinSoundEvent.get("minecraft:item.bucket.empty");
+    SoundEvent ITEM_BUCKET_EMPTY = BuiltinSoundEvent.get("item.bucket.empty");
 
-    SoundEvent ITEM_BUCKET_EMPTY_AXOLOTL = BuiltinSoundEvent.get("minecraft:item.bucket.empty_axolotl");
+    SoundEvent ITEM_BUCKET_EMPTY_AXOLOTL = BuiltinSoundEvent.get("item.bucket.empty_axolotl");
 
-    SoundEvent ITEM_BUCKET_EMPTY_FISH = BuiltinSoundEvent.get("minecraft:item.bucket.empty_fish");
+    SoundEvent ITEM_BUCKET_EMPTY_FISH = BuiltinSoundEvent.get("item.bucket.empty_fish");
 
-    SoundEvent ITEM_BUCKET_EMPTY_LAVA = BuiltinSoundEvent.get("minecraft:item.bucket.empty_lava");
+    SoundEvent ITEM_BUCKET_EMPTY_LAVA = BuiltinSoundEvent.get("item.bucket.empty_lava");
 
-    SoundEvent ITEM_BUCKET_EMPTY_POWDER_SNOW = BuiltinSoundEvent.get("minecraft:item.bucket.empty_powder_snow");
+    SoundEvent ITEM_BUCKET_EMPTY_POWDER_SNOW = BuiltinSoundEvent.get("item.bucket.empty_powder_snow");
 
-    SoundEvent ITEM_BUCKET_EMPTY_TADPOLE = BuiltinSoundEvent.get("minecraft:item.bucket.empty_tadpole");
+    SoundEvent ITEM_BUCKET_EMPTY_TADPOLE = BuiltinSoundEvent.get("item.bucket.empty_tadpole");
 
-    SoundEvent ITEM_BUCKET_FILL = BuiltinSoundEvent.get("minecraft:item.bucket.fill");
+    SoundEvent ITEM_BUCKET_FILL = BuiltinSoundEvent.get("item.bucket.fill");
 
-    SoundEvent ITEM_BUCKET_FILL_AXOLOTL = BuiltinSoundEvent.get("minecraft:item.bucket.fill_axolotl");
+    SoundEvent ITEM_BUCKET_FILL_AXOLOTL = BuiltinSoundEvent.get("item.bucket.fill_axolotl");
 
-    SoundEvent ITEM_BUCKET_FILL_FISH = BuiltinSoundEvent.get("minecraft:item.bucket.fill_fish");
+    SoundEvent ITEM_BUCKET_FILL_FISH = BuiltinSoundEvent.get("item.bucket.fill_fish");
 
-    SoundEvent ITEM_BUCKET_FILL_LAVA = BuiltinSoundEvent.get("minecraft:item.bucket.fill_lava");
+    SoundEvent ITEM_BUCKET_FILL_LAVA = BuiltinSoundEvent.get("item.bucket.fill_lava");
 
-    SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = BuiltinSoundEvent.get("minecraft:item.bucket.fill_powder_snow");
+    SoundEvent ITEM_BUCKET_FILL_POWDER_SNOW = BuiltinSoundEvent.get("item.bucket.fill_powder_snow");
 
-    SoundEvent ITEM_BUCKET_FILL_TADPOLE = BuiltinSoundEvent.get("minecraft:item.bucket.fill_tadpole");
+    SoundEvent ITEM_BUCKET_FILL_TADPOLE = BuiltinSoundEvent.get("item.bucket.fill_tadpole");
 
-    SoundEvent ITEM_BUNDLE_DROP_CONTENTS = BuiltinSoundEvent.get("minecraft:item.bundle.drop_contents");
+    SoundEvent ITEM_BUNDLE_DROP_CONTENTS = BuiltinSoundEvent.get("item.bundle.drop_contents");
 
-    SoundEvent ITEM_BUNDLE_INSERT = BuiltinSoundEvent.get("minecraft:item.bundle.insert");
+    SoundEvent ITEM_BUNDLE_INSERT = BuiltinSoundEvent.get("item.bundle.insert");
 
-    SoundEvent ITEM_BUNDLE_INSERT_FAIL = BuiltinSoundEvent.get("minecraft:item.bundle.insert_fail");
+    SoundEvent ITEM_BUNDLE_INSERT_FAIL = BuiltinSoundEvent.get("item.bundle.insert_fail");
 
-    SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get("minecraft:item.bundle.remove_one");
+    SoundEvent ITEM_BUNDLE_REMOVE_ONE = BuiltinSoundEvent.get("item.bundle.remove_one");
 
-    SoundEvent BLOCK_CAKE_ADD_CANDLE = BuiltinSoundEvent.get("minecraft:block.cake.add_candle");
+    SoundEvent BLOCK_CACTUS_FLOWER_BREAK = BuiltinSoundEvent.get("block.cactus_flower.break");
 
-    SoundEvent BLOCK_CALCITE_BREAK = BuiltinSoundEvent.get("minecraft:block.calcite.break");
+    SoundEvent BLOCK_CACTUS_FLOWER_PLACE = BuiltinSoundEvent.get("block.cactus_flower.place");
 
-    SoundEvent BLOCK_CALCITE_STEP = BuiltinSoundEvent.get("minecraft:block.calcite.step");
+    SoundEvent BLOCK_CAKE_ADD_CANDLE = BuiltinSoundEvent.get("block.cake.add_candle");
 
-    SoundEvent BLOCK_CALCITE_PLACE = BuiltinSoundEvent.get("minecraft:block.calcite.place");
+    SoundEvent BLOCK_CALCITE_BREAK = BuiltinSoundEvent.get("block.calcite.break");
 
-    SoundEvent BLOCK_CALCITE_HIT = BuiltinSoundEvent.get("minecraft:block.calcite.hit");
+    SoundEvent BLOCK_CALCITE_STEP = BuiltinSoundEvent.get("block.calcite.step");
 
-    SoundEvent BLOCK_CALCITE_FALL = BuiltinSoundEvent.get("minecraft:block.calcite.fall");
+    SoundEvent BLOCK_CALCITE_PLACE = BuiltinSoundEvent.get("block.calcite.place");
 
-    SoundEvent ENTITY_CAMEL_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.camel.ambient");
+    SoundEvent BLOCK_CALCITE_HIT = BuiltinSoundEvent.get("block.calcite.hit");
 
-    SoundEvent ENTITY_CAMEL_DASH = BuiltinSoundEvent.get("minecraft:entity.camel.dash");
+    SoundEvent BLOCK_CALCITE_FALL = BuiltinSoundEvent.get("block.calcite.fall");
 
-    SoundEvent ENTITY_CAMEL_DASH_READY = BuiltinSoundEvent.get("minecraft:entity.camel.dash_ready");
+    SoundEvent ENTITY_CAMEL_AMBIENT = BuiltinSoundEvent.get("entity.camel.ambient");
 
-    SoundEvent ENTITY_CAMEL_DEATH = BuiltinSoundEvent.get("minecraft:entity.camel.death");
+    SoundEvent ENTITY_CAMEL_DASH = BuiltinSoundEvent.get("entity.camel.dash");
 
-    SoundEvent ENTITY_CAMEL_EAT = BuiltinSoundEvent.get("minecraft:entity.camel.eat");
+    SoundEvent ENTITY_CAMEL_DASH_READY = BuiltinSoundEvent.get("entity.camel.dash_ready");
 
-    SoundEvent ENTITY_CAMEL_HURT = BuiltinSoundEvent.get("minecraft:entity.camel.hurt");
+    SoundEvent ENTITY_CAMEL_DEATH = BuiltinSoundEvent.get("entity.camel.death");
 
-    SoundEvent ENTITY_CAMEL_SADDLE = BuiltinSoundEvent.get("minecraft:entity.camel.saddle");
+    SoundEvent ENTITY_CAMEL_EAT = BuiltinSoundEvent.get("entity.camel.eat");
 
-    SoundEvent ENTITY_CAMEL_SIT = BuiltinSoundEvent.get("minecraft:entity.camel.sit");
+    SoundEvent ENTITY_CAMEL_HURT = BuiltinSoundEvent.get("entity.camel.hurt");
 
-    SoundEvent ENTITY_CAMEL_STAND = BuiltinSoundEvent.get("minecraft:entity.camel.stand");
+    SoundEvent ENTITY_CAMEL_SADDLE = BuiltinSoundEvent.get("entity.camel.saddle");
 
-    SoundEvent ENTITY_CAMEL_STEP = BuiltinSoundEvent.get("minecraft:entity.camel.step");
+    SoundEvent ENTITY_CAMEL_SIT = BuiltinSoundEvent.get("entity.camel.sit");
 
-    SoundEvent ENTITY_CAMEL_STEP_SAND = BuiltinSoundEvent.get("minecraft:entity.camel.step_sand");
+    SoundEvent ENTITY_CAMEL_STAND = BuiltinSoundEvent.get("entity.camel.stand");
 
-    SoundEvent BLOCK_CAMPFIRE_CRACKLE = BuiltinSoundEvent.get("minecraft:block.campfire.crackle");
+    SoundEvent ENTITY_CAMEL_STEP = BuiltinSoundEvent.get("entity.camel.step");
 
-    SoundEvent BLOCK_CANDLE_AMBIENT = BuiltinSoundEvent.get("minecraft:block.candle.ambient");
+    SoundEvent ENTITY_CAMEL_STEP_SAND = BuiltinSoundEvent.get("entity.camel.step_sand");
 
-    SoundEvent BLOCK_CANDLE_BREAK = BuiltinSoundEvent.get("minecraft:block.candle.break");
+    SoundEvent BLOCK_CAMPFIRE_CRACKLE = BuiltinSoundEvent.get("block.campfire.crackle");
 
-    SoundEvent BLOCK_CANDLE_EXTINGUISH = BuiltinSoundEvent.get("minecraft:block.candle.extinguish");
+    SoundEvent BLOCK_CANDLE_AMBIENT = BuiltinSoundEvent.get("block.candle.ambient");
 
-    SoundEvent BLOCK_CANDLE_FALL = BuiltinSoundEvent.get("minecraft:block.candle.fall");
+    SoundEvent BLOCK_CANDLE_BREAK = BuiltinSoundEvent.get("block.candle.break");
 
-    SoundEvent BLOCK_CANDLE_HIT = BuiltinSoundEvent.get("minecraft:block.candle.hit");
+    SoundEvent BLOCK_CANDLE_EXTINGUISH = BuiltinSoundEvent.get("block.candle.extinguish");
 
-    SoundEvent BLOCK_CANDLE_PLACE = BuiltinSoundEvent.get("minecraft:block.candle.place");
+    SoundEvent BLOCK_CANDLE_FALL = BuiltinSoundEvent.get("block.candle.fall");
 
-    SoundEvent BLOCK_CANDLE_STEP = BuiltinSoundEvent.get("minecraft:block.candle.step");
+    SoundEvent BLOCK_CANDLE_HIT = BuiltinSoundEvent.get("block.candle.hit");
 
-    SoundEvent ENTITY_CAT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.cat.ambient");
+    SoundEvent BLOCK_CANDLE_PLACE = BuiltinSoundEvent.get("block.candle.place");
 
-    SoundEvent ENTITY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.cat.stray_ambient");
+    SoundEvent BLOCK_CANDLE_STEP = BuiltinSoundEvent.get("block.candle.step");
 
-    SoundEvent ENTITY_CAT_DEATH = BuiltinSoundEvent.get("minecraft:entity.cat.death");
+    SoundEvent ENTITY_CAT_AMBIENT = BuiltinSoundEvent.get("entity.cat.ambient");
 
-    SoundEvent ENTITY_CAT_EAT = BuiltinSoundEvent.get("minecraft:entity.cat.eat");
+    SoundEvent ENTITY_CAT_STRAY_AMBIENT = BuiltinSoundEvent.get("entity.cat.stray_ambient");
 
-    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get("minecraft:entity.cat.hiss");
+    SoundEvent ENTITY_CAT_DEATH = BuiltinSoundEvent.get("entity.cat.death");
 
-    SoundEvent ENTITY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get("minecraft:entity.cat.beg_for_food");
+    SoundEvent ENTITY_CAT_EAT = BuiltinSoundEvent.get("entity.cat.eat");
 
-    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get("minecraft:entity.cat.hurt");
+    SoundEvent ENTITY_CAT_HISS = BuiltinSoundEvent.get("entity.cat.hiss");
 
-    SoundEvent ENTITY_CAT_PURR = BuiltinSoundEvent.get("minecraft:entity.cat.purr");
+    SoundEvent ENTITY_CAT_BEG_FOR_FOOD = BuiltinSoundEvent.get("entity.cat.beg_for_food");
 
-    SoundEvent ENTITY_CAT_PURREOW = BuiltinSoundEvent.get("minecraft:entity.cat.purreow");
+    SoundEvent ENTITY_CAT_HURT = BuiltinSoundEvent.get("entity.cat.hurt");
 
-    SoundEvent BLOCK_CAVE_VINES_BREAK = BuiltinSoundEvent.get("minecraft:block.cave_vines.break");
+    SoundEvent ENTITY_CAT_PURR = BuiltinSoundEvent.get("entity.cat.purr");
 
-    SoundEvent BLOCK_CAVE_VINES_FALL = BuiltinSoundEvent.get("minecraft:block.cave_vines.fall");
+    SoundEvent ENTITY_CAT_PURREOW = BuiltinSoundEvent.get("entity.cat.purreow");
 
-    SoundEvent BLOCK_CAVE_VINES_HIT = BuiltinSoundEvent.get("minecraft:block.cave_vines.hit");
+    SoundEvent BLOCK_CAVE_VINES_BREAK = BuiltinSoundEvent.get("block.cave_vines.break");
 
-    SoundEvent BLOCK_CAVE_VINES_PLACE = BuiltinSoundEvent.get("minecraft:block.cave_vines.place");
+    SoundEvent BLOCK_CAVE_VINES_FALL = BuiltinSoundEvent.get("block.cave_vines.fall");
 
-    SoundEvent BLOCK_CAVE_VINES_STEP = BuiltinSoundEvent.get("minecraft:block.cave_vines.step");
+    SoundEvent BLOCK_CAVE_VINES_HIT = BuiltinSoundEvent.get("block.cave_vines.hit");
 
-    SoundEvent BLOCK_CAVE_VINES_PICK_BERRIES = BuiltinSoundEvent.get("minecraft:block.cave_vines.pick_berries");
+    SoundEvent BLOCK_CAVE_VINES_PLACE = BuiltinSoundEvent.get("block.cave_vines.place");
 
-    SoundEvent BLOCK_CHAIN_BREAK = BuiltinSoundEvent.get("minecraft:block.chain.break");
+    SoundEvent BLOCK_CAVE_VINES_STEP = BuiltinSoundEvent.get("block.cave_vines.step");
 
-    SoundEvent BLOCK_CHAIN_FALL = BuiltinSoundEvent.get("minecraft:block.chain.fall");
+    SoundEvent BLOCK_CAVE_VINES_PICK_BERRIES = BuiltinSoundEvent.get("block.cave_vines.pick_berries");
 
-    SoundEvent BLOCK_CHAIN_HIT = BuiltinSoundEvent.get("minecraft:block.chain.hit");
+    SoundEvent BLOCK_CHAIN_BREAK = BuiltinSoundEvent.get("block.chain.break");
 
-    SoundEvent BLOCK_CHAIN_PLACE = BuiltinSoundEvent.get("minecraft:block.chain.place");
+    SoundEvent BLOCK_CHAIN_FALL = BuiltinSoundEvent.get("block.chain.fall");
 
-    SoundEvent BLOCK_CHAIN_STEP = BuiltinSoundEvent.get("minecraft:block.chain.step");
+    SoundEvent BLOCK_CHAIN_HIT = BuiltinSoundEvent.get("block.chain.hit");
 
-    SoundEvent BLOCK_CHERRY_WOOD_BREAK = BuiltinSoundEvent.get("minecraft:block.cherry_wood.break");
+    SoundEvent BLOCK_CHAIN_PLACE = BuiltinSoundEvent.get("block.chain.place");
 
-    SoundEvent BLOCK_CHERRY_WOOD_FALL = BuiltinSoundEvent.get("minecraft:block.cherry_wood.fall");
+    SoundEvent BLOCK_CHAIN_STEP = BuiltinSoundEvent.get("block.chain.step");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HIT = BuiltinSoundEvent.get("minecraft:block.cherry_wood.hit");
+    SoundEvent BLOCK_CHERRY_WOOD_BREAK = BuiltinSoundEvent.get("block.cherry_wood.break");
 
-    SoundEvent BLOCK_CHERRY_WOOD_PLACE = BuiltinSoundEvent.get("minecraft:block.cherry_wood.place");
+    SoundEvent BLOCK_CHERRY_WOOD_FALL = BuiltinSoundEvent.get("block.cherry_wood.fall");
 
-    SoundEvent BLOCK_CHERRY_WOOD_STEP = BuiltinSoundEvent.get("minecraft:block.cherry_wood.step");
+    SoundEvent BLOCK_CHERRY_WOOD_HIT = BuiltinSoundEvent.get("block.cherry_wood.hit");
 
-    SoundEvent BLOCK_CHERRY_SAPLING_BREAK = BuiltinSoundEvent.get("minecraft:block.cherry_sapling.break");
+    SoundEvent BLOCK_CHERRY_WOOD_PLACE = BuiltinSoundEvent.get("block.cherry_wood.place");
 
-    SoundEvent BLOCK_CHERRY_SAPLING_FALL = BuiltinSoundEvent.get("minecraft:block.cherry_sapling.fall");
+    SoundEvent BLOCK_CHERRY_WOOD_STEP = BuiltinSoundEvent.get("block.cherry_wood.step");
 
-    SoundEvent BLOCK_CHERRY_SAPLING_HIT = BuiltinSoundEvent.get("minecraft:block.cherry_sapling.hit");
+    SoundEvent BLOCK_CHERRY_SAPLING_BREAK = BuiltinSoundEvent.get("block.cherry_sapling.break");
 
-    SoundEvent BLOCK_CHERRY_SAPLING_PLACE = BuiltinSoundEvent.get("minecraft:block.cherry_sapling.place");
+    SoundEvent BLOCK_CHERRY_SAPLING_FALL = BuiltinSoundEvent.get("block.cherry_sapling.fall");
 
-    SoundEvent BLOCK_CHERRY_SAPLING_STEP = BuiltinSoundEvent.get("minecraft:block.cherry_sapling.step");
+    SoundEvent BLOCK_CHERRY_SAPLING_HIT = BuiltinSoundEvent.get("block.cherry_sapling.hit");
 
-    SoundEvent BLOCK_CHERRY_LEAVES_BREAK = BuiltinSoundEvent.get("minecraft:block.cherry_leaves.break");
+    SoundEvent BLOCK_CHERRY_SAPLING_PLACE = BuiltinSoundEvent.get("block.cherry_sapling.place");
 
-    SoundEvent BLOCK_CHERRY_LEAVES_FALL = BuiltinSoundEvent.get("minecraft:block.cherry_leaves.fall");
+    SoundEvent BLOCK_CHERRY_SAPLING_STEP = BuiltinSoundEvent.get("block.cherry_sapling.step");
 
-    SoundEvent BLOCK_CHERRY_LEAVES_HIT = BuiltinSoundEvent.get("minecraft:block.cherry_leaves.hit");
+    SoundEvent BLOCK_CHERRY_LEAVES_BREAK = BuiltinSoundEvent.get("block.cherry_leaves.break");
 
-    SoundEvent BLOCK_CHERRY_LEAVES_PLACE = BuiltinSoundEvent.get("minecraft:block.cherry_leaves.place");
+    SoundEvent BLOCK_CHERRY_LEAVES_FALL = BuiltinSoundEvent.get("block.cherry_leaves.fall");
 
-    SoundEvent BLOCK_CHERRY_LEAVES_STEP = BuiltinSoundEvent.get("minecraft:block.cherry_leaves.step");
+    SoundEvent BLOCK_CHERRY_LEAVES_HIT = BuiltinSoundEvent.get("block.cherry_leaves.hit");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("minecraft:block.cherry_wood_hanging_sign.step");
+    SoundEvent BLOCK_CHERRY_LEAVES_PLACE = BuiltinSoundEvent.get("block.cherry_leaves.place");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("minecraft:block.cherry_wood_hanging_sign.break");
+    SoundEvent BLOCK_CHERRY_LEAVES_STEP = BuiltinSoundEvent.get("block.cherry_leaves.step");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("minecraft:block.cherry_wood_hanging_sign.fall");
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("block.cherry_wood_hanging_sign.step");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("minecraft:block.cherry_wood_hanging_sign.hit");
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("block.cherry_wood_hanging_sign.break");
 
-    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("minecraft:block.cherry_wood_hanging_sign.place");
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("block.cherry_wood_hanging_sign.fall");
 
-    SoundEvent BLOCK_CHERRY_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.cherry_wood_door.close");
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("block.cherry_wood_hanging_sign.hit");
 
-    SoundEvent BLOCK_CHERRY_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.cherry_wood_door.open");
+    SoundEvent BLOCK_CHERRY_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("block.cherry_wood_hanging_sign.place");
 
-    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.cherry_wood_trapdoor.close");
+    SoundEvent BLOCK_CHERRY_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("block.cherry_wood_door.close");
 
-    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.cherry_wood_trapdoor.open");
+    SoundEvent BLOCK_CHERRY_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("block.cherry_wood_door.open");
 
-    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.cherry_wood_button.click_off");
+    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.cherry_wood_trapdoor.close");
 
-    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.cherry_wood_button.click_on");
+    SoundEvent BLOCK_CHERRY_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.cherry_wood_trapdoor.open");
 
-    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.cherry_wood_pressure_plate.click_off");
+    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("block.cherry_wood_button.click_off");
 
-    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.cherry_wood_pressure_plate.click_on");
+    SoundEvent BLOCK_CHERRY_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("block.cherry_wood_button.click_on");
 
-    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("minecraft:block.cherry_wood_fence_gate.close");
+    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.cherry_wood_pressure_plate.click_off");
 
-    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("minecraft:block.cherry_wood_fence_gate.open");
+    SoundEvent BLOCK_CHERRY_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.cherry_wood_pressure_plate.click_on");
 
-    SoundEvent BLOCK_CHEST_CLOSE = BuiltinSoundEvent.get("minecraft:block.chest.close");
+    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("block.cherry_wood_fence_gate.close");
 
-    SoundEvent BLOCK_CHEST_LOCKED = BuiltinSoundEvent.get("minecraft:block.chest.locked");
+    SoundEvent BLOCK_CHERRY_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("block.cherry_wood_fence_gate.open");
 
-    SoundEvent BLOCK_CHEST_OPEN = BuiltinSoundEvent.get("minecraft:block.chest.open");
+    SoundEvent BLOCK_CHEST_CLOSE = BuiltinSoundEvent.get("block.chest.close");
 
-    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.chicken.ambient");
+    SoundEvent BLOCK_CHEST_LOCKED = BuiltinSoundEvent.get("block.chest.locked");
 
-    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get("minecraft:entity.chicken.death");
+    SoundEvent BLOCK_CHEST_OPEN = BuiltinSoundEvent.get("block.chest.open");
 
-    SoundEvent ENTITY_CHICKEN_EGG = BuiltinSoundEvent.get("minecraft:entity.chicken.egg");
+    SoundEvent ENTITY_CHICKEN_AMBIENT = BuiltinSoundEvent.get("entity.chicken.ambient");
 
-    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get("minecraft:entity.chicken.hurt");
+    SoundEvent ENTITY_CHICKEN_DEATH = BuiltinSoundEvent.get("entity.chicken.death");
 
-    SoundEvent ENTITY_CHICKEN_STEP = BuiltinSoundEvent.get("minecraft:entity.chicken.step");
+    SoundEvent ENTITY_CHICKEN_EGG = BuiltinSoundEvent.get("entity.chicken.egg");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_BREAK = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.break");
+    SoundEvent ENTITY_CHICKEN_HURT = BuiltinSoundEvent.get("entity.chicken.hurt");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_FALL = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.fall");
+    SoundEvent ENTITY_CHICKEN_STEP = BuiltinSoundEvent.get("entity.chicken.step");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_HIT = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.hit");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_BREAK = BuiltinSoundEvent.get("block.chiseled_bookshelf.break");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.insert");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_FALL = BuiltinSoundEvent.get("block.chiseled_bookshelf.fall");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.insert.enchanted");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_HIT = BuiltinSoundEvent.get("block.chiseled_bookshelf.hit");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_STEP = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.step");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT = BuiltinSoundEvent.get("block.chiseled_bookshelf.insert");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.pickup");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_INSERT_ENCHANTED = BuiltinSoundEvent.get("block.chiseled_bookshelf.insert.enchanted");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.pickup.enchanted");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_STEP = BuiltinSoundEvent.get("block.chiseled_bookshelf.step");
 
-    SoundEvent BLOCK_CHISELED_BOOKSHELF_PLACE = BuiltinSoundEvent.get("minecraft:block.chiseled_bookshelf.place");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP = BuiltinSoundEvent.get("block.chiseled_bookshelf.pickup");
 
-    SoundEvent BLOCK_CHORUS_FLOWER_DEATH = BuiltinSoundEvent.get("minecraft:block.chorus_flower.death");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PICKUP_ENCHANTED = BuiltinSoundEvent.get("block.chiseled_bookshelf.pickup.enchanted");
 
-    SoundEvent BLOCK_CHORUS_FLOWER_GROW = BuiltinSoundEvent.get("minecraft:block.chorus_flower.grow");
+    SoundEvent BLOCK_CHISELED_BOOKSHELF_PLACE = BuiltinSoundEvent.get("block.chiseled_bookshelf.place");
 
-    SoundEvent ITEM_CHORUS_FRUIT_TELEPORT = BuiltinSoundEvent.get("minecraft:item.chorus_fruit.teleport");
+    SoundEvent BLOCK_CHORUS_FLOWER_DEATH = BuiltinSoundEvent.get("block.chorus_flower.death");
 
-    SoundEvent BLOCK_COBWEB_BREAK = BuiltinSoundEvent.get("minecraft:block.cobweb.break");
+    SoundEvent BLOCK_CHORUS_FLOWER_GROW = BuiltinSoundEvent.get("block.chorus_flower.grow");
 
-    SoundEvent BLOCK_COBWEB_STEP = BuiltinSoundEvent.get("minecraft:block.cobweb.step");
+    SoundEvent ITEM_CHORUS_FRUIT_TELEPORT = BuiltinSoundEvent.get("item.chorus_fruit.teleport");
 
-    SoundEvent BLOCK_COBWEB_PLACE = BuiltinSoundEvent.get("minecraft:block.cobweb.place");
+    SoundEvent BLOCK_COBWEB_BREAK = BuiltinSoundEvent.get("block.cobweb.break");
 
-    SoundEvent BLOCK_COBWEB_HIT = BuiltinSoundEvent.get("minecraft:block.cobweb.hit");
+    SoundEvent BLOCK_COBWEB_STEP = BuiltinSoundEvent.get("block.cobweb.step");
 
-    SoundEvent BLOCK_COBWEB_FALL = BuiltinSoundEvent.get("minecraft:block.cobweb.fall");
+    SoundEvent BLOCK_COBWEB_PLACE = BuiltinSoundEvent.get("block.cobweb.place");
 
-    SoundEvent ENTITY_COD_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.cod.ambient");
+    SoundEvent BLOCK_COBWEB_HIT = BuiltinSoundEvent.get("block.cobweb.hit");
 
-    SoundEvent ENTITY_COD_DEATH = BuiltinSoundEvent.get("minecraft:entity.cod.death");
+    SoundEvent BLOCK_COBWEB_FALL = BuiltinSoundEvent.get("block.cobweb.fall");
 
-    SoundEvent ENTITY_COD_FLOP = BuiltinSoundEvent.get("minecraft:entity.cod.flop");
+    SoundEvent ENTITY_COD_AMBIENT = BuiltinSoundEvent.get("entity.cod.ambient");
 
-    SoundEvent ENTITY_COD_HURT = BuiltinSoundEvent.get("minecraft:entity.cod.hurt");
+    SoundEvent ENTITY_COD_DEATH = BuiltinSoundEvent.get("entity.cod.death");
 
-    SoundEvent BLOCK_COMPARATOR_CLICK = BuiltinSoundEvent.get("minecraft:block.comparator.click");
+    SoundEvent ENTITY_COD_FLOP = BuiltinSoundEvent.get("entity.cod.flop");
 
-    SoundEvent BLOCK_COMPOSTER_EMPTY = BuiltinSoundEvent.get("minecraft:block.composter.empty");
+    SoundEvent ENTITY_COD_HURT = BuiltinSoundEvent.get("entity.cod.hurt");
 
-    SoundEvent BLOCK_COMPOSTER_FILL = BuiltinSoundEvent.get("minecraft:block.composter.fill");
+    SoundEvent BLOCK_COMPARATOR_CLICK = BuiltinSoundEvent.get("block.comparator.click");
 
-    SoundEvent BLOCK_COMPOSTER_FILL_SUCCESS = BuiltinSoundEvent.get("minecraft:block.composter.fill_success");
+    SoundEvent BLOCK_COMPOSTER_EMPTY = BuiltinSoundEvent.get("block.composter.empty");
 
-    SoundEvent BLOCK_COMPOSTER_READY = BuiltinSoundEvent.get("minecraft:block.composter.ready");
+    SoundEvent BLOCK_COMPOSTER_FILL = BuiltinSoundEvent.get("block.composter.fill");
 
-    SoundEvent BLOCK_CONDUIT_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.conduit.activate");
+    SoundEvent BLOCK_COMPOSTER_FILL_SUCCESS = BuiltinSoundEvent.get("block.composter.fill_success");
 
-    SoundEvent BLOCK_CONDUIT_AMBIENT = BuiltinSoundEvent.get("minecraft:block.conduit.ambient");
+    SoundEvent BLOCK_COMPOSTER_READY = BuiltinSoundEvent.get("block.composter.ready");
 
-    SoundEvent BLOCK_CONDUIT_AMBIENT_SHORT = BuiltinSoundEvent.get("minecraft:block.conduit.ambient.short");
+    SoundEvent BLOCK_CONDUIT_ACTIVATE = BuiltinSoundEvent.get("block.conduit.activate");
 
-    SoundEvent BLOCK_CONDUIT_ATTACK_TARGET = BuiltinSoundEvent.get("minecraft:block.conduit.attack.target");
+    SoundEvent BLOCK_CONDUIT_AMBIENT = BuiltinSoundEvent.get("block.conduit.ambient");
 
-    SoundEvent BLOCK_CONDUIT_DEACTIVATE = BuiltinSoundEvent.get("minecraft:block.conduit.deactivate");
+    SoundEvent BLOCK_CONDUIT_AMBIENT_SHORT = BuiltinSoundEvent.get("block.conduit.ambient.short");
 
-    SoundEvent BLOCK_COPPER_BULB_BREAK = BuiltinSoundEvent.get("minecraft:block.copper_bulb.break");
+    SoundEvent BLOCK_CONDUIT_ATTACK_TARGET = BuiltinSoundEvent.get("block.conduit.attack.target");
 
-    SoundEvent BLOCK_COPPER_BULB_STEP = BuiltinSoundEvent.get("minecraft:block.copper_bulb.step");
+    SoundEvent BLOCK_CONDUIT_DEACTIVATE = BuiltinSoundEvent.get("block.conduit.deactivate");
 
-    SoundEvent BLOCK_COPPER_BULB_PLACE = BuiltinSoundEvent.get("minecraft:block.copper_bulb.place");
+    SoundEvent BLOCK_COPPER_BULB_BREAK = BuiltinSoundEvent.get("block.copper_bulb.break");
 
-    SoundEvent BLOCK_COPPER_BULB_HIT = BuiltinSoundEvent.get("minecraft:block.copper_bulb.hit");
+    SoundEvent BLOCK_COPPER_BULB_STEP = BuiltinSoundEvent.get("block.copper_bulb.step");
 
-    SoundEvent BLOCK_COPPER_BULB_FALL = BuiltinSoundEvent.get("minecraft:block.copper_bulb.fall");
+    SoundEvent BLOCK_COPPER_BULB_PLACE = BuiltinSoundEvent.get("block.copper_bulb.place");
 
-    SoundEvent BLOCK_COPPER_BULB_TURN_ON = BuiltinSoundEvent.get("minecraft:block.copper_bulb.turn_on");
+    SoundEvent BLOCK_COPPER_BULB_HIT = BuiltinSoundEvent.get("block.copper_bulb.hit");
 
-    SoundEvent BLOCK_COPPER_BULB_TURN_OFF = BuiltinSoundEvent.get("minecraft:block.copper_bulb.turn_off");
+    SoundEvent BLOCK_COPPER_BULB_FALL = BuiltinSoundEvent.get("block.copper_bulb.fall");
 
-    SoundEvent BLOCK_COPPER_BREAK = BuiltinSoundEvent.get("minecraft:block.copper.break");
+    SoundEvent BLOCK_COPPER_BULB_TURN_ON = BuiltinSoundEvent.get("block.copper_bulb.turn_on");
 
-    SoundEvent BLOCK_COPPER_STEP = BuiltinSoundEvent.get("minecraft:block.copper.step");
+    SoundEvent BLOCK_COPPER_BULB_TURN_OFF = BuiltinSoundEvent.get("block.copper_bulb.turn_off");
 
-    SoundEvent BLOCK_COPPER_PLACE = BuiltinSoundEvent.get("minecraft:block.copper.place");
+    SoundEvent BLOCK_COPPER_BREAK = BuiltinSoundEvent.get("block.copper.break");
 
-    SoundEvent BLOCK_COPPER_HIT = BuiltinSoundEvent.get("minecraft:block.copper.hit");
+    SoundEvent BLOCK_COPPER_STEP = BuiltinSoundEvent.get("block.copper.step");
 
-    SoundEvent BLOCK_COPPER_FALL = BuiltinSoundEvent.get("minecraft:block.copper.fall");
+    SoundEvent BLOCK_COPPER_PLACE = BuiltinSoundEvent.get("block.copper.place");
 
-    SoundEvent BLOCK_COPPER_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.copper_door.close");
+    SoundEvent BLOCK_COPPER_HIT = BuiltinSoundEvent.get("block.copper.hit");
 
-    SoundEvent BLOCK_COPPER_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.copper_door.open");
+    SoundEvent BLOCK_COPPER_FALL = BuiltinSoundEvent.get("block.copper.fall");
 
-    SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get("minecraft:block.copper_grate.break");
+    SoundEvent BLOCK_COPPER_DOOR_CLOSE = BuiltinSoundEvent.get("block.copper_door.close");
 
-    SoundEvent BLOCK_COPPER_GRATE_STEP = BuiltinSoundEvent.get("minecraft:block.copper_grate.step");
+    SoundEvent BLOCK_COPPER_DOOR_OPEN = BuiltinSoundEvent.get("block.copper_door.open");
 
-    SoundEvent BLOCK_COPPER_GRATE_PLACE = BuiltinSoundEvent.get("minecraft:block.copper_grate.place");
+    SoundEvent BLOCK_COPPER_GRATE_BREAK = BuiltinSoundEvent.get("block.copper_grate.break");
 
-    SoundEvent BLOCK_COPPER_GRATE_HIT = BuiltinSoundEvent.get("minecraft:block.copper_grate.hit");
+    SoundEvent BLOCK_COPPER_GRATE_STEP = BuiltinSoundEvent.get("block.copper_grate.step");
 
-    SoundEvent BLOCK_COPPER_GRATE_FALL = BuiltinSoundEvent.get("minecraft:block.copper_grate.fall");
+    SoundEvent BLOCK_COPPER_GRATE_PLACE = BuiltinSoundEvent.get("block.copper_grate.place");
 
-    SoundEvent BLOCK_COPPER_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.copper_trapdoor.close");
+    SoundEvent BLOCK_COPPER_GRATE_HIT = BuiltinSoundEvent.get("block.copper_grate.hit");
 
-    SoundEvent BLOCK_COPPER_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.copper_trapdoor.open");
+    SoundEvent BLOCK_COPPER_GRATE_FALL = BuiltinSoundEvent.get("block.copper_grate.fall");
 
-    SoundEvent BLOCK_CORAL_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.coral_block.break");
+    SoundEvent BLOCK_COPPER_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.copper_trapdoor.close");
 
-    SoundEvent BLOCK_CORAL_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.coral_block.fall");
+    SoundEvent BLOCK_COPPER_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.copper_trapdoor.open");
 
-    SoundEvent BLOCK_CORAL_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.coral_block.hit");
+    SoundEvent BLOCK_CORAL_BLOCK_BREAK = BuiltinSoundEvent.get("block.coral_block.break");
 
-    SoundEvent BLOCK_CORAL_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.coral_block.place");
+    SoundEvent BLOCK_CORAL_BLOCK_FALL = BuiltinSoundEvent.get("block.coral_block.fall");
 
-    SoundEvent BLOCK_CORAL_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.coral_block.step");
+    SoundEvent BLOCK_CORAL_BLOCK_HIT = BuiltinSoundEvent.get("block.coral_block.hit");
 
-    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.cow.ambient");
+    SoundEvent BLOCK_CORAL_BLOCK_PLACE = BuiltinSoundEvent.get("block.coral_block.place");
 
-    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get("minecraft:entity.cow.death");
+    SoundEvent BLOCK_CORAL_BLOCK_STEP = BuiltinSoundEvent.get("block.coral_block.step");
 
-    SoundEvent ENTITY_COW_HURT = BuiltinSoundEvent.get("minecraft:entity.cow.hurt");
+    SoundEvent ENTITY_COW_AMBIENT = BuiltinSoundEvent.get("entity.cow.ambient");
 
-    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get("minecraft:entity.cow.milk");
+    SoundEvent ENTITY_COW_DEATH = BuiltinSoundEvent.get("entity.cow.death");
 
-    SoundEvent ENTITY_COW_STEP = BuiltinSoundEvent.get("minecraft:entity.cow.step");
+    SoundEvent ENTITY_COW_HURT = BuiltinSoundEvent.get("entity.cow.hurt");
 
-    SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get("minecraft:block.crafter.craft");
+    SoundEvent ENTITY_COW_MILK = BuiltinSoundEvent.get("entity.cow.milk");
 
-    SoundEvent BLOCK_CRAFTER_FAIL = BuiltinSoundEvent.get("minecraft:block.crafter.fail");
+    SoundEvent ENTITY_COW_STEP = BuiltinSoundEvent.get("entity.cow.step");
 
-    SoundEvent ENTITY_CREAKING_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.creaking.ambient");
+    SoundEvent BLOCK_CRAFTER_CRAFT = BuiltinSoundEvent.get("block.crafter.craft");
 
-    SoundEvent ENTITY_CREAKING_ACTIVATE = BuiltinSoundEvent.get("minecraft:entity.creaking.activate");
+    SoundEvent BLOCK_CRAFTER_FAIL = BuiltinSoundEvent.get("block.crafter.fail");
 
-    SoundEvent ENTITY_CREAKING_DEACTIVATE = BuiltinSoundEvent.get("minecraft:entity.creaking.deactivate");
+    SoundEvent ENTITY_CREAKING_AMBIENT = BuiltinSoundEvent.get("entity.creaking.ambient");
 
-    SoundEvent ENTITY_CREAKING_ATTACK = BuiltinSoundEvent.get("minecraft:entity.creaking.attack");
+    SoundEvent ENTITY_CREAKING_ACTIVATE = BuiltinSoundEvent.get("entity.creaking.activate");
 
-    SoundEvent ENTITY_CREAKING_DEATH = BuiltinSoundEvent.get("minecraft:entity.creaking.death");
+    SoundEvent ENTITY_CREAKING_DEACTIVATE = BuiltinSoundEvent.get("entity.creaking.deactivate");
 
-    SoundEvent ENTITY_CREAKING_STEP = BuiltinSoundEvent.get("minecraft:entity.creaking.step");
+    SoundEvent ENTITY_CREAKING_ATTACK = BuiltinSoundEvent.get("entity.creaking.attack");
 
-    SoundEvent ENTITY_CREAKING_FREEZE = BuiltinSoundEvent.get("minecraft:entity.creaking.freeze");
+    SoundEvent ENTITY_CREAKING_DEATH = BuiltinSoundEvent.get("entity.creaking.death");
 
-    SoundEvent ENTITY_CREAKING_UNFREEZE = BuiltinSoundEvent.get("minecraft:entity.creaking.unfreeze");
+    SoundEvent ENTITY_CREAKING_STEP = BuiltinSoundEvent.get("entity.creaking.step");
 
-    SoundEvent ENTITY_CREAKING_SPAWN = BuiltinSoundEvent.get("minecraft:entity.creaking.spawn");
+    SoundEvent ENTITY_CREAKING_FREEZE = BuiltinSoundEvent.get("entity.creaking.freeze");
 
-    SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get("minecraft:entity.creaking.sway");
+    SoundEvent ENTITY_CREAKING_UNFREEZE = BuiltinSoundEvent.get("entity.creaking.unfreeze");
 
-    SoundEvent ENTITY_CREAKING_TWITCH = BuiltinSoundEvent.get("minecraft:entity.creaking.twitch");
+    SoundEvent ENTITY_CREAKING_SPAWN = BuiltinSoundEvent.get("entity.creaking.spawn");
 
-    SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get("minecraft:block.creaking_heart.break");
+    SoundEvent ENTITY_CREAKING_SWAY = BuiltinSoundEvent.get("entity.creaking.sway");
 
-    SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get("minecraft:block.creaking_heart.fall");
+    SoundEvent ENTITY_CREAKING_TWITCH = BuiltinSoundEvent.get("entity.creaking.twitch");
 
-    SoundEvent BLOCK_CREAKING_HEART_HIT = BuiltinSoundEvent.get("minecraft:block.creaking_heart.hit");
+    SoundEvent BLOCK_CREAKING_HEART_BREAK = BuiltinSoundEvent.get("block.creaking_heart.break");
 
-    SoundEvent BLOCK_CREAKING_HEART_HURT = BuiltinSoundEvent.get("minecraft:block.creaking_heart.hurt");
+    SoundEvent BLOCK_CREAKING_HEART_FALL = BuiltinSoundEvent.get("block.creaking_heart.fall");
 
-    SoundEvent BLOCK_CREAKING_HEART_PLACE = BuiltinSoundEvent.get("minecraft:block.creaking_heart.place");
+    SoundEvent BLOCK_CREAKING_HEART_HIT = BuiltinSoundEvent.get("block.creaking_heart.hit");
 
-    SoundEvent BLOCK_CREAKING_HEART_STEP = BuiltinSoundEvent.get("minecraft:block.creaking_heart.step");
+    SoundEvent BLOCK_CREAKING_HEART_HURT = BuiltinSoundEvent.get("block.creaking_heart.hurt");
 
-    SoundEvent BLOCK_CREAKING_HEART_IDLE = BuiltinSoundEvent.get("minecraft:block.creaking_heart.idle");
+    SoundEvent BLOCK_CREAKING_HEART_PLACE = BuiltinSoundEvent.get("block.creaking_heart.place");
 
-    SoundEvent BLOCK_CREAKING_HEART_SPAWN = BuiltinSoundEvent.get("minecraft:block.creaking_heart.spawn");
+    SoundEvent BLOCK_CREAKING_HEART_STEP = BuiltinSoundEvent.get("block.creaking_heart.step");
 
-    SoundEvent ENTITY_CREEPER_DEATH = BuiltinSoundEvent.get("minecraft:entity.creeper.death");
+    SoundEvent BLOCK_CREAKING_HEART_IDLE = BuiltinSoundEvent.get("block.creaking_heart.idle");
 
-    SoundEvent ENTITY_CREEPER_HURT = BuiltinSoundEvent.get("minecraft:entity.creeper.hurt");
+    SoundEvent BLOCK_CREAKING_HEART_SPAWN = BuiltinSoundEvent.get("block.creaking_heart.spawn");
 
-    SoundEvent ENTITY_CREEPER_PRIMED = BuiltinSoundEvent.get("minecraft:entity.creeper.primed");
+    SoundEvent ENTITY_CREEPER_DEATH = BuiltinSoundEvent.get("entity.creeper.death");
 
-    SoundEvent BLOCK_CROP_BREAK = BuiltinSoundEvent.get("minecraft:block.crop.break");
+    SoundEvent ENTITY_CREEPER_HURT = BuiltinSoundEvent.get("entity.creeper.hurt");
 
-    SoundEvent ITEM_CROP_PLANT = BuiltinSoundEvent.get("minecraft:item.crop.plant");
+    SoundEvent ENTITY_CREEPER_PRIMED = BuiltinSoundEvent.get("entity.creeper.primed");
 
-    SoundEvent ITEM_CROSSBOW_HIT = BuiltinSoundEvent.get("minecraft:item.crossbow.hit");
+    SoundEvent BLOCK_CROP_BREAK = BuiltinSoundEvent.get("block.crop.break");
 
-    SoundEvent ITEM_CROSSBOW_LOADING_END = BuiltinSoundEvent.get("minecraft:item.crossbow.loading_end");
+    SoundEvent ITEM_CROP_PLANT = BuiltinSoundEvent.get("item.crop.plant");
 
-    SoundEvent ITEM_CROSSBOW_LOADING_MIDDLE = BuiltinSoundEvent.get("minecraft:item.crossbow.loading_middle");
+    SoundEvent ITEM_CROSSBOW_HIT = BuiltinSoundEvent.get("item.crossbow.hit");
 
-    SoundEvent ITEM_CROSSBOW_LOADING_START = BuiltinSoundEvent.get("minecraft:item.crossbow.loading_start");
+    SoundEvent ITEM_CROSSBOW_LOADING_END = BuiltinSoundEvent.get("item.crossbow.loading_end");
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_1 = BuiltinSoundEvent.get("minecraft:item.crossbow.quick_charge_1");
+    SoundEvent ITEM_CROSSBOW_LOADING_MIDDLE = BuiltinSoundEvent.get("item.crossbow.loading_middle");
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_2 = BuiltinSoundEvent.get("minecraft:item.crossbow.quick_charge_2");
+    SoundEvent ITEM_CROSSBOW_LOADING_START = BuiltinSoundEvent.get("item.crossbow.loading_start");
 
-    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_3 = BuiltinSoundEvent.get("minecraft:item.crossbow.quick_charge_3");
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_1 = BuiltinSoundEvent.get("item.crossbow.quick_charge_1");
 
-    SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get("minecraft:item.crossbow.shoot");
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_2 = BuiltinSoundEvent.get("item.crossbow.quick_charge_2");
 
-    SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get("minecraft:block.decorated_pot.break");
+    SoundEvent ITEM_CROSSBOW_QUICK_CHARGE_3 = BuiltinSoundEvent.get("item.crossbow.quick_charge_3");
 
-    SoundEvent BLOCK_DECORATED_POT_FALL = BuiltinSoundEvent.get("minecraft:block.decorated_pot.fall");
+    SoundEvent ITEM_CROSSBOW_SHOOT = BuiltinSoundEvent.get("item.crossbow.shoot");
 
-    SoundEvent BLOCK_DECORATED_POT_HIT = BuiltinSoundEvent.get("minecraft:block.decorated_pot.hit");
+    SoundEvent BLOCK_DEADBUSH_IDLE = BuiltinSoundEvent.get("block.deadbush.idle");
 
-    SoundEvent BLOCK_DECORATED_POT_INSERT = BuiltinSoundEvent.get("minecraft:block.decorated_pot.insert");
+    SoundEvent BLOCK_DECORATED_POT_BREAK = BuiltinSoundEvent.get("block.decorated_pot.break");
 
-    SoundEvent BLOCK_DECORATED_POT_INSERT_FAIL = BuiltinSoundEvent.get("minecraft:block.decorated_pot.insert_fail");
+    SoundEvent BLOCK_DECORATED_POT_FALL = BuiltinSoundEvent.get("block.decorated_pot.fall");
 
-    SoundEvent BLOCK_DECORATED_POT_STEP = BuiltinSoundEvent.get("minecraft:block.decorated_pot.step");
+    SoundEvent BLOCK_DECORATED_POT_HIT = BuiltinSoundEvent.get("block.decorated_pot.hit");
 
-    SoundEvent BLOCK_DECORATED_POT_PLACE = BuiltinSoundEvent.get("minecraft:block.decorated_pot.place");
+    SoundEvent BLOCK_DECORATED_POT_INSERT = BuiltinSoundEvent.get("block.decorated_pot.insert");
 
-    SoundEvent BLOCK_DECORATED_POT_SHATTER = BuiltinSoundEvent.get("minecraft:block.decorated_pot.shatter");
+    SoundEvent BLOCK_DECORATED_POT_INSERT_FAIL = BuiltinSoundEvent.get("block.decorated_pot.insert_fail");
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.deepslate_bricks.break");
+    SoundEvent BLOCK_DECORATED_POT_STEP = BuiltinSoundEvent.get("block.decorated_pot.step");
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.deepslate_bricks.fall");
+    SoundEvent BLOCK_DECORATED_POT_PLACE = BuiltinSoundEvent.get("block.decorated_pot.place");
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.deepslate_bricks.hit");
+    SoundEvent BLOCK_DECORATED_POT_SHATTER = BuiltinSoundEvent.get("block.decorated_pot.shatter");
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.deepslate_bricks.place");
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_BREAK = BuiltinSoundEvent.get("block.deepslate_bricks.break");
 
-    SoundEvent BLOCK_DEEPSLATE_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.deepslate_bricks.step");
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_FALL = BuiltinSoundEvent.get("block.deepslate_bricks.fall");
 
-    SoundEvent BLOCK_DEEPSLATE_BREAK = BuiltinSoundEvent.get("minecraft:block.deepslate.break");
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_HIT = BuiltinSoundEvent.get("block.deepslate_bricks.hit");
 
-    SoundEvent BLOCK_DEEPSLATE_FALL = BuiltinSoundEvent.get("minecraft:block.deepslate.fall");
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_PLACE = BuiltinSoundEvent.get("block.deepslate_bricks.place");
 
-    SoundEvent BLOCK_DEEPSLATE_HIT = BuiltinSoundEvent.get("minecraft:block.deepslate.hit");
+    SoundEvent BLOCK_DEEPSLATE_BRICKS_STEP = BuiltinSoundEvent.get("block.deepslate_bricks.step");
 
-    SoundEvent BLOCK_DEEPSLATE_PLACE = BuiltinSoundEvent.get("minecraft:block.deepslate.place");
+    SoundEvent BLOCK_DEEPSLATE_BREAK = BuiltinSoundEvent.get("block.deepslate.break");
 
-    SoundEvent BLOCK_DEEPSLATE_STEP = BuiltinSoundEvent.get("minecraft:block.deepslate.step");
+    SoundEvent BLOCK_DEEPSLATE_FALL = BuiltinSoundEvent.get("block.deepslate.fall");
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_BREAK = BuiltinSoundEvent.get("minecraft:block.deepslate_tiles.break");
+    SoundEvent BLOCK_DEEPSLATE_HIT = BuiltinSoundEvent.get("block.deepslate.hit");
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_FALL = BuiltinSoundEvent.get("minecraft:block.deepslate_tiles.fall");
+    SoundEvent BLOCK_DEEPSLATE_PLACE = BuiltinSoundEvent.get("block.deepslate.place");
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_HIT = BuiltinSoundEvent.get("minecraft:block.deepslate_tiles.hit");
+    SoundEvent BLOCK_DEEPSLATE_STEP = BuiltinSoundEvent.get("block.deepslate.step");
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_PLACE = BuiltinSoundEvent.get("minecraft:block.deepslate_tiles.place");
+    SoundEvent BLOCK_DEEPSLATE_TILES_BREAK = BuiltinSoundEvent.get("block.deepslate_tiles.break");
 
-    SoundEvent BLOCK_DEEPSLATE_TILES_STEP = BuiltinSoundEvent.get("minecraft:block.deepslate_tiles.step");
+    SoundEvent BLOCK_DEEPSLATE_TILES_FALL = BuiltinSoundEvent.get("block.deepslate_tiles.fall");
 
-    SoundEvent BLOCK_DISPENSER_DISPENSE = BuiltinSoundEvent.get("minecraft:block.dispenser.dispense");
+    SoundEvent BLOCK_DEEPSLATE_TILES_HIT = BuiltinSoundEvent.get("block.deepslate_tiles.hit");
 
-    SoundEvent BLOCK_DISPENSER_FAIL = BuiltinSoundEvent.get("minecraft:block.dispenser.fail");
+    SoundEvent BLOCK_DEEPSLATE_TILES_PLACE = BuiltinSoundEvent.get("block.deepslate_tiles.place");
 
-    SoundEvent BLOCK_DISPENSER_LAUNCH = BuiltinSoundEvent.get("minecraft:block.dispenser.launch");
+    SoundEvent BLOCK_DEEPSLATE_TILES_STEP = BuiltinSoundEvent.get("block.deepslate_tiles.step");
 
-    SoundEvent ENTITY_DOLPHIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.dolphin.ambient");
+    SoundEvent BLOCK_DISPENSER_DISPENSE = BuiltinSoundEvent.get("block.dispenser.dispense");
 
-    SoundEvent ENTITY_DOLPHIN_AMBIENT_WATER = BuiltinSoundEvent.get("minecraft:entity.dolphin.ambient_water");
+    SoundEvent BLOCK_DISPENSER_FAIL = BuiltinSoundEvent.get("block.dispenser.fail");
 
-    SoundEvent ENTITY_DOLPHIN_ATTACK = BuiltinSoundEvent.get("minecraft:entity.dolphin.attack");
+    SoundEvent BLOCK_DISPENSER_LAUNCH = BuiltinSoundEvent.get("block.dispenser.launch");
 
-    SoundEvent ENTITY_DOLPHIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.dolphin.death");
+    SoundEvent ENTITY_DOLPHIN_AMBIENT = BuiltinSoundEvent.get("entity.dolphin.ambient");
 
-    SoundEvent ENTITY_DOLPHIN_EAT = BuiltinSoundEvent.get("minecraft:entity.dolphin.eat");
+    SoundEvent ENTITY_DOLPHIN_AMBIENT_WATER = BuiltinSoundEvent.get("entity.dolphin.ambient_water");
 
-    SoundEvent ENTITY_DOLPHIN_HURT = BuiltinSoundEvent.get("minecraft:entity.dolphin.hurt");
+    SoundEvent ENTITY_DOLPHIN_ATTACK = BuiltinSoundEvent.get("entity.dolphin.attack");
 
-    SoundEvent ENTITY_DOLPHIN_JUMP = BuiltinSoundEvent.get("minecraft:entity.dolphin.jump");
+    SoundEvent ENTITY_DOLPHIN_DEATH = BuiltinSoundEvent.get("entity.dolphin.death");
 
-    SoundEvent ENTITY_DOLPHIN_PLAY = BuiltinSoundEvent.get("minecraft:entity.dolphin.play");
+    SoundEvent ENTITY_DOLPHIN_EAT = BuiltinSoundEvent.get("entity.dolphin.eat");
 
-    SoundEvent ENTITY_DOLPHIN_SPLASH = BuiltinSoundEvent.get("minecraft:entity.dolphin.splash");
+    SoundEvent ENTITY_DOLPHIN_HURT = BuiltinSoundEvent.get("entity.dolphin.hurt");
 
-    SoundEvent ENTITY_DOLPHIN_SWIM = BuiltinSoundEvent.get("minecraft:entity.dolphin.swim");
+    SoundEvent ENTITY_DOLPHIN_JUMP = BuiltinSoundEvent.get("entity.dolphin.jump");
 
-    SoundEvent ENTITY_DONKEY_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.donkey.ambient");
+    SoundEvent ENTITY_DOLPHIN_PLAY = BuiltinSoundEvent.get("entity.dolphin.play");
 
-    SoundEvent ENTITY_DONKEY_ANGRY = BuiltinSoundEvent.get("minecraft:entity.donkey.angry");
+    SoundEvent ENTITY_DOLPHIN_SPLASH = BuiltinSoundEvent.get("entity.dolphin.splash");
 
-    SoundEvent ENTITY_DONKEY_CHEST = BuiltinSoundEvent.get("minecraft:entity.donkey.chest");
+    SoundEvent ENTITY_DOLPHIN_SWIM = BuiltinSoundEvent.get("entity.dolphin.swim");
 
-    SoundEvent ENTITY_DONKEY_DEATH = BuiltinSoundEvent.get("minecraft:entity.donkey.death");
+    SoundEvent ENTITY_DONKEY_AMBIENT = BuiltinSoundEvent.get("entity.donkey.ambient");
 
-    SoundEvent ENTITY_DONKEY_EAT = BuiltinSoundEvent.get("minecraft:entity.donkey.eat");
+    SoundEvent ENTITY_DONKEY_ANGRY = BuiltinSoundEvent.get("entity.donkey.angry");
 
-    SoundEvent ENTITY_DONKEY_HURT = BuiltinSoundEvent.get("minecraft:entity.donkey.hurt");
+    SoundEvent ENTITY_DONKEY_CHEST = BuiltinSoundEvent.get("entity.donkey.chest");
 
-    SoundEvent ENTITY_DONKEY_JUMP = BuiltinSoundEvent.get("minecraft:entity.donkey.jump");
+    SoundEvent ENTITY_DONKEY_DEATH = BuiltinSoundEvent.get("entity.donkey.death");
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.dripstone_block.break");
+    SoundEvent ENTITY_DONKEY_EAT = BuiltinSoundEvent.get("entity.donkey.eat");
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.dripstone_block.step");
+    SoundEvent ENTITY_DONKEY_HURT = BuiltinSoundEvent.get("entity.donkey.hurt");
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.dripstone_block.place");
+    SoundEvent ENTITY_DONKEY_JUMP = BuiltinSoundEvent.get("entity.donkey.jump");
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.dripstone_block.hit");
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_BREAK = BuiltinSoundEvent.get("block.dripstone_block.break");
 
-    SoundEvent BLOCK_DRIPSTONE_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.dripstone_block.fall");
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_STEP = BuiltinSoundEvent.get("block.dripstone_block.step");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_BREAK = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.break");
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_PLACE = BuiltinSoundEvent.get("block.dripstone_block.place");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_STEP = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.step");
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_HIT = BuiltinSoundEvent.get("block.dripstone_block.hit");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_PLACE = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.place");
+    SoundEvent BLOCK_DRIPSTONE_BLOCK_FALL = BuiltinSoundEvent.get("block.dripstone_block.fall");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_HIT = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.hit");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_BREAK = BuiltinSoundEvent.get("block.pointed_dripstone.break");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_FALL = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.fall");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_STEP = BuiltinSoundEvent.get("block.pointed_dripstone.step");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_LAND = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.land");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_PLACE = BuiltinSoundEvent.get("block.pointed_dripstone.place");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.drip_lava");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_HIT = BuiltinSoundEvent.get("block.pointed_dripstone.hit");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.drip_water");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_FALL = BuiltinSoundEvent.get("block.pointed_dripstone.fall");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.drip_lava_into_cauldron");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_LAND = BuiltinSoundEvent.get("block.pointed_dripstone.land");
 
-    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON = BuiltinSoundEvent.get("minecraft:block.pointed_dripstone.drip_water_into_cauldron");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA = BuiltinSoundEvent.get("block.pointed_dripstone.drip_lava");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_DOWN = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.tilt_down");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER = BuiltinSoundEvent.get("block.pointed_dripstone.drip_water");
 
-    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_UP = BuiltinSoundEvent.get("minecraft:block.big_dripleaf.tilt_up");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRON = BuiltinSoundEvent.get("block.pointed_dripstone.drip_lava_into_cauldron");
 
-    SoundEvent ENTITY_DROWNED_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.drowned.ambient");
+    SoundEvent BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON = BuiltinSoundEvent.get("block.pointed_dripstone.drip_water_into_cauldron");
 
-    SoundEvent ENTITY_DROWNED_AMBIENT_WATER = BuiltinSoundEvent.get("minecraft:entity.drowned.ambient_water");
+    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_DOWN = BuiltinSoundEvent.get("block.big_dripleaf.tilt_down");
 
-    SoundEvent ENTITY_DROWNED_DEATH = BuiltinSoundEvent.get("minecraft:entity.drowned.death");
+    SoundEvent BLOCK_BIG_DRIPLEAF_TILT_UP = BuiltinSoundEvent.get("block.big_dripleaf.tilt_up");
 
-    SoundEvent ENTITY_DROWNED_DEATH_WATER = BuiltinSoundEvent.get("minecraft:entity.drowned.death_water");
+    SoundEvent ENTITY_DROWNED_AMBIENT = BuiltinSoundEvent.get("entity.drowned.ambient");
 
-    SoundEvent ENTITY_DROWNED_HURT = BuiltinSoundEvent.get("minecraft:entity.drowned.hurt");
+    SoundEvent ENTITY_DROWNED_AMBIENT_WATER = BuiltinSoundEvent.get("entity.drowned.ambient_water");
 
-    SoundEvent ENTITY_DROWNED_HURT_WATER = BuiltinSoundEvent.get("minecraft:entity.drowned.hurt_water");
+    SoundEvent ENTITY_DROWNED_DEATH = BuiltinSoundEvent.get("entity.drowned.death");
 
-    SoundEvent ENTITY_DROWNED_SHOOT = BuiltinSoundEvent.get("minecraft:entity.drowned.shoot");
+    SoundEvent ENTITY_DROWNED_DEATH_WATER = BuiltinSoundEvent.get("entity.drowned.death_water");
 
-    SoundEvent ENTITY_DROWNED_STEP = BuiltinSoundEvent.get("minecraft:entity.drowned.step");
+    SoundEvent ENTITY_DROWNED_HURT = BuiltinSoundEvent.get("entity.drowned.hurt");
 
-    SoundEvent ENTITY_DROWNED_SWIM = BuiltinSoundEvent.get("minecraft:entity.drowned.swim");
+    SoundEvent ENTITY_DROWNED_HURT_WATER = BuiltinSoundEvent.get("entity.drowned.hurt_water");
 
-    SoundEvent ITEM_DYE_USE = BuiltinSoundEvent.get("minecraft:item.dye.use");
+    SoundEvent ENTITY_DROWNED_SHOOT = BuiltinSoundEvent.get("entity.drowned.shoot");
 
-    SoundEvent ENTITY_EGG_THROW = BuiltinSoundEvent.get("minecraft:entity.egg.throw");
+    SoundEvent ENTITY_DROWNED_STEP = BuiltinSoundEvent.get("entity.drowned.step");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.ambient");
+    SoundEvent ENTITY_DROWNED_SWIM = BuiltinSoundEvent.get("entity.drowned.swim");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.ambient_land");
+    SoundEvent ITEM_DYE_USE = BuiltinSoundEvent.get("item.dye.use");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_CURSE = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.curse");
+    SoundEvent ENTITY_EGG_THROW = BuiltinSoundEvent.get("entity.egg.throw");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.death");
+    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT = BuiltinSoundEvent.get("entity.elder_guardian.ambient");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.death_land");
+    SoundEvent ENTITY_ELDER_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get("entity.elder_guardian.ambient_land");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_FLOP = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.flop");
+    SoundEvent ENTITY_ELDER_GUARDIAN_CURSE = BuiltinSoundEvent.get("entity.elder_guardian.curse");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_HURT = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.hurt");
+    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH = BuiltinSoundEvent.get("entity.elder_guardian.death");
 
-    SoundEvent ENTITY_ELDER_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get("minecraft:entity.elder_guardian.hurt_land");
+    SoundEvent ENTITY_ELDER_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get("entity.elder_guardian.death_land");
 
-    SoundEvent ITEM_ELYTRA_FLYING = BuiltinSoundEvent.get("minecraft:item.elytra.flying");
+    SoundEvent ENTITY_ELDER_GUARDIAN_FLOP = BuiltinSoundEvent.get("entity.elder_guardian.flop");
 
-    SoundEvent BLOCK_ENCHANTMENT_TABLE_USE = BuiltinSoundEvent.get("minecraft:block.enchantment_table.use");
+    SoundEvent ENTITY_ELDER_GUARDIAN_HURT = BuiltinSoundEvent.get("entity.elder_guardian.hurt");
 
-    SoundEvent BLOCK_ENDER_CHEST_CLOSE = BuiltinSoundEvent.get("minecraft:block.ender_chest.close");
+    SoundEvent ENTITY_ELDER_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get("entity.elder_guardian.hurt_land");
 
-    SoundEvent BLOCK_ENDER_CHEST_OPEN = BuiltinSoundEvent.get("minecraft:block.ender_chest.open");
+    SoundEvent ITEM_ELYTRA_FLYING = BuiltinSoundEvent.get("item.elytra.flying");
 
-    SoundEvent ENTITY_ENDER_DRAGON_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.ambient");
+    SoundEvent BLOCK_ENCHANTMENT_TABLE_USE = BuiltinSoundEvent.get("block.enchantment_table.use");
 
-    SoundEvent ENTITY_ENDER_DRAGON_DEATH = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.death");
+    SoundEvent BLOCK_ENDER_CHEST_CLOSE = BuiltinSoundEvent.get("block.ender_chest.close");
 
-    SoundEvent ENTITY_DRAGON_FIREBALL_EXPLODE = BuiltinSoundEvent.get("minecraft:entity.dragon_fireball.explode");
+    SoundEvent BLOCK_ENDER_CHEST_OPEN = BuiltinSoundEvent.get("block.ender_chest.open");
 
-    SoundEvent ENTITY_ENDER_DRAGON_FLAP = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.flap");
+    SoundEvent ENTITY_ENDER_DRAGON_AMBIENT = BuiltinSoundEvent.get("entity.ender_dragon.ambient");
 
-    SoundEvent ENTITY_ENDER_DRAGON_GROWL = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.growl");
+    SoundEvent ENTITY_ENDER_DRAGON_DEATH = BuiltinSoundEvent.get("entity.ender_dragon.death");
 
-    SoundEvent ENTITY_ENDER_DRAGON_HURT = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.hurt");
+    SoundEvent ENTITY_DRAGON_FIREBALL_EXPLODE = BuiltinSoundEvent.get("entity.dragon_fireball.explode");
 
-    SoundEvent ENTITY_ENDER_DRAGON_SHOOT = BuiltinSoundEvent.get("minecraft:entity.ender_dragon.shoot");
+    SoundEvent ENTITY_ENDER_DRAGON_FLAP = BuiltinSoundEvent.get("entity.ender_dragon.flap");
 
-    SoundEvent ENTITY_ENDER_EYE_DEATH = BuiltinSoundEvent.get("minecraft:entity.ender_eye.death");
+    SoundEvent ENTITY_ENDER_DRAGON_GROWL = BuiltinSoundEvent.get("entity.ender_dragon.growl");
 
-    SoundEvent ENTITY_ENDER_EYE_LAUNCH = BuiltinSoundEvent.get("minecraft:entity.ender_eye.launch");
+    SoundEvent ENTITY_ENDER_DRAGON_HURT = BuiltinSoundEvent.get("entity.ender_dragon.hurt");
 
-    SoundEvent ENTITY_ENDERMAN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.enderman.ambient");
+    SoundEvent ENTITY_ENDER_DRAGON_SHOOT = BuiltinSoundEvent.get("entity.ender_dragon.shoot");
 
-    SoundEvent ENTITY_ENDERMAN_DEATH = BuiltinSoundEvent.get("minecraft:entity.enderman.death");
+    SoundEvent ENTITY_ENDER_EYE_DEATH = BuiltinSoundEvent.get("entity.ender_eye.death");
 
-    SoundEvent ENTITY_ENDERMAN_HURT = BuiltinSoundEvent.get("minecraft:entity.enderman.hurt");
+    SoundEvent ENTITY_ENDER_EYE_LAUNCH = BuiltinSoundEvent.get("entity.ender_eye.launch");
 
-    SoundEvent ENTITY_ENDERMAN_SCREAM = BuiltinSoundEvent.get("minecraft:entity.enderman.scream");
+    SoundEvent ENTITY_ENDERMAN_AMBIENT = BuiltinSoundEvent.get("entity.enderman.ambient");
 
-    SoundEvent ENTITY_ENDERMAN_STARE = BuiltinSoundEvent.get("minecraft:entity.enderman.stare");
+    SoundEvent ENTITY_ENDERMAN_DEATH = BuiltinSoundEvent.get("entity.enderman.death");
 
-    SoundEvent ENTITY_ENDERMAN_TELEPORT = BuiltinSoundEvent.get("minecraft:entity.enderman.teleport");
+    SoundEvent ENTITY_ENDERMAN_HURT = BuiltinSoundEvent.get("entity.enderman.hurt");
 
-    SoundEvent ENTITY_ENDERMITE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.endermite.ambient");
+    SoundEvent ENTITY_ENDERMAN_SCREAM = BuiltinSoundEvent.get("entity.enderman.scream");
 
-    SoundEvent ENTITY_ENDERMITE_DEATH = BuiltinSoundEvent.get("minecraft:entity.endermite.death");
+    SoundEvent ENTITY_ENDERMAN_STARE = BuiltinSoundEvent.get("entity.enderman.stare");
 
-    SoundEvent ENTITY_ENDERMITE_HURT = BuiltinSoundEvent.get("minecraft:entity.endermite.hurt");
+    SoundEvent ENTITY_ENDERMAN_TELEPORT = BuiltinSoundEvent.get("entity.enderman.teleport");
 
-    SoundEvent ENTITY_ENDERMITE_STEP = BuiltinSoundEvent.get("minecraft:entity.endermite.step");
+    SoundEvent ENTITY_ENDERMITE_AMBIENT = BuiltinSoundEvent.get("entity.endermite.ambient");
 
-    SoundEvent ENTITY_ENDER_PEARL_THROW = BuiltinSoundEvent.get("minecraft:entity.ender_pearl.throw");
+    SoundEvent ENTITY_ENDERMITE_DEATH = BuiltinSoundEvent.get("entity.endermite.death");
 
-    SoundEvent BLOCK_END_GATEWAY_SPAWN = BuiltinSoundEvent.get("minecraft:block.end_gateway.spawn");
+    SoundEvent ENTITY_ENDERMITE_HURT = BuiltinSoundEvent.get("entity.endermite.hurt");
 
-    SoundEvent BLOCK_END_PORTAL_FRAME_FILL = BuiltinSoundEvent.get("minecraft:block.end_portal_frame.fill");
+    SoundEvent ENTITY_ENDERMITE_STEP = BuiltinSoundEvent.get("entity.endermite.step");
 
-    SoundEvent BLOCK_END_PORTAL_SPAWN = BuiltinSoundEvent.get("minecraft:block.end_portal.spawn");
+    SoundEvent ENTITY_ENDER_PEARL_THROW = BuiltinSoundEvent.get("entity.ender_pearl.throw");
 
-    SoundEvent ENTITY_EVOKER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.evoker.ambient");
+    SoundEvent BLOCK_END_GATEWAY_SPAWN = BuiltinSoundEvent.get("block.end_gateway.spawn");
 
-    SoundEvent ENTITY_EVOKER_CAST_SPELL = BuiltinSoundEvent.get("minecraft:entity.evoker.cast_spell");
+    SoundEvent BLOCK_END_PORTAL_FRAME_FILL = BuiltinSoundEvent.get("block.end_portal_frame.fill");
 
-    SoundEvent ENTITY_EVOKER_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.evoker.celebrate");
+    SoundEvent BLOCK_END_PORTAL_SPAWN = BuiltinSoundEvent.get("block.end_portal.spawn");
 
-    SoundEvent ENTITY_EVOKER_DEATH = BuiltinSoundEvent.get("minecraft:entity.evoker.death");
+    SoundEvent ENTITY_EVOKER_AMBIENT = BuiltinSoundEvent.get("entity.evoker.ambient");
 
-    SoundEvent ENTITY_EVOKER_FANGS_ATTACK = BuiltinSoundEvent.get("minecraft:entity.evoker_fangs.attack");
+    SoundEvent ENTITY_EVOKER_CAST_SPELL = BuiltinSoundEvent.get("entity.evoker.cast_spell");
 
-    SoundEvent ENTITY_EVOKER_HURT = BuiltinSoundEvent.get("minecraft:entity.evoker.hurt");
+    SoundEvent ENTITY_EVOKER_CELEBRATE = BuiltinSoundEvent.get("entity.evoker.celebrate");
 
-    SoundEvent ENTITY_EVOKER_PREPARE_ATTACK = BuiltinSoundEvent.get("minecraft:entity.evoker.prepare_attack");
+    SoundEvent ENTITY_EVOKER_DEATH = BuiltinSoundEvent.get("entity.evoker.death");
 
-    SoundEvent ENTITY_EVOKER_PREPARE_SUMMON = BuiltinSoundEvent.get("minecraft:entity.evoker.prepare_summon");
+    SoundEvent ENTITY_EVOKER_FANGS_ATTACK = BuiltinSoundEvent.get("entity.evoker_fangs.attack");
 
-    SoundEvent ENTITY_EVOKER_PREPARE_WOLOLO = BuiltinSoundEvent.get("minecraft:entity.evoker.prepare_wololo");
+    SoundEvent ENTITY_EVOKER_HURT = BuiltinSoundEvent.get("entity.evoker.hurt");
 
-    SoundEvent ENTITY_EXPERIENCE_BOTTLE_THROW = BuiltinSoundEvent.get("minecraft:entity.experience_bottle.throw");
+    SoundEvent ENTITY_EVOKER_PREPARE_ATTACK = BuiltinSoundEvent.get("entity.evoker.prepare_attack");
 
-    SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP = BuiltinSoundEvent.get("minecraft:entity.experience_orb.pickup");
+    SoundEvent ENTITY_EVOKER_PREPARE_SUMMON = BuiltinSoundEvent.get("entity.evoker.prepare_summon");
 
-    SoundEvent BLOCK_EYEBLOSSOM_OPEN_LONG = BuiltinSoundEvent.get("minecraft:block.eyeblossom.open_long");
+    SoundEvent ENTITY_EVOKER_PREPARE_WOLOLO = BuiltinSoundEvent.get("entity.evoker.prepare_wololo");
 
-    SoundEvent BLOCK_EYEBLOSSOM_OPEN = BuiltinSoundEvent.get("minecraft:block.eyeblossom.open");
+    SoundEvent ENTITY_EXPERIENCE_BOTTLE_THROW = BuiltinSoundEvent.get("entity.experience_bottle.throw");
 
-    SoundEvent BLOCK_EYEBLOSSOM_CLOSE_LONG = BuiltinSoundEvent.get("minecraft:block.eyeblossom.close_long");
+    SoundEvent ENTITY_EXPERIENCE_ORB_PICKUP = BuiltinSoundEvent.get("entity.experience_orb.pickup");
 
-    SoundEvent BLOCK_EYEBLOSSOM_CLOSE = BuiltinSoundEvent.get("minecraft:block.eyeblossom.close");
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN_LONG = BuiltinSoundEvent.get("block.eyeblossom.open_long");
 
-    SoundEvent BLOCK_EYEBLOSSOM_IDLE = BuiltinSoundEvent.get("minecraft:block.eyeblossom.idle");
+    SoundEvent BLOCK_EYEBLOSSOM_OPEN = BuiltinSoundEvent.get("block.eyeblossom.open");
 
-    SoundEvent BLOCK_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("minecraft:block.fence_gate.close");
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE_LONG = BuiltinSoundEvent.get("block.eyeblossom.close_long");
 
-    SoundEvent BLOCK_FENCE_GATE_OPEN = BuiltinSoundEvent.get("minecraft:block.fence_gate.open");
+    SoundEvent BLOCK_EYEBLOSSOM_CLOSE = BuiltinSoundEvent.get("block.eyeblossom.close");
 
-    SoundEvent ITEM_FIRECHARGE_USE = BuiltinSoundEvent.get("minecraft:item.firecharge.use");
+    SoundEvent BLOCK_EYEBLOSSOM_IDLE = BuiltinSoundEvent.get("block.eyeblossom.idle");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.blast");
+    SoundEvent BLOCK_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("block.fence_gate.close");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST_FAR = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.blast_far");
+    SoundEvent BLOCK_FENCE_GATE_OPEN = BuiltinSoundEvent.get("block.fence_gate.open");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.large_blast");
+    SoundEvent ITEM_FIRECHARGE_USE = BuiltinSoundEvent.get("item.firecharge.use");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.large_blast_far");
+    SoundEvent BLOCK_FIREFLY_BUSH_IDLE = BuiltinSoundEvent.get("block.firefly_bush.idle");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_LAUNCH = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.launch");
+    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST = BuiltinSoundEvent.get("entity.firework_rocket.blast");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_SHOOT = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.shoot");
+    SoundEvent ENTITY_FIREWORK_ROCKET_BLAST_FAR = BuiltinSoundEvent.get("entity.firework_rocket.blast_far");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.twinkle");
+    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST = BuiltinSoundEvent.get("entity.firework_rocket.large_blast");
 
-    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE_FAR = BuiltinSoundEvent.get("minecraft:entity.firework_rocket.twinkle_far");
+    SoundEvent ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR = BuiltinSoundEvent.get("entity.firework_rocket.large_blast_far");
 
-    SoundEvent BLOCK_FIRE_AMBIENT = BuiltinSoundEvent.get("minecraft:block.fire.ambient");
+    SoundEvent ENTITY_FIREWORK_ROCKET_LAUNCH = BuiltinSoundEvent.get("entity.firework_rocket.launch");
 
-    SoundEvent BLOCK_FIRE_EXTINGUISH = BuiltinSoundEvent.get("minecraft:block.fire.extinguish");
+    SoundEvent ENTITY_FIREWORK_ROCKET_SHOOT = BuiltinSoundEvent.get("entity.firework_rocket.shoot");
 
-    SoundEvent ENTITY_FISH_SWIM = BuiltinSoundEvent.get("minecraft:entity.fish.swim");
+    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE = BuiltinSoundEvent.get("entity.firework_rocket.twinkle");
 
-    SoundEvent ENTITY_FISHING_BOBBER_RETRIEVE = BuiltinSoundEvent.get("minecraft:entity.fishing_bobber.retrieve");
+    SoundEvent ENTITY_FIREWORK_ROCKET_TWINKLE_FAR = BuiltinSoundEvent.get("entity.firework_rocket.twinkle_far");
 
-    SoundEvent ENTITY_FISHING_BOBBER_SPLASH = BuiltinSoundEvent.get("minecraft:entity.fishing_bobber.splash");
+    SoundEvent BLOCK_FIRE_AMBIENT = BuiltinSoundEvent.get("block.fire.ambient");
 
-    SoundEvent ENTITY_FISHING_BOBBER_THROW = BuiltinSoundEvent.get("minecraft:entity.fishing_bobber.throw");
+    SoundEvent BLOCK_FIRE_EXTINGUISH = BuiltinSoundEvent.get("block.fire.extinguish");
 
-    SoundEvent ITEM_FLINTANDSTEEL_USE = BuiltinSoundEvent.get("minecraft:item.flintandsteel.use");
+    SoundEvent ENTITY_FISH_SWIM = BuiltinSoundEvent.get("entity.fish.swim");
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_BREAK = BuiltinSoundEvent.get("minecraft:block.flowering_azalea.break");
+    SoundEvent ENTITY_FISHING_BOBBER_RETRIEVE = BuiltinSoundEvent.get("entity.fishing_bobber.retrieve");
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_FALL = BuiltinSoundEvent.get("minecraft:block.flowering_azalea.fall");
+    SoundEvent ENTITY_FISHING_BOBBER_SPLASH = BuiltinSoundEvent.get("entity.fishing_bobber.splash");
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_HIT = BuiltinSoundEvent.get("minecraft:block.flowering_azalea.hit");
+    SoundEvent ENTITY_FISHING_BOBBER_THROW = BuiltinSoundEvent.get("entity.fishing_bobber.throw");
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_PLACE = BuiltinSoundEvent.get("minecraft:block.flowering_azalea.place");
+    SoundEvent ITEM_FLINTANDSTEEL_USE = BuiltinSoundEvent.get("item.flintandsteel.use");
 
-    SoundEvent BLOCK_FLOWERING_AZALEA_STEP = BuiltinSoundEvent.get("minecraft:block.flowering_azalea.step");
+    SoundEvent BLOCK_FLOWERING_AZALEA_BREAK = BuiltinSoundEvent.get("block.flowering_azalea.break");
 
-    SoundEvent ENTITY_FOX_AGGRO = BuiltinSoundEvent.get("minecraft:entity.fox.aggro");
+    SoundEvent BLOCK_FLOWERING_AZALEA_FALL = BuiltinSoundEvent.get("block.flowering_azalea.fall");
 
-    SoundEvent ENTITY_FOX_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.fox.ambient");
+    SoundEvent BLOCK_FLOWERING_AZALEA_HIT = BuiltinSoundEvent.get("block.flowering_azalea.hit");
 
-    SoundEvent ENTITY_FOX_BITE = BuiltinSoundEvent.get("minecraft:entity.fox.bite");
+    SoundEvent BLOCK_FLOWERING_AZALEA_PLACE = BuiltinSoundEvent.get("block.flowering_azalea.place");
 
-    SoundEvent ENTITY_FOX_DEATH = BuiltinSoundEvent.get("minecraft:entity.fox.death");
+    SoundEvent BLOCK_FLOWERING_AZALEA_STEP = BuiltinSoundEvent.get("block.flowering_azalea.step");
 
-    SoundEvent ENTITY_FOX_EAT = BuiltinSoundEvent.get("minecraft:entity.fox.eat");
+    SoundEvent ENTITY_FOX_AGGRO = BuiltinSoundEvent.get("entity.fox.aggro");
 
-    SoundEvent ENTITY_FOX_HURT = BuiltinSoundEvent.get("minecraft:entity.fox.hurt");
+    SoundEvent ENTITY_FOX_AMBIENT = BuiltinSoundEvent.get("entity.fox.ambient");
 
-    SoundEvent ENTITY_FOX_SCREECH = BuiltinSoundEvent.get("minecraft:entity.fox.screech");
+    SoundEvent ENTITY_FOX_BITE = BuiltinSoundEvent.get("entity.fox.bite");
 
-    SoundEvent ENTITY_FOX_SLEEP = BuiltinSoundEvent.get("minecraft:entity.fox.sleep");
+    SoundEvent ENTITY_FOX_DEATH = BuiltinSoundEvent.get("entity.fox.death");
 
-    SoundEvent ENTITY_FOX_SNIFF = BuiltinSoundEvent.get("minecraft:entity.fox.sniff");
+    SoundEvent ENTITY_FOX_EAT = BuiltinSoundEvent.get("entity.fox.eat");
 
-    SoundEvent ENTITY_FOX_SPIT = BuiltinSoundEvent.get("minecraft:entity.fox.spit");
+    SoundEvent ENTITY_FOX_HURT = BuiltinSoundEvent.get("entity.fox.hurt");
 
-    SoundEvent ENTITY_FOX_TELEPORT = BuiltinSoundEvent.get("minecraft:entity.fox.teleport");
+    SoundEvent ENTITY_FOX_SCREECH = BuiltinSoundEvent.get("entity.fox.screech");
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_BREAK = BuiltinSoundEvent.get("minecraft:block.suspicious_sand.break");
+    SoundEvent ENTITY_FOX_SLEEP = BuiltinSoundEvent.get("entity.fox.sleep");
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_STEP = BuiltinSoundEvent.get("minecraft:block.suspicious_sand.step");
+    SoundEvent ENTITY_FOX_SNIFF = BuiltinSoundEvent.get("entity.fox.sniff");
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_PLACE = BuiltinSoundEvent.get("minecraft:block.suspicious_sand.place");
+    SoundEvent ENTITY_FOX_SPIT = BuiltinSoundEvent.get("entity.fox.spit");
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_HIT = BuiltinSoundEvent.get("minecraft:block.suspicious_sand.hit");
+    SoundEvent ENTITY_FOX_TELEPORT = BuiltinSoundEvent.get("entity.fox.teleport");
 
-    SoundEvent BLOCK_SUSPICIOUS_SAND_FALL = BuiltinSoundEvent.get("minecraft:block.suspicious_sand.fall");
+    SoundEvent BLOCK_SUSPICIOUS_SAND_BREAK = BuiltinSoundEvent.get("block.suspicious_sand.break");
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_BREAK = BuiltinSoundEvent.get("minecraft:block.suspicious_gravel.break");
+    SoundEvent BLOCK_SUSPICIOUS_SAND_STEP = BuiltinSoundEvent.get("block.suspicious_sand.step");
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_STEP = BuiltinSoundEvent.get("minecraft:block.suspicious_gravel.step");
+    SoundEvent BLOCK_SUSPICIOUS_SAND_PLACE = BuiltinSoundEvent.get("block.suspicious_sand.place");
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_PLACE = BuiltinSoundEvent.get("minecraft:block.suspicious_gravel.place");
+    SoundEvent BLOCK_SUSPICIOUS_SAND_HIT = BuiltinSoundEvent.get("block.suspicious_sand.hit");
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_HIT = BuiltinSoundEvent.get("minecraft:block.suspicious_gravel.hit");
+    SoundEvent BLOCK_SUSPICIOUS_SAND_FALL = BuiltinSoundEvent.get("block.suspicious_sand.fall");
 
-    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_FALL = BuiltinSoundEvent.get("minecraft:block.suspicious_gravel.fall");
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_BREAK = BuiltinSoundEvent.get("block.suspicious_gravel.break");
 
-    SoundEvent BLOCK_FROGLIGHT_BREAK = BuiltinSoundEvent.get("minecraft:block.froglight.break");
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_STEP = BuiltinSoundEvent.get("block.suspicious_gravel.step");
 
-    SoundEvent BLOCK_FROGLIGHT_FALL = BuiltinSoundEvent.get("minecraft:block.froglight.fall");
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_PLACE = BuiltinSoundEvent.get("block.suspicious_gravel.place");
 
-    SoundEvent BLOCK_FROGLIGHT_HIT = BuiltinSoundEvent.get("minecraft:block.froglight.hit");
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_HIT = BuiltinSoundEvent.get("block.suspicious_gravel.hit");
 
-    SoundEvent BLOCK_FROGLIGHT_PLACE = BuiltinSoundEvent.get("minecraft:block.froglight.place");
+    SoundEvent BLOCK_SUSPICIOUS_GRAVEL_FALL = BuiltinSoundEvent.get("block.suspicious_gravel.fall");
 
-    SoundEvent BLOCK_FROGLIGHT_STEP = BuiltinSoundEvent.get("minecraft:block.froglight.step");
+    SoundEvent BLOCK_FROGLIGHT_BREAK = BuiltinSoundEvent.get("block.froglight.break");
 
-    SoundEvent BLOCK_FROGSPAWN_STEP = BuiltinSoundEvent.get("minecraft:block.frogspawn.step");
+    SoundEvent BLOCK_FROGLIGHT_FALL = BuiltinSoundEvent.get("block.froglight.fall");
 
-    SoundEvent BLOCK_FROGSPAWN_BREAK = BuiltinSoundEvent.get("minecraft:block.frogspawn.break");
+    SoundEvent BLOCK_FROGLIGHT_HIT = BuiltinSoundEvent.get("block.froglight.hit");
 
-    SoundEvent BLOCK_FROGSPAWN_FALL = BuiltinSoundEvent.get("minecraft:block.frogspawn.fall");
+    SoundEvent BLOCK_FROGLIGHT_PLACE = BuiltinSoundEvent.get("block.froglight.place");
 
-    SoundEvent BLOCK_FROGSPAWN_HATCH = BuiltinSoundEvent.get("minecraft:block.frogspawn.hatch");
+    SoundEvent BLOCK_FROGLIGHT_STEP = BuiltinSoundEvent.get("block.froglight.step");
 
-    SoundEvent BLOCK_FROGSPAWN_HIT = BuiltinSoundEvent.get("minecraft:block.frogspawn.hit");
+    SoundEvent BLOCK_FROGSPAWN_STEP = BuiltinSoundEvent.get("block.frogspawn.step");
 
-    SoundEvent BLOCK_FROGSPAWN_PLACE = BuiltinSoundEvent.get("minecraft:block.frogspawn.place");
+    SoundEvent BLOCK_FROGSPAWN_BREAK = BuiltinSoundEvent.get("block.frogspawn.break");
 
-    SoundEvent ENTITY_FROG_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.frog.ambient");
+    SoundEvent BLOCK_FROGSPAWN_FALL = BuiltinSoundEvent.get("block.frogspawn.fall");
 
-    SoundEvent ENTITY_FROG_DEATH = BuiltinSoundEvent.get("minecraft:entity.frog.death");
+    SoundEvent BLOCK_FROGSPAWN_HATCH = BuiltinSoundEvent.get("block.frogspawn.hatch");
 
-    SoundEvent ENTITY_FROG_EAT = BuiltinSoundEvent.get("minecraft:entity.frog.eat");
+    SoundEvent BLOCK_FROGSPAWN_HIT = BuiltinSoundEvent.get("block.frogspawn.hit");
 
-    SoundEvent ENTITY_FROG_HURT = BuiltinSoundEvent.get("minecraft:entity.frog.hurt");
+    SoundEvent BLOCK_FROGSPAWN_PLACE = BuiltinSoundEvent.get("block.frogspawn.place");
 
-    SoundEvent ENTITY_FROG_LAY_SPAWN = BuiltinSoundEvent.get("minecraft:entity.frog.lay_spawn");
+    SoundEvent ENTITY_FROG_AMBIENT = BuiltinSoundEvent.get("entity.frog.ambient");
 
-    SoundEvent ENTITY_FROG_LONG_JUMP = BuiltinSoundEvent.get("minecraft:entity.frog.long_jump");
+    SoundEvent ENTITY_FROG_DEATH = BuiltinSoundEvent.get("entity.frog.death");
 
-    SoundEvent ENTITY_FROG_STEP = BuiltinSoundEvent.get("minecraft:entity.frog.step");
+    SoundEvent ENTITY_FROG_EAT = BuiltinSoundEvent.get("entity.frog.eat");
 
-    SoundEvent ENTITY_FROG_TONGUE = BuiltinSoundEvent.get("minecraft:entity.frog.tongue");
+    SoundEvent ENTITY_FROG_HURT = BuiltinSoundEvent.get("entity.frog.hurt");
 
-    SoundEvent BLOCK_ROOTS_BREAK = BuiltinSoundEvent.get("minecraft:block.roots.break");
+    SoundEvent ENTITY_FROG_LAY_SPAWN = BuiltinSoundEvent.get("entity.frog.lay_spawn");
 
-    SoundEvent BLOCK_ROOTS_STEP = BuiltinSoundEvent.get("minecraft:block.roots.step");
+    SoundEvent ENTITY_FROG_LONG_JUMP = BuiltinSoundEvent.get("entity.frog.long_jump");
 
-    SoundEvent BLOCK_ROOTS_PLACE = BuiltinSoundEvent.get("minecraft:block.roots.place");
+    SoundEvent ENTITY_FROG_STEP = BuiltinSoundEvent.get("entity.frog.step");
 
-    SoundEvent BLOCK_ROOTS_HIT = BuiltinSoundEvent.get("minecraft:block.roots.hit");
+    SoundEvent ENTITY_FROG_TONGUE = BuiltinSoundEvent.get("entity.frog.tongue");
 
-    SoundEvent BLOCK_ROOTS_FALL = BuiltinSoundEvent.get("minecraft:block.roots.fall");
+    SoundEvent BLOCK_ROOTS_BREAK = BuiltinSoundEvent.get("block.roots.break");
 
-    SoundEvent BLOCK_FURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get("minecraft:block.furnace.fire_crackle");
+    SoundEvent BLOCK_ROOTS_STEP = BuiltinSoundEvent.get("block.roots.step");
 
-    SoundEvent ENTITY_GENERIC_BIG_FALL = BuiltinSoundEvent.get("minecraft:entity.generic.big_fall");
+    SoundEvent BLOCK_ROOTS_PLACE = BuiltinSoundEvent.get("block.roots.place");
 
-    SoundEvent ENTITY_GENERIC_BURN = BuiltinSoundEvent.get("minecraft:entity.generic.burn");
+    SoundEvent BLOCK_ROOTS_HIT = BuiltinSoundEvent.get("block.roots.hit");
 
-    SoundEvent ENTITY_GENERIC_DEATH = BuiltinSoundEvent.get("minecraft:entity.generic.death");
+    SoundEvent BLOCK_ROOTS_FALL = BuiltinSoundEvent.get("block.roots.fall");
 
-    SoundEvent ENTITY_GENERIC_DRINK = BuiltinSoundEvent.get("minecraft:entity.generic.drink");
+    SoundEvent BLOCK_FURNACE_FIRE_CRACKLE = BuiltinSoundEvent.get("block.furnace.fire_crackle");
 
-    SoundEvent ENTITY_GENERIC_EAT = BuiltinSoundEvent.get("minecraft:entity.generic.eat");
+    SoundEvent ENTITY_GENERIC_BIG_FALL = BuiltinSoundEvent.get("entity.generic.big_fall");
 
-    SoundEvent ENTITY_GENERIC_EXPLODE = BuiltinSoundEvent.get("minecraft:entity.generic.explode");
+    SoundEvent ENTITY_GENERIC_BURN = BuiltinSoundEvent.get("entity.generic.burn");
 
-    SoundEvent ENTITY_GENERIC_EXTINGUISH_FIRE = BuiltinSoundEvent.get("minecraft:entity.generic.extinguish_fire");
+    SoundEvent ENTITY_GENERIC_DEATH = BuiltinSoundEvent.get("entity.generic.death");
 
-    SoundEvent ENTITY_GENERIC_HURT = BuiltinSoundEvent.get("minecraft:entity.generic.hurt");
+    SoundEvent ENTITY_GENERIC_DRINK = BuiltinSoundEvent.get("entity.generic.drink");
 
-    SoundEvent ENTITY_GENERIC_SMALL_FALL = BuiltinSoundEvent.get("minecraft:entity.generic.small_fall");
+    SoundEvent ENTITY_GENERIC_EAT = BuiltinSoundEvent.get("entity.generic.eat");
 
-    SoundEvent ENTITY_GENERIC_SPLASH = BuiltinSoundEvent.get("minecraft:entity.generic.splash");
+    SoundEvent ENTITY_GENERIC_EXPLODE = BuiltinSoundEvent.get("entity.generic.explode");
 
-    SoundEvent ENTITY_GENERIC_SWIM = BuiltinSoundEvent.get("minecraft:entity.generic.swim");
+    SoundEvent ENTITY_GENERIC_EXTINGUISH_FIRE = BuiltinSoundEvent.get("entity.generic.extinguish_fire");
 
-    SoundEvent ENTITY_GHAST_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.ghast.ambient");
+    SoundEvent ENTITY_GENERIC_HURT = BuiltinSoundEvent.get("entity.generic.hurt");
 
-    SoundEvent ENTITY_GHAST_DEATH = BuiltinSoundEvent.get("minecraft:entity.ghast.death");
+    SoundEvent ENTITY_GENERIC_SMALL_FALL = BuiltinSoundEvent.get("entity.generic.small_fall");
 
-    SoundEvent ENTITY_GHAST_HURT = BuiltinSoundEvent.get("minecraft:entity.ghast.hurt");
+    SoundEvent ENTITY_GENERIC_SPLASH = BuiltinSoundEvent.get("entity.generic.splash");
 
-    SoundEvent ENTITY_GHAST_SCREAM = BuiltinSoundEvent.get("minecraft:entity.ghast.scream");
+    SoundEvent ENTITY_GENERIC_SWIM = BuiltinSoundEvent.get("entity.generic.swim");
 
-    SoundEvent ENTITY_GHAST_SHOOT = BuiltinSoundEvent.get("minecraft:entity.ghast.shoot");
+    SoundEvent ENTITY_GHAST_AMBIENT = BuiltinSoundEvent.get("entity.ghast.ambient");
 
-    SoundEvent ENTITY_GHAST_WARN = BuiltinSoundEvent.get("minecraft:entity.ghast.warn");
+    SoundEvent ENTITY_GHAST_DEATH = BuiltinSoundEvent.get("entity.ghast.death");
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_BREAK = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.break");
+    SoundEvent ENTITY_GHAST_HURT = BuiltinSoundEvent.get("entity.ghast.hurt");
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_FALL = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.fall");
+    SoundEvent ENTITY_GHAST_SCREAM = BuiltinSoundEvent.get("entity.ghast.scream");
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_HIT = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.hit");
+    SoundEvent ENTITY_GHAST_SHOOT = BuiltinSoundEvent.get("entity.ghast.shoot");
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_PLACE = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.place");
+    SoundEvent ENTITY_GHAST_WARN = BuiltinSoundEvent.get("entity.ghast.warn");
 
-    SoundEvent BLOCK_GILDED_BLACKSTONE_STEP = BuiltinSoundEvent.get("minecraft:block.gilded_blackstone.step");
+    SoundEvent BLOCK_GILDED_BLACKSTONE_BREAK = BuiltinSoundEvent.get("block.gilded_blackstone.break");
 
-    SoundEvent BLOCK_GLASS_BREAK = BuiltinSoundEvent.get("minecraft:block.glass.break");
+    SoundEvent BLOCK_GILDED_BLACKSTONE_FALL = BuiltinSoundEvent.get("block.gilded_blackstone.fall");
 
-    SoundEvent BLOCK_GLASS_FALL = BuiltinSoundEvent.get("minecraft:block.glass.fall");
+    SoundEvent BLOCK_GILDED_BLACKSTONE_HIT = BuiltinSoundEvent.get("block.gilded_blackstone.hit");
 
-    SoundEvent BLOCK_GLASS_HIT = BuiltinSoundEvent.get("minecraft:block.glass.hit");
+    SoundEvent BLOCK_GILDED_BLACKSTONE_PLACE = BuiltinSoundEvent.get("block.gilded_blackstone.place");
 
-    SoundEvent BLOCK_GLASS_PLACE = BuiltinSoundEvent.get("minecraft:block.glass.place");
+    SoundEvent BLOCK_GILDED_BLACKSTONE_STEP = BuiltinSoundEvent.get("block.gilded_blackstone.step");
 
-    SoundEvent BLOCK_GLASS_STEP = BuiltinSoundEvent.get("minecraft:block.glass.step");
+    SoundEvent BLOCK_GLASS_BREAK = BuiltinSoundEvent.get("block.glass.break");
 
-    SoundEvent ITEM_GLOW_INK_SAC_USE = BuiltinSoundEvent.get("minecraft:item.glow_ink_sac.use");
+    SoundEvent BLOCK_GLASS_FALL = BuiltinSoundEvent.get("block.glass.fall");
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get("minecraft:entity.glow_item_frame.add_item");
+    SoundEvent BLOCK_GLASS_HIT = BuiltinSoundEvent.get("block.glass.hit");
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_BREAK = BuiltinSoundEvent.get("minecraft:entity.glow_item_frame.break");
+    SoundEvent BLOCK_GLASS_PLACE = BuiltinSoundEvent.get("block.glass.place");
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_PLACE = BuiltinSoundEvent.get("minecraft:entity.glow_item_frame.place");
+    SoundEvent BLOCK_GLASS_STEP = BuiltinSoundEvent.get("block.glass.step");
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get("minecraft:entity.glow_item_frame.remove_item");
+    SoundEvent ITEM_GLOW_INK_SAC_USE = BuiltinSoundEvent.get("item.glow_ink_sac.use");
 
-    SoundEvent ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get("minecraft:entity.glow_item_frame.rotate_item");
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get("entity.glow_item_frame.add_item");
 
-    SoundEvent ENTITY_GLOW_SQUID_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.glow_squid.ambient");
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_BREAK = BuiltinSoundEvent.get("entity.glow_item_frame.break");
 
-    SoundEvent ENTITY_GLOW_SQUID_DEATH = BuiltinSoundEvent.get("minecraft:entity.glow_squid.death");
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_PLACE = BuiltinSoundEvent.get("entity.glow_item_frame.place");
 
-    SoundEvent ENTITY_GLOW_SQUID_HURT = BuiltinSoundEvent.get("minecraft:entity.glow_squid.hurt");
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get("entity.glow_item_frame.remove_item");
 
-    SoundEvent ENTITY_GLOW_SQUID_SQUIRT = BuiltinSoundEvent.get("minecraft:entity.glow_squid.squirt");
+    SoundEvent ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get("entity.glow_item_frame.rotate_item");
 
-    SoundEvent ENTITY_GOAT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.goat.ambient");
+    SoundEvent ENTITY_GLOW_SQUID_AMBIENT = BuiltinSoundEvent.get("entity.glow_squid.ambient");
 
-    SoundEvent ENTITY_GOAT_DEATH = BuiltinSoundEvent.get("minecraft:entity.goat.death");
+    SoundEvent ENTITY_GLOW_SQUID_DEATH = BuiltinSoundEvent.get("entity.glow_squid.death");
 
-    SoundEvent ENTITY_GOAT_EAT = BuiltinSoundEvent.get("minecraft:entity.goat.eat");
+    SoundEvent ENTITY_GLOW_SQUID_HURT = BuiltinSoundEvent.get("entity.glow_squid.hurt");
 
-    SoundEvent ENTITY_GOAT_HURT = BuiltinSoundEvent.get("minecraft:entity.goat.hurt");
+    SoundEvent ENTITY_GLOW_SQUID_SQUIRT = BuiltinSoundEvent.get("entity.glow_squid.squirt");
 
-    SoundEvent ENTITY_GOAT_LONG_JUMP = BuiltinSoundEvent.get("minecraft:entity.goat.long_jump");
+    SoundEvent ENTITY_GOAT_AMBIENT = BuiltinSoundEvent.get("entity.goat.ambient");
 
-    SoundEvent ENTITY_GOAT_MILK = BuiltinSoundEvent.get("minecraft:entity.goat.milk");
+    SoundEvent ENTITY_GOAT_DEATH = BuiltinSoundEvent.get("entity.goat.death");
 
-    SoundEvent ENTITY_GOAT_PREPARE_RAM = BuiltinSoundEvent.get("minecraft:entity.goat.prepare_ram");
+    SoundEvent ENTITY_GOAT_EAT = BuiltinSoundEvent.get("entity.goat.eat");
 
-    SoundEvent ENTITY_GOAT_RAM_IMPACT = BuiltinSoundEvent.get("minecraft:entity.goat.ram_impact");
+    SoundEvent ENTITY_GOAT_HURT = BuiltinSoundEvent.get("entity.goat.hurt");
 
-    SoundEvent ENTITY_GOAT_HORN_BREAK = BuiltinSoundEvent.get("minecraft:entity.goat.horn_break");
+    SoundEvent ENTITY_GOAT_LONG_JUMP = BuiltinSoundEvent.get("entity.goat.long_jump");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.ambient");
+    SoundEvent ENTITY_GOAT_MILK = BuiltinSoundEvent.get("entity.goat.milk");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_DEATH = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.death");
+    SoundEvent ENTITY_GOAT_PREPARE_RAM = BuiltinSoundEvent.get("entity.goat.prepare_ram");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_EAT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.eat");
+    SoundEvent ENTITY_GOAT_RAM_IMPACT = BuiltinSoundEvent.get("entity.goat.ram_impact");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_HURT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.hurt");
+    SoundEvent ENTITY_GOAT_HORN_BREAK = BuiltinSoundEvent.get("entity.goat.horn_break");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_LONG_JUMP = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.long_jump");
+    SoundEvent ENTITY_GOAT_SCREAMING_AMBIENT = BuiltinSoundEvent.get("entity.goat.screaming.ambient");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_MILK = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.milk");
+    SoundEvent ENTITY_GOAT_SCREAMING_DEATH = BuiltinSoundEvent.get("entity.goat.screaming.death");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_PREPARE_RAM = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.prepare_ram");
+    SoundEvent ENTITY_GOAT_SCREAMING_EAT = BuiltinSoundEvent.get("entity.goat.screaming.eat");
 
-    SoundEvent ENTITY_GOAT_SCREAMING_RAM_IMPACT = BuiltinSoundEvent.get("minecraft:entity.goat.screaming.ram_impact");
+    SoundEvent ENTITY_GOAT_SCREAMING_HURT = BuiltinSoundEvent.get("entity.goat.screaming.hurt");
 
-    SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get("minecraft:entity.goat.step");
+    SoundEvent ENTITY_GOAT_SCREAMING_LONG_JUMP = BuiltinSoundEvent.get("entity.goat.screaming.long_jump");
 
-    SoundEvent BLOCK_GRASS_BREAK = BuiltinSoundEvent.get("minecraft:block.grass.break");
+    SoundEvent ENTITY_GOAT_SCREAMING_MILK = BuiltinSoundEvent.get("entity.goat.screaming.milk");
 
-    SoundEvent BLOCK_GRASS_FALL = BuiltinSoundEvent.get("minecraft:block.grass.fall");
+    SoundEvent ENTITY_GOAT_SCREAMING_PREPARE_RAM = BuiltinSoundEvent.get("entity.goat.screaming.prepare_ram");
 
-    SoundEvent BLOCK_GRASS_HIT = BuiltinSoundEvent.get("minecraft:block.grass.hit");
+    SoundEvent ENTITY_GOAT_SCREAMING_RAM_IMPACT = BuiltinSoundEvent.get("entity.goat.screaming.ram_impact");
 
-    SoundEvent BLOCK_GRASS_PLACE = BuiltinSoundEvent.get("minecraft:block.grass.place");
+    SoundEvent ENTITY_GOAT_STEP = BuiltinSoundEvent.get("entity.goat.step");
 
-    SoundEvent BLOCK_GRASS_STEP = BuiltinSoundEvent.get("minecraft:block.grass.step");
+    SoundEvent BLOCK_GRASS_BREAK = BuiltinSoundEvent.get("block.grass.break");
 
-    SoundEvent BLOCK_GRAVEL_BREAK = BuiltinSoundEvent.get("minecraft:block.gravel.break");
+    SoundEvent BLOCK_GRASS_FALL = BuiltinSoundEvent.get("block.grass.fall");
 
-    SoundEvent BLOCK_GRAVEL_FALL = BuiltinSoundEvent.get("minecraft:block.gravel.fall");
+    SoundEvent BLOCK_GRASS_HIT = BuiltinSoundEvent.get("block.grass.hit");
 
-    SoundEvent BLOCK_GRAVEL_HIT = BuiltinSoundEvent.get("minecraft:block.gravel.hit");
+    SoundEvent BLOCK_GRASS_PLACE = BuiltinSoundEvent.get("block.grass.place");
 
-    SoundEvent BLOCK_GRAVEL_PLACE = BuiltinSoundEvent.get("minecraft:block.gravel.place");
+    SoundEvent BLOCK_GRASS_STEP = BuiltinSoundEvent.get("block.grass.step");
 
-    SoundEvent BLOCK_GRAVEL_STEP = BuiltinSoundEvent.get("minecraft:block.gravel.step");
+    SoundEvent BLOCK_GRAVEL_BREAK = BuiltinSoundEvent.get("block.gravel.break");
 
-    SoundEvent BLOCK_GRINDSTONE_USE = BuiltinSoundEvent.get("minecraft:block.grindstone.use");
+    SoundEvent BLOCK_GRAVEL_FALL = BuiltinSoundEvent.get("block.gravel.fall");
 
-    SoundEvent BLOCK_GROWING_PLANT_CROP = BuiltinSoundEvent.get("minecraft:block.growing_plant.crop");
+    SoundEvent BLOCK_GRAVEL_HIT = BuiltinSoundEvent.get("block.gravel.hit");
 
-    SoundEvent ENTITY_GUARDIAN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.guardian.ambient");
+    SoundEvent BLOCK_GRAVEL_PLACE = BuiltinSoundEvent.get("block.gravel.place");
 
-    SoundEvent ENTITY_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get("minecraft:entity.guardian.ambient_land");
+    SoundEvent BLOCK_GRAVEL_STEP = BuiltinSoundEvent.get("block.gravel.step");
 
-    SoundEvent ENTITY_GUARDIAN_ATTACK = BuiltinSoundEvent.get("minecraft:entity.guardian.attack");
+    SoundEvent BLOCK_GRINDSTONE_USE = BuiltinSoundEvent.get("block.grindstone.use");
 
-    SoundEvent ENTITY_GUARDIAN_DEATH = BuiltinSoundEvent.get("minecraft:entity.guardian.death");
+    SoundEvent BLOCK_GROWING_PLANT_CROP = BuiltinSoundEvent.get("block.growing_plant.crop");
 
-    SoundEvent ENTITY_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get("minecraft:entity.guardian.death_land");
+    SoundEvent ENTITY_GUARDIAN_AMBIENT = BuiltinSoundEvent.get("entity.guardian.ambient");
 
-    SoundEvent ENTITY_GUARDIAN_FLOP = BuiltinSoundEvent.get("minecraft:entity.guardian.flop");
+    SoundEvent ENTITY_GUARDIAN_AMBIENT_LAND = BuiltinSoundEvent.get("entity.guardian.ambient_land");
 
-    SoundEvent ENTITY_GUARDIAN_HURT = BuiltinSoundEvent.get("minecraft:entity.guardian.hurt");
+    SoundEvent ENTITY_GUARDIAN_ATTACK = BuiltinSoundEvent.get("entity.guardian.attack");
 
-    SoundEvent ENTITY_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get("minecraft:entity.guardian.hurt_land");
+    SoundEvent ENTITY_GUARDIAN_DEATH = BuiltinSoundEvent.get("entity.guardian.death");
 
-    SoundEvent BLOCK_HANGING_ROOTS_BREAK = BuiltinSoundEvent.get("minecraft:block.hanging_roots.break");
+    SoundEvent ENTITY_GUARDIAN_DEATH_LAND = BuiltinSoundEvent.get("entity.guardian.death_land");
 
-    SoundEvent BLOCK_HANGING_ROOTS_FALL = BuiltinSoundEvent.get("minecraft:block.hanging_roots.fall");
+    SoundEvent ENTITY_GUARDIAN_FLOP = BuiltinSoundEvent.get("entity.guardian.flop");
 
-    SoundEvent BLOCK_HANGING_ROOTS_HIT = BuiltinSoundEvent.get("minecraft:block.hanging_roots.hit");
+    SoundEvent ENTITY_GUARDIAN_HURT = BuiltinSoundEvent.get("entity.guardian.hurt");
 
-    SoundEvent BLOCK_HANGING_ROOTS_PLACE = BuiltinSoundEvent.get("minecraft:block.hanging_roots.place");
+    SoundEvent ENTITY_GUARDIAN_HURT_LAND = BuiltinSoundEvent.get("entity.guardian.hurt_land");
 
-    SoundEvent BLOCK_HANGING_ROOTS_STEP = BuiltinSoundEvent.get("minecraft:block.hanging_roots.step");
+    SoundEvent BLOCK_HANGING_ROOTS_BREAK = BuiltinSoundEvent.get("block.hanging_roots.break");
 
-    SoundEvent BLOCK_HANGING_SIGN_STEP = BuiltinSoundEvent.get("minecraft:block.hanging_sign.step");
+    SoundEvent BLOCK_HANGING_ROOTS_FALL = BuiltinSoundEvent.get("block.hanging_roots.fall");
 
-    SoundEvent BLOCK_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("minecraft:block.hanging_sign.break");
+    SoundEvent BLOCK_HANGING_ROOTS_HIT = BuiltinSoundEvent.get("block.hanging_roots.hit");
 
-    SoundEvent BLOCK_HANGING_SIGN_FALL = BuiltinSoundEvent.get("minecraft:block.hanging_sign.fall");
+    SoundEvent BLOCK_HANGING_ROOTS_PLACE = BuiltinSoundEvent.get("block.hanging_roots.place");
 
-    SoundEvent BLOCK_HANGING_SIGN_HIT = BuiltinSoundEvent.get("minecraft:block.hanging_sign.hit");
+    SoundEvent BLOCK_HANGING_ROOTS_STEP = BuiltinSoundEvent.get("block.hanging_roots.step");
 
-    SoundEvent BLOCK_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("minecraft:block.hanging_sign.place");
+    SoundEvent BLOCK_HANGING_SIGN_STEP = BuiltinSoundEvent.get("block.hanging_sign.step");
 
-    SoundEvent BLOCK_HEAVY_CORE_BREAK = BuiltinSoundEvent.get("minecraft:block.heavy_core.break");
+    SoundEvent BLOCK_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("block.hanging_sign.break");
 
-    SoundEvent BLOCK_HEAVY_CORE_FALL = BuiltinSoundEvent.get("minecraft:block.heavy_core.fall");
+    SoundEvent BLOCK_HANGING_SIGN_FALL = BuiltinSoundEvent.get("block.hanging_sign.fall");
 
-    SoundEvent BLOCK_HEAVY_CORE_HIT = BuiltinSoundEvent.get("minecraft:block.heavy_core.hit");
+    SoundEvent BLOCK_HANGING_SIGN_HIT = BuiltinSoundEvent.get("block.hanging_sign.hit");
 
-    SoundEvent BLOCK_HEAVY_CORE_PLACE = BuiltinSoundEvent.get("minecraft:block.heavy_core.place");
+    SoundEvent BLOCK_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("block.hanging_sign.place");
 
-    SoundEvent BLOCK_HEAVY_CORE_STEP = BuiltinSoundEvent.get("minecraft:block.heavy_core.step");
+    SoundEvent BLOCK_HEAVY_CORE_BREAK = BuiltinSoundEvent.get("block.heavy_core.break");
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("minecraft:block.nether_wood_hanging_sign.step");
+    SoundEvent BLOCK_HEAVY_CORE_FALL = BuiltinSoundEvent.get("block.heavy_core.fall");
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_wood_hanging_sign.break");
+    SoundEvent BLOCK_HEAVY_CORE_HIT = BuiltinSoundEvent.get("block.heavy_core.hit");
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("minecraft:block.nether_wood_hanging_sign.fall");
+    SoundEvent BLOCK_HEAVY_CORE_PLACE = BuiltinSoundEvent.get("block.heavy_core.place");
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("minecraft:block.nether_wood_hanging_sign.hit");
+    SoundEvent BLOCK_HEAVY_CORE_STEP = BuiltinSoundEvent.get("block.heavy_core.step");
 
-    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_wood_hanging_sign.place");
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("block.nether_wood_hanging_sign.step");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_hanging_sign.step");
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("block.nether_wood_hanging_sign.break");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_hanging_sign.break");
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("block.nether_wood_hanging_sign.fall");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_hanging_sign.fall");
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("block.nether_wood_hanging_sign.hit");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_hanging_sign.hit");
+    SoundEvent BLOCK_NETHER_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("block.nether_wood_hanging_sign.place");
 
-    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("minecraft:block.bamboo_wood_hanging_sign.place");
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_STEP = BuiltinSoundEvent.get("block.bamboo_wood_hanging_sign.step");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_BREAK = BuiltinSoundEvent.get("minecraft:block.trial_spawner.break");
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_BREAK = BuiltinSoundEvent.get("block.bamboo_wood_hanging_sign.break");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_STEP = BuiltinSoundEvent.get("minecraft:block.trial_spawner.step");
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_FALL = BuiltinSoundEvent.get("block.bamboo_wood_hanging_sign.fall");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_PLACE = BuiltinSoundEvent.get("minecraft:block.trial_spawner.place");
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_HIT = BuiltinSoundEvent.get("block.bamboo_wood_hanging_sign.hit");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_HIT = BuiltinSoundEvent.get("minecraft:block.trial_spawner.hit");
+    SoundEvent BLOCK_BAMBOO_WOOD_HANGING_SIGN_PLACE = BuiltinSoundEvent.get("block.bamboo_wood_hanging_sign.place");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_FALL = BuiltinSoundEvent.get("minecraft:block.trial_spawner.fall");
+    SoundEvent BLOCK_TRIAL_SPAWNER_BREAK = BuiltinSoundEvent.get("block.trial_spawner.break");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_MOB = BuiltinSoundEvent.get("minecraft:block.trial_spawner.spawn_mob");
+    SoundEvent BLOCK_TRIAL_SPAWNER_STEP = BuiltinSoundEvent.get("block.trial_spawner.step");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM = BuiltinSoundEvent.get("minecraft:block.trial_spawner.about_to_spawn_item");
+    SoundEvent BLOCK_TRIAL_SPAWNER_PLACE = BuiltinSoundEvent.get("block.trial_spawner.place");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM = BuiltinSoundEvent.get("minecraft:block.trial_spawner.spawn_item");
+    SoundEvent BLOCK_TRIAL_SPAWNER_HIT = BuiltinSoundEvent.get("block.trial_spawner.hit");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN = BuiltinSoundEvent.get("minecraft:block.trial_spawner.spawn_item_begin");
+    SoundEvent BLOCK_TRIAL_SPAWNER_FALL = BuiltinSoundEvent.get("block.trial_spawner.fall");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.detect_player");
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_MOB = BuiltinSoundEvent.get("block.trial_spawner.spawn_mob");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ominous_activate");
+    SoundEvent BLOCK_TRIAL_SPAWNER_ABOUT_TO_SPAWN_ITEM = BuiltinSoundEvent.get("block.trial_spawner.about_to_spawn_item");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ambient");
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM = BuiltinSoundEvent.get("block.trial_spawner.spawn_item");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = BuiltinSoundEvent.get("minecraft:block.trial_spawner.ambient_ominous");
+    SoundEvent BLOCK_TRIAL_SPAWNER_SPAWN_ITEM_BEGIN = BuiltinSoundEvent.get("block.trial_spawner.spawn_item_begin");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.open_shutter");
+    SoundEvent BLOCK_TRIAL_SPAWNER_DETECT_PLAYER = BuiltinSoundEvent.get("block.trial_spawner.detect_player");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = BuiltinSoundEvent.get("minecraft:block.trial_spawner.close_shutter");
+    SoundEvent BLOCK_TRIAL_SPAWNER_OMINOUS_ACTIVATE = BuiltinSoundEvent.get("block.trial_spawner.ominous_activate");
 
-    SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = BuiltinSoundEvent.get("minecraft:block.trial_spawner.eject_item");
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT = BuiltinSoundEvent.get("block.trial_spawner.ambient");
 
-    SoundEvent ITEM_HOE_TILL = BuiltinSoundEvent.get("minecraft:item.hoe.till");
+    SoundEvent BLOCK_TRIAL_SPAWNER_AMBIENT_OMINOUS = BuiltinSoundEvent.get("block.trial_spawner.ambient_ominous");
 
-    SoundEvent ENTITY_HOGLIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.hoglin.ambient");
+    SoundEvent BLOCK_TRIAL_SPAWNER_OPEN_SHUTTER = BuiltinSoundEvent.get("block.trial_spawner.open_shutter");
 
-    SoundEvent ENTITY_HOGLIN_ANGRY = BuiltinSoundEvent.get("minecraft:entity.hoglin.angry");
+    SoundEvent BLOCK_TRIAL_SPAWNER_CLOSE_SHUTTER = BuiltinSoundEvent.get("block.trial_spawner.close_shutter");
 
-    SoundEvent ENTITY_HOGLIN_ATTACK = BuiltinSoundEvent.get("minecraft:entity.hoglin.attack");
+    SoundEvent BLOCK_TRIAL_SPAWNER_EJECT_ITEM = BuiltinSoundEvent.get("block.trial_spawner.eject_item");
 
-    SoundEvent ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("minecraft:entity.hoglin.converted_to_zombified");
+    SoundEvent ITEM_HOE_TILL = BuiltinSoundEvent.get("item.hoe.till");
 
-    SoundEvent ENTITY_HOGLIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.hoglin.death");
+    SoundEvent ENTITY_HOGLIN_AMBIENT = BuiltinSoundEvent.get("entity.hoglin.ambient");
 
-    SoundEvent ENTITY_HOGLIN_HURT = BuiltinSoundEvent.get("minecraft:entity.hoglin.hurt");
+    SoundEvent ENTITY_HOGLIN_ANGRY = BuiltinSoundEvent.get("entity.hoglin.angry");
 
-    SoundEvent ENTITY_HOGLIN_RETREAT = BuiltinSoundEvent.get("minecraft:entity.hoglin.retreat");
+    SoundEvent ENTITY_HOGLIN_ATTACK = BuiltinSoundEvent.get("entity.hoglin.attack");
 
-    SoundEvent ENTITY_HOGLIN_STEP = BuiltinSoundEvent.get("minecraft:entity.hoglin.step");
+    SoundEvent ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("entity.hoglin.converted_to_zombified");
 
-    SoundEvent BLOCK_HONEY_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.honey_block.break");
+    SoundEvent ENTITY_HOGLIN_DEATH = BuiltinSoundEvent.get("entity.hoglin.death");
 
-    SoundEvent BLOCK_HONEY_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.honey_block.fall");
+    SoundEvent ENTITY_HOGLIN_HURT = BuiltinSoundEvent.get("entity.hoglin.hurt");
 
-    SoundEvent BLOCK_HONEY_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.honey_block.hit");
+    SoundEvent ENTITY_HOGLIN_RETREAT = BuiltinSoundEvent.get("entity.hoglin.retreat");
 
-    SoundEvent BLOCK_HONEY_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.honey_block.place");
+    SoundEvent ENTITY_HOGLIN_STEP = BuiltinSoundEvent.get("entity.hoglin.step");
 
-    SoundEvent BLOCK_HONEY_BLOCK_SLIDE = BuiltinSoundEvent.get("minecraft:block.honey_block.slide");
+    SoundEvent BLOCK_HONEY_BLOCK_BREAK = BuiltinSoundEvent.get("block.honey_block.break");
 
-    SoundEvent BLOCK_HONEY_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.honey_block.step");
+    SoundEvent BLOCK_HONEY_BLOCK_FALL = BuiltinSoundEvent.get("block.honey_block.fall");
 
-    SoundEvent ITEM_HONEYCOMB_WAX_ON = BuiltinSoundEvent.get("minecraft:item.honeycomb.wax_on");
+    SoundEvent BLOCK_HONEY_BLOCK_HIT = BuiltinSoundEvent.get("block.honey_block.hit");
 
-    SoundEvent ITEM_HONEY_BOTTLE_DRINK = BuiltinSoundEvent.get("minecraft:item.honey_bottle.drink");
+    SoundEvent BLOCK_HONEY_BLOCK_PLACE = BuiltinSoundEvent.get("block.honey_block.place");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_0 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.0");
+    SoundEvent BLOCK_HONEY_BLOCK_SLIDE = BuiltinSoundEvent.get("block.honey_block.slide");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_1 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.1");
+    SoundEvent BLOCK_HONEY_BLOCK_STEP = BuiltinSoundEvent.get("block.honey_block.step");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_2 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.2");
+    SoundEvent ITEM_HONEYCOMB_WAX_ON = BuiltinSoundEvent.get("item.honeycomb.wax_on");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_3 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.3");
+    SoundEvent ITEM_HONEY_BOTTLE_DRINK = BuiltinSoundEvent.get("item.honey_bottle.drink");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_4 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.4");
+    SoundEvent ITEM_GOAT_HORN_SOUND_0 = BuiltinSoundEvent.get("item.goat_horn.sound.0");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_5 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.5");
+    SoundEvent ITEM_GOAT_HORN_SOUND_1 = BuiltinSoundEvent.get("item.goat_horn.sound.1");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_6 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.6");
+    SoundEvent ITEM_GOAT_HORN_SOUND_2 = BuiltinSoundEvent.get("item.goat_horn.sound.2");
 
-    SoundEvent ITEM_GOAT_HORN_SOUND_7 = BuiltinSoundEvent.get("minecraft:item.goat_horn.sound.7");
+    SoundEvent ITEM_GOAT_HORN_SOUND_3 = BuiltinSoundEvent.get("item.goat_horn.sound.3");
 
-    SoundEvent ENTITY_HORSE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.horse.ambient");
+    SoundEvent ITEM_GOAT_HORN_SOUND_4 = BuiltinSoundEvent.get("item.goat_horn.sound.4");
 
-    SoundEvent ENTITY_HORSE_ANGRY = BuiltinSoundEvent.get("minecraft:entity.horse.angry");
+    SoundEvent ITEM_GOAT_HORN_SOUND_5 = BuiltinSoundEvent.get("item.goat_horn.sound.5");
 
-    SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get("minecraft:entity.horse.armor");
+    SoundEvent ITEM_GOAT_HORN_SOUND_6 = BuiltinSoundEvent.get("item.goat_horn.sound.6");
 
-    SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get("minecraft:entity.horse.breathe");
+    SoundEvent ITEM_GOAT_HORN_SOUND_7 = BuiltinSoundEvent.get("item.goat_horn.sound.7");
 
-    SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get("minecraft:entity.horse.death");
+    SoundEvent ENTITY_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.horse.ambient");
 
-    SoundEvent ENTITY_HORSE_EAT = BuiltinSoundEvent.get("minecraft:entity.horse.eat");
+    SoundEvent ENTITY_HORSE_ANGRY = BuiltinSoundEvent.get("entity.horse.angry");
 
-    SoundEvent ENTITY_HORSE_GALLOP = BuiltinSoundEvent.get("minecraft:entity.horse.gallop");
+    SoundEvent ENTITY_HORSE_ARMOR = BuiltinSoundEvent.get("entity.horse.armor");
 
-    SoundEvent ENTITY_HORSE_HURT = BuiltinSoundEvent.get("minecraft:entity.horse.hurt");
+    SoundEvent ENTITY_HORSE_BREATHE = BuiltinSoundEvent.get("entity.horse.breathe");
 
-    SoundEvent ENTITY_HORSE_JUMP = BuiltinSoundEvent.get("minecraft:entity.horse.jump");
+    SoundEvent ENTITY_HORSE_DEATH = BuiltinSoundEvent.get("entity.horse.death");
 
-    SoundEvent ENTITY_HORSE_LAND = BuiltinSoundEvent.get("minecraft:entity.horse.land");
+    SoundEvent ENTITY_HORSE_EAT = BuiltinSoundEvent.get("entity.horse.eat");
 
-    SoundEvent ENTITY_HORSE_SADDLE = BuiltinSoundEvent.get("minecraft:entity.horse.saddle");
+    SoundEvent ENTITY_HORSE_GALLOP = BuiltinSoundEvent.get("entity.horse.gallop");
 
-    SoundEvent ENTITY_HORSE_STEP = BuiltinSoundEvent.get("minecraft:entity.horse.step");
+    SoundEvent ENTITY_HORSE_HURT = BuiltinSoundEvent.get("entity.horse.hurt");
 
-    SoundEvent ENTITY_HORSE_STEP_WOOD = BuiltinSoundEvent.get("minecraft:entity.horse.step_wood");
+    SoundEvent ENTITY_HORSE_JUMP = BuiltinSoundEvent.get("entity.horse.jump");
 
-    SoundEvent ENTITY_HOSTILE_BIG_FALL = BuiltinSoundEvent.get("minecraft:entity.hostile.big_fall");
+    SoundEvent ENTITY_HORSE_LAND = BuiltinSoundEvent.get("entity.horse.land");
 
-    SoundEvent ENTITY_HOSTILE_DEATH = BuiltinSoundEvent.get("minecraft:entity.hostile.death");
+    SoundEvent ENTITY_HORSE_SADDLE = BuiltinSoundEvent.get("entity.horse.saddle");
 
-    SoundEvent ENTITY_HOSTILE_HURT = BuiltinSoundEvent.get("minecraft:entity.hostile.hurt");
+    SoundEvent ENTITY_HORSE_STEP = BuiltinSoundEvent.get("entity.horse.step");
 
-    SoundEvent ENTITY_HOSTILE_SMALL_FALL = BuiltinSoundEvent.get("minecraft:entity.hostile.small_fall");
+    SoundEvent ENTITY_HORSE_STEP_WOOD = BuiltinSoundEvent.get("entity.horse.step_wood");
 
-    SoundEvent ENTITY_HOSTILE_SPLASH = BuiltinSoundEvent.get("minecraft:entity.hostile.splash");
+    SoundEvent ENTITY_HOSTILE_BIG_FALL = BuiltinSoundEvent.get("entity.hostile.big_fall");
 
-    SoundEvent ENTITY_HOSTILE_SWIM = BuiltinSoundEvent.get("minecraft:entity.hostile.swim");
+    SoundEvent ENTITY_HOSTILE_DEATH = BuiltinSoundEvent.get("entity.hostile.death");
 
-    SoundEvent ENTITY_HUSK_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.husk.ambient");
+    SoundEvent ENTITY_HOSTILE_HURT = BuiltinSoundEvent.get("entity.hostile.hurt");
 
-    SoundEvent ENTITY_HUSK_CONVERTED_TO_ZOMBIE = BuiltinSoundEvent.get("minecraft:entity.husk.converted_to_zombie");
+    SoundEvent ENTITY_HOSTILE_SMALL_FALL = BuiltinSoundEvent.get("entity.hostile.small_fall");
 
-    SoundEvent ENTITY_HUSK_DEATH = BuiltinSoundEvent.get("minecraft:entity.husk.death");
+    SoundEvent ENTITY_HOSTILE_SPLASH = BuiltinSoundEvent.get("entity.hostile.splash");
 
-    SoundEvent ENTITY_HUSK_HURT = BuiltinSoundEvent.get("minecraft:entity.husk.hurt");
+    SoundEvent ENTITY_HOSTILE_SWIM = BuiltinSoundEvent.get("entity.hostile.swim");
 
-    SoundEvent ENTITY_HUSK_STEP = BuiltinSoundEvent.get("minecraft:entity.husk.step");
+    SoundEvent ENTITY_HUSK_AMBIENT = BuiltinSoundEvent.get("entity.husk.ambient");
 
-    SoundEvent ENTITY_ILLUSIONER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.illusioner.ambient");
+    SoundEvent ENTITY_HUSK_CONVERTED_TO_ZOMBIE = BuiltinSoundEvent.get("entity.husk.converted_to_zombie");
 
-    SoundEvent ENTITY_ILLUSIONER_CAST_SPELL = BuiltinSoundEvent.get("minecraft:entity.illusioner.cast_spell");
+    SoundEvent ENTITY_HUSK_DEATH = BuiltinSoundEvent.get("entity.husk.death");
 
-    SoundEvent ENTITY_ILLUSIONER_DEATH = BuiltinSoundEvent.get("minecraft:entity.illusioner.death");
+    SoundEvent ENTITY_HUSK_HURT = BuiltinSoundEvent.get("entity.husk.hurt");
 
-    SoundEvent ENTITY_ILLUSIONER_HURT = BuiltinSoundEvent.get("minecraft:entity.illusioner.hurt");
+    SoundEvent ENTITY_HUSK_STEP = BuiltinSoundEvent.get("entity.husk.step");
 
-    SoundEvent ENTITY_ILLUSIONER_MIRROR_MOVE = BuiltinSoundEvent.get("minecraft:entity.illusioner.mirror_move");
+    SoundEvent ENTITY_ILLUSIONER_AMBIENT = BuiltinSoundEvent.get("entity.illusioner.ambient");
 
-    SoundEvent ENTITY_ILLUSIONER_PREPARE_BLINDNESS = BuiltinSoundEvent.get("minecraft:entity.illusioner.prepare_blindness");
+    SoundEvent ENTITY_ILLUSIONER_CAST_SPELL = BuiltinSoundEvent.get("entity.illusioner.cast_spell");
 
-    SoundEvent ENTITY_ILLUSIONER_PREPARE_MIRROR = BuiltinSoundEvent.get("minecraft:entity.illusioner.prepare_mirror");
+    SoundEvent ENTITY_ILLUSIONER_DEATH = BuiltinSoundEvent.get("entity.illusioner.death");
 
-    SoundEvent ITEM_INK_SAC_USE = BuiltinSoundEvent.get("minecraft:item.ink_sac.use");
+    SoundEvent ENTITY_ILLUSIONER_HURT = BuiltinSoundEvent.get("entity.illusioner.hurt");
 
-    SoundEvent BLOCK_IRON_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.iron_door.close");
+    SoundEvent ENTITY_ILLUSIONER_MIRROR_MOVE = BuiltinSoundEvent.get("entity.illusioner.mirror_move");
 
-    SoundEvent BLOCK_IRON_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.iron_door.open");
+    SoundEvent ENTITY_ILLUSIONER_PREPARE_BLINDNESS = BuiltinSoundEvent.get("entity.illusioner.prepare_blindness");
 
-    SoundEvent ENTITY_IRON_GOLEM_ATTACK = BuiltinSoundEvent.get("minecraft:entity.iron_golem.attack");
+    SoundEvent ENTITY_ILLUSIONER_PREPARE_MIRROR = BuiltinSoundEvent.get("entity.illusioner.prepare_mirror");
 
-    SoundEvent ENTITY_IRON_GOLEM_DAMAGE = BuiltinSoundEvent.get("minecraft:entity.iron_golem.damage");
+    SoundEvent ITEM_INK_SAC_USE = BuiltinSoundEvent.get("item.ink_sac.use");
 
-    SoundEvent ENTITY_IRON_GOLEM_DEATH = BuiltinSoundEvent.get("minecraft:entity.iron_golem.death");
+    SoundEvent BLOCK_IRON_BREAK = BuiltinSoundEvent.get("block.iron.break");
 
-    SoundEvent ENTITY_IRON_GOLEM_HURT = BuiltinSoundEvent.get("minecraft:entity.iron_golem.hurt");
+    SoundEvent BLOCK_IRON_STEP = BuiltinSoundEvent.get("block.iron.step");
 
-    SoundEvent ENTITY_IRON_GOLEM_REPAIR = BuiltinSoundEvent.get("minecraft:entity.iron_golem.repair");
+    SoundEvent BLOCK_IRON_PLACE = BuiltinSoundEvent.get("block.iron.place");
 
-    SoundEvent ENTITY_IRON_GOLEM_STEP = BuiltinSoundEvent.get("minecraft:entity.iron_golem.step");
+    SoundEvent BLOCK_IRON_HIT = BuiltinSoundEvent.get("block.iron.hit");
 
-    SoundEvent BLOCK_IRON_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.iron_trapdoor.close");
+    SoundEvent BLOCK_IRON_FALL = BuiltinSoundEvent.get("block.iron.fall");
 
-    SoundEvent BLOCK_IRON_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.iron_trapdoor.open");
+    SoundEvent BLOCK_IRON_DOOR_CLOSE = BuiltinSoundEvent.get("block.iron_door.close");
 
-    SoundEvent ENTITY_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get("minecraft:entity.item_frame.add_item");
+    SoundEvent BLOCK_IRON_DOOR_OPEN = BuiltinSoundEvent.get("block.iron_door.open");
 
-    SoundEvent ENTITY_ITEM_FRAME_BREAK = BuiltinSoundEvent.get("minecraft:entity.item_frame.break");
+    SoundEvent ENTITY_IRON_GOLEM_ATTACK = BuiltinSoundEvent.get("entity.iron_golem.attack");
 
-    SoundEvent ENTITY_ITEM_FRAME_PLACE = BuiltinSoundEvent.get("minecraft:entity.item_frame.place");
+    SoundEvent ENTITY_IRON_GOLEM_DAMAGE = BuiltinSoundEvent.get("entity.iron_golem.damage");
 
-    SoundEvent ENTITY_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get("minecraft:entity.item_frame.remove_item");
+    SoundEvent ENTITY_IRON_GOLEM_DEATH = BuiltinSoundEvent.get("entity.iron_golem.death");
 
-    SoundEvent ENTITY_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get("minecraft:entity.item_frame.rotate_item");
+    SoundEvent ENTITY_IRON_GOLEM_HURT = BuiltinSoundEvent.get("entity.iron_golem.hurt");
 
-    SoundEvent ENTITY_ITEM_BREAK = BuiltinSoundEvent.get("minecraft:entity.item.break");
+    SoundEvent ENTITY_IRON_GOLEM_REPAIR = BuiltinSoundEvent.get("entity.iron_golem.repair");
 
-    SoundEvent ENTITY_ITEM_PICKUP = BuiltinSoundEvent.get("minecraft:entity.item.pickup");
+    SoundEvent ENTITY_IRON_GOLEM_STEP = BuiltinSoundEvent.get("entity.iron_golem.step");
 
-    SoundEvent BLOCK_LADDER_BREAK = BuiltinSoundEvent.get("minecraft:block.ladder.break");
+    SoundEvent BLOCK_IRON_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.iron_trapdoor.close");
 
-    SoundEvent BLOCK_LADDER_FALL = BuiltinSoundEvent.get("minecraft:block.ladder.fall");
+    SoundEvent BLOCK_IRON_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.iron_trapdoor.open");
 
-    SoundEvent BLOCK_LADDER_HIT = BuiltinSoundEvent.get("minecraft:block.ladder.hit");
+    SoundEvent ENTITY_ITEM_FRAME_ADD_ITEM = BuiltinSoundEvent.get("entity.item_frame.add_item");
 
-    SoundEvent BLOCK_LADDER_PLACE = BuiltinSoundEvent.get("minecraft:block.ladder.place");
+    SoundEvent ENTITY_ITEM_FRAME_BREAK = BuiltinSoundEvent.get("entity.item_frame.break");
 
-    SoundEvent BLOCK_LADDER_STEP = BuiltinSoundEvent.get("minecraft:block.ladder.step");
+    SoundEvent ENTITY_ITEM_FRAME_PLACE = BuiltinSoundEvent.get("entity.item_frame.place");
 
-    SoundEvent BLOCK_LANTERN_BREAK = BuiltinSoundEvent.get("minecraft:block.lantern.break");
+    SoundEvent ENTITY_ITEM_FRAME_REMOVE_ITEM = BuiltinSoundEvent.get("entity.item_frame.remove_item");
 
-    SoundEvent BLOCK_LANTERN_FALL = BuiltinSoundEvent.get("minecraft:block.lantern.fall");
+    SoundEvent ENTITY_ITEM_FRAME_ROTATE_ITEM = BuiltinSoundEvent.get("entity.item_frame.rotate_item");
 
-    SoundEvent BLOCK_LANTERN_HIT = BuiltinSoundEvent.get("minecraft:block.lantern.hit");
+    SoundEvent ENTITY_ITEM_BREAK = BuiltinSoundEvent.get("entity.item.break");
 
-    SoundEvent BLOCK_LANTERN_PLACE = BuiltinSoundEvent.get("minecraft:block.lantern.place");
+    SoundEvent ENTITY_ITEM_PICKUP = BuiltinSoundEvent.get("entity.item.pickup");
 
-    SoundEvent BLOCK_LANTERN_STEP = BuiltinSoundEvent.get("minecraft:block.lantern.step");
+    SoundEvent BLOCK_LADDER_BREAK = BuiltinSoundEvent.get("block.ladder.break");
 
-    SoundEvent BLOCK_LARGE_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("minecraft:block.large_amethyst_bud.break");
+    SoundEvent BLOCK_LADDER_FALL = BuiltinSoundEvent.get("block.ladder.fall");
 
-    SoundEvent BLOCK_LARGE_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("minecraft:block.large_amethyst_bud.place");
+    SoundEvent BLOCK_LADDER_HIT = BuiltinSoundEvent.get("block.ladder.hit");
 
-    SoundEvent BLOCK_LAVA_AMBIENT = BuiltinSoundEvent.get("minecraft:block.lava.ambient");
+    SoundEvent BLOCK_LADDER_PLACE = BuiltinSoundEvent.get("block.ladder.place");
 
-    SoundEvent BLOCK_LAVA_EXTINGUISH = BuiltinSoundEvent.get("minecraft:block.lava.extinguish");
+    SoundEvent BLOCK_LADDER_STEP = BuiltinSoundEvent.get("block.ladder.step");
 
-    SoundEvent BLOCK_LAVA_POP = BuiltinSoundEvent.get("minecraft:block.lava.pop");
+    SoundEvent BLOCK_LANTERN_BREAK = BuiltinSoundEvent.get("block.lantern.break");
 
-    SoundEvent ENTITY_LEASH_KNOT_BREAK = BuiltinSoundEvent.get("minecraft:entity.leash_knot.break");
+    SoundEvent BLOCK_LANTERN_FALL = BuiltinSoundEvent.get("block.lantern.fall");
 
-    SoundEvent ENTITY_LEASH_KNOT_PLACE = BuiltinSoundEvent.get("minecraft:entity.leash_knot.place");
+    SoundEvent BLOCK_LANTERN_HIT = BuiltinSoundEvent.get("block.lantern.hit");
 
-    SoundEvent BLOCK_LEVER_CLICK = BuiltinSoundEvent.get("minecraft:block.lever.click");
+    SoundEvent BLOCK_LANTERN_PLACE = BuiltinSoundEvent.get("block.lantern.place");
 
-    SoundEvent ENTITY_LIGHTNING_BOLT_IMPACT = BuiltinSoundEvent.get("minecraft:entity.lightning_bolt.impact");
+    SoundEvent BLOCK_LANTERN_STEP = BuiltinSoundEvent.get("block.lantern.step");
 
-    SoundEvent ENTITY_LIGHTNING_BOLT_THUNDER = BuiltinSoundEvent.get("minecraft:entity.lightning_bolt.thunder");
+    SoundEvent BLOCK_LARGE_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("block.large_amethyst_bud.break");
 
-    SoundEvent ENTITY_LINGERING_POTION_THROW = BuiltinSoundEvent.get("minecraft:entity.lingering_potion.throw");
+    SoundEvent BLOCK_LARGE_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("block.large_amethyst_bud.place");
 
-    SoundEvent ENTITY_LLAMA_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.llama.ambient");
+    SoundEvent BLOCK_LAVA_AMBIENT = BuiltinSoundEvent.get("block.lava.ambient");
 
-    SoundEvent ENTITY_LLAMA_ANGRY = BuiltinSoundEvent.get("minecraft:entity.llama.angry");
+    SoundEvent BLOCK_LAVA_EXTINGUISH = BuiltinSoundEvent.get("block.lava.extinguish");
 
-    SoundEvent ENTITY_LLAMA_CHEST = BuiltinSoundEvent.get("minecraft:entity.llama.chest");
+    SoundEvent BLOCK_LAVA_POP = BuiltinSoundEvent.get("block.lava.pop");
 
-    SoundEvent ENTITY_LLAMA_DEATH = BuiltinSoundEvent.get("minecraft:entity.llama.death");
+    SoundEvent BLOCK_LEAF_LITTER_BREAK = BuiltinSoundEvent.get("block.leaf_litter.break");
 
-    SoundEvent ENTITY_LLAMA_EAT = BuiltinSoundEvent.get("minecraft:entity.llama.eat");
+    SoundEvent BLOCK_LEAF_LITTER_STEP = BuiltinSoundEvent.get("block.leaf_litter.step");
 
-    SoundEvent ENTITY_LLAMA_HURT = BuiltinSoundEvent.get("minecraft:entity.llama.hurt");
+    SoundEvent BLOCK_LEAF_LITTER_PLACE = BuiltinSoundEvent.get("block.leaf_litter.place");
 
-    SoundEvent ENTITY_LLAMA_SPIT = BuiltinSoundEvent.get("minecraft:entity.llama.spit");
+    SoundEvent BLOCK_LEAF_LITTER_HIT = BuiltinSoundEvent.get("block.leaf_litter.hit");
 
-    SoundEvent ENTITY_LLAMA_STEP = BuiltinSoundEvent.get("minecraft:entity.llama.step");
+    SoundEvent BLOCK_LEAF_LITTER_FALL = BuiltinSoundEvent.get("block.leaf_litter.fall");
 
-    SoundEvent ENTITY_LLAMA_SWAG = BuiltinSoundEvent.get("minecraft:entity.llama.swag");
+    SoundEvent ENTITY_LEASH_KNOT_BREAK = BuiltinSoundEvent.get("entity.leash_knot.break");
 
-    SoundEvent ENTITY_MAGMA_CUBE_DEATH_SMALL = BuiltinSoundEvent.get("minecraft:entity.magma_cube.death_small");
+    SoundEvent ENTITY_LEASH_KNOT_PLACE = BuiltinSoundEvent.get("entity.leash_knot.place");
 
-    SoundEvent BLOCK_LODESTONE_BREAK = BuiltinSoundEvent.get("minecraft:block.lodestone.break");
+    SoundEvent BLOCK_LEVER_CLICK = BuiltinSoundEvent.get("block.lever.click");
 
-    SoundEvent BLOCK_LODESTONE_STEP = BuiltinSoundEvent.get("minecraft:block.lodestone.step");
+    SoundEvent ENTITY_LIGHTNING_BOLT_IMPACT = BuiltinSoundEvent.get("entity.lightning_bolt.impact");
 
-    SoundEvent BLOCK_LODESTONE_PLACE = BuiltinSoundEvent.get("minecraft:block.lodestone.place");
+    SoundEvent ENTITY_LIGHTNING_BOLT_THUNDER = BuiltinSoundEvent.get("entity.lightning_bolt.thunder");
 
-    SoundEvent BLOCK_LODESTONE_HIT = BuiltinSoundEvent.get("minecraft:block.lodestone.hit");
+    SoundEvent ENTITY_LINGERING_POTION_THROW = BuiltinSoundEvent.get("entity.lingering_potion.throw");
 
-    SoundEvent BLOCK_LODESTONE_FALL = BuiltinSoundEvent.get("minecraft:block.lodestone.fall");
+    SoundEvent ENTITY_LLAMA_AMBIENT = BuiltinSoundEvent.get("entity.llama.ambient");
 
-    SoundEvent ITEM_LODESTONE_COMPASS_LOCK = BuiltinSoundEvent.get("minecraft:item.lodestone_compass.lock");
+    SoundEvent ENTITY_LLAMA_ANGRY = BuiltinSoundEvent.get("entity.llama.angry");
 
-    SoundEvent ITEM_MACE_SMASH_AIR = BuiltinSoundEvent.get("minecraft:item.mace.smash_air");
+    SoundEvent ENTITY_LLAMA_CHEST = BuiltinSoundEvent.get("entity.llama.chest");
 
-    SoundEvent ITEM_MACE_SMASH_GROUND = BuiltinSoundEvent.get("minecraft:item.mace.smash_ground");
+    SoundEvent ENTITY_LLAMA_DEATH = BuiltinSoundEvent.get("entity.llama.death");
 
-    SoundEvent ITEM_MACE_SMASH_GROUND_HEAVY = BuiltinSoundEvent.get("minecraft:item.mace.smash_ground_heavy");
+    SoundEvent ENTITY_LLAMA_EAT = BuiltinSoundEvent.get("entity.llama.eat");
 
-    SoundEvent ENTITY_MAGMA_CUBE_DEATH = BuiltinSoundEvent.get("minecraft:entity.magma_cube.death");
+    SoundEvent ENTITY_LLAMA_HURT = BuiltinSoundEvent.get("entity.llama.hurt");
 
-    SoundEvent ENTITY_MAGMA_CUBE_HURT = BuiltinSoundEvent.get("minecraft:entity.magma_cube.hurt");
+    SoundEvent ENTITY_LLAMA_SPIT = BuiltinSoundEvent.get("entity.llama.spit");
 
-    SoundEvent ENTITY_MAGMA_CUBE_HURT_SMALL = BuiltinSoundEvent.get("minecraft:entity.magma_cube.hurt_small");
+    SoundEvent ENTITY_LLAMA_STEP = BuiltinSoundEvent.get("entity.llama.step");
 
-    SoundEvent ENTITY_MAGMA_CUBE_JUMP = BuiltinSoundEvent.get("minecraft:entity.magma_cube.jump");
+    SoundEvent ENTITY_LLAMA_SWAG = BuiltinSoundEvent.get("entity.llama.swag");
 
-    SoundEvent ENTITY_MAGMA_CUBE_SQUISH = BuiltinSoundEvent.get("minecraft:entity.magma_cube.squish");
+    SoundEvent ENTITY_MAGMA_CUBE_DEATH_SMALL = BuiltinSoundEvent.get("entity.magma_cube.death_small");
 
-    SoundEvent ENTITY_MAGMA_CUBE_SQUISH_SMALL = BuiltinSoundEvent.get("minecraft:entity.magma_cube.squish_small");
+    SoundEvent BLOCK_LODESTONE_BREAK = BuiltinSoundEvent.get("block.lodestone.break");
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get("minecraft:block.mangrove_roots.break");
+    SoundEvent BLOCK_LODESTONE_STEP = BuiltinSoundEvent.get("block.lodestone.step");
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get("minecraft:block.mangrove_roots.fall");
+    SoundEvent BLOCK_LODESTONE_PLACE = BuiltinSoundEvent.get("block.lodestone.place");
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get("minecraft:block.mangrove_roots.hit");
+    SoundEvent BLOCK_LODESTONE_HIT = BuiltinSoundEvent.get("block.lodestone.hit");
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get("minecraft:block.mangrove_roots.place");
+    SoundEvent BLOCK_LODESTONE_FALL = BuiltinSoundEvent.get("block.lodestone.fall");
 
-    SoundEvent BLOCK_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get("minecraft:block.mangrove_roots.step");
+    SoundEvent ITEM_LODESTONE_COMPASS_LOCK = BuiltinSoundEvent.get("item.lodestone_compass.lock");
 
-    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("minecraft:block.medium_amethyst_bud.break");
+    SoundEvent ITEM_MACE_SMASH_AIR = BuiltinSoundEvent.get("item.mace.smash_air");
 
-    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("minecraft:block.medium_amethyst_bud.place");
+    SoundEvent ITEM_MACE_SMASH_GROUND = BuiltinSoundEvent.get("item.mace.smash_ground");
 
-    SoundEvent BLOCK_METAL_BREAK = BuiltinSoundEvent.get("minecraft:block.metal.break");
+    SoundEvent ITEM_MACE_SMASH_GROUND_HEAVY = BuiltinSoundEvent.get("item.mace.smash_ground_heavy");
 
-    SoundEvent BLOCK_METAL_FALL = BuiltinSoundEvent.get("minecraft:block.metal.fall");
+    SoundEvent ENTITY_MAGMA_CUBE_DEATH = BuiltinSoundEvent.get("entity.magma_cube.death");
 
-    SoundEvent BLOCK_METAL_HIT = BuiltinSoundEvent.get("minecraft:block.metal.hit");
+    SoundEvent ENTITY_MAGMA_CUBE_HURT = BuiltinSoundEvent.get("entity.magma_cube.hurt");
 
-    SoundEvent BLOCK_METAL_PLACE = BuiltinSoundEvent.get("minecraft:block.metal.place");
+    SoundEvent ENTITY_MAGMA_CUBE_HURT_SMALL = BuiltinSoundEvent.get("entity.magma_cube.hurt_small");
 
-    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.metal_pressure_plate.click_off");
+    SoundEvent ENTITY_MAGMA_CUBE_JUMP = BuiltinSoundEvent.get("entity.magma_cube.jump");
 
-    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.metal_pressure_plate.click_on");
+    SoundEvent ENTITY_MAGMA_CUBE_SQUISH = BuiltinSoundEvent.get("entity.magma_cube.squish");
 
-    SoundEvent BLOCK_METAL_STEP = BuiltinSoundEvent.get("minecraft:block.metal.step");
+    SoundEvent ENTITY_MAGMA_CUBE_SQUISH_SMALL = BuiltinSoundEvent.get("entity.magma_cube.squish_small");
 
-    SoundEvent ENTITY_MINECART_INSIDE_UNDERWATER = BuiltinSoundEvent.get("minecraft:entity.minecart.inside.underwater");
+    SoundEvent BLOCK_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get("block.mangrove_roots.break");
 
-    SoundEvent ENTITY_MINECART_INSIDE = BuiltinSoundEvent.get("minecraft:entity.minecart.inside");
+    SoundEvent BLOCK_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get("block.mangrove_roots.fall");
 
-    SoundEvent ENTITY_MINECART_RIDING = BuiltinSoundEvent.get("minecraft:entity.minecart.riding");
+    SoundEvent BLOCK_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get("block.mangrove_roots.hit");
 
-    SoundEvent ENTITY_MOOSHROOM_CONVERT = BuiltinSoundEvent.get("minecraft:entity.mooshroom.convert");
+    SoundEvent BLOCK_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get("block.mangrove_roots.place");
 
-    SoundEvent ENTITY_MOOSHROOM_EAT = BuiltinSoundEvent.get("minecraft:entity.mooshroom.eat");
+    SoundEvent BLOCK_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get("block.mangrove_roots.step");
 
-    SoundEvent ENTITY_MOOSHROOM_MILK = BuiltinSoundEvent.get("minecraft:entity.mooshroom.milk");
+    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("block.medium_amethyst_bud.break");
 
-    SoundEvent ENTITY_MOOSHROOM_SUSPICIOUS_MILK = BuiltinSoundEvent.get("minecraft:entity.mooshroom.suspicious_milk");
+    SoundEvent BLOCK_MEDIUM_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("block.medium_amethyst_bud.place");
 
-    SoundEvent ENTITY_MOOSHROOM_SHEAR = BuiltinSoundEvent.get("minecraft:entity.mooshroom.shear");
+    SoundEvent BLOCK_METAL_BREAK = BuiltinSoundEvent.get("block.metal.break");
 
-    SoundEvent BLOCK_MOSS_CARPET_BREAK = BuiltinSoundEvent.get("minecraft:block.moss_carpet.break");
+    SoundEvent BLOCK_METAL_FALL = BuiltinSoundEvent.get("block.metal.fall");
 
-    SoundEvent BLOCK_MOSS_CARPET_FALL = BuiltinSoundEvent.get("minecraft:block.moss_carpet.fall");
+    SoundEvent BLOCK_METAL_HIT = BuiltinSoundEvent.get("block.metal.hit");
 
-    SoundEvent BLOCK_MOSS_CARPET_HIT = BuiltinSoundEvent.get("minecraft:block.moss_carpet.hit");
+    SoundEvent BLOCK_METAL_PLACE = BuiltinSoundEvent.get("block.metal.place");
 
-    SoundEvent BLOCK_MOSS_CARPET_PLACE = BuiltinSoundEvent.get("minecraft:block.moss_carpet.place");
+    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.metal_pressure_plate.click_off");
 
-    SoundEvent BLOCK_MOSS_CARPET_STEP = BuiltinSoundEvent.get("minecraft:block.moss_carpet.step");
+    SoundEvent BLOCK_METAL_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.metal_pressure_plate.click_on");
 
-    SoundEvent BLOCK_PINK_PETALS_BREAK = BuiltinSoundEvent.get("minecraft:block.pink_petals.break");
+    SoundEvent BLOCK_METAL_STEP = BuiltinSoundEvent.get("block.metal.step");
 
-    SoundEvent BLOCK_PINK_PETALS_FALL = BuiltinSoundEvent.get("minecraft:block.pink_petals.fall");
+    SoundEvent ENTITY_MINECART_INSIDE_UNDERWATER = BuiltinSoundEvent.get("entity.minecart.inside.underwater");
 
-    SoundEvent BLOCK_PINK_PETALS_HIT = BuiltinSoundEvent.get("minecraft:block.pink_petals.hit");
+    SoundEvent ENTITY_MINECART_INSIDE = BuiltinSoundEvent.get("entity.minecart.inside");
 
-    SoundEvent BLOCK_PINK_PETALS_PLACE = BuiltinSoundEvent.get("minecraft:block.pink_petals.place");
+    SoundEvent ENTITY_MINECART_RIDING = BuiltinSoundEvent.get("entity.minecart.riding");
 
-    SoundEvent BLOCK_PINK_PETALS_STEP = BuiltinSoundEvent.get("minecraft:block.pink_petals.step");
+    SoundEvent ENTITY_MOOSHROOM_CONVERT = BuiltinSoundEvent.get("entity.mooshroom.convert");
 
-    SoundEvent BLOCK_MOSS_BREAK = BuiltinSoundEvent.get("minecraft:block.moss.break");
+    SoundEvent ENTITY_MOOSHROOM_EAT = BuiltinSoundEvent.get("entity.mooshroom.eat");
 
-    SoundEvent BLOCK_MOSS_FALL = BuiltinSoundEvent.get("minecraft:block.moss.fall");
+    SoundEvent ENTITY_MOOSHROOM_MILK = BuiltinSoundEvent.get("entity.mooshroom.milk");
 
-    SoundEvent BLOCK_MOSS_HIT = BuiltinSoundEvent.get("minecraft:block.moss.hit");
+    SoundEvent ENTITY_MOOSHROOM_SUSPICIOUS_MILK = BuiltinSoundEvent.get("entity.mooshroom.suspicious_milk");
 
-    SoundEvent BLOCK_MOSS_PLACE = BuiltinSoundEvent.get("minecraft:block.moss.place");
+    SoundEvent ENTITY_MOOSHROOM_SHEAR = BuiltinSoundEvent.get("entity.mooshroom.shear");
 
-    SoundEvent BLOCK_MOSS_STEP = BuiltinSoundEvent.get("minecraft:block.moss.step");
+    SoundEvent BLOCK_MOSS_CARPET_BREAK = BuiltinSoundEvent.get("block.moss_carpet.break");
 
-    SoundEvent BLOCK_MUD_BREAK = BuiltinSoundEvent.get("minecraft:block.mud.break");
+    SoundEvent BLOCK_MOSS_CARPET_FALL = BuiltinSoundEvent.get("block.moss_carpet.fall");
 
-    SoundEvent BLOCK_MUD_FALL = BuiltinSoundEvent.get("minecraft:block.mud.fall");
+    SoundEvent BLOCK_MOSS_CARPET_HIT = BuiltinSoundEvent.get("block.moss_carpet.hit");
 
-    SoundEvent BLOCK_MUD_HIT = BuiltinSoundEvent.get("minecraft:block.mud.hit");
+    SoundEvent BLOCK_MOSS_CARPET_PLACE = BuiltinSoundEvent.get("block.moss_carpet.place");
 
-    SoundEvent BLOCK_MUD_PLACE = BuiltinSoundEvent.get("minecraft:block.mud.place");
+    SoundEvent BLOCK_MOSS_CARPET_STEP = BuiltinSoundEvent.get("block.moss_carpet.step");
 
-    SoundEvent BLOCK_MUD_STEP = BuiltinSoundEvent.get("minecraft:block.mud.step");
+    SoundEvent BLOCK_PINK_PETALS_BREAK = BuiltinSoundEvent.get("block.pink_petals.break");
 
-    SoundEvent BLOCK_MUD_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.mud_bricks.break");
+    SoundEvent BLOCK_PINK_PETALS_FALL = BuiltinSoundEvent.get("block.pink_petals.fall");
 
-    SoundEvent BLOCK_MUD_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.mud_bricks.fall");
+    SoundEvent BLOCK_PINK_PETALS_HIT = BuiltinSoundEvent.get("block.pink_petals.hit");
 
-    SoundEvent BLOCK_MUD_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.mud_bricks.hit");
+    SoundEvent BLOCK_PINK_PETALS_PLACE = BuiltinSoundEvent.get("block.pink_petals.place");
 
-    SoundEvent BLOCK_MUD_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.mud_bricks.place");
+    SoundEvent BLOCK_PINK_PETALS_STEP = BuiltinSoundEvent.get("block.pink_petals.step");
 
-    SoundEvent BLOCK_MUD_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.mud_bricks.step");
+    SoundEvent BLOCK_MOSS_BREAK = BuiltinSoundEvent.get("block.moss.break");
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get("minecraft:block.muddy_mangrove_roots.break");
+    SoundEvent BLOCK_MOSS_FALL = BuiltinSoundEvent.get("block.moss.fall");
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get("minecraft:block.muddy_mangrove_roots.fall");
+    SoundEvent BLOCK_MOSS_HIT = BuiltinSoundEvent.get("block.moss.hit");
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get("minecraft:block.muddy_mangrove_roots.hit");
+    SoundEvent BLOCK_MOSS_PLACE = BuiltinSoundEvent.get("block.moss.place");
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get("minecraft:block.muddy_mangrove_roots.place");
+    SoundEvent BLOCK_MOSS_STEP = BuiltinSoundEvent.get("block.moss.step");
 
-    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get("minecraft:block.muddy_mangrove_roots.step");
+    SoundEvent BLOCK_MUD_BREAK = BuiltinSoundEvent.get("block.mud.break");
 
-    SoundEvent ENTITY_MULE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.mule.ambient");
+    SoundEvent BLOCK_MUD_FALL = BuiltinSoundEvent.get("block.mud.fall");
 
-    SoundEvent ENTITY_MULE_ANGRY = BuiltinSoundEvent.get("minecraft:entity.mule.angry");
+    SoundEvent BLOCK_MUD_HIT = BuiltinSoundEvent.get("block.mud.hit");
 
-    SoundEvent ENTITY_MULE_CHEST = BuiltinSoundEvent.get("minecraft:entity.mule.chest");
+    SoundEvent BLOCK_MUD_PLACE = BuiltinSoundEvent.get("block.mud.place");
 
-    SoundEvent ENTITY_MULE_DEATH = BuiltinSoundEvent.get("minecraft:entity.mule.death");
+    SoundEvent BLOCK_MUD_STEP = BuiltinSoundEvent.get("block.mud.step");
 
-    SoundEvent ENTITY_MULE_EAT = BuiltinSoundEvent.get("minecraft:entity.mule.eat");
+    SoundEvent BLOCK_MUD_BRICKS_BREAK = BuiltinSoundEvent.get("block.mud_bricks.break");
 
-    SoundEvent ENTITY_MULE_HURT = BuiltinSoundEvent.get("minecraft:entity.mule.hurt");
+    SoundEvent BLOCK_MUD_BRICKS_FALL = BuiltinSoundEvent.get("block.mud_bricks.fall");
 
-    SoundEvent ENTITY_MULE_JUMP = BuiltinSoundEvent.get("minecraft:entity.mule.jump");
+    SoundEvent BLOCK_MUD_BRICKS_HIT = BuiltinSoundEvent.get("block.mud_bricks.hit");
 
-    SoundEvent MUSIC_CREATIVE = BuiltinSoundEvent.get("minecraft:music.creative");
+    SoundEvent BLOCK_MUD_BRICKS_PLACE = BuiltinSoundEvent.get("block.mud_bricks.place");
 
-    SoundEvent MUSIC_CREDITS = BuiltinSoundEvent.get("minecraft:music.credits");
+    SoundEvent BLOCK_MUD_BRICKS_STEP = BuiltinSoundEvent.get("block.mud_bricks.step");
 
-    SoundEvent MUSIC_DISC_5 = BuiltinSoundEvent.get("minecraft:music_disc.5");
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_BREAK = BuiltinSoundEvent.get("block.muddy_mangrove_roots.break");
 
-    SoundEvent MUSIC_DISC_11 = BuiltinSoundEvent.get("minecraft:music_disc.11");
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_FALL = BuiltinSoundEvent.get("block.muddy_mangrove_roots.fall");
 
-    SoundEvent MUSIC_DISC_13 = BuiltinSoundEvent.get("minecraft:music_disc.13");
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_HIT = BuiltinSoundEvent.get("block.muddy_mangrove_roots.hit");
 
-    SoundEvent MUSIC_DISC_BLOCKS = BuiltinSoundEvent.get("minecraft:music_disc.blocks");
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_PLACE = BuiltinSoundEvent.get("block.muddy_mangrove_roots.place");
 
-    SoundEvent MUSIC_DISC_CAT = BuiltinSoundEvent.get("minecraft:music_disc.cat");
+    SoundEvent BLOCK_MUDDY_MANGROVE_ROOTS_STEP = BuiltinSoundEvent.get("block.muddy_mangrove_roots.step");
 
-    SoundEvent MUSIC_DISC_CHIRP = BuiltinSoundEvent.get("minecraft:music_disc.chirp");
+    SoundEvent ENTITY_MULE_AMBIENT = BuiltinSoundEvent.get("entity.mule.ambient");
 
-    SoundEvent MUSIC_DISC_FAR = BuiltinSoundEvent.get("minecraft:music_disc.far");
+    SoundEvent ENTITY_MULE_ANGRY = BuiltinSoundEvent.get("entity.mule.angry");
 
-    SoundEvent MUSIC_DISC_MALL = BuiltinSoundEvent.get("minecraft:music_disc.mall");
+    SoundEvent ENTITY_MULE_CHEST = BuiltinSoundEvent.get("entity.mule.chest");
 
-    SoundEvent MUSIC_DISC_MELLOHI = BuiltinSoundEvent.get("minecraft:music_disc.mellohi");
+    SoundEvent ENTITY_MULE_DEATH = BuiltinSoundEvent.get("entity.mule.death");
 
-    SoundEvent MUSIC_DISC_PIGSTEP = BuiltinSoundEvent.get("minecraft:music_disc.pigstep");
+    SoundEvent ENTITY_MULE_EAT = BuiltinSoundEvent.get("entity.mule.eat");
 
-    SoundEvent MUSIC_DISC_STAL = BuiltinSoundEvent.get("minecraft:music_disc.stal");
+    SoundEvent ENTITY_MULE_HURT = BuiltinSoundEvent.get("entity.mule.hurt");
 
-    SoundEvent MUSIC_DISC_STRAD = BuiltinSoundEvent.get("minecraft:music_disc.strad");
+    SoundEvent ENTITY_MULE_JUMP = BuiltinSoundEvent.get("entity.mule.jump");
 
-    SoundEvent MUSIC_DISC_WAIT = BuiltinSoundEvent.get("minecraft:music_disc.wait");
+    SoundEvent MUSIC_CREATIVE = BuiltinSoundEvent.get("music.creative");
 
-    SoundEvent MUSIC_DISC_WARD = BuiltinSoundEvent.get("minecraft:music_disc.ward");
+    SoundEvent MUSIC_CREDITS = BuiltinSoundEvent.get("music.credits");
 
-    SoundEvent MUSIC_DISC_OTHERSIDE = BuiltinSoundEvent.get("minecraft:music_disc.otherside");
+    SoundEvent MUSIC_DISC_5 = BuiltinSoundEvent.get("music_disc.5");
 
-    SoundEvent MUSIC_DISC_RELIC = BuiltinSoundEvent.get("minecraft:music_disc.relic");
+    SoundEvent MUSIC_DISC_11 = BuiltinSoundEvent.get("music_disc.11");
 
-    SoundEvent MUSIC_DISC_CREATOR = BuiltinSoundEvent.get("minecraft:music_disc.creator");
+    SoundEvent MUSIC_DISC_13 = BuiltinSoundEvent.get("music_disc.13");
 
-    SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get("minecraft:music_disc.creator_music_box");
+    SoundEvent MUSIC_DISC_BLOCKS = BuiltinSoundEvent.get("music_disc.blocks");
 
-    SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get("minecraft:music_disc.precipice");
+    SoundEvent MUSIC_DISC_CAT = BuiltinSoundEvent.get("music_disc.cat");
 
-    SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get("minecraft:music.dragon");
+    SoundEvent MUSIC_DISC_CHIRP = BuiltinSoundEvent.get("music_disc.chirp");
 
-    SoundEvent MUSIC_END = BuiltinSoundEvent.get("minecraft:music.end");
+    SoundEvent MUSIC_DISC_FAR = BuiltinSoundEvent.get("music_disc.far");
 
-    SoundEvent MUSIC_GAME = BuiltinSoundEvent.get("minecraft:music.game");
+    SoundEvent MUSIC_DISC_MALL = BuiltinSoundEvent.get("music_disc.mall");
 
-    SoundEvent MUSIC_MENU = BuiltinSoundEvent.get("minecraft:music.menu");
+    SoundEvent MUSIC_DISC_MELLOHI = BuiltinSoundEvent.get("music_disc.mellohi");
 
-    SoundEvent MUSIC_NETHER_BASALT_DELTAS = BuiltinSoundEvent.get("minecraft:music.nether.basalt_deltas");
+    SoundEvent MUSIC_DISC_PIGSTEP = BuiltinSoundEvent.get("music_disc.pigstep");
 
-    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = BuiltinSoundEvent.get("minecraft:music.nether.crimson_forest");
+    SoundEvent MUSIC_DISC_STAL = BuiltinSoundEvent.get("music_disc.stal");
 
-    SoundEvent MUSIC_OVERWORLD_DEEP_DARK = BuiltinSoundEvent.get("minecraft:music.overworld.deep_dark");
+    SoundEvent MUSIC_DISC_STRAD = BuiltinSoundEvent.get("music_disc.strad");
 
-    SoundEvent MUSIC_OVERWORLD_DRIPSTONE_CAVES = BuiltinSoundEvent.get("minecraft:music.overworld.dripstone_caves");
+    SoundEvent MUSIC_DISC_WAIT = BuiltinSoundEvent.get("music_disc.wait");
 
-    SoundEvent MUSIC_OVERWORLD_GROVE = BuiltinSoundEvent.get("minecraft:music.overworld.grove");
+    SoundEvent MUSIC_DISC_WARD = BuiltinSoundEvent.get("music_disc.ward");
 
-    SoundEvent MUSIC_OVERWORLD_JAGGED_PEAKS = BuiltinSoundEvent.get("minecraft:music.overworld.jagged_peaks");
+    SoundEvent MUSIC_DISC_OTHERSIDE = BuiltinSoundEvent.get("music_disc.otherside");
 
-    SoundEvent MUSIC_OVERWORLD_LUSH_CAVES = BuiltinSoundEvent.get("minecraft:music.overworld.lush_caves");
+    SoundEvent MUSIC_DISC_RELIC = BuiltinSoundEvent.get("music_disc.relic");
 
-    SoundEvent MUSIC_OVERWORLD_SWAMP = BuiltinSoundEvent.get("minecraft:music.overworld.swamp");
+    SoundEvent MUSIC_DISC_CREATOR = BuiltinSoundEvent.get("music_disc.creator");
 
-    SoundEvent MUSIC_OVERWORLD_FOREST = BuiltinSoundEvent.get("minecraft:music.overworld.forest");
+    SoundEvent MUSIC_DISC_CREATOR_MUSIC_BOX = BuiltinSoundEvent.get("music_disc.creator_music_box");
 
-    SoundEvent MUSIC_OVERWORLD_OLD_GROWTH_TAIGA = BuiltinSoundEvent.get("minecraft:music.overworld.old_growth_taiga");
+    SoundEvent MUSIC_DISC_PRECIPICE = BuiltinSoundEvent.get("music_disc.precipice");
 
-    SoundEvent MUSIC_OVERWORLD_MEADOW = BuiltinSoundEvent.get("minecraft:music.overworld.meadow");
+    SoundEvent MUSIC_DRAGON = BuiltinSoundEvent.get("music.dragon");
 
-    SoundEvent MUSIC_OVERWORLD_CHERRY_GROVE = BuiltinSoundEvent.get("minecraft:music.overworld.cherry_grove");
+    SoundEvent MUSIC_END = BuiltinSoundEvent.get("music.end");
 
-    SoundEvent MUSIC_NETHER_NETHER_WASTES = BuiltinSoundEvent.get("minecraft:music.nether.nether_wastes");
+    SoundEvent MUSIC_GAME = BuiltinSoundEvent.get("music.game");
 
-    SoundEvent MUSIC_OVERWORLD_FROZEN_PEAKS = BuiltinSoundEvent.get("minecraft:music.overworld.frozen_peaks");
+    SoundEvent MUSIC_MENU = BuiltinSoundEvent.get("music.menu");
 
-    SoundEvent MUSIC_OVERWORLD_SNOWY_SLOPES = BuiltinSoundEvent.get("minecraft:music.overworld.snowy_slopes");
+    SoundEvent MUSIC_NETHER_BASALT_DELTAS = BuiltinSoundEvent.get("music.nether.basalt_deltas");
 
-    SoundEvent MUSIC_NETHER_SOUL_SAND_VALLEY = BuiltinSoundEvent.get("minecraft:music.nether.soul_sand_valley");
+    SoundEvent MUSIC_NETHER_CRIMSON_FOREST = BuiltinSoundEvent.get("music.nether.crimson_forest");
 
-    SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = BuiltinSoundEvent.get("minecraft:music.overworld.stony_peaks");
+    SoundEvent MUSIC_OVERWORLD_DEEP_DARK = BuiltinSoundEvent.get("music.overworld.deep_dark");
 
-    SoundEvent MUSIC_NETHER_WARPED_FOREST = BuiltinSoundEvent.get("minecraft:music.nether.warped_forest");
+    SoundEvent MUSIC_OVERWORLD_DRIPSTONE_CAVES = BuiltinSoundEvent.get("music.overworld.dripstone_caves");
 
-    SoundEvent MUSIC_OVERWORLD_FLOWER_FOREST = BuiltinSoundEvent.get("minecraft:music.overworld.flower_forest");
+    SoundEvent MUSIC_OVERWORLD_GROVE = BuiltinSoundEvent.get("music.overworld.grove");
 
-    SoundEvent MUSIC_OVERWORLD_DESERT = BuiltinSoundEvent.get("minecraft:music.overworld.desert");
+    SoundEvent MUSIC_OVERWORLD_JAGGED_PEAKS = BuiltinSoundEvent.get("music.overworld.jagged_peaks");
 
-    SoundEvent MUSIC_OVERWORLD_BADLANDS = BuiltinSoundEvent.get("minecraft:music.overworld.badlands");
+    SoundEvent MUSIC_OVERWORLD_LUSH_CAVES = BuiltinSoundEvent.get("music.overworld.lush_caves");
 
-    SoundEvent MUSIC_OVERWORLD_JUNGLE = BuiltinSoundEvent.get("minecraft:music.overworld.jungle");
+    SoundEvent MUSIC_OVERWORLD_SWAMP = BuiltinSoundEvent.get("music.overworld.swamp");
 
-    SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = BuiltinSoundEvent.get("minecraft:music.overworld.sparse_jungle");
+    SoundEvent MUSIC_OVERWORLD_FOREST = BuiltinSoundEvent.get("music.overworld.forest");
 
-    SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = BuiltinSoundEvent.get("minecraft:music.overworld.bamboo_jungle");
+    SoundEvent MUSIC_OVERWORLD_OLD_GROWTH_TAIGA = BuiltinSoundEvent.get("music.overworld.old_growth_taiga");
 
-    SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get("minecraft:music.under_water");
+    SoundEvent MUSIC_OVERWORLD_MEADOW = BuiltinSoundEvent.get("music.overworld.meadow");
 
-    SoundEvent BLOCK_NETHER_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_bricks.break");
+    SoundEvent MUSIC_OVERWORLD_CHERRY_GROVE = BuiltinSoundEvent.get("music.overworld.cherry_grove");
 
-    SoundEvent BLOCK_NETHER_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.nether_bricks.step");
+    SoundEvent MUSIC_NETHER_NETHER_WASTES = BuiltinSoundEvent.get("music.nether.nether_wastes");
 
-    SoundEvent BLOCK_NETHER_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_bricks.place");
+    SoundEvent MUSIC_OVERWORLD_FROZEN_PEAKS = BuiltinSoundEvent.get("music.overworld.frozen_peaks");
 
-    SoundEvent BLOCK_NETHER_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.nether_bricks.hit");
+    SoundEvent MUSIC_OVERWORLD_SNOWY_SLOPES = BuiltinSoundEvent.get("music.overworld.snowy_slopes");
 
-    SoundEvent BLOCK_NETHER_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.nether_bricks.fall");
+    SoundEvent MUSIC_NETHER_SOUL_SAND_VALLEY = BuiltinSoundEvent.get("music.nether.soul_sand_valley");
 
-    SoundEvent BLOCK_NETHER_WART_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_wart.break");
+    SoundEvent MUSIC_OVERWORLD_STONY_PEAKS = BuiltinSoundEvent.get("music.overworld.stony_peaks");
 
-    SoundEvent ITEM_NETHER_WART_PLANT = BuiltinSoundEvent.get("minecraft:item.nether_wart.plant");
+    SoundEvent MUSIC_NETHER_WARPED_FOREST = BuiltinSoundEvent.get("music.nether.warped_forest");
 
-    SoundEvent BLOCK_NETHER_WOOD_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_wood.break");
+    SoundEvent MUSIC_OVERWORLD_FLOWER_FOREST = BuiltinSoundEvent.get("music.overworld.flower_forest");
 
-    SoundEvent BLOCK_NETHER_WOOD_FALL = BuiltinSoundEvent.get("minecraft:block.nether_wood.fall");
+    SoundEvent MUSIC_OVERWORLD_DESERT = BuiltinSoundEvent.get("music.overworld.desert");
 
-    SoundEvent BLOCK_NETHER_WOOD_HIT = BuiltinSoundEvent.get("minecraft:block.nether_wood.hit");
+    SoundEvent MUSIC_OVERWORLD_BADLANDS = BuiltinSoundEvent.get("music.overworld.badlands");
 
-    SoundEvent BLOCK_NETHER_WOOD_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_wood.place");
+    SoundEvent MUSIC_OVERWORLD_JUNGLE = BuiltinSoundEvent.get("music.overworld.jungle");
 
-    SoundEvent BLOCK_NETHER_WOOD_STEP = BuiltinSoundEvent.get("minecraft:block.nether_wood.step");
+    SoundEvent MUSIC_OVERWORLD_SPARSE_JUNGLE = BuiltinSoundEvent.get("music.overworld.sparse_jungle");
 
-    SoundEvent BLOCK_NETHER_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.nether_wood_door.close");
+    SoundEvent MUSIC_OVERWORLD_BAMBOO_JUNGLE = BuiltinSoundEvent.get("music.overworld.bamboo_jungle");
 
-    SoundEvent BLOCK_NETHER_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.nether_wood_door.open");
+    SoundEvent MUSIC_UNDER_WATER = BuiltinSoundEvent.get("music.under_water");
 
-    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.nether_wood_trapdoor.close");
+    SoundEvent BLOCK_NETHER_BRICKS_BREAK = BuiltinSoundEvent.get("block.nether_bricks.break");
 
-    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.nether_wood_trapdoor.open");
+    SoundEvent BLOCK_NETHER_BRICKS_STEP = BuiltinSoundEvent.get("block.nether_bricks.step");
 
-    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.nether_wood_button.click_off");
+    SoundEvent BLOCK_NETHER_BRICKS_PLACE = BuiltinSoundEvent.get("block.nether_bricks.place");
 
-    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.nether_wood_button.click_on");
+    SoundEvent BLOCK_NETHER_BRICKS_HIT = BuiltinSoundEvent.get("block.nether_bricks.hit");
 
-    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.nether_wood_pressure_plate.click_off");
+    SoundEvent BLOCK_NETHER_BRICKS_FALL = BuiltinSoundEvent.get("block.nether_bricks.fall");
 
-    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.nether_wood_pressure_plate.click_on");
+    SoundEvent BLOCK_NETHER_WART_BREAK = BuiltinSoundEvent.get("block.nether_wart.break");
 
-    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("minecraft:block.nether_wood_fence_gate.close");
+    SoundEvent ITEM_NETHER_WART_PLANT = BuiltinSoundEvent.get("item.nether_wart.plant");
 
-    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("minecraft:block.nether_wood_fence_gate.open");
+    SoundEvent BLOCK_NETHER_WOOD_BREAK = BuiltinSoundEvent.get("block.nether_wood.break");
 
-    SoundEvent INTENTIONALLY_EMPTY = BuiltinSoundEvent.get("minecraft:intentionally_empty");
+    SoundEvent BLOCK_NETHER_WOOD_FALL = BuiltinSoundEvent.get("block.nether_wood.fall");
 
-    SoundEvent BLOCK_PACKED_MUD_BREAK = BuiltinSoundEvent.get("minecraft:block.packed_mud.break");
+    SoundEvent BLOCK_NETHER_WOOD_HIT = BuiltinSoundEvent.get("block.nether_wood.hit");
 
-    SoundEvent BLOCK_PACKED_MUD_FALL = BuiltinSoundEvent.get("minecraft:block.packed_mud.fall");
+    SoundEvent BLOCK_NETHER_WOOD_PLACE = BuiltinSoundEvent.get("block.nether_wood.place");
 
-    SoundEvent BLOCK_PACKED_MUD_HIT = BuiltinSoundEvent.get("minecraft:block.packed_mud.hit");
+    SoundEvent BLOCK_NETHER_WOOD_STEP = BuiltinSoundEvent.get("block.nether_wood.step");
 
-    SoundEvent BLOCK_PACKED_MUD_PLACE = BuiltinSoundEvent.get("minecraft:block.packed_mud.place");
+    SoundEvent BLOCK_NETHER_WOOD_DOOR_CLOSE = BuiltinSoundEvent.get("block.nether_wood_door.close");
 
-    SoundEvent BLOCK_PACKED_MUD_STEP = BuiltinSoundEvent.get("minecraft:block.packed_mud.step");
+    SoundEvent BLOCK_NETHER_WOOD_DOOR_OPEN = BuiltinSoundEvent.get("block.nether_wood_door.open");
 
-    SoundEvent BLOCK_STEM_BREAK = BuiltinSoundEvent.get("minecraft:block.stem.break");
+    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.nether_wood_trapdoor.close");
 
-    SoundEvent BLOCK_STEM_STEP = BuiltinSoundEvent.get("minecraft:block.stem.step");
+    SoundEvent BLOCK_NETHER_WOOD_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.nether_wood_trapdoor.open");
 
-    SoundEvent BLOCK_STEM_PLACE = BuiltinSoundEvent.get("minecraft:block.stem.place");
+    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("block.nether_wood_button.click_off");
 
-    SoundEvent BLOCK_STEM_HIT = BuiltinSoundEvent.get("minecraft:block.stem.hit");
+    SoundEvent BLOCK_NETHER_WOOD_BUTTON_CLICK_ON = BuiltinSoundEvent.get("block.nether_wood_button.click_on");
 
-    SoundEvent BLOCK_STEM_FALL = BuiltinSoundEvent.get("minecraft:block.stem.fall");
+    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.nether_wood_pressure_plate.click_off");
 
-    SoundEvent BLOCK_NYLIUM_BREAK = BuiltinSoundEvent.get("minecraft:block.nylium.break");
+    SoundEvent BLOCK_NETHER_WOOD_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.nether_wood_pressure_plate.click_on");
 
-    SoundEvent BLOCK_NYLIUM_STEP = BuiltinSoundEvent.get("minecraft:block.nylium.step");
+    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_CLOSE = BuiltinSoundEvent.get("block.nether_wood_fence_gate.close");
 
-    SoundEvent BLOCK_NYLIUM_PLACE = BuiltinSoundEvent.get("minecraft:block.nylium.place");
+    SoundEvent BLOCK_NETHER_WOOD_FENCE_GATE_OPEN = BuiltinSoundEvent.get("block.nether_wood_fence_gate.open");
 
-    SoundEvent BLOCK_NYLIUM_HIT = BuiltinSoundEvent.get("minecraft:block.nylium.hit");
+    SoundEvent INTENTIONALLY_EMPTY = BuiltinSoundEvent.get("intentionally_empty");
 
-    SoundEvent BLOCK_NYLIUM_FALL = BuiltinSoundEvent.get("minecraft:block.nylium.fall");
+    SoundEvent BLOCK_PACKED_MUD_BREAK = BuiltinSoundEvent.get("block.packed_mud.break");
 
-    SoundEvent BLOCK_NETHER_SPROUTS_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_sprouts.break");
+    SoundEvent BLOCK_PACKED_MUD_FALL = BuiltinSoundEvent.get("block.packed_mud.fall");
 
-    SoundEvent BLOCK_NETHER_SPROUTS_STEP = BuiltinSoundEvent.get("minecraft:block.nether_sprouts.step");
+    SoundEvent BLOCK_PACKED_MUD_HIT = BuiltinSoundEvent.get("block.packed_mud.hit");
 
-    SoundEvent BLOCK_NETHER_SPROUTS_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_sprouts.place");
+    SoundEvent BLOCK_PACKED_MUD_PLACE = BuiltinSoundEvent.get("block.packed_mud.place");
 
-    SoundEvent BLOCK_NETHER_SPROUTS_HIT = BuiltinSoundEvent.get("minecraft:block.nether_sprouts.hit");
+    SoundEvent BLOCK_PACKED_MUD_STEP = BuiltinSoundEvent.get("block.packed_mud.step");
 
-    SoundEvent BLOCK_NETHER_SPROUTS_FALL = BuiltinSoundEvent.get("minecraft:block.nether_sprouts.fall");
+    SoundEvent BLOCK_STEM_BREAK = BuiltinSoundEvent.get("block.stem.break");
 
-    SoundEvent BLOCK_FUNGUS_BREAK = BuiltinSoundEvent.get("minecraft:block.fungus.break");
+    SoundEvent BLOCK_STEM_STEP = BuiltinSoundEvent.get("block.stem.step");
 
-    SoundEvent BLOCK_FUNGUS_STEP = BuiltinSoundEvent.get("minecraft:block.fungus.step");
+    SoundEvent BLOCK_STEM_PLACE = BuiltinSoundEvent.get("block.stem.place");
 
-    SoundEvent BLOCK_FUNGUS_PLACE = BuiltinSoundEvent.get("minecraft:block.fungus.place");
+    SoundEvent BLOCK_STEM_HIT = BuiltinSoundEvent.get("block.stem.hit");
 
-    SoundEvent BLOCK_FUNGUS_HIT = BuiltinSoundEvent.get("minecraft:block.fungus.hit");
+    SoundEvent BLOCK_STEM_FALL = BuiltinSoundEvent.get("block.stem.fall");
 
-    SoundEvent BLOCK_FUNGUS_FALL = BuiltinSoundEvent.get("minecraft:block.fungus.fall");
+    SoundEvent BLOCK_NYLIUM_BREAK = BuiltinSoundEvent.get("block.nylium.break");
 
-    SoundEvent BLOCK_WEEPING_VINES_BREAK = BuiltinSoundEvent.get("minecraft:block.weeping_vines.break");
+    SoundEvent BLOCK_NYLIUM_STEP = BuiltinSoundEvent.get("block.nylium.step");
 
-    SoundEvent BLOCK_WEEPING_VINES_STEP = BuiltinSoundEvent.get("minecraft:block.weeping_vines.step");
+    SoundEvent BLOCK_NYLIUM_PLACE = BuiltinSoundEvent.get("block.nylium.place");
 
-    SoundEvent BLOCK_WEEPING_VINES_PLACE = BuiltinSoundEvent.get("minecraft:block.weeping_vines.place");
+    SoundEvent BLOCK_NYLIUM_HIT = BuiltinSoundEvent.get("block.nylium.hit");
 
-    SoundEvent BLOCK_WEEPING_VINES_HIT = BuiltinSoundEvent.get("minecraft:block.weeping_vines.hit");
+    SoundEvent BLOCK_NYLIUM_FALL = BuiltinSoundEvent.get("block.nylium.fall");
 
-    SoundEvent BLOCK_WEEPING_VINES_FALL = BuiltinSoundEvent.get("minecraft:block.weeping_vines.fall");
+    SoundEvent BLOCK_NETHER_SPROUTS_BREAK = BuiltinSoundEvent.get("block.nether_sprouts.break");
 
-    SoundEvent BLOCK_WART_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.wart_block.break");
+    SoundEvent BLOCK_NETHER_SPROUTS_STEP = BuiltinSoundEvent.get("block.nether_sprouts.step");
 
-    SoundEvent BLOCK_WART_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.wart_block.step");
+    SoundEvent BLOCK_NETHER_SPROUTS_PLACE = BuiltinSoundEvent.get("block.nether_sprouts.place");
 
-    SoundEvent BLOCK_WART_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.wart_block.place");
+    SoundEvent BLOCK_NETHER_SPROUTS_HIT = BuiltinSoundEvent.get("block.nether_sprouts.hit");
 
-    SoundEvent BLOCK_WART_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.wart_block.hit");
+    SoundEvent BLOCK_NETHER_SPROUTS_FALL = BuiltinSoundEvent.get("block.nether_sprouts.fall");
 
-    SoundEvent BLOCK_WART_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.wart_block.fall");
+    SoundEvent BLOCK_FUNGUS_BREAK = BuiltinSoundEvent.get("block.fungus.break");
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.netherite_block.break");
+    SoundEvent BLOCK_FUNGUS_STEP = BuiltinSoundEvent.get("block.fungus.step");
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.netherite_block.step");
+    SoundEvent BLOCK_FUNGUS_PLACE = BuiltinSoundEvent.get("block.fungus.place");
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.netherite_block.place");
+    SoundEvent BLOCK_FUNGUS_HIT = BuiltinSoundEvent.get("block.fungus.hit");
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.netherite_block.hit");
+    SoundEvent BLOCK_FUNGUS_FALL = BuiltinSoundEvent.get("block.fungus.fall");
 
-    SoundEvent BLOCK_NETHERITE_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.netherite_block.fall");
+    SoundEvent BLOCK_WEEPING_VINES_BREAK = BuiltinSoundEvent.get("block.weeping_vines.break");
 
-    SoundEvent BLOCK_NETHERRACK_BREAK = BuiltinSoundEvent.get("minecraft:block.netherrack.break");
+    SoundEvent BLOCK_WEEPING_VINES_STEP = BuiltinSoundEvent.get("block.weeping_vines.step");
 
-    SoundEvent BLOCK_NETHERRACK_STEP = BuiltinSoundEvent.get("minecraft:block.netherrack.step");
+    SoundEvent BLOCK_WEEPING_VINES_PLACE = BuiltinSoundEvent.get("block.weeping_vines.place");
 
-    SoundEvent BLOCK_NETHERRACK_PLACE = BuiltinSoundEvent.get("minecraft:block.netherrack.place");
+    SoundEvent BLOCK_WEEPING_VINES_HIT = BuiltinSoundEvent.get("block.weeping_vines.hit");
 
-    SoundEvent BLOCK_NETHERRACK_HIT = BuiltinSoundEvent.get("minecraft:block.netherrack.hit");
+    SoundEvent BLOCK_WEEPING_VINES_FALL = BuiltinSoundEvent.get("block.weeping_vines.fall");
 
-    SoundEvent BLOCK_NETHERRACK_FALL = BuiltinSoundEvent.get("minecraft:block.netherrack.fall");
+    SoundEvent BLOCK_WART_BLOCK_BREAK = BuiltinSoundEvent.get("block.wart_block.break");
 
-    SoundEvent BLOCK_NOTE_BLOCK_BASEDRUM = BuiltinSoundEvent.get("minecraft:block.note_block.basedrum");
+    SoundEvent BLOCK_WART_BLOCK_STEP = BuiltinSoundEvent.get("block.wart_block.step");
 
-    SoundEvent BLOCK_NOTE_BLOCK_BASS = BuiltinSoundEvent.get("minecraft:block.note_block.bass");
+    SoundEvent BLOCK_WART_BLOCK_PLACE = BuiltinSoundEvent.get("block.wart_block.place");
 
-    SoundEvent BLOCK_NOTE_BLOCK_BELL = BuiltinSoundEvent.get("minecraft:block.note_block.bell");
+    SoundEvent BLOCK_WART_BLOCK_HIT = BuiltinSoundEvent.get("block.wart_block.hit");
 
-    SoundEvent BLOCK_NOTE_BLOCK_CHIME = BuiltinSoundEvent.get("minecraft:block.note_block.chime");
+    SoundEvent BLOCK_WART_BLOCK_FALL = BuiltinSoundEvent.get("block.wart_block.fall");
 
-    SoundEvent BLOCK_NOTE_BLOCK_FLUTE = BuiltinSoundEvent.get("minecraft:block.note_block.flute");
+    SoundEvent BLOCK_NETHERITE_BLOCK_BREAK = BuiltinSoundEvent.get("block.netherite_block.break");
 
-    SoundEvent BLOCK_NOTE_BLOCK_GUITAR = BuiltinSoundEvent.get("minecraft:block.note_block.guitar");
+    SoundEvent BLOCK_NETHERITE_BLOCK_STEP = BuiltinSoundEvent.get("block.netherite_block.step");
 
-    SoundEvent BLOCK_NOTE_BLOCK_HARP = BuiltinSoundEvent.get("minecraft:block.note_block.harp");
+    SoundEvent BLOCK_NETHERITE_BLOCK_PLACE = BuiltinSoundEvent.get("block.netherite_block.place");
 
-    SoundEvent BLOCK_NOTE_BLOCK_HAT = BuiltinSoundEvent.get("minecraft:block.note_block.hat");
+    SoundEvent BLOCK_NETHERITE_BLOCK_HIT = BuiltinSoundEvent.get("block.netherite_block.hit");
 
-    SoundEvent BLOCK_NOTE_BLOCK_PLING = BuiltinSoundEvent.get("minecraft:block.note_block.pling");
+    SoundEvent BLOCK_NETHERITE_BLOCK_FALL = BuiltinSoundEvent.get("block.netherite_block.fall");
 
-    SoundEvent BLOCK_NOTE_BLOCK_SNARE = BuiltinSoundEvent.get("minecraft:block.note_block.snare");
+    SoundEvent BLOCK_NETHERRACK_BREAK = BuiltinSoundEvent.get("block.netherrack.break");
 
-    SoundEvent BLOCK_NOTE_BLOCK_XYLOPHONE = BuiltinSoundEvent.get("minecraft:block.note_block.xylophone");
+    SoundEvent BLOCK_NETHERRACK_STEP = BuiltinSoundEvent.get("block.netherrack.step");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IRON_XYLOPHONE = BuiltinSoundEvent.get("minecraft:block.note_block.iron_xylophone");
+    SoundEvent BLOCK_NETHERRACK_PLACE = BuiltinSoundEvent.get("block.netherrack.place");
 
-    SoundEvent BLOCK_NOTE_BLOCK_COW_BELL = BuiltinSoundEvent.get("minecraft:block.note_block.cow_bell");
+    SoundEvent BLOCK_NETHERRACK_HIT = BuiltinSoundEvent.get("block.netherrack.hit");
 
-    SoundEvent BLOCK_NOTE_BLOCK_DIDGERIDOO = BuiltinSoundEvent.get("minecraft:block.note_block.didgeridoo");
+    SoundEvent BLOCK_NETHERRACK_FALL = BuiltinSoundEvent.get("block.netherrack.fall");
 
-    SoundEvent BLOCK_NOTE_BLOCK_BIT = BuiltinSoundEvent.get("minecraft:block.note_block.bit");
+    SoundEvent BLOCK_NOTE_BLOCK_BASEDRUM = BuiltinSoundEvent.get("block.note_block.basedrum");
 
-    SoundEvent BLOCK_NOTE_BLOCK_BANJO = BuiltinSoundEvent.get("minecraft:block.note_block.banjo");
+    SoundEvent BLOCK_NOTE_BLOCK_BASS = BuiltinSoundEvent.get("block.note_block.bass");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.zombie");
+    SoundEvent BLOCK_NOTE_BLOCK_BELL = BuiltinSoundEvent.get("block.note_block.bell");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_SKELETON = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.skeleton");
+    SoundEvent BLOCK_NOTE_BLOCK_CHIME = BuiltinSoundEvent.get("block.note_block.chime");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_CREEPER = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.creeper");
+    SoundEvent BLOCK_NOTE_BLOCK_FLUTE = BuiltinSoundEvent.get("block.note_block.flute");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.ender_dragon");
+    SoundEvent BLOCK_NOTE_BLOCK_GUITAR = BuiltinSoundEvent.get("block.note_block.guitar");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.wither_skeleton");
+    SoundEvent BLOCK_NOTE_BLOCK_HARP = BuiltinSoundEvent.get("block.note_block.harp");
 
-    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_PIGLIN = BuiltinSoundEvent.get("minecraft:block.note_block.imitate.piglin");
+    SoundEvent BLOCK_NOTE_BLOCK_HAT = BuiltinSoundEvent.get("block.note_block.hat");
 
-    SoundEvent ENTITY_OCELOT_HURT = BuiltinSoundEvent.get("minecraft:entity.ocelot.hurt");
+    SoundEvent BLOCK_NOTE_BLOCK_PLING = BuiltinSoundEvent.get("block.note_block.pling");
 
-    SoundEvent ENTITY_OCELOT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.ocelot.ambient");
+    SoundEvent BLOCK_NOTE_BLOCK_SNARE = BuiltinSoundEvent.get("block.note_block.snare");
 
-    SoundEvent ENTITY_OCELOT_DEATH = BuiltinSoundEvent.get("minecraft:entity.ocelot.death");
+    SoundEvent BLOCK_NOTE_BLOCK_XYLOPHONE = BuiltinSoundEvent.get("block.note_block.xylophone");
 
-    SoundEvent ITEM_OMINOUS_BOTTLE_DISPOSE = BuiltinSoundEvent.get("minecraft:item.ominous_bottle.dispose");
+    SoundEvent BLOCK_NOTE_BLOCK_IRON_XYLOPHONE = BuiltinSoundEvent.get("block.note_block.iron_xylophone");
 
-    SoundEvent ENTITY_PAINTING_BREAK = BuiltinSoundEvent.get("minecraft:entity.painting.break");
+    SoundEvent BLOCK_NOTE_BLOCK_COW_BELL = BuiltinSoundEvent.get("block.note_block.cow_bell");
 
-    SoundEvent ENTITY_PAINTING_PLACE = BuiltinSoundEvent.get("minecraft:entity.painting.place");
+    SoundEvent BLOCK_NOTE_BLOCK_DIDGERIDOO = BuiltinSoundEvent.get("block.note_block.didgeridoo");
 
-    SoundEvent BLOCK_PALE_HANGING_MOSS_IDLE = BuiltinSoundEvent.get("minecraft:block.pale_hanging_moss.idle");
+    SoundEvent BLOCK_NOTE_BLOCK_BIT = BuiltinSoundEvent.get("block.note_block.bit");
 
-    SoundEvent ENTITY_PANDA_PRE_SNEEZE = BuiltinSoundEvent.get("minecraft:entity.panda.pre_sneeze");
+    SoundEvent BLOCK_NOTE_BLOCK_BANJO = BuiltinSoundEvent.get("block.note_block.banjo");
 
-    SoundEvent ENTITY_PANDA_SNEEZE = BuiltinSoundEvent.get("minecraft:entity.panda.sneeze");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ZOMBIE = BuiltinSoundEvent.get("block.note_block.imitate.zombie");
 
-    SoundEvent ENTITY_PANDA_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.panda.ambient");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_SKELETON = BuiltinSoundEvent.get("block.note_block.imitate.skeleton");
 
-    SoundEvent ENTITY_PANDA_DEATH = BuiltinSoundEvent.get("minecraft:entity.panda.death");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_CREEPER = BuiltinSoundEvent.get("block.note_block.imitate.creeper");
 
-    SoundEvent ENTITY_PANDA_EAT = BuiltinSoundEvent.get("minecraft:entity.panda.eat");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get("block.note_block.imitate.ender_dragon");
 
-    SoundEvent ENTITY_PANDA_STEP = BuiltinSoundEvent.get("minecraft:entity.panda.step");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get("block.note_block.imitate.wither_skeleton");
 
-    SoundEvent ENTITY_PANDA_CANT_BREED = BuiltinSoundEvent.get("minecraft:entity.panda.cant_breed");
+    SoundEvent BLOCK_NOTE_BLOCK_IMITATE_PIGLIN = BuiltinSoundEvent.get("block.note_block.imitate.piglin");
 
-    SoundEvent ENTITY_PANDA_AGGRESSIVE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.panda.aggressive_ambient");
+    SoundEvent ENTITY_OCELOT_HURT = BuiltinSoundEvent.get("entity.ocelot.hurt");
 
-    SoundEvent ENTITY_PANDA_WORRIED_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.panda.worried_ambient");
+    SoundEvent ENTITY_OCELOT_AMBIENT = BuiltinSoundEvent.get("entity.ocelot.ambient");
 
-    SoundEvent ENTITY_PANDA_HURT = BuiltinSoundEvent.get("minecraft:entity.panda.hurt");
+    SoundEvent ENTITY_OCELOT_DEATH = BuiltinSoundEvent.get("entity.ocelot.death");
 
-    SoundEvent ENTITY_PANDA_BITE = BuiltinSoundEvent.get("minecraft:entity.panda.bite");
+    SoundEvent ITEM_OMINOUS_BOTTLE_DISPOSE = BuiltinSoundEvent.get("item.ominous_bottle.dispose");
 
-    SoundEvent ENTITY_PARROT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.parrot.ambient");
+    SoundEvent ENTITY_PAINTING_BREAK = BuiltinSoundEvent.get("entity.painting.break");
 
-    SoundEvent ENTITY_PARROT_DEATH = BuiltinSoundEvent.get("minecraft:entity.parrot.death");
+    SoundEvent ENTITY_PAINTING_PLACE = BuiltinSoundEvent.get("entity.painting.place");
 
-    SoundEvent ENTITY_PARROT_EAT = BuiltinSoundEvent.get("minecraft:entity.parrot.eat");
+    SoundEvent BLOCK_PALE_HANGING_MOSS_IDLE = BuiltinSoundEvent.get("block.pale_hanging_moss.idle");
 
-    SoundEvent ENTITY_PARROT_FLY = BuiltinSoundEvent.get("minecraft:entity.parrot.fly");
+    SoundEvent ENTITY_PANDA_PRE_SNEEZE = BuiltinSoundEvent.get("entity.panda.pre_sneeze");
 
-    SoundEvent ENTITY_PARROT_HURT = BuiltinSoundEvent.get("minecraft:entity.parrot.hurt");
+    SoundEvent ENTITY_PANDA_SNEEZE = BuiltinSoundEvent.get("entity.panda.sneeze");
 
-    SoundEvent ENTITY_PARROT_IMITATE_BLAZE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.blaze");
+    SoundEvent ENTITY_PANDA_AMBIENT = BuiltinSoundEvent.get("entity.panda.ambient");
 
-    SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.bogged");
+    SoundEvent ENTITY_PANDA_DEATH = BuiltinSoundEvent.get("entity.panda.death");
 
-    SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.breeze");
+    SoundEvent ENTITY_PANDA_EAT = BuiltinSoundEvent.get("entity.panda.eat");
 
-    SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.creaking");
+    SoundEvent ENTITY_PANDA_STEP = BuiltinSoundEvent.get("entity.panda.step");
 
-    SoundEvent ENTITY_PARROT_IMITATE_CREEPER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.creeper");
+    SoundEvent ENTITY_PANDA_CANT_BREED = BuiltinSoundEvent.get("entity.panda.cant_breed");
 
-    SoundEvent ENTITY_PARROT_IMITATE_DROWNED = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.drowned");
+    SoundEvent ENTITY_PANDA_AGGRESSIVE_AMBIENT = BuiltinSoundEvent.get("entity.panda.aggressive_ambient");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ELDER_GUARDIAN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.elder_guardian");
+    SoundEvent ENTITY_PANDA_WORRIED_AMBIENT = BuiltinSoundEvent.get("entity.panda.worried_ambient");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.ender_dragon");
+    SoundEvent ENTITY_PANDA_HURT = BuiltinSoundEvent.get("entity.panda.hurt");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ENDERMITE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.endermite");
+    SoundEvent ENTITY_PANDA_BITE = BuiltinSoundEvent.get("entity.panda.bite");
 
-    SoundEvent ENTITY_PARROT_IMITATE_EVOKER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.evoker");
+    SoundEvent ENTITY_PARROT_AMBIENT = BuiltinSoundEvent.get("entity.parrot.ambient");
 
-    SoundEvent ENTITY_PARROT_IMITATE_GHAST = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.ghast");
+    SoundEvent ENTITY_PARROT_DEATH = BuiltinSoundEvent.get("entity.parrot.death");
 
-    SoundEvent ENTITY_PARROT_IMITATE_GUARDIAN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.guardian");
+    SoundEvent ENTITY_PARROT_EAT = BuiltinSoundEvent.get("entity.parrot.eat");
 
-    SoundEvent ENTITY_PARROT_IMITATE_HOGLIN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.hoglin");
+    SoundEvent ENTITY_PARROT_FLY = BuiltinSoundEvent.get("entity.parrot.fly");
 
-    SoundEvent ENTITY_PARROT_IMITATE_HUSK = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.husk");
+    SoundEvent ENTITY_PARROT_HURT = BuiltinSoundEvent.get("entity.parrot.hurt");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ILLUSIONER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.illusioner");
+    SoundEvent ENTITY_PARROT_IMITATE_BLAZE = BuiltinSoundEvent.get("entity.parrot.imitate.blaze");
 
-    SoundEvent ENTITY_PARROT_IMITATE_MAGMA_CUBE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.magma_cube");
+    SoundEvent ENTITY_PARROT_IMITATE_BOGGED = BuiltinSoundEvent.get("entity.parrot.imitate.bogged");
 
-    SoundEvent ENTITY_PARROT_IMITATE_PHANTOM = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.phantom");
+    SoundEvent ENTITY_PARROT_IMITATE_BREEZE = BuiltinSoundEvent.get("entity.parrot.imitate.breeze");
 
-    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.piglin");
+    SoundEvent ENTITY_PARROT_IMITATE_CREAKING = BuiltinSoundEvent.get("entity.parrot.imitate.creaking");
 
-    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.piglin_brute");
+    SoundEvent ENTITY_PARROT_IMITATE_CREEPER = BuiltinSoundEvent.get("entity.parrot.imitate.creeper");
 
-    SoundEvent ENTITY_PARROT_IMITATE_PILLAGER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.pillager");
+    SoundEvent ENTITY_PARROT_IMITATE_DROWNED = BuiltinSoundEvent.get("entity.parrot.imitate.drowned");
 
-    SoundEvent ENTITY_PARROT_IMITATE_RAVAGER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.ravager");
+    SoundEvent ENTITY_PARROT_IMITATE_ELDER_GUARDIAN = BuiltinSoundEvent.get("entity.parrot.imitate.elder_guardian");
 
-    SoundEvent ENTITY_PARROT_IMITATE_SHULKER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.shulker");
+    SoundEvent ENTITY_PARROT_IMITATE_ENDER_DRAGON = BuiltinSoundEvent.get("entity.parrot.imitate.ender_dragon");
 
-    SoundEvent ENTITY_PARROT_IMITATE_SILVERFISH = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.silverfish");
+    SoundEvent ENTITY_PARROT_IMITATE_ENDERMITE = BuiltinSoundEvent.get("entity.parrot.imitate.endermite");
 
-    SoundEvent ENTITY_PARROT_IMITATE_SKELETON = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.skeleton");
+    SoundEvent ENTITY_PARROT_IMITATE_EVOKER = BuiltinSoundEvent.get("entity.parrot.imitate.evoker");
 
-    SoundEvent ENTITY_PARROT_IMITATE_SLIME = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.slime");
+    SoundEvent ENTITY_PARROT_IMITATE_GHAST = BuiltinSoundEvent.get("entity.parrot.imitate.ghast");
 
-    SoundEvent ENTITY_PARROT_IMITATE_SPIDER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.spider");
+    SoundEvent ENTITY_PARROT_IMITATE_GUARDIAN = BuiltinSoundEvent.get("entity.parrot.imitate.guardian");
 
-    SoundEvent ENTITY_PARROT_IMITATE_STRAY = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.stray");
+    SoundEvent ENTITY_PARROT_IMITATE_HOGLIN = BuiltinSoundEvent.get("entity.parrot.imitate.hoglin");
 
-    SoundEvent ENTITY_PARROT_IMITATE_VEX = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.vex");
+    SoundEvent ENTITY_PARROT_IMITATE_HUSK = BuiltinSoundEvent.get("entity.parrot.imitate.husk");
 
-    SoundEvent ENTITY_PARROT_IMITATE_VINDICATOR = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.vindicator");
+    SoundEvent ENTITY_PARROT_IMITATE_ILLUSIONER = BuiltinSoundEvent.get("entity.parrot.imitate.illusioner");
 
-    SoundEvent ENTITY_PARROT_IMITATE_WARDEN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.warden");
+    SoundEvent ENTITY_PARROT_IMITATE_MAGMA_CUBE = BuiltinSoundEvent.get("entity.parrot.imitate.magma_cube");
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITCH = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.witch");
+    SoundEvent ENTITY_PARROT_IMITATE_PHANTOM = BuiltinSoundEvent.get("entity.parrot.imitate.phantom");
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITHER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.wither");
+    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN = BuiltinSoundEvent.get("entity.parrot.imitate.piglin");
 
-    SoundEvent ENTITY_PARROT_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.wither_skeleton");
+    SoundEvent ENTITY_PARROT_IMITATE_PIGLIN_BRUTE = BuiltinSoundEvent.get("entity.parrot.imitate.piglin_brute");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOGLIN = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.zoglin");
+    SoundEvent ENTITY_PARROT_IMITATE_PILLAGER = BuiltinSoundEvent.get("entity.parrot.imitate.pillager");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.zombie");
+    SoundEvent ENTITY_PARROT_IMITATE_RAVAGER = BuiltinSoundEvent.get("entity.parrot.imitate.ravager");
 
-    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = BuiltinSoundEvent.get("minecraft:entity.parrot.imitate.zombie_villager");
+    SoundEvent ENTITY_PARROT_IMITATE_SHULKER = BuiltinSoundEvent.get("entity.parrot.imitate.shulker");
 
-    SoundEvent ENTITY_PARROT_STEP = BuiltinSoundEvent.get("minecraft:entity.parrot.step");
+    SoundEvent ENTITY_PARROT_IMITATE_SILVERFISH = BuiltinSoundEvent.get("entity.parrot.imitate.silverfish");
 
-    SoundEvent ENTITY_PHANTOM_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.phantom.ambient");
+    SoundEvent ENTITY_PARROT_IMITATE_SKELETON = BuiltinSoundEvent.get("entity.parrot.imitate.skeleton");
 
-    SoundEvent ENTITY_PHANTOM_BITE = BuiltinSoundEvent.get("minecraft:entity.phantom.bite");
+    SoundEvent ENTITY_PARROT_IMITATE_SLIME = BuiltinSoundEvent.get("entity.parrot.imitate.slime");
 
-    SoundEvent ENTITY_PHANTOM_DEATH = BuiltinSoundEvent.get("minecraft:entity.phantom.death");
+    SoundEvent ENTITY_PARROT_IMITATE_SPIDER = BuiltinSoundEvent.get("entity.parrot.imitate.spider");
 
-    SoundEvent ENTITY_PHANTOM_FLAP = BuiltinSoundEvent.get("minecraft:entity.phantom.flap");
+    SoundEvent ENTITY_PARROT_IMITATE_STRAY = BuiltinSoundEvent.get("entity.parrot.imitate.stray");
 
-    SoundEvent ENTITY_PHANTOM_HURT = BuiltinSoundEvent.get("minecraft:entity.phantom.hurt");
+    SoundEvent ENTITY_PARROT_IMITATE_VEX = BuiltinSoundEvent.get("entity.parrot.imitate.vex");
 
-    SoundEvent ENTITY_PHANTOM_SWOOP = BuiltinSoundEvent.get("minecraft:entity.phantom.swoop");
+    SoundEvent ENTITY_PARROT_IMITATE_VINDICATOR = BuiltinSoundEvent.get("entity.parrot.imitate.vindicator");
 
-    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.pig.ambient");
+    SoundEvent ENTITY_PARROT_IMITATE_WARDEN = BuiltinSoundEvent.get("entity.parrot.imitate.warden");
 
-    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get("minecraft:entity.pig.death");
+    SoundEvent ENTITY_PARROT_IMITATE_WITCH = BuiltinSoundEvent.get("entity.parrot.imitate.witch");
 
-    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get("minecraft:entity.pig.hurt");
+    SoundEvent ENTITY_PARROT_IMITATE_WITHER = BuiltinSoundEvent.get("entity.parrot.imitate.wither");
 
-    SoundEvent ENTITY_PIG_SADDLE = BuiltinSoundEvent.get("minecraft:entity.pig.saddle");
+    SoundEvent ENTITY_PARROT_IMITATE_WITHER_SKELETON = BuiltinSoundEvent.get("entity.parrot.imitate.wither_skeleton");
 
-    SoundEvent ENTITY_PIG_STEP = BuiltinSoundEvent.get("minecraft:entity.pig.step");
+    SoundEvent ENTITY_PARROT_IMITATE_ZOGLIN = BuiltinSoundEvent.get("entity.parrot.imitate.zoglin");
 
-    SoundEvent ENTITY_PIGLIN_ADMIRING_ITEM = BuiltinSoundEvent.get("minecraft:entity.piglin.admiring_item");
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE = BuiltinSoundEvent.get("entity.parrot.imitate.zombie");
 
-    SoundEvent ENTITY_PIGLIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.piglin.ambient");
+    SoundEvent ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER = BuiltinSoundEvent.get("entity.parrot.imitate.zombie_villager");
 
-    SoundEvent ENTITY_PIGLIN_ANGRY = BuiltinSoundEvent.get("minecraft:entity.piglin.angry");
+    SoundEvent ENTITY_PARROT_STEP = BuiltinSoundEvent.get("entity.parrot.step");
 
-    SoundEvent ENTITY_PIGLIN_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.piglin.celebrate");
+    SoundEvent ENTITY_PHANTOM_AMBIENT = BuiltinSoundEvent.get("entity.phantom.ambient");
 
-    SoundEvent ENTITY_PIGLIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.piglin.death");
+    SoundEvent ENTITY_PHANTOM_BITE = BuiltinSoundEvent.get("entity.phantom.bite");
 
-    SoundEvent ENTITY_PIGLIN_JEALOUS = BuiltinSoundEvent.get("minecraft:entity.piglin.jealous");
+    SoundEvent ENTITY_PHANTOM_DEATH = BuiltinSoundEvent.get("entity.phantom.death");
 
-    SoundEvent ENTITY_PIGLIN_HURT = BuiltinSoundEvent.get("minecraft:entity.piglin.hurt");
+    SoundEvent ENTITY_PHANTOM_FLAP = BuiltinSoundEvent.get("entity.phantom.flap");
 
-    SoundEvent ENTITY_PIGLIN_RETREAT = BuiltinSoundEvent.get("minecraft:entity.piglin.retreat");
+    SoundEvent ENTITY_PHANTOM_HURT = BuiltinSoundEvent.get("entity.phantom.hurt");
 
-    SoundEvent ENTITY_PIGLIN_STEP = BuiltinSoundEvent.get("minecraft:entity.piglin.step");
+    SoundEvent ENTITY_PHANTOM_SWOOP = BuiltinSoundEvent.get("entity.phantom.swoop");
 
-    SoundEvent ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("minecraft:entity.piglin.converted_to_zombified");
+    SoundEvent ENTITY_PIG_AMBIENT = BuiltinSoundEvent.get("entity.pig.ambient");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.ambient");
+    SoundEvent ENTITY_PIG_DEATH = BuiltinSoundEvent.get("entity.pig.death");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_ANGRY = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.angry");
+    SoundEvent ENTITY_PIG_HURT = BuiltinSoundEvent.get("entity.pig.hurt");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_DEATH = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.death");
+    SoundEvent ENTITY_PIG_SADDLE = BuiltinSoundEvent.get("entity.pig.saddle");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_HURT = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.hurt");
+    SoundEvent ENTITY_PIG_STEP = BuiltinSoundEvent.get("entity.pig.step");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_STEP = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.step");
+    SoundEvent ENTITY_PIGLIN_ADMIRING_ITEM = BuiltinSoundEvent.get("entity.piglin.admiring_item");
 
-    SoundEvent ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("minecraft:entity.piglin_brute.converted_to_zombified");
+    SoundEvent ENTITY_PIGLIN_AMBIENT = BuiltinSoundEvent.get("entity.piglin.ambient");
 
-    SoundEvent ENTITY_PILLAGER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.pillager.ambient");
+    SoundEvent ENTITY_PIGLIN_ANGRY = BuiltinSoundEvent.get("entity.piglin.angry");
 
-    SoundEvent ENTITY_PILLAGER_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.pillager.celebrate");
+    SoundEvent ENTITY_PIGLIN_CELEBRATE = BuiltinSoundEvent.get("entity.piglin.celebrate");
 
-    SoundEvent ENTITY_PILLAGER_DEATH = BuiltinSoundEvent.get("minecraft:entity.pillager.death");
+    SoundEvent ENTITY_PIGLIN_DEATH = BuiltinSoundEvent.get("entity.piglin.death");
 
-    SoundEvent ENTITY_PILLAGER_HURT = BuiltinSoundEvent.get("minecraft:entity.pillager.hurt");
+    SoundEvent ENTITY_PIGLIN_JEALOUS = BuiltinSoundEvent.get("entity.piglin.jealous");
 
-    SoundEvent BLOCK_PISTON_CONTRACT = BuiltinSoundEvent.get("minecraft:block.piston.contract");
+    SoundEvent ENTITY_PIGLIN_HURT = BuiltinSoundEvent.get("entity.piglin.hurt");
 
-    SoundEvent BLOCK_PISTON_EXTEND = BuiltinSoundEvent.get("minecraft:block.piston.extend");
+    SoundEvent ENTITY_PIGLIN_RETREAT = BuiltinSoundEvent.get("entity.piglin.retreat");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_CRIT = BuiltinSoundEvent.get("minecraft:entity.player.attack.crit");
+    SoundEvent ENTITY_PIGLIN_STEP = BuiltinSoundEvent.get("entity.piglin.step");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_KNOCKBACK = BuiltinSoundEvent.get("minecraft:entity.player.attack.knockback");
+    SoundEvent ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("entity.piglin.converted_to_zombified");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_NODAMAGE = BuiltinSoundEvent.get("minecraft:entity.player.attack.nodamage");
+    SoundEvent ENTITY_PIGLIN_BRUTE_AMBIENT = BuiltinSoundEvent.get("entity.piglin_brute.ambient");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_STRONG = BuiltinSoundEvent.get("minecraft:entity.player.attack.strong");
+    SoundEvent ENTITY_PIGLIN_BRUTE_ANGRY = BuiltinSoundEvent.get("entity.piglin_brute.angry");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_SWEEP = BuiltinSoundEvent.get("minecraft:entity.player.attack.sweep");
+    SoundEvent ENTITY_PIGLIN_BRUTE_DEATH = BuiltinSoundEvent.get("entity.piglin_brute.death");
 
-    SoundEvent ENTITY_PLAYER_ATTACK_WEAK = BuiltinSoundEvent.get("minecraft:entity.player.attack.weak");
+    SoundEvent ENTITY_PIGLIN_BRUTE_HURT = BuiltinSoundEvent.get("entity.piglin_brute.hurt");
 
-    SoundEvent ENTITY_PLAYER_BIG_FALL = BuiltinSoundEvent.get("minecraft:entity.player.big_fall");
+    SoundEvent ENTITY_PIGLIN_BRUTE_STEP = BuiltinSoundEvent.get("entity.piglin_brute.step");
 
-    SoundEvent ENTITY_PLAYER_BREATH = BuiltinSoundEvent.get("minecraft:entity.player.breath");
+    SoundEvent ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED = BuiltinSoundEvent.get("entity.piglin_brute.converted_to_zombified");
 
-    SoundEvent ENTITY_PLAYER_BURP = BuiltinSoundEvent.get("minecraft:entity.player.burp");
+    SoundEvent ENTITY_PILLAGER_AMBIENT = BuiltinSoundEvent.get("entity.pillager.ambient");
 
-    SoundEvent ENTITY_PLAYER_DEATH = BuiltinSoundEvent.get("minecraft:entity.player.death");
+    SoundEvent ENTITY_PILLAGER_CELEBRATE = BuiltinSoundEvent.get("entity.pillager.celebrate");
 
-    SoundEvent ENTITY_PLAYER_HURT = BuiltinSoundEvent.get("minecraft:entity.player.hurt");
+    SoundEvent ENTITY_PILLAGER_DEATH = BuiltinSoundEvent.get("entity.pillager.death");
 
-    SoundEvent ENTITY_PLAYER_HURT_DROWN = BuiltinSoundEvent.get("minecraft:entity.player.hurt_drown");
+    SoundEvent ENTITY_PILLAGER_HURT = BuiltinSoundEvent.get("entity.pillager.hurt");
 
-    SoundEvent ENTITY_PLAYER_HURT_FREEZE = BuiltinSoundEvent.get("minecraft:entity.player.hurt_freeze");
+    SoundEvent BLOCK_PISTON_CONTRACT = BuiltinSoundEvent.get("block.piston.contract");
 
-    SoundEvent ENTITY_PLAYER_HURT_ON_FIRE = BuiltinSoundEvent.get("minecraft:entity.player.hurt_on_fire");
+    SoundEvent BLOCK_PISTON_EXTEND = BuiltinSoundEvent.get("block.piston.extend");
 
-    SoundEvent ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH = BuiltinSoundEvent.get("minecraft:entity.player.hurt_sweet_berry_bush");
+    SoundEvent ENTITY_PLAYER_ATTACK_CRIT = BuiltinSoundEvent.get("entity.player.attack.crit");
 
-    SoundEvent ENTITY_PLAYER_LEVELUP = BuiltinSoundEvent.get("minecraft:entity.player.levelup");
+    SoundEvent ENTITY_PLAYER_ATTACK_KNOCKBACK = BuiltinSoundEvent.get("entity.player.attack.knockback");
 
-    SoundEvent ENTITY_PLAYER_SMALL_FALL = BuiltinSoundEvent.get("minecraft:entity.player.small_fall");
+    SoundEvent ENTITY_PLAYER_ATTACK_NODAMAGE = BuiltinSoundEvent.get("entity.player.attack.nodamage");
 
-    SoundEvent ENTITY_PLAYER_SPLASH = BuiltinSoundEvent.get("minecraft:entity.player.splash");
+    SoundEvent ENTITY_PLAYER_ATTACK_STRONG = BuiltinSoundEvent.get("entity.player.attack.strong");
 
-    SoundEvent ENTITY_PLAYER_SPLASH_HIGH_SPEED = BuiltinSoundEvent.get("minecraft:entity.player.splash.high_speed");
+    SoundEvent ENTITY_PLAYER_ATTACK_SWEEP = BuiltinSoundEvent.get("entity.player.attack.sweep");
 
-    SoundEvent ENTITY_PLAYER_SWIM = BuiltinSoundEvent.get("minecraft:entity.player.swim");
+    SoundEvent ENTITY_PLAYER_ATTACK_WEAK = BuiltinSoundEvent.get("entity.player.attack.weak");
 
-    SoundEvent ENTITY_PLAYER_TELEPORT = BuiltinSoundEvent.get("minecraft:entity.player.teleport");
+    SoundEvent ENTITY_PLAYER_BIG_FALL = BuiltinSoundEvent.get("entity.player.big_fall");
 
-    SoundEvent ENTITY_POLAR_BEAR_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.polar_bear.ambient");
+    SoundEvent ENTITY_PLAYER_BREATH = BuiltinSoundEvent.get("entity.player.breath");
 
-    SoundEvent ENTITY_POLAR_BEAR_AMBIENT_BABY = BuiltinSoundEvent.get("minecraft:entity.polar_bear.ambient_baby");
+    SoundEvent ENTITY_PLAYER_BURP = BuiltinSoundEvent.get("entity.player.burp");
 
-    SoundEvent ENTITY_POLAR_BEAR_DEATH = BuiltinSoundEvent.get("minecraft:entity.polar_bear.death");
+    SoundEvent ENTITY_PLAYER_DEATH = BuiltinSoundEvent.get("entity.player.death");
 
-    SoundEvent ENTITY_POLAR_BEAR_HURT = BuiltinSoundEvent.get("minecraft:entity.polar_bear.hurt");
+    SoundEvent ENTITY_PLAYER_HURT = BuiltinSoundEvent.get("entity.player.hurt");
 
-    SoundEvent ENTITY_POLAR_BEAR_STEP = BuiltinSoundEvent.get("minecraft:entity.polar_bear.step");
+    SoundEvent ENTITY_PLAYER_HURT_DROWN = BuiltinSoundEvent.get("entity.player.hurt_drown");
 
-    SoundEvent ENTITY_POLAR_BEAR_WARNING = BuiltinSoundEvent.get("minecraft:entity.polar_bear.warning");
+    SoundEvent ENTITY_PLAYER_HURT_FREEZE = BuiltinSoundEvent.get("entity.player.hurt_freeze");
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_BREAK = BuiltinSoundEvent.get("minecraft:block.polished_deepslate.break");
+    SoundEvent ENTITY_PLAYER_HURT_ON_FIRE = BuiltinSoundEvent.get("entity.player.hurt_on_fire");
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_FALL = BuiltinSoundEvent.get("minecraft:block.polished_deepslate.fall");
+    SoundEvent ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH = BuiltinSoundEvent.get("entity.player.hurt_sweet_berry_bush");
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_HIT = BuiltinSoundEvent.get("minecraft:block.polished_deepslate.hit");
+    SoundEvent ENTITY_PLAYER_LEVELUP = BuiltinSoundEvent.get("entity.player.levelup");
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_PLACE = BuiltinSoundEvent.get("minecraft:block.polished_deepslate.place");
+    SoundEvent ENTITY_PLAYER_SMALL_FALL = BuiltinSoundEvent.get("entity.player.small_fall");
 
-    SoundEvent BLOCK_POLISHED_DEEPSLATE_STEP = BuiltinSoundEvent.get("minecraft:block.polished_deepslate.step");
+    SoundEvent ENTITY_PLAYER_SPLASH = BuiltinSoundEvent.get("entity.player.splash");
 
-    SoundEvent BLOCK_PORTAL_AMBIENT = BuiltinSoundEvent.get("minecraft:block.portal.ambient");
+    SoundEvent ENTITY_PLAYER_SPLASH_HIGH_SPEED = BuiltinSoundEvent.get("entity.player.splash.high_speed");
 
-    SoundEvent BLOCK_PORTAL_TRAVEL = BuiltinSoundEvent.get("minecraft:block.portal.travel");
+    SoundEvent ENTITY_PLAYER_SWIM = BuiltinSoundEvent.get("entity.player.swim");
 
-    SoundEvent BLOCK_PORTAL_TRIGGER = BuiltinSoundEvent.get("minecraft:block.portal.trigger");
+    SoundEvent ENTITY_PLAYER_TELEPORT = BuiltinSoundEvent.get("entity.player.teleport");
 
-    SoundEvent BLOCK_POWDER_SNOW_BREAK = BuiltinSoundEvent.get("minecraft:block.powder_snow.break");
+    SoundEvent ENTITY_POLAR_BEAR_AMBIENT = BuiltinSoundEvent.get("entity.polar_bear.ambient");
 
-    SoundEvent BLOCK_POWDER_SNOW_FALL = BuiltinSoundEvent.get("minecraft:block.powder_snow.fall");
+    SoundEvent ENTITY_POLAR_BEAR_AMBIENT_BABY = BuiltinSoundEvent.get("entity.polar_bear.ambient_baby");
 
-    SoundEvent BLOCK_POWDER_SNOW_HIT = BuiltinSoundEvent.get("minecraft:block.powder_snow.hit");
+    SoundEvent ENTITY_POLAR_BEAR_DEATH = BuiltinSoundEvent.get("entity.polar_bear.death");
 
-    SoundEvent BLOCK_POWDER_SNOW_PLACE = BuiltinSoundEvent.get("minecraft:block.powder_snow.place");
+    SoundEvent ENTITY_POLAR_BEAR_HURT = BuiltinSoundEvent.get("entity.polar_bear.hurt");
 
-    SoundEvent BLOCK_POWDER_SNOW_STEP = BuiltinSoundEvent.get("minecraft:block.powder_snow.step");
+    SoundEvent ENTITY_POLAR_BEAR_STEP = BuiltinSoundEvent.get("entity.polar_bear.step");
 
-    SoundEvent ENTITY_PUFFER_FISH_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.ambient");
+    SoundEvent ENTITY_POLAR_BEAR_WARNING = BuiltinSoundEvent.get("entity.polar_bear.warning");
 
-    SoundEvent ENTITY_PUFFER_FISH_BLOW_OUT = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.blow_out");
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_BREAK = BuiltinSoundEvent.get("block.polished_deepslate.break");
 
-    SoundEvent ENTITY_PUFFER_FISH_BLOW_UP = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.blow_up");
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_FALL = BuiltinSoundEvent.get("block.polished_deepslate.fall");
 
-    SoundEvent ENTITY_PUFFER_FISH_DEATH = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.death");
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_HIT = BuiltinSoundEvent.get("block.polished_deepslate.hit");
 
-    SoundEvent ENTITY_PUFFER_FISH_FLOP = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.flop");
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_PLACE = BuiltinSoundEvent.get("block.polished_deepslate.place");
 
-    SoundEvent ENTITY_PUFFER_FISH_HURT = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.hurt");
+    SoundEvent BLOCK_POLISHED_DEEPSLATE_STEP = BuiltinSoundEvent.get("block.polished_deepslate.step");
 
-    SoundEvent ENTITY_PUFFER_FISH_STING = BuiltinSoundEvent.get("minecraft:entity.puffer_fish.sting");
+    SoundEvent BLOCK_PORTAL_AMBIENT = BuiltinSoundEvent.get("block.portal.ambient");
 
-    SoundEvent BLOCK_PUMPKIN_CARVE = BuiltinSoundEvent.get("minecraft:block.pumpkin.carve");
+    SoundEvent BLOCK_PORTAL_TRAVEL = BuiltinSoundEvent.get("block.portal.travel");
 
-    SoundEvent ENTITY_RABBIT_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.rabbit.ambient");
+    SoundEvent BLOCK_PORTAL_TRIGGER = BuiltinSoundEvent.get("block.portal.trigger");
 
-    SoundEvent ENTITY_RABBIT_ATTACK = BuiltinSoundEvent.get("minecraft:entity.rabbit.attack");
+    SoundEvent BLOCK_POWDER_SNOW_BREAK = BuiltinSoundEvent.get("block.powder_snow.break");
 
-    SoundEvent ENTITY_RABBIT_DEATH = BuiltinSoundEvent.get("minecraft:entity.rabbit.death");
+    SoundEvent BLOCK_POWDER_SNOW_FALL = BuiltinSoundEvent.get("block.powder_snow.fall");
 
-    SoundEvent ENTITY_RABBIT_HURT = BuiltinSoundEvent.get("minecraft:entity.rabbit.hurt");
+    SoundEvent BLOCK_POWDER_SNOW_HIT = BuiltinSoundEvent.get("block.powder_snow.hit");
 
-    SoundEvent ENTITY_RABBIT_JUMP = BuiltinSoundEvent.get("minecraft:entity.rabbit.jump");
+    SoundEvent BLOCK_POWDER_SNOW_PLACE = BuiltinSoundEvent.get("block.powder_snow.place");
 
-    SoundEvent EVENT_RAID_HORN = BuiltinSoundEvent.get("minecraft:event.raid.horn");
+    SoundEvent BLOCK_POWDER_SNOW_STEP = BuiltinSoundEvent.get("block.powder_snow.step");
 
-    SoundEvent ENTITY_RAVAGER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.ravager.ambient");
+    SoundEvent ENTITY_PUFFER_FISH_AMBIENT = BuiltinSoundEvent.get("entity.puffer_fish.ambient");
 
-    SoundEvent ENTITY_RAVAGER_ATTACK = BuiltinSoundEvent.get("minecraft:entity.ravager.attack");
+    SoundEvent ENTITY_PUFFER_FISH_BLOW_OUT = BuiltinSoundEvent.get("entity.puffer_fish.blow_out");
 
-    SoundEvent ENTITY_RAVAGER_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.ravager.celebrate");
+    SoundEvent ENTITY_PUFFER_FISH_BLOW_UP = BuiltinSoundEvent.get("entity.puffer_fish.blow_up");
 
-    SoundEvent ENTITY_RAVAGER_DEATH = BuiltinSoundEvent.get("minecraft:entity.ravager.death");
+    SoundEvent ENTITY_PUFFER_FISH_DEATH = BuiltinSoundEvent.get("entity.puffer_fish.death");
 
-    SoundEvent ENTITY_RAVAGER_HURT = BuiltinSoundEvent.get("minecraft:entity.ravager.hurt");
+    SoundEvent ENTITY_PUFFER_FISH_FLOP = BuiltinSoundEvent.get("entity.puffer_fish.flop");
 
-    SoundEvent ENTITY_RAVAGER_STEP = BuiltinSoundEvent.get("minecraft:entity.ravager.step");
+    SoundEvent ENTITY_PUFFER_FISH_HURT = BuiltinSoundEvent.get("entity.puffer_fish.hurt");
 
-    SoundEvent ENTITY_RAVAGER_STUNNED = BuiltinSoundEvent.get("minecraft:entity.ravager.stunned");
+    SoundEvent ENTITY_PUFFER_FISH_STING = BuiltinSoundEvent.get("entity.puffer_fish.sting");
 
-    SoundEvent ENTITY_RAVAGER_ROAR = BuiltinSoundEvent.get("minecraft:entity.ravager.roar");
+    SoundEvent BLOCK_PUMPKIN_CARVE = BuiltinSoundEvent.get("block.pumpkin.carve");
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_gold_ore.break");
+    SoundEvent ENTITY_RABBIT_AMBIENT = BuiltinSoundEvent.get("entity.rabbit.ambient");
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_FALL = BuiltinSoundEvent.get("minecraft:block.nether_gold_ore.fall");
+    SoundEvent ENTITY_RABBIT_ATTACK = BuiltinSoundEvent.get("entity.rabbit.attack");
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_HIT = BuiltinSoundEvent.get("minecraft:block.nether_gold_ore.hit");
+    SoundEvent ENTITY_RABBIT_DEATH = BuiltinSoundEvent.get("entity.rabbit.death");
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_gold_ore.place");
+    SoundEvent ENTITY_RABBIT_HURT = BuiltinSoundEvent.get("entity.rabbit.hurt");
 
-    SoundEvent BLOCK_NETHER_GOLD_ORE_STEP = BuiltinSoundEvent.get("minecraft:block.nether_gold_ore.step");
+    SoundEvent ENTITY_RABBIT_JUMP = BuiltinSoundEvent.get("entity.rabbit.jump");
 
-    SoundEvent BLOCK_NETHER_ORE_BREAK = BuiltinSoundEvent.get("minecraft:block.nether_ore.break");
+    SoundEvent EVENT_RAID_HORN = BuiltinSoundEvent.get("event.raid.horn");
 
-    SoundEvent BLOCK_NETHER_ORE_FALL = BuiltinSoundEvent.get("minecraft:block.nether_ore.fall");
+    SoundEvent ENTITY_RAVAGER_AMBIENT = BuiltinSoundEvent.get("entity.ravager.ambient");
 
-    SoundEvent BLOCK_NETHER_ORE_HIT = BuiltinSoundEvent.get("minecraft:block.nether_ore.hit");
+    SoundEvent ENTITY_RAVAGER_ATTACK = BuiltinSoundEvent.get("entity.ravager.attack");
 
-    SoundEvent BLOCK_NETHER_ORE_PLACE = BuiltinSoundEvent.get("minecraft:block.nether_ore.place");
+    SoundEvent ENTITY_RAVAGER_CELEBRATE = BuiltinSoundEvent.get("entity.ravager.celebrate");
 
-    SoundEvent BLOCK_NETHER_ORE_STEP = BuiltinSoundEvent.get("minecraft:block.nether_ore.step");
+    SoundEvent ENTITY_RAVAGER_DEATH = BuiltinSoundEvent.get("entity.ravager.death");
 
-    SoundEvent BLOCK_REDSTONE_TORCH_BURNOUT = BuiltinSoundEvent.get("minecraft:block.redstone_torch.burnout");
+    SoundEvent ENTITY_RAVAGER_HURT = BuiltinSoundEvent.get("entity.ravager.hurt");
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT = BuiltinSoundEvent.get("minecraft:block.respawn_anchor.ambient");
+    SoundEvent ENTITY_RAVAGER_STEP = BuiltinSoundEvent.get("entity.ravager.step");
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_CHARGE = BuiltinSoundEvent.get("minecraft:block.respawn_anchor.charge");
+    SoundEvent ENTITY_RAVAGER_STUNNED = BuiltinSoundEvent.get("entity.ravager.stunned");
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_DEPLETE = BuiltinSoundEvent.get("minecraft:block.respawn_anchor.deplete");
+    SoundEvent ENTITY_RAVAGER_ROAR = BuiltinSoundEvent.get("entity.ravager.roar");
 
-    SoundEvent BLOCK_RESPAWN_ANCHOR_SET_SPAWN = BuiltinSoundEvent.get("minecraft:block.respawn_anchor.set_spawn");
+    SoundEvent BLOCK_NETHER_GOLD_ORE_BREAK = BuiltinSoundEvent.get("block.nether_gold_ore.break");
 
-    SoundEvent BLOCK_ROOTED_DIRT_BREAK = BuiltinSoundEvent.get("minecraft:block.rooted_dirt.break");
+    SoundEvent BLOCK_NETHER_GOLD_ORE_FALL = BuiltinSoundEvent.get("block.nether_gold_ore.fall");
 
-    SoundEvent BLOCK_ROOTED_DIRT_FALL = BuiltinSoundEvent.get("minecraft:block.rooted_dirt.fall");
+    SoundEvent BLOCK_NETHER_GOLD_ORE_HIT = BuiltinSoundEvent.get("block.nether_gold_ore.hit");
 
-    SoundEvent BLOCK_ROOTED_DIRT_HIT = BuiltinSoundEvent.get("minecraft:block.rooted_dirt.hit");
+    SoundEvent BLOCK_NETHER_GOLD_ORE_PLACE = BuiltinSoundEvent.get("block.nether_gold_ore.place");
 
-    SoundEvent BLOCK_ROOTED_DIRT_PLACE = BuiltinSoundEvent.get("minecraft:block.rooted_dirt.place");
+    SoundEvent BLOCK_NETHER_GOLD_ORE_STEP = BuiltinSoundEvent.get("block.nether_gold_ore.step");
 
-    SoundEvent BLOCK_ROOTED_DIRT_STEP = BuiltinSoundEvent.get("minecraft:block.rooted_dirt.step");
+    SoundEvent BLOCK_NETHER_ORE_BREAK = BuiltinSoundEvent.get("block.nether_ore.break");
 
-    SoundEvent ENTITY_SALMON_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.salmon.ambient");
+    SoundEvent BLOCK_NETHER_ORE_FALL = BuiltinSoundEvent.get("block.nether_ore.fall");
 
-    SoundEvent ENTITY_SALMON_DEATH = BuiltinSoundEvent.get("minecraft:entity.salmon.death");
+    SoundEvent BLOCK_NETHER_ORE_HIT = BuiltinSoundEvent.get("block.nether_ore.hit");
 
-    SoundEvent ENTITY_SALMON_FLOP = BuiltinSoundEvent.get("minecraft:entity.salmon.flop");
+    SoundEvent BLOCK_NETHER_ORE_PLACE = BuiltinSoundEvent.get("block.nether_ore.place");
 
-    SoundEvent ENTITY_SALMON_HURT = BuiltinSoundEvent.get("minecraft:entity.salmon.hurt");
+    SoundEvent BLOCK_NETHER_ORE_STEP = BuiltinSoundEvent.get("block.nether_ore.step");
 
-    SoundEvent BLOCK_SAND_BREAK = BuiltinSoundEvent.get("minecraft:block.sand.break");
+    SoundEvent BLOCK_REDSTONE_TORCH_BURNOUT = BuiltinSoundEvent.get("block.redstone_torch.burnout");
 
-    SoundEvent BLOCK_SAND_FALL = BuiltinSoundEvent.get("minecraft:block.sand.fall");
+    SoundEvent BLOCK_RESPAWN_ANCHOR_AMBIENT = BuiltinSoundEvent.get("block.respawn_anchor.ambient");
 
-    SoundEvent BLOCK_SAND_HIT = BuiltinSoundEvent.get("minecraft:block.sand.hit");
+    SoundEvent BLOCK_RESPAWN_ANCHOR_CHARGE = BuiltinSoundEvent.get("block.respawn_anchor.charge");
 
-    SoundEvent BLOCK_SAND_PLACE = BuiltinSoundEvent.get("minecraft:block.sand.place");
+    SoundEvent BLOCK_RESPAWN_ANCHOR_DEPLETE = BuiltinSoundEvent.get("block.respawn_anchor.deplete");
 
-    SoundEvent BLOCK_SAND_STEP = BuiltinSoundEvent.get("minecraft:block.sand.step");
+    SoundEvent BLOCK_RESPAWN_ANCHOR_SET_SPAWN = BuiltinSoundEvent.get("block.respawn_anchor.set_spawn");
 
-    SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get("minecraft:block.scaffolding.break");
+    SoundEvent BLOCK_ROOTED_DIRT_BREAK = BuiltinSoundEvent.get("block.rooted_dirt.break");
 
-    SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get("minecraft:block.scaffolding.fall");
+    SoundEvent BLOCK_ROOTED_DIRT_FALL = BuiltinSoundEvent.get("block.rooted_dirt.fall");
 
-    SoundEvent BLOCK_SCAFFOLDING_HIT = BuiltinSoundEvent.get("minecraft:block.scaffolding.hit");
+    SoundEvent BLOCK_ROOTED_DIRT_HIT = BuiltinSoundEvent.get("block.rooted_dirt.hit");
 
-    SoundEvent BLOCK_SCAFFOLDING_PLACE = BuiltinSoundEvent.get("minecraft:block.scaffolding.place");
+    SoundEvent BLOCK_ROOTED_DIRT_PLACE = BuiltinSoundEvent.get("block.rooted_dirt.place");
 
-    SoundEvent BLOCK_SCAFFOLDING_STEP = BuiltinSoundEvent.get("minecraft:block.scaffolding.step");
+    SoundEvent BLOCK_ROOTED_DIRT_STEP = BuiltinSoundEvent.get("block.rooted_dirt.step");
 
-    SoundEvent BLOCK_SCULK_SPREAD = BuiltinSoundEvent.get("minecraft:block.sculk.spread");
+    SoundEvent ENTITY_SALMON_AMBIENT = BuiltinSoundEvent.get("entity.salmon.ambient");
 
-    SoundEvent BLOCK_SCULK_CHARGE = BuiltinSoundEvent.get("minecraft:block.sculk.charge");
+    SoundEvent ENTITY_SALMON_DEATH = BuiltinSoundEvent.get("entity.salmon.death");
 
-    SoundEvent BLOCK_SCULK_BREAK = BuiltinSoundEvent.get("minecraft:block.sculk.break");
+    SoundEvent ENTITY_SALMON_FLOP = BuiltinSoundEvent.get("entity.salmon.flop");
 
-    SoundEvent BLOCK_SCULK_FALL = BuiltinSoundEvent.get("minecraft:block.sculk.fall");
+    SoundEvent ENTITY_SALMON_HURT = BuiltinSoundEvent.get("entity.salmon.hurt");
 
-    SoundEvent BLOCK_SCULK_HIT = BuiltinSoundEvent.get("minecraft:block.sculk.hit");
+    SoundEvent BLOCK_SAND_BREAK = BuiltinSoundEvent.get("block.sand.break");
 
-    SoundEvent BLOCK_SCULK_PLACE = BuiltinSoundEvent.get("minecraft:block.sculk.place");
+    SoundEvent BLOCK_SAND_FALL = BuiltinSoundEvent.get("block.sand.fall");
 
-    SoundEvent BLOCK_SCULK_STEP = BuiltinSoundEvent.get("minecraft:block.sculk.step");
+    SoundEvent BLOCK_SAND_HIT = BuiltinSoundEvent.get("block.sand.hit");
 
-    SoundEvent BLOCK_SCULK_CATALYST_BLOOM = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.bloom");
+    SoundEvent BLOCK_SAND_PLACE = BuiltinSoundEvent.get("block.sand.place");
 
-    SoundEvent BLOCK_SCULK_CATALYST_BREAK = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.break");
+    SoundEvent BLOCK_SAND_STEP = BuiltinSoundEvent.get("block.sand.step");
 
-    SoundEvent BLOCK_SCULK_CATALYST_FALL = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.fall");
+    SoundEvent BLOCK_SAND_IDLE = BuiltinSoundEvent.get("block.sand.idle");
 
-    SoundEvent BLOCK_SCULK_CATALYST_HIT = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.hit");
+    SoundEvent BLOCK_SAND_WIND = BuiltinSoundEvent.get("block.sand.wind");
 
-    SoundEvent BLOCK_SCULK_CATALYST_PLACE = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.place");
+    SoundEvent BLOCK_SCAFFOLDING_BREAK = BuiltinSoundEvent.get("block.scaffolding.break");
 
-    SoundEvent BLOCK_SCULK_CATALYST_STEP = BuiltinSoundEvent.get("minecraft:block.sculk_catalyst.step");
+    SoundEvent BLOCK_SCAFFOLDING_FALL = BuiltinSoundEvent.get("block.scaffolding.fall");
 
-    SoundEvent BLOCK_SCULK_SENSOR_CLICKING = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.clicking");
+    SoundEvent BLOCK_SCAFFOLDING_HIT = BuiltinSoundEvent.get("block.scaffolding.hit");
 
-    SoundEvent BLOCK_SCULK_SENSOR_CLICKING_STOP = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.clicking_stop");
+    SoundEvent BLOCK_SCAFFOLDING_PLACE = BuiltinSoundEvent.get("block.scaffolding.place");
 
-    SoundEvent BLOCK_SCULK_SENSOR_BREAK = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.break");
+    SoundEvent BLOCK_SCAFFOLDING_STEP = BuiltinSoundEvent.get("block.scaffolding.step");
 
-    SoundEvent BLOCK_SCULK_SENSOR_FALL = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.fall");
+    SoundEvent BLOCK_SCULK_SPREAD = BuiltinSoundEvent.get("block.sculk.spread");
 
-    SoundEvent BLOCK_SCULK_SENSOR_HIT = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.hit");
+    SoundEvent BLOCK_SCULK_CHARGE = BuiltinSoundEvent.get("block.sculk.charge");
 
-    SoundEvent BLOCK_SCULK_SENSOR_PLACE = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.place");
+    SoundEvent BLOCK_SCULK_BREAK = BuiltinSoundEvent.get("block.sculk.break");
 
-    SoundEvent BLOCK_SCULK_SENSOR_STEP = BuiltinSoundEvent.get("minecraft:block.sculk_sensor.step");
+    SoundEvent BLOCK_SCULK_FALL = BuiltinSoundEvent.get("block.sculk.fall");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_BREAK = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.break");
+    SoundEvent BLOCK_SCULK_HIT = BuiltinSoundEvent.get("block.sculk.hit");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_FALL = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.fall");
+    SoundEvent BLOCK_SCULK_PLACE = BuiltinSoundEvent.get("block.sculk.place");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_HIT = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.hit");
+    SoundEvent BLOCK_SCULK_STEP = BuiltinSoundEvent.get("block.sculk.step");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_PLACE = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.place");
+    SoundEvent BLOCK_SCULK_CATALYST_BLOOM = BuiltinSoundEvent.get("block.sculk_catalyst.bloom");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_SHRIEK = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.shriek");
+    SoundEvent BLOCK_SCULK_CATALYST_BREAK = BuiltinSoundEvent.get("block.sculk_catalyst.break");
 
-    SoundEvent BLOCK_SCULK_SHRIEKER_STEP = BuiltinSoundEvent.get("minecraft:block.sculk_shrieker.step");
+    SoundEvent BLOCK_SCULK_CATALYST_FALL = BuiltinSoundEvent.get("block.sculk_catalyst.fall");
 
-    SoundEvent BLOCK_SCULK_VEIN_BREAK = BuiltinSoundEvent.get("minecraft:block.sculk_vein.break");
+    SoundEvent BLOCK_SCULK_CATALYST_HIT = BuiltinSoundEvent.get("block.sculk_catalyst.hit");
 
-    SoundEvent BLOCK_SCULK_VEIN_FALL = BuiltinSoundEvent.get("minecraft:block.sculk_vein.fall");
+    SoundEvent BLOCK_SCULK_CATALYST_PLACE = BuiltinSoundEvent.get("block.sculk_catalyst.place");
 
-    SoundEvent BLOCK_SCULK_VEIN_HIT = BuiltinSoundEvent.get("minecraft:block.sculk_vein.hit");
+    SoundEvent BLOCK_SCULK_CATALYST_STEP = BuiltinSoundEvent.get("block.sculk_catalyst.step");
 
-    SoundEvent BLOCK_SCULK_VEIN_PLACE = BuiltinSoundEvent.get("minecraft:block.sculk_vein.place");
+    SoundEvent BLOCK_SCULK_SENSOR_CLICKING = BuiltinSoundEvent.get("block.sculk_sensor.clicking");
 
-    SoundEvent BLOCK_SCULK_VEIN_STEP = BuiltinSoundEvent.get("minecraft:block.sculk_vein.step");
+    SoundEvent BLOCK_SCULK_SENSOR_CLICKING_STOP = BuiltinSoundEvent.get("block.sculk_sensor.clicking_stop");
 
-    SoundEvent ENTITY_SHEEP_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.sheep.ambient");
+    SoundEvent BLOCK_SCULK_SENSOR_BREAK = BuiltinSoundEvent.get("block.sculk_sensor.break");
 
-    SoundEvent ENTITY_SHEEP_DEATH = BuiltinSoundEvent.get("minecraft:entity.sheep.death");
+    SoundEvent BLOCK_SCULK_SENSOR_FALL = BuiltinSoundEvent.get("block.sculk_sensor.fall");
 
-    SoundEvent ENTITY_SHEEP_HURT = BuiltinSoundEvent.get("minecraft:entity.sheep.hurt");
+    SoundEvent BLOCK_SCULK_SENSOR_HIT = BuiltinSoundEvent.get("block.sculk_sensor.hit");
 
-    SoundEvent ENTITY_SHEEP_SHEAR = BuiltinSoundEvent.get("minecraft:entity.sheep.shear");
+    SoundEvent BLOCK_SCULK_SENSOR_PLACE = BuiltinSoundEvent.get("block.sculk_sensor.place");
 
-    SoundEvent ENTITY_SHEEP_STEP = BuiltinSoundEvent.get("minecraft:entity.sheep.step");
+    SoundEvent BLOCK_SCULK_SENSOR_STEP = BuiltinSoundEvent.get("block.sculk_sensor.step");
 
-    SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get("minecraft:item.shield.block");
+    SoundEvent BLOCK_SCULK_SHRIEKER_BREAK = BuiltinSoundEvent.get("block.sculk_shrieker.break");
 
-    SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get("minecraft:item.shield.break");
+    SoundEvent BLOCK_SCULK_SHRIEKER_FALL = BuiltinSoundEvent.get("block.sculk_shrieker.fall");
 
-    SoundEvent BLOCK_SHROOMLIGHT_BREAK = BuiltinSoundEvent.get("minecraft:block.shroomlight.break");
+    SoundEvent BLOCK_SCULK_SHRIEKER_HIT = BuiltinSoundEvent.get("block.sculk_shrieker.hit");
 
-    SoundEvent BLOCK_SHROOMLIGHT_STEP = BuiltinSoundEvent.get("minecraft:block.shroomlight.step");
+    SoundEvent BLOCK_SCULK_SHRIEKER_PLACE = BuiltinSoundEvent.get("block.sculk_shrieker.place");
 
-    SoundEvent BLOCK_SHROOMLIGHT_PLACE = BuiltinSoundEvent.get("minecraft:block.shroomlight.place");
+    SoundEvent BLOCK_SCULK_SHRIEKER_SHRIEK = BuiltinSoundEvent.get("block.sculk_shrieker.shriek");
 
-    SoundEvent BLOCK_SHROOMLIGHT_HIT = BuiltinSoundEvent.get("minecraft:block.shroomlight.hit");
+    SoundEvent BLOCK_SCULK_SHRIEKER_STEP = BuiltinSoundEvent.get("block.sculk_shrieker.step");
 
-    SoundEvent BLOCK_SHROOMLIGHT_FALL = BuiltinSoundEvent.get("minecraft:block.shroomlight.fall");
+    SoundEvent BLOCK_SCULK_VEIN_BREAK = BuiltinSoundEvent.get("block.sculk_vein.break");
 
-    SoundEvent ITEM_SHOVEL_FLATTEN = BuiltinSoundEvent.get("minecraft:item.shovel.flatten");
+    SoundEvent BLOCK_SCULK_VEIN_FALL = BuiltinSoundEvent.get("block.sculk_vein.fall");
 
-    SoundEvent ENTITY_SHULKER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.shulker.ambient");
+    SoundEvent BLOCK_SCULK_VEIN_HIT = BuiltinSoundEvent.get("block.sculk_vein.hit");
 
-    SoundEvent BLOCK_SHULKER_BOX_CLOSE = BuiltinSoundEvent.get("minecraft:block.shulker_box.close");
+    SoundEvent BLOCK_SCULK_VEIN_PLACE = BuiltinSoundEvent.get("block.sculk_vein.place");
 
-    SoundEvent BLOCK_SHULKER_BOX_OPEN = BuiltinSoundEvent.get("minecraft:block.shulker_box.open");
+    SoundEvent BLOCK_SCULK_VEIN_STEP = BuiltinSoundEvent.get("block.sculk_vein.step");
 
-    SoundEvent ENTITY_SHULKER_BULLET_HIT = BuiltinSoundEvent.get("minecraft:entity.shulker_bullet.hit");
+    SoundEvent ENTITY_SHEEP_AMBIENT = BuiltinSoundEvent.get("entity.sheep.ambient");
 
-    SoundEvent ENTITY_SHULKER_BULLET_HURT = BuiltinSoundEvent.get("minecraft:entity.shulker_bullet.hurt");
+    SoundEvent ENTITY_SHEEP_DEATH = BuiltinSoundEvent.get("entity.sheep.death");
 
-    SoundEvent ENTITY_SHULKER_CLOSE = BuiltinSoundEvent.get("minecraft:entity.shulker.close");
+    SoundEvent ENTITY_SHEEP_HURT = BuiltinSoundEvent.get("entity.sheep.hurt");
 
-    SoundEvent ENTITY_SHULKER_DEATH = BuiltinSoundEvent.get("minecraft:entity.shulker.death");
+    SoundEvent ENTITY_SHEEP_SHEAR = BuiltinSoundEvent.get("entity.sheep.shear");
 
-    SoundEvent ENTITY_SHULKER_HURT = BuiltinSoundEvent.get("minecraft:entity.shulker.hurt");
+    SoundEvent ENTITY_SHEEP_STEP = BuiltinSoundEvent.get("entity.sheep.step");
 
-    SoundEvent ENTITY_SHULKER_HURT_CLOSED = BuiltinSoundEvent.get("minecraft:entity.shulker.hurt_closed");
+    SoundEvent ITEM_SHIELD_BLOCK = BuiltinSoundEvent.get("item.shield.block");
 
-    SoundEvent ENTITY_SHULKER_OPEN = BuiltinSoundEvent.get("minecraft:entity.shulker.open");
+    SoundEvent ITEM_SHIELD_BREAK = BuiltinSoundEvent.get("item.shield.break");
 
-    SoundEvent ENTITY_SHULKER_SHOOT = BuiltinSoundEvent.get("minecraft:entity.shulker.shoot");
+    SoundEvent BLOCK_SHROOMLIGHT_BREAK = BuiltinSoundEvent.get("block.shroomlight.break");
 
-    SoundEvent ENTITY_SHULKER_TELEPORT = BuiltinSoundEvent.get("minecraft:entity.shulker.teleport");
+    SoundEvent BLOCK_SHROOMLIGHT_STEP = BuiltinSoundEvent.get("block.shroomlight.step");
 
-    SoundEvent ENTITY_SILVERFISH_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.silverfish.ambient");
+    SoundEvent BLOCK_SHROOMLIGHT_PLACE = BuiltinSoundEvent.get("block.shroomlight.place");
 
-    SoundEvent ENTITY_SILVERFISH_DEATH = BuiltinSoundEvent.get("minecraft:entity.silverfish.death");
+    SoundEvent BLOCK_SHROOMLIGHT_HIT = BuiltinSoundEvent.get("block.shroomlight.hit");
 
-    SoundEvent ENTITY_SILVERFISH_HURT = BuiltinSoundEvent.get("minecraft:entity.silverfish.hurt");
+    SoundEvent BLOCK_SHROOMLIGHT_FALL = BuiltinSoundEvent.get("block.shroomlight.fall");
 
-    SoundEvent ENTITY_SILVERFISH_STEP = BuiltinSoundEvent.get("minecraft:entity.silverfish.step");
+    SoundEvent ITEM_SHOVEL_FLATTEN = BuiltinSoundEvent.get("item.shovel.flatten");
 
-    SoundEvent ENTITY_SKELETON_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.skeleton.ambient");
+    SoundEvent ENTITY_SHULKER_AMBIENT = BuiltinSoundEvent.get("entity.shulker.ambient");
 
-    SoundEvent ENTITY_SKELETON_CONVERTED_TO_STRAY = BuiltinSoundEvent.get("minecraft:entity.skeleton.converted_to_stray");
+    SoundEvent BLOCK_SHULKER_BOX_CLOSE = BuiltinSoundEvent.get("block.shulker_box.close");
 
-    SoundEvent ENTITY_SKELETON_DEATH = BuiltinSoundEvent.get("minecraft:entity.skeleton.death");
+    SoundEvent BLOCK_SHULKER_BOX_OPEN = BuiltinSoundEvent.get("block.shulker_box.open");
 
-    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.ambient");
+    SoundEvent ENTITY_SHULKER_BULLET_HIT = BuiltinSoundEvent.get("entity.shulker_bullet.hit");
 
-    SoundEvent ENTITY_SKELETON_HORSE_DEATH = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.death");
+    SoundEvent ENTITY_SHULKER_BULLET_HURT = BuiltinSoundEvent.get("entity.shulker_bullet.hurt");
 
-    SoundEvent ENTITY_SKELETON_HORSE_HURT = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.hurt");
+    SoundEvent ENTITY_SHULKER_CLOSE = BuiltinSoundEvent.get("entity.shulker.close");
 
-    SoundEvent ENTITY_SKELETON_HORSE_SWIM = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.swim");
+    SoundEvent ENTITY_SHULKER_DEATH = BuiltinSoundEvent.get("entity.shulker.death");
 
-    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT_WATER = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.ambient_water");
+    SoundEvent ENTITY_SHULKER_HURT = BuiltinSoundEvent.get("entity.shulker.hurt");
 
-    SoundEvent ENTITY_SKELETON_HORSE_GALLOP_WATER = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.gallop_water");
+    SoundEvent ENTITY_SHULKER_HURT_CLOSED = BuiltinSoundEvent.get("entity.shulker.hurt_closed");
 
-    SoundEvent ENTITY_SKELETON_HORSE_JUMP_WATER = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.jump_water");
+    SoundEvent ENTITY_SHULKER_OPEN = BuiltinSoundEvent.get("entity.shulker.open");
 
-    SoundEvent ENTITY_SKELETON_HORSE_STEP_WATER = BuiltinSoundEvent.get("minecraft:entity.skeleton_horse.step_water");
+    SoundEvent ENTITY_SHULKER_SHOOT = BuiltinSoundEvent.get("entity.shulker.shoot");
 
-    SoundEvent ENTITY_SKELETON_HURT = BuiltinSoundEvent.get("minecraft:entity.skeleton.hurt");
+    SoundEvent ENTITY_SHULKER_TELEPORT = BuiltinSoundEvent.get("entity.shulker.teleport");
 
-    SoundEvent ENTITY_SKELETON_SHOOT = BuiltinSoundEvent.get("minecraft:entity.skeleton.shoot");
+    SoundEvent ENTITY_SILVERFISH_AMBIENT = BuiltinSoundEvent.get("entity.silverfish.ambient");
 
-    SoundEvent ENTITY_SKELETON_STEP = BuiltinSoundEvent.get("minecraft:entity.skeleton.step");
+    SoundEvent ENTITY_SILVERFISH_DEATH = BuiltinSoundEvent.get("entity.silverfish.death");
 
-    SoundEvent ENTITY_SLIME_ATTACK = BuiltinSoundEvent.get("minecraft:entity.slime.attack");
+    SoundEvent ENTITY_SILVERFISH_HURT = BuiltinSoundEvent.get("entity.silverfish.hurt");
 
-    SoundEvent ENTITY_SLIME_DEATH = BuiltinSoundEvent.get("minecraft:entity.slime.death");
+    SoundEvent ENTITY_SILVERFISH_STEP = BuiltinSoundEvent.get("entity.silverfish.step");
 
-    SoundEvent ENTITY_SLIME_HURT = BuiltinSoundEvent.get("minecraft:entity.slime.hurt");
+    SoundEvent ENTITY_SKELETON_AMBIENT = BuiltinSoundEvent.get("entity.skeleton.ambient");
 
-    SoundEvent ENTITY_SLIME_JUMP = BuiltinSoundEvent.get("minecraft:entity.slime.jump");
+    SoundEvent ENTITY_SKELETON_CONVERTED_TO_STRAY = BuiltinSoundEvent.get("entity.skeleton.converted_to_stray");
 
-    SoundEvent ENTITY_SLIME_SQUISH = BuiltinSoundEvent.get("minecraft:entity.slime.squish");
+    SoundEvent ENTITY_SKELETON_DEATH = BuiltinSoundEvent.get("entity.skeleton.death");
 
-    SoundEvent BLOCK_SLIME_BLOCK_BREAK = BuiltinSoundEvent.get("minecraft:block.slime_block.break");
+    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.skeleton_horse.ambient");
 
-    SoundEvent BLOCK_SLIME_BLOCK_FALL = BuiltinSoundEvent.get("minecraft:block.slime_block.fall");
+    SoundEvent ENTITY_SKELETON_HORSE_DEATH = BuiltinSoundEvent.get("entity.skeleton_horse.death");
 
-    SoundEvent BLOCK_SLIME_BLOCK_HIT = BuiltinSoundEvent.get("minecraft:block.slime_block.hit");
+    SoundEvent ENTITY_SKELETON_HORSE_HURT = BuiltinSoundEvent.get("entity.skeleton_horse.hurt");
 
-    SoundEvent BLOCK_SLIME_BLOCK_PLACE = BuiltinSoundEvent.get("minecraft:block.slime_block.place");
+    SoundEvent ENTITY_SKELETON_HORSE_SWIM = BuiltinSoundEvent.get("entity.skeleton_horse.swim");
 
-    SoundEvent BLOCK_SLIME_BLOCK_STEP = BuiltinSoundEvent.get("minecraft:block.slime_block.step");
+    SoundEvent ENTITY_SKELETON_HORSE_AMBIENT_WATER = BuiltinSoundEvent.get("entity.skeleton_horse.ambient_water");
 
-    SoundEvent BLOCK_SMALL_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("minecraft:block.small_amethyst_bud.break");
+    SoundEvent ENTITY_SKELETON_HORSE_GALLOP_WATER = BuiltinSoundEvent.get("entity.skeleton_horse.gallop_water");
 
-    SoundEvent BLOCK_SMALL_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("minecraft:block.small_amethyst_bud.place");
+    SoundEvent ENTITY_SKELETON_HORSE_JUMP_WATER = BuiltinSoundEvent.get("entity.skeleton_horse.jump_water");
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_BREAK = BuiltinSoundEvent.get("minecraft:block.small_dripleaf.break");
+    SoundEvent ENTITY_SKELETON_HORSE_STEP_WATER = BuiltinSoundEvent.get("entity.skeleton_horse.step_water");
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_FALL = BuiltinSoundEvent.get("minecraft:block.small_dripleaf.fall");
+    SoundEvent ENTITY_SKELETON_HURT = BuiltinSoundEvent.get("entity.skeleton.hurt");
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_HIT = BuiltinSoundEvent.get("minecraft:block.small_dripleaf.hit");
+    SoundEvent ENTITY_SKELETON_SHOOT = BuiltinSoundEvent.get("entity.skeleton.shoot");
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_PLACE = BuiltinSoundEvent.get("minecraft:block.small_dripleaf.place");
+    SoundEvent ENTITY_SKELETON_STEP = BuiltinSoundEvent.get("entity.skeleton.step");
 
-    SoundEvent BLOCK_SMALL_DRIPLEAF_STEP = BuiltinSoundEvent.get("minecraft:block.small_dripleaf.step");
+    SoundEvent ENTITY_SLIME_ATTACK = BuiltinSoundEvent.get("entity.slime.attack");
 
-    SoundEvent BLOCK_SOUL_SAND_BREAK = BuiltinSoundEvent.get("minecraft:block.soul_sand.break");
+    SoundEvent ENTITY_SLIME_DEATH = BuiltinSoundEvent.get("entity.slime.death");
 
-    SoundEvent BLOCK_SOUL_SAND_STEP = BuiltinSoundEvent.get("minecraft:block.soul_sand.step");
+    SoundEvent ENTITY_SLIME_HURT = BuiltinSoundEvent.get("entity.slime.hurt");
 
-    SoundEvent BLOCK_SOUL_SAND_PLACE = BuiltinSoundEvent.get("minecraft:block.soul_sand.place");
+    SoundEvent ENTITY_SLIME_JUMP = BuiltinSoundEvent.get("entity.slime.jump");
 
-    SoundEvent BLOCK_SOUL_SAND_HIT = BuiltinSoundEvent.get("minecraft:block.soul_sand.hit");
+    SoundEvent ENTITY_SLIME_SQUISH = BuiltinSoundEvent.get("entity.slime.squish");
 
-    SoundEvent BLOCK_SOUL_SAND_FALL = BuiltinSoundEvent.get("minecraft:block.soul_sand.fall");
+    SoundEvent BLOCK_SLIME_BLOCK_BREAK = BuiltinSoundEvent.get("block.slime_block.break");
 
-    SoundEvent BLOCK_SOUL_SOIL_BREAK = BuiltinSoundEvent.get("minecraft:block.soul_soil.break");
+    SoundEvent BLOCK_SLIME_BLOCK_FALL = BuiltinSoundEvent.get("block.slime_block.fall");
 
-    SoundEvent BLOCK_SOUL_SOIL_STEP = BuiltinSoundEvent.get("minecraft:block.soul_soil.step");
+    SoundEvent BLOCK_SLIME_BLOCK_HIT = BuiltinSoundEvent.get("block.slime_block.hit");
 
-    SoundEvent BLOCK_SOUL_SOIL_PLACE = BuiltinSoundEvent.get("minecraft:block.soul_soil.place");
+    SoundEvent BLOCK_SLIME_BLOCK_PLACE = BuiltinSoundEvent.get("block.slime_block.place");
 
-    SoundEvent BLOCK_SOUL_SOIL_HIT = BuiltinSoundEvent.get("minecraft:block.soul_soil.hit");
+    SoundEvent BLOCK_SLIME_BLOCK_STEP = BuiltinSoundEvent.get("block.slime_block.step");
 
-    SoundEvent BLOCK_SOUL_SOIL_FALL = BuiltinSoundEvent.get("minecraft:block.soul_soil.fall");
+    SoundEvent BLOCK_SMALL_AMETHYST_BUD_BREAK = BuiltinSoundEvent.get("block.small_amethyst_bud.break");
 
-    SoundEvent PARTICLE_SOUL_ESCAPE = BuiltinSoundEvent.get("minecraft:particle.soul_escape");
+    SoundEvent BLOCK_SMALL_AMETHYST_BUD_PLACE = BuiltinSoundEvent.get("block.small_amethyst_bud.place");
 
-    SoundEvent BLOCK_SPAWNER_BREAK = BuiltinSoundEvent.get("minecraft:block.spawner.break");
+    SoundEvent BLOCK_SMALL_DRIPLEAF_BREAK = BuiltinSoundEvent.get("block.small_dripleaf.break");
 
-    SoundEvent BLOCK_SPAWNER_FALL = BuiltinSoundEvent.get("minecraft:block.spawner.fall");
+    SoundEvent BLOCK_SMALL_DRIPLEAF_FALL = BuiltinSoundEvent.get("block.small_dripleaf.fall");
 
-    SoundEvent BLOCK_SPAWNER_HIT = BuiltinSoundEvent.get("minecraft:block.spawner.hit");
+    SoundEvent BLOCK_SMALL_DRIPLEAF_HIT = BuiltinSoundEvent.get("block.small_dripleaf.hit");
 
-    SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get("minecraft:block.spawner.place");
+    SoundEvent BLOCK_SMALL_DRIPLEAF_PLACE = BuiltinSoundEvent.get("block.small_dripleaf.place");
 
-    SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get("minecraft:block.spawner.step");
+    SoundEvent BLOCK_SMALL_DRIPLEAF_STEP = BuiltinSoundEvent.get("block.small_dripleaf.step");
 
-    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get("minecraft:block.resin.break");
+    SoundEvent BLOCK_SOUL_SAND_BREAK = BuiltinSoundEvent.get("block.soul_sand.break");
 
-    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get("minecraft:block.resin.fall");
+    SoundEvent BLOCK_SOUL_SAND_STEP = BuiltinSoundEvent.get("block.soul_sand.step");
 
-    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get("minecraft:block.resin.place");
+    SoundEvent BLOCK_SOUL_SAND_PLACE = BuiltinSoundEvent.get("block.soul_sand.place");
 
-    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get("minecraft:block.resin.step");
+    SoundEvent BLOCK_SOUL_SAND_HIT = BuiltinSoundEvent.get("block.soul_sand.hit");
 
-    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.resin_bricks.break");
+    SoundEvent BLOCK_SOUL_SAND_FALL = BuiltinSoundEvent.get("block.soul_sand.fall");
 
-    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.resin_bricks.fall");
+    SoundEvent BLOCK_SOUL_SOIL_BREAK = BuiltinSoundEvent.get("block.soul_soil.break");
 
-    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.resin_bricks.hit");
+    SoundEvent BLOCK_SOUL_SOIL_STEP = BuiltinSoundEvent.get("block.soul_soil.step");
 
-    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.resin_bricks.place");
+    SoundEvent BLOCK_SOUL_SOIL_PLACE = BuiltinSoundEvent.get("block.soul_soil.place");
 
-    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.resin_bricks.step");
+    SoundEvent BLOCK_SOUL_SOIL_HIT = BuiltinSoundEvent.get("block.soul_soil.hit");
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get("minecraft:block.spore_blossom.break");
+    SoundEvent BLOCK_SOUL_SOIL_FALL = BuiltinSoundEvent.get("block.soul_soil.fall");
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_FALL = BuiltinSoundEvent.get("minecraft:block.spore_blossom.fall");
+    SoundEvent PARTICLE_SOUL_ESCAPE = BuiltinSoundEvent.get("particle.soul_escape");
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_HIT = BuiltinSoundEvent.get("minecraft:block.spore_blossom.hit");
+    SoundEvent BLOCK_SPAWNER_BREAK = BuiltinSoundEvent.get("block.spawner.break");
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_PLACE = BuiltinSoundEvent.get("minecraft:block.spore_blossom.place");
+    SoundEvent BLOCK_SPAWNER_FALL = BuiltinSoundEvent.get("block.spawner.fall");
 
-    SoundEvent BLOCK_SPORE_BLOSSOM_STEP = BuiltinSoundEvent.get("minecraft:block.spore_blossom.step");
+    SoundEvent BLOCK_SPAWNER_HIT = BuiltinSoundEvent.get("block.spawner.hit");
 
-    SoundEvent ENTITY_STRIDER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.strider.ambient");
+    SoundEvent BLOCK_SPAWNER_PLACE = BuiltinSoundEvent.get("block.spawner.place");
 
-    SoundEvent ENTITY_STRIDER_HAPPY = BuiltinSoundEvent.get("minecraft:entity.strider.happy");
+    SoundEvent BLOCK_SPAWNER_STEP = BuiltinSoundEvent.get("block.spawner.step");
 
-    SoundEvent ENTITY_STRIDER_RETREAT = BuiltinSoundEvent.get("minecraft:entity.strider.retreat");
+    SoundEvent BLOCK_RESIN_BREAK = BuiltinSoundEvent.get("block.resin.break");
 
-    SoundEvent ENTITY_STRIDER_DEATH = BuiltinSoundEvent.get("minecraft:entity.strider.death");
+    SoundEvent BLOCK_RESIN_FALL = BuiltinSoundEvent.get("block.resin.fall");
 
-    SoundEvent ENTITY_STRIDER_HURT = BuiltinSoundEvent.get("minecraft:entity.strider.hurt");
+    SoundEvent BLOCK_RESIN_PLACE = BuiltinSoundEvent.get("block.resin.place");
 
-    SoundEvent ENTITY_STRIDER_STEP = BuiltinSoundEvent.get("minecraft:entity.strider.step");
+    SoundEvent BLOCK_RESIN_STEP = BuiltinSoundEvent.get("block.resin.step");
 
-    SoundEvent ENTITY_STRIDER_STEP_LAVA = BuiltinSoundEvent.get("minecraft:entity.strider.step_lava");
+    SoundEvent BLOCK_RESIN_BRICKS_BREAK = BuiltinSoundEvent.get("block.resin_bricks.break");
 
-    SoundEvent ENTITY_STRIDER_EAT = BuiltinSoundEvent.get("minecraft:entity.strider.eat");
+    SoundEvent BLOCK_RESIN_BRICKS_FALL = BuiltinSoundEvent.get("block.resin_bricks.fall");
 
-    SoundEvent ENTITY_STRIDER_SADDLE = BuiltinSoundEvent.get("minecraft:entity.strider.saddle");
+    SoundEvent BLOCK_RESIN_BRICKS_HIT = BuiltinSoundEvent.get("block.resin_bricks.hit");
 
-    SoundEvent ENTITY_SLIME_DEATH_SMALL = BuiltinSoundEvent.get("minecraft:entity.slime.death_small");
+    SoundEvent BLOCK_RESIN_BRICKS_PLACE = BuiltinSoundEvent.get("block.resin_bricks.place");
 
-    SoundEvent ENTITY_SLIME_HURT_SMALL = BuiltinSoundEvent.get("minecraft:entity.slime.hurt_small");
+    SoundEvent BLOCK_RESIN_BRICKS_STEP = BuiltinSoundEvent.get("block.resin_bricks.step");
 
-    SoundEvent ENTITY_SLIME_JUMP_SMALL = BuiltinSoundEvent.get("minecraft:entity.slime.jump_small");
+    SoundEvent BLOCK_SPORE_BLOSSOM_BREAK = BuiltinSoundEvent.get("block.spore_blossom.break");
 
-    SoundEvent ENTITY_SLIME_SQUISH_SMALL = BuiltinSoundEvent.get("minecraft:entity.slime.squish_small");
+    SoundEvent BLOCK_SPORE_BLOSSOM_FALL = BuiltinSoundEvent.get("block.spore_blossom.fall");
 
-    SoundEvent BLOCK_SMITHING_TABLE_USE = BuiltinSoundEvent.get("minecraft:block.smithing_table.use");
+    SoundEvent BLOCK_SPORE_BLOSSOM_HIT = BuiltinSoundEvent.get("block.spore_blossom.hit");
 
-    SoundEvent BLOCK_SMOKER_SMOKE = BuiltinSoundEvent.get("minecraft:block.smoker.smoke");
+    SoundEvent BLOCK_SPORE_BLOSSOM_PLACE = BuiltinSoundEvent.get("block.spore_blossom.place");
 
-    SoundEvent ENTITY_SNIFFER_STEP = BuiltinSoundEvent.get("minecraft:entity.sniffer.step");
+    SoundEvent BLOCK_SPORE_BLOSSOM_STEP = BuiltinSoundEvent.get("block.spore_blossom.step");
 
-    SoundEvent ENTITY_SNIFFER_EAT = BuiltinSoundEvent.get("minecraft:entity.sniffer.eat");
+    SoundEvent ENTITY_STRIDER_AMBIENT = BuiltinSoundEvent.get("entity.strider.ambient");
 
-    SoundEvent ENTITY_SNIFFER_IDLE = BuiltinSoundEvent.get("minecraft:entity.sniffer.idle");
+    SoundEvent ENTITY_STRIDER_HAPPY = BuiltinSoundEvent.get("entity.strider.happy");
 
-    SoundEvent ENTITY_SNIFFER_HURT = BuiltinSoundEvent.get("minecraft:entity.sniffer.hurt");
+    SoundEvent ENTITY_STRIDER_RETREAT = BuiltinSoundEvent.get("entity.strider.retreat");
 
-    SoundEvent ENTITY_SNIFFER_DEATH = BuiltinSoundEvent.get("minecraft:entity.sniffer.death");
+    SoundEvent ENTITY_STRIDER_DEATH = BuiltinSoundEvent.get("entity.strider.death");
 
-    SoundEvent ENTITY_SNIFFER_DROP_SEED = BuiltinSoundEvent.get("minecraft:entity.sniffer.drop_seed");
+    SoundEvent ENTITY_STRIDER_HURT = BuiltinSoundEvent.get("entity.strider.hurt");
 
-    SoundEvent ENTITY_SNIFFER_SCENTING = BuiltinSoundEvent.get("minecraft:entity.sniffer.scenting");
+    SoundEvent ENTITY_STRIDER_STEP = BuiltinSoundEvent.get("entity.strider.step");
 
-    SoundEvent ENTITY_SNIFFER_SNIFFING = BuiltinSoundEvent.get("minecraft:entity.sniffer.sniffing");
+    SoundEvent ENTITY_STRIDER_STEP_LAVA = BuiltinSoundEvent.get("entity.strider.step_lava");
 
-    SoundEvent ENTITY_SNIFFER_SEARCHING = BuiltinSoundEvent.get("minecraft:entity.sniffer.searching");
+    SoundEvent ENTITY_STRIDER_EAT = BuiltinSoundEvent.get("entity.strider.eat");
 
-    SoundEvent ENTITY_SNIFFER_DIGGING = BuiltinSoundEvent.get("minecraft:entity.sniffer.digging");
+    SoundEvent ENTITY_STRIDER_SADDLE = BuiltinSoundEvent.get("entity.strider.saddle");
 
-    SoundEvent ENTITY_SNIFFER_DIGGING_STOP = BuiltinSoundEvent.get("minecraft:entity.sniffer.digging_stop");
+    SoundEvent ENTITY_SLIME_DEATH_SMALL = BuiltinSoundEvent.get("entity.slime.death_small");
 
-    SoundEvent ENTITY_SNIFFER_HAPPY = BuiltinSoundEvent.get("minecraft:entity.sniffer.happy");
+    SoundEvent ENTITY_SLIME_HURT_SMALL = BuiltinSoundEvent.get("entity.slime.hurt_small");
 
-    SoundEvent BLOCK_SNIFFER_EGG_PLOP = BuiltinSoundEvent.get("minecraft:block.sniffer_egg.plop");
+    SoundEvent ENTITY_SLIME_JUMP_SMALL = BuiltinSoundEvent.get("entity.slime.jump_small");
 
-    SoundEvent BLOCK_SNIFFER_EGG_CRACK = BuiltinSoundEvent.get("minecraft:block.sniffer_egg.crack");
+    SoundEvent ENTITY_SLIME_SQUISH_SMALL = BuiltinSoundEvent.get("entity.slime.squish_small");
 
-    SoundEvent BLOCK_SNIFFER_EGG_HATCH = BuiltinSoundEvent.get("minecraft:block.sniffer_egg.hatch");
+    SoundEvent BLOCK_SMITHING_TABLE_USE = BuiltinSoundEvent.get("block.smithing_table.use");
 
-    SoundEvent ENTITY_SNOWBALL_THROW = BuiltinSoundEvent.get("minecraft:entity.snowball.throw");
+    SoundEvent BLOCK_SMOKER_SMOKE = BuiltinSoundEvent.get("block.smoker.smoke");
 
-    SoundEvent BLOCK_SNOW_BREAK = BuiltinSoundEvent.get("minecraft:block.snow.break");
+    SoundEvent ENTITY_SNIFFER_STEP = BuiltinSoundEvent.get("entity.sniffer.step");
 
-    SoundEvent BLOCK_SNOW_FALL = BuiltinSoundEvent.get("minecraft:block.snow.fall");
+    SoundEvent ENTITY_SNIFFER_EAT = BuiltinSoundEvent.get("entity.sniffer.eat");
 
-    SoundEvent ENTITY_SNOW_GOLEM_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.snow_golem.ambient");
+    SoundEvent ENTITY_SNIFFER_IDLE = BuiltinSoundEvent.get("entity.sniffer.idle");
 
-    SoundEvent ENTITY_SNOW_GOLEM_DEATH = BuiltinSoundEvent.get("minecraft:entity.snow_golem.death");
+    SoundEvent ENTITY_SNIFFER_HURT = BuiltinSoundEvent.get("entity.sniffer.hurt");
 
-    SoundEvent ENTITY_SNOW_GOLEM_HURT = BuiltinSoundEvent.get("minecraft:entity.snow_golem.hurt");
+    SoundEvent ENTITY_SNIFFER_DEATH = BuiltinSoundEvent.get("entity.sniffer.death");
 
-    SoundEvent ENTITY_SNOW_GOLEM_SHOOT = BuiltinSoundEvent.get("minecraft:entity.snow_golem.shoot");
+    SoundEvent ENTITY_SNIFFER_DROP_SEED = BuiltinSoundEvent.get("entity.sniffer.drop_seed");
 
-    SoundEvent ENTITY_SNOW_GOLEM_SHEAR = BuiltinSoundEvent.get("minecraft:entity.snow_golem.shear");
+    SoundEvent ENTITY_SNIFFER_SCENTING = BuiltinSoundEvent.get("entity.sniffer.scenting");
 
-    SoundEvent BLOCK_SNOW_HIT = BuiltinSoundEvent.get("minecraft:block.snow.hit");
+    SoundEvent ENTITY_SNIFFER_SNIFFING = BuiltinSoundEvent.get("entity.sniffer.sniffing");
 
-    SoundEvent BLOCK_SNOW_PLACE = BuiltinSoundEvent.get("minecraft:block.snow.place");
+    SoundEvent ENTITY_SNIFFER_SEARCHING = BuiltinSoundEvent.get("entity.sniffer.searching");
 
-    SoundEvent BLOCK_SNOW_STEP = BuiltinSoundEvent.get("minecraft:block.snow.step");
+    SoundEvent ENTITY_SNIFFER_DIGGING = BuiltinSoundEvent.get("entity.sniffer.digging");
 
-    SoundEvent ENTITY_SPIDER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.spider.ambient");
+    SoundEvent ENTITY_SNIFFER_DIGGING_STOP = BuiltinSoundEvent.get("entity.sniffer.digging_stop");
 
-    SoundEvent ENTITY_SPIDER_DEATH = BuiltinSoundEvent.get("minecraft:entity.spider.death");
+    SoundEvent ENTITY_SNIFFER_HAPPY = BuiltinSoundEvent.get("entity.sniffer.happy");
 
-    SoundEvent ENTITY_SPIDER_HURT = BuiltinSoundEvent.get("minecraft:entity.spider.hurt");
+    SoundEvent BLOCK_SNIFFER_EGG_PLOP = BuiltinSoundEvent.get("block.sniffer_egg.plop");
 
-    SoundEvent ENTITY_SPIDER_STEP = BuiltinSoundEvent.get("minecraft:entity.spider.step");
+    SoundEvent BLOCK_SNIFFER_EGG_CRACK = BuiltinSoundEvent.get("block.sniffer_egg.crack");
 
-    SoundEvent ENTITY_SPLASH_POTION_BREAK = BuiltinSoundEvent.get("minecraft:entity.splash_potion.break");
+    SoundEvent BLOCK_SNIFFER_EGG_HATCH = BuiltinSoundEvent.get("block.sniffer_egg.hatch");
 
-    SoundEvent ENTITY_SPLASH_POTION_THROW = BuiltinSoundEvent.get("minecraft:entity.splash_potion.throw");
+    SoundEvent ENTITY_SNOWBALL_THROW = BuiltinSoundEvent.get("entity.snowball.throw");
 
-    SoundEvent BLOCK_SPONGE_BREAK = BuiltinSoundEvent.get("minecraft:block.sponge.break");
+    SoundEvent BLOCK_SNOW_BREAK = BuiltinSoundEvent.get("block.snow.break");
 
-    SoundEvent BLOCK_SPONGE_FALL = BuiltinSoundEvent.get("minecraft:block.sponge.fall");
+    SoundEvent BLOCK_SNOW_FALL = BuiltinSoundEvent.get("block.snow.fall");
 
-    SoundEvent BLOCK_SPONGE_HIT = BuiltinSoundEvent.get("minecraft:block.sponge.hit");
+    SoundEvent ENTITY_SNOW_GOLEM_AMBIENT = BuiltinSoundEvent.get("entity.snow_golem.ambient");
 
-    SoundEvent BLOCK_SPONGE_PLACE = BuiltinSoundEvent.get("minecraft:block.sponge.place");
+    SoundEvent ENTITY_SNOW_GOLEM_DEATH = BuiltinSoundEvent.get("entity.snow_golem.death");
 
-    SoundEvent BLOCK_SPONGE_STEP = BuiltinSoundEvent.get("minecraft:block.sponge.step");
+    SoundEvent ENTITY_SNOW_GOLEM_HURT = BuiltinSoundEvent.get("entity.snow_golem.hurt");
 
-    SoundEvent BLOCK_SPONGE_ABSORB = BuiltinSoundEvent.get("minecraft:block.sponge.absorb");
+    SoundEvent ENTITY_SNOW_GOLEM_SHOOT = BuiltinSoundEvent.get("entity.snow_golem.shoot");
 
-    SoundEvent ITEM_SPYGLASS_USE = BuiltinSoundEvent.get("minecraft:item.spyglass.use");
+    SoundEvent ENTITY_SNOW_GOLEM_SHEAR = BuiltinSoundEvent.get("entity.snow_golem.shear");
 
-    SoundEvent ITEM_SPYGLASS_STOP_USING = BuiltinSoundEvent.get("minecraft:item.spyglass.stop_using");
+    SoundEvent BLOCK_SNOW_HIT = BuiltinSoundEvent.get("block.snow.hit");
 
-    SoundEvent ENTITY_SQUID_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.squid.ambient");
+    SoundEvent BLOCK_SNOW_PLACE = BuiltinSoundEvent.get("block.snow.place");
 
-    SoundEvent ENTITY_SQUID_DEATH = BuiltinSoundEvent.get("minecraft:entity.squid.death");
+    SoundEvent BLOCK_SNOW_STEP = BuiltinSoundEvent.get("block.snow.step");
 
-    SoundEvent ENTITY_SQUID_HURT = BuiltinSoundEvent.get("minecraft:entity.squid.hurt");
+    SoundEvent ENTITY_SPIDER_AMBIENT = BuiltinSoundEvent.get("entity.spider.ambient");
 
-    SoundEvent ENTITY_SQUID_SQUIRT = BuiltinSoundEvent.get("minecraft:entity.squid.squirt");
+    SoundEvent ENTITY_SPIDER_DEATH = BuiltinSoundEvent.get("entity.spider.death");
 
-    SoundEvent BLOCK_STONE_BREAK = BuiltinSoundEvent.get("minecraft:block.stone.break");
+    SoundEvent ENTITY_SPIDER_HURT = BuiltinSoundEvent.get("entity.spider.hurt");
 
-    SoundEvent BLOCK_STONE_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.stone_button.click_off");
+    SoundEvent ENTITY_SPIDER_STEP = BuiltinSoundEvent.get("entity.spider.step");
 
-    SoundEvent BLOCK_STONE_BUTTON_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.stone_button.click_on");
+    SoundEvent ENTITY_SPLASH_POTION_BREAK = BuiltinSoundEvent.get("entity.splash_potion.break");
 
-    SoundEvent BLOCK_STONE_FALL = BuiltinSoundEvent.get("minecraft:block.stone.fall");
+    SoundEvent ENTITY_SPLASH_POTION_THROW = BuiltinSoundEvent.get("entity.splash_potion.throw");
 
-    SoundEvent BLOCK_STONE_HIT = BuiltinSoundEvent.get("minecraft:block.stone.hit");
+    SoundEvent BLOCK_SPONGE_BREAK = BuiltinSoundEvent.get("block.sponge.break");
 
-    SoundEvent BLOCK_STONE_PLACE = BuiltinSoundEvent.get("minecraft:block.stone.place");
+    SoundEvent BLOCK_SPONGE_FALL = BuiltinSoundEvent.get("block.sponge.fall");
 
-    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.stone_pressure_plate.click_off");
+    SoundEvent BLOCK_SPONGE_HIT = BuiltinSoundEvent.get("block.sponge.hit");
 
-    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.stone_pressure_plate.click_on");
+    SoundEvent BLOCK_SPONGE_PLACE = BuiltinSoundEvent.get("block.sponge.place");
 
-    SoundEvent BLOCK_STONE_STEP = BuiltinSoundEvent.get("minecraft:block.stone.step");
+    SoundEvent BLOCK_SPONGE_STEP = BuiltinSoundEvent.get("block.sponge.step");
 
-    SoundEvent ENTITY_STRAY_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.stray.ambient");
+    SoundEvent BLOCK_SPONGE_ABSORB = BuiltinSoundEvent.get("block.sponge.absorb");
 
-    SoundEvent ENTITY_STRAY_DEATH = BuiltinSoundEvent.get("minecraft:entity.stray.death");
+    SoundEvent ITEM_SPYGLASS_USE = BuiltinSoundEvent.get("item.spyglass.use");
 
-    SoundEvent ENTITY_STRAY_HURT = BuiltinSoundEvent.get("minecraft:entity.stray.hurt");
+    SoundEvent ITEM_SPYGLASS_STOP_USING = BuiltinSoundEvent.get("item.spyglass.stop_using");
 
-    SoundEvent ENTITY_STRAY_STEP = BuiltinSoundEvent.get("minecraft:entity.stray.step");
+    SoundEvent ENTITY_SQUID_AMBIENT = BuiltinSoundEvent.get("entity.squid.ambient");
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_BREAK = BuiltinSoundEvent.get("minecraft:block.sweet_berry_bush.break");
+    SoundEvent ENTITY_SQUID_DEATH = BuiltinSoundEvent.get("entity.squid.death");
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_PLACE = BuiltinSoundEvent.get("minecraft:block.sweet_berry_bush.place");
+    SoundEvent ENTITY_SQUID_HURT = BuiltinSoundEvent.get("entity.squid.hurt");
 
-    SoundEvent BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES = BuiltinSoundEvent.get("minecraft:block.sweet_berry_bush.pick_berries");
+    SoundEvent ENTITY_SQUID_SQUIRT = BuiltinSoundEvent.get("entity.squid.squirt");
 
-    SoundEvent ENTITY_TADPOLE_DEATH = BuiltinSoundEvent.get("minecraft:entity.tadpole.death");
+    SoundEvent BLOCK_STONE_BREAK = BuiltinSoundEvent.get("block.stone.break");
 
-    SoundEvent ENTITY_TADPOLE_FLOP = BuiltinSoundEvent.get("minecraft:entity.tadpole.flop");
+    SoundEvent BLOCK_STONE_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("block.stone_button.click_off");
 
-    SoundEvent ENTITY_TADPOLE_GROW_UP = BuiltinSoundEvent.get("minecraft:entity.tadpole.grow_up");
+    SoundEvent BLOCK_STONE_BUTTON_CLICK_ON = BuiltinSoundEvent.get("block.stone_button.click_on");
 
-    SoundEvent ENTITY_TADPOLE_HURT = BuiltinSoundEvent.get("minecraft:entity.tadpole.hurt");
+    SoundEvent BLOCK_STONE_FALL = BuiltinSoundEvent.get("block.stone.fall");
 
-    SoundEvent ENCHANT_THORNS_HIT = BuiltinSoundEvent.get("minecraft:enchant.thorns.hit");
+    SoundEvent BLOCK_STONE_HIT = BuiltinSoundEvent.get("block.stone.hit");
 
-    SoundEvent ENTITY_TNT_PRIMED = BuiltinSoundEvent.get("minecraft:entity.tnt.primed");
+    SoundEvent BLOCK_STONE_PLACE = BuiltinSoundEvent.get("block.stone.place");
 
-    SoundEvent ITEM_TOTEM_USE = BuiltinSoundEvent.get("minecraft:item.totem.use");
+    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.stone_pressure_plate.click_off");
 
-    SoundEvent ITEM_TRIDENT_HIT = BuiltinSoundEvent.get("minecraft:item.trident.hit");
+    SoundEvent BLOCK_STONE_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.stone_pressure_plate.click_on");
 
-    SoundEvent ITEM_TRIDENT_HIT_GROUND = BuiltinSoundEvent.get("minecraft:item.trident.hit_ground");
+    SoundEvent BLOCK_STONE_STEP = BuiltinSoundEvent.get("block.stone.step");
 
-    SoundEvent ITEM_TRIDENT_RETURN = BuiltinSoundEvent.get("minecraft:item.trident.return");
+    SoundEvent ENTITY_STRAY_AMBIENT = BuiltinSoundEvent.get("entity.stray.ambient");
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_1 = BuiltinSoundEvent.get("minecraft:item.trident.riptide_1");
+    SoundEvent ENTITY_STRAY_DEATH = BuiltinSoundEvent.get("entity.stray.death");
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_2 = BuiltinSoundEvent.get("minecraft:item.trident.riptide_2");
+    SoundEvent ENTITY_STRAY_HURT = BuiltinSoundEvent.get("entity.stray.hurt");
 
-    SoundEvent ITEM_TRIDENT_RIPTIDE_3 = BuiltinSoundEvent.get("minecraft:item.trident.riptide_3");
+    SoundEvent ENTITY_STRAY_STEP = BuiltinSoundEvent.get("entity.stray.step");
 
-    SoundEvent ITEM_TRIDENT_THROW = BuiltinSoundEvent.get("minecraft:item.trident.throw");
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_BREAK = BuiltinSoundEvent.get("block.sweet_berry_bush.break");
 
-    SoundEvent ITEM_TRIDENT_THUNDER = BuiltinSoundEvent.get("minecraft:item.trident.thunder");
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_PLACE = BuiltinSoundEvent.get("block.sweet_berry_bush.place");
 
-    SoundEvent BLOCK_TRIPWIRE_ATTACH = BuiltinSoundEvent.get("minecraft:block.tripwire.attach");
+    SoundEvent BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES = BuiltinSoundEvent.get("block.sweet_berry_bush.pick_berries");
 
-    SoundEvent BLOCK_TRIPWIRE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.tripwire.click_off");
+    SoundEvent ENTITY_TADPOLE_DEATH = BuiltinSoundEvent.get("entity.tadpole.death");
 
-    SoundEvent BLOCK_TRIPWIRE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.tripwire.click_on");
+    SoundEvent ENTITY_TADPOLE_FLOP = BuiltinSoundEvent.get("entity.tadpole.flop");
 
-    SoundEvent BLOCK_TRIPWIRE_DETACH = BuiltinSoundEvent.get("minecraft:block.tripwire.detach");
+    SoundEvent ENTITY_TADPOLE_GROW_UP = BuiltinSoundEvent.get("entity.tadpole.grow_up");
 
-    SoundEvent ENTITY_TROPICAL_FISH_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.tropical_fish.ambient");
+    SoundEvent ENTITY_TADPOLE_HURT = BuiltinSoundEvent.get("entity.tadpole.hurt");
 
-    SoundEvent ENTITY_TROPICAL_FISH_DEATH = BuiltinSoundEvent.get("minecraft:entity.tropical_fish.death");
+    SoundEvent ENCHANT_THORNS_HIT = BuiltinSoundEvent.get("enchant.thorns.hit");
 
-    SoundEvent ENTITY_TROPICAL_FISH_FLOP = BuiltinSoundEvent.get("minecraft:entity.tropical_fish.flop");
+    SoundEvent ENTITY_TNT_PRIMED = BuiltinSoundEvent.get("entity.tnt.primed");
 
-    SoundEvent ENTITY_TROPICAL_FISH_HURT = BuiltinSoundEvent.get("minecraft:entity.tropical_fish.hurt");
+    SoundEvent ITEM_TOTEM_USE = BuiltinSoundEvent.get("item.totem.use");
 
-    SoundEvent BLOCK_TUFF_BREAK = BuiltinSoundEvent.get("minecraft:block.tuff.break");
+    SoundEvent ITEM_TRIDENT_HIT = BuiltinSoundEvent.get("item.trident.hit");
 
-    SoundEvent BLOCK_TUFF_STEP = BuiltinSoundEvent.get("minecraft:block.tuff.step");
+    SoundEvent ITEM_TRIDENT_HIT_GROUND = BuiltinSoundEvent.get("item.trident.hit_ground");
 
-    SoundEvent BLOCK_TUFF_PLACE = BuiltinSoundEvent.get("minecraft:block.tuff.place");
+    SoundEvent ITEM_TRIDENT_RETURN = BuiltinSoundEvent.get("item.trident.return");
 
-    SoundEvent BLOCK_TUFF_HIT = BuiltinSoundEvent.get("minecraft:block.tuff.hit");
+    SoundEvent ITEM_TRIDENT_RIPTIDE_1 = BuiltinSoundEvent.get("item.trident.riptide_1");
 
-    SoundEvent BLOCK_TUFF_FALL = BuiltinSoundEvent.get("minecraft:block.tuff.fall");
+    SoundEvent ITEM_TRIDENT_RIPTIDE_2 = BuiltinSoundEvent.get("item.trident.riptide_2");
 
-    SoundEvent BLOCK_TUFF_BRICKS_BREAK = BuiltinSoundEvent.get("minecraft:block.tuff_bricks.break");
+    SoundEvent ITEM_TRIDENT_RIPTIDE_3 = BuiltinSoundEvent.get("item.trident.riptide_3");
 
-    SoundEvent BLOCK_TUFF_BRICKS_FALL = BuiltinSoundEvent.get("minecraft:block.tuff_bricks.fall");
+    SoundEvent ITEM_TRIDENT_THROW = BuiltinSoundEvent.get("item.trident.throw");
 
-    SoundEvent BLOCK_TUFF_BRICKS_HIT = BuiltinSoundEvent.get("minecraft:block.tuff_bricks.hit");
+    SoundEvent ITEM_TRIDENT_THUNDER = BuiltinSoundEvent.get("item.trident.thunder");
 
-    SoundEvent BLOCK_TUFF_BRICKS_PLACE = BuiltinSoundEvent.get("minecraft:block.tuff_bricks.place");
+    SoundEvent BLOCK_TRIPWIRE_ATTACH = BuiltinSoundEvent.get("block.tripwire.attach");
 
-    SoundEvent BLOCK_TUFF_BRICKS_STEP = BuiltinSoundEvent.get("minecraft:block.tuff_bricks.step");
+    SoundEvent BLOCK_TRIPWIRE_CLICK_OFF = BuiltinSoundEvent.get("block.tripwire.click_off");
 
-    SoundEvent BLOCK_POLISHED_TUFF_BREAK = BuiltinSoundEvent.get("minecraft:block.polished_tuff.break");
+    SoundEvent BLOCK_TRIPWIRE_CLICK_ON = BuiltinSoundEvent.get("block.tripwire.click_on");
 
-    SoundEvent BLOCK_POLISHED_TUFF_FALL = BuiltinSoundEvent.get("minecraft:block.polished_tuff.fall");
+    SoundEvent BLOCK_TRIPWIRE_DETACH = BuiltinSoundEvent.get("block.tripwire.detach");
 
-    SoundEvent BLOCK_POLISHED_TUFF_HIT = BuiltinSoundEvent.get("minecraft:block.polished_tuff.hit");
+    SoundEvent ENTITY_TROPICAL_FISH_AMBIENT = BuiltinSoundEvent.get("entity.tropical_fish.ambient");
 
-    SoundEvent BLOCK_POLISHED_TUFF_PLACE = BuiltinSoundEvent.get("minecraft:block.polished_tuff.place");
+    SoundEvent ENTITY_TROPICAL_FISH_DEATH = BuiltinSoundEvent.get("entity.tropical_fish.death");
 
-    SoundEvent BLOCK_POLISHED_TUFF_STEP = BuiltinSoundEvent.get("minecraft:block.polished_tuff.step");
+    SoundEvent ENTITY_TROPICAL_FISH_FLOP = BuiltinSoundEvent.get("entity.tropical_fish.flop");
 
-    SoundEvent ENTITY_TURTLE_AMBIENT_LAND = BuiltinSoundEvent.get("minecraft:entity.turtle.ambient_land");
+    SoundEvent ENTITY_TROPICAL_FISH_HURT = BuiltinSoundEvent.get("entity.tropical_fish.hurt");
 
-    SoundEvent ENTITY_TURTLE_DEATH = BuiltinSoundEvent.get("minecraft:entity.turtle.death");
+    SoundEvent BLOCK_TUFF_BREAK = BuiltinSoundEvent.get("block.tuff.break");
 
-    SoundEvent ENTITY_TURTLE_DEATH_BABY = BuiltinSoundEvent.get("minecraft:entity.turtle.death_baby");
+    SoundEvent BLOCK_TUFF_STEP = BuiltinSoundEvent.get("block.tuff.step");
 
-    SoundEvent ENTITY_TURTLE_EGG_BREAK = BuiltinSoundEvent.get("minecraft:entity.turtle.egg_break");
+    SoundEvent BLOCK_TUFF_PLACE = BuiltinSoundEvent.get("block.tuff.place");
 
-    SoundEvent ENTITY_TURTLE_EGG_CRACK = BuiltinSoundEvent.get("minecraft:entity.turtle.egg_crack");
+    SoundEvent BLOCK_TUFF_HIT = BuiltinSoundEvent.get("block.tuff.hit");
 
-    SoundEvent ENTITY_TURTLE_EGG_HATCH = BuiltinSoundEvent.get("minecraft:entity.turtle.egg_hatch");
+    SoundEvent BLOCK_TUFF_FALL = BuiltinSoundEvent.get("block.tuff.fall");
 
-    SoundEvent ENTITY_TURTLE_HURT = BuiltinSoundEvent.get("minecraft:entity.turtle.hurt");
+    SoundEvent BLOCK_TUFF_BRICKS_BREAK = BuiltinSoundEvent.get("block.tuff_bricks.break");
 
-    SoundEvent ENTITY_TURTLE_HURT_BABY = BuiltinSoundEvent.get("minecraft:entity.turtle.hurt_baby");
+    SoundEvent BLOCK_TUFF_BRICKS_FALL = BuiltinSoundEvent.get("block.tuff_bricks.fall");
 
-    SoundEvent ENTITY_TURTLE_LAY_EGG = BuiltinSoundEvent.get("minecraft:entity.turtle.lay_egg");
+    SoundEvent BLOCK_TUFF_BRICKS_HIT = BuiltinSoundEvent.get("block.tuff_bricks.hit");
 
-    SoundEvent ENTITY_TURTLE_SHAMBLE = BuiltinSoundEvent.get("minecraft:entity.turtle.shamble");
+    SoundEvent BLOCK_TUFF_BRICKS_PLACE = BuiltinSoundEvent.get("block.tuff_bricks.place");
 
-    SoundEvent ENTITY_TURTLE_SHAMBLE_BABY = BuiltinSoundEvent.get("minecraft:entity.turtle.shamble_baby");
+    SoundEvent BLOCK_TUFF_BRICKS_STEP = BuiltinSoundEvent.get("block.tuff_bricks.step");
 
-    SoundEvent ENTITY_TURTLE_SWIM = BuiltinSoundEvent.get("minecraft:entity.turtle.swim");
+    SoundEvent BLOCK_POLISHED_TUFF_BREAK = BuiltinSoundEvent.get("block.polished_tuff.break");
 
-    SoundEvent UI_BUTTON_CLICK = BuiltinSoundEvent.get("minecraft:ui.button.click");
+    SoundEvent BLOCK_POLISHED_TUFF_FALL = BuiltinSoundEvent.get("block.polished_tuff.fall");
 
-    SoundEvent UI_LOOM_SELECT_PATTERN = BuiltinSoundEvent.get("minecraft:ui.loom.select_pattern");
+    SoundEvent BLOCK_POLISHED_TUFF_HIT = BuiltinSoundEvent.get("block.polished_tuff.hit");
 
-    SoundEvent UI_LOOM_TAKE_RESULT = BuiltinSoundEvent.get("minecraft:ui.loom.take_result");
+    SoundEvent BLOCK_POLISHED_TUFF_PLACE = BuiltinSoundEvent.get("block.polished_tuff.place");
 
-    SoundEvent UI_CARTOGRAPHY_TABLE_TAKE_RESULT = BuiltinSoundEvent.get("minecraft:ui.cartography_table.take_result");
+    SoundEvent BLOCK_POLISHED_TUFF_STEP = BuiltinSoundEvent.get("block.polished_tuff.step");
 
-    SoundEvent UI_STONECUTTER_TAKE_RESULT = BuiltinSoundEvent.get("minecraft:ui.stonecutter.take_result");
+    SoundEvent ENTITY_TURTLE_AMBIENT_LAND = BuiltinSoundEvent.get("entity.turtle.ambient_land");
 
-    SoundEvent UI_STONECUTTER_SELECT_RECIPE = BuiltinSoundEvent.get("minecraft:ui.stonecutter.select_recipe");
+    SoundEvent ENTITY_TURTLE_DEATH = BuiltinSoundEvent.get("entity.turtle.death");
 
-    SoundEvent UI_TOAST_CHALLENGE_COMPLETE = BuiltinSoundEvent.get("minecraft:ui.toast.challenge_complete");
+    SoundEvent ENTITY_TURTLE_DEATH_BABY = BuiltinSoundEvent.get("entity.turtle.death_baby");
 
-    SoundEvent UI_TOAST_IN = BuiltinSoundEvent.get("minecraft:ui.toast.in");
+    SoundEvent ENTITY_TURTLE_EGG_BREAK = BuiltinSoundEvent.get("entity.turtle.egg_break");
 
-    SoundEvent UI_TOAST_OUT = BuiltinSoundEvent.get("minecraft:ui.toast.out");
+    SoundEvent ENTITY_TURTLE_EGG_CRACK = BuiltinSoundEvent.get("entity.turtle.egg_crack");
 
-    SoundEvent BLOCK_VAULT_ACTIVATE = BuiltinSoundEvent.get("minecraft:block.vault.activate");
+    SoundEvent ENTITY_TURTLE_EGG_HATCH = BuiltinSoundEvent.get("entity.turtle.egg_hatch");
 
-    SoundEvent BLOCK_VAULT_AMBIENT = BuiltinSoundEvent.get("minecraft:block.vault.ambient");
+    SoundEvent ENTITY_TURTLE_HURT = BuiltinSoundEvent.get("entity.turtle.hurt");
 
-    SoundEvent BLOCK_VAULT_BREAK = BuiltinSoundEvent.get("minecraft:block.vault.break");
+    SoundEvent ENTITY_TURTLE_HURT_BABY = BuiltinSoundEvent.get("entity.turtle.hurt_baby");
 
-    SoundEvent BLOCK_VAULT_CLOSE_SHUTTER = BuiltinSoundEvent.get("minecraft:block.vault.close_shutter");
+    SoundEvent ENTITY_TURTLE_LAY_EGG = BuiltinSoundEvent.get("entity.turtle.lay_egg");
 
-    SoundEvent BLOCK_VAULT_DEACTIVATE = BuiltinSoundEvent.get("minecraft:block.vault.deactivate");
+    SoundEvent ENTITY_TURTLE_SHAMBLE = BuiltinSoundEvent.get("entity.turtle.shamble");
 
-    SoundEvent BLOCK_VAULT_EJECT_ITEM = BuiltinSoundEvent.get("minecraft:block.vault.eject_item");
+    SoundEvent ENTITY_TURTLE_SHAMBLE_BABY = BuiltinSoundEvent.get("entity.turtle.shamble_baby");
 
-    SoundEvent BLOCK_VAULT_REJECT_REWARDED_PLAYER = BuiltinSoundEvent.get("minecraft:block.vault.reject_rewarded_player");
+    SoundEvent ENTITY_TURTLE_SWIM = BuiltinSoundEvent.get("entity.turtle.swim");
 
-    SoundEvent BLOCK_VAULT_FALL = BuiltinSoundEvent.get("minecraft:block.vault.fall");
+    SoundEvent UI_BUTTON_CLICK = BuiltinSoundEvent.get("ui.button.click");
 
-    SoundEvent BLOCK_VAULT_HIT = BuiltinSoundEvent.get("minecraft:block.vault.hit");
+    SoundEvent UI_LOOM_SELECT_PATTERN = BuiltinSoundEvent.get("ui.loom.select_pattern");
 
-    SoundEvent BLOCK_VAULT_INSERT_ITEM = BuiltinSoundEvent.get("minecraft:block.vault.insert_item");
+    SoundEvent UI_LOOM_TAKE_RESULT = BuiltinSoundEvent.get("ui.loom.take_result");
 
-    SoundEvent BLOCK_VAULT_INSERT_ITEM_FAIL = BuiltinSoundEvent.get("minecraft:block.vault.insert_item_fail");
+    SoundEvent UI_CARTOGRAPHY_TABLE_TAKE_RESULT = BuiltinSoundEvent.get("ui.cartography_table.take_result");
 
-    SoundEvent BLOCK_VAULT_OPEN_SHUTTER = BuiltinSoundEvent.get("minecraft:block.vault.open_shutter");
+    SoundEvent UI_STONECUTTER_TAKE_RESULT = BuiltinSoundEvent.get("ui.stonecutter.take_result");
 
-    SoundEvent BLOCK_VAULT_PLACE = BuiltinSoundEvent.get("minecraft:block.vault.place");
+    SoundEvent UI_STONECUTTER_SELECT_RECIPE = BuiltinSoundEvent.get("ui.stonecutter.select_recipe");
 
-    SoundEvent BLOCK_VAULT_STEP = BuiltinSoundEvent.get("minecraft:block.vault.step");
+    SoundEvent UI_TOAST_CHALLENGE_COMPLETE = BuiltinSoundEvent.get("ui.toast.challenge_complete");
 
-    SoundEvent ENTITY_VEX_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.vex.ambient");
+    SoundEvent UI_TOAST_IN = BuiltinSoundEvent.get("ui.toast.in");
 
-    SoundEvent ENTITY_VEX_CHARGE = BuiltinSoundEvent.get("minecraft:entity.vex.charge");
+    SoundEvent UI_TOAST_OUT = BuiltinSoundEvent.get("ui.toast.out");
 
-    SoundEvent ENTITY_VEX_DEATH = BuiltinSoundEvent.get("minecraft:entity.vex.death");
+    SoundEvent BLOCK_VAULT_ACTIVATE = BuiltinSoundEvent.get("block.vault.activate");
 
-    SoundEvent ENTITY_VEX_HURT = BuiltinSoundEvent.get("minecraft:entity.vex.hurt");
+    SoundEvent BLOCK_VAULT_AMBIENT = BuiltinSoundEvent.get("block.vault.ambient");
 
-    SoundEvent ENTITY_VILLAGER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.villager.ambient");
+    SoundEvent BLOCK_VAULT_BREAK = BuiltinSoundEvent.get("block.vault.break");
 
-    SoundEvent ENTITY_VILLAGER_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.villager.celebrate");
+    SoundEvent BLOCK_VAULT_CLOSE_SHUTTER = BuiltinSoundEvent.get("block.vault.close_shutter");
 
-    SoundEvent ENTITY_VILLAGER_DEATH = BuiltinSoundEvent.get("minecraft:entity.villager.death");
+    SoundEvent BLOCK_VAULT_DEACTIVATE = BuiltinSoundEvent.get("block.vault.deactivate");
 
-    SoundEvent ENTITY_VILLAGER_HURT = BuiltinSoundEvent.get("minecraft:entity.villager.hurt");
+    SoundEvent BLOCK_VAULT_EJECT_ITEM = BuiltinSoundEvent.get("block.vault.eject_item");
 
-    SoundEvent ENTITY_VILLAGER_NO = BuiltinSoundEvent.get("minecraft:entity.villager.no");
+    SoundEvent BLOCK_VAULT_REJECT_REWARDED_PLAYER = BuiltinSoundEvent.get("block.vault.reject_rewarded_player");
 
-    SoundEvent ENTITY_VILLAGER_TRADE = BuiltinSoundEvent.get("minecraft:entity.villager.trade");
+    SoundEvent BLOCK_VAULT_FALL = BuiltinSoundEvent.get("block.vault.fall");
 
-    SoundEvent ENTITY_VILLAGER_YES = BuiltinSoundEvent.get("minecraft:entity.villager.yes");
+    SoundEvent BLOCK_VAULT_HIT = BuiltinSoundEvent.get("block.vault.hit");
 
-    SoundEvent ENTITY_VILLAGER_WORK_ARMORER = BuiltinSoundEvent.get("minecraft:entity.villager.work_armorer");
+    SoundEvent BLOCK_VAULT_INSERT_ITEM = BuiltinSoundEvent.get("block.vault.insert_item");
 
-    SoundEvent ENTITY_VILLAGER_WORK_BUTCHER = BuiltinSoundEvent.get("minecraft:entity.villager.work_butcher");
+    SoundEvent BLOCK_VAULT_INSERT_ITEM_FAIL = BuiltinSoundEvent.get("block.vault.insert_item_fail");
 
-    SoundEvent ENTITY_VILLAGER_WORK_CARTOGRAPHER = BuiltinSoundEvent.get("minecraft:entity.villager.work_cartographer");
+    SoundEvent BLOCK_VAULT_OPEN_SHUTTER = BuiltinSoundEvent.get("block.vault.open_shutter");
 
-    SoundEvent ENTITY_VILLAGER_WORK_CLERIC = BuiltinSoundEvent.get("minecraft:entity.villager.work_cleric");
+    SoundEvent BLOCK_VAULT_PLACE = BuiltinSoundEvent.get("block.vault.place");
 
-    SoundEvent ENTITY_VILLAGER_WORK_FARMER = BuiltinSoundEvent.get("minecraft:entity.villager.work_farmer");
+    SoundEvent BLOCK_VAULT_STEP = BuiltinSoundEvent.get("block.vault.step");
 
-    SoundEvent ENTITY_VILLAGER_WORK_FISHERMAN = BuiltinSoundEvent.get("minecraft:entity.villager.work_fisherman");
+    SoundEvent ENTITY_VEX_AMBIENT = BuiltinSoundEvent.get("entity.vex.ambient");
 
-    SoundEvent ENTITY_VILLAGER_WORK_FLETCHER = BuiltinSoundEvent.get("minecraft:entity.villager.work_fletcher");
+    SoundEvent ENTITY_VEX_CHARGE = BuiltinSoundEvent.get("entity.vex.charge");
 
-    SoundEvent ENTITY_VILLAGER_WORK_LEATHERWORKER = BuiltinSoundEvent.get("minecraft:entity.villager.work_leatherworker");
+    SoundEvent ENTITY_VEX_DEATH = BuiltinSoundEvent.get("entity.vex.death");
 
-    SoundEvent ENTITY_VILLAGER_WORK_LIBRARIAN = BuiltinSoundEvent.get("minecraft:entity.villager.work_librarian");
+    SoundEvent ENTITY_VEX_HURT = BuiltinSoundEvent.get("entity.vex.hurt");
 
-    SoundEvent ENTITY_VILLAGER_WORK_MASON = BuiltinSoundEvent.get("minecraft:entity.villager.work_mason");
+    SoundEvent ENTITY_VILLAGER_AMBIENT = BuiltinSoundEvent.get("entity.villager.ambient");
 
-    SoundEvent ENTITY_VILLAGER_WORK_SHEPHERD = BuiltinSoundEvent.get("minecraft:entity.villager.work_shepherd");
+    SoundEvent ENTITY_VILLAGER_CELEBRATE = BuiltinSoundEvent.get("entity.villager.celebrate");
 
-    SoundEvent ENTITY_VILLAGER_WORK_TOOLSMITH = BuiltinSoundEvent.get("minecraft:entity.villager.work_toolsmith");
+    SoundEvent ENTITY_VILLAGER_DEATH = BuiltinSoundEvent.get("entity.villager.death");
 
-    SoundEvent ENTITY_VILLAGER_WORK_WEAPONSMITH = BuiltinSoundEvent.get("minecraft:entity.villager.work_weaponsmith");
+    SoundEvent ENTITY_VILLAGER_HURT = BuiltinSoundEvent.get("entity.villager.hurt");
 
-    SoundEvent ENTITY_VINDICATOR_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.vindicator.ambient");
+    SoundEvent ENTITY_VILLAGER_NO = BuiltinSoundEvent.get("entity.villager.no");
 
-    SoundEvent ENTITY_VINDICATOR_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.vindicator.celebrate");
+    SoundEvent ENTITY_VILLAGER_TRADE = BuiltinSoundEvent.get("entity.villager.trade");
 
-    SoundEvent ENTITY_VINDICATOR_DEATH = BuiltinSoundEvent.get("minecraft:entity.vindicator.death");
+    SoundEvent ENTITY_VILLAGER_YES = BuiltinSoundEvent.get("entity.villager.yes");
 
-    SoundEvent ENTITY_VINDICATOR_HURT = BuiltinSoundEvent.get("minecraft:entity.vindicator.hurt");
+    SoundEvent ENTITY_VILLAGER_WORK_ARMORER = BuiltinSoundEvent.get("entity.villager.work_armorer");
 
-    SoundEvent BLOCK_VINE_BREAK = BuiltinSoundEvent.get("minecraft:block.vine.break");
+    SoundEvent ENTITY_VILLAGER_WORK_BUTCHER = BuiltinSoundEvent.get("entity.villager.work_butcher");
 
-    SoundEvent BLOCK_VINE_FALL = BuiltinSoundEvent.get("minecraft:block.vine.fall");
+    SoundEvent ENTITY_VILLAGER_WORK_CARTOGRAPHER = BuiltinSoundEvent.get("entity.villager.work_cartographer");
 
-    SoundEvent BLOCK_VINE_HIT = BuiltinSoundEvent.get("minecraft:block.vine.hit");
+    SoundEvent ENTITY_VILLAGER_WORK_CLERIC = BuiltinSoundEvent.get("entity.villager.work_cleric");
 
-    SoundEvent BLOCK_VINE_PLACE = BuiltinSoundEvent.get("minecraft:block.vine.place");
+    SoundEvent ENTITY_VILLAGER_WORK_FARMER = BuiltinSoundEvent.get("entity.villager.work_farmer");
 
-    SoundEvent BLOCK_VINE_STEP = BuiltinSoundEvent.get("minecraft:block.vine.step");
+    SoundEvent ENTITY_VILLAGER_WORK_FISHERMAN = BuiltinSoundEvent.get("entity.villager.work_fisherman");
 
-    SoundEvent BLOCK_LILY_PAD_PLACE = BuiltinSoundEvent.get("minecraft:block.lily_pad.place");
+    SoundEvent ENTITY_VILLAGER_WORK_FLETCHER = BuiltinSoundEvent.get("entity.villager.work_fletcher");
 
-    SoundEvent ENTITY_WANDERING_TRADER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.ambient");
+    SoundEvent ENTITY_VILLAGER_WORK_LEATHERWORKER = BuiltinSoundEvent.get("entity.villager.work_leatherworker");
 
-    SoundEvent ENTITY_WANDERING_TRADER_DEATH = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.death");
+    SoundEvent ENTITY_VILLAGER_WORK_LIBRARIAN = BuiltinSoundEvent.get("entity.villager.work_librarian");
 
-    SoundEvent ENTITY_WANDERING_TRADER_DISAPPEARED = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.disappeared");
+    SoundEvent ENTITY_VILLAGER_WORK_MASON = BuiltinSoundEvent.get("entity.villager.work_mason");
 
-    SoundEvent ENTITY_WANDERING_TRADER_DRINK_MILK = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.drink_milk");
+    SoundEvent ENTITY_VILLAGER_WORK_SHEPHERD = BuiltinSoundEvent.get("entity.villager.work_shepherd");
 
-    SoundEvent ENTITY_WANDERING_TRADER_DRINK_POTION = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.drink_potion");
+    SoundEvent ENTITY_VILLAGER_WORK_TOOLSMITH = BuiltinSoundEvent.get("entity.villager.work_toolsmith");
 
-    SoundEvent ENTITY_WANDERING_TRADER_HURT = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.hurt");
+    SoundEvent ENTITY_VILLAGER_WORK_WEAPONSMITH = BuiltinSoundEvent.get("entity.villager.work_weaponsmith");
 
-    SoundEvent ENTITY_WANDERING_TRADER_NO = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.no");
+    SoundEvent ENTITY_VINDICATOR_AMBIENT = BuiltinSoundEvent.get("entity.vindicator.ambient");
 
-    SoundEvent ENTITY_WANDERING_TRADER_REAPPEARED = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.reappeared");
+    SoundEvent ENTITY_VINDICATOR_CELEBRATE = BuiltinSoundEvent.get("entity.vindicator.celebrate");
 
-    SoundEvent ENTITY_WANDERING_TRADER_TRADE = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.trade");
+    SoundEvent ENTITY_VINDICATOR_DEATH = BuiltinSoundEvent.get("entity.vindicator.death");
 
-    SoundEvent ENTITY_WANDERING_TRADER_YES = BuiltinSoundEvent.get("minecraft:entity.wandering_trader.yes");
+    SoundEvent ENTITY_VINDICATOR_HURT = BuiltinSoundEvent.get("entity.vindicator.hurt");
 
-    SoundEvent ENTITY_WARDEN_AGITATED = BuiltinSoundEvent.get("minecraft:entity.warden.agitated");
+    SoundEvent BLOCK_VINE_BREAK = BuiltinSoundEvent.get("block.vine.break");
 
-    SoundEvent ENTITY_WARDEN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.warden.ambient");
+    SoundEvent BLOCK_VINE_FALL = BuiltinSoundEvent.get("block.vine.fall");
 
-    SoundEvent ENTITY_WARDEN_ANGRY = BuiltinSoundEvent.get("minecraft:entity.warden.angry");
+    SoundEvent BLOCK_VINE_HIT = BuiltinSoundEvent.get("block.vine.hit");
 
-    SoundEvent ENTITY_WARDEN_ATTACK_IMPACT = BuiltinSoundEvent.get("minecraft:entity.warden.attack_impact");
+    SoundEvent BLOCK_VINE_PLACE = BuiltinSoundEvent.get("block.vine.place");
 
-    SoundEvent ENTITY_WARDEN_DEATH = BuiltinSoundEvent.get("minecraft:entity.warden.death");
+    SoundEvent BLOCK_VINE_STEP = BuiltinSoundEvent.get("block.vine.step");
 
-    SoundEvent ENTITY_WARDEN_DIG = BuiltinSoundEvent.get("minecraft:entity.warden.dig");
+    SoundEvent BLOCK_LILY_PAD_PLACE = BuiltinSoundEvent.get("block.lily_pad.place");
 
-    SoundEvent ENTITY_WARDEN_EMERGE = BuiltinSoundEvent.get("minecraft:entity.warden.emerge");
+    SoundEvent ENTITY_WANDERING_TRADER_AMBIENT = BuiltinSoundEvent.get("entity.wandering_trader.ambient");
 
-    SoundEvent ENTITY_WARDEN_HEARTBEAT = BuiltinSoundEvent.get("minecraft:entity.warden.heartbeat");
+    SoundEvent ENTITY_WANDERING_TRADER_DEATH = BuiltinSoundEvent.get("entity.wandering_trader.death");
 
-    SoundEvent ENTITY_WARDEN_HURT = BuiltinSoundEvent.get("minecraft:entity.warden.hurt");
+    SoundEvent ENTITY_WANDERING_TRADER_DISAPPEARED = BuiltinSoundEvent.get("entity.wandering_trader.disappeared");
 
-    SoundEvent ENTITY_WARDEN_LISTENING = BuiltinSoundEvent.get("minecraft:entity.warden.listening");
+    SoundEvent ENTITY_WANDERING_TRADER_DRINK_MILK = BuiltinSoundEvent.get("entity.wandering_trader.drink_milk");
 
-    SoundEvent ENTITY_WARDEN_LISTENING_ANGRY = BuiltinSoundEvent.get("minecraft:entity.warden.listening_angry");
+    SoundEvent ENTITY_WANDERING_TRADER_DRINK_POTION = BuiltinSoundEvent.get("entity.wandering_trader.drink_potion");
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSE = BuiltinSoundEvent.get("minecraft:entity.warden.nearby_close");
+    SoundEvent ENTITY_WANDERING_TRADER_HURT = BuiltinSoundEvent.get("entity.wandering_trader.hurt");
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSER = BuiltinSoundEvent.get("minecraft:entity.warden.nearby_closer");
+    SoundEvent ENTITY_WANDERING_TRADER_NO = BuiltinSoundEvent.get("entity.wandering_trader.no");
 
-    SoundEvent ENTITY_WARDEN_NEARBY_CLOSEST = BuiltinSoundEvent.get("minecraft:entity.warden.nearby_closest");
+    SoundEvent ENTITY_WANDERING_TRADER_REAPPEARED = BuiltinSoundEvent.get("entity.wandering_trader.reappeared");
 
-    SoundEvent ENTITY_WARDEN_ROAR = BuiltinSoundEvent.get("minecraft:entity.warden.roar");
+    SoundEvent ENTITY_WANDERING_TRADER_TRADE = BuiltinSoundEvent.get("entity.wandering_trader.trade");
 
-    SoundEvent ENTITY_WARDEN_SNIFF = BuiltinSoundEvent.get("minecraft:entity.warden.sniff");
+    SoundEvent ENTITY_WANDERING_TRADER_YES = BuiltinSoundEvent.get("entity.wandering_trader.yes");
 
-    SoundEvent ENTITY_WARDEN_SONIC_BOOM = BuiltinSoundEvent.get("minecraft:entity.warden.sonic_boom");
+    SoundEvent ENTITY_WARDEN_AGITATED = BuiltinSoundEvent.get("entity.warden.agitated");
 
-    SoundEvent ENTITY_WARDEN_SONIC_CHARGE = BuiltinSoundEvent.get("minecraft:entity.warden.sonic_charge");
+    SoundEvent ENTITY_WARDEN_AMBIENT = BuiltinSoundEvent.get("entity.warden.ambient");
 
-    SoundEvent ENTITY_WARDEN_STEP = BuiltinSoundEvent.get("minecraft:entity.warden.step");
+    SoundEvent ENTITY_WARDEN_ANGRY = BuiltinSoundEvent.get("entity.warden.angry");
 
-    SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = BuiltinSoundEvent.get("minecraft:entity.warden.tendril_clicks");
+    SoundEvent ENTITY_WARDEN_ATTACK_IMPACT = BuiltinSoundEvent.get("entity.warden.attack_impact");
 
-    SoundEvent BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("minecraft:block.hanging_sign.waxed_interact_fail");
+    SoundEvent ENTITY_WARDEN_DEATH = BuiltinSoundEvent.get("entity.warden.death");
 
-    SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("minecraft:block.sign.waxed_interact_fail");
+    SoundEvent ENTITY_WARDEN_DIG = BuiltinSoundEvent.get("entity.warden.dig");
 
-    SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get("minecraft:block.water.ambient");
+    SoundEvent ENTITY_WARDEN_EMERGE = BuiltinSoundEvent.get("entity.warden.emerge");
 
-    SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get("minecraft:weather.rain");
+    SoundEvent ENTITY_WARDEN_HEARTBEAT = BuiltinSoundEvent.get("entity.warden.heartbeat");
 
-    SoundEvent WEATHER_RAIN_ABOVE = BuiltinSoundEvent.get("minecraft:weather.rain.above");
+    SoundEvent ENTITY_WARDEN_HURT = BuiltinSoundEvent.get("entity.warden.hurt");
 
-    SoundEvent BLOCK_WET_GRASS_BREAK = BuiltinSoundEvent.get("minecraft:block.wet_grass.break");
+    SoundEvent ENTITY_WARDEN_LISTENING = BuiltinSoundEvent.get("entity.warden.listening");
 
-    SoundEvent BLOCK_WET_GRASS_FALL = BuiltinSoundEvent.get("minecraft:block.wet_grass.fall");
+    SoundEvent ENTITY_WARDEN_LISTENING_ANGRY = BuiltinSoundEvent.get("entity.warden.listening_angry");
 
-    SoundEvent BLOCK_WET_GRASS_HIT = BuiltinSoundEvent.get("minecraft:block.wet_grass.hit");
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSE = BuiltinSoundEvent.get("entity.warden.nearby_close");
 
-    SoundEvent BLOCK_WET_GRASS_PLACE = BuiltinSoundEvent.get("minecraft:block.wet_grass.place");
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSER = BuiltinSoundEvent.get("entity.warden.nearby_closer");
 
-    SoundEvent BLOCK_WET_GRASS_STEP = BuiltinSoundEvent.get("minecraft:block.wet_grass.step");
+    SoundEvent ENTITY_WARDEN_NEARBY_CLOSEST = BuiltinSoundEvent.get("entity.warden.nearby_closest");
 
-    SoundEvent BLOCK_WET_SPONGE_BREAK = BuiltinSoundEvent.get("minecraft:block.wet_sponge.break");
+    SoundEvent ENTITY_WARDEN_ROAR = BuiltinSoundEvent.get("entity.warden.roar");
 
-    SoundEvent BLOCK_WET_SPONGE_DRIES = BuiltinSoundEvent.get("minecraft:block.wet_sponge.dries");
+    SoundEvent ENTITY_WARDEN_SNIFF = BuiltinSoundEvent.get("entity.warden.sniff");
 
-    SoundEvent BLOCK_WET_SPONGE_FALL = BuiltinSoundEvent.get("minecraft:block.wet_sponge.fall");
+    SoundEvent ENTITY_WARDEN_SONIC_BOOM = BuiltinSoundEvent.get("entity.warden.sonic_boom");
 
-    SoundEvent BLOCK_WET_SPONGE_HIT = BuiltinSoundEvent.get("minecraft:block.wet_sponge.hit");
+    SoundEvent ENTITY_WARDEN_SONIC_CHARGE = BuiltinSoundEvent.get("entity.warden.sonic_charge");
 
-    SoundEvent BLOCK_WET_SPONGE_PLACE = BuiltinSoundEvent.get("minecraft:block.wet_sponge.place");
+    SoundEvent ENTITY_WARDEN_STEP = BuiltinSoundEvent.get("entity.warden.step");
 
-    SoundEvent BLOCK_WET_SPONGE_STEP = BuiltinSoundEvent.get("minecraft:block.wet_sponge.step");
+    SoundEvent ENTITY_WARDEN_TENDRIL_CLICKS = BuiltinSoundEvent.get("entity.warden.tendril_clicks");
 
-    SoundEvent ENTITY_WIND_CHARGE_WIND_BURST = BuiltinSoundEvent.get("minecraft:entity.wind_charge.wind_burst");
+    SoundEvent BLOCK_HANGING_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("block.hanging_sign.waxed_interact_fail");
 
-    SoundEvent ENTITY_WIND_CHARGE_THROW = BuiltinSoundEvent.get("minecraft:entity.wind_charge.throw");
+    SoundEvent BLOCK_SIGN_WAXED_INTERACT_FAIL = BuiltinSoundEvent.get("block.sign.waxed_interact_fail");
 
-    SoundEvent ENTITY_WITCH_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.witch.ambient");
+    SoundEvent BLOCK_WATER_AMBIENT = BuiltinSoundEvent.get("block.water.ambient");
 
-    SoundEvent ENTITY_WITCH_CELEBRATE = BuiltinSoundEvent.get("minecraft:entity.witch.celebrate");
+    SoundEvent WEATHER_RAIN = BuiltinSoundEvent.get("weather.rain");
 
-    SoundEvent ENTITY_WITCH_DEATH = BuiltinSoundEvent.get("minecraft:entity.witch.death");
+    SoundEvent WEATHER_RAIN_ABOVE = BuiltinSoundEvent.get("weather.rain.above");
 
-    SoundEvent ENTITY_WITCH_DRINK = BuiltinSoundEvent.get("minecraft:entity.witch.drink");
+    SoundEvent BLOCK_WET_GRASS_BREAK = BuiltinSoundEvent.get("block.wet_grass.break");
 
-    SoundEvent ENTITY_WITCH_HURT = BuiltinSoundEvent.get("minecraft:entity.witch.hurt");
+    SoundEvent BLOCK_WET_GRASS_FALL = BuiltinSoundEvent.get("block.wet_grass.fall");
 
-    SoundEvent ENTITY_WITCH_THROW = BuiltinSoundEvent.get("minecraft:entity.witch.throw");
+    SoundEvent BLOCK_WET_GRASS_HIT = BuiltinSoundEvent.get("block.wet_grass.hit");
 
-    SoundEvent ENTITY_WITHER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wither.ambient");
+    SoundEvent BLOCK_WET_GRASS_PLACE = BuiltinSoundEvent.get("block.wet_grass.place");
 
-    SoundEvent ENTITY_WITHER_BREAK_BLOCK = BuiltinSoundEvent.get("minecraft:entity.wither.break_block");
+    SoundEvent BLOCK_WET_GRASS_STEP = BuiltinSoundEvent.get("block.wet_grass.step");
 
-    SoundEvent ENTITY_WITHER_DEATH = BuiltinSoundEvent.get("minecraft:entity.wither.death");
+    SoundEvent BLOCK_WET_SPONGE_BREAK = BuiltinSoundEvent.get("block.wet_sponge.break");
 
-    SoundEvent ENTITY_WITHER_HURT = BuiltinSoundEvent.get("minecraft:entity.wither.hurt");
+    SoundEvent BLOCK_WET_SPONGE_DRIES = BuiltinSoundEvent.get("block.wet_sponge.dries");
 
-    SoundEvent ENTITY_WITHER_SHOOT = BuiltinSoundEvent.get("minecraft:entity.wither.shoot");
+    SoundEvent BLOCK_WET_SPONGE_FALL = BuiltinSoundEvent.get("block.wet_sponge.fall");
 
-    SoundEvent ENTITY_WITHER_SKELETON_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wither_skeleton.ambient");
+    SoundEvent BLOCK_WET_SPONGE_HIT = BuiltinSoundEvent.get("block.wet_sponge.hit");
 
-    SoundEvent ENTITY_WITHER_SKELETON_DEATH = BuiltinSoundEvent.get("minecraft:entity.wither_skeleton.death");
+    SoundEvent BLOCK_WET_SPONGE_PLACE = BuiltinSoundEvent.get("block.wet_sponge.place");
 
-    SoundEvent ENTITY_WITHER_SKELETON_HURT = BuiltinSoundEvent.get("minecraft:entity.wither_skeleton.hurt");
+    SoundEvent BLOCK_WET_SPONGE_STEP = BuiltinSoundEvent.get("block.wet_sponge.step");
 
-    SoundEvent ENTITY_WITHER_SKELETON_STEP = BuiltinSoundEvent.get("minecraft:entity.wither_skeleton.step");
+    SoundEvent ENTITY_WIND_CHARGE_WIND_BURST = BuiltinSoundEvent.get("entity.wind_charge.wind_burst");
 
-    SoundEvent ENTITY_WITHER_SPAWN = BuiltinSoundEvent.get("minecraft:entity.wither.spawn");
+    SoundEvent ENTITY_WIND_CHARGE_THROW = BuiltinSoundEvent.get("entity.wind_charge.throw");
 
-    SoundEvent ITEM_WOLF_ARMOR_BREAK = BuiltinSoundEvent.get("minecraft:item.wolf_armor.break");
+    SoundEvent ENTITY_WITCH_AMBIENT = BuiltinSoundEvent.get("entity.witch.ambient");
 
-    SoundEvent ITEM_WOLF_ARMOR_CRACK = BuiltinSoundEvent.get("minecraft:item.wolf_armor.crack");
+    SoundEvent ENTITY_WITCH_CELEBRATE = BuiltinSoundEvent.get("entity.witch.celebrate");
 
-    SoundEvent ITEM_WOLF_ARMOR_DAMAGE = BuiltinSoundEvent.get("minecraft:item.wolf_armor.damage");
+    SoundEvent ENTITY_WITCH_DEATH = BuiltinSoundEvent.get("entity.witch.death");
 
-    SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get("minecraft:item.wolf_armor.repair");
+    SoundEvent ENTITY_WITCH_DRINK = BuiltinSoundEvent.get("entity.witch.drink");
 
-    SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.wolf.ambient");
+    SoundEvent ENTITY_WITCH_HURT = BuiltinSoundEvent.get("entity.witch.hurt");
 
-    SoundEvent ENTITY_WOLF_DEATH = BuiltinSoundEvent.get("minecraft:entity.wolf.death");
+    SoundEvent ENTITY_WITCH_THROW = BuiltinSoundEvent.get("entity.witch.throw");
 
-    SoundEvent ENTITY_WOLF_GROWL = BuiltinSoundEvent.get("minecraft:entity.wolf.growl");
+    SoundEvent ENTITY_WITHER_AMBIENT = BuiltinSoundEvent.get("entity.wither.ambient");
 
-    SoundEvent ENTITY_WOLF_HOWL = BuiltinSoundEvent.get("minecraft:entity.wolf.howl");
+    SoundEvent ENTITY_WITHER_BREAK_BLOCK = BuiltinSoundEvent.get("entity.wither.break_block");
 
-    SoundEvent ENTITY_WOLF_HURT = BuiltinSoundEvent.get("minecraft:entity.wolf.hurt");
+    SoundEvent ENTITY_WITHER_DEATH = BuiltinSoundEvent.get("entity.wither.death");
 
-    SoundEvent ENTITY_WOLF_PANT = BuiltinSoundEvent.get("minecraft:entity.wolf.pant");
+    SoundEvent ENTITY_WITHER_HURT = BuiltinSoundEvent.get("entity.wither.hurt");
 
-    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get("minecraft:entity.wolf.shake");
+    SoundEvent ENTITY_WITHER_SHOOT = BuiltinSoundEvent.get("entity.wither.shoot");
 
-    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get("minecraft:entity.wolf.step");
+    SoundEvent ENTITY_WITHER_SKELETON_AMBIENT = BuiltinSoundEvent.get("entity.wither_skeleton.ambient");
 
-    SoundEvent ENTITY_WOLF_WHINE = BuiltinSoundEvent.get("minecraft:entity.wolf.whine");
+    SoundEvent ENTITY_WITHER_SKELETON_DEATH = BuiltinSoundEvent.get("entity.wither_skeleton.death");
 
-    SoundEvent BLOCK_WOODEN_DOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.wooden_door.close");
+    SoundEvent ENTITY_WITHER_SKELETON_HURT = BuiltinSoundEvent.get("entity.wither_skeleton.hurt");
 
-    SoundEvent BLOCK_WOODEN_DOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.wooden_door.open");
+    SoundEvent ENTITY_WITHER_SKELETON_STEP = BuiltinSoundEvent.get("entity.wither_skeleton.step");
 
-    SoundEvent BLOCK_WOODEN_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("minecraft:block.wooden_trapdoor.close");
+    SoundEvent ENTITY_WITHER_SPAWN = BuiltinSoundEvent.get("entity.wither.spawn");
 
-    SoundEvent BLOCK_WOODEN_TRAPDOOR_OPEN = BuiltinSoundEvent.get("minecraft:block.wooden_trapdoor.open");
+    SoundEvent ITEM_WOLF_ARMOR_BREAK = BuiltinSoundEvent.get("item.wolf_armor.break");
 
-    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.wooden_button.click_off");
+    SoundEvent ITEM_WOLF_ARMOR_CRACK = BuiltinSoundEvent.get("item.wolf_armor.crack");
 
-    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.wooden_button.click_on");
+    SoundEvent ITEM_WOLF_ARMOR_DAMAGE = BuiltinSoundEvent.get("item.wolf_armor.damage");
 
-    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("minecraft:block.wooden_pressure_plate.click_off");
+    SoundEvent ITEM_WOLF_ARMOR_REPAIR = BuiltinSoundEvent.get("item.wolf_armor.repair");
 
-    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("minecraft:block.wooden_pressure_plate.click_on");
+    SoundEvent ENTITY_WOLF_SHAKE = BuiltinSoundEvent.get("entity.wolf.shake");
 
-    SoundEvent BLOCK_WOOD_BREAK = BuiltinSoundEvent.get("minecraft:block.wood.break");
+    SoundEvent ENTITY_WOLF_STEP = BuiltinSoundEvent.get("entity.wolf.step");
 
-    SoundEvent BLOCK_WOOD_FALL = BuiltinSoundEvent.get("minecraft:block.wood.fall");
+    SoundEvent ENTITY_WOLF_AMBIENT = BuiltinSoundEvent.get("entity.wolf.ambient");
 
-    SoundEvent BLOCK_WOOD_HIT = BuiltinSoundEvent.get("minecraft:block.wood.hit");
+    SoundEvent ENTITY_WOLF_DEATH = BuiltinSoundEvent.get("entity.wolf.death");
 
-    SoundEvent BLOCK_WOOD_PLACE = BuiltinSoundEvent.get("minecraft:block.wood.place");
+    SoundEvent ENTITY_WOLF_GROWL = BuiltinSoundEvent.get("entity.wolf.growl");
 
-    SoundEvent BLOCK_WOOD_STEP = BuiltinSoundEvent.get("minecraft:block.wood.step");
+    SoundEvent ENTITY_WOLF_HURT = BuiltinSoundEvent.get("entity.wolf.hurt");
 
-    SoundEvent BLOCK_WOOL_BREAK = BuiltinSoundEvent.get("minecraft:block.wool.break");
+    SoundEvent ENTITY_WOLF_PANT = BuiltinSoundEvent.get("entity.wolf.pant");
 
-    SoundEvent BLOCK_WOOL_FALL = BuiltinSoundEvent.get("minecraft:block.wool.fall");
+    SoundEvent ENTITY_WOLF_WHINE = BuiltinSoundEvent.get("entity.wolf.whine");
 
-    SoundEvent BLOCK_WOOL_HIT = BuiltinSoundEvent.get("minecraft:block.wool.hit");
+    SoundEvent ENTITY_WOLF_PUGLIN_AMBIENT = BuiltinSoundEvent.get("entity.wolf_puglin.ambient");
 
-    SoundEvent BLOCK_WOOL_PLACE = BuiltinSoundEvent.get("minecraft:block.wool.place");
+    SoundEvent ENTITY_WOLF_PUGLIN_DEATH = BuiltinSoundEvent.get("entity.wolf_puglin.death");
 
-    SoundEvent BLOCK_WOOL_STEP = BuiltinSoundEvent.get("minecraft:block.wool.step");
+    SoundEvent ENTITY_WOLF_PUGLIN_GROWL = BuiltinSoundEvent.get("entity.wolf_puglin.growl");
 
-    SoundEvent ENTITY_ZOGLIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.zoglin.ambient");
+    SoundEvent ENTITY_WOLF_PUGLIN_HURT = BuiltinSoundEvent.get("entity.wolf_puglin.hurt");
 
-    SoundEvent ENTITY_ZOGLIN_ANGRY = BuiltinSoundEvent.get("minecraft:entity.zoglin.angry");
+    SoundEvent ENTITY_WOLF_PUGLIN_PANT = BuiltinSoundEvent.get("entity.wolf_puglin.pant");
 
-    SoundEvent ENTITY_ZOGLIN_ATTACK = BuiltinSoundEvent.get("minecraft:entity.zoglin.attack");
+    SoundEvent ENTITY_WOLF_PUGLIN_WHINE = BuiltinSoundEvent.get("entity.wolf_puglin.whine");
 
-    SoundEvent ENTITY_ZOGLIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.zoglin.death");
+    SoundEvent ENTITY_WOLF_SAD_AMBIENT = BuiltinSoundEvent.get("entity.wolf_sad.ambient");
 
-    SoundEvent ENTITY_ZOGLIN_HURT = BuiltinSoundEvent.get("minecraft:entity.zoglin.hurt");
+    SoundEvent ENTITY_WOLF_SAD_DEATH = BuiltinSoundEvent.get("entity.wolf_sad.death");
 
-    SoundEvent ENTITY_ZOGLIN_STEP = BuiltinSoundEvent.get("minecraft:entity.zoglin.step");
+    SoundEvent ENTITY_WOLF_SAD_GROWL = BuiltinSoundEvent.get("entity.wolf_sad.growl");
 
-    SoundEvent ENTITY_ZOMBIE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.zombie.ambient");
+    SoundEvent ENTITY_WOLF_SAD_HURT = BuiltinSoundEvent.get("entity.wolf_sad.hurt");
 
-    SoundEvent ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR = BuiltinSoundEvent.get("minecraft:entity.zombie.attack_wooden_door");
+    SoundEvent ENTITY_WOLF_SAD_PANT = BuiltinSoundEvent.get("entity.wolf_sad.pant");
 
-    SoundEvent ENTITY_ZOMBIE_ATTACK_IRON_DOOR = BuiltinSoundEvent.get("minecraft:entity.zombie.attack_iron_door");
+    SoundEvent ENTITY_WOLF_SAD_WHINE = BuiltinSoundEvent.get("entity.wolf_sad.whine");
 
-    SoundEvent ENTITY_ZOMBIE_BREAK_WOODEN_DOOR = BuiltinSoundEvent.get("minecraft:entity.zombie.break_wooden_door");
+    SoundEvent ENTITY_WOLF_ANGRY_AMBIENT = BuiltinSoundEvent.get("entity.wolf_angry.ambient");
 
-    SoundEvent ENTITY_ZOMBIE_CONVERTED_TO_DROWNED = BuiltinSoundEvent.get("minecraft:entity.zombie.converted_to_drowned");
+    SoundEvent ENTITY_WOLF_ANGRY_DEATH = BuiltinSoundEvent.get("entity.wolf_angry.death");
 
-    SoundEvent ENTITY_ZOMBIE_DEATH = BuiltinSoundEvent.get("minecraft:entity.zombie.death");
+    SoundEvent ENTITY_WOLF_ANGRY_GROWL = BuiltinSoundEvent.get("entity.wolf_angry.growl");
 
-    SoundEvent ENTITY_ZOMBIE_DESTROY_EGG = BuiltinSoundEvent.get("minecraft:entity.zombie.destroy_egg");
+    SoundEvent ENTITY_WOLF_ANGRY_HURT = BuiltinSoundEvent.get("entity.wolf_angry.hurt");
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.zombie_horse.ambient");
+    SoundEvent ENTITY_WOLF_ANGRY_PANT = BuiltinSoundEvent.get("entity.wolf_angry.pant");
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_DEATH = BuiltinSoundEvent.get("minecraft:entity.zombie_horse.death");
+    SoundEvent ENTITY_WOLF_ANGRY_WHINE = BuiltinSoundEvent.get("entity.wolf_angry.whine");
 
-    SoundEvent ENTITY_ZOMBIE_HORSE_HURT = BuiltinSoundEvent.get("minecraft:entity.zombie_horse.hurt");
+    SoundEvent ENTITY_WOLF_GRUMPY_AMBIENT = BuiltinSoundEvent.get("entity.wolf_grumpy.ambient");
 
-    SoundEvent ENTITY_ZOMBIE_HURT = BuiltinSoundEvent.get("minecraft:entity.zombie.hurt");
+    SoundEvent ENTITY_WOLF_GRUMPY_DEATH = BuiltinSoundEvent.get("entity.wolf_grumpy.death");
 
-    SoundEvent ENTITY_ZOMBIE_INFECT = BuiltinSoundEvent.get("minecraft:entity.zombie.infect");
+    SoundEvent ENTITY_WOLF_GRUMPY_GROWL = BuiltinSoundEvent.get("entity.wolf_grumpy.growl");
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.zombified_piglin.ambient");
+    SoundEvent ENTITY_WOLF_GRUMPY_HURT = BuiltinSoundEvent.get("entity.wolf_grumpy.hurt");
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_ANGRY = BuiltinSoundEvent.get("minecraft:entity.zombified_piglin.angry");
+    SoundEvent ENTITY_WOLF_GRUMPY_PANT = BuiltinSoundEvent.get("entity.wolf_grumpy.pant");
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_DEATH = BuiltinSoundEvent.get("minecraft:entity.zombified_piglin.death");
+    SoundEvent ENTITY_WOLF_GRUMPY_WHINE = BuiltinSoundEvent.get("entity.wolf_grumpy.whine");
 
-    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_HURT = BuiltinSoundEvent.get("minecraft:entity.zombified_piglin.hurt");
+    SoundEvent ENTITY_WOLF_BIG_AMBIENT = BuiltinSoundEvent.get("entity.wolf_big.ambient");
 
-    SoundEvent ENTITY_ZOMBIE_STEP = BuiltinSoundEvent.get("minecraft:entity.zombie.step");
+    SoundEvent ENTITY_WOLF_BIG_DEATH = BuiltinSoundEvent.get("entity.wolf_big.death");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_AMBIENT = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.ambient");
+    SoundEvent ENTITY_WOLF_BIG_GROWL = BuiltinSoundEvent.get("entity.wolf_big.growl");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_CONVERTED = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.converted");
+    SoundEvent ENTITY_WOLF_BIG_HURT = BuiltinSoundEvent.get("entity.wolf_big.hurt");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_CURE = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.cure");
+    SoundEvent ENTITY_WOLF_BIG_PANT = BuiltinSoundEvent.get("entity.wolf_big.pant");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_DEATH = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.death");
+    SoundEvent ENTITY_WOLF_BIG_WHINE = BuiltinSoundEvent.get("entity.wolf_big.whine");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_HURT = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.hurt");
+    SoundEvent ENTITY_WOLF_CUTE_AMBIENT = BuiltinSoundEvent.get("entity.wolf_cute.ambient");
 
-    SoundEvent ENTITY_ZOMBIE_VILLAGER_STEP = BuiltinSoundEvent.get("minecraft:entity.zombie_villager.step");
+    SoundEvent ENTITY_WOLF_CUTE_DEATH = BuiltinSoundEvent.get("entity.wolf_cute.death");
 
-    SoundEvent EVENT_MOB_EFFECT_BAD_OMEN = BuiltinSoundEvent.get("minecraft:event.mob_effect.bad_omen");
+    SoundEvent ENTITY_WOLF_CUTE_GROWL = BuiltinSoundEvent.get("entity.wolf_cute.growl");
 
-    SoundEvent EVENT_MOB_EFFECT_TRIAL_OMEN = BuiltinSoundEvent.get("minecraft:event.mob_effect.trial_omen");
+    SoundEvent ENTITY_WOLF_CUTE_HURT = BuiltinSoundEvent.get("entity.wolf_cute.hurt");
 
-    SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get("minecraft:event.mob_effect.raid_omen");
+    SoundEvent ENTITY_WOLF_CUTE_PANT = BuiltinSoundEvent.get("entity.wolf_cute.pant");
+
+    SoundEvent ENTITY_WOLF_CUTE_WHINE = BuiltinSoundEvent.get("entity.wolf_cute.whine");
+
+    SoundEvent BLOCK_WOODEN_DOOR_CLOSE = BuiltinSoundEvent.get("block.wooden_door.close");
+
+    SoundEvent BLOCK_WOODEN_DOOR_OPEN = BuiltinSoundEvent.get("block.wooden_door.open");
+
+    SoundEvent BLOCK_WOODEN_TRAPDOOR_CLOSE = BuiltinSoundEvent.get("block.wooden_trapdoor.close");
+
+    SoundEvent BLOCK_WOODEN_TRAPDOOR_OPEN = BuiltinSoundEvent.get("block.wooden_trapdoor.open");
+
+    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_OFF = BuiltinSoundEvent.get("block.wooden_button.click_off");
+
+    SoundEvent BLOCK_WOODEN_BUTTON_CLICK_ON = BuiltinSoundEvent.get("block.wooden_button.click_on");
+
+    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF = BuiltinSoundEvent.get("block.wooden_pressure_plate.click_off");
+
+    SoundEvent BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON = BuiltinSoundEvent.get("block.wooden_pressure_plate.click_on");
+
+    SoundEvent BLOCK_WOOD_BREAK = BuiltinSoundEvent.get("block.wood.break");
+
+    SoundEvent BLOCK_WOOD_FALL = BuiltinSoundEvent.get("block.wood.fall");
+
+    SoundEvent BLOCK_WOOD_HIT = BuiltinSoundEvent.get("block.wood.hit");
+
+    SoundEvent BLOCK_WOOD_PLACE = BuiltinSoundEvent.get("block.wood.place");
+
+    SoundEvent BLOCK_WOOD_STEP = BuiltinSoundEvent.get("block.wood.step");
+
+    SoundEvent BLOCK_WOOL_BREAK = BuiltinSoundEvent.get("block.wool.break");
+
+    SoundEvent BLOCK_WOOL_FALL = BuiltinSoundEvent.get("block.wool.fall");
+
+    SoundEvent BLOCK_WOOL_HIT = BuiltinSoundEvent.get("block.wool.hit");
+
+    SoundEvent BLOCK_WOOL_PLACE = BuiltinSoundEvent.get("block.wool.place");
+
+    SoundEvent BLOCK_WOOL_STEP = BuiltinSoundEvent.get("block.wool.step");
+
+    SoundEvent ENTITY_ZOGLIN_AMBIENT = BuiltinSoundEvent.get("entity.zoglin.ambient");
+
+    SoundEvent ENTITY_ZOGLIN_ANGRY = BuiltinSoundEvent.get("entity.zoglin.angry");
+
+    SoundEvent ENTITY_ZOGLIN_ATTACK = BuiltinSoundEvent.get("entity.zoglin.attack");
+
+    SoundEvent ENTITY_ZOGLIN_DEATH = BuiltinSoundEvent.get("entity.zoglin.death");
+
+    SoundEvent ENTITY_ZOGLIN_HURT = BuiltinSoundEvent.get("entity.zoglin.hurt");
+
+    SoundEvent ENTITY_ZOGLIN_STEP = BuiltinSoundEvent.get("entity.zoglin.step");
+
+    SoundEvent ENTITY_ZOMBIE_AMBIENT = BuiltinSoundEvent.get("entity.zombie.ambient");
+
+    SoundEvent ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR = BuiltinSoundEvent.get("entity.zombie.attack_wooden_door");
+
+    SoundEvent ENTITY_ZOMBIE_ATTACK_IRON_DOOR = BuiltinSoundEvent.get("entity.zombie.attack_iron_door");
+
+    SoundEvent ENTITY_ZOMBIE_BREAK_WOODEN_DOOR = BuiltinSoundEvent.get("entity.zombie.break_wooden_door");
+
+    SoundEvent ENTITY_ZOMBIE_CONVERTED_TO_DROWNED = BuiltinSoundEvent.get("entity.zombie.converted_to_drowned");
+
+    SoundEvent ENTITY_ZOMBIE_DEATH = BuiltinSoundEvent.get("entity.zombie.death");
+
+    SoundEvent ENTITY_ZOMBIE_DESTROY_EGG = BuiltinSoundEvent.get("entity.zombie.destroy_egg");
+
+    SoundEvent ENTITY_ZOMBIE_HORSE_AMBIENT = BuiltinSoundEvent.get("entity.zombie_horse.ambient");
+
+    SoundEvent ENTITY_ZOMBIE_HORSE_DEATH = BuiltinSoundEvent.get("entity.zombie_horse.death");
+
+    SoundEvent ENTITY_ZOMBIE_HORSE_HURT = BuiltinSoundEvent.get("entity.zombie_horse.hurt");
+
+    SoundEvent ENTITY_ZOMBIE_HURT = BuiltinSoundEvent.get("entity.zombie.hurt");
+
+    SoundEvent ENTITY_ZOMBIE_INFECT = BuiltinSoundEvent.get("entity.zombie.infect");
+
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_AMBIENT = BuiltinSoundEvent.get("entity.zombified_piglin.ambient");
+
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_ANGRY = BuiltinSoundEvent.get("entity.zombified_piglin.angry");
+
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_DEATH = BuiltinSoundEvent.get("entity.zombified_piglin.death");
+
+    SoundEvent ENTITY_ZOMBIFIED_PIGLIN_HURT = BuiltinSoundEvent.get("entity.zombified_piglin.hurt");
+
+    SoundEvent ENTITY_ZOMBIE_STEP = BuiltinSoundEvent.get("entity.zombie.step");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_AMBIENT = BuiltinSoundEvent.get("entity.zombie_villager.ambient");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_CONVERTED = BuiltinSoundEvent.get("entity.zombie_villager.converted");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_CURE = BuiltinSoundEvent.get("entity.zombie_villager.cure");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_DEATH = BuiltinSoundEvent.get("entity.zombie_villager.death");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_HURT = BuiltinSoundEvent.get("entity.zombie_villager.hurt");
+
+    SoundEvent ENTITY_ZOMBIE_VILLAGER_STEP = BuiltinSoundEvent.get("entity.zombie_villager.step");
+
+    SoundEvent EVENT_MOB_EFFECT_BAD_OMEN = BuiltinSoundEvent.get("event.mob_effect.bad_omen");
+
+    SoundEvent EVENT_MOB_EFFECT_TRIAL_OMEN = BuiltinSoundEvent.get("event.mob_effect.trial_omen");
+
+    SoundEvent EVENT_MOB_EFFECT_RAID_OMEN = BuiltinSoundEvent.get("event.mob_effect.raid_omen");
 }

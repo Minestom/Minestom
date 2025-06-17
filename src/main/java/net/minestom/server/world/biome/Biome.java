@@ -1,17 +1,36 @@
 package net.minestom.server.world.biome;
 
-import net.minestom.server.color.Color;
+import net.kyori.adventure.key.Key;
+import net.minestom.server.codec.Codec;
+import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.ProtocolObject;
-import net.minestom.server.registry.Registry;
-import net.minestom.server.utils.nbt.BinaryTagSerializer;
+import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
+public sealed interface Biome extends Biomes permits BiomeImpl {
+    @NotNull Codec<Biome> REGISTRY_CODEC = StructCodec.struct(
+            "temperature", Codec.FLOAT, Biome::temperature,
+            "downfall", Codec.FLOAT, Biome::downfall,
+            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+            "temperature_modifier", TemperatureModifier.CODEC.optional(TemperatureModifier.NONE), Biome::temperatureModifier,
+            "effects", BiomeEffects.CODEC.optional(BiomeEffects.PLAINS_EFFECTS), Biome::effects,
+            Biome::create);
+    @NotNull Codec<Biome> NETWORK_CODEC = StructCodec.struct(
+            "temperature", Codec.FLOAT, Biome::temperature,
+            "downfall", Codec.FLOAT, Biome::downfall,
+            "has_precipitation", Codec.BOOLEAN, Biome::hasPrecipitation,
+            "temperature_modifier", TemperatureModifier.CODEC, Biome::temperatureModifier,
+            "effects", BiomeEffects.CODEC, Biome::effects,
+            Biome::create);
+
+    static @NotNull Biome create(float temperature, float downfall, boolean hasPrecipitation,
+                                 @NotNull TemperatureModifier temperatureModifier, @NotNull BiomeEffects effects) {
+        return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
+    }
 
     static @NotNull Builder builder() {
         return new Builder();
@@ -25,11 +44,11 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Biome> createDefaultRegistry() {
         return DynamicRegistry.create(
-                "minecraft:worldgen/biome", BiomeImpl.REGISTRY_NBT_TYPE, Registry.Resource.BIOMES,
-                (namespace, props) -> new BiomeImpl(Registry.biome(namespace, props)),
+                Key.key("minecraft:worldgen/biome"), NETWORK_CODEC, null, RegistryData.Resource.BIOMES,
                 // We force plains to be first because it allows convenient palette initialization.
                 // Maybe worth switching to fetching plains in the palette in the future to avoid this.
-                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0
+                (a, b) -> a.equals("minecraft:plains") ? -1 : b.equals("minecraft:plains") ? 1 : 0,
+                REGISTRY_CODEC
         );
     }
 
@@ -43,41 +62,32 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
     @NotNull TemperatureModifier temperatureModifier();
 
-    @Nullable Registry.BiomeEntry registry();
-
     enum TemperatureModifier {
         NONE, FROZEN;
 
-        public static final BinaryTagSerializer<TemperatureModifier> NBT_TYPE = BinaryTagSerializer.fromEnumStringable(TemperatureModifier.class);
+        public static final Codec<TemperatureModifier> CODEC = Codec.Enum(TemperatureModifier.class);
     }
 
     interface Setter {
-        void setBiome(int x, int y, int z, @NotNull DynamicRegistry.Key<Biome> biome);
+        void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome);
 
-        default void setBiome(@NotNull Point blockPosition, @NotNull DynamicRegistry.Key<Biome> biome) {
+        default void setBiome(@NotNull Point blockPosition, @NotNull RegistryKey<Biome> biome) {
             setBiome(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), biome);
         }
     }
 
     interface Getter {
-        @NotNull DynamicRegistry.Key<Biome> getBiome(int x, int y, int z);
+        @NotNull RegistryKey<Biome> getBiome(int x, int y, int z);
 
-        default @NotNull DynamicRegistry.Key<Biome> getBiome(@NotNull Point point) {
+        default @NotNull RegistryKey<Biome> getBiome(@NotNull Point point) {
             return getBiome(point.blockX(), point.blockY(), point.blockZ());
         }
     }
 
     final class Builder {
-        private static final BiomeEffects DEFAULT_EFFECTS = BiomeEffects.builder()
-                .fogColor(new Color(0xC0D8FF))
-                .skyColor(new Color(0x78A7FF))
-                .waterColor(new Color(0x3F76E4))
-                .waterFogColor(new Color(0x50533))
-                .build();
-
         private float temperature = 0.25f;
         private float downfall = 0.8f;
-        private BiomeEffects effects = DEFAULT_EFFECTS;
+        private BiomeEffects effects = BiomeEffects.PLAINS_EFFECTS;
         private boolean hasPrecipitation = false;
         private TemperatureModifier temperatureModifier = TemperatureModifier.NONE;
 
@@ -116,7 +126,7 @@ public sealed interface Biome extends Biomes, ProtocolObject permits BiomeImpl {
 
         @Contract(pure = true)
         public @NotNull Biome build() {
-            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier, null);
+            return new BiomeImpl(temperature, downfall, effects, hasPrecipitation, temperatureModifier);
         }
     }
 }

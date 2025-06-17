@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.minestom.codegen.Generators;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,8 +15,12 @@ import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class GenericEnumGenerator extends MinestomCodeGenerator {
@@ -66,17 +71,20 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
 
         ClassName networkBufferCN = ClassName.get("net.minestom.server.network", "NetworkBuffer");
         ParameterizedTypeName networkBufferTypeCN = ParameterizedTypeName.get(networkBufferCN.nestedClass("Type"), entryCN);
-        ClassName binaryTagSerializerRawCN = ClassName.get("net.minestom.server.utils.nbt", "BinaryTagSerializer");
-        ParameterizedTypeName binaryTagSerializerCN = ParameterizedTypeName.get(binaryTagSerializerRawCN, entryCN);
+        ClassName codecRawCN = ClassName.get("net.minestom.server.codec", "Codec");
+        ParameterizedTypeName codecCN = ParameterizedTypeName.get(codecRawCN, entryCN);
 
         // Fields
         entryEnum.addFields(
                 List.of(
+                        FieldSpec.builder(ParameterizedTypeName.get(ClassName.get(Map.class), keyCN, entryCN), "BY_KEY", Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$T.stream(values()).collect($T.toMap($T::key, $T.identity()))", Arrays.class, Collectors.class, entryCN, Function.class)
+                                .build(),
                         FieldSpec.builder(networkBufferTypeCN, "NETWORK_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                                 .initializer("$T.Enum($T.class)", networkBufferCN, entryCN)
                                 .build(),
-                        FieldSpec.builder(binaryTagSerializerCN, "NBT_TYPE", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                                .initializer("$T.fromEnumKeyed($T.class)", binaryTagSerializerRawCN, entryCN)
+                        FieldSpec.builder(codecCN, "CODEC", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                .initializer("$T.KEY.transform(BY_KEY::get, $T::key)", codecRawCN, entryCN)
                                 .build(),
                         FieldSpec.builder(keyCN, "key", Modifier.PRIVATE, Modifier.FINAL).build()
                 )
@@ -108,10 +116,11 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
 
         // Use data
         for (JsonObject entryObject : StreamSupport.stream(entryList.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
-            String entryName = entryObject.get("name").getAsString();
+            final String entryName = entryObject.get("name").getAsString();
+            final String namespaceString = Generators.namespaceShort(entryName);
             entryEnum.addEnumConstant(nameGenerator(entryName), TypeSpec.anonymousClassBuilder(
                             "$T.key($S)",
-                            keyCN, entryName
+                            keyCN, namespaceString
                     ).build()
             );
         }

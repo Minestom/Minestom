@@ -6,17 +6,18 @@ import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.block.TestBlockHandler;
+import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
+import net.minestom.server.component.DataComponents;
 import net.minestom.server.event.server.ServerListPingEvent;
-import net.minestom.server.extras.MojangAuth;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockManager;
-import net.minestom.server.item.ItemComponent;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
@@ -36,6 +37,8 @@ public class Main {
 
         BlockManager blockManager = MinecraftServer.getBlockManager();
         blockManager.registerBlockPlacementRule(new DripstonePlacementRule());
+        var beds = Block.values().stream().filter(block -> block.registry().blockEntityId() == 25).toList();
+        beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
@@ -78,6 +81,7 @@ public class Main {
         commandManager.register(new TestInstabreakCommand());
         commandManager.register(new AttributeCommand());
         commandManager.register(new PrimedTNTCommand());
+        commandManager.register(new SleepCommand());
 
         commandManager.setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command", NamedTextColor.RED)));
 
@@ -123,7 +127,7 @@ public class Main {
                 RecipeBookCategory.CRAFTING_MISC,
                 List.of(Material.DIRT),
                 ItemStack.builder(Material.GOLD_BLOCK)
-                        .set(ItemComponent.CUSTOM_NAME, Component.text("abc"))
+                        .set(DataComponents.CUSTOM_NAME, Component.text("abc"))
                         .build()
         ));
 
@@ -132,7 +136,7 @@ public class Main {
 //        VelocityProxy.enable("abcdef");
         //BungeeCordProxy.enable();
 
-        MojangAuth.init();
+//        MojangAuth.init();
 
         // useful for testing - we don't need to worry about event calls so just set this to a long time
         OpenToLAN.open(new OpenToLANConfig().eventCallDelay(Duration.of(1, TimeUnit.DAY)));
