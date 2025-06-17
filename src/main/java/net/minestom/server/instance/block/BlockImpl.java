@@ -199,18 +199,15 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
 
     @Override
     public @NotNull String state() {
-        final String name = name();
         final Map<String, String> properties = properties();
-        if (properties.isEmpty()) return name;
-        StringBuilder builder = new StringBuilder(name);
-        builder.append('[');
+        if (properties.isEmpty()) return name();
+        StringBuilder builder = new StringBuilder(name()).append('[');
+        boolean first = true;
         for (Map.Entry<String, String> entry : properties.entrySet()) {
-            builder.append(entry.getKey())
-                    .append('=')
-                    .append(entry.getValue())
-                    .append(',');
+            if (first) first = false;
+            else builder.append(',');
+            builder.append(entry.getKey()).append('=').append(entry.getValue());
         }
-        builder.deleteCharAt(builder.length() - 1);
         builder.append(']');
         return builder.toString();
     }
