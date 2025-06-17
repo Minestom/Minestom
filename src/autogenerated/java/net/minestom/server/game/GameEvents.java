@@ -5,123 +5,123 @@ package net.minestom.server.game;
  */
 @SuppressWarnings("unused")
 interface GameEvents {
-    GameEvent BLOCK_ACTIVATE = GameEventImpl.get("minecraft:block_activate");
+    GameEvent BLOCK_ACTIVATE = GameEventImpl.get("block_activate");
 
-    GameEvent BLOCK_ATTACH = GameEventImpl.get("minecraft:block_attach");
+    GameEvent BLOCK_ATTACH = GameEventImpl.get("block_attach");
 
-    GameEvent BLOCK_CHANGE = GameEventImpl.get("minecraft:block_change");
+    GameEvent BLOCK_CHANGE = GameEventImpl.get("block_change");
 
-    GameEvent BLOCK_CLOSE = GameEventImpl.get("minecraft:block_close");
+    GameEvent BLOCK_CLOSE = GameEventImpl.get("block_close");
 
-    GameEvent BLOCK_DEACTIVATE = GameEventImpl.get("minecraft:block_deactivate");
+    GameEvent BLOCK_DEACTIVATE = GameEventImpl.get("block_deactivate");
 
-    GameEvent BLOCK_DESTROY = GameEventImpl.get("minecraft:block_destroy");
+    GameEvent BLOCK_DESTROY = GameEventImpl.get("block_destroy");
 
-    GameEvent BLOCK_DETACH = GameEventImpl.get("minecraft:block_detach");
+    GameEvent BLOCK_DETACH = GameEventImpl.get("block_detach");
 
-    GameEvent BLOCK_OPEN = GameEventImpl.get("minecraft:block_open");
+    GameEvent BLOCK_OPEN = GameEventImpl.get("block_open");
 
-    GameEvent BLOCK_PLACE = GameEventImpl.get("minecraft:block_place");
+    GameEvent BLOCK_PLACE = GameEventImpl.get("block_place");
 
-    GameEvent CONTAINER_CLOSE = GameEventImpl.get("minecraft:container_close");
+    GameEvent CONTAINER_CLOSE = GameEventImpl.get("container_close");
 
-    GameEvent CONTAINER_OPEN = GameEventImpl.get("minecraft:container_open");
+    GameEvent CONTAINER_OPEN = GameEventImpl.get("container_open");
 
-    GameEvent DRINK = GameEventImpl.get("minecraft:drink");
+    GameEvent DRINK = GameEventImpl.get("drink");
 
-    GameEvent EAT = GameEventImpl.get("minecraft:eat");
+    GameEvent EAT = GameEventImpl.get("eat");
 
-    GameEvent ELYTRA_GLIDE = GameEventImpl.get("minecraft:elytra_glide");
+    GameEvent ELYTRA_GLIDE = GameEventImpl.get("elytra_glide");
 
-    GameEvent ENTITY_DAMAGE = GameEventImpl.get("minecraft:entity_damage");
+    GameEvent ENTITY_DAMAGE = GameEventImpl.get("entity_damage");
 
-    GameEvent ENTITY_DIE = GameEventImpl.get("minecraft:entity_die");
+    GameEvent ENTITY_DIE = GameEventImpl.get("entity_die");
 
-    GameEvent ENTITY_DISMOUNT = GameEventImpl.get("minecraft:entity_dismount");
+    GameEvent ENTITY_DISMOUNT = GameEventImpl.get("entity_dismount");
 
-    GameEvent ENTITY_INTERACT = GameEventImpl.get("minecraft:entity_interact");
+    GameEvent ENTITY_INTERACT = GameEventImpl.get("entity_interact");
 
-    GameEvent ENTITY_MOUNT = GameEventImpl.get("minecraft:entity_mount");
+    GameEvent ENTITY_MOUNT = GameEventImpl.get("entity_mount");
 
-    GameEvent ENTITY_PLACE = GameEventImpl.get("minecraft:entity_place");
+    GameEvent ENTITY_PLACE = GameEventImpl.get("entity_place");
 
-    GameEvent ENTITY_ACTION = GameEventImpl.get("minecraft:entity_action");
+    GameEvent ENTITY_ACTION = GameEventImpl.get("entity_action");
 
-    GameEvent EQUIP = GameEventImpl.get("minecraft:equip");
+    GameEvent EQUIP = GameEventImpl.get("equip");
 
-    GameEvent EXPLODE = GameEventImpl.get("minecraft:explode");
+    GameEvent EXPLODE = GameEventImpl.get("explode");
 
-    GameEvent FLAP = GameEventImpl.get("minecraft:flap");
+    GameEvent FLAP = GameEventImpl.get("flap");
 
-    GameEvent FLUID_PICKUP = GameEventImpl.get("minecraft:fluid_pickup");
+    GameEvent FLUID_PICKUP = GameEventImpl.get("fluid_pickup");
 
-    GameEvent FLUID_PLACE = GameEventImpl.get("minecraft:fluid_place");
+    GameEvent FLUID_PLACE = GameEventImpl.get("fluid_place");
 
-    GameEvent HIT_GROUND = GameEventImpl.get("minecraft:hit_ground");
+    GameEvent HIT_GROUND = GameEventImpl.get("hit_ground");
 
-    GameEvent INSTRUMENT_PLAY = GameEventImpl.get("minecraft:instrument_play");
+    GameEvent INSTRUMENT_PLAY = GameEventImpl.get("instrument_play");
 
-    GameEvent ITEM_INTERACT_FINISH = GameEventImpl.get("minecraft:item_interact_finish");
+    GameEvent ITEM_INTERACT_FINISH = GameEventImpl.get("item_interact_finish");
 
-    GameEvent ITEM_INTERACT_START = GameEventImpl.get("minecraft:item_interact_start");
+    GameEvent ITEM_INTERACT_START = GameEventImpl.get("item_interact_start");
 
-    GameEvent JUKEBOX_PLAY = GameEventImpl.get("minecraft:jukebox_play");
+    GameEvent JUKEBOX_PLAY = GameEventImpl.get("jukebox_play");
 
-    GameEvent JUKEBOX_STOP_PLAY = GameEventImpl.get("minecraft:jukebox_stop_play");
+    GameEvent JUKEBOX_STOP_PLAY = GameEventImpl.get("jukebox_stop_play");
 
-    GameEvent LIGHTNING_STRIKE = GameEventImpl.get("minecraft:lightning_strike");
+    GameEvent LIGHTNING_STRIKE = GameEventImpl.get("lightning_strike");
 
-    GameEvent NOTE_BLOCK_PLAY = GameEventImpl.get("minecraft:note_block_play");
+    GameEvent NOTE_BLOCK_PLAY = GameEventImpl.get("note_block_play");
 
-    GameEvent PRIME_FUSE = GameEventImpl.get("minecraft:prime_fuse");
+    GameEvent PRIME_FUSE = GameEventImpl.get("prime_fuse");
 
-    GameEvent PROJECTILE_LAND = GameEventImpl.get("minecraft:projectile_land");
+    GameEvent PROJECTILE_LAND = GameEventImpl.get("projectile_land");
 
-    GameEvent PROJECTILE_SHOOT = GameEventImpl.get("minecraft:projectile_shoot");
+    GameEvent PROJECTILE_SHOOT = GameEventImpl.get("projectile_shoot");
 
-    GameEvent SCULK_SENSOR_TENDRILS_CLICKING = GameEventImpl.get("minecraft:sculk_sensor_tendrils_clicking");
+    GameEvent SCULK_SENSOR_TENDRILS_CLICKING = GameEventImpl.get("sculk_sensor_tendrils_clicking");
 
-    GameEvent SHEAR = GameEventImpl.get("minecraft:shear");
+    GameEvent SHEAR = GameEventImpl.get("shear");
 
-    GameEvent SHRIEK = GameEventImpl.get("minecraft:shriek");
+    GameEvent SHRIEK = GameEventImpl.get("shriek");
 
-    GameEvent SPLASH = GameEventImpl.get("minecraft:splash");
+    GameEvent SPLASH = GameEventImpl.get("splash");
 
-    GameEvent STEP = GameEventImpl.get("minecraft:step");
+    GameEvent STEP = GameEventImpl.get("step");
 
-    GameEvent SWIM = GameEventImpl.get("minecraft:swim");
+    GameEvent SWIM = GameEventImpl.get("swim");
 
-    GameEvent TELEPORT = GameEventImpl.get("minecraft:teleport");
+    GameEvent TELEPORT = GameEventImpl.get("teleport");
 
-    GameEvent UNEQUIP = GameEventImpl.get("minecraft:unequip");
+    GameEvent UNEQUIP = GameEventImpl.get("unequip");
 
-    GameEvent RESONATE_1 = GameEventImpl.get("minecraft:resonate_1");
+    GameEvent RESONATE_1 = GameEventImpl.get("resonate_1");
 
-    GameEvent RESONATE_2 = GameEventImpl.get("minecraft:resonate_2");
+    GameEvent RESONATE_2 = GameEventImpl.get("resonate_2");
 
-    GameEvent RESONATE_3 = GameEventImpl.get("minecraft:resonate_3");
+    GameEvent RESONATE_3 = GameEventImpl.get("resonate_3");
 
-    GameEvent RESONATE_4 = GameEventImpl.get("minecraft:resonate_4");
+    GameEvent RESONATE_4 = GameEventImpl.get("resonate_4");
 
-    GameEvent RESONATE_5 = GameEventImpl.get("minecraft:resonate_5");
+    GameEvent RESONATE_5 = GameEventImpl.get("resonate_5");
 
-    GameEvent RESONATE_6 = GameEventImpl.get("minecraft:resonate_6");
+    GameEvent RESONATE_6 = GameEventImpl.get("resonate_6");
 
-    GameEvent RESONATE_7 = GameEventImpl.get("minecraft:resonate_7");
+    GameEvent RESONATE_7 = GameEventImpl.get("resonate_7");
 
-    GameEvent RESONATE_8 = GameEventImpl.get("minecraft:resonate_8");
+    GameEvent RESONATE_8 = GameEventImpl.get("resonate_8");
 
-    GameEvent RESONATE_9 = GameEventImpl.get("minecraft:resonate_9");
+    GameEvent RESONATE_9 = GameEventImpl.get("resonate_9");
 
-    GameEvent RESONATE_10 = GameEventImpl.get("minecraft:resonate_10");
+    GameEvent RESONATE_10 = GameEventImpl.get("resonate_10");
 
-    GameEvent RESONATE_11 = GameEventImpl.get("minecraft:resonate_11");
+    GameEvent RESONATE_11 = GameEventImpl.get("resonate_11");
 
-    GameEvent RESONATE_12 = GameEventImpl.get("minecraft:resonate_12");
+    GameEvent RESONATE_12 = GameEventImpl.get("resonate_12");
 
-    GameEvent RESONATE_13 = GameEventImpl.get("minecraft:resonate_13");
+    GameEvent RESONATE_13 = GameEventImpl.get("resonate_13");
 
-    GameEvent RESONATE_14 = GameEventImpl.get("minecraft:resonate_14");
+    GameEvent RESONATE_14 = GameEventImpl.get("resonate_14");
 
-    GameEvent RESONATE_15 = GameEventImpl.get("minecraft:resonate_15");
+    GameEvent RESONATE_15 = GameEventImpl.get("resonate_15");
 }

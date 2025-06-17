@@ -7,25 +7,25 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface TrimMaterials {
-    RegistryKey<TrimMaterial> LAPIS = RegistryKey.unsafeOf("minecraft:lapis");
+    RegistryKey<TrimMaterial> LAPIS = RegistryKey.unsafeOf("lapis");
 
-    RegistryKey<TrimMaterial> IRON = RegistryKey.unsafeOf("minecraft:iron");
+    RegistryKey<TrimMaterial> IRON = RegistryKey.unsafeOf("iron");
 
-    RegistryKey<TrimMaterial> DIAMOND = RegistryKey.unsafeOf("minecraft:diamond");
+    RegistryKey<TrimMaterial> DIAMOND = RegistryKey.unsafeOf("diamond");
 
-    RegistryKey<TrimMaterial> AMETHYST = RegistryKey.unsafeOf("minecraft:amethyst");
+    RegistryKey<TrimMaterial> AMETHYST = RegistryKey.unsafeOf("amethyst");
 
-    RegistryKey<TrimMaterial> COPPER = RegistryKey.unsafeOf("minecraft:copper");
+    RegistryKey<TrimMaterial> COPPER = RegistryKey.unsafeOf("copper");
 
-    RegistryKey<TrimMaterial> QUARTZ = RegistryKey.unsafeOf("minecraft:quartz");
+    RegistryKey<TrimMaterial> QUARTZ = RegistryKey.unsafeOf("quartz");
 
-    RegistryKey<TrimMaterial> EMERALD = RegistryKey.unsafeOf("minecraft:emerald");
+    RegistryKey<TrimMaterial> EMERALD = RegistryKey.unsafeOf("emerald");
 
-    RegistryKey<TrimMaterial> RESIN = RegistryKey.unsafeOf("minecraft:resin");
+    RegistryKey<TrimMaterial> RESIN = RegistryKey.unsafeOf("resin");
 
-    RegistryKey<TrimMaterial> REDSTONE = RegistryKey.unsafeOf("minecraft:redstone");
+    RegistryKey<TrimMaterial> REDSTONE = RegistryKey.unsafeOf("redstone");
 
-    RegistryKey<TrimMaterial> GOLD = RegistryKey.unsafeOf("minecraft:gold");
+    RegistryKey<TrimMaterial> GOLD = RegistryKey.unsafeOf("gold");
 
-    RegistryKey<TrimMaterial> NETHERITE = RegistryKey.unsafeOf("minecraft:netherite");
+    RegistryKey<TrimMaterial> NETHERITE = RegistryKey.unsafeOf("netherite");
 }

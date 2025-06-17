@@ -7,17 +7,17 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface ChatTypes {
-    RegistryKey<ChatType> EMOTE_COMMAND = RegistryKey.unsafeOf("minecraft:emote_command");
+    RegistryKey<ChatType> EMOTE_COMMAND = RegistryKey.unsafeOf("emote_command");
 
-    RegistryKey<ChatType> TEAM_MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("minecraft:team_msg_command_incoming");
+    RegistryKey<ChatType> TEAM_MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("team_msg_command_incoming");
 
-    RegistryKey<ChatType> TEAM_MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("minecraft:team_msg_command_outgoing");
+    RegistryKey<ChatType> TEAM_MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("team_msg_command_outgoing");
 
-    RegistryKey<ChatType> CHAT = RegistryKey.unsafeOf("minecraft:chat");
+    RegistryKey<ChatType> CHAT = RegistryKey.unsafeOf("chat");
 
-    RegistryKey<ChatType> MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("minecraft:msg_command_incoming");
+    RegistryKey<ChatType> MSG_COMMAND_INCOMING = RegistryKey.unsafeOf("msg_command_incoming");
 
-    RegistryKey<ChatType> MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("minecraft:msg_command_outgoing");
+    RegistryKey<ChatType> MSG_COMMAND_OUTGOING = RegistryKey.unsafeOf("msg_command_outgoing");
 
-    RegistryKey<ChatType> SAY_COMMAND = RegistryKey.unsafeOf("minecraft:say_command");
+    RegistryKey<ChatType> SAY_COMMAND = RegistryKey.unsafeOf("say_command");
 }

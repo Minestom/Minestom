@@ -7,39 +7,39 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface TrimPatterns {
-    RegistryKey<TrimPattern> TIDE = RegistryKey.unsafeOf("minecraft:tide");
+    RegistryKey<TrimPattern> TIDE = RegistryKey.unsafeOf("tide");
 
-    RegistryKey<TrimPattern> RIB = RegistryKey.unsafeOf("minecraft:rib");
+    RegistryKey<TrimPattern> RIB = RegistryKey.unsafeOf("rib");
 
-    RegistryKey<TrimPattern> BOLT = RegistryKey.unsafeOf("minecraft:bolt");
+    RegistryKey<TrimPattern> BOLT = RegistryKey.unsafeOf("bolt");
 
-    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("minecraft:host");
+    RegistryKey<TrimPattern> HOST = RegistryKey.unsafeOf("host");
 
-    RegistryKey<TrimPattern> SILENCE = RegistryKey.unsafeOf("minecraft:silence");
+    RegistryKey<TrimPattern> SILENCE = RegistryKey.unsafeOf("silence");
 
-    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("minecraft:wild");
+    RegistryKey<TrimPattern> WILD = RegistryKey.unsafeOf("wild");
 
-    RegistryKey<TrimPattern> WAYFINDER = RegistryKey.unsafeOf("minecraft:wayfinder");
+    RegistryKey<TrimPattern> WAYFINDER = RegistryKey.unsafeOf("wayfinder");
 
-    RegistryKey<TrimPattern> FLOW = RegistryKey.unsafeOf("minecraft:flow");
+    RegistryKey<TrimPattern> FLOW = RegistryKey.unsafeOf("flow");
 
-    RegistryKey<TrimPattern> DUNE = RegistryKey.unsafeOf("minecraft:dune");
+    RegistryKey<TrimPattern> DUNE = RegistryKey.unsafeOf("dune");
 
-    RegistryKey<TrimPattern> RAISER = RegistryKey.unsafeOf("minecraft:raiser");
+    RegistryKey<TrimPattern> RAISER = RegistryKey.unsafeOf("raiser");
 
-    RegistryKey<TrimPattern> SNOUT = RegistryKey.unsafeOf("minecraft:snout");
+    RegistryKey<TrimPattern> SNOUT = RegistryKey.unsafeOf("snout");
 
-    RegistryKey<TrimPattern> VEX = RegistryKey.unsafeOf("minecraft:vex");
+    RegistryKey<TrimPattern> VEX = RegistryKey.unsafeOf("vex");
 
-    RegistryKey<TrimPattern> SPIRE = RegistryKey.unsafeOf("minecraft:spire");
+    RegistryKey<TrimPattern> SPIRE = RegistryKey.unsafeOf("spire");
 
-    RegistryKey<TrimPattern> SENTRY = RegistryKey.unsafeOf("minecraft:sentry");
+    RegistryKey<TrimPattern> SENTRY = RegistryKey.unsafeOf("sentry");
 
-    RegistryKey<TrimPattern> EYE = RegistryKey.unsafeOf("minecraft:eye");
+    RegistryKey<TrimPattern> EYE = RegistryKey.unsafeOf("eye");
 
-    RegistryKey<TrimPattern> WARD = RegistryKey.unsafeOf("minecraft:ward");
+    RegistryKey<TrimPattern> WARD = RegistryKey.unsafeOf("ward");
 
-    RegistryKey<TrimPattern> COAST = RegistryKey.unsafeOf("minecraft:coast");
+    RegistryKey<TrimPattern> COAST = RegistryKey.unsafeOf("coast");
 
-    RegistryKey<TrimPattern> SHAPER = RegistryKey.unsafeOf("minecraft:shaper");
+    RegistryKey<TrimPattern> SHAPER = RegistryKey.unsafeOf("shaper");
 }

@@ -7,21 +7,21 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface WolfVariants {
-    RegistryKey<WolfVariant> BLACK = RegistryKey.unsafeOf("minecraft:black");
+    RegistryKey<WolfVariant> BLACK = RegistryKey.unsafeOf("black");
 
-    RegistryKey<WolfVariant> CHESTNUT = RegistryKey.unsafeOf("minecraft:chestnut");
+    RegistryKey<WolfVariant> CHESTNUT = RegistryKey.unsafeOf("chestnut");
 
-    RegistryKey<WolfVariant> SNOWY = RegistryKey.unsafeOf("minecraft:snowy");
+    RegistryKey<WolfVariant> SNOWY = RegistryKey.unsafeOf("snowy");
 
-    RegistryKey<WolfVariant> STRIPED = RegistryKey.unsafeOf("minecraft:striped");
+    RegistryKey<WolfVariant> STRIPED = RegistryKey.unsafeOf("striped");
 
-    RegistryKey<WolfVariant> ASHEN = RegistryKey.unsafeOf("minecraft:ashen");
+    RegistryKey<WolfVariant> ASHEN = RegistryKey.unsafeOf("ashen");
 
-    RegistryKey<WolfVariant> SPOTTED = RegistryKey.unsafeOf("minecraft:spotted");
+    RegistryKey<WolfVariant> SPOTTED = RegistryKey.unsafeOf("spotted");
 
-    RegistryKey<WolfVariant> RUSTY = RegistryKey.unsafeOf("minecraft:rusty");
+    RegistryKey<WolfVariant> RUSTY = RegistryKey.unsafeOf("rusty");
 
-    RegistryKey<WolfVariant> WOODS = RegistryKey.unsafeOf("minecraft:woods");
+    RegistryKey<WolfVariant> WOODS = RegistryKey.unsafeOf("woods");
 
-    RegistryKey<WolfVariant> PALE = RegistryKey.unsafeOf("minecraft:pale");
+    RegistryKey<WolfVariant> PALE = RegistryKey.unsafeOf("pale");
 }

@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.squareup.javapoet.*;
+import net.minestom.codegen.Generators;
 import net.minestom.codegen.MinestomCodeGenerator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -115,10 +116,11 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
 
         // Use data
         for (JsonObject entryObject : StreamSupport.stream(entryList.spliterator(), true).map(JsonElement::getAsJsonObject).sorted(Comparator.comparingInt(o -> o.get("id").getAsInt())).toList()) {
-            String entryName = entryObject.get("name").getAsString();
+            final String entryName = entryObject.get("name").getAsString();
+            final String namespaceString = Generators.namespaceShort(entryName);
             entryEnum.addEnumConstant(nameGenerator(entryName), TypeSpec.anonymousClassBuilder(
                             "$T.key($S)",
-                            keyCN, entryName
+                            keyCN, namespaceString
                     ).build()
             );
         }
