@@ -41,7 +41,7 @@ public class BlockBreakCalculation {
         // https://minecraft.wiki/w/Breaking#Calculation
         // More information to mimic calculations taken from minecraft's source
         RegistryData.BlockEntry registry = block.registry();
-        double blockHardness = registry.hardness();
+        float blockHardness = registry.hardness();
         if (blockHardness == -1) {
             // Bedrock, barrier, and unbreakable blocks
             return UNBREAKABLE;
