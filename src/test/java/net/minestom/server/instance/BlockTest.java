@@ -54,6 +54,15 @@ public class BlockTest {
     }
 
     @Test
+    public void testState() {
+        assertEquals("minecraft:dirt", Block.DIRT.state());
+        assertEquals(Block.DIRT, Block.fromState("minecraft:dirt"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest"));
+        assertEquals(Block.CHEST, Block.fromState("minecraft:chest[]"));
+        assertEquals(Block.CHEST.withProperty("facing", "north"), Block.fromState("minecraft:chest[facing=north]"));
+    }
+
+    @Test
     public void invalidProperties() {
         Block block = Block.CHEST;
         assertThrows(Exception.class, () -> block.withProperty("random", "randomKey"));

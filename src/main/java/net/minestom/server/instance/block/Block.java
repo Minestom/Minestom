@@ -126,6 +126,20 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     @NotNull Map<String, String> properties();
 
     /**
+     * Returns the block states as a string.
+     * <p>
+     * The format is `block_name[property1=value1,property2=value2,...]`.
+     * <p>
+     * More portable than {@link #stateId()} across game versions, but less efficient.
+     * Do not rely on exact string comparison as properties order may vary, use {@link #fromState(String)}.
+     *
+     * @return the block properties as a string
+     * @see #fromState(String)
+     */
+    @Contract(pure = true)
+    @NotNull String state();
+
+    /**
      * Returns this block type with default properties, no tags and no handler.
      * As found in the {@link Blocks} listing.
      *
@@ -202,6 +216,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
     static @Nullable Block fromKey(@NotNull Key key) {
         return BlockImpl.REGISTRY.get(key);
+    }
+
+    static @Nullable Block fromState(@NotNull String state) {
+        return BlockImpl.parseState(state);
     }
 
     static @Nullable Block fromStateId(int stateId) {
