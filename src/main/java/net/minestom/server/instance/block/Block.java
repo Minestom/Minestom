@@ -125,6 +125,17 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     @Contract(pure = true)
     @NotNull Map<String, String> properties();
 
+    /**
+     * Returns the block states as a string.
+     * <p>
+     * The format is `block_name[property1=value1;property2=value2;...]`.
+     * <p>
+     * More portable than {@link #stateId()} across game versions, but less efficient.
+     * Do not rely on exact string comparison as properties order may vary, use {@link #fromState(String)}.
+     *
+     * @return the block properties as a string
+     * @see #fromState(String)
+     */
     @Contract(pure = true)
     @NotNull String state();
 
@@ -246,7 +257,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     interface Getter {
-        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        @UnknownNullability
+        Block getBlock(int x, int y, int z, @NotNull Condition condition);
 
         default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
