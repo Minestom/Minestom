@@ -107,7 +107,7 @@ public final class ThreadDispatcher<P> {
     /**
      * Prepares the update by creating the {@link TickThread} tasks.
      *
-     * @param time the tick time in milliseconds
+     * @param time the tick time in nanos
      */
     public synchronized void updateAndAwait(long time) {
         // Update dispatcher
