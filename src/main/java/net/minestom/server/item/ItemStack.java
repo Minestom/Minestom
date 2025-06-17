@@ -248,6 +248,9 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
     @Contract(value = "_, -> new", pure = true)
     @NotNull ItemStack consume(int amount);
 
+    @Contract(value = "_, -> new", pure = true)
+    @NotNull ItemStack damage(int amount);
+
     @Contract(pure = true)
     default boolean isAir() {
         return material() == Material.AIR;
