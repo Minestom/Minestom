@@ -1,6 +1,6 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
@@ -35,7 +35,7 @@ public class SuspiciousStewEffectsTest extends AbstractItemComponentTest<Suspici
 
     @Test
     void nbtReadDefaultDuration() throws Exception {
-        var value = assertOk(DataComponents.SUSPICIOUS_STEW_EFFECTS.decode(Transcoder.NBT, TagStringIOExt.readTag("""
+        var value = assertOk(DataComponents.SUSPICIOUS_STEW_EFFECTS.decode(Transcoder.NBT, TagStringIO.tagStringIO().asTag("""
                 [{"id": "minecraft:strength"}]
                 """)));
         var expected = new SuspiciousStewEffects(new SuspiciousStewEffects.Effect(PotionEffect.STRENGTH, 160));

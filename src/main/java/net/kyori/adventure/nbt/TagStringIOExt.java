@@ -7,12 +7,28 @@ import java.util.Map;
 
 // Based on net.kyori.adventure.nbt.TagStringIO licensed under the MIT license.
 // https://github.com/KyoriPowered/adventure/blob/main/4/nbt/src/main/java/net/kyori/adventure/nbt/TagStringIO.java
+
+/**
+ * Adventure 4.22.0 has deprecated this class in favor of {@link TagStringIO}, as changes are now upstreamed.
+ * Replacements:
+ * - {@link #writeTag(BinaryTag)} -> {@link TagStringIO#asString(BinaryTag)}
+ * - {@link #writeTag(BinaryTag, String)} -> {@link TagStringIO#asString(BinaryTag)}
+ * - {@link #readTag(String)} -> {@link TagStringIO#asTag(String)}
+ * - {@link #readTagEmbedded(String)} -> {@link TagStringIO#asTag(String, Appendable)}
+ */
+@Deprecated(forRemoval = true)
 public final class TagStringIOExt {
 
+    /**
+     * @deprecated Use {@link TagStringIO#asString(BinaryTag)}
+     */
     public static @NotNull String writeTag(@NotNull BinaryTag tag) {
         return writeTag(tag, "");
     }
 
+    /**
+     * @deprecated Use {@link TagStringIO#asString(BinaryTag)}
+     */
     public static @NotNull String writeTag(@NotNull BinaryTag input, @NotNull String indent) {
         final StringBuilder sb = new StringBuilder();
         try (final TagStringWriter emit = new TagStringWriter(sb, indent).heterogeneousLists(true)) {
@@ -25,6 +41,9 @@ public final class TagStringIOExt {
         return sb.toString();
     }
 
+    /**
+     * @deprecated Use {@link TagStringIO#asTag(String)}
+     */
     public static @NotNull BinaryTag readTag(@NotNull String input) throws IOException {
         try {
             final CharBuffer buffer = new CharBuffer(input);
@@ -41,6 +60,7 @@ public final class TagStringIOExt {
     }
 
     /**
+     * @deprecated Use {@link TagStringIO#asTag(String, Appendable)}
      * Reads a tag and returns the remainder of the input buffer.
      */
     public static Map.Entry<@NotNull BinaryTag, @NotNull String> readTagEmbedded(@NotNull String input) throws IOException {

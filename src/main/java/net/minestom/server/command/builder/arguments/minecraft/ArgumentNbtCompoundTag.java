@@ -1,6 +1,5 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
-import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.command.ArgumentParserType;
@@ -28,12 +27,7 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
     @Override
     public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
-            BinaryTag nbt = TagStringIO.get().asCompound(input);
-
-            if (!(nbt instanceof CompoundBinaryTag compound))
-                throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
-
-            return compound;
+            return TagStringIO.tagStringIO().asCompound(input);
         } catch (IOException e) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }

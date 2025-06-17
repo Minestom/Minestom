@@ -1,7 +1,7 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.kyori.adventure.nbt.TagStringIO;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -113,7 +113,7 @@ public class StructCodecTest {
     }
 
     private @NotNull BinaryTag snbt(@NotNull String snbt) {
-        return assertDoesNotThrow(() -> TagStringIOExt.readTag(snbt));
+        return assertDoesNotThrow(() -> TagStringIO.tagStringIO().asTag(snbt));
     }
 
 

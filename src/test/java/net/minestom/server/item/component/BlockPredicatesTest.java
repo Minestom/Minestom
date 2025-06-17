@@ -1,6 +1,6 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
@@ -39,7 +39,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
     @Test
     public void testSingleBlockNbtInput() throws IOException {
         assumeFalse(true, "TODO(1.21.5)");
-        var tag = TagStringIOExt.readTag("{blocks:'minecraft:stone'}");
+        var tag = TagStringIO.tagStringIO().asTag("{blocks:'minecraft:stone'}");
         var component = assertOk(DataComponents.CAN_PLACE_ON.decode(Transcoder.NBT, tag));
         var expected = new BlockPredicates(new BlockPredicate(Block.STONE));
         assertEquals(expected, component);

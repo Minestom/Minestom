@@ -1,6 +1,6 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
@@ -40,7 +40,7 @@ public class EnchantmentListTest extends AbstractItemComponentTest<EnchantmentLi
 
     @Test
     void testShorthandNbtSyntax(Env env) throws Exception {
-        var tag = TagStringIOExt.readTag("""
+        var tag = TagStringIO.tagStringIO().asTag("""
                 {
                     "sharpness": 1,
                     "punch": 2,

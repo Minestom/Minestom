@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.item.ItemStack;
@@ -10,6 +10,7 @@ import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -44,11 +45,11 @@ public class CustomDataTest extends AbstractItemComponentTest<CustomData> {
     }
 
     @Test
-    void customDataTagPath() {
+    void customDataTagPath() throws IOException {
         final ItemStack item = ItemStack.builder(Material.STICK)
                 .set(Tag.Integer("num").path("test"), 5)
                 .build();
-        final String snbt = TagStringIOExt.writeTag(item.get(DataComponents.CUSTOM_DATA).nbt());
+        final String snbt = TagStringIO.tagStringIO().asString(item.get(DataComponents.CUSTOM_DATA).nbt());
         assertEquals("{test:{num:5}}", snbt);
     }
 }

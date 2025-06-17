@@ -21,7 +21,7 @@ public final class MinestomAdventure {
      * A codec to convert between strings and NBT.
      */
     public static final Codec<CompoundBinaryTag, String, IOException, IOException> NBT_CODEC
-            = Codec.codec(TagStringIO.get()::asCompound, TagStringIO.get()::asString);
+            = Codec.codec(TagStringIO.tagStringIO()::asCompound, TagStringIO.tagStringIO()::asString);
 
     /**
      * If components should be automatically translated in outgoing packets.

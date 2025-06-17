@@ -258,8 +258,12 @@ public class AnvilLoader implements IChunkLoader {
                     if (property.getValue() instanceof StringBinaryTag propertyValue) {
                         properties.put(property.getKey(), propertyValue.value());
                     } else {
-                        LOGGER.warn("Fail to parse block state properties {}, expected a string for {}, but contents were {}",
-                                propertiesNBT, property.getKey(), TagStringIOExt.writeTag(property.getValue()));
+                        try {
+                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were {}",
+                                    propertiesNBT, property.getKey(), TagStringIO.tagStringIO().asString(property.getValue()));
+                        } catch (IOException e) {
+                            LOGGER.warn("Fail to parse block state properties {}, expected a string tag for {}, but contents were a {} tag", propertiesNBT, property.getKey(), property.getValue().examinableName());
+                        }
                     }
                 }
                 if (!properties.isEmpty()) block = block.withProperties(properties);
