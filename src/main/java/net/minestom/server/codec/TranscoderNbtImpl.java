@@ -137,7 +137,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
 
     @Override
     public @NotNull ListBuilder<BinaryTag> createList(int expectedSize) {
-        final List<BinaryTag> elements = new ArrayList<>();
+        final ListBinaryTag.Builder<BinaryTag> elements = ListBinaryTag.heterogeneousListBinaryTag();
         return new ListBuilder<>() {
             @Override
             public @NotNull ListBuilder<BinaryTag> add(BinaryTag value) {
@@ -147,25 +147,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
 
             @Override
             public BinaryTag build() {
-                // Temporary handling for wrapping elements in heterogenus lists.
-                // TODO: remove extra logic when adventure-nbt supports this.
-                BinaryTagType<?> type = null;
-                for (BinaryTag element : elements) {
-                    if (type == null) {
-                        type = element.type();
-                    } else if (type != element.type()) {
-                        type = BinaryTagTypes.COMPOUND;
-                    }
-                }
-                for (int i = 0; i < elements.size(); i++) {
-                    BinaryTag element = elements.get(i);
-                    if (element.type() != type) {
-                        elements.set(i, CompoundBinaryTag.builder()
-                                .put("", element)
-                                .build());
-                    }
-                }
-                return ListBinaryTag.from(elements);
+                return elements.build();
             }
         };
     }
@@ -280,15 +262,7 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
             case ListBinaryTag listTag -> {
                 final ListBuilder<O> list = coder.createList(listTag.size());
                 for (int i = 0; i < listTag.size(); i++) {
-                    BinaryTag element = listTag.get(i);
-                    // Temporary handling for unwrapping elements in heterogenus lists.
-                    // TODO: remove extra logic when adventure-nbt supports this.
-                    if (element.type() == BinaryTagTypes.COMPOUND) {
-                        var compound = (CompoundBinaryTag) element;
-                        if (compound.keySet().equals(WRAPPED_ELEMENT_KEYS))
-                            element = Objects.requireNonNull(compound.get(""));
-                    }
-                    switch (convertTo(coder, element)) {
+                    switch (convertTo(coder, listTag.get(i))) {
                         case Result.Ok<O> ok -> list.add(ok.value());
                         case Result.Error<O> error -> {
                             yield new Result.Error<>(i + ": " + error);

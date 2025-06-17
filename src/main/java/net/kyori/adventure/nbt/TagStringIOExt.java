@@ -15,7 +15,7 @@ public final class TagStringIOExt {
 
     public static @NotNull String writeTag(@NotNull BinaryTag input, @NotNull String indent) {
         final StringBuilder sb = new StringBuilder();
-        try (final TagStringWriter emit = new TagStringWriter(sb, indent)) {
+        try (final TagStringWriter emit = new TagStringWriter(sb, indent).heterogeneousLists(true)) {
             emit.writeTag(input);
         } catch (IOException e) {
             // The IOException comes from Writer#close(), but we are passing a StringBuilder which
@@ -29,6 +29,7 @@ public final class TagStringIOExt {
         try {
             final CharBuffer buffer = new CharBuffer(input);
             final TagStringReader parser = new TagStringReader(buffer);
+            parser.heterogeneousLists(true);
             final BinaryTag tag = parser.tag();
             if (buffer.skipWhitespace().hasMore()) {
                 throw new IOException("Document had trailing content after first tag");
@@ -46,6 +47,7 @@ public final class TagStringIOExt {
         try {
             final CharBuffer buffer = new CharBuffer(input);
             final TagStringReader parser = new TagStringReader(buffer);
+            parser.heterogeneousLists(true);
             final BinaryTag tag = parser.tag();
 
             // Collect remaining (todo figure out a better way, probably need to just write an snbt parser)
@@ -60,5 +62,6 @@ public final class TagStringIOExt {
         }
     }
 
-    private TagStringIOExt() {}
+    private TagStringIOExt() {
+    }
 }
