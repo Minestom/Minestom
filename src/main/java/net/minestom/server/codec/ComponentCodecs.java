@@ -168,7 +168,7 @@ public final class ComponentCodecs {
         }
     };
 
-    private static final Codec<Component> INNER_COMPONENT = Codec.Recursive((componentCodec) -> {
+    public static final Codec<Component> COMPONENT = Codec.Recursive((componentCodec) -> {
         final Codec<List<Component>> componentListCodec = componentCodec.list();
         final StructCodec<List<Component>> childrenCodec = StructCodec.struct(
                 "extra", componentListCodec.optional(List.of()), children -> children,
@@ -231,6 +231,10 @@ public final class ComponentCodecs {
             public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
                 if (value == null) return new Result.Error<>("null");
 
+                // As a special case we want to encode text components with no children or styling as strings directly.
+                if (value instanceof TextComponent text && value.children().isEmpty() && value.style().isEmpty())
+                    return new Result.Ok<>(coder.createString(text.content()));
+
                 // Otherwise an object. Never encode as a list even through it is a supported decode format.
                 final MapBuilder<D> map = coder.createMap();
                 final Result<D> baseResult = switch (value) {
@@ -252,21 +256,4 @@ public final class ComponentCodecs {
             }
         };
     });
-    public static final Codec<Component> COMPONENT = new Codec<>() {
-        @Override
-        public @NotNull <D> Result<Component> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
-            return INNER_COMPONENT.decode(coder, value);
-        }
-
-        @Override
-        public @NotNull <D> Result<D> encode(@NotNull Transcoder<D> coder, @Nullable Component value) {
-            if (value == null) return new Result.Error<>("null");
-
-            // As a special case we want to encode text components with no children or styling as strings directly.
-            if (value instanceof TextComponent text && value.children().isEmpty() && value.style().isEmpty())
-                return new Result.Ok<>(coder.createString(text.content()));
-
-            return INNER_COMPONENT.encode(coder, value);
-        }
-    };
 }
