@@ -5,2213 +5,2213 @@ package net.minestom.server.instance.block;
  */
 @SuppressWarnings("unused")
 interface Blocks {
-    Block AIR = BlockImpl.get("minecraft:air");
+    Block AIR = BlockImpl.get("air");
 
-    Block STONE = BlockImpl.get("minecraft:stone");
+    Block STONE = BlockImpl.get("stone");
 
-    Block GRANITE = BlockImpl.get("minecraft:granite");
+    Block GRANITE = BlockImpl.get("granite");
 
-    Block POLISHED_GRANITE = BlockImpl.get("minecraft:polished_granite");
+    Block POLISHED_GRANITE = BlockImpl.get("polished_granite");
 
-    Block DIORITE = BlockImpl.get("minecraft:diorite");
+    Block DIORITE = BlockImpl.get("diorite");
 
-    Block POLISHED_DIORITE = BlockImpl.get("minecraft:polished_diorite");
+    Block POLISHED_DIORITE = BlockImpl.get("polished_diorite");
 
-    Block ANDESITE = BlockImpl.get("minecraft:andesite");
+    Block ANDESITE = BlockImpl.get("andesite");
 
-    Block POLISHED_ANDESITE = BlockImpl.get("minecraft:polished_andesite");
+    Block POLISHED_ANDESITE = BlockImpl.get("polished_andesite");
 
-    Block GRASS_BLOCK = BlockImpl.get("minecraft:grass_block");
+    Block GRASS_BLOCK = BlockImpl.get("grass_block");
 
-    Block DIRT = BlockImpl.get("minecraft:dirt");
+    Block DIRT = BlockImpl.get("dirt");
 
-    Block COARSE_DIRT = BlockImpl.get("minecraft:coarse_dirt");
+    Block COARSE_DIRT = BlockImpl.get("coarse_dirt");
 
-    Block PODZOL = BlockImpl.get("minecraft:podzol");
+    Block PODZOL = BlockImpl.get("podzol");
 
-    Block COBBLESTONE = BlockImpl.get("minecraft:cobblestone");
+    Block COBBLESTONE = BlockImpl.get("cobblestone");
 
-    Block OAK_PLANKS = BlockImpl.get("minecraft:oak_planks");
+    Block OAK_PLANKS = BlockImpl.get("oak_planks");
 
-    Block SPRUCE_PLANKS = BlockImpl.get("minecraft:spruce_planks");
+    Block SPRUCE_PLANKS = BlockImpl.get("spruce_planks");
 
-    Block BIRCH_PLANKS = BlockImpl.get("minecraft:birch_planks");
+    Block BIRCH_PLANKS = BlockImpl.get("birch_planks");
 
-    Block JUNGLE_PLANKS = BlockImpl.get("minecraft:jungle_planks");
+    Block JUNGLE_PLANKS = BlockImpl.get("jungle_planks");
 
-    Block ACACIA_PLANKS = BlockImpl.get("minecraft:acacia_planks");
+    Block ACACIA_PLANKS = BlockImpl.get("acacia_planks");
 
-    Block CHERRY_PLANKS = BlockImpl.get("minecraft:cherry_planks");
+    Block CHERRY_PLANKS = BlockImpl.get("cherry_planks");
 
-    Block DARK_OAK_PLANKS = BlockImpl.get("minecraft:dark_oak_planks");
+    Block DARK_OAK_PLANKS = BlockImpl.get("dark_oak_planks");
 
-    Block PALE_OAK_WOOD = BlockImpl.get("minecraft:pale_oak_wood");
+    Block PALE_OAK_WOOD = BlockImpl.get("pale_oak_wood");
 
-    Block PALE_OAK_PLANKS = BlockImpl.get("minecraft:pale_oak_planks");
+    Block PALE_OAK_PLANKS = BlockImpl.get("pale_oak_planks");
 
-    Block MANGROVE_PLANKS = BlockImpl.get("minecraft:mangrove_planks");
+    Block MANGROVE_PLANKS = BlockImpl.get("mangrove_planks");
 
-    Block BAMBOO_PLANKS = BlockImpl.get("minecraft:bamboo_planks");
+    Block BAMBOO_PLANKS = BlockImpl.get("bamboo_planks");
 
-    Block BAMBOO_MOSAIC = BlockImpl.get("minecraft:bamboo_mosaic");
+    Block BAMBOO_MOSAIC = BlockImpl.get("bamboo_mosaic");
 
-    Block OAK_SAPLING = BlockImpl.get("minecraft:oak_sapling");
+    Block OAK_SAPLING = BlockImpl.get("oak_sapling");
 
-    Block SPRUCE_SAPLING = BlockImpl.get("minecraft:spruce_sapling");
+    Block SPRUCE_SAPLING = BlockImpl.get("spruce_sapling");
 
-    Block BIRCH_SAPLING = BlockImpl.get("minecraft:birch_sapling");
+    Block BIRCH_SAPLING = BlockImpl.get("birch_sapling");
 
-    Block JUNGLE_SAPLING = BlockImpl.get("minecraft:jungle_sapling");
+    Block JUNGLE_SAPLING = BlockImpl.get("jungle_sapling");
 
-    Block ACACIA_SAPLING = BlockImpl.get("minecraft:acacia_sapling");
+    Block ACACIA_SAPLING = BlockImpl.get("acacia_sapling");
 
-    Block CHERRY_SAPLING = BlockImpl.get("minecraft:cherry_sapling");
+    Block CHERRY_SAPLING = BlockImpl.get("cherry_sapling");
 
-    Block DARK_OAK_SAPLING = BlockImpl.get("minecraft:dark_oak_sapling");
+    Block DARK_OAK_SAPLING = BlockImpl.get("dark_oak_sapling");
 
-    Block PALE_OAK_SAPLING = BlockImpl.get("minecraft:pale_oak_sapling");
+    Block PALE_OAK_SAPLING = BlockImpl.get("pale_oak_sapling");
 
-    Block MANGROVE_PROPAGULE = BlockImpl.get("minecraft:mangrove_propagule");
+    Block MANGROVE_PROPAGULE = BlockImpl.get("mangrove_propagule");
 
-    Block BEDROCK = BlockImpl.get("minecraft:bedrock");
+    Block BEDROCK = BlockImpl.get("bedrock");
 
-    Block WATER = BlockImpl.get("minecraft:water");
+    Block WATER = BlockImpl.get("water");
 
-    Block LAVA = BlockImpl.get("minecraft:lava");
+    Block LAVA = BlockImpl.get("lava");
 
-    Block SAND = BlockImpl.get("minecraft:sand");
+    Block SAND = BlockImpl.get("sand");
 
-    Block SUSPICIOUS_SAND = BlockImpl.get("minecraft:suspicious_sand");
+    Block SUSPICIOUS_SAND = BlockImpl.get("suspicious_sand");
 
-    Block RED_SAND = BlockImpl.get("minecraft:red_sand");
+    Block RED_SAND = BlockImpl.get("red_sand");
 
-    Block GRAVEL = BlockImpl.get("minecraft:gravel");
+    Block GRAVEL = BlockImpl.get("gravel");
 
-    Block SUSPICIOUS_GRAVEL = BlockImpl.get("minecraft:suspicious_gravel");
+    Block SUSPICIOUS_GRAVEL = BlockImpl.get("suspicious_gravel");
 
-    Block GOLD_ORE = BlockImpl.get("minecraft:gold_ore");
+    Block GOLD_ORE = BlockImpl.get("gold_ore");
 
-    Block DEEPSLATE_GOLD_ORE = BlockImpl.get("minecraft:deepslate_gold_ore");
+    Block DEEPSLATE_GOLD_ORE = BlockImpl.get("deepslate_gold_ore");
 
-    Block IRON_ORE = BlockImpl.get("minecraft:iron_ore");
+    Block IRON_ORE = BlockImpl.get("iron_ore");
 
-    Block DEEPSLATE_IRON_ORE = BlockImpl.get("minecraft:deepslate_iron_ore");
+    Block DEEPSLATE_IRON_ORE = BlockImpl.get("deepslate_iron_ore");
 
-    Block COAL_ORE = BlockImpl.get("minecraft:coal_ore");
+    Block COAL_ORE = BlockImpl.get("coal_ore");
 
-    Block DEEPSLATE_COAL_ORE = BlockImpl.get("minecraft:deepslate_coal_ore");
+    Block DEEPSLATE_COAL_ORE = BlockImpl.get("deepslate_coal_ore");
 
-    Block NETHER_GOLD_ORE = BlockImpl.get("minecraft:nether_gold_ore");
+    Block NETHER_GOLD_ORE = BlockImpl.get("nether_gold_ore");
 
-    Block OAK_LOG = BlockImpl.get("minecraft:oak_log");
+    Block OAK_LOG = BlockImpl.get("oak_log");
 
-    Block SPRUCE_LOG = BlockImpl.get("minecraft:spruce_log");
+    Block SPRUCE_LOG = BlockImpl.get("spruce_log");
 
-    Block BIRCH_LOG = BlockImpl.get("minecraft:birch_log");
+    Block BIRCH_LOG = BlockImpl.get("birch_log");
 
-    Block JUNGLE_LOG = BlockImpl.get("minecraft:jungle_log");
+    Block JUNGLE_LOG = BlockImpl.get("jungle_log");
 
-    Block ACACIA_LOG = BlockImpl.get("minecraft:acacia_log");
+    Block ACACIA_LOG = BlockImpl.get("acacia_log");
 
-    Block CHERRY_LOG = BlockImpl.get("minecraft:cherry_log");
+    Block CHERRY_LOG = BlockImpl.get("cherry_log");
 
-    Block DARK_OAK_LOG = BlockImpl.get("minecraft:dark_oak_log");
+    Block DARK_OAK_LOG = BlockImpl.get("dark_oak_log");
 
-    Block PALE_OAK_LOG = BlockImpl.get("minecraft:pale_oak_log");
+    Block PALE_OAK_LOG = BlockImpl.get("pale_oak_log");
 
-    Block MANGROVE_LOG = BlockImpl.get("minecraft:mangrove_log");
+    Block MANGROVE_LOG = BlockImpl.get("mangrove_log");
 
-    Block MANGROVE_ROOTS = BlockImpl.get("minecraft:mangrove_roots");
+    Block MANGROVE_ROOTS = BlockImpl.get("mangrove_roots");
 
-    Block MUDDY_MANGROVE_ROOTS = BlockImpl.get("minecraft:muddy_mangrove_roots");
+    Block MUDDY_MANGROVE_ROOTS = BlockImpl.get("muddy_mangrove_roots");
 
-    Block BAMBOO_BLOCK = BlockImpl.get("minecraft:bamboo_block");
+    Block BAMBOO_BLOCK = BlockImpl.get("bamboo_block");
 
-    Block STRIPPED_SPRUCE_LOG = BlockImpl.get("minecraft:stripped_spruce_log");
+    Block STRIPPED_SPRUCE_LOG = BlockImpl.get("stripped_spruce_log");
 
-    Block STRIPPED_BIRCH_LOG = BlockImpl.get("minecraft:stripped_birch_log");
+    Block STRIPPED_BIRCH_LOG = BlockImpl.get("stripped_birch_log");
 
-    Block STRIPPED_JUNGLE_LOG = BlockImpl.get("minecraft:stripped_jungle_log");
+    Block STRIPPED_JUNGLE_LOG = BlockImpl.get("stripped_jungle_log");
 
-    Block STRIPPED_ACACIA_LOG = BlockImpl.get("minecraft:stripped_acacia_log");
+    Block STRIPPED_ACACIA_LOG = BlockImpl.get("stripped_acacia_log");
 
-    Block STRIPPED_CHERRY_LOG = BlockImpl.get("minecraft:stripped_cherry_log");
+    Block STRIPPED_CHERRY_LOG = BlockImpl.get("stripped_cherry_log");
 
-    Block STRIPPED_DARK_OAK_LOG = BlockImpl.get("minecraft:stripped_dark_oak_log");
+    Block STRIPPED_DARK_OAK_LOG = BlockImpl.get("stripped_dark_oak_log");
 
-    Block STRIPPED_PALE_OAK_LOG = BlockImpl.get("minecraft:stripped_pale_oak_log");
+    Block STRIPPED_PALE_OAK_LOG = BlockImpl.get("stripped_pale_oak_log");
 
-    Block STRIPPED_OAK_LOG = BlockImpl.get("minecraft:stripped_oak_log");
+    Block STRIPPED_OAK_LOG = BlockImpl.get("stripped_oak_log");
 
-    Block STRIPPED_MANGROVE_LOG = BlockImpl.get("minecraft:stripped_mangrove_log");
+    Block STRIPPED_MANGROVE_LOG = BlockImpl.get("stripped_mangrove_log");
 
-    Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get("minecraft:stripped_bamboo_block");
+    Block STRIPPED_BAMBOO_BLOCK = BlockImpl.get("stripped_bamboo_block");
 
-    Block OAK_WOOD = BlockImpl.get("minecraft:oak_wood");
+    Block OAK_WOOD = BlockImpl.get("oak_wood");
 
-    Block SPRUCE_WOOD = BlockImpl.get("minecraft:spruce_wood");
+    Block SPRUCE_WOOD = BlockImpl.get("spruce_wood");
 
-    Block BIRCH_WOOD = BlockImpl.get("minecraft:birch_wood");
+    Block BIRCH_WOOD = BlockImpl.get("birch_wood");
 
-    Block JUNGLE_WOOD = BlockImpl.get("minecraft:jungle_wood");
+    Block JUNGLE_WOOD = BlockImpl.get("jungle_wood");
 
-    Block ACACIA_WOOD = BlockImpl.get("minecraft:acacia_wood");
+    Block ACACIA_WOOD = BlockImpl.get("acacia_wood");
 
-    Block CHERRY_WOOD = BlockImpl.get("minecraft:cherry_wood");
+    Block CHERRY_WOOD = BlockImpl.get("cherry_wood");
 
-    Block DARK_OAK_WOOD = BlockImpl.get("minecraft:dark_oak_wood");
+    Block DARK_OAK_WOOD = BlockImpl.get("dark_oak_wood");
 
-    Block MANGROVE_WOOD = BlockImpl.get("minecraft:mangrove_wood");
+    Block MANGROVE_WOOD = BlockImpl.get("mangrove_wood");
 
-    Block STRIPPED_OAK_WOOD = BlockImpl.get("minecraft:stripped_oak_wood");
+    Block STRIPPED_OAK_WOOD = BlockImpl.get("stripped_oak_wood");
 
-    Block STRIPPED_SPRUCE_WOOD = BlockImpl.get("minecraft:stripped_spruce_wood");
+    Block STRIPPED_SPRUCE_WOOD = BlockImpl.get("stripped_spruce_wood");
 
-    Block STRIPPED_BIRCH_WOOD = BlockImpl.get("minecraft:stripped_birch_wood");
+    Block STRIPPED_BIRCH_WOOD = BlockImpl.get("stripped_birch_wood");
 
-    Block STRIPPED_JUNGLE_WOOD = BlockImpl.get("minecraft:stripped_jungle_wood");
+    Block STRIPPED_JUNGLE_WOOD = BlockImpl.get("stripped_jungle_wood");
 
-    Block STRIPPED_ACACIA_WOOD = BlockImpl.get("minecraft:stripped_acacia_wood");
+    Block STRIPPED_ACACIA_WOOD = BlockImpl.get("stripped_acacia_wood");
 
-    Block STRIPPED_CHERRY_WOOD = BlockImpl.get("minecraft:stripped_cherry_wood");
+    Block STRIPPED_CHERRY_WOOD = BlockImpl.get("stripped_cherry_wood");
 
-    Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get("minecraft:stripped_dark_oak_wood");
+    Block STRIPPED_DARK_OAK_WOOD = BlockImpl.get("stripped_dark_oak_wood");
 
-    Block STRIPPED_PALE_OAK_WOOD = BlockImpl.get("minecraft:stripped_pale_oak_wood");
+    Block STRIPPED_PALE_OAK_WOOD = BlockImpl.get("stripped_pale_oak_wood");
 
-    Block STRIPPED_MANGROVE_WOOD = BlockImpl.get("minecraft:stripped_mangrove_wood");
+    Block STRIPPED_MANGROVE_WOOD = BlockImpl.get("stripped_mangrove_wood");
 
-    Block OAK_LEAVES = BlockImpl.get("minecraft:oak_leaves");
+    Block OAK_LEAVES = BlockImpl.get("oak_leaves");
 
-    Block SPRUCE_LEAVES = BlockImpl.get("minecraft:spruce_leaves");
+    Block SPRUCE_LEAVES = BlockImpl.get("spruce_leaves");
 
-    Block BIRCH_LEAVES = BlockImpl.get("minecraft:birch_leaves");
+    Block BIRCH_LEAVES = BlockImpl.get("birch_leaves");
 
-    Block JUNGLE_LEAVES = BlockImpl.get("minecraft:jungle_leaves");
+    Block JUNGLE_LEAVES = BlockImpl.get("jungle_leaves");
 
-    Block ACACIA_LEAVES = BlockImpl.get("minecraft:acacia_leaves");
+    Block ACACIA_LEAVES = BlockImpl.get("acacia_leaves");
 
-    Block CHERRY_LEAVES = BlockImpl.get("minecraft:cherry_leaves");
+    Block CHERRY_LEAVES = BlockImpl.get("cherry_leaves");
 
-    Block DARK_OAK_LEAVES = BlockImpl.get("minecraft:dark_oak_leaves");
+    Block DARK_OAK_LEAVES = BlockImpl.get("dark_oak_leaves");
 
-    Block PALE_OAK_LEAVES = BlockImpl.get("minecraft:pale_oak_leaves");
+    Block PALE_OAK_LEAVES = BlockImpl.get("pale_oak_leaves");
 
-    Block MANGROVE_LEAVES = BlockImpl.get("minecraft:mangrove_leaves");
+    Block MANGROVE_LEAVES = BlockImpl.get("mangrove_leaves");
 
-    Block AZALEA_LEAVES = BlockImpl.get("minecraft:azalea_leaves");
+    Block AZALEA_LEAVES = BlockImpl.get("azalea_leaves");
 
-    Block FLOWERING_AZALEA_LEAVES = BlockImpl.get("minecraft:flowering_azalea_leaves");
+    Block FLOWERING_AZALEA_LEAVES = BlockImpl.get("flowering_azalea_leaves");
 
-    Block SPONGE = BlockImpl.get("minecraft:sponge");
+    Block SPONGE = BlockImpl.get("sponge");
 
-    Block WET_SPONGE = BlockImpl.get("minecraft:wet_sponge");
+    Block WET_SPONGE = BlockImpl.get("wet_sponge");
 
-    Block GLASS = BlockImpl.get("minecraft:glass");
+    Block GLASS = BlockImpl.get("glass");
 
-    Block LAPIS_ORE = BlockImpl.get("minecraft:lapis_ore");
+    Block LAPIS_ORE = BlockImpl.get("lapis_ore");
 
-    Block DEEPSLATE_LAPIS_ORE = BlockImpl.get("minecraft:deepslate_lapis_ore");
+    Block DEEPSLATE_LAPIS_ORE = BlockImpl.get("deepslate_lapis_ore");
 
-    Block LAPIS_BLOCK = BlockImpl.get("minecraft:lapis_block");
+    Block LAPIS_BLOCK = BlockImpl.get("lapis_block");
 
-    Block DISPENSER = BlockImpl.get("minecraft:dispenser");
+    Block DISPENSER = BlockImpl.get("dispenser");
 
-    Block SANDSTONE = BlockImpl.get("minecraft:sandstone");
+    Block SANDSTONE = BlockImpl.get("sandstone");
 
-    Block CHISELED_SANDSTONE = BlockImpl.get("minecraft:chiseled_sandstone");
+    Block CHISELED_SANDSTONE = BlockImpl.get("chiseled_sandstone");
 
-    Block CUT_SANDSTONE = BlockImpl.get("minecraft:cut_sandstone");
+    Block CUT_SANDSTONE = BlockImpl.get("cut_sandstone");
 
-    Block NOTE_BLOCK = BlockImpl.get("minecraft:note_block");
+    Block NOTE_BLOCK = BlockImpl.get("note_block");
 
-    Block WHITE_BED = BlockImpl.get("minecraft:white_bed");
+    Block WHITE_BED = BlockImpl.get("white_bed");
 
-    Block ORANGE_BED = BlockImpl.get("minecraft:orange_bed");
+    Block ORANGE_BED = BlockImpl.get("orange_bed");
 
-    Block MAGENTA_BED = BlockImpl.get("minecraft:magenta_bed");
+    Block MAGENTA_BED = BlockImpl.get("magenta_bed");
 
-    Block LIGHT_BLUE_BED = BlockImpl.get("minecraft:light_blue_bed");
+    Block LIGHT_BLUE_BED = BlockImpl.get("light_blue_bed");
 
-    Block YELLOW_BED = BlockImpl.get("minecraft:yellow_bed");
+    Block YELLOW_BED = BlockImpl.get("yellow_bed");
 
-    Block LIME_BED = BlockImpl.get("minecraft:lime_bed");
+    Block LIME_BED = BlockImpl.get("lime_bed");
 
-    Block PINK_BED = BlockImpl.get("minecraft:pink_bed");
+    Block PINK_BED = BlockImpl.get("pink_bed");
 
-    Block GRAY_BED = BlockImpl.get("minecraft:gray_bed");
+    Block GRAY_BED = BlockImpl.get("gray_bed");
 
-    Block LIGHT_GRAY_BED = BlockImpl.get("minecraft:light_gray_bed");
+    Block LIGHT_GRAY_BED = BlockImpl.get("light_gray_bed");
 
-    Block CYAN_BED = BlockImpl.get("minecraft:cyan_bed");
+    Block CYAN_BED = BlockImpl.get("cyan_bed");
 
-    Block PURPLE_BED = BlockImpl.get("minecraft:purple_bed");
+    Block PURPLE_BED = BlockImpl.get("purple_bed");
 
-    Block BLUE_BED = BlockImpl.get("minecraft:blue_bed");
+    Block BLUE_BED = BlockImpl.get("blue_bed");
 
-    Block BROWN_BED = BlockImpl.get("minecraft:brown_bed");
+    Block BROWN_BED = BlockImpl.get("brown_bed");
 
-    Block GREEN_BED = BlockImpl.get("minecraft:green_bed");
+    Block GREEN_BED = BlockImpl.get("green_bed");
 
-    Block RED_BED = BlockImpl.get("minecraft:red_bed");
+    Block RED_BED = BlockImpl.get("red_bed");
 
-    Block BLACK_BED = BlockImpl.get("minecraft:black_bed");
+    Block BLACK_BED = BlockImpl.get("black_bed");
 
-    Block POWERED_RAIL = BlockImpl.get("minecraft:powered_rail");
+    Block POWERED_RAIL = BlockImpl.get("powered_rail");
 
-    Block DETECTOR_RAIL = BlockImpl.get("minecraft:detector_rail");
+    Block DETECTOR_RAIL = BlockImpl.get("detector_rail");
 
-    Block STICKY_PISTON = BlockImpl.get("minecraft:sticky_piston");
+    Block STICKY_PISTON = BlockImpl.get("sticky_piston");
 
-    Block COBWEB = BlockImpl.get("minecraft:cobweb");
+    Block COBWEB = BlockImpl.get("cobweb");
 
-    Block SHORT_GRASS = BlockImpl.get("minecraft:short_grass");
+    Block SHORT_GRASS = BlockImpl.get("short_grass");
 
-    Block FERN = BlockImpl.get("minecraft:fern");
+    Block FERN = BlockImpl.get("fern");
 
-    Block DEAD_BUSH = BlockImpl.get("minecraft:dead_bush");
+    Block DEAD_BUSH = BlockImpl.get("dead_bush");
 
-    Block BUSH = BlockImpl.get("minecraft:bush");
+    Block BUSH = BlockImpl.get("bush");
 
-    Block SHORT_DRY_GRASS = BlockImpl.get("minecraft:short_dry_grass");
+    Block SHORT_DRY_GRASS = BlockImpl.get("short_dry_grass");
 
-    Block TALL_DRY_GRASS = BlockImpl.get("minecraft:tall_dry_grass");
+    Block TALL_DRY_GRASS = BlockImpl.get("tall_dry_grass");
 
-    Block SEAGRASS = BlockImpl.get("minecraft:seagrass");
+    Block SEAGRASS = BlockImpl.get("seagrass");
 
-    Block TALL_SEAGRASS = BlockImpl.get("minecraft:tall_seagrass");
+    Block TALL_SEAGRASS = BlockImpl.get("tall_seagrass");
 
-    Block PISTON = BlockImpl.get("minecraft:piston");
+    Block PISTON = BlockImpl.get("piston");
 
-    Block PISTON_HEAD = BlockImpl.get("minecraft:piston_head");
+    Block PISTON_HEAD = BlockImpl.get("piston_head");
 
-    Block WHITE_WOOL = BlockImpl.get("minecraft:white_wool");
+    Block WHITE_WOOL = BlockImpl.get("white_wool");
 
-    Block ORANGE_WOOL = BlockImpl.get("minecraft:orange_wool");
+    Block ORANGE_WOOL = BlockImpl.get("orange_wool");
 
-    Block MAGENTA_WOOL = BlockImpl.get("minecraft:magenta_wool");
+    Block MAGENTA_WOOL = BlockImpl.get("magenta_wool");
 
-    Block LIGHT_BLUE_WOOL = BlockImpl.get("minecraft:light_blue_wool");
+    Block LIGHT_BLUE_WOOL = BlockImpl.get("light_blue_wool");
 
-    Block YELLOW_WOOL = BlockImpl.get("minecraft:yellow_wool");
+    Block YELLOW_WOOL = BlockImpl.get("yellow_wool");
 
-    Block LIME_WOOL = BlockImpl.get("minecraft:lime_wool");
+    Block LIME_WOOL = BlockImpl.get("lime_wool");
 
-    Block PINK_WOOL = BlockImpl.get("minecraft:pink_wool");
+    Block PINK_WOOL = BlockImpl.get("pink_wool");
 
-    Block GRAY_WOOL = BlockImpl.get("minecraft:gray_wool");
+    Block GRAY_WOOL = BlockImpl.get("gray_wool");
 
-    Block LIGHT_GRAY_WOOL = BlockImpl.get("minecraft:light_gray_wool");
+    Block LIGHT_GRAY_WOOL = BlockImpl.get("light_gray_wool");
 
-    Block CYAN_WOOL = BlockImpl.get("minecraft:cyan_wool");
+    Block CYAN_WOOL = BlockImpl.get("cyan_wool");
 
-    Block PURPLE_WOOL = BlockImpl.get("minecraft:purple_wool");
+    Block PURPLE_WOOL = BlockImpl.get("purple_wool");
 
-    Block BLUE_WOOL = BlockImpl.get("minecraft:blue_wool");
+    Block BLUE_WOOL = BlockImpl.get("blue_wool");
 
-    Block BROWN_WOOL = BlockImpl.get("minecraft:brown_wool");
+    Block BROWN_WOOL = BlockImpl.get("brown_wool");
 
-    Block GREEN_WOOL = BlockImpl.get("minecraft:green_wool");
+    Block GREEN_WOOL = BlockImpl.get("green_wool");
 
-    Block RED_WOOL = BlockImpl.get("minecraft:red_wool");
+    Block RED_WOOL = BlockImpl.get("red_wool");
 
-    Block BLACK_WOOL = BlockImpl.get("minecraft:black_wool");
+    Block BLACK_WOOL = BlockImpl.get("black_wool");
 
-    Block MOVING_PISTON = BlockImpl.get("minecraft:moving_piston");
+    Block MOVING_PISTON = BlockImpl.get("moving_piston");
 
-    Block DANDELION = BlockImpl.get("minecraft:dandelion");
+    Block DANDELION = BlockImpl.get("dandelion");
 
-    Block TORCHFLOWER = BlockImpl.get("minecraft:torchflower");
+    Block TORCHFLOWER = BlockImpl.get("torchflower");
 
-    Block POPPY = BlockImpl.get("minecraft:poppy");
+    Block POPPY = BlockImpl.get("poppy");
 
-    Block BLUE_ORCHID = BlockImpl.get("minecraft:blue_orchid");
+    Block BLUE_ORCHID = BlockImpl.get("blue_orchid");
 
-    Block ALLIUM = BlockImpl.get("minecraft:allium");
+    Block ALLIUM = BlockImpl.get("allium");
 
-    Block AZURE_BLUET = BlockImpl.get("minecraft:azure_bluet");
+    Block AZURE_BLUET = BlockImpl.get("azure_bluet");
 
-    Block RED_TULIP = BlockImpl.get("minecraft:red_tulip");
+    Block RED_TULIP = BlockImpl.get("red_tulip");
 
-    Block ORANGE_TULIP = BlockImpl.get("minecraft:orange_tulip");
+    Block ORANGE_TULIP = BlockImpl.get("orange_tulip");
 
-    Block WHITE_TULIP = BlockImpl.get("minecraft:white_tulip");
+    Block WHITE_TULIP = BlockImpl.get("white_tulip");
 
-    Block PINK_TULIP = BlockImpl.get("minecraft:pink_tulip");
+    Block PINK_TULIP = BlockImpl.get("pink_tulip");
 
-    Block OXEYE_DAISY = BlockImpl.get("minecraft:oxeye_daisy");
+    Block OXEYE_DAISY = BlockImpl.get("oxeye_daisy");
 
-    Block CORNFLOWER = BlockImpl.get("minecraft:cornflower");
+    Block CORNFLOWER = BlockImpl.get("cornflower");
 
-    Block WITHER_ROSE = BlockImpl.get("minecraft:wither_rose");
+    Block WITHER_ROSE = BlockImpl.get("wither_rose");
 
-    Block LILY_OF_THE_VALLEY = BlockImpl.get("minecraft:lily_of_the_valley");
+    Block LILY_OF_THE_VALLEY = BlockImpl.get("lily_of_the_valley");
 
-    Block BROWN_MUSHROOM = BlockImpl.get("minecraft:brown_mushroom");
+    Block BROWN_MUSHROOM = BlockImpl.get("brown_mushroom");
 
-    Block RED_MUSHROOM = BlockImpl.get("minecraft:red_mushroom");
+    Block RED_MUSHROOM = BlockImpl.get("red_mushroom");
 
-    Block GOLD_BLOCK = BlockImpl.get("minecraft:gold_block");
+    Block GOLD_BLOCK = BlockImpl.get("gold_block");
 
-    Block IRON_BLOCK = BlockImpl.get("minecraft:iron_block");
+    Block IRON_BLOCK = BlockImpl.get("iron_block");
 
-    Block BRICKS = BlockImpl.get("minecraft:bricks");
+    Block BRICKS = BlockImpl.get("bricks");
 
-    Block TNT = BlockImpl.get("minecraft:tnt");
+    Block TNT = BlockImpl.get("tnt");
 
-    Block BOOKSHELF = BlockImpl.get("minecraft:bookshelf");
+    Block BOOKSHELF = BlockImpl.get("bookshelf");
 
-    Block CHISELED_BOOKSHELF = BlockImpl.get("minecraft:chiseled_bookshelf");
+    Block CHISELED_BOOKSHELF = BlockImpl.get("chiseled_bookshelf");
 
-    Block MOSSY_COBBLESTONE = BlockImpl.get("minecraft:mossy_cobblestone");
+    Block MOSSY_COBBLESTONE = BlockImpl.get("mossy_cobblestone");
 
-    Block OBSIDIAN = BlockImpl.get("minecraft:obsidian");
+    Block OBSIDIAN = BlockImpl.get("obsidian");
 
-    Block TORCH = BlockImpl.get("minecraft:torch");
+    Block TORCH = BlockImpl.get("torch");
 
-    Block WALL_TORCH = BlockImpl.get("minecraft:wall_torch");
+    Block WALL_TORCH = BlockImpl.get("wall_torch");
 
-    Block FIRE = BlockImpl.get("minecraft:fire");
+    Block FIRE = BlockImpl.get("fire");
 
-    Block SOUL_FIRE = BlockImpl.get("minecraft:soul_fire");
+    Block SOUL_FIRE = BlockImpl.get("soul_fire");
 
-    Block SPAWNER = BlockImpl.get("minecraft:spawner");
+    Block SPAWNER = BlockImpl.get("spawner");
 
-    Block CREAKING_HEART = BlockImpl.get("minecraft:creaking_heart");
+    Block CREAKING_HEART = BlockImpl.get("creaking_heart");
 
-    Block OAK_STAIRS = BlockImpl.get("minecraft:oak_stairs");
+    Block OAK_STAIRS = BlockImpl.get("oak_stairs");
 
-    Block CHEST = BlockImpl.get("minecraft:chest");
+    Block CHEST = BlockImpl.get("chest");
 
-    Block REDSTONE_WIRE = BlockImpl.get("minecraft:redstone_wire");
+    Block REDSTONE_WIRE = BlockImpl.get("redstone_wire");
 
-    Block DIAMOND_ORE = BlockImpl.get("minecraft:diamond_ore");
+    Block DIAMOND_ORE = BlockImpl.get("diamond_ore");
 
-    Block DEEPSLATE_DIAMOND_ORE = BlockImpl.get("minecraft:deepslate_diamond_ore");
+    Block DEEPSLATE_DIAMOND_ORE = BlockImpl.get("deepslate_diamond_ore");
 
-    Block DIAMOND_BLOCK = BlockImpl.get("minecraft:diamond_block");
+    Block DIAMOND_BLOCK = BlockImpl.get("diamond_block");
 
-    Block CRAFTING_TABLE = BlockImpl.get("minecraft:crafting_table");
+    Block CRAFTING_TABLE = BlockImpl.get("crafting_table");
 
-    Block WHEAT = BlockImpl.get("minecraft:wheat");
+    Block WHEAT = BlockImpl.get("wheat");
 
-    Block FARMLAND = BlockImpl.get("minecraft:farmland");
+    Block FARMLAND = BlockImpl.get("farmland");
 
-    Block FURNACE = BlockImpl.get("minecraft:furnace");
+    Block FURNACE = BlockImpl.get("furnace");
 
-    Block OAK_SIGN = BlockImpl.get("minecraft:oak_sign");
+    Block OAK_SIGN = BlockImpl.get("oak_sign");
 
-    Block SPRUCE_SIGN = BlockImpl.get("minecraft:spruce_sign");
+    Block SPRUCE_SIGN = BlockImpl.get("spruce_sign");
 
-    Block BIRCH_SIGN = BlockImpl.get("minecraft:birch_sign");
+    Block BIRCH_SIGN = BlockImpl.get("birch_sign");
 
-    Block ACACIA_SIGN = BlockImpl.get("minecraft:acacia_sign");
+    Block ACACIA_SIGN = BlockImpl.get("acacia_sign");
 
-    Block CHERRY_SIGN = BlockImpl.get("minecraft:cherry_sign");
+    Block CHERRY_SIGN = BlockImpl.get("cherry_sign");
 
-    Block JUNGLE_SIGN = BlockImpl.get("minecraft:jungle_sign");
+    Block JUNGLE_SIGN = BlockImpl.get("jungle_sign");
 
-    Block DARK_OAK_SIGN = BlockImpl.get("minecraft:dark_oak_sign");
+    Block DARK_OAK_SIGN = BlockImpl.get("dark_oak_sign");
 
-    Block PALE_OAK_SIGN = BlockImpl.get("minecraft:pale_oak_sign");
+    Block PALE_OAK_SIGN = BlockImpl.get("pale_oak_sign");
 
-    Block MANGROVE_SIGN = BlockImpl.get("minecraft:mangrove_sign");
+    Block MANGROVE_SIGN = BlockImpl.get("mangrove_sign");
 
-    Block BAMBOO_SIGN = BlockImpl.get("minecraft:bamboo_sign");
+    Block BAMBOO_SIGN = BlockImpl.get("bamboo_sign");
 
-    Block OAK_DOOR = BlockImpl.get("minecraft:oak_door");
+    Block OAK_DOOR = BlockImpl.get("oak_door");
 
-    Block LADDER = BlockImpl.get("minecraft:ladder");
+    Block LADDER = BlockImpl.get("ladder");
 
-    Block RAIL = BlockImpl.get("minecraft:rail");
+    Block RAIL = BlockImpl.get("rail");
 
-    Block COBBLESTONE_STAIRS = BlockImpl.get("minecraft:cobblestone_stairs");
+    Block COBBLESTONE_STAIRS = BlockImpl.get("cobblestone_stairs");
 
-    Block OAK_WALL_SIGN = BlockImpl.get("minecraft:oak_wall_sign");
+    Block OAK_WALL_SIGN = BlockImpl.get("oak_wall_sign");
 
-    Block SPRUCE_WALL_SIGN = BlockImpl.get("minecraft:spruce_wall_sign");
+    Block SPRUCE_WALL_SIGN = BlockImpl.get("spruce_wall_sign");
 
-    Block BIRCH_WALL_SIGN = BlockImpl.get("minecraft:birch_wall_sign");
+    Block BIRCH_WALL_SIGN = BlockImpl.get("birch_wall_sign");
 
-    Block ACACIA_WALL_SIGN = BlockImpl.get("minecraft:acacia_wall_sign");
+    Block ACACIA_WALL_SIGN = BlockImpl.get("acacia_wall_sign");
 
-    Block CHERRY_WALL_SIGN = BlockImpl.get("minecraft:cherry_wall_sign");
+    Block CHERRY_WALL_SIGN = BlockImpl.get("cherry_wall_sign");
 
-    Block JUNGLE_WALL_SIGN = BlockImpl.get("minecraft:jungle_wall_sign");
+    Block JUNGLE_WALL_SIGN = BlockImpl.get("jungle_wall_sign");
 
-    Block DARK_OAK_WALL_SIGN = BlockImpl.get("minecraft:dark_oak_wall_sign");
+    Block DARK_OAK_WALL_SIGN = BlockImpl.get("dark_oak_wall_sign");
 
-    Block PALE_OAK_WALL_SIGN = BlockImpl.get("minecraft:pale_oak_wall_sign");
+    Block PALE_OAK_WALL_SIGN = BlockImpl.get("pale_oak_wall_sign");
 
-    Block MANGROVE_WALL_SIGN = BlockImpl.get("minecraft:mangrove_wall_sign");
+    Block MANGROVE_WALL_SIGN = BlockImpl.get("mangrove_wall_sign");
 
-    Block BAMBOO_WALL_SIGN = BlockImpl.get("minecraft:bamboo_wall_sign");
+    Block BAMBOO_WALL_SIGN = BlockImpl.get("bamboo_wall_sign");
 
-    Block OAK_HANGING_SIGN = BlockImpl.get("minecraft:oak_hanging_sign");
+    Block OAK_HANGING_SIGN = BlockImpl.get("oak_hanging_sign");
 
-    Block SPRUCE_HANGING_SIGN = BlockImpl.get("minecraft:spruce_hanging_sign");
+    Block SPRUCE_HANGING_SIGN = BlockImpl.get("spruce_hanging_sign");
 
-    Block BIRCH_HANGING_SIGN = BlockImpl.get("minecraft:birch_hanging_sign");
+    Block BIRCH_HANGING_SIGN = BlockImpl.get("birch_hanging_sign");
 
-    Block ACACIA_HANGING_SIGN = BlockImpl.get("minecraft:acacia_hanging_sign");
+    Block ACACIA_HANGING_SIGN = BlockImpl.get("acacia_hanging_sign");
 
-    Block CHERRY_HANGING_SIGN = BlockImpl.get("minecraft:cherry_hanging_sign");
+    Block CHERRY_HANGING_SIGN = BlockImpl.get("cherry_hanging_sign");
 
-    Block JUNGLE_HANGING_SIGN = BlockImpl.get("minecraft:jungle_hanging_sign");
+    Block JUNGLE_HANGING_SIGN = BlockImpl.get("jungle_hanging_sign");
 
-    Block DARK_OAK_HANGING_SIGN = BlockImpl.get("minecraft:dark_oak_hanging_sign");
+    Block DARK_OAK_HANGING_SIGN = BlockImpl.get("dark_oak_hanging_sign");
 
-    Block PALE_OAK_HANGING_SIGN = BlockImpl.get("minecraft:pale_oak_hanging_sign");
+    Block PALE_OAK_HANGING_SIGN = BlockImpl.get("pale_oak_hanging_sign");
 
-    Block CRIMSON_HANGING_SIGN = BlockImpl.get("minecraft:crimson_hanging_sign");
+    Block CRIMSON_HANGING_SIGN = BlockImpl.get("crimson_hanging_sign");
 
-    Block WARPED_HANGING_SIGN = BlockImpl.get("minecraft:warped_hanging_sign");
+    Block WARPED_HANGING_SIGN = BlockImpl.get("warped_hanging_sign");
 
-    Block MANGROVE_HANGING_SIGN = BlockImpl.get("minecraft:mangrove_hanging_sign");
+    Block MANGROVE_HANGING_SIGN = BlockImpl.get("mangrove_hanging_sign");
 
-    Block BAMBOO_HANGING_SIGN = BlockImpl.get("minecraft:bamboo_hanging_sign");
+    Block BAMBOO_HANGING_SIGN = BlockImpl.get("bamboo_hanging_sign");
 
-    Block OAK_WALL_HANGING_SIGN = BlockImpl.get("minecraft:oak_wall_hanging_sign");
+    Block OAK_WALL_HANGING_SIGN = BlockImpl.get("oak_wall_hanging_sign");
 
-    Block SPRUCE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:spruce_wall_hanging_sign");
+    Block SPRUCE_WALL_HANGING_SIGN = BlockImpl.get("spruce_wall_hanging_sign");
 
-    Block BIRCH_WALL_HANGING_SIGN = BlockImpl.get("minecraft:birch_wall_hanging_sign");
+    Block BIRCH_WALL_HANGING_SIGN = BlockImpl.get("birch_wall_hanging_sign");
 
-    Block ACACIA_WALL_HANGING_SIGN = BlockImpl.get("minecraft:acacia_wall_hanging_sign");
+    Block ACACIA_WALL_HANGING_SIGN = BlockImpl.get("acacia_wall_hanging_sign");
 
-    Block CHERRY_WALL_HANGING_SIGN = BlockImpl.get("minecraft:cherry_wall_hanging_sign");
+    Block CHERRY_WALL_HANGING_SIGN = BlockImpl.get("cherry_wall_hanging_sign");
 
-    Block JUNGLE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:jungle_wall_hanging_sign");
+    Block JUNGLE_WALL_HANGING_SIGN = BlockImpl.get("jungle_wall_hanging_sign");
 
-    Block DARK_OAK_WALL_HANGING_SIGN = BlockImpl.get("minecraft:dark_oak_wall_hanging_sign");
+    Block DARK_OAK_WALL_HANGING_SIGN = BlockImpl.get("dark_oak_wall_hanging_sign");
 
-    Block PALE_OAK_WALL_HANGING_SIGN = BlockImpl.get("minecraft:pale_oak_wall_hanging_sign");
+    Block PALE_OAK_WALL_HANGING_SIGN = BlockImpl.get("pale_oak_wall_hanging_sign");
 
-    Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get("minecraft:mangrove_wall_hanging_sign");
+    Block MANGROVE_WALL_HANGING_SIGN = BlockImpl.get("mangrove_wall_hanging_sign");
 
-    Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get("minecraft:crimson_wall_hanging_sign");
+    Block CRIMSON_WALL_HANGING_SIGN = BlockImpl.get("crimson_wall_hanging_sign");
 
-    Block WARPED_WALL_HANGING_SIGN = BlockImpl.get("minecraft:warped_wall_hanging_sign");
+    Block WARPED_WALL_HANGING_SIGN = BlockImpl.get("warped_wall_hanging_sign");
 
-    Block BAMBOO_WALL_HANGING_SIGN = BlockImpl.get("minecraft:bamboo_wall_hanging_sign");
+    Block BAMBOO_WALL_HANGING_SIGN = BlockImpl.get("bamboo_wall_hanging_sign");
 
-    Block LEVER = BlockImpl.get("minecraft:lever");
+    Block LEVER = BlockImpl.get("lever");
 
-    Block STONE_PRESSURE_PLATE = BlockImpl.get("minecraft:stone_pressure_plate");
+    Block STONE_PRESSURE_PLATE = BlockImpl.get("stone_pressure_plate");
 
-    Block IRON_DOOR = BlockImpl.get("minecraft:iron_door");
+    Block IRON_DOOR = BlockImpl.get("iron_door");
 
-    Block OAK_PRESSURE_PLATE = BlockImpl.get("minecraft:oak_pressure_plate");
+    Block OAK_PRESSURE_PLATE = BlockImpl.get("oak_pressure_plate");
 
-    Block SPRUCE_PRESSURE_PLATE = BlockImpl.get("minecraft:spruce_pressure_plate");
+    Block SPRUCE_PRESSURE_PLATE = BlockImpl.get("spruce_pressure_plate");
 
-    Block BIRCH_PRESSURE_PLATE = BlockImpl.get("minecraft:birch_pressure_plate");
+    Block BIRCH_PRESSURE_PLATE = BlockImpl.get("birch_pressure_plate");
 
-    Block JUNGLE_PRESSURE_PLATE = BlockImpl.get("minecraft:jungle_pressure_plate");
+    Block JUNGLE_PRESSURE_PLATE = BlockImpl.get("jungle_pressure_plate");
 
-    Block ACACIA_PRESSURE_PLATE = BlockImpl.get("minecraft:acacia_pressure_plate");
+    Block ACACIA_PRESSURE_PLATE = BlockImpl.get("acacia_pressure_plate");
 
-    Block CHERRY_PRESSURE_PLATE = BlockImpl.get("minecraft:cherry_pressure_plate");
+    Block CHERRY_PRESSURE_PLATE = BlockImpl.get("cherry_pressure_plate");
 
-    Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get("minecraft:dark_oak_pressure_plate");
+    Block DARK_OAK_PRESSURE_PLATE = BlockImpl.get("dark_oak_pressure_plate");
 
-    Block PALE_OAK_PRESSURE_PLATE = BlockImpl.get("minecraft:pale_oak_pressure_plate");
+    Block PALE_OAK_PRESSURE_PLATE = BlockImpl.get("pale_oak_pressure_plate");
 
-    Block MANGROVE_PRESSURE_PLATE = BlockImpl.get("minecraft:mangrove_pressure_plate");
+    Block MANGROVE_PRESSURE_PLATE = BlockImpl.get("mangrove_pressure_plate");
 
-    Block BAMBOO_PRESSURE_PLATE = BlockImpl.get("minecraft:bamboo_pressure_plate");
+    Block BAMBOO_PRESSURE_PLATE = BlockImpl.get("bamboo_pressure_plate");
 
-    Block REDSTONE_ORE = BlockImpl.get("minecraft:redstone_ore");
+    Block REDSTONE_ORE = BlockImpl.get("redstone_ore");
 
-    Block DEEPSLATE_REDSTONE_ORE = BlockImpl.get("minecraft:deepslate_redstone_ore");
+    Block DEEPSLATE_REDSTONE_ORE = BlockImpl.get("deepslate_redstone_ore");
 
-    Block REDSTONE_TORCH = BlockImpl.get("minecraft:redstone_torch");
+    Block REDSTONE_TORCH = BlockImpl.get("redstone_torch");
 
-    Block REDSTONE_WALL_TORCH = BlockImpl.get("minecraft:redstone_wall_torch");
+    Block REDSTONE_WALL_TORCH = BlockImpl.get("redstone_wall_torch");
 
-    Block STONE_BUTTON = BlockImpl.get("minecraft:stone_button");
+    Block STONE_BUTTON = BlockImpl.get("stone_button");
 
-    Block SNOW = BlockImpl.get("minecraft:snow");
+    Block SNOW = BlockImpl.get("snow");
 
-    Block ICE = BlockImpl.get("minecraft:ice");
+    Block ICE = BlockImpl.get("ice");
 
-    Block SNOW_BLOCK = BlockImpl.get("minecraft:snow_block");
+    Block SNOW_BLOCK = BlockImpl.get("snow_block");
 
-    Block CACTUS = BlockImpl.get("minecraft:cactus");
+    Block CACTUS = BlockImpl.get("cactus");
 
-    Block CACTUS_FLOWER = BlockImpl.get("minecraft:cactus_flower");
+    Block CACTUS_FLOWER = BlockImpl.get("cactus_flower");
 
-    Block CLAY = BlockImpl.get("minecraft:clay");
+    Block CLAY = BlockImpl.get("clay");
 
-    Block SUGAR_CANE = BlockImpl.get("minecraft:sugar_cane");
+    Block SUGAR_CANE = BlockImpl.get("sugar_cane");
 
-    Block JUKEBOX = BlockImpl.get("minecraft:jukebox");
+    Block JUKEBOX = BlockImpl.get("jukebox");
 
-    Block OAK_FENCE = BlockImpl.get("minecraft:oak_fence");
+    Block OAK_FENCE = BlockImpl.get("oak_fence");
 
-    Block NETHERRACK = BlockImpl.get("minecraft:netherrack");
+    Block NETHERRACK = BlockImpl.get("netherrack");
 
-    Block SOUL_SAND = BlockImpl.get("minecraft:soul_sand");
+    Block SOUL_SAND = BlockImpl.get("soul_sand");
 
-    Block SOUL_SOIL = BlockImpl.get("minecraft:soul_soil");
+    Block SOUL_SOIL = BlockImpl.get("soul_soil");
 
-    Block BASALT = BlockImpl.get("minecraft:basalt");
+    Block BASALT = BlockImpl.get("basalt");
 
-    Block POLISHED_BASALT = BlockImpl.get("minecraft:polished_basalt");
+    Block POLISHED_BASALT = BlockImpl.get("polished_basalt");
 
-    Block SOUL_TORCH = BlockImpl.get("minecraft:soul_torch");
+    Block SOUL_TORCH = BlockImpl.get("soul_torch");
 
-    Block SOUL_WALL_TORCH = BlockImpl.get("minecraft:soul_wall_torch");
+    Block SOUL_WALL_TORCH = BlockImpl.get("soul_wall_torch");
 
-    Block GLOWSTONE = BlockImpl.get("minecraft:glowstone");
+    Block GLOWSTONE = BlockImpl.get("glowstone");
 
-    Block NETHER_PORTAL = BlockImpl.get("minecraft:nether_portal");
+    Block NETHER_PORTAL = BlockImpl.get("nether_portal");
 
-    Block CARVED_PUMPKIN = BlockImpl.get("minecraft:carved_pumpkin");
+    Block CARVED_PUMPKIN = BlockImpl.get("carved_pumpkin");
 
-    Block JACK_O_LANTERN = BlockImpl.get("minecraft:jack_o_lantern");
+    Block JACK_O_LANTERN = BlockImpl.get("jack_o_lantern");
 
-    Block CAKE = BlockImpl.get("minecraft:cake");
+    Block CAKE = BlockImpl.get("cake");
 
-    Block REPEATER = BlockImpl.get("minecraft:repeater");
+    Block REPEATER = BlockImpl.get("repeater");
 
-    Block WHITE_STAINED_GLASS = BlockImpl.get("minecraft:white_stained_glass");
+    Block WHITE_STAINED_GLASS = BlockImpl.get("white_stained_glass");
 
-    Block ORANGE_STAINED_GLASS = BlockImpl.get("minecraft:orange_stained_glass");
+    Block ORANGE_STAINED_GLASS = BlockImpl.get("orange_stained_glass");
 
-    Block MAGENTA_STAINED_GLASS = BlockImpl.get("minecraft:magenta_stained_glass");
+    Block MAGENTA_STAINED_GLASS = BlockImpl.get("magenta_stained_glass");
 
-    Block LIGHT_BLUE_STAINED_GLASS = BlockImpl.get("minecraft:light_blue_stained_glass");
+    Block LIGHT_BLUE_STAINED_GLASS = BlockImpl.get("light_blue_stained_glass");
 
-    Block YELLOW_STAINED_GLASS = BlockImpl.get("minecraft:yellow_stained_glass");
+    Block YELLOW_STAINED_GLASS = BlockImpl.get("yellow_stained_glass");
 
-    Block LIME_STAINED_GLASS = BlockImpl.get("minecraft:lime_stained_glass");
+    Block LIME_STAINED_GLASS = BlockImpl.get("lime_stained_glass");
 
-    Block PINK_STAINED_GLASS = BlockImpl.get("minecraft:pink_stained_glass");
+    Block PINK_STAINED_GLASS = BlockImpl.get("pink_stained_glass");
 
-    Block GRAY_STAINED_GLASS = BlockImpl.get("minecraft:gray_stained_glass");
+    Block GRAY_STAINED_GLASS = BlockImpl.get("gray_stained_glass");
 
-    Block LIGHT_GRAY_STAINED_GLASS = BlockImpl.get("minecraft:light_gray_stained_glass");
+    Block LIGHT_GRAY_STAINED_GLASS = BlockImpl.get("light_gray_stained_glass");
 
-    Block CYAN_STAINED_GLASS = BlockImpl.get("minecraft:cyan_stained_glass");
+    Block CYAN_STAINED_GLASS = BlockImpl.get("cyan_stained_glass");
 
-    Block PURPLE_STAINED_GLASS = BlockImpl.get("minecraft:purple_stained_glass");
+    Block PURPLE_STAINED_GLASS = BlockImpl.get("purple_stained_glass");
 
-    Block BLUE_STAINED_GLASS = BlockImpl.get("minecraft:blue_stained_glass");
+    Block BLUE_STAINED_GLASS = BlockImpl.get("blue_stained_glass");
 
-    Block BROWN_STAINED_GLASS = BlockImpl.get("minecraft:brown_stained_glass");
+    Block BROWN_STAINED_GLASS = BlockImpl.get("brown_stained_glass");
 
-    Block GREEN_STAINED_GLASS = BlockImpl.get("minecraft:green_stained_glass");
+    Block GREEN_STAINED_GLASS = BlockImpl.get("green_stained_glass");
 
-    Block RED_STAINED_GLASS = BlockImpl.get("minecraft:red_stained_glass");
+    Block RED_STAINED_GLASS = BlockImpl.get("red_stained_glass");
 
-    Block BLACK_STAINED_GLASS = BlockImpl.get("minecraft:black_stained_glass");
+    Block BLACK_STAINED_GLASS = BlockImpl.get("black_stained_glass");
 
-    Block OAK_TRAPDOOR = BlockImpl.get("minecraft:oak_trapdoor");
+    Block OAK_TRAPDOOR = BlockImpl.get("oak_trapdoor");
 
-    Block SPRUCE_TRAPDOOR = BlockImpl.get("minecraft:spruce_trapdoor");
+    Block SPRUCE_TRAPDOOR = BlockImpl.get("spruce_trapdoor");
 
-    Block BIRCH_TRAPDOOR = BlockImpl.get("minecraft:birch_trapdoor");
+    Block BIRCH_TRAPDOOR = BlockImpl.get("birch_trapdoor");
 
-    Block JUNGLE_TRAPDOOR = BlockImpl.get("minecraft:jungle_trapdoor");
+    Block JUNGLE_TRAPDOOR = BlockImpl.get("jungle_trapdoor");
 
-    Block ACACIA_TRAPDOOR = BlockImpl.get("minecraft:acacia_trapdoor");
+    Block ACACIA_TRAPDOOR = BlockImpl.get("acacia_trapdoor");
 
-    Block CHERRY_TRAPDOOR = BlockImpl.get("minecraft:cherry_trapdoor");
+    Block CHERRY_TRAPDOOR = BlockImpl.get("cherry_trapdoor");
 
-    Block DARK_OAK_TRAPDOOR = BlockImpl.get("minecraft:dark_oak_trapdoor");
+    Block DARK_OAK_TRAPDOOR = BlockImpl.get("dark_oak_trapdoor");
 
-    Block PALE_OAK_TRAPDOOR = BlockImpl.get("minecraft:pale_oak_trapdoor");
+    Block PALE_OAK_TRAPDOOR = BlockImpl.get("pale_oak_trapdoor");
 
-    Block MANGROVE_TRAPDOOR = BlockImpl.get("minecraft:mangrove_trapdoor");
+    Block MANGROVE_TRAPDOOR = BlockImpl.get("mangrove_trapdoor");
 
-    Block BAMBOO_TRAPDOOR = BlockImpl.get("minecraft:bamboo_trapdoor");
+    Block BAMBOO_TRAPDOOR = BlockImpl.get("bamboo_trapdoor");
 
-    Block STONE_BRICKS = BlockImpl.get("minecraft:stone_bricks");
+    Block STONE_BRICKS = BlockImpl.get("stone_bricks");
 
-    Block MOSSY_STONE_BRICKS = BlockImpl.get("minecraft:mossy_stone_bricks");
+    Block MOSSY_STONE_BRICKS = BlockImpl.get("mossy_stone_bricks");
 
-    Block CRACKED_STONE_BRICKS = BlockImpl.get("minecraft:cracked_stone_bricks");
+    Block CRACKED_STONE_BRICKS = BlockImpl.get("cracked_stone_bricks");
 
-    Block CHISELED_STONE_BRICKS = BlockImpl.get("minecraft:chiseled_stone_bricks");
+    Block CHISELED_STONE_BRICKS = BlockImpl.get("chiseled_stone_bricks");
 
-    Block PACKED_MUD = BlockImpl.get("minecraft:packed_mud");
+    Block PACKED_MUD = BlockImpl.get("packed_mud");
 
-    Block MUD_BRICKS = BlockImpl.get("minecraft:mud_bricks");
+    Block MUD_BRICKS = BlockImpl.get("mud_bricks");
 
-    Block INFESTED_STONE = BlockImpl.get("minecraft:infested_stone");
+    Block INFESTED_STONE = BlockImpl.get("infested_stone");
 
-    Block INFESTED_COBBLESTONE = BlockImpl.get("minecraft:infested_cobblestone");
+    Block INFESTED_COBBLESTONE = BlockImpl.get("infested_cobblestone");
 
-    Block INFESTED_STONE_BRICKS = BlockImpl.get("minecraft:infested_stone_bricks");
+    Block INFESTED_STONE_BRICKS = BlockImpl.get("infested_stone_bricks");
 
-    Block INFESTED_MOSSY_STONE_BRICKS = BlockImpl.get("minecraft:infested_mossy_stone_bricks");
+    Block INFESTED_MOSSY_STONE_BRICKS = BlockImpl.get("infested_mossy_stone_bricks");
 
-    Block INFESTED_CRACKED_STONE_BRICKS = BlockImpl.get("minecraft:infested_cracked_stone_bricks");
+    Block INFESTED_CRACKED_STONE_BRICKS = BlockImpl.get("infested_cracked_stone_bricks");
 
-    Block INFESTED_CHISELED_STONE_BRICKS = BlockImpl.get("minecraft:infested_chiseled_stone_bricks");
+    Block INFESTED_CHISELED_STONE_BRICKS = BlockImpl.get("infested_chiseled_stone_bricks");
 
-    Block BROWN_MUSHROOM_BLOCK = BlockImpl.get("minecraft:brown_mushroom_block");
+    Block BROWN_MUSHROOM_BLOCK = BlockImpl.get("brown_mushroom_block");
 
-    Block RED_MUSHROOM_BLOCK = BlockImpl.get("minecraft:red_mushroom_block");
+    Block RED_MUSHROOM_BLOCK = BlockImpl.get("red_mushroom_block");
 
-    Block MUSHROOM_STEM = BlockImpl.get("minecraft:mushroom_stem");
+    Block MUSHROOM_STEM = BlockImpl.get("mushroom_stem");
 
-    Block IRON_BARS = BlockImpl.get("minecraft:iron_bars");
+    Block IRON_BARS = BlockImpl.get("iron_bars");
 
-    Block CHAIN = BlockImpl.get("minecraft:chain");
+    Block CHAIN = BlockImpl.get("chain");
 
-    Block GLASS_PANE = BlockImpl.get("minecraft:glass_pane");
+    Block GLASS_PANE = BlockImpl.get("glass_pane");
 
-    Block PUMPKIN = BlockImpl.get("minecraft:pumpkin");
+    Block PUMPKIN = BlockImpl.get("pumpkin");
 
-    Block MELON = BlockImpl.get("minecraft:melon");
+    Block MELON = BlockImpl.get("melon");
 
-    Block ATTACHED_PUMPKIN_STEM = BlockImpl.get("minecraft:attached_pumpkin_stem");
+    Block ATTACHED_PUMPKIN_STEM = BlockImpl.get("attached_pumpkin_stem");
 
-    Block ATTACHED_MELON_STEM = BlockImpl.get("minecraft:attached_melon_stem");
+    Block ATTACHED_MELON_STEM = BlockImpl.get("attached_melon_stem");
 
-    Block PUMPKIN_STEM = BlockImpl.get("minecraft:pumpkin_stem");
+    Block PUMPKIN_STEM = BlockImpl.get("pumpkin_stem");
 
-    Block MELON_STEM = BlockImpl.get("minecraft:melon_stem");
+    Block MELON_STEM = BlockImpl.get("melon_stem");
 
-    Block VINE = BlockImpl.get("minecraft:vine");
+    Block VINE = BlockImpl.get("vine");
 
-    Block GLOW_LICHEN = BlockImpl.get("minecraft:glow_lichen");
+    Block GLOW_LICHEN = BlockImpl.get("glow_lichen");
 
-    Block RESIN_CLUMP = BlockImpl.get("minecraft:resin_clump");
+    Block RESIN_CLUMP = BlockImpl.get("resin_clump");
 
-    Block OAK_FENCE_GATE = BlockImpl.get("minecraft:oak_fence_gate");
+    Block OAK_FENCE_GATE = BlockImpl.get("oak_fence_gate");
 
-    Block BRICK_STAIRS = BlockImpl.get("minecraft:brick_stairs");
+    Block BRICK_STAIRS = BlockImpl.get("brick_stairs");
 
-    Block STONE_BRICK_STAIRS = BlockImpl.get("minecraft:stone_brick_stairs");
+    Block STONE_BRICK_STAIRS = BlockImpl.get("stone_brick_stairs");
 
-    Block MUD_BRICK_STAIRS = BlockImpl.get("minecraft:mud_brick_stairs");
+    Block MUD_BRICK_STAIRS = BlockImpl.get("mud_brick_stairs");
 
-    Block MYCELIUM = BlockImpl.get("minecraft:mycelium");
+    Block MYCELIUM = BlockImpl.get("mycelium");
 
-    Block LILY_PAD = BlockImpl.get("minecraft:lily_pad");
+    Block LILY_PAD = BlockImpl.get("lily_pad");
 
-    Block RESIN_BLOCK = BlockImpl.get("minecraft:resin_block");
+    Block RESIN_BLOCK = BlockImpl.get("resin_block");
 
-    Block RESIN_BRICKS = BlockImpl.get("minecraft:resin_bricks");
+    Block RESIN_BRICKS = BlockImpl.get("resin_bricks");
 
-    Block RESIN_BRICK_STAIRS = BlockImpl.get("minecraft:resin_brick_stairs");
+    Block RESIN_BRICK_STAIRS = BlockImpl.get("resin_brick_stairs");
 
-    Block RESIN_BRICK_SLAB = BlockImpl.get("minecraft:resin_brick_slab");
+    Block RESIN_BRICK_SLAB = BlockImpl.get("resin_brick_slab");
 
-    Block RESIN_BRICK_WALL = BlockImpl.get("minecraft:resin_brick_wall");
+    Block RESIN_BRICK_WALL = BlockImpl.get("resin_brick_wall");
 
-    Block CHISELED_RESIN_BRICKS = BlockImpl.get("minecraft:chiseled_resin_bricks");
+    Block CHISELED_RESIN_BRICKS = BlockImpl.get("chiseled_resin_bricks");
 
-    Block NETHER_BRICKS = BlockImpl.get("minecraft:nether_bricks");
+    Block NETHER_BRICKS = BlockImpl.get("nether_bricks");
 
-    Block NETHER_BRICK_FENCE = BlockImpl.get("minecraft:nether_brick_fence");
+    Block NETHER_BRICK_FENCE = BlockImpl.get("nether_brick_fence");
 
-    Block NETHER_BRICK_STAIRS = BlockImpl.get("minecraft:nether_brick_stairs");
+    Block NETHER_BRICK_STAIRS = BlockImpl.get("nether_brick_stairs");
 
-    Block NETHER_WART = BlockImpl.get("minecraft:nether_wart");
+    Block NETHER_WART = BlockImpl.get("nether_wart");
 
-    Block ENCHANTING_TABLE = BlockImpl.get("minecraft:enchanting_table");
+    Block ENCHANTING_TABLE = BlockImpl.get("enchanting_table");
 
-    Block BREWING_STAND = BlockImpl.get("minecraft:brewing_stand");
+    Block BREWING_STAND = BlockImpl.get("brewing_stand");
 
-    Block CAULDRON = BlockImpl.get("minecraft:cauldron");
+    Block CAULDRON = BlockImpl.get("cauldron");
 
-    Block WATER_CAULDRON = BlockImpl.get("minecraft:water_cauldron");
+    Block WATER_CAULDRON = BlockImpl.get("water_cauldron");
 
-    Block LAVA_CAULDRON = BlockImpl.get("minecraft:lava_cauldron");
+    Block LAVA_CAULDRON = BlockImpl.get("lava_cauldron");
 
-    Block POWDER_SNOW_CAULDRON = BlockImpl.get("minecraft:powder_snow_cauldron");
+    Block POWDER_SNOW_CAULDRON = BlockImpl.get("powder_snow_cauldron");
 
-    Block END_PORTAL = BlockImpl.get("minecraft:end_portal");
+    Block END_PORTAL = BlockImpl.get("end_portal");
 
-    Block END_PORTAL_FRAME = BlockImpl.get("minecraft:end_portal_frame");
+    Block END_PORTAL_FRAME = BlockImpl.get("end_portal_frame");
 
-    Block END_STONE = BlockImpl.get("minecraft:end_stone");
+    Block END_STONE = BlockImpl.get("end_stone");
 
-    Block DRAGON_EGG = BlockImpl.get("minecraft:dragon_egg");
+    Block DRAGON_EGG = BlockImpl.get("dragon_egg");
 
-    Block REDSTONE_LAMP = BlockImpl.get("minecraft:redstone_lamp");
+    Block REDSTONE_LAMP = BlockImpl.get("redstone_lamp");
 
-    Block COCOA = BlockImpl.get("minecraft:cocoa");
+    Block COCOA = BlockImpl.get("cocoa");
 
-    Block SANDSTONE_STAIRS = BlockImpl.get("minecraft:sandstone_stairs");
+    Block SANDSTONE_STAIRS = BlockImpl.get("sandstone_stairs");
 
-    Block EMERALD_ORE = BlockImpl.get("minecraft:emerald_ore");
+    Block EMERALD_ORE = BlockImpl.get("emerald_ore");
 
-    Block DEEPSLATE_EMERALD_ORE = BlockImpl.get("minecraft:deepslate_emerald_ore");
+    Block DEEPSLATE_EMERALD_ORE = BlockImpl.get("deepslate_emerald_ore");
 
-    Block ENDER_CHEST = BlockImpl.get("minecraft:ender_chest");
+    Block ENDER_CHEST = BlockImpl.get("ender_chest");
 
-    Block TRIPWIRE_HOOK = BlockImpl.get("minecraft:tripwire_hook");
+    Block TRIPWIRE_HOOK = BlockImpl.get("tripwire_hook");
 
-    Block TRIPWIRE = BlockImpl.get("minecraft:tripwire");
+    Block TRIPWIRE = BlockImpl.get("tripwire");
 
-    Block EMERALD_BLOCK = BlockImpl.get("minecraft:emerald_block");
+    Block EMERALD_BLOCK = BlockImpl.get("emerald_block");
 
-    Block SPRUCE_STAIRS = BlockImpl.get("minecraft:spruce_stairs");
+    Block SPRUCE_STAIRS = BlockImpl.get("spruce_stairs");
 
-    Block BIRCH_STAIRS = BlockImpl.get("minecraft:birch_stairs");
+    Block BIRCH_STAIRS = BlockImpl.get("birch_stairs");
 
-    Block JUNGLE_STAIRS = BlockImpl.get("minecraft:jungle_stairs");
+    Block JUNGLE_STAIRS = BlockImpl.get("jungle_stairs");
 
-    Block COMMAND_BLOCK = BlockImpl.get("minecraft:command_block");
+    Block COMMAND_BLOCK = BlockImpl.get("command_block");
 
-    Block BEACON = BlockImpl.get("minecraft:beacon");
+    Block BEACON = BlockImpl.get("beacon");
 
-    Block COBBLESTONE_WALL = BlockImpl.get("minecraft:cobblestone_wall");
+    Block COBBLESTONE_WALL = BlockImpl.get("cobblestone_wall");
 
-    Block MOSSY_COBBLESTONE_WALL = BlockImpl.get("minecraft:mossy_cobblestone_wall");
+    Block MOSSY_COBBLESTONE_WALL = BlockImpl.get("mossy_cobblestone_wall");
 
-    Block FLOWER_POT = BlockImpl.get("minecraft:flower_pot");
+    Block FLOWER_POT = BlockImpl.get("flower_pot");
 
-    Block POTTED_TORCHFLOWER = BlockImpl.get("minecraft:potted_torchflower");
+    Block POTTED_TORCHFLOWER = BlockImpl.get("potted_torchflower");
 
-    Block POTTED_OAK_SAPLING = BlockImpl.get("minecraft:potted_oak_sapling");
+    Block POTTED_OAK_SAPLING = BlockImpl.get("potted_oak_sapling");
 
-    Block POTTED_SPRUCE_SAPLING = BlockImpl.get("minecraft:potted_spruce_sapling");
+    Block POTTED_SPRUCE_SAPLING = BlockImpl.get("potted_spruce_sapling");
 
-    Block POTTED_BIRCH_SAPLING = BlockImpl.get("minecraft:potted_birch_sapling");
+    Block POTTED_BIRCH_SAPLING = BlockImpl.get("potted_birch_sapling");
 
-    Block POTTED_JUNGLE_SAPLING = BlockImpl.get("minecraft:potted_jungle_sapling");
+    Block POTTED_JUNGLE_SAPLING = BlockImpl.get("potted_jungle_sapling");
 
-    Block POTTED_ACACIA_SAPLING = BlockImpl.get("minecraft:potted_acacia_sapling");
+    Block POTTED_ACACIA_SAPLING = BlockImpl.get("potted_acacia_sapling");
 
-    Block POTTED_CHERRY_SAPLING = BlockImpl.get("minecraft:potted_cherry_sapling");
+    Block POTTED_CHERRY_SAPLING = BlockImpl.get("potted_cherry_sapling");
 
-    Block POTTED_DARK_OAK_SAPLING = BlockImpl.get("minecraft:potted_dark_oak_sapling");
+    Block POTTED_DARK_OAK_SAPLING = BlockImpl.get("potted_dark_oak_sapling");
 
-    Block POTTED_PALE_OAK_SAPLING = BlockImpl.get("minecraft:potted_pale_oak_sapling");
+    Block POTTED_PALE_OAK_SAPLING = BlockImpl.get("potted_pale_oak_sapling");
 
-    Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get("minecraft:potted_mangrove_propagule");
+    Block POTTED_MANGROVE_PROPAGULE = BlockImpl.get("potted_mangrove_propagule");
 
-    Block POTTED_FERN = BlockImpl.get("minecraft:potted_fern");
+    Block POTTED_FERN = BlockImpl.get("potted_fern");
 
-    Block POTTED_DANDELION = BlockImpl.get("minecraft:potted_dandelion");
+    Block POTTED_DANDELION = BlockImpl.get("potted_dandelion");
 
-    Block POTTED_POPPY = BlockImpl.get("minecraft:potted_poppy");
+    Block POTTED_POPPY = BlockImpl.get("potted_poppy");
 
-    Block POTTED_BLUE_ORCHID = BlockImpl.get("minecraft:potted_blue_orchid");
+    Block POTTED_BLUE_ORCHID = BlockImpl.get("potted_blue_orchid");
 
-    Block POTTED_ALLIUM = BlockImpl.get("minecraft:potted_allium");
+    Block POTTED_ALLIUM = BlockImpl.get("potted_allium");
 
-    Block POTTED_AZURE_BLUET = BlockImpl.get("minecraft:potted_azure_bluet");
+    Block POTTED_AZURE_BLUET = BlockImpl.get("potted_azure_bluet");
 
-    Block POTTED_RED_TULIP = BlockImpl.get("minecraft:potted_red_tulip");
+    Block POTTED_RED_TULIP = BlockImpl.get("potted_red_tulip");
 
-    Block POTTED_ORANGE_TULIP = BlockImpl.get("minecraft:potted_orange_tulip");
+    Block POTTED_ORANGE_TULIP = BlockImpl.get("potted_orange_tulip");
 
-    Block POTTED_WHITE_TULIP = BlockImpl.get("minecraft:potted_white_tulip");
+    Block POTTED_WHITE_TULIP = BlockImpl.get("potted_white_tulip");
 
-    Block POTTED_PINK_TULIP = BlockImpl.get("minecraft:potted_pink_tulip");
+    Block POTTED_PINK_TULIP = BlockImpl.get("potted_pink_tulip");
 
-    Block POTTED_OXEYE_DAISY = BlockImpl.get("minecraft:potted_oxeye_daisy");
+    Block POTTED_OXEYE_DAISY = BlockImpl.get("potted_oxeye_daisy");
 
-    Block POTTED_CORNFLOWER = BlockImpl.get("minecraft:potted_cornflower");
+    Block POTTED_CORNFLOWER = BlockImpl.get("potted_cornflower");
 
-    Block POTTED_LILY_OF_THE_VALLEY = BlockImpl.get("minecraft:potted_lily_of_the_valley");
+    Block POTTED_LILY_OF_THE_VALLEY = BlockImpl.get("potted_lily_of_the_valley");
 
-    Block POTTED_WITHER_ROSE = BlockImpl.get("minecraft:potted_wither_rose");
+    Block POTTED_WITHER_ROSE = BlockImpl.get("potted_wither_rose");
 
-    Block POTTED_RED_MUSHROOM = BlockImpl.get("minecraft:potted_red_mushroom");
+    Block POTTED_RED_MUSHROOM = BlockImpl.get("potted_red_mushroom");
 
-    Block POTTED_BROWN_MUSHROOM = BlockImpl.get("minecraft:potted_brown_mushroom");
+    Block POTTED_BROWN_MUSHROOM = BlockImpl.get("potted_brown_mushroom");
 
-    Block POTTED_DEAD_BUSH = BlockImpl.get("minecraft:potted_dead_bush");
+    Block POTTED_DEAD_BUSH = BlockImpl.get("potted_dead_bush");
 
-    Block POTTED_CACTUS = BlockImpl.get("minecraft:potted_cactus");
+    Block POTTED_CACTUS = BlockImpl.get("potted_cactus");
 
-    Block CARROTS = BlockImpl.get("minecraft:carrots");
+    Block CARROTS = BlockImpl.get("carrots");
 
-    Block POTATOES = BlockImpl.get("minecraft:potatoes");
+    Block POTATOES = BlockImpl.get("potatoes");
 
-    Block OAK_BUTTON = BlockImpl.get("minecraft:oak_button");
+    Block OAK_BUTTON = BlockImpl.get("oak_button");
 
-    Block SPRUCE_BUTTON = BlockImpl.get("minecraft:spruce_button");
+    Block SPRUCE_BUTTON = BlockImpl.get("spruce_button");
 
-    Block BIRCH_BUTTON = BlockImpl.get("minecraft:birch_button");
+    Block BIRCH_BUTTON = BlockImpl.get("birch_button");
 
-    Block JUNGLE_BUTTON = BlockImpl.get("minecraft:jungle_button");
+    Block JUNGLE_BUTTON = BlockImpl.get("jungle_button");
 
-    Block ACACIA_BUTTON = BlockImpl.get("minecraft:acacia_button");
+    Block ACACIA_BUTTON = BlockImpl.get("acacia_button");
 
-    Block CHERRY_BUTTON = BlockImpl.get("minecraft:cherry_button");
+    Block CHERRY_BUTTON = BlockImpl.get("cherry_button");
 
-    Block DARK_OAK_BUTTON = BlockImpl.get("minecraft:dark_oak_button");
+    Block DARK_OAK_BUTTON = BlockImpl.get("dark_oak_button");
 
-    Block PALE_OAK_BUTTON = BlockImpl.get("minecraft:pale_oak_button");
+    Block PALE_OAK_BUTTON = BlockImpl.get("pale_oak_button");
 
-    Block MANGROVE_BUTTON = BlockImpl.get("minecraft:mangrove_button");
+    Block MANGROVE_BUTTON = BlockImpl.get("mangrove_button");
 
-    Block BAMBOO_BUTTON = BlockImpl.get("minecraft:bamboo_button");
+    Block BAMBOO_BUTTON = BlockImpl.get("bamboo_button");
 
-    Block SKELETON_SKULL = BlockImpl.get("minecraft:skeleton_skull");
+    Block SKELETON_SKULL = BlockImpl.get("skeleton_skull");
 
-    Block SKELETON_WALL_SKULL = BlockImpl.get("minecraft:skeleton_wall_skull");
+    Block SKELETON_WALL_SKULL = BlockImpl.get("skeleton_wall_skull");
 
-    Block WITHER_SKELETON_SKULL = BlockImpl.get("minecraft:wither_skeleton_skull");
+    Block WITHER_SKELETON_SKULL = BlockImpl.get("wither_skeleton_skull");
 
-    Block WITHER_SKELETON_WALL_SKULL = BlockImpl.get("minecraft:wither_skeleton_wall_skull");
+    Block WITHER_SKELETON_WALL_SKULL = BlockImpl.get("wither_skeleton_wall_skull");
 
-    Block ZOMBIE_HEAD = BlockImpl.get("minecraft:zombie_head");
+    Block ZOMBIE_HEAD = BlockImpl.get("zombie_head");
 
-    Block ZOMBIE_WALL_HEAD = BlockImpl.get("minecraft:zombie_wall_head");
+    Block ZOMBIE_WALL_HEAD = BlockImpl.get("zombie_wall_head");
 
-    Block PLAYER_HEAD = BlockImpl.get("minecraft:player_head");
+    Block PLAYER_HEAD = BlockImpl.get("player_head");
 
-    Block PLAYER_WALL_HEAD = BlockImpl.get("minecraft:player_wall_head");
+    Block PLAYER_WALL_HEAD = BlockImpl.get("player_wall_head");
 
-    Block CREEPER_HEAD = BlockImpl.get("minecraft:creeper_head");
+    Block CREEPER_HEAD = BlockImpl.get("creeper_head");
 
-    Block CREEPER_WALL_HEAD = BlockImpl.get("minecraft:creeper_wall_head");
+    Block CREEPER_WALL_HEAD = BlockImpl.get("creeper_wall_head");
 
-    Block DRAGON_HEAD = BlockImpl.get("minecraft:dragon_head");
+    Block DRAGON_HEAD = BlockImpl.get("dragon_head");
 
-    Block DRAGON_WALL_HEAD = BlockImpl.get("minecraft:dragon_wall_head");
+    Block DRAGON_WALL_HEAD = BlockImpl.get("dragon_wall_head");
 
-    Block PIGLIN_HEAD = BlockImpl.get("minecraft:piglin_head");
+    Block PIGLIN_HEAD = BlockImpl.get("piglin_head");
 
-    Block PIGLIN_WALL_HEAD = BlockImpl.get("minecraft:piglin_wall_head");
+    Block PIGLIN_WALL_HEAD = BlockImpl.get("piglin_wall_head");
 
-    Block ANVIL = BlockImpl.get("minecraft:anvil");
+    Block ANVIL = BlockImpl.get("anvil");
 
-    Block CHIPPED_ANVIL = BlockImpl.get("minecraft:chipped_anvil");
+    Block CHIPPED_ANVIL = BlockImpl.get("chipped_anvil");
 
-    Block DAMAGED_ANVIL = BlockImpl.get("minecraft:damaged_anvil");
+    Block DAMAGED_ANVIL = BlockImpl.get("damaged_anvil");
 
-    Block TRAPPED_CHEST = BlockImpl.get("minecraft:trapped_chest");
+    Block TRAPPED_CHEST = BlockImpl.get("trapped_chest");
 
-    Block LIGHT_WEIGHTED_PRESSURE_PLATE = BlockImpl.get("minecraft:light_weighted_pressure_plate");
+    Block LIGHT_WEIGHTED_PRESSURE_PLATE = BlockImpl.get("light_weighted_pressure_plate");
 
-    Block HEAVY_WEIGHTED_PRESSURE_PLATE = BlockImpl.get("minecraft:heavy_weighted_pressure_plate");
+    Block HEAVY_WEIGHTED_PRESSURE_PLATE = BlockImpl.get("heavy_weighted_pressure_plate");
 
-    Block COMPARATOR = BlockImpl.get("minecraft:comparator");
+    Block COMPARATOR = BlockImpl.get("comparator");
 
-    Block DAYLIGHT_DETECTOR = BlockImpl.get("minecraft:daylight_detector");
+    Block DAYLIGHT_DETECTOR = BlockImpl.get("daylight_detector");
 
-    Block REDSTONE_BLOCK = BlockImpl.get("minecraft:redstone_block");
+    Block REDSTONE_BLOCK = BlockImpl.get("redstone_block");
 
-    Block NETHER_QUARTZ_ORE = BlockImpl.get("minecraft:nether_quartz_ore");
+    Block NETHER_QUARTZ_ORE = BlockImpl.get("nether_quartz_ore");
 
-    Block HOPPER = BlockImpl.get("minecraft:hopper");
+    Block HOPPER = BlockImpl.get("hopper");
 
-    Block QUARTZ_BLOCK = BlockImpl.get("minecraft:quartz_block");
+    Block QUARTZ_BLOCK = BlockImpl.get("quartz_block");
 
-    Block CHISELED_QUARTZ_BLOCK = BlockImpl.get("minecraft:chiseled_quartz_block");
+    Block CHISELED_QUARTZ_BLOCK = BlockImpl.get("chiseled_quartz_block");
 
-    Block QUARTZ_PILLAR = BlockImpl.get("minecraft:quartz_pillar");
+    Block QUARTZ_PILLAR = BlockImpl.get("quartz_pillar");
 
-    Block QUARTZ_STAIRS = BlockImpl.get("minecraft:quartz_stairs");
+    Block QUARTZ_STAIRS = BlockImpl.get("quartz_stairs");
 
-    Block ACTIVATOR_RAIL = BlockImpl.get("minecraft:activator_rail");
+    Block ACTIVATOR_RAIL = BlockImpl.get("activator_rail");
 
-    Block DROPPER = BlockImpl.get("minecraft:dropper");
+    Block DROPPER = BlockImpl.get("dropper");
 
-    Block WHITE_TERRACOTTA = BlockImpl.get("minecraft:white_terracotta");
+    Block WHITE_TERRACOTTA = BlockImpl.get("white_terracotta");
 
-    Block ORANGE_TERRACOTTA = BlockImpl.get("minecraft:orange_terracotta");
+    Block ORANGE_TERRACOTTA = BlockImpl.get("orange_terracotta");
 
-    Block MAGENTA_TERRACOTTA = BlockImpl.get("minecraft:magenta_terracotta");
+    Block MAGENTA_TERRACOTTA = BlockImpl.get("magenta_terracotta");
 
-    Block LIGHT_BLUE_TERRACOTTA = BlockImpl.get("minecraft:light_blue_terracotta");
+    Block LIGHT_BLUE_TERRACOTTA = BlockImpl.get("light_blue_terracotta");
 
-    Block YELLOW_TERRACOTTA = BlockImpl.get("minecraft:yellow_terracotta");
+    Block YELLOW_TERRACOTTA = BlockImpl.get("yellow_terracotta");
 
-    Block LIME_TERRACOTTA = BlockImpl.get("minecraft:lime_terracotta");
+    Block LIME_TERRACOTTA = BlockImpl.get("lime_terracotta");
 
-    Block PINK_TERRACOTTA = BlockImpl.get("minecraft:pink_terracotta");
+    Block PINK_TERRACOTTA = BlockImpl.get("pink_terracotta");
 
-    Block GRAY_TERRACOTTA = BlockImpl.get("minecraft:gray_terracotta");
+    Block GRAY_TERRACOTTA = BlockImpl.get("gray_terracotta");
 
-    Block LIGHT_GRAY_TERRACOTTA = BlockImpl.get("minecraft:light_gray_terracotta");
+    Block LIGHT_GRAY_TERRACOTTA = BlockImpl.get("light_gray_terracotta");
 
-    Block CYAN_TERRACOTTA = BlockImpl.get("minecraft:cyan_terracotta");
+    Block CYAN_TERRACOTTA = BlockImpl.get("cyan_terracotta");
 
-    Block PURPLE_TERRACOTTA = BlockImpl.get("minecraft:purple_terracotta");
+    Block PURPLE_TERRACOTTA = BlockImpl.get("purple_terracotta");
 
-    Block BLUE_TERRACOTTA = BlockImpl.get("minecraft:blue_terracotta");
+    Block BLUE_TERRACOTTA = BlockImpl.get("blue_terracotta");
 
-    Block BROWN_TERRACOTTA = BlockImpl.get("minecraft:brown_terracotta");
+    Block BROWN_TERRACOTTA = BlockImpl.get("brown_terracotta");
 
-    Block GREEN_TERRACOTTA = BlockImpl.get("minecraft:green_terracotta");
+    Block GREEN_TERRACOTTA = BlockImpl.get("green_terracotta");
 
-    Block RED_TERRACOTTA = BlockImpl.get("minecraft:red_terracotta");
+    Block RED_TERRACOTTA = BlockImpl.get("red_terracotta");
 
-    Block BLACK_TERRACOTTA = BlockImpl.get("minecraft:black_terracotta");
+    Block BLACK_TERRACOTTA = BlockImpl.get("black_terracotta");
 
-    Block WHITE_STAINED_GLASS_PANE = BlockImpl.get("minecraft:white_stained_glass_pane");
+    Block WHITE_STAINED_GLASS_PANE = BlockImpl.get("white_stained_glass_pane");
 
-    Block ORANGE_STAINED_GLASS_PANE = BlockImpl.get("minecraft:orange_stained_glass_pane");
+    Block ORANGE_STAINED_GLASS_PANE = BlockImpl.get("orange_stained_glass_pane");
 
-    Block MAGENTA_STAINED_GLASS_PANE = BlockImpl.get("minecraft:magenta_stained_glass_pane");
+    Block MAGENTA_STAINED_GLASS_PANE = BlockImpl.get("magenta_stained_glass_pane");
 
-    Block LIGHT_BLUE_STAINED_GLASS_PANE = BlockImpl.get("minecraft:light_blue_stained_glass_pane");
+    Block LIGHT_BLUE_STAINED_GLASS_PANE = BlockImpl.get("light_blue_stained_glass_pane");
 
-    Block YELLOW_STAINED_GLASS_PANE = BlockImpl.get("minecraft:yellow_stained_glass_pane");
+    Block YELLOW_STAINED_GLASS_PANE = BlockImpl.get("yellow_stained_glass_pane");
 
-    Block LIME_STAINED_GLASS_PANE = BlockImpl.get("minecraft:lime_stained_glass_pane");
+    Block LIME_STAINED_GLASS_PANE = BlockImpl.get("lime_stained_glass_pane");
 
-    Block PINK_STAINED_GLASS_PANE = BlockImpl.get("minecraft:pink_stained_glass_pane");
+    Block PINK_STAINED_GLASS_PANE = BlockImpl.get("pink_stained_glass_pane");
 
-    Block GRAY_STAINED_GLASS_PANE = BlockImpl.get("minecraft:gray_stained_glass_pane");
+    Block GRAY_STAINED_GLASS_PANE = BlockImpl.get("gray_stained_glass_pane");
 
-    Block LIGHT_GRAY_STAINED_GLASS_PANE = BlockImpl.get("minecraft:light_gray_stained_glass_pane");
+    Block LIGHT_GRAY_STAINED_GLASS_PANE = BlockImpl.get("light_gray_stained_glass_pane");
 
-    Block CYAN_STAINED_GLASS_PANE = BlockImpl.get("minecraft:cyan_stained_glass_pane");
+    Block CYAN_STAINED_GLASS_PANE = BlockImpl.get("cyan_stained_glass_pane");
 
-    Block PURPLE_STAINED_GLASS_PANE = BlockImpl.get("minecraft:purple_stained_glass_pane");
+    Block PURPLE_STAINED_GLASS_PANE = BlockImpl.get("purple_stained_glass_pane");
 
-    Block BLUE_STAINED_GLASS_PANE = BlockImpl.get("minecraft:blue_stained_glass_pane");
+    Block BLUE_STAINED_GLASS_PANE = BlockImpl.get("blue_stained_glass_pane");
 
-    Block BROWN_STAINED_GLASS_PANE = BlockImpl.get("minecraft:brown_stained_glass_pane");
+    Block BROWN_STAINED_GLASS_PANE = BlockImpl.get("brown_stained_glass_pane");
 
-    Block GREEN_STAINED_GLASS_PANE = BlockImpl.get("minecraft:green_stained_glass_pane");
+    Block GREEN_STAINED_GLASS_PANE = BlockImpl.get("green_stained_glass_pane");
 
-    Block RED_STAINED_GLASS_PANE = BlockImpl.get("minecraft:red_stained_glass_pane");
+    Block RED_STAINED_GLASS_PANE = BlockImpl.get("red_stained_glass_pane");
 
-    Block BLACK_STAINED_GLASS_PANE = BlockImpl.get("minecraft:black_stained_glass_pane");
+    Block BLACK_STAINED_GLASS_PANE = BlockImpl.get("black_stained_glass_pane");
 
-    Block ACACIA_STAIRS = BlockImpl.get("minecraft:acacia_stairs");
+    Block ACACIA_STAIRS = BlockImpl.get("acacia_stairs");
 
-    Block CHERRY_STAIRS = BlockImpl.get("minecraft:cherry_stairs");
+    Block CHERRY_STAIRS = BlockImpl.get("cherry_stairs");
 
-    Block DARK_OAK_STAIRS = BlockImpl.get("minecraft:dark_oak_stairs");
+    Block DARK_OAK_STAIRS = BlockImpl.get("dark_oak_stairs");
 
-    Block PALE_OAK_STAIRS = BlockImpl.get("minecraft:pale_oak_stairs");
+    Block PALE_OAK_STAIRS = BlockImpl.get("pale_oak_stairs");
 
-    Block MANGROVE_STAIRS = BlockImpl.get("minecraft:mangrove_stairs");
+    Block MANGROVE_STAIRS = BlockImpl.get("mangrove_stairs");
 
-    Block BAMBOO_STAIRS = BlockImpl.get("minecraft:bamboo_stairs");
+    Block BAMBOO_STAIRS = BlockImpl.get("bamboo_stairs");
 
-    Block BAMBOO_MOSAIC_STAIRS = BlockImpl.get("minecraft:bamboo_mosaic_stairs");
+    Block BAMBOO_MOSAIC_STAIRS = BlockImpl.get("bamboo_mosaic_stairs");
 
-    Block SLIME_BLOCK = BlockImpl.get("minecraft:slime_block");
+    Block SLIME_BLOCK = BlockImpl.get("slime_block");
 
-    Block BARRIER = BlockImpl.get("minecraft:barrier");
+    Block BARRIER = BlockImpl.get("barrier");
 
-    Block LIGHT = BlockImpl.get("minecraft:light");
+    Block LIGHT = BlockImpl.get("light");
 
-    Block IRON_TRAPDOOR = BlockImpl.get("minecraft:iron_trapdoor");
+    Block IRON_TRAPDOOR = BlockImpl.get("iron_trapdoor");
 
-    Block PRISMARINE = BlockImpl.get("minecraft:prismarine");
+    Block PRISMARINE = BlockImpl.get("prismarine");
 
-    Block PRISMARINE_BRICKS = BlockImpl.get("minecraft:prismarine_bricks");
+    Block PRISMARINE_BRICKS = BlockImpl.get("prismarine_bricks");
 
-    Block DARK_PRISMARINE = BlockImpl.get("minecraft:dark_prismarine");
+    Block DARK_PRISMARINE = BlockImpl.get("dark_prismarine");
 
-    Block PRISMARINE_STAIRS = BlockImpl.get("minecraft:prismarine_stairs");
+    Block PRISMARINE_STAIRS = BlockImpl.get("prismarine_stairs");
 
-    Block PRISMARINE_BRICK_STAIRS = BlockImpl.get("minecraft:prismarine_brick_stairs");
+    Block PRISMARINE_BRICK_STAIRS = BlockImpl.get("prismarine_brick_stairs");
 
-    Block DARK_PRISMARINE_STAIRS = BlockImpl.get("minecraft:dark_prismarine_stairs");
+    Block DARK_PRISMARINE_STAIRS = BlockImpl.get("dark_prismarine_stairs");
 
-    Block PRISMARINE_SLAB = BlockImpl.get("minecraft:prismarine_slab");
+    Block PRISMARINE_SLAB = BlockImpl.get("prismarine_slab");
 
-    Block PRISMARINE_BRICK_SLAB = BlockImpl.get("minecraft:prismarine_brick_slab");
+    Block PRISMARINE_BRICK_SLAB = BlockImpl.get("prismarine_brick_slab");
 
-    Block DARK_PRISMARINE_SLAB = BlockImpl.get("minecraft:dark_prismarine_slab");
+    Block DARK_PRISMARINE_SLAB = BlockImpl.get("dark_prismarine_slab");
 
-    Block SEA_LANTERN = BlockImpl.get("minecraft:sea_lantern");
+    Block SEA_LANTERN = BlockImpl.get("sea_lantern");
 
-    Block HAY_BLOCK = BlockImpl.get("minecraft:hay_block");
+    Block HAY_BLOCK = BlockImpl.get("hay_block");
 
-    Block WHITE_CARPET = BlockImpl.get("minecraft:white_carpet");
+    Block WHITE_CARPET = BlockImpl.get("white_carpet");
 
-    Block ORANGE_CARPET = BlockImpl.get("minecraft:orange_carpet");
+    Block ORANGE_CARPET = BlockImpl.get("orange_carpet");
 
-    Block MAGENTA_CARPET = BlockImpl.get("minecraft:magenta_carpet");
+    Block MAGENTA_CARPET = BlockImpl.get("magenta_carpet");
 
-    Block LIGHT_BLUE_CARPET = BlockImpl.get("minecraft:light_blue_carpet");
+    Block LIGHT_BLUE_CARPET = BlockImpl.get("light_blue_carpet");
 
-    Block YELLOW_CARPET = BlockImpl.get("minecraft:yellow_carpet");
+    Block YELLOW_CARPET = BlockImpl.get("yellow_carpet");
 
-    Block LIME_CARPET = BlockImpl.get("minecraft:lime_carpet");
+    Block LIME_CARPET = BlockImpl.get("lime_carpet");
 
-    Block PINK_CARPET = BlockImpl.get("minecraft:pink_carpet");
+    Block PINK_CARPET = BlockImpl.get("pink_carpet");
 
-    Block GRAY_CARPET = BlockImpl.get("minecraft:gray_carpet");
+    Block GRAY_CARPET = BlockImpl.get("gray_carpet");
 
-    Block LIGHT_GRAY_CARPET = BlockImpl.get("minecraft:light_gray_carpet");
+    Block LIGHT_GRAY_CARPET = BlockImpl.get("light_gray_carpet");
 
-    Block CYAN_CARPET = BlockImpl.get("minecraft:cyan_carpet");
+    Block CYAN_CARPET = BlockImpl.get("cyan_carpet");
 
-    Block PURPLE_CARPET = BlockImpl.get("minecraft:purple_carpet");
+    Block PURPLE_CARPET = BlockImpl.get("purple_carpet");
 
-    Block BLUE_CARPET = BlockImpl.get("minecraft:blue_carpet");
+    Block BLUE_CARPET = BlockImpl.get("blue_carpet");
 
-    Block BROWN_CARPET = BlockImpl.get("minecraft:brown_carpet");
+    Block BROWN_CARPET = BlockImpl.get("brown_carpet");
 
-    Block GREEN_CARPET = BlockImpl.get("minecraft:green_carpet");
+    Block GREEN_CARPET = BlockImpl.get("green_carpet");
 
-    Block RED_CARPET = BlockImpl.get("minecraft:red_carpet");
+    Block RED_CARPET = BlockImpl.get("red_carpet");
 
-    Block BLACK_CARPET = BlockImpl.get("minecraft:black_carpet");
+    Block BLACK_CARPET = BlockImpl.get("black_carpet");
 
-    Block TERRACOTTA = BlockImpl.get("minecraft:terracotta");
+    Block TERRACOTTA = BlockImpl.get("terracotta");
 
-    Block COAL_BLOCK = BlockImpl.get("minecraft:coal_block");
+    Block COAL_BLOCK = BlockImpl.get("coal_block");
 
-    Block PACKED_ICE = BlockImpl.get("minecraft:packed_ice");
+    Block PACKED_ICE = BlockImpl.get("packed_ice");
 
-    Block SUNFLOWER = BlockImpl.get("minecraft:sunflower");
+    Block SUNFLOWER = BlockImpl.get("sunflower");
 
-    Block LILAC = BlockImpl.get("minecraft:lilac");
+    Block LILAC = BlockImpl.get("lilac");
 
-    Block ROSE_BUSH = BlockImpl.get("minecraft:rose_bush");
+    Block ROSE_BUSH = BlockImpl.get("rose_bush");
 
-    Block PEONY = BlockImpl.get("minecraft:peony");
+    Block PEONY = BlockImpl.get("peony");
 
-    Block TALL_GRASS = BlockImpl.get("minecraft:tall_grass");
+    Block TALL_GRASS = BlockImpl.get("tall_grass");
 
-    Block LARGE_FERN = BlockImpl.get("minecraft:large_fern");
+    Block LARGE_FERN = BlockImpl.get("large_fern");
 
-    Block WHITE_BANNER = BlockImpl.get("minecraft:white_banner");
+    Block WHITE_BANNER = BlockImpl.get("white_banner");
 
-    Block ORANGE_BANNER = BlockImpl.get("minecraft:orange_banner");
+    Block ORANGE_BANNER = BlockImpl.get("orange_banner");
 
-    Block MAGENTA_BANNER = BlockImpl.get("minecraft:magenta_banner");
+    Block MAGENTA_BANNER = BlockImpl.get("magenta_banner");
 
-    Block LIGHT_BLUE_BANNER = BlockImpl.get("minecraft:light_blue_banner");
+    Block LIGHT_BLUE_BANNER = BlockImpl.get("light_blue_banner");
 
-    Block YELLOW_BANNER = BlockImpl.get("minecraft:yellow_banner");
+    Block YELLOW_BANNER = BlockImpl.get("yellow_banner");
 
-    Block LIME_BANNER = BlockImpl.get("minecraft:lime_banner");
+    Block LIME_BANNER = BlockImpl.get("lime_banner");
 
-    Block PINK_BANNER = BlockImpl.get("minecraft:pink_banner");
+    Block PINK_BANNER = BlockImpl.get("pink_banner");
 
-    Block GRAY_BANNER = BlockImpl.get("minecraft:gray_banner");
+    Block GRAY_BANNER = BlockImpl.get("gray_banner");
 
-    Block LIGHT_GRAY_BANNER = BlockImpl.get("minecraft:light_gray_banner");
+    Block LIGHT_GRAY_BANNER = BlockImpl.get("light_gray_banner");
 
-    Block CYAN_BANNER = BlockImpl.get("minecraft:cyan_banner");
+    Block CYAN_BANNER = BlockImpl.get("cyan_banner");
 
-    Block PURPLE_BANNER = BlockImpl.get("minecraft:purple_banner");
+    Block PURPLE_BANNER = BlockImpl.get("purple_banner");
 
-    Block BLUE_BANNER = BlockImpl.get("minecraft:blue_banner");
+    Block BLUE_BANNER = BlockImpl.get("blue_banner");
 
-    Block BROWN_BANNER = BlockImpl.get("minecraft:brown_banner");
+    Block BROWN_BANNER = BlockImpl.get("brown_banner");
 
-    Block GREEN_BANNER = BlockImpl.get("minecraft:green_banner");
+    Block GREEN_BANNER = BlockImpl.get("green_banner");
 
-    Block RED_BANNER = BlockImpl.get("minecraft:red_banner");
+    Block RED_BANNER = BlockImpl.get("red_banner");
 
-    Block BLACK_BANNER = BlockImpl.get("minecraft:black_banner");
+    Block BLACK_BANNER = BlockImpl.get("black_banner");
 
-    Block WHITE_WALL_BANNER = BlockImpl.get("minecraft:white_wall_banner");
+    Block WHITE_WALL_BANNER = BlockImpl.get("white_wall_banner");
 
-    Block ORANGE_WALL_BANNER = BlockImpl.get("minecraft:orange_wall_banner");
+    Block ORANGE_WALL_BANNER = BlockImpl.get("orange_wall_banner");
 
-    Block MAGENTA_WALL_BANNER = BlockImpl.get("minecraft:magenta_wall_banner");
+    Block MAGENTA_WALL_BANNER = BlockImpl.get("magenta_wall_banner");
 
-    Block LIGHT_BLUE_WALL_BANNER = BlockImpl.get("minecraft:light_blue_wall_banner");
+    Block LIGHT_BLUE_WALL_BANNER = BlockImpl.get("light_blue_wall_banner");
 
-    Block YELLOW_WALL_BANNER = BlockImpl.get("minecraft:yellow_wall_banner");
+    Block YELLOW_WALL_BANNER = BlockImpl.get("yellow_wall_banner");
 
-    Block LIME_WALL_BANNER = BlockImpl.get("minecraft:lime_wall_banner");
+    Block LIME_WALL_BANNER = BlockImpl.get("lime_wall_banner");
 
-    Block PINK_WALL_BANNER = BlockImpl.get("minecraft:pink_wall_banner");
+    Block PINK_WALL_BANNER = BlockImpl.get("pink_wall_banner");
 
-    Block GRAY_WALL_BANNER = BlockImpl.get("minecraft:gray_wall_banner");
+    Block GRAY_WALL_BANNER = BlockImpl.get("gray_wall_banner");
 
-    Block LIGHT_GRAY_WALL_BANNER = BlockImpl.get("minecraft:light_gray_wall_banner");
+    Block LIGHT_GRAY_WALL_BANNER = BlockImpl.get("light_gray_wall_banner");
 
-    Block CYAN_WALL_BANNER = BlockImpl.get("minecraft:cyan_wall_banner");
+    Block CYAN_WALL_BANNER = BlockImpl.get("cyan_wall_banner");
 
-    Block PURPLE_WALL_BANNER = BlockImpl.get("minecraft:purple_wall_banner");
+    Block PURPLE_WALL_BANNER = BlockImpl.get("purple_wall_banner");
 
-    Block BLUE_WALL_BANNER = BlockImpl.get("minecraft:blue_wall_banner");
+    Block BLUE_WALL_BANNER = BlockImpl.get("blue_wall_banner");
 
-    Block BROWN_WALL_BANNER = BlockImpl.get("minecraft:brown_wall_banner");
+    Block BROWN_WALL_BANNER = BlockImpl.get("brown_wall_banner");
 
-    Block GREEN_WALL_BANNER = BlockImpl.get("minecraft:green_wall_banner");
+    Block GREEN_WALL_BANNER = BlockImpl.get("green_wall_banner");
 
-    Block RED_WALL_BANNER = BlockImpl.get("minecraft:red_wall_banner");
+    Block RED_WALL_BANNER = BlockImpl.get("red_wall_banner");
 
-    Block BLACK_WALL_BANNER = BlockImpl.get("minecraft:black_wall_banner");
+    Block BLACK_WALL_BANNER = BlockImpl.get("black_wall_banner");
 
-    Block RED_SANDSTONE = BlockImpl.get("minecraft:red_sandstone");
+    Block RED_SANDSTONE = BlockImpl.get("red_sandstone");
 
-    Block CHISELED_RED_SANDSTONE = BlockImpl.get("minecraft:chiseled_red_sandstone");
+    Block CHISELED_RED_SANDSTONE = BlockImpl.get("chiseled_red_sandstone");
 
-    Block CUT_RED_SANDSTONE = BlockImpl.get("minecraft:cut_red_sandstone");
+    Block CUT_RED_SANDSTONE = BlockImpl.get("cut_red_sandstone");
 
-    Block RED_SANDSTONE_STAIRS = BlockImpl.get("minecraft:red_sandstone_stairs");
+    Block RED_SANDSTONE_STAIRS = BlockImpl.get("red_sandstone_stairs");
 
-    Block OAK_SLAB = BlockImpl.get("minecraft:oak_slab");
+    Block OAK_SLAB = BlockImpl.get("oak_slab");
 
-    Block SPRUCE_SLAB = BlockImpl.get("minecraft:spruce_slab");
+    Block SPRUCE_SLAB = BlockImpl.get("spruce_slab");
 
-    Block BIRCH_SLAB = BlockImpl.get("minecraft:birch_slab");
+    Block BIRCH_SLAB = BlockImpl.get("birch_slab");
 
-    Block JUNGLE_SLAB = BlockImpl.get("minecraft:jungle_slab");
+    Block JUNGLE_SLAB = BlockImpl.get("jungle_slab");
 
-    Block ACACIA_SLAB = BlockImpl.get("minecraft:acacia_slab");
+    Block ACACIA_SLAB = BlockImpl.get("acacia_slab");
 
-    Block CHERRY_SLAB = BlockImpl.get("minecraft:cherry_slab");
+    Block CHERRY_SLAB = BlockImpl.get("cherry_slab");
 
-    Block DARK_OAK_SLAB = BlockImpl.get("minecraft:dark_oak_slab");
+    Block DARK_OAK_SLAB = BlockImpl.get("dark_oak_slab");
 
-    Block PALE_OAK_SLAB = BlockImpl.get("minecraft:pale_oak_slab");
+    Block PALE_OAK_SLAB = BlockImpl.get("pale_oak_slab");
 
-    Block MANGROVE_SLAB = BlockImpl.get("minecraft:mangrove_slab");
+    Block MANGROVE_SLAB = BlockImpl.get("mangrove_slab");
 
-    Block BAMBOO_SLAB = BlockImpl.get("minecraft:bamboo_slab");
+    Block BAMBOO_SLAB = BlockImpl.get("bamboo_slab");
 
-    Block BAMBOO_MOSAIC_SLAB = BlockImpl.get("minecraft:bamboo_mosaic_slab");
+    Block BAMBOO_MOSAIC_SLAB = BlockImpl.get("bamboo_mosaic_slab");
 
-    Block STONE_SLAB = BlockImpl.get("minecraft:stone_slab");
+    Block STONE_SLAB = BlockImpl.get("stone_slab");
 
-    Block SMOOTH_STONE_SLAB = BlockImpl.get("minecraft:smooth_stone_slab");
+    Block SMOOTH_STONE_SLAB = BlockImpl.get("smooth_stone_slab");
 
-    Block SANDSTONE_SLAB = BlockImpl.get("minecraft:sandstone_slab");
+    Block SANDSTONE_SLAB = BlockImpl.get("sandstone_slab");
 
-    Block CUT_SANDSTONE_SLAB = BlockImpl.get("minecraft:cut_sandstone_slab");
+    Block CUT_SANDSTONE_SLAB = BlockImpl.get("cut_sandstone_slab");
 
-    Block PETRIFIED_OAK_SLAB = BlockImpl.get("minecraft:petrified_oak_slab");
+    Block PETRIFIED_OAK_SLAB = BlockImpl.get("petrified_oak_slab");
 
-    Block COBBLESTONE_SLAB = BlockImpl.get("minecraft:cobblestone_slab");
+    Block COBBLESTONE_SLAB = BlockImpl.get("cobblestone_slab");
 
-    Block BRICK_SLAB = BlockImpl.get("minecraft:brick_slab");
+    Block BRICK_SLAB = BlockImpl.get("brick_slab");
 
-    Block STONE_BRICK_SLAB = BlockImpl.get("minecraft:stone_brick_slab");
+    Block STONE_BRICK_SLAB = BlockImpl.get("stone_brick_slab");
 
-    Block MUD_BRICK_SLAB = BlockImpl.get("minecraft:mud_brick_slab");
+    Block MUD_BRICK_SLAB = BlockImpl.get("mud_brick_slab");
 
-    Block NETHER_BRICK_SLAB = BlockImpl.get("minecraft:nether_brick_slab");
+    Block NETHER_BRICK_SLAB = BlockImpl.get("nether_brick_slab");
 
-    Block QUARTZ_SLAB = BlockImpl.get("minecraft:quartz_slab");
+    Block QUARTZ_SLAB = BlockImpl.get("quartz_slab");
 
-    Block RED_SANDSTONE_SLAB = BlockImpl.get("minecraft:red_sandstone_slab");
+    Block RED_SANDSTONE_SLAB = BlockImpl.get("red_sandstone_slab");
 
-    Block CUT_RED_SANDSTONE_SLAB = BlockImpl.get("minecraft:cut_red_sandstone_slab");
+    Block CUT_RED_SANDSTONE_SLAB = BlockImpl.get("cut_red_sandstone_slab");
 
-    Block PURPUR_SLAB = BlockImpl.get("minecraft:purpur_slab");
+    Block PURPUR_SLAB = BlockImpl.get("purpur_slab");
 
-    Block SMOOTH_STONE = BlockImpl.get("minecraft:smooth_stone");
+    Block SMOOTH_STONE = BlockImpl.get("smooth_stone");
 
-    Block SMOOTH_SANDSTONE = BlockImpl.get("minecraft:smooth_sandstone");
+    Block SMOOTH_SANDSTONE = BlockImpl.get("smooth_sandstone");
 
-    Block SMOOTH_QUARTZ = BlockImpl.get("minecraft:smooth_quartz");
+    Block SMOOTH_QUARTZ = BlockImpl.get("smooth_quartz");
 
-    Block SMOOTH_RED_SANDSTONE = BlockImpl.get("minecraft:smooth_red_sandstone");
+    Block SMOOTH_RED_SANDSTONE = BlockImpl.get("smooth_red_sandstone");
 
-    Block SPRUCE_FENCE_GATE = BlockImpl.get("minecraft:spruce_fence_gate");
+    Block SPRUCE_FENCE_GATE = BlockImpl.get("spruce_fence_gate");
 
-    Block BIRCH_FENCE_GATE = BlockImpl.get("minecraft:birch_fence_gate");
+    Block BIRCH_FENCE_GATE = BlockImpl.get("birch_fence_gate");
 
-    Block JUNGLE_FENCE_GATE = BlockImpl.get("minecraft:jungle_fence_gate");
+    Block JUNGLE_FENCE_GATE = BlockImpl.get("jungle_fence_gate");
 
-    Block ACACIA_FENCE_GATE = BlockImpl.get("minecraft:acacia_fence_gate");
+    Block ACACIA_FENCE_GATE = BlockImpl.get("acacia_fence_gate");
 
-    Block CHERRY_FENCE_GATE = BlockImpl.get("minecraft:cherry_fence_gate");
+    Block CHERRY_FENCE_GATE = BlockImpl.get("cherry_fence_gate");
 
-    Block DARK_OAK_FENCE_GATE = BlockImpl.get("minecraft:dark_oak_fence_gate");
+    Block DARK_OAK_FENCE_GATE = BlockImpl.get("dark_oak_fence_gate");
 
-    Block PALE_OAK_FENCE_GATE = BlockImpl.get("minecraft:pale_oak_fence_gate");
+    Block PALE_OAK_FENCE_GATE = BlockImpl.get("pale_oak_fence_gate");
 
-    Block MANGROVE_FENCE_GATE = BlockImpl.get("minecraft:mangrove_fence_gate");
+    Block MANGROVE_FENCE_GATE = BlockImpl.get("mangrove_fence_gate");
 
-    Block BAMBOO_FENCE_GATE = BlockImpl.get("minecraft:bamboo_fence_gate");
+    Block BAMBOO_FENCE_GATE = BlockImpl.get("bamboo_fence_gate");
 
-    Block SPRUCE_FENCE = BlockImpl.get("minecraft:spruce_fence");
+    Block SPRUCE_FENCE = BlockImpl.get("spruce_fence");
 
-    Block BIRCH_FENCE = BlockImpl.get("minecraft:birch_fence");
+    Block BIRCH_FENCE = BlockImpl.get("birch_fence");
 
-    Block JUNGLE_FENCE = BlockImpl.get("minecraft:jungle_fence");
+    Block JUNGLE_FENCE = BlockImpl.get("jungle_fence");
 
-    Block ACACIA_FENCE = BlockImpl.get("minecraft:acacia_fence");
+    Block ACACIA_FENCE = BlockImpl.get("acacia_fence");
 
-    Block CHERRY_FENCE = BlockImpl.get("minecraft:cherry_fence");
+    Block CHERRY_FENCE = BlockImpl.get("cherry_fence");
 
-    Block DARK_OAK_FENCE = BlockImpl.get("minecraft:dark_oak_fence");
+    Block DARK_OAK_FENCE = BlockImpl.get("dark_oak_fence");
 
-    Block PALE_OAK_FENCE = BlockImpl.get("minecraft:pale_oak_fence");
+    Block PALE_OAK_FENCE = BlockImpl.get("pale_oak_fence");
 
-    Block MANGROVE_FENCE = BlockImpl.get("minecraft:mangrove_fence");
+    Block MANGROVE_FENCE = BlockImpl.get("mangrove_fence");
 
-    Block BAMBOO_FENCE = BlockImpl.get("minecraft:bamboo_fence");
+    Block BAMBOO_FENCE = BlockImpl.get("bamboo_fence");
 
-    Block SPRUCE_DOOR = BlockImpl.get("minecraft:spruce_door");
+    Block SPRUCE_DOOR = BlockImpl.get("spruce_door");
 
-    Block BIRCH_DOOR = BlockImpl.get("minecraft:birch_door");
+    Block BIRCH_DOOR = BlockImpl.get("birch_door");
 
-    Block JUNGLE_DOOR = BlockImpl.get("minecraft:jungle_door");
+    Block JUNGLE_DOOR = BlockImpl.get("jungle_door");
 
-    Block ACACIA_DOOR = BlockImpl.get("minecraft:acacia_door");
+    Block ACACIA_DOOR = BlockImpl.get("acacia_door");
 
-    Block CHERRY_DOOR = BlockImpl.get("minecraft:cherry_door");
+    Block CHERRY_DOOR = BlockImpl.get("cherry_door");
 
-    Block DARK_OAK_DOOR = BlockImpl.get("minecraft:dark_oak_door");
+    Block DARK_OAK_DOOR = BlockImpl.get("dark_oak_door");
 
-    Block PALE_OAK_DOOR = BlockImpl.get("minecraft:pale_oak_door");
+    Block PALE_OAK_DOOR = BlockImpl.get("pale_oak_door");
 
-    Block MANGROVE_DOOR = BlockImpl.get("minecraft:mangrove_door");
+    Block MANGROVE_DOOR = BlockImpl.get("mangrove_door");
 
-    Block BAMBOO_DOOR = BlockImpl.get("minecraft:bamboo_door");
+    Block BAMBOO_DOOR = BlockImpl.get("bamboo_door");
 
-    Block END_ROD = BlockImpl.get("minecraft:end_rod");
+    Block END_ROD = BlockImpl.get("end_rod");
 
-    Block CHORUS_PLANT = BlockImpl.get("minecraft:chorus_plant");
+    Block CHORUS_PLANT = BlockImpl.get("chorus_plant");
 
-    Block CHORUS_FLOWER = BlockImpl.get("minecraft:chorus_flower");
+    Block CHORUS_FLOWER = BlockImpl.get("chorus_flower");
 
-    Block PURPUR_BLOCK = BlockImpl.get("minecraft:purpur_block");
+    Block PURPUR_BLOCK = BlockImpl.get("purpur_block");
 
-    Block PURPUR_PILLAR = BlockImpl.get("minecraft:purpur_pillar");
+    Block PURPUR_PILLAR = BlockImpl.get("purpur_pillar");
 
-    Block PURPUR_STAIRS = BlockImpl.get("minecraft:purpur_stairs");
+    Block PURPUR_STAIRS = BlockImpl.get("purpur_stairs");
 
-    Block END_STONE_BRICKS = BlockImpl.get("minecraft:end_stone_bricks");
+    Block END_STONE_BRICKS = BlockImpl.get("end_stone_bricks");
 
-    Block TORCHFLOWER_CROP = BlockImpl.get("minecraft:torchflower_crop");
+    Block TORCHFLOWER_CROP = BlockImpl.get("torchflower_crop");
 
-    Block PITCHER_CROP = BlockImpl.get("minecraft:pitcher_crop");
+    Block PITCHER_CROP = BlockImpl.get("pitcher_crop");
 
-    Block PITCHER_PLANT = BlockImpl.get("minecraft:pitcher_plant");
+    Block PITCHER_PLANT = BlockImpl.get("pitcher_plant");
 
-    Block BEETROOTS = BlockImpl.get("minecraft:beetroots");
+    Block BEETROOTS = BlockImpl.get("beetroots");
 
-    Block DIRT_PATH = BlockImpl.get("minecraft:dirt_path");
+    Block DIRT_PATH = BlockImpl.get("dirt_path");
 
-    Block END_GATEWAY = BlockImpl.get("minecraft:end_gateway");
+    Block END_GATEWAY = BlockImpl.get("end_gateway");
 
-    Block REPEATING_COMMAND_BLOCK = BlockImpl.get("minecraft:repeating_command_block");
+    Block REPEATING_COMMAND_BLOCK = BlockImpl.get("repeating_command_block");
 
-    Block CHAIN_COMMAND_BLOCK = BlockImpl.get("minecraft:chain_command_block");
+    Block CHAIN_COMMAND_BLOCK = BlockImpl.get("chain_command_block");
 
-    Block FROSTED_ICE = BlockImpl.get("minecraft:frosted_ice");
+    Block FROSTED_ICE = BlockImpl.get("frosted_ice");
 
-    Block MAGMA_BLOCK = BlockImpl.get("minecraft:magma_block");
+    Block MAGMA_BLOCK = BlockImpl.get("magma_block");
 
-    Block NETHER_WART_BLOCK = BlockImpl.get("minecraft:nether_wart_block");
+    Block NETHER_WART_BLOCK = BlockImpl.get("nether_wart_block");
 
-    Block RED_NETHER_BRICKS = BlockImpl.get("minecraft:red_nether_bricks");
+    Block RED_NETHER_BRICKS = BlockImpl.get("red_nether_bricks");
 
-    Block BONE_BLOCK = BlockImpl.get("minecraft:bone_block");
+    Block BONE_BLOCK = BlockImpl.get("bone_block");
 
-    Block STRUCTURE_VOID = BlockImpl.get("minecraft:structure_void");
+    Block STRUCTURE_VOID = BlockImpl.get("structure_void");
 
-    Block OBSERVER = BlockImpl.get("minecraft:observer");
+    Block OBSERVER = BlockImpl.get("observer");
 
-    Block SHULKER_BOX = BlockImpl.get("minecraft:shulker_box");
+    Block SHULKER_BOX = BlockImpl.get("shulker_box");
 
-    Block WHITE_SHULKER_BOX = BlockImpl.get("minecraft:white_shulker_box");
+    Block WHITE_SHULKER_BOX = BlockImpl.get("white_shulker_box");
 
-    Block ORANGE_SHULKER_BOX = BlockImpl.get("minecraft:orange_shulker_box");
+    Block ORANGE_SHULKER_BOX = BlockImpl.get("orange_shulker_box");
 
-    Block MAGENTA_SHULKER_BOX = BlockImpl.get("minecraft:magenta_shulker_box");
+    Block MAGENTA_SHULKER_BOX = BlockImpl.get("magenta_shulker_box");
 
-    Block LIGHT_BLUE_SHULKER_BOX = BlockImpl.get("minecraft:light_blue_shulker_box");
+    Block LIGHT_BLUE_SHULKER_BOX = BlockImpl.get("light_blue_shulker_box");
 
-    Block YELLOW_SHULKER_BOX = BlockImpl.get("minecraft:yellow_shulker_box");
+    Block YELLOW_SHULKER_BOX = BlockImpl.get("yellow_shulker_box");
 
-    Block LIME_SHULKER_BOX = BlockImpl.get("minecraft:lime_shulker_box");
+    Block LIME_SHULKER_BOX = BlockImpl.get("lime_shulker_box");
 
-    Block PINK_SHULKER_BOX = BlockImpl.get("minecraft:pink_shulker_box");
+    Block PINK_SHULKER_BOX = BlockImpl.get("pink_shulker_box");
 
-    Block GRAY_SHULKER_BOX = BlockImpl.get("minecraft:gray_shulker_box");
+    Block GRAY_SHULKER_BOX = BlockImpl.get("gray_shulker_box");
 
-    Block LIGHT_GRAY_SHULKER_BOX = BlockImpl.get("minecraft:light_gray_shulker_box");
+    Block LIGHT_GRAY_SHULKER_BOX = BlockImpl.get("light_gray_shulker_box");
 
-    Block CYAN_SHULKER_BOX = BlockImpl.get("minecraft:cyan_shulker_box");
+    Block CYAN_SHULKER_BOX = BlockImpl.get("cyan_shulker_box");
 
-    Block PURPLE_SHULKER_BOX = BlockImpl.get("minecraft:purple_shulker_box");
+    Block PURPLE_SHULKER_BOX = BlockImpl.get("purple_shulker_box");
 
-    Block BLUE_SHULKER_BOX = BlockImpl.get("minecraft:blue_shulker_box");
+    Block BLUE_SHULKER_BOX = BlockImpl.get("blue_shulker_box");
 
-    Block BROWN_SHULKER_BOX = BlockImpl.get("minecraft:brown_shulker_box");
+    Block BROWN_SHULKER_BOX = BlockImpl.get("brown_shulker_box");
 
-    Block GREEN_SHULKER_BOX = BlockImpl.get("minecraft:green_shulker_box");
+    Block GREEN_SHULKER_BOX = BlockImpl.get("green_shulker_box");
 
-    Block RED_SHULKER_BOX = BlockImpl.get("minecraft:red_shulker_box");
+    Block RED_SHULKER_BOX = BlockImpl.get("red_shulker_box");
 
-    Block BLACK_SHULKER_BOX = BlockImpl.get("minecraft:black_shulker_box");
+    Block BLACK_SHULKER_BOX = BlockImpl.get("black_shulker_box");
 
-    Block WHITE_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:white_glazed_terracotta");
+    Block WHITE_GLAZED_TERRACOTTA = BlockImpl.get("white_glazed_terracotta");
 
-    Block ORANGE_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:orange_glazed_terracotta");
+    Block ORANGE_GLAZED_TERRACOTTA = BlockImpl.get("orange_glazed_terracotta");
 
-    Block MAGENTA_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:magenta_glazed_terracotta");
+    Block MAGENTA_GLAZED_TERRACOTTA = BlockImpl.get("magenta_glazed_terracotta");
 
-    Block LIGHT_BLUE_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:light_blue_glazed_terracotta");
+    Block LIGHT_BLUE_GLAZED_TERRACOTTA = BlockImpl.get("light_blue_glazed_terracotta");
 
-    Block YELLOW_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:yellow_glazed_terracotta");
+    Block YELLOW_GLAZED_TERRACOTTA = BlockImpl.get("yellow_glazed_terracotta");
 
-    Block LIME_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:lime_glazed_terracotta");
+    Block LIME_GLAZED_TERRACOTTA = BlockImpl.get("lime_glazed_terracotta");
 
-    Block PINK_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:pink_glazed_terracotta");
+    Block PINK_GLAZED_TERRACOTTA = BlockImpl.get("pink_glazed_terracotta");
 
-    Block GRAY_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:gray_glazed_terracotta");
+    Block GRAY_GLAZED_TERRACOTTA = BlockImpl.get("gray_glazed_terracotta");
 
-    Block LIGHT_GRAY_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:light_gray_glazed_terracotta");
+    Block LIGHT_GRAY_GLAZED_TERRACOTTA = BlockImpl.get("light_gray_glazed_terracotta");
 
-    Block CYAN_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:cyan_glazed_terracotta");
+    Block CYAN_GLAZED_TERRACOTTA = BlockImpl.get("cyan_glazed_terracotta");
 
-    Block PURPLE_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:purple_glazed_terracotta");
+    Block PURPLE_GLAZED_TERRACOTTA = BlockImpl.get("purple_glazed_terracotta");
 
-    Block BLUE_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:blue_glazed_terracotta");
+    Block BLUE_GLAZED_TERRACOTTA = BlockImpl.get("blue_glazed_terracotta");
 
-    Block BROWN_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:brown_glazed_terracotta");
+    Block BROWN_GLAZED_TERRACOTTA = BlockImpl.get("brown_glazed_terracotta");
 
-    Block GREEN_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:green_glazed_terracotta");
+    Block GREEN_GLAZED_TERRACOTTA = BlockImpl.get("green_glazed_terracotta");
 
-    Block RED_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:red_glazed_terracotta");
+    Block RED_GLAZED_TERRACOTTA = BlockImpl.get("red_glazed_terracotta");
 
-    Block BLACK_GLAZED_TERRACOTTA = BlockImpl.get("minecraft:black_glazed_terracotta");
+    Block BLACK_GLAZED_TERRACOTTA = BlockImpl.get("black_glazed_terracotta");
 
-    Block WHITE_CONCRETE = BlockImpl.get("minecraft:white_concrete");
+    Block WHITE_CONCRETE = BlockImpl.get("white_concrete");
 
-    Block ORANGE_CONCRETE = BlockImpl.get("minecraft:orange_concrete");
+    Block ORANGE_CONCRETE = BlockImpl.get("orange_concrete");
 
-    Block MAGENTA_CONCRETE = BlockImpl.get("minecraft:magenta_concrete");
+    Block MAGENTA_CONCRETE = BlockImpl.get("magenta_concrete");
 
-    Block LIGHT_BLUE_CONCRETE = BlockImpl.get("minecraft:light_blue_concrete");
+    Block LIGHT_BLUE_CONCRETE = BlockImpl.get("light_blue_concrete");
 
-    Block YELLOW_CONCRETE = BlockImpl.get("minecraft:yellow_concrete");
+    Block YELLOW_CONCRETE = BlockImpl.get("yellow_concrete");
 
-    Block LIME_CONCRETE = BlockImpl.get("minecraft:lime_concrete");
+    Block LIME_CONCRETE = BlockImpl.get("lime_concrete");
 
-    Block PINK_CONCRETE = BlockImpl.get("minecraft:pink_concrete");
+    Block PINK_CONCRETE = BlockImpl.get("pink_concrete");
 
-    Block GRAY_CONCRETE = BlockImpl.get("minecraft:gray_concrete");
+    Block GRAY_CONCRETE = BlockImpl.get("gray_concrete");
 
-    Block LIGHT_GRAY_CONCRETE = BlockImpl.get("minecraft:light_gray_concrete");
+    Block LIGHT_GRAY_CONCRETE = BlockImpl.get("light_gray_concrete");
 
-    Block CYAN_CONCRETE = BlockImpl.get("minecraft:cyan_concrete");
+    Block CYAN_CONCRETE = BlockImpl.get("cyan_concrete");
 
-    Block PURPLE_CONCRETE = BlockImpl.get("minecraft:purple_concrete");
+    Block PURPLE_CONCRETE = BlockImpl.get("purple_concrete");
 
-    Block BLUE_CONCRETE = BlockImpl.get("minecraft:blue_concrete");
+    Block BLUE_CONCRETE = BlockImpl.get("blue_concrete");
 
-    Block BROWN_CONCRETE = BlockImpl.get("minecraft:brown_concrete");
+    Block BROWN_CONCRETE = BlockImpl.get("brown_concrete");
 
-    Block GREEN_CONCRETE = BlockImpl.get("minecraft:green_concrete");
+    Block GREEN_CONCRETE = BlockImpl.get("green_concrete");
 
-    Block RED_CONCRETE = BlockImpl.get("minecraft:red_concrete");
+    Block RED_CONCRETE = BlockImpl.get("red_concrete");
 
-    Block BLACK_CONCRETE = BlockImpl.get("minecraft:black_concrete");
+    Block BLACK_CONCRETE = BlockImpl.get("black_concrete");
 
-    Block WHITE_CONCRETE_POWDER = BlockImpl.get("minecraft:white_concrete_powder");
+    Block WHITE_CONCRETE_POWDER = BlockImpl.get("white_concrete_powder");
 
-    Block ORANGE_CONCRETE_POWDER = BlockImpl.get("minecraft:orange_concrete_powder");
+    Block ORANGE_CONCRETE_POWDER = BlockImpl.get("orange_concrete_powder");
 
-    Block MAGENTA_CONCRETE_POWDER = BlockImpl.get("minecraft:magenta_concrete_powder");
+    Block MAGENTA_CONCRETE_POWDER = BlockImpl.get("magenta_concrete_powder");
 
-    Block LIGHT_BLUE_CONCRETE_POWDER = BlockImpl.get("minecraft:light_blue_concrete_powder");
+    Block LIGHT_BLUE_CONCRETE_POWDER = BlockImpl.get("light_blue_concrete_powder");
 
-    Block YELLOW_CONCRETE_POWDER = BlockImpl.get("minecraft:yellow_concrete_powder");
+    Block YELLOW_CONCRETE_POWDER = BlockImpl.get("yellow_concrete_powder");
 
-    Block LIME_CONCRETE_POWDER = BlockImpl.get("minecraft:lime_concrete_powder");
+    Block LIME_CONCRETE_POWDER = BlockImpl.get("lime_concrete_powder");
 
-    Block PINK_CONCRETE_POWDER = BlockImpl.get("minecraft:pink_concrete_powder");
+    Block PINK_CONCRETE_POWDER = BlockImpl.get("pink_concrete_powder");
 
-    Block GRAY_CONCRETE_POWDER = BlockImpl.get("minecraft:gray_concrete_powder");
+    Block GRAY_CONCRETE_POWDER = BlockImpl.get("gray_concrete_powder");
 
-    Block LIGHT_GRAY_CONCRETE_POWDER = BlockImpl.get("minecraft:light_gray_concrete_powder");
+    Block LIGHT_GRAY_CONCRETE_POWDER = BlockImpl.get("light_gray_concrete_powder");
 
-    Block CYAN_CONCRETE_POWDER = BlockImpl.get("minecraft:cyan_concrete_powder");
+    Block CYAN_CONCRETE_POWDER = BlockImpl.get("cyan_concrete_powder");
 
-    Block PURPLE_CONCRETE_POWDER = BlockImpl.get("minecraft:purple_concrete_powder");
+    Block PURPLE_CONCRETE_POWDER = BlockImpl.get("purple_concrete_powder");
 
-    Block BLUE_CONCRETE_POWDER = BlockImpl.get("minecraft:blue_concrete_powder");
+    Block BLUE_CONCRETE_POWDER = BlockImpl.get("blue_concrete_powder");
 
-    Block BROWN_CONCRETE_POWDER = BlockImpl.get("minecraft:brown_concrete_powder");
+    Block BROWN_CONCRETE_POWDER = BlockImpl.get("brown_concrete_powder");
 
-    Block GREEN_CONCRETE_POWDER = BlockImpl.get("minecraft:green_concrete_powder");
+    Block GREEN_CONCRETE_POWDER = BlockImpl.get("green_concrete_powder");
 
-    Block RED_CONCRETE_POWDER = BlockImpl.get("minecraft:red_concrete_powder");
+    Block RED_CONCRETE_POWDER = BlockImpl.get("red_concrete_powder");
 
-    Block BLACK_CONCRETE_POWDER = BlockImpl.get("minecraft:black_concrete_powder");
+    Block BLACK_CONCRETE_POWDER = BlockImpl.get("black_concrete_powder");
 
-    Block KELP = BlockImpl.get("minecraft:kelp");
+    Block KELP = BlockImpl.get("kelp");
 
-    Block KELP_PLANT = BlockImpl.get("minecraft:kelp_plant");
+    Block KELP_PLANT = BlockImpl.get("kelp_plant");
 
-    Block DRIED_KELP_BLOCK = BlockImpl.get("minecraft:dried_kelp_block");
+    Block DRIED_KELP_BLOCK = BlockImpl.get("dried_kelp_block");
 
-    Block TURTLE_EGG = BlockImpl.get("minecraft:turtle_egg");
+    Block TURTLE_EGG = BlockImpl.get("turtle_egg");
 
-    Block SNIFFER_EGG = BlockImpl.get("minecraft:sniffer_egg");
+    Block SNIFFER_EGG = BlockImpl.get("sniffer_egg");
 
-    Block DRIED_GHAST = BlockImpl.get("minecraft:dried_ghast");
+    Block DRIED_GHAST = BlockImpl.get("dried_ghast");
 
-    Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get("minecraft:dead_tube_coral_block");
+    Block DEAD_TUBE_CORAL_BLOCK = BlockImpl.get("dead_tube_coral_block");
 
-    Block DEAD_BRAIN_CORAL_BLOCK = BlockImpl.get("minecraft:dead_brain_coral_block");
+    Block DEAD_BRAIN_CORAL_BLOCK = BlockImpl.get("dead_brain_coral_block");
 
-    Block DEAD_BUBBLE_CORAL_BLOCK = BlockImpl.get("minecraft:dead_bubble_coral_block");
+    Block DEAD_BUBBLE_CORAL_BLOCK = BlockImpl.get("dead_bubble_coral_block");
 
-    Block DEAD_FIRE_CORAL_BLOCK = BlockImpl.get("minecraft:dead_fire_coral_block");
+    Block DEAD_FIRE_CORAL_BLOCK = BlockImpl.get("dead_fire_coral_block");
 
-    Block DEAD_HORN_CORAL_BLOCK = BlockImpl.get("minecraft:dead_horn_coral_block");
+    Block DEAD_HORN_CORAL_BLOCK = BlockImpl.get("dead_horn_coral_block");
 
-    Block TUBE_CORAL_BLOCK = BlockImpl.get("minecraft:tube_coral_block");
+    Block TUBE_CORAL_BLOCK = BlockImpl.get("tube_coral_block");
 
-    Block BRAIN_CORAL_BLOCK = BlockImpl.get("minecraft:brain_coral_block");
+    Block BRAIN_CORAL_BLOCK = BlockImpl.get("brain_coral_block");
 
-    Block BUBBLE_CORAL_BLOCK = BlockImpl.get("minecraft:bubble_coral_block");
+    Block BUBBLE_CORAL_BLOCK = BlockImpl.get("bubble_coral_block");
 
-    Block FIRE_CORAL_BLOCK = BlockImpl.get("minecraft:fire_coral_block");
+    Block FIRE_CORAL_BLOCK = BlockImpl.get("fire_coral_block");
 
-    Block HORN_CORAL_BLOCK = BlockImpl.get("minecraft:horn_coral_block");
+    Block HORN_CORAL_BLOCK = BlockImpl.get("horn_coral_block");
 
-    Block DEAD_TUBE_CORAL = BlockImpl.get("minecraft:dead_tube_coral");
+    Block DEAD_TUBE_CORAL = BlockImpl.get("dead_tube_coral");
 
-    Block DEAD_BRAIN_CORAL = BlockImpl.get("minecraft:dead_brain_coral");
+    Block DEAD_BRAIN_CORAL = BlockImpl.get("dead_brain_coral");
 
-    Block DEAD_BUBBLE_CORAL = BlockImpl.get("minecraft:dead_bubble_coral");
+    Block DEAD_BUBBLE_CORAL = BlockImpl.get("dead_bubble_coral");
 
-    Block DEAD_FIRE_CORAL = BlockImpl.get("minecraft:dead_fire_coral");
+    Block DEAD_FIRE_CORAL = BlockImpl.get("dead_fire_coral");
 
-    Block DEAD_HORN_CORAL = BlockImpl.get("minecraft:dead_horn_coral");
+    Block DEAD_HORN_CORAL = BlockImpl.get("dead_horn_coral");
 
-    Block TUBE_CORAL = BlockImpl.get("minecraft:tube_coral");
+    Block TUBE_CORAL = BlockImpl.get("tube_coral");
 
-    Block BRAIN_CORAL = BlockImpl.get("minecraft:brain_coral");
+    Block BRAIN_CORAL = BlockImpl.get("brain_coral");
 
-    Block BUBBLE_CORAL = BlockImpl.get("minecraft:bubble_coral");
+    Block BUBBLE_CORAL = BlockImpl.get("bubble_coral");
 
-    Block FIRE_CORAL = BlockImpl.get("minecraft:fire_coral");
+    Block FIRE_CORAL = BlockImpl.get("fire_coral");
 
-    Block HORN_CORAL = BlockImpl.get("minecraft:horn_coral");
+    Block HORN_CORAL = BlockImpl.get("horn_coral");
 
-    Block DEAD_TUBE_CORAL_FAN = BlockImpl.get("minecraft:dead_tube_coral_fan");
+    Block DEAD_TUBE_CORAL_FAN = BlockImpl.get("dead_tube_coral_fan");
 
-    Block DEAD_BRAIN_CORAL_FAN = BlockImpl.get("minecraft:dead_brain_coral_fan");
+    Block DEAD_BRAIN_CORAL_FAN = BlockImpl.get("dead_brain_coral_fan");
 
-    Block DEAD_BUBBLE_CORAL_FAN = BlockImpl.get("minecraft:dead_bubble_coral_fan");
+    Block DEAD_BUBBLE_CORAL_FAN = BlockImpl.get("dead_bubble_coral_fan");
 
-    Block DEAD_FIRE_CORAL_FAN = BlockImpl.get("minecraft:dead_fire_coral_fan");
+    Block DEAD_FIRE_CORAL_FAN = BlockImpl.get("dead_fire_coral_fan");
 
-    Block DEAD_HORN_CORAL_FAN = BlockImpl.get("minecraft:dead_horn_coral_fan");
+    Block DEAD_HORN_CORAL_FAN = BlockImpl.get("dead_horn_coral_fan");
 
-    Block TUBE_CORAL_FAN = BlockImpl.get("minecraft:tube_coral_fan");
+    Block TUBE_CORAL_FAN = BlockImpl.get("tube_coral_fan");
 
-    Block BRAIN_CORAL_FAN = BlockImpl.get("minecraft:brain_coral_fan");
+    Block BRAIN_CORAL_FAN = BlockImpl.get("brain_coral_fan");
 
-    Block BUBBLE_CORAL_FAN = BlockImpl.get("minecraft:bubble_coral_fan");
+    Block BUBBLE_CORAL_FAN = BlockImpl.get("bubble_coral_fan");
 
-    Block FIRE_CORAL_FAN = BlockImpl.get("minecraft:fire_coral_fan");
+    Block FIRE_CORAL_FAN = BlockImpl.get("fire_coral_fan");
 
-    Block HORN_CORAL_FAN = BlockImpl.get("minecraft:horn_coral_fan");
+    Block HORN_CORAL_FAN = BlockImpl.get("horn_coral_fan");
 
-    Block DEAD_TUBE_CORAL_WALL_FAN = BlockImpl.get("minecraft:dead_tube_coral_wall_fan");
+    Block DEAD_TUBE_CORAL_WALL_FAN = BlockImpl.get("dead_tube_coral_wall_fan");
 
-    Block DEAD_BRAIN_CORAL_WALL_FAN = BlockImpl.get("minecraft:dead_brain_coral_wall_fan");
+    Block DEAD_BRAIN_CORAL_WALL_FAN = BlockImpl.get("dead_brain_coral_wall_fan");
 
-    Block DEAD_BUBBLE_CORAL_WALL_FAN = BlockImpl.get("minecraft:dead_bubble_coral_wall_fan");
+    Block DEAD_BUBBLE_CORAL_WALL_FAN = BlockImpl.get("dead_bubble_coral_wall_fan");
 
-    Block DEAD_FIRE_CORAL_WALL_FAN = BlockImpl.get("minecraft:dead_fire_coral_wall_fan");
+    Block DEAD_FIRE_CORAL_WALL_FAN = BlockImpl.get("dead_fire_coral_wall_fan");
 
-    Block DEAD_HORN_CORAL_WALL_FAN = BlockImpl.get("minecraft:dead_horn_coral_wall_fan");
+    Block DEAD_HORN_CORAL_WALL_FAN = BlockImpl.get("dead_horn_coral_wall_fan");
 
-    Block TUBE_CORAL_WALL_FAN = BlockImpl.get("minecraft:tube_coral_wall_fan");
+    Block TUBE_CORAL_WALL_FAN = BlockImpl.get("tube_coral_wall_fan");
 
-    Block BRAIN_CORAL_WALL_FAN = BlockImpl.get("minecraft:brain_coral_wall_fan");
+    Block BRAIN_CORAL_WALL_FAN = BlockImpl.get("brain_coral_wall_fan");
 
-    Block BUBBLE_CORAL_WALL_FAN = BlockImpl.get("minecraft:bubble_coral_wall_fan");
+    Block BUBBLE_CORAL_WALL_FAN = BlockImpl.get("bubble_coral_wall_fan");
 
-    Block FIRE_CORAL_WALL_FAN = BlockImpl.get("minecraft:fire_coral_wall_fan");
+    Block FIRE_CORAL_WALL_FAN = BlockImpl.get("fire_coral_wall_fan");
 
-    Block HORN_CORAL_WALL_FAN = BlockImpl.get("minecraft:horn_coral_wall_fan");
+    Block HORN_CORAL_WALL_FAN = BlockImpl.get("horn_coral_wall_fan");
 
-    Block SEA_PICKLE = BlockImpl.get("minecraft:sea_pickle");
+    Block SEA_PICKLE = BlockImpl.get("sea_pickle");
 
-    Block BLUE_ICE = BlockImpl.get("minecraft:blue_ice");
+    Block BLUE_ICE = BlockImpl.get("blue_ice");
 
-    Block CONDUIT = BlockImpl.get("minecraft:conduit");
+    Block CONDUIT = BlockImpl.get("conduit");
 
-    Block BAMBOO_SAPLING = BlockImpl.get("minecraft:bamboo_sapling");
+    Block BAMBOO_SAPLING = BlockImpl.get("bamboo_sapling");
 
-    Block BAMBOO = BlockImpl.get("minecraft:bamboo");
+    Block BAMBOO = BlockImpl.get("bamboo");
 
-    Block POTTED_BAMBOO = BlockImpl.get("minecraft:potted_bamboo");
+    Block POTTED_BAMBOO = BlockImpl.get("potted_bamboo");
 
-    Block VOID_AIR = BlockImpl.get("minecraft:void_air");
+    Block VOID_AIR = BlockImpl.get("void_air");
 
-    Block CAVE_AIR = BlockImpl.get("minecraft:cave_air");
+    Block CAVE_AIR = BlockImpl.get("cave_air");
 
-    Block BUBBLE_COLUMN = BlockImpl.get("minecraft:bubble_column");
+    Block BUBBLE_COLUMN = BlockImpl.get("bubble_column");
 
-    Block POLISHED_GRANITE_STAIRS = BlockImpl.get("minecraft:polished_granite_stairs");
+    Block POLISHED_GRANITE_STAIRS = BlockImpl.get("polished_granite_stairs");
 
-    Block SMOOTH_RED_SANDSTONE_STAIRS = BlockImpl.get("minecraft:smooth_red_sandstone_stairs");
+    Block SMOOTH_RED_SANDSTONE_STAIRS = BlockImpl.get("smooth_red_sandstone_stairs");
 
-    Block MOSSY_STONE_BRICK_STAIRS = BlockImpl.get("minecraft:mossy_stone_brick_stairs");
+    Block MOSSY_STONE_BRICK_STAIRS = BlockImpl.get("mossy_stone_brick_stairs");
 
-    Block POLISHED_DIORITE_STAIRS = BlockImpl.get("minecraft:polished_diorite_stairs");
+    Block POLISHED_DIORITE_STAIRS = BlockImpl.get("polished_diorite_stairs");
 
-    Block MOSSY_COBBLESTONE_STAIRS = BlockImpl.get("minecraft:mossy_cobblestone_stairs");
+    Block MOSSY_COBBLESTONE_STAIRS = BlockImpl.get("mossy_cobblestone_stairs");
 
-    Block END_STONE_BRICK_STAIRS = BlockImpl.get("minecraft:end_stone_brick_stairs");
+    Block END_STONE_BRICK_STAIRS = BlockImpl.get("end_stone_brick_stairs");
 
-    Block STONE_STAIRS = BlockImpl.get("minecraft:stone_stairs");
+    Block STONE_STAIRS = BlockImpl.get("stone_stairs");
 
-    Block SMOOTH_SANDSTONE_STAIRS = BlockImpl.get("minecraft:smooth_sandstone_stairs");
+    Block SMOOTH_SANDSTONE_STAIRS = BlockImpl.get("smooth_sandstone_stairs");
 
-    Block SMOOTH_QUARTZ_STAIRS = BlockImpl.get("minecraft:smooth_quartz_stairs");
+    Block SMOOTH_QUARTZ_STAIRS = BlockImpl.get("smooth_quartz_stairs");
 
-    Block GRANITE_STAIRS = BlockImpl.get("minecraft:granite_stairs");
+    Block GRANITE_STAIRS = BlockImpl.get("granite_stairs");
 
-    Block ANDESITE_STAIRS = BlockImpl.get("minecraft:andesite_stairs");
+    Block ANDESITE_STAIRS = BlockImpl.get("andesite_stairs");
 
-    Block RED_NETHER_BRICK_STAIRS = BlockImpl.get("minecraft:red_nether_brick_stairs");
+    Block RED_NETHER_BRICK_STAIRS = BlockImpl.get("red_nether_brick_stairs");
 
-    Block POLISHED_ANDESITE_STAIRS = BlockImpl.get("minecraft:polished_andesite_stairs");
+    Block POLISHED_ANDESITE_STAIRS = BlockImpl.get("polished_andesite_stairs");
 
-    Block DIORITE_STAIRS = BlockImpl.get("minecraft:diorite_stairs");
+    Block DIORITE_STAIRS = BlockImpl.get("diorite_stairs");
 
-    Block POLISHED_GRANITE_SLAB = BlockImpl.get("minecraft:polished_granite_slab");
+    Block POLISHED_GRANITE_SLAB = BlockImpl.get("polished_granite_slab");
 
-    Block SMOOTH_RED_SANDSTONE_SLAB = BlockImpl.get("minecraft:smooth_red_sandstone_slab");
+    Block SMOOTH_RED_SANDSTONE_SLAB = BlockImpl.get("smooth_red_sandstone_slab");
 
-    Block MOSSY_STONE_BRICK_SLAB = BlockImpl.get("minecraft:mossy_stone_brick_slab");
+    Block MOSSY_STONE_BRICK_SLAB = BlockImpl.get("mossy_stone_brick_slab");
 
-    Block POLISHED_DIORITE_SLAB = BlockImpl.get("minecraft:polished_diorite_slab");
+    Block POLISHED_DIORITE_SLAB = BlockImpl.get("polished_diorite_slab");
 
-    Block MOSSY_COBBLESTONE_SLAB = BlockImpl.get("minecraft:mossy_cobblestone_slab");
+    Block MOSSY_COBBLESTONE_SLAB = BlockImpl.get("mossy_cobblestone_slab");
 
-    Block END_STONE_BRICK_SLAB = BlockImpl.get("minecraft:end_stone_brick_slab");
+    Block END_STONE_BRICK_SLAB = BlockImpl.get("end_stone_brick_slab");
 
-    Block SMOOTH_SANDSTONE_SLAB = BlockImpl.get("minecraft:smooth_sandstone_slab");
+    Block SMOOTH_SANDSTONE_SLAB = BlockImpl.get("smooth_sandstone_slab");
 
-    Block SMOOTH_QUARTZ_SLAB = BlockImpl.get("minecraft:smooth_quartz_slab");
+    Block SMOOTH_QUARTZ_SLAB = BlockImpl.get("smooth_quartz_slab");
 
-    Block GRANITE_SLAB = BlockImpl.get("minecraft:granite_slab");
+    Block GRANITE_SLAB = BlockImpl.get("granite_slab");
 
-    Block ANDESITE_SLAB = BlockImpl.get("minecraft:andesite_slab");
+    Block ANDESITE_SLAB = BlockImpl.get("andesite_slab");
 
-    Block RED_NETHER_BRICK_SLAB = BlockImpl.get("minecraft:red_nether_brick_slab");
+    Block RED_NETHER_BRICK_SLAB = BlockImpl.get("red_nether_brick_slab");
 
-    Block POLISHED_ANDESITE_SLAB = BlockImpl.get("minecraft:polished_andesite_slab");
+    Block POLISHED_ANDESITE_SLAB = BlockImpl.get("polished_andesite_slab");
 
-    Block DIORITE_SLAB = BlockImpl.get("minecraft:diorite_slab");
+    Block DIORITE_SLAB = BlockImpl.get("diorite_slab");
 
-    Block BRICK_WALL = BlockImpl.get("minecraft:brick_wall");
+    Block BRICK_WALL = BlockImpl.get("brick_wall");
 
-    Block PRISMARINE_WALL = BlockImpl.get("minecraft:prismarine_wall");
+    Block PRISMARINE_WALL = BlockImpl.get("prismarine_wall");
 
-    Block RED_SANDSTONE_WALL = BlockImpl.get("minecraft:red_sandstone_wall");
+    Block RED_SANDSTONE_WALL = BlockImpl.get("red_sandstone_wall");
 
-    Block MOSSY_STONE_BRICK_WALL = BlockImpl.get("minecraft:mossy_stone_brick_wall");
+    Block MOSSY_STONE_BRICK_WALL = BlockImpl.get("mossy_stone_brick_wall");
 
-    Block GRANITE_WALL = BlockImpl.get("minecraft:granite_wall");
+    Block GRANITE_WALL = BlockImpl.get("granite_wall");
 
-    Block STONE_BRICK_WALL = BlockImpl.get("minecraft:stone_brick_wall");
+    Block STONE_BRICK_WALL = BlockImpl.get("stone_brick_wall");
 
-    Block MUD_BRICK_WALL = BlockImpl.get("minecraft:mud_brick_wall");
+    Block MUD_BRICK_WALL = BlockImpl.get("mud_brick_wall");
 
-    Block NETHER_BRICK_WALL = BlockImpl.get("minecraft:nether_brick_wall");
+    Block NETHER_BRICK_WALL = BlockImpl.get("nether_brick_wall");
 
-    Block ANDESITE_WALL = BlockImpl.get("minecraft:andesite_wall");
+    Block ANDESITE_WALL = BlockImpl.get("andesite_wall");
 
-    Block RED_NETHER_BRICK_WALL = BlockImpl.get("minecraft:red_nether_brick_wall");
+    Block RED_NETHER_BRICK_WALL = BlockImpl.get("red_nether_brick_wall");
 
-    Block SANDSTONE_WALL = BlockImpl.get("minecraft:sandstone_wall");
+    Block SANDSTONE_WALL = BlockImpl.get("sandstone_wall");
 
-    Block END_STONE_BRICK_WALL = BlockImpl.get("minecraft:end_stone_brick_wall");
+    Block END_STONE_BRICK_WALL = BlockImpl.get("end_stone_brick_wall");
 
-    Block DIORITE_WALL = BlockImpl.get("minecraft:diorite_wall");
+    Block DIORITE_WALL = BlockImpl.get("diorite_wall");
 
-    Block SCAFFOLDING = BlockImpl.get("minecraft:scaffolding");
+    Block SCAFFOLDING = BlockImpl.get("scaffolding");
 
-    Block LOOM = BlockImpl.get("minecraft:loom");
+    Block LOOM = BlockImpl.get("loom");
 
-    Block BARREL = BlockImpl.get("minecraft:barrel");
+    Block BARREL = BlockImpl.get("barrel");
 
-    Block SMOKER = BlockImpl.get("minecraft:smoker");
+    Block SMOKER = BlockImpl.get("smoker");
 
-    Block BLAST_FURNACE = BlockImpl.get("minecraft:blast_furnace");
+    Block BLAST_FURNACE = BlockImpl.get("blast_furnace");
 
-    Block CARTOGRAPHY_TABLE = BlockImpl.get("minecraft:cartography_table");
+    Block CARTOGRAPHY_TABLE = BlockImpl.get("cartography_table");
 
-    Block FLETCHING_TABLE = BlockImpl.get("minecraft:fletching_table");
+    Block FLETCHING_TABLE = BlockImpl.get("fletching_table");
 
-    Block GRINDSTONE = BlockImpl.get("minecraft:grindstone");
+    Block GRINDSTONE = BlockImpl.get("grindstone");
 
-    Block LECTERN = BlockImpl.get("minecraft:lectern");
+    Block LECTERN = BlockImpl.get("lectern");
 
-    Block SMITHING_TABLE = BlockImpl.get("minecraft:smithing_table");
+    Block SMITHING_TABLE = BlockImpl.get("smithing_table");
 
-    Block STONECUTTER = BlockImpl.get("minecraft:stonecutter");
+    Block STONECUTTER = BlockImpl.get("stonecutter");
 
-    Block BELL = BlockImpl.get("minecraft:bell");
+    Block BELL = BlockImpl.get("bell");
 
-    Block LANTERN = BlockImpl.get("minecraft:lantern");
+    Block LANTERN = BlockImpl.get("lantern");
 
-    Block SOUL_LANTERN = BlockImpl.get("minecraft:soul_lantern");
+    Block SOUL_LANTERN = BlockImpl.get("soul_lantern");
 
-    Block CAMPFIRE = BlockImpl.get("minecraft:campfire");
+    Block CAMPFIRE = BlockImpl.get("campfire");
 
-    Block SOUL_CAMPFIRE = BlockImpl.get("minecraft:soul_campfire");
+    Block SOUL_CAMPFIRE = BlockImpl.get("soul_campfire");
 
-    Block SWEET_BERRY_BUSH = BlockImpl.get("minecraft:sweet_berry_bush");
+    Block SWEET_BERRY_BUSH = BlockImpl.get("sweet_berry_bush");
 
-    Block WARPED_STEM = BlockImpl.get("minecraft:warped_stem");
+    Block WARPED_STEM = BlockImpl.get("warped_stem");
 
-    Block STRIPPED_WARPED_STEM = BlockImpl.get("minecraft:stripped_warped_stem");
+    Block STRIPPED_WARPED_STEM = BlockImpl.get("stripped_warped_stem");
 
-    Block WARPED_HYPHAE = BlockImpl.get("minecraft:warped_hyphae");
+    Block WARPED_HYPHAE = BlockImpl.get("warped_hyphae");
 
-    Block STRIPPED_WARPED_HYPHAE = BlockImpl.get("minecraft:stripped_warped_hyphae");
+    Block STRIPPED_WARPED_HYPHAE = BlockImpl.get("stripped_warped_hyphae");
 
-    Block WARPED_NYLIUM = BlockImpl.get("minecraft:warped_nylium");
+    Block WARPED_NYLIUM = BlockImpl.get("warped_nylium");
 
-    Block WARPED_FUNGUS = BlockImpl.get("minecraft:warped_fungus");
+    Block WARPED_FUNGUS = BlockImpl.get("warped_fungus");
 
-    Block WARPED_WART_BLOCK = BlockImpl.get("minecraft:warped_wart_block");
+    Block WARPED_WART_BLOCK = BlockImpl.get("warped_wart_block");
 
-    Block WARPED_ROOTS = BlockImpl.get("minecraft:warped_roots");
+    Block WARPED_ROOTS = BlockImpl.get("warped_roots");
 
-    Block NETHER_SPROUTS = BlockImpl.get("minecraft:nether_sprouts");
+    Block NETHER_SPROUTS = BlockImpl.get("nether_sprouts");
 
-    Block CRIMSON_STEM = BlockImpl.get("minecraft:crimson_stem");
+    Block CRIMSON_STEM = BlockImpl.get("crimson_stem");
 
-    Block STRIPPED_CRIMSON_STEM = BlockImpl.get("minecraft:stripped_crimson_stem");
+    Block STRIPPED_CRIMSON_STEM = BlockImpl.get("stripped_crimson_stem");
 
-    Block CRIMSON_HYPHAE = BlockImpl.get("minecraft:crimson_hyphae");
+    Block CRIMSON_HYPHAE = BlockImpl.get("crimson_hyphae");
 
-    Block STRIPPED_CRIMSON_HYPHAE = BlockImpl.get("minecraft:stripped_crimson_hyphae");
+    Block STRIPPED_CRIMSON_HYPHAE = BlockImpl.get("stripped_crimson_hyphae");
 
-    Block CRIMSON_NYLIUM = BlockImpl.get("minecraft:crimson_nylium");
+    Block CRIMSON_NYLIUM = BlockImpl.get("crimson_nylium");
 
-    Block CRIMSON_FUNGUS = BlockImpl.get("minecraft:crimson_fungus");
+    Block CRIMSON_FUNGUS = BlockImpl.get("crimson_fungus");
 
-    Block SHROOMLIGHT = BlockImpl.get("minecraft:shroomlight");
+    Block SHROOMLIGHT = BlockImpl.get("shroomlight");
 
-    Block WEEPING_VINES = BlockImpl.get("minecraft:weeping_vines");
+    Block WEEPING_VINES = BlockImpl.get("weeping_vines");
 
-    Block WEEPING_VINES_PLANT = BlockImpl.get("minecraft:weeping_vines_plant");
+    Block WEEPING_VINES_PLANT = BlockImpl.get("weeping_vines_plant");
 
-    Block TWISTING_VINES = BlockImpl.get("minecraft:twisting_vines");
+    Block TWISTING_VINES = BlockImpl.get("twisting_vines");
 
-    Block TWISTING_VINES_PLANT = BlockImpl.get("minecraft:twisting_vines_plant");
+    Block TWISTING_VINES_PLANT = BlockImpl.get("twisting_vines_plant");
 
-    Block CRIMSON_ROOTS = BlockImpl.get("minecraft:crimson_roots");
+    Block CRIMSON_ROOTS = BlockImpl.get("crimson_roots");
 
-    Block CRIMSON_PLANKS = BlockImpl.get("minecraft:crimson_planks");
+    Block CRIMSON_PLANKS = BlockImpl.get("crimson_planks");
 
-    Block WARPED_PLANKS = BlockImpl.get("minecraft:warped_planks");
+    Block WARPED_PLANKS = BlockImpl.get("warped_planks");
 
-    Block CRIMSON_SLAB = BlockImpl.get("minecraft:crimson_slab");
+    Block CRIMSON_SLAB = BlockImpl.get("crimson_slab");
 
-    Block WARPED_SLAB = BlockImpl.get("minecraft:warped_slab");
+    Block WARPED_SLAB = BlockImpl.get("warped_slab");
 
-    Block CRIMSON_PRESSURE_PLATE = BlockImpl.get("minecraft:crimson_pressure_plate");
+    Block CRIMSON_PRESSURE_PLATE = BlockImpl.get("crimson_pressure_plate");
 
-    Block WARPED_PRESSURE_PLATE = BlockImpl.get("minecraft:warped_pressure_plate");
+    Block WARPED_PRESSURE_PLATE = BlockImpl.get("warped_pressure_plate");
 
-    Block CRIMSON_FENCE = BlockImpl.get("minecraft:crimson_fence");
+    Block CRIMSON_FENCE = BlockImpl.get("crimson_fence");
 
-    Block WARPED_FENCE = BlockImpl.get("minecraft:warped_fence");
+    Block WARPED_FENCE = BlockImpl.get("warped_fence");
 
-    Block CRIMSON_TRAPDOOR = BlockImpl.get("minecraft:crimson_trapdoor");
+    Block CRIMSON_TRAPDOOR = BlockImpl.get("crimson_trapdoor");
 
-    Block WARPED_TRAPDOOR = BlockImpl.get("minecraft:warped_trapdoor");
+    Block WARPED_TRAPDOOR = BlockImpl.get("warped_trapdoor");
 
-    Block CRIMSON_FENCE_GATE = BlockImpl.get("minecraft:crimson_fence_gate");
+    Block CRIMSON_FENCE_GATE = BlockImpl.get("crimson_fence_gate");
 
-    Block WARPED_FENCE_GATE = BlockImpl.get("minecraft:warped_fence_gate");
+    Block WARPED_FENCE_GATE = BlockImpl.get("warped_fence_gate");
 
-    Block CRIMSON_STAIRS = BlockImpl.get("minecraft:crimson_stairs");
+    Block CRIMSON_STAIRS = BlockImpl.get("crimson_stairs");
 
-    Block WARPED_STAIRS = BlockImpl.get("minecraft:warped_stairs");
+    Block WARPED_STAIRS = BlockImpl.get("warped_stairs");
 
-    Block CRIMSON_BUTTON = BlockImpl.get("minecraft:crimson_button");
+    Block CRIMSON_BUTTON = BlockImpl.get("crimson_button");
 
-    Block WARPED_BUTTON = BlockImpl.get("minecraft:warped_button");
+    Block WARPED_BUTTON = BlockImpl.get("warped_button");
 
-    Block CRIMSON_DOOR = BlockImpl.get("minecraft:crimson_door");
+    Block CRIMSON_DOOR = BlockImpl.get("crimson_door");
 
-    Block WARPED_DOOR = BlockImpl.get("minecraft:warped_door");
+    Block WARPED_DOOR = BlockImpl.get("warped_door");
 
-    Block CRIMSON_SIGN = BlockImpl.get("minecraft:crimson_sign");
+    Block CRIMSON_SIGN = BlockImpl.get("crimson_sign");
 
-    Block WARPED_SIGN = BlockImpl.get("minecraft:warped_sign");
+    Block WARPED_SIGN = BlockImpl.get("warped_sign");
 
-    Block CRIMSON_WALL_SIGN = BlockImpl.get("minecraft:crimson_wall_sign");
+    Block CRIMSON_WALL_SIGN = BlockImpl.get("crimson_wall_sign");
 
-    Block WARPED_WALL_SIGN = BlockImpl.get("minecraft:warped_wall_sign");
+    Block WARPED_WALL_SIGN = BlockImpl.get("warped_wall_sign");
 
-    Block STRUCTURE_BLOCK = BlockImpl.get("minecraft:structure_block");
+    Block STRUCTURE_BLOCK = BlockImpl.get("structure_block");
 
-    Block JIGSAW = BlockImpl.get("minecraft:jigsaw");
+    Block JIGSAW = BlockImpl.get("jigsaw");
 
-    Block TEST_BLOCK = BlockImpl.get("minecraft:test_block");
+    Block TEST_BLOCK = BlockImpl.get("test_block");
 
-    Block TEST_INSTANCE_BLOCK = BlockImpl.get("minecraft:test_instance_block");
+    Block TEST_INSTANCE_BLOCK = BlockImpl.get("test_instance_block");
 
-    Block COMPOSTER = BlockImpl.get("minecraft:composter");
+    Block COMPOSTER = BlockImpl.get("composter");
 
-    Block TARGET = BlockImpl.get("minecraft:target");
+    Block TARGET = BlockImpl.get("target");
 
-    Block BEE_NEST = BlockImpl.get("minecraft:bee_nest");
+    Block BEE_NEST = BlockImpl.get("bee_nest");
 
-    Block BEEHIVE = BlockImpl.get("minecraft:beehive");
+    Block BEEHIVE = BlockImpl.get("beehive");
 
-    Block HONEY_BLOCK = BlockImpl.get("minecraft:honey_block");
+    Block HONEY_BLOCK = BlockImpl.get("honey_block");
 
-    Block HONEYCOMB_BLOCK = BlockImpl.get("minecraft:honeycomb_block");
+    Block HONEYCOMB_BLOCK = BlockImpl.get("honeycomb_block");
 
-    Block NETHERITE_BLOCK = BlockImpl.get("minecraft:netherite_block");
+    Block NETHERITE_BLOCK = BlockImpl.get("netherite_block");
 
-    Block ANCIENT_DEBRIS = BlockImpl.get("minecraft:ancient_debris");
+    Block ANCIENT_DEBRIS = BlockImpl.get("ancient_debris");
 
-    Block CRYING_OBSIDIAN = BlockImpl.get("minecraft:crying_obsidian");
+    Block CRYING_OBSIDIAN = BlockImpl.get("crying_obsidian");
 
-    Block RESPAWN_ANCHOR = BlockImpl.get("minecraft:respawn_anchor");
+    Block RESPAWN_ANCHOR = BlockImpl.get("respawn_anchor");
 
-    Block POTTED_CRIMSON_FUNGUS = BlockImpl.get("minecraft:potted_crimson_fungus");
+    Block POTTED_CRIMSON_FUNGUS = BlockImpl.get("potted_crimson_fungus");
 
-    Block POTTED_WARPED_FUNGUS = BlockImpl.get("minecraft:potted_warped_fungus");
+    Block POTTED_WARPED_FUNGUS = BlockImpl.get("potted_warped_fungus");
 
-    Block POTTED_CRIMSON_ROOTS = BlockImpl.get("minecraft:potted_crimson_roots");
+    Block POTTED_CRIMSON_ROOTS = BlockImpl.get("potted_crimson_roots");
 
-    Block POTTED_WARPED_ROOTS = BlockImpl.get("minecraft:potted_warped_roots");
+    Block POTTED_WARPED_ROOTS = BlockImpl.get("potted_warped_roots");
 
-    Block LODESTONE = BlockImpl.get("minecraft:lodestone");
+    Block LODESTONE = BlockImpl.get("lodestone");
 
-    Block BLACKSTONE = BlockImpl.get("minecraft:blackstone");
+    Block BLACKSTONE = BlockImpl.get("blackstone");
 
-    Block BLACKSTONE_STAIRS = BlockImpl.get("minecraft:blackstone_stairs");
+    Block BLACKSTONE_STAIRS = BlockImpl.get("blackstone_stairs");
 
-    Block BLACKSTONE_WALL = BlockImpl.get("minecraft:blackstone_wall");
+    Block BLACKSTONE_WALL = BlockImpl.get("blackstone_wall");
 
-    Block BLACKSTONE_SLAB = BlockImpl.get("minecraft:blackstone_slab");
+    Block BLACKSTONE_SLAB = BlockImpl.get("blackstone_slab");
 
-    Block POLISHED_BLACKSTONE = BlockImpl.get("minecraft:polished_blackstone");
+    Block POLISHED_BLACKSTONE = BlockImpl.get("polished_blackstone");
 
-    Block POLISHED_BLACKSTONE_BRICKS = BlockImpl.get("minecraft:polished_blackstone_bricks");
+    Block POLISHED_BLACKSTONE_BRICKS = BlockImpl.get("polished_blackstone_bricks");
 
-    Block CRACKED_POLISHED_BLACKSTONE_BRICKS = BlockImpl.get("minecraft:cracked_polished_blackstone_bricks");
+    Block CRACKED_POLISHED_BLACKSTONE_BRICKS = BlockImpl.get("cracked_polished_blackstone_bricks");
 
-    Block CHISELED_POLISHED_BLACKSTONE = BlockImpl.get("minecraft:chiseled_polished_blackstone");
+    Block CHISELED_POLISHED_BLACKSTONE = BlockImpl.get("chiseled_polished_blackstone");
 
-    Block POLISHED_BLACKSTONE_BRICK_SLAB = BlockImpl.get("minecraft:polished_blackstone_brick_slab");
+    Block POLISHED_BLACKSTONE_BRICK_SLAB = BlockImpl.get("polished_blackstone_brick_slab");
 
-    Block POLISHED_BLACKSTONE_BRICK_STAIRS = BlockImpl.get("minecraft:polished_blackstone_brick_stairs");
+    Block POLISHED_BLACKSTONE_BRICK_STAIRS = BlockImpl.get("polished_blackstone_brick_stairs");
 
-    Block POLISHED_BLACKSTONE_BRICK_WALL = BlockImpl.get("minecraft:polished_blackstone_brick_wall");
+    Block POLISHED_BLACKSTONE_BRICK_WALL = BlockImpl.get("polished_blackstone_brick_wall");
 
-    Block GILDED_BLACKSTONE = BlockImpl.get("minecraft:gilded_blackstone");
+    Block GILDED_BLACKSTONE = BlockImpl.get("gilded_blackstone");
 
-    Block POLISHED_BLACKSTONE_STAIRS = BlockImpl.get("minecraft:polished_blackstone_stairs");
+    Block POLISHED_BLACKSTONE_STAIRS = BlockImpl.get("polished_blackstone_stairs");
 
-    Block POLISHED_BLACKSTONE_SLAB = BlockImpl.get("minecraft:polished_blackstone_slab");
+    Block POLISHED_BLACKSTONE_SLAB = BlockImpl.get("polished_blackstone_slab");
 
-    Block POLISHED_BLACKSTONE_PRESSURE_PLATE = BlockImpl.get("minecraft:polished_blackstone_pressure_plate");
+    Block POLISHED_BLACKSTONE_PRESSURE_PLATE = BlockImpl.get("polished_blackstone_pressure_plate");
 
-    Block POLISHED_BLACKSTONE_BUTTON = BlockImpl.get("minecraft:polished_blackstone_button");
+    Block POLISHED_BLACKSTONE_BUTTON = BlockImpl.get("polished_blackstone_button");
 
-    Block POLISHED_BLACKSTONE_WALL = BlockImpl.get("minecraft:polished_blackstone_wall");
+    Block POLISHED_BLACKSTONE_WALL = BlockImpl.get("polished_blackstone_wall");
 
-    Block CHISELED_NETHER_BRICKS = BlockImpl.get("minecraft:chiseled_nether_bricks");
+    Block CHISELED_NETHER_BRICKS = BlockImpl.get("chiseled_nether_bricks");
 
-    Block CRACKED_NETHER_BRICKS = BlockImpl.get("minecraft:cracked_nether_bricks");
+    Block CRACKED_NETHER_BRICKS = BlockImpl.get("cracked_nether_bricks");
 
-    Block QUARTZ_BRICKS = BlockImpl.get("minecraft:quartz_bricks");
+    Block QUARTZ_BRICKS = BlockImpl.get("quartz_bricks");
 
-    Block CANDLE = BlockImpl.get("minecraft:candle");
+    Block CANDLE = BlockImpl.get("candle");
 
-    Block WHITE_CANDLE = BlockImpl.get("minecraft:white_candle");
+    Block WHITE_CANDLE = BlockImpl.get("white_candle");
 
-    Block ORANGE_CANDLE = BlockImpl.get("minecraft:orange_candle");
+    Block ORANGE_CANDLE = BlockImpl.get("orange_candle");
 
-    Block MAGENTA_CANDLE = BlockImpl.get("minecraft:magenta_candle");
+    Block MAGENTA_CANDLE = BlockImpl.get("magenta_candle");
 
-    Block LIGHT_BLUE_CANDLE = BlockImpl.get("minecraft:light_blue_candle");
+    Block LIGHT_BLUE_CANDLE = BlockImpl.get("light_blue_candle");
 
-    Block YELLOW_CANDLE = BlockImpl.get("minecraft:yellow_candle");
+    Block YELLOW_CANDLE = BlockImpl.get("yellow_candle");
 
-    Block LIME_CANDLE = BlockImpl.get("minecraft:lime_candle");
+    Block LIME_CANDLE = BlockImpl.get("lime_candle");
 
-    Block PINK_CANDLE = BlockImpl.get("minecraft:pink_candle");
+    Block PINK_CANDLE = BlockImpl.get("pink_candle");
 
-    Block GRAY_CANDLE = BlockImpl.get("minecraft:gray_candle");
+    Block GRAY_CANDLE = BlockImpl.get("gray_candle");
 
-    Block LIGHT_GRAY_CANDLE = BlockImpl.get("minecraft:light_gray_candle");
+    Block LIGHT_GRAY_CANDLE = BlockImpl.get("light_gray_candle");
 
-    Block CYAN_CANDLE = BlockImpl.get("minecraft:cyan_candle");
+    Block CYAN_CANDLE = BlockImpl.get("cyan_candle");
 
-    Block PURPLE_CANDLE = BlockImpl.get("minecraft:purple_candle");
+    Block PURPLE_CANDLE = BlockImpl.get("purple_candle");
 
-    Block BLUE_CANDLE = BlockImpl.get("minecraft:blue_candle");
+    Block BLUE_CANDLE = BlockImpl.get("blue_candle");
 
-    Block BROWN_CANDLE = BlockImpl.get("minecraft:brown_candle");
+    Block BROWN_CANDLE = BlockImpl.get("brown_candle");
 
-    Block GREEN_CANDLE = BlockImpl.get("minecraft:green_candle");
+    Block GREEN_CANDLE = BlockImpl.get("green_candle");
 
-    Block RED_CANDLE = BlockImpl.get("minecraft:red_candle");
+    Block RED_CANDLE = BlockImpl.get("red_candle");
 
-    Block BLACK_CANDLE = BlockImpl.get("minecraft:black_candle");
+    Block BLACK_CANDLE = BlockImpl.get("black_candle");
 
-    Block CANDLE_CAKE = BlockImpl.get("minecraft:candle_cake");
+    Block CANDLE_CAKE = BlockImpl.get("candle_cake");
 
-    Block WHITE_CANDLE_CAKE = BlockImpl.get("minecraft:white_candle_cake");
+    Block WHITE_CANDLE_CAKE = BlockImpl.get("white_candle_cake");
 
-    Block ORANGE_CANDLE_CAKE = BlockImpl.get("minecraft:orange_candle_cake");
+    Block ORANGE_CANDLE_CAKE = BlockImpl.get("orange_candle_cake");
 
-    Block MAGENTA_CANDLE_CAKE = BlockImpl.get("minecraft:magenta_candle_cake");
+    Block MAGENTA_CANDLE_CAKE = BlockImpl.get("magenta_candle_cake");
 
-    Block LIGHT_BLUE_CANDLE_CAKE = BlockImpl.get("minecraft:light_blue_candle_cake");
+    Block LIGHT_BLUE_CANDLE_CAKE = BlockImpl.get("light_blue_candle_cake");
 
-    Block YELLOW_CANDLE_CAKE = BlockImpl.get("minecraft:yellow_candle_cake");
+    Block YELLOW_CANDLE_CAKE = BlockImpl.get("yellow_candle_cake");
 
-    Block LIME_CANDLE_CAKE = BlockImpl.get("minecraft:lime_candle_cake");
+    Block LIME_CANDLE_CAKE = BlockImpl.get("lime_candle_cake");
 
-    Block PINK_CANDLE_CAKE = BlockImpl.get("minecraft:pink_candle_cake");
+    Block PINK_CANDLE_CAKE = BlockImpl.get("pink_candle_cake");
 
-    Block GRAY_CANDLE_CAKE = BlockImpl.get("minecraft:gray_candle_cake");
+    Block GRAY_CANDLE_CAKE = BlockImpl.get("gray_candle_cake");
 
-    Block LIGHT_GRAY_CANDLE_CAKE = BlockImpl.get("minecraft:light_gray_candle_cake");
+    Block LIGHT_GRAY_CANDLE_CAKE = BlockImpl.get("light_gray_candle_cake");
 
-    Block CYAN_CANDLE_CAKE = BlockImpl.get("minecraft:cyan_candle_cake");
+    Block CYAN_CANDLE_CAKE = BlockImpl.get("cyan_candle_cake");
 
-    Block PURPLE_CANDLE_CAKE = BlockImpl.get("minecraft:purple_candle_cake");
+    Block PURPLE_CANDLE_CAKE = BlockImpl.get("purple_candle_cake");
 
-    Block BLUE_CANDLE_CAKE = BlockImpl.get("minecraft:blue_candle_cake");
+    Block BLUE_CANDLE_CAKE = BlockImpl.get("blue_candle_cake");
 
-    Block BROWN_CANDLE_CAKE = BlockImpl.get("minecraft:brown_candle_cake");
+    Block BROWN_CANDLE_CAKE = BlockImpl.get("brown_candle_cake");
 
-    Block GREEN_CANDLE_CAKE = BlockImpl.get("minecraft:green_candle_cake");
+    Block GREEN_CANDLE_CAKE = BlockImpl.get("green_candle_cake");
 
-    Block RED_CANDLE_CAKE = BlockImpl.get("minecraft:red_candle_cake");
+    Block RED_CANDLE_CAKE = BlockImpl.get("red_candle_cake");
 
-    Block BLACK_CANDLE_CAKE = BlockImpl.get("minecraft:black_candle_cake");
+    Block BLACK_CANDLE_CAKE = BlockImpl.get("black_candle_cake");
 
-    Block AMETHYST_BLOCK = BlockImpl.get("minecraft:amethyst_block");
+    Block AMETHYST_BLOCK = BlockImpl.get("amethyst_block");
 
-    Block BUDDING_AMETHYST = BlockImpl.get("minecraft:budding_amethyst");
+    Block BUDDING_AMETHYST = BlockImpl.get("budding_amethyst");
 
-    Block AMETHYST_CLUSTER = BlockImpl.get("minecraft:amethyst_cluster");
+    Block AMETHYST_CLUSTER = BlockImpl.get("amethyst_cluster");
 
-    Block LARGE_AMETHYST_BUD = BlockImpl.get("minecraft:large_amethyst_bud");
+    Block LARGE_AMETHYST_BUD = BlockImpl.get("large_amethyst_bud");
 
-    Block MEDIUM_AMETHYST_BUD = BlockImpl.get("minecraft:medium_amethyst_bud");
+    Block MEDIUM_AMETHYST_BUD = BlockImpl.get("medium_amethyst_bud");
 
-    Block SMALL_AMETHYST_BUD = BlockImpl.get("minecraft:small_amethyst_bud");
+    Block SMALL_AMETHYST_BUD = BlockImpl.get("small_amethyst_bud");
 
-    Block TUFF = BlockImpl.get("minecraft:tuff");
+    Block TUFF = BlockImpl.get("tuff");
 
-    Block TUFF_SLAB = BlockImpl.get("minecraft:tuff_slab");
+    Block TUFF_SLAB = BlockImpl.get("tuff_slab");
 
-    Block TUFF_STAIRS = BlockImpl.get("minecraft:tuff_stairs");
+    Block TUFF_STAIRS = BlockImpl.get("tuff_stairs");
 
-    Block TUFF_WALL = BlockImpl.get("minecraft:tuff_wall");
+    Block TUFF_WALL = BlockImpl.get("tuff_wall");
 
-    Block POLISHED_TUFF = BlockImpl.get("minecraft:polished_tuff");
+    Block POLISHED_TUFF = BlockImpl.get("polished_tuff");
 
-    Block POLISHED_TUFF_SLAB = BlockImpl.get("minecraft:polished_tuff_slab");
+    Block POLISHED_TUFF_SLAB = BlockImpl.get("polished_tuff_slab");
 
-    Block POLISHED_TUFF_STAIRS = BlockImpl.get("minecraft:polished_tuff_stairs");
+    Block POLISHED_TUFF_STAIRS = BlockImpl.get("polished_tuff_stairs");
 
-    Block POLISHED_TUFF_WALL = BlockImpl.get("minecraft:polished_tuff_wall");
+    Block POLISHED_TUFF_WALL = BlockImpl.get("polished_tuff_wall");
 
-    Block CHISELED_TUFF = BlockImpl.get("minecraft:chiseled_tuff");
+    Block CHISELED_TUFF = BlockImpl.get("chiseled_tuff");
 
-    Block TUFF_BRICKS = BlockImpl.get("minecraft:tuff_bricks");
+    Block TUFF_BRICKS = BlockImpl.get("tuff_bricks");
 
-    Block TUFF_BRICK_SLAB = BlockImpl.get("minecraft:tuff_brick_slab");
+    Block TUFF_BRICK_SLAB = BlockImpl.get("tuff_brick_slab");
 
-    Block TUFF_BRICK_STAIRS = BlockImpl.get("minecraft:tuff_brick_stairs");
+    Block TUFF_BRICK_STAIRS = BlockImpl.get("tuff_brick_stairs");
 
-    Block TUFF_BRICK_WALL = BlockImpl.get("minecraft:tuff_brick_wall");
+    Block TUFF_BRICK_WALL = BlockImpl.get("tuff_brick_wall");
 
-    Block CHISELED_TUFF_BRICKS = BlockImpl.get("minecraft:chiseled_tuff_bricks");
+    Block CHISELED_TUFF_BRICKS = BlockImpl.get("chiseled_tuff_bricks");
 
-    Block CALCITE = BlockImpl.get("minecraft:calcite");
+    Block CALCITE = BlockImpl.get("calcite");
 
-    Block TINTED_GLASS = BlockImpl.get("minecraft:tinted_glass");
+    Block TINTED_GLASS = BlockImpl.get("tinted_glass");
 
-    Block POWDER_SNOW = BlockImpl.get("minecraft:powder_snow");
+    Block POWDER_SNOW = BlockImpl.get("powder_snow");
 
-    Block SCULK_SENSOR = BlockImpl.get("minecraft:sculk_sensor");
+    Block SCULK_SENSOR = BlockImpl.get("sculk_sensor");
 
-    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get("minecraft:calibrated_sculk_sensor");
+    Block CALIBRATED_SCULK_SENSOR = BlockImpl.get("calibrated_sculk_sensor");
 
-    Block SCULK = BlockImpl.get("minecraft:sculk");
+    Block SCULK = BlockImpl.get("sculk");
 
-    Block SCULK_VEIN = BlockImpl.get("minecraft:sculk_vein");
+    Block SCULK_VEIN = BlockImpl.get("sculk_vein");
 
-    Block SCULK_CATALYST = BlockImpl.get("minecraft:sculk_catalyst");
+    Block SCULK_CATALYST = BlockImpl.get("sculk_catalyst");
 
-    Block SCULK_SHRIEKER = BlockImpl.get("minecraft:sculk_shrieker");
+    Block SCULK_SHRIEKER = BlockImpl.get("sculk_shrieker");
 
-    Block COPPER_BLOCK = BlockImpl.get("minecraft:copper_block");
+    Block COPPER_BLOCK = BlockImpl.get("copper_block");
 
-    Block EXPOSED_COPPER = BlockImpl.get("minecraft:exposed_copper");
+    Block EXPOSED_COPPER = BlockImpl.get("exposed_copper");
 
-    Block WEATHERED_COPPER = BlockImpl.get("minecraft:weathered_copper");
+    Block WEATHERED_COPPER = BlockImpl.get("weathered_copper");
 
-    Block OXIDIZED_COPPER = BlockImpl.get("minecraft:oxidized_copper");
+    Block OXIDIZED_COPPER = BlockImpl.get("oxidized_copper");
 
-    Block COPPER_ORE = BlockImpl.get("minecraft:copper_ore");
+    Block COPPER_ORE = BlockImpl.get("copper_ore");
 
-    Block DEEPSLATE_COPPER_ORE = BlockImpl.get("minecraft:deepslate_copper_ore");
+    Block DEEPSLATE_COPPER_ORE = BlockImpl.get("deepslate_copper_ore");
 
-    Block OXIDIZED_CUT_COPPER = BlockImpl.get("minecraft:oxidized_cut_copper");
+    Block OXIDIZED_CUT_COPPER = BlockImpl.get("oxidized_cut_copper");
 
-    Block WEATHERED_CUT_COPPER = BlockImpl.get("minecraft:weathered_cut_copper");
+    Block WEATHERED_CUT_COPPER = BlockImpl.get("weathered_cut_copper");
 
-    Block EXPOSED_CUT_COPPER = BlockImpl.get("minecraft:exposed_cut_copper");
+    Block EXPOSED_CUT_COPPER = BlockImpl.get("exposed_cut_copper");
 
-    Block CUT_COPPER = BlockImpl.get("minecraft:cut_copper");
+    Block CUT_COPPER = BlockImpl.get("cut_copper");
 
-    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:oxidized_chiseled_copper");
+    Block OXIDIZED_CHISELED_COPPER = BlockImpl.get("oxidized_chiseled_copper");
 
-    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:weathered_chiseled_copper");
+    Block WEATHERED_CHISELED_COPPER = BlockImpl.get("weathered_chiseled_copper");
 
-    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:exposed_chiseled_copper");
+    Block EXPOSED_CHISELED_COPPER = BlockImpl.get("exposed_chiseled_copper");
 
-    Block CHISELED_COPPER = BlockImpl.get("minecraft:chiseled_copper");
+    Block CHISELED_COPPER = BlockImpl.get("chiseled_copper");
 
-    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_oxidized_chiseled_copper");
+    Block WAXED_OXIDIZED_CHISELED_COPPER = BlockImpl.get("waxed_oxidized_chiseled_copper");
 
-    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_weathered_chiseled_copper");
+    Block WAXED_WEATHERED_CHISELED_COPPER = BlockImpl.get("waxed_weathered_chiseled_copper");
 
-    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_exposed_chiseled_copper");
+    Block WAXED_EXPOSED_CHISELED_COPPER = BlockImpl.get("waxed_exposed_chiseled_copper");
 
-    Block WAXED_CHISELED_COPPER = BlockImpl.get("minecraft:waxed_chiseled_copper");
+    Block WAXED_CHISELED_COPPER = BlockImpl.get("waxed_chiseled_copper");
 
-    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:oxidized_cut_copper_stairs");
+    Block OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("oxidized_cut_copper_stairs");
 
-    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:weathered_cut_copper_stairs");
+    Block WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("weathered_cut_copper_stairs");
 
-    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:exposed_cut_copper_stairs");
+    Block EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("exposed_cut_copper_stairs");
 
-    Block CUT_COPPER_STAIRS = BlockImpl.get("minecraft:cut_copper_stairs");
+    Block CUT_COPPER_STAIRS = BlockImpl.get("cut_copper_stairs");
 
-    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:oxidized_cut_copper_slab");
+    Block OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("oxidized_cut_copper_slab");
 
-    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:weathered_cut_copper_slab");
+    Block WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("weathered_cut_copper_slab");
 
-    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:exposed_cut_copper_slab");
+    Block EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("exposed_cut_copper_slab");
 
-    Block CUT_COPPER_SLAB = BlockImpl.get("minecraft:cut_copper_slab");
+    Block CUT_COPPER_SLAB = BlockImpl.get("cut_copper_slab");
 
-    Block WAXED_COPPER_BLOCK = BlockImpl.get("minecraft:waxed_copper_block");
+    Block WAXED_COPPER_BLOCK = BlockImpl.get("waxed_copper_block");
 
-    Block WAXED_WEATHERED_COPPER = BlockImpl.get("minecraft:waxed_weathered_copper");
+    Block WAXED_WEATHERED_COPPER = BlockImpl.get("waxed_weathered_copper");
 
-    Block WAXED_EXPOSED_COPPER = BlockImpl.get("minecraft:waxed_exposed_copper");
+    Block WAXED_EXPOSED_COPPER = BlockImpl.get("waxed_exposed_copper");
 
-    Block WAXED_OXIDIZED_COPPER = BlockImpl.get("minecraft:waxed_oxidized_copper");
+    Block WAXED_OXIDIZED_COPPER = BlockImpl.get("waxed_oxidized_copper");
 
-    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get("minecraft:waxed_oxidized_cut_copper");
+    Block WAXED_OXIDIZED_CUT_COPPER = BlockImpl.get("waxed_oxidized_cut_copper");
 
-    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get("minecraft:waxed_weathered_cut_copper");
+    Block WAXED_WEATHERED_CUT_COPPER = BlockImpl.get("waxed_weathered_cut_copper");
 
-    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get("minecraft:waxed_exposed_cut_copper");
+    Block WAXED_EXPOSED_CUT_COPPER = BlockImpl.get("waxed_exposed_cut_copper");
 
-    Block WAXED_CUT_COPPER = BlockImpl.get("minecraft:waxed_cut_copper");
+    Block WAXED_CUT_COPPER = BlockImpl.get("waxed_cut_copper");
 
-    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:waxed_oxidized_cut_copper_stairs");
+    Block WAXED_OXIDIZED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_oxidized_cut_copper_stairs");
 
-    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:waxed_weathered_cut_copper_stairs");
+    Block WAXED_WEATHERED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_weathered_cut_copper_stairs");
 
-    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:waxed_exposed_cut_copper_stairs");
+    Block WAXED_EXPOSED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_exposed_cut_copper_stairs");
 
-    Block WAXED_CUT_COPPER_STAIRS = BlockImpl.get("minecraft:waxed_cut_copper_stairs");
+    Block WAXED_CUT_COPPER_STAIRS = BlockImpl.get("waxed_cut_copper_stairs");
 
-    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_oxidized_cut_copper_slab");
+    Block WAXED_OXIDIZED_CUT_COPPER_SLAB = BlockImpl.get("waxed_oxidized_cut_copper_slab");
 
-    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_weathered_cut_copper_slab");
+    Block WAXED_WEATHERED_CUT_COPPER_SLAB = BlockImpl.get("waxed_weathered_cut_copper_slab");
 
-    Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_exposed_cut_copper_slab");
+    Block WAXED_EXPOSED_CUT_COPPER_SLAB = BlockImpl.get("waxed_exposed_cut_copper_slab");
 
-    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("minecraft:waxed_cut_copper_slab");
+    Block WAXED_CUT_COPPER_SLAB = BlockImpl.get("waxed_cut_copper_slab");
 
-    Block COPPER_DOOR = BlockImpl.get("minecraft:copper_door");
+    Block COPPER_DOOR = BlockImpl.get("copper_door");
 
-    Block EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:exposed_copper_door");
+    Block EXPOSED_COPPER_DOOR = BlockImpl.get("exposed_copper_door");
 
-    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:oxidized_copper_door");
+    Block OXIDIZED_COPPER_DOOR = BlockImpl.get("oxidized_copper_door");
 
-    Block WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:weathered_copper_door");
+    Block WEATHERED_COPPER_DOOR = BlockImpl.get("weathered_copper_door");
 
-    Block WAXED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_copper_door");
+    Block WAXED_COPPER_DOOR = BlockImpl.get("waxed_copper_door");
 
-    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_exposed_copper_door");
+    Block WAXED_EXPOSED_COPPER_DOOR = BlockImpl.get("waxed_exposed_copper_door");
 
-    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_door");
+    Block WAXED_OXIDIZED_COPPER_DOOR = BlockImpl.get("waxed_oxidized_copper_door");
 
-    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get("minecraft:waxed_weathered_copper_door");
+    Block WAXED_WEATHERED_COPPER_DOOR = BlockImpl.get("waxed_weathered_copper_door");
 
-    Block COPPER_TRAPDOOR = BlockImpl.get("minecraft:copper_trapdoor");
+    Block COPPER_TRAPDOOR = BlockImpl.get("copper_trapdoor");
 
-    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:exposed_copper_trapdoor");
+    Block EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("exposed_copper_trapdoor");
 
-    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:oxidized_copper_trapdoor");
+    Block OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("oxidized_copper_trapdoor");
 
-    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:weathered_copper_trapdoor");
+    Block WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("weathered_copper_trapdoor");
 
-    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_copper_trapdoor");
+    Block WAXED_COPPER_TRAPDOOR = BlockImpl.get("waxed_copper_trapdoor");
 
-    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_exposed_copper_trapdoor");
+    Block WAXED_EXPOSED_COPPER_TRAPDOOR = BlockImpl.get("waxed_exposed_copper_trapdoor");
 
-    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_oxidized_copper_trapdoor");
+    Block WAXED_OXIDIZED_COPPER_TRAPDOOR = BlockImpl.get("waxed_oxidized_copper_trapdoor");
 
-    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("minecraft:waxed_weathered_copper_trapdoor");
+    Block WAXED_WEATHERED_COPPER_TRAPDOOR = BlockImpl.get("waxed_weathered_copper_trapdoor");
 
-    Block COPPER_GRATE = BlockImpl.get("minecraft:copper_grate");
+    Block COPPER_GRATE = BlockImpl.get("copper_grate");
 
-    Block EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:exposed_copper_grate");
+    Block EXPOSED_COPPER_GRATE = BlockImpl.get("exposed_copper_grate");
 
-    Block WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:weathered_copper_grate");
+    Block WEATHERED_COPPER_GRATE = BlockImpl.get("weathered_copper_grate");
 
-    Block OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:oxidized_copper_grate");
+    Block OXIDIZED_COPPER_GRATE = BlockImpl.get("oxidized_copper_grate");
 
-    Block WAXED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_copper_grate");
+    Block WAXED_COPPER_GRATE = BlockImpl.get("waxed_copper_grate");
 
-    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_exposed_copper_grate");
+    Block WAXED_EXPOSED_COPPER_GRATE = BlockImpl.get("waxed_exposed_copper_grate");
 
-    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_weathered_copper_grate");
+    Block WAXED_WEATHERED_COPPER_GRATE = BlockImpl.get("waxed_weathered_copper_grate");
 
-    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get("minecraft:waxed_oxidized_copper_grate");
+    Block WAXED_OXIDIZED_COPPER_GRATE = BlockImpl.get("waxed_oxidized_copper_grate");
 
-    Block COPPER_BULB = BlockImpl.get("minecraft:copper_bulb");
+    Block COPPER_BULB = BlockImpl.get("copper_bulb");
 
-    Block EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:exposed_copper_bulb");
+    Block EXPOSED_COPPER_BULB = BlockImpl.get("exposed_copper_bulb");
 
-    Block WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:weathered_copper_bulb");
+    Block WEATHERED_COPPER_BULB = BlockImpl.get("weathered_copper_bulb");
 
-    Block OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:oxidized_copper_bulb");
+    Block OXIDIZED_COPPER_BULB = BlockImpl.get("oxidized_copper_bulb");
 
-    Block WAXED_COPPER_BULB = BlockImpl.get("minecraft:waxed_copper_bulb");
+    Block WAXED_COPPER_BULB = BlockImpl.get("waxed_copper_bulb");
 
-    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get("minecraft:waxed_exposed_copper_bulb");
+    Block WAXED_EXPOSED_COPPER_BULB = BlockImpl.get("waxed_exposed_copper_bulb");
 
-    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get("minecraft:waxed_weathered_copper_bulb");
+    Block WAXED_WEATHERED_COPPER_BULB = BlockImpl.get("waxed_weathered_copper_bulb");
 
-    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get("minecraft:waxed_oxidized_copper_bulb");
+    Block WAXED_OXIDIZED_COPPER_BULB = BlockImpl.get("waxed_oxidized_copper_bulb");
 
-    Block LIGHTNING_ROD = BlockImpl.get("minecraft:lightning_rod");
+    Block LIGHTNING_ROD = BlockImpl.get("lightning_rod");
 
-    Block POINTED_DRIPSTONE = BlockImpl.get("minecraft:pointed_dripstone");
+    Block POINTED_DRIPSTONE = BlockImpl.get("pointed_dripstone");
 
-    Block DRIPSTONE_BLOCK = BlockImpl.get("minecraft:dripstone_block");
+    Block DRIPSTONE_BLOCK = BlockImpl.get("dripstone_block");
 
-    Block CAVE_VINES = BlockImpl.get("minecraft:cave_vines");
+    Block CAVE_VINES = BlockImpl.get("cave_vines");
 
-    Block CAVE_VINES_PLANT = BlockImpl.get("minecraft:cave_vines_plant");
+    Block CAVE_VINES_PLANT = BlockImpl.get("cave_vines_plant");
 
-    Block SPORE_BLOSSOM = BlockImpl.get("minecraft:spore_blossom");
+    Block SPORE_BLOSSOM = BlockImpl.get("spore_blossom");
 
-    Block AZALEA = BlockImpl.get("minecraft:azalea");
+    Block AZALEA = BlockImpl.get("azalea");
 
-    Block FLOWERING_AZALEA = BlockImpl.get("minecraft:flowering_azalea");
+    Block FLOWERING_AZALEA = BlockImpl.get("flowering_azalea");
 
-    Block MOSS_CARPET = BlockImpl.get("minecraft:moss_carpet");
+    Block MOSS_CARPET = BlockImpl.get("moss_carpet");
 
-    Block PINK_PETALS = BlockImpl.get("minecraft:pink_petals");
+    Block PINK_PETALS = BlockImpl.get("pink_petals");
 
-    Block WILDFLOWERS = BlockImpl.get("minecraft:wildflowers");
+    Block WILDFLOWERS = BlockImpl.get("wildflowers");
 
-    Block LEAF_LITTER = BlockImpl.get("minecraft:leaf_litter");
+    Block LEAF_LITTER = BlockImpl.get("leaf_litter");
 
-    Block MOSS_BLOCK = BlockImpl.get("minecraft:moss_block");
+    Block MOSS_BLOCK = BlockImpl.get("moss_block");
 
-    Block BIG_DRIPLEAF = BlockImpl.get("minecraft:big_dripleaf");
+    Block BIG_DRIPLEAF = BlockImpl.get("big_dripleaf");
 
-    Block BIG_DRIPLEAF_STEM = BlockImpl.get("minecraft:big_dripleaf_stem");
+    Block BIG_DRIPLEAF_STEM = BlockImpl.get("big_dripleaf_stem");
 
-    Block SMALL_DRIPLEAF = BlockImpl.get("minecraft:small_dripleaf");
+    Block SMALL_DRIPLEAF = BlockImpl.get("small_dripleaf");
 
-    Block HANGING_ROOTS = BlockImpl.get("minecraft:hanging_roots");
+    Block HANGING_ROOTS = BlockImpl.get("hanging_roots");
 
-    Block ROOTED_DIRT = BlockImpl.get("minecraft:rooted_dirt");
+    Block ROOTED_DIRT = BlockImpl.get("rooted_dirt");
 
-    Block MUD = BlockImpl.get("minecraft:mud");
+    Block MUD = BlockImpl.get("mud");
 
-    Block DEEPSLATE = BlockImpl.get("minecraft:deepslate");
+    Block DEEPSLATE = BlockImpl.get("deepslate");
 
-    Block COBBLED_DEEPSLATE = BlockImpl.get("minecraft:cobbled_deepslate");
+    Block COBBLED_DEEPSLATE = BlockImpl.get("cobbled_deepslate");
 
-    Block COBBLED_DEEPSLATE_STAIRS = BlockImpl.get("minecraft:cobbled_deepslate_stairs");
+    Block COBBLED_DEEPSLATE_STAIRS = BlockImpl.get("cobbled_deepslate_stairs");
 
-    Block COBBLED_DEEPSLATE_SLAB = BlockImpl.get("minecraft:cobbled_deepslate_slab");
+    Block COBBLED_DEEPSLATE_SLAB = BlockImpl.get("cobbled_deepslate_slab");
 
-    Block COBBLED_DEEPSLATE_WALL = BlockImpl.get("minecraft:cobbled_deepslate_wall");
+    Block COBBLED_DEEPSLATE_WALL = BlockImpl.get("cobbled_deepslate_wall");
 
-    Block POLISHED_DEEPSLATE = BlockImpl.get("minecraft:polished_deepslate");
+    Block POLISHED_DEEPSLATE = BlockImpl.get("polished_deepslate");
 
-    Block POLISHED_DEEPSLATE_STAIRS = BlockImpl.get("minecraft:polished_deepslate_stairs");
+    Block POLISHED_DEEPSLATE_STAIRS = BlockImpl.get("polished_deepslate_stairs");
 
-    Block POLISHED_DEEPSLATE_SLAB = BlockImpl.get("minecraft:polished_deepslate_slab");
+    Block POLISHED_DEEPSLATE_SLAB = BlockImpl.get("polished_deepslate_slab");
 
-    Block POLISHED_DEEPSLATE_WALL = BlockImpl.get("minecraft:polished_deepslate_wall");
+    Block POLISHED_DEEPSLATE_WALL = BlockImpl.get("polished_deepslate_wall");
 
-    Block DEEPSLATE_TILES = BlockImpl.get("minecraft:deepslate_tiles");
+    Block DEEPSLATE_TILES = BlockImpl.get("deepslate_tiles");
 
-    Block DEEPSLATE_TILE_STAIRS = BlockImpl.get("minecraft:deepslate_tile_stairs");
+    Block DEEPSLATE_TILE_STAIRS = BlockImpl.get("deepslate_tile_stairs");
 
-    Block DEEPSLATE_TILE_SLAB = BlockImpl.get("minecraft:deepslate_tile_slab");
+    Block DEEPSLATE_TILE_SLAB = BlockImpl.get("deepslate_tile_slab");
 
-    Block DEEPSLATE_TILE_WALL = BlockImpl.get("minecraft:deepslate_tile_wall");
+    Block DEEPSLATE_TILE_WALL = BlockImpl.get("deepslate_tile_wall");
 
-    Block DEEPSLATE_BRICKS = BlockImpl.get("minecraft:deepslate_bricks");
+    Block DEEPSLATE_BRICKS = BlockImpl.get("deepslate_bricks");
 
-    Block DEEPSLATE_BRICK_STAIRS = BlockImpl.get("minecraft:deepslate_brick_stairs");
+    Block DEEPSLATE_BRICK_STAIRS = BlockImpl.get("deepslate_brick_stairs");
 
-    Block DEEPSLATE_BRICK_SLAB = BlockImpl.get("minecraft:deepslate_brick_slab");
+    Block DEEPSLATE_BRICK_SLAB = BlockImpl.get("deepslate_brick_slab");
 
-    Block DEEPSLATE_BRICK_WALL = BlockImpl.get("minecraft:deepslate_brick_wall");
+    Block DEEPSLATE_BRICK_WALL = BlockImpl.get("deepslate_brick_wall");
 
-    Block CHISELED_DEEPSLATE = BlockImpl.get("minecraft:chiseled_deepslate");
+    Block CHISELED_DEEPSLATE = BlockImpl.get("chiseled_deepslate");
 
-    Block CRACKED_DEEPSLATE_BRICKS = BlockImpl.get("minecraft:cracked_deepslate_bricks");
+    Block CRACKED_DEEPSLATE_BRICKS = BlockImpl.get("cracked_deepslate_bricks");
 
-    Block CRACKED_DEEPSLATE_TILES = BlockImpl.get("minecraft:cracked_deepslate_tiles");
+    Block CRACKED_DEEPSLATE_TILES = BlockImpl.get("cracked_deepslate_tiles");
 
-    Block INFESTED_DEEPSLATE = BlockImpl.get("minecraft:infested_deepslate");
+    Block INFESTED_DEEPSLATE = BlockImpl.get("infested_deepslate");
 
-    Block SMOOTH_BASALT = BlockImpl.get("minecraft:smooth_basalt");
+    Block SMOOTH_BASALT = BlockImpl.get("smooth_basalt");
 
-    Block RAW_IRON_BLOCK = BlockImpl.get("minecraft:raw_iron_block");
+    Block RAW_IRON_BLOCK = BlockImpl.get("raw_iron_block");
 
-    Block RAW_COPPER_BLOCK = BlockImpl.get("minecraft:raw_copper_block");
+    Block RAW_COPPER_BLOCK = BlockImpl.get("raw_copper_block");
 
-    Block RAW_GOLD_BLOCK = BlockImpl.get("minecraft:raw_gold_block");
+    Block RAW_GOLD_BLOCK = BlockImpl.get("raw_gold_block");
 
-    Block POTTED_AZALEA_BUSH = BlockImpl.get("minecraft:potted_azalea_bush");
+    Block POTTED_AZALEA_BUSH = BlockImpl.get("potted_azalea_bush");
 
-    Block POTTED_FLOWERING_AZALEA_BUSH = BlockImpl.get("minecraft:potted_flowering_azalea_bush");
+    Block POTTED_FLOWERING_AZALEA_BUSH = BlockImpl.get("potted_flowering_azalea_bush");
 
-    Block OCHRE_FROGLIGHT = BlockImpl.get("minecraft:ochre_froglight");
+    Block OCHRE_FROGLIGHT = BlockImpl.get("ochre_froglight");
 
-    Block VERDANT_FROGLIGHT = BlockImpl.get("minecraft:verdant_froglight");
+    Block VERDANT_FROGLIGHT = BlockImpl.get("verdant_froglight");
 
-    Block PEARLESCENT_FROGLIGHT = BlockImpl.get("minecraft:pearlescent_froglight");
+    Block PEARLESCENT_FROGLIGHT = BlockImpl.get("pearlescent_froglight");
 
-    Block FROGSPAWN = BlockImpl.get("minecraft:frogspawn");
+    Block FROGSPAWN = BlockImpl.get("frogspawn");
 
-    Block REINFORCED_DEEPSLATE = BlockImpl.get("minecraft:reinforced_deepslate");
+    Block REINFORCED_DEEPSLATE = BlockImpl.get("reinforced_deepslate");
 
-    Block DECORATED_POT = BlockImpl.get("minecraft:decorated_pot");
+    Block DECORATED_POT = BlockImpl.get("decorated_pot");
 
-    Block CRAFTER = BlockImpl.get("minecraft:crafter");
+    Block CRAFTER = BlockImpl.get("crafter");
 
-    Block TRIAL_SPAWNER = BlockImpl.get("minecraft:trial_spawner");
+    Block TRIAL_SPAWNER = BlockImpl.get("trial_spawner");
 
-    Block VAULT = BlockImpl.get("minecraft:vault");
+    Block VAULT = BlockImpl.get("vault");
 
-    Block HEAVY_CORE = BlockImpl.get("minecraft:heavy_core");
+    Block HEAVY_CORE = BlockImpl.get("heavy_core");
 
-    Block PALE_MOSS_BLOCK = BlockImpl.get("minecraft:pale_moss_block");
+    Block PALE_MOSS_BLOCK = BlockImpl.get("pale_moss_block");
 
-    Block PALE_MOSS_CARPET = BlockImpl.get("minecraft:pale_moss_carpet");
+    Block PALE_MOSS_CARPET = BlockImpl.get("pale_moss_carpet");
 
-    Block PALE_HANGING_MOSS = BlockImpl.get("minecraft:pale_hanging_moss");
+    Block PALE_HANGING_MOSS = BlockImpl.get("pale_hanging_moss");
 
-    Block OPEN_EYEBLOSSOM = BlockImpl.get("minecraft:open_eyeblossom");
+    Block OPEN_EYEBLOSSOM = BlockImpl.get("open_eyeblossom");
 
-    Block CLOSED_EYEBLOSSOM = BlockImpl.get("minecraft:closed_eyeblossom");
+    Block CLOSED_EYEBLOSSOM = BlockImpl.get("closed_eyeblossom");
 
-    Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get("minecraft:potted_open_eyeblossom");
+    Block POTTED_OPEN_EYEBLOSSOM = BlockImpl.get("potted_open_eyeblossom");
 
-    Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get("minecraft:potted_closed_eyeblossom");
+    Block POTTED_CLOSED_EYEBLOSSOM = BlockImpl.get("potted_closed_eyeblossom");
 
-    Block FIREFLY_BUSH = BlockImpl.get("minecraft:firefly_bush");
+    Block FIREFLY_BUSH = BlockImpl.get("firefly_bush");
 }
