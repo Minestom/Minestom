@@ -18,7 +18,9 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.registry.RegistryTranscoder;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -36,26 +38,42 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int INVALID_MATERIAL = 3;
     public static final int INVALID_COMPONENT = 4;
 
+    private final TagStringIO tagStringIO;
+
     public ArgumentItemStack(String id) {
         super(id, true);
+        this.tagStringIO = TagStringIO.tagStringIO();
+    }
+
+    public ArgumentItemStack(String id, @NotNull TagStringIO tagParser) {
+        super(id, true);
+        Check.notNull(tagParser, "tagParser cannot be null.");
+        this.tagStringIO = tagParser;
     }
 
     @NotNull
     @Override
     public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input);
+        return staticParse(input, TagStringIO.tagStringIO());
     }
 
     @Override
     public ArgumentParserType parser() {
         return ArgumentParserType.ITEM_STACK;
     }
+    /**
+     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
+     */
+    @Deprecated
+    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
+        return staticParse(input, TagStringIO.tagStringIO());
+    }
 
     /**
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @SuppressWarnings("unchecked") @Deprecated
-    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
+    public static ItemStack staticParse(@NotNull String input, @NotNull TagStringIO tagStringIO) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
         final Material material = Material.fromKey(reader.readKey());
@@ -79,7 +97,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
                 reader.consume('=');
 
-                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
+                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag(tagStringIO));
                 components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
 
                 if (reader.peek() != ']')
@@ -90,7 +108,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         // Parse the NBT
         if (reader.hasMore() && reader.peek() == '{') {
-            final BinaryTag nbt = reader.readTag();
+            final BinaryTag nbt = reader.readTag(tagStringIO);
             if (!(nbt instanceof CompoundBinaryTag compound))
                 throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
 
@@ -149,10 +167,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             return Key.key(input.substring(start, index));
         }
 
-        public @NotNull BinaryTag readTag() {
+        public @NotNull BinaryTag readTag(TagStringIO tagStringIO) {
             try {
                 StringBuilder remainder = new StringBuilder();
-                final BinaryTag result = TagStringIO.tagStringIO().asTag(input.substring(index), remainder);
+                final BinaryTag result = tagStringIO.asTag(input.substring(index), remainder);
                 this.input = remainder.toString();
                 this.index = 0;
 
