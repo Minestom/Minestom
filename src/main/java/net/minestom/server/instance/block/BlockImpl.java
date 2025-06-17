@@ -116,8 +116,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         return BLOCK_STATE_MAP.get(stateId);
     }
 
-    static @Nullable Block parseState(String input) {
-        if (input == null || input.isEmpty()) return null;
+    static @Nullable Block parseState(@NotNull String input) {
+        if (input.isEmpty()) return null;
         final int nbtIndex = input.indexOf("[");
         if (nbtIndex == 0) return null;
         if (nbtIndex == -1) return Block.fromKey(input);
