@@ -24,7 +24,7 @@ public class SalmonMeta extends AbstractFishMeta {
      */
     @Deprecated
     public @NotNull SalmonMeta.Size getSize() {
-        return Size.BY_ID.getOrDefault(metadata.get(MetadataDef.Salmon.SIZE), Size.MEDIUM);
+        return Size.VALUES[metadata.get(MetadataDef.Salmon.SIZE)];
     }
 
     /**
@@ -32,7 +32,7 @@ public class SalmonMeta extends AbstractFishMeta {
      */
     @Deprecated
     public void setSize(@NotNull SalmonMeta.Size size) {
-        metadata.set(MetadataDef.Salmon.SIZE, size.id());
+        metadata.set(MetadataDef.Salmon.SIZE, size.ordinal());
     }
 
     @Override
@@ -54,6 +54,8 @@ public class SalmonMeta extends AbstractFishMeta {
         SMALL("small"),
         MEDIUM("medium"),
         LARGE("large");
+
+        private static final Size[] VALUES = values();
 
         public static final NetworkBuffer.Type<Size> NETWORK_TYPE = NetworkBuffer.Enum(Size.class);
         public static final Codec<Size> CODEC = Codec.Enum(Size.class);
