@@ -6,7 +6,7 @@ import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.metadata.animal.ArmadilloMeta;
 import net.minestom.server.entity.metadata.animal.FrogMeta;
 import net.minestom.server.entity.metadata.animal.SnifferMeta;
-import net.minestom.server.entity.metadata.animal.tameable.CatMeta;
+import net.minestom.server.entity.metadata.animal.tameable.CatVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
@@ -50,7 +50,7 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_VILLAGERDATA, VillagerData(VillagerMeta.VillagerData.DEFAULT));
         EMPTY_VALUES.set(TYPE_OPT_VARINT, OptVarInt(null));
         EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
-        EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatMeta.Variant.TABBY));
+        EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatVariant.TABBY));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
         EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos

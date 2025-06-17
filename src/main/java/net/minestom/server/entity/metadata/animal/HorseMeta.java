@@ -46,15 +46,17 @@ public class HorseMeta extends AbstractHorseMeta {
     @SuppressWarnings("unchecked")
     protected <T> @Nullable T get(@NotNull DataComponent<T> component) {
         if (component == DataComponents.HORSE_VARIANT)
-            return (T) getVariant();
+            return (T) getVariant().getMarking();
         return super.get(component);
     }
 
     @Override
     protected <T> void set(@NotNull DataComponent<T> component, @NotNull T value) {
-        if (component == DataComponents.HORSE_VARIANT)
-            setVariant((Variant) value);
-        else super.set(component, value);
+        if (component == DataComponents.HORSE_VARIANT) {
+            var variant = getVariant();
+            variant.setMarking((Marking) value);
+            setVariant(variant);
+        } else super.set(component, value);
     }
 
     public static class Variant {
