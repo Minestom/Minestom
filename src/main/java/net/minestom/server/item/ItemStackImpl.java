@@ -125,6 +125,18 @@ record ItemStackImpl(Material material, int amount, DataComponentMap components)
     }
 
     @Override
+    public @NotNull ItemStack damage(int amount) {
+        final Integer damage = get(DataComponents.DAMAGE);
+        if (damage == null) return this;
+        final Integer maxDamage = get(DataComponents.MAX_DAMAGE);
+        if (maxDamage != null && damage + amount >= maxDamage) {
+            return ItemStack.AIR;
+        } else {
+            return with(DataComponents.DAMAGE, damage + amount);
+        }
+    }
+
+    @Override
     public boolean isSimilar(@NotNull ItemStack itemStack) {
         return material == itemStack.material() && components.equals(((ItemStackImpl) itemStack).components);
     }
