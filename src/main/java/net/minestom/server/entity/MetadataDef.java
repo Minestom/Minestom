@@ -11,6 +11,7 @@ import net.minestom.server.entity.metadata.animal.tameable.WolfSoundVariant;
 import net.minestom.server.entity.metadata.animal.tameable.WolfVariant;
 import net.minestom.server.entity.metadata.other.PaintingVariant;
 import net.minestom.server.entity.metadata.villager.VillagerMeta;
+import net.minestom.server.entity.metadata.water.fish.SalmonMeta;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.particle.Particle;
@@ -282,7 +283,7 @@ public sealed class MetadataDef {
     }
 
     public static final class Salmon extends AbstractFish {
-        public static final Entry<String> SIZE = index(0, Metadata::String, "");
+        public static final Entry<Integer> SIZE = index(0, Metadata::VarInt, SalmonMeta.Size.SMALL.ordinal());
     }
 
     public static final class TropicalFish extends AbstractFish {
