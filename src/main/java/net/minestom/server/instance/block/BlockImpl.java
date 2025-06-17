@@ -116,6 +116,26 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         return BLOCK_STATE_MAP.get(stateId);
     }
 
+    static @Nullable Block parseState(@NotNull String input) {
+        if (input.isEmpty()) return null;
+        final int nbtIndex = input.indexOf("[");
+        if (nbtIndex == 0) return null;
+        if (nbtIndex == -1) return Block.fromKey(input);
+        if (!input.endsWith("]")) return null;
+        // Block state
+        final String blockName = input.substring(0, nbtIndex);
+        Block block = Block.fromKey(blockName);
+        if (block == null) return null;
+        // Compute properties
+        final String query = input.substring(nbtIndex);
+        final Map<String, String> propertyMap = BlockUtils.parseProperties(query);
+        try {
+            return block.withProperties(propertyMap);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
     @Override
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
@@ -175,6 +195,21 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
             values[i] = property.values().get((int) index);
         }
         return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
+    }
+
+    @Override
+    public @NotNull String state() {
+        final Map<String, String> properties = properties();
+        if (properties.isEmpty()) return name();
+        StringBuilder builder = new StringBuilder(name()).append('[');
+        boolean first = true;
+        for (Map.Entry<String, String> entry : properties.entrySet()) {
+            if (first) first = false;
+            else builder.append(',');
+            builder.append(entry.getKey()).append('=').append(entry.getValue());
+        }
+        builder.append(']');
+        return builder.toString();
     }
 
     @Override
