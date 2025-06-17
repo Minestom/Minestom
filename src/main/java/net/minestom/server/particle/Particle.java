@@ -12,7 +12,6 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.StaticProtocolObject;
-import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -115,14 +114,14 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", coder.createString(block.state()))
                     .build());
         }
     }
@@ -145,14 +144,14 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", coder.createString(block.state()))
                     .build());
         }
     }
@@ -270,14 +269,14 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", coder.createString(block.state()))
                     .build());
         }
     }
@@ -300,14 +299,14 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
 
         @Override
         public void writeData(@NotNull NetworkBuffer writer) {
-            writer.write(NetworkBuffer.VAR_INT, (int) block.stateId());
+            writer.write(NetworkBuffer.VAR_INT, block.stateId());
         }
 
         @Override
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", coder.createString(block.state()))
                     .build());
         }
     }
@@ -558,7 +557,7 @@ public sealed interface Particle extends StaticProtocolObject<Particle>, Particl
         public <D> @NotNull Result<D> encode(@NotNull Transcoder<D> coder) {
             return new Result.Ok<>(coder.createMap()
                     .put("type", coder.createString(key.asString()))
-                    .put("block_state", coder.createString(BlockUtils.toString(block)))
+                    .put("block_state", coder.createString(block.state()))
                     .build());
         }
     }

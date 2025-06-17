@@ -3,8 +3,10 @@ package net.minestom.server.instance.block;
 import it.unimi.dsi.fastutil.longs.Long2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMaps;
+import net.kyori.adventure.key.InvalidKeyException;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.tag.Tag;
@@ -20,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+
+import static net.minestom.server.command.builder.arguments.minecraft.ArgumentBlockState.*;
 
 record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
@@ -116,6 +120,42 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         return BLOCK_STATE_MAP.get(stateId);
     }
 
+    static @Nullable Block parseState(String input) {
+        final int nbtIndex = input.indexOf("[");
+        if (nbtIndex == 0)
+            throw new ArgumentSyntaxException("No block type", input, NO_BLOCK);
+
+        if (nbtIndex == -1) {
+            // Only block name
+            Block block;
+            try {
+                block = Block.fromKey(input);
+            } catch (InvalidKeyException ignored) {
+                block = null;
+            }
+            if (block == null)
+                throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
+            return block;
+        } else {
+            if (!input.endsWith("]"))
+                throw new ArgumentSyntaxException("Property list need to end with ]", input, INVALID_PROPERTY);
+            // Block state
+            final String blockName = input.substring(0, nbtIndex);
+            Block block = Block.fromKey(blockName);
+            if (block == null)
+                throw new ArgumentSyntaxException("Invalid block type", input, INVALID_BLOCK);
+
+            // Compute properties
+            final String query = input.substring(nbtIndex);
+            final var propertyMap = BlockUtils.parseProperties(query);
+            try {
+                return block.withProperties(propertyMap);
+            } catch (IllegalArgumentException e) {
+                throw new ArgumentSyntaxException("Invalid property values", input, INVALID_PROPERTY_VALUE);
+            }
+        }
+    }
+
     @Override
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
@@ -175,6 +215,22 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
             values[i] = property.values().get((int) index);
         }
         return Object2ObjectMaps.unmodifiable(new Object2ObjectArrayMap<>(keys, values, length));
+    }
+
+    @Override
+    public @NotNull String state() {
+        if (properties().isEmpty()) return name();
+        StringBuilder builder = new StringBuilder(name());
+        builder.append('[');
+        for (var entry : properties().entrySet()) {
+            builder.append(entry.getKey())
+                    .append('=')
+                    .append(entry.getValue())
+                    .append(',');
+        }
+        builder.deleteCharAt(builder.length() - 1);
+        builder.append(']');
+        return builder.toString();
     }
 
     @Override

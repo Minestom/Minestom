@@ -125,6 +125,9 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     @Contract(pure = true)
     @NotNull Map<String, String> properties();
 
+    @Contract(pure = true)
+    @NotNull String state();
+
     /**
      * Returns this block type with default properties, no tags and no handler.
      * As found in the {@link Blocks} listing.
@@ -202,6 +205,10 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
     static @Nullable Block fromKey(@NotNull Key key) {
         return BlockImpl.REGISTRY.get(key);
+    }
+
+    static @Nullable Block fromState(String state) {
+        return BlockImpl.parseState(state);
     }
 
     static @Nullable Block fromStateId(int stateId) {
