@@ -7,6 +7,7 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,7 +15,7 @@ import java.util.Map;
 
 public sealed interface DialogBody {
     @NotNull Registry<StructCodec<? extends DialogBody>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:dialog_body_type"),
+            RegistryKey.unsafeOf("minecraft:dialog_body_type"),
             Map.entry(Key.key("item"), Item.CODEC),
             Map.entry(Key.key("plain_message"), PlainMessage.CODEC));
     @NotNull StructCodec<DialogBody> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogBody::codec, "type");

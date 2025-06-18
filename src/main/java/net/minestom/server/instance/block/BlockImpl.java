@@ -7,6 +7,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -47,7 +48,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         HashMap<Object, Object> internCache = new HashMap<>();
 
         REGISTRY = RegistryData.createStaticRegistry(
-                Key.key("minecraft:block"),
+                BuiltinRegistries.BLOCK,
                 (namespace, properties) -> {
                     final int blockId = properties.getInt("id");
                     final RegistryData.Properties stateObject = properties.section("states");

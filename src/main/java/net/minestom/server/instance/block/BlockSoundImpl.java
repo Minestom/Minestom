@@ -3,11 +3,12 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
 public record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implements BlockSoundType {
-    static final Registry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(Key.key("minecraft:block_sound_type"),
+    static final Registry<BlockSoundType> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.BLOCK_SOUND_TYPE,
             (namespace, properties) -> new BlockSoundImpl(RegistryData.blockSoundTypeEntry(namespace, properties)));
 
     static @UnknownNullability BlockSoundType get(@NotNull String key) {

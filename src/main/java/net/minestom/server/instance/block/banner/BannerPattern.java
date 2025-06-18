@@ -8,7 +8,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -44,7 +44,7 @@ public sealed interface BannerPattern extends Holder.Direct<BannerPattern>, Bann
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<BannerPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:banner_pattern"), REGISTRY_CODEC, RegistryData.Resource.BANNER_PATTERNS);
+        return DynamicRegistry.load(BuiltinRegistries.BANNER_PATTERN, REGISTRY_CODEC);
     }
 
     @NotNull Key assetId();

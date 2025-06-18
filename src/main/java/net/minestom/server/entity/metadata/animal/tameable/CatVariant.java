@@ -6,8 +6,8 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -30,7 +30,7 @@ public sealed interface CatVariant extends CatVariants permits CatVariantImpl {
      */
     @ApiStatus.Internal
     static DynamicRegistry<CatVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:cat_variant"), REGISTRY_CODEC, RegistryData.Resource.CAT_VARIANTS);
+        return DynamicRegistry.load(BuiltinRegistries.CAT_VARIANT, REGISTRY_CODEC);
     }
 
     @NotNull Key assetId();

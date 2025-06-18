@@ -6,8 +6,8 @@ import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -31,7 +31,7 @@ public sealed interface ChickenVariant extends ChickenVariants permits ChickenVa
      */
     @ApiStatus.Internal
     static DynamicRegistry<ChickenVariant> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chicken_variant"), REGISTRY_CODEC, RegistryData.Resource.CHICKEN_VARIANTS);
+        return DynamicRegistry.load(BuiltinRegistries.CHICKEN_VARIANT, REGISTRY_CODEC);
     }
 
     @NotNull Model model();

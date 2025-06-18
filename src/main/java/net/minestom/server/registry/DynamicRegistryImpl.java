@@ -44,11 +44,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
 
-    private final Key key;
+    private final RegistryKey<DynamicRegistry<T>> registryKey;
     private final Codec<T> codec;
 
-    DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec) {
-        this.key = key;
+    DynamicRegistryImpl(@NotNull RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec) {
+        this.registryKey = registryKey;
         this.codec = codec;
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
@@ -62,11 +62,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     // Used to create compressed registries
-    DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
+    DynamicRegistryImpl(@NotNull RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
                         @NotNull Map<RegistryKey<T>, Integer> keyToId, @NotNull List<RegistryKey<T>> idToKey,
                         @NotNull Map<Key, T> keyToValue, @NotNull Map<T, RegistryKey<T>> valueToKey,
                         @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
-        this.key = key;
+        this.registryKey = registryKey;
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
@@ -78,8 +78,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     @Override
-    public @NotNull Key key() {
-        return this.key;
+    public @NotNull RegistryKey<DynamicRegistry<T>> registryKey() {
+        return this.registryKey;
     }
 
     public @UnknownNullability Codec<T> codec() {
@@ -285,13 +285,13 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
                     data = (CompoundBinaryTag) tag;
                 } else {
-                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + key);
+                    throw new IllegalStateException("Failed to encode registry entry " + i + " (" + getKey(i) + ") for registry " + registryKey.name());
                 }
             }
             //noinspection DataFlowIssue
             entries.add(new RegistryDataPacket.Entry(getKey(i).key().asString(), data));
         }
-        return new RegistryDataPacket(key.asString(), entries);
+        return new RegistryDataPacket(registryKey.key().asString(), entries);
     }
 
     /**
@@ -302,7 +302,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Contract(pure = true)
     @NotNull DynamicRegistryImpl<T> compact() {
         // Create new instances so they are trimmed to size without downcasting.
-        return new DynamicRegistryImpl<>(key, codec,
+        return new DynamicRegistryImpl<>(registryKey, codec,
                 new ArrayList<>(idToValue),
                 new HashMap<>(keyToId),
                 new ArrayList<>(idToKey),
@@ -321,10 +321,9 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
-        Check.argCondition(!resource.fileName().endsWith(".json"), "Resource must be a JSON file: {0}", resource.fileName());
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
-            Check.notNull(resourceStream, "Resource {0} does not exist!", resource);
+            Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);

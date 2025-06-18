@@ -5,10 +5,7 @@ import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
-import net.minestom.server.registry.DynamicRegistry;
-import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.Registry;
+import net.minestom.server.registry.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +19,7 @@ import java.util.Map;
  */
 public sealed interface DialogAction {
     @NotNull Registry<StructCodec<? extends DialogAction>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:dialog_action_type"),
+            RegistryKey.unsafeOf("minecraft:dialog_action_type"),
             Map.entry(Key.key("open_url"), OpenUrl.CODEC),
             Map.entry(Key.key("run_command"), RunCommand.CODEC),
             Map.entry(Key.key("suggest_command"), SuggestCommand.CODEC),

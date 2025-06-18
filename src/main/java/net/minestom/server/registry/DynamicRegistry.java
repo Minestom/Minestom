@@ -29,7 +29,7 @@ import java.util.Objects;
 public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRegistryImpl {
 
     @SafeVarargs
-    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull Key key, @NotNull Map.Entry<Key, T>... entries) {
+    static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Map.Entry<Key, T>... entries) {
         var registry = new DynamicRegistryImpl<T>(key, null);
         for (var entry : entries)
             registry.register(entry.getKey(), entry.getValue(), null);
@@ -37,7 +37,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     }
 
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key) {
         return new DynamicRegistryImpl<>(key, null);
     }
 
@@ -47,18 +47,18 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec) {
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
         return new DynamicRegistryImpl<>(key, codec);
     }
 
     /**
-     * Creates a new registry of the given type. Should only be used internally.
+     * Creates a new empty registry of the given type. Should only be used internally.
      *
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @NotNull RegistryData.Resource resource) {
-        return create(key, codec, null, resource, null, null);
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
+        return load(key, codec, null);
     }
 
     /**
@@ -67,8 +67,8 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource) {
-        return create(key, codec, registries, resource, null, null);
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries) {
+        return load(key, codec, registries, null, null);
     }
 
     /**
@@ -77,40 +77,42 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull Key key, @NotNull Codec<T> codec, @Nullable Registries registries, @NotNull RegistryData.Resource resource, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, resource, idComparator, Objects.requireNonNullElse(readCodec, codec));
+        return load(registry, registries, idComparator, readCodec);
+    }
+
+    @ApiStatus.Internal
+    private static <T> @NotNull DynamicRegistry<T> load(@NotNull DynamicRegistryImpl<T> registry, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, idComparator, Objects.requireNonNullElse(readCodec, registry.codec()));
         return registry.compact();
     }
 
+
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
-            @NotNull Key key, @NotNull Codec<Enchantment> codec,
-            @NotNull RegistryData.Resource resource, @NotNull Registries registries
+            @NotNull RegistryKey<DynamicRegistry<Enchantment>> key, @NotNull Codec<Enchantment> codec, @NotNull Registries registries
     ) {
         final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+        return load(registry, new Registries.Delegating(registries) {
             @Override
             public @NotNull DynamicRegistry<Enchantment> enchantment() {
                 return registry;
             }
-        }, registry, resource, null, codec);
-        return registry.compact();
+        }, null, codec);
     }
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
-            @NotNull Key key, @NotNull Codec<Dialog> codec,
-            @NotNull RegistryData.Resource resource, @NotNull Registries registries
+            @NotNull RegistryKey<DynamicRegistry<Dialog>> key, @NotNull Codec<Dialog> codec, @NotNull Registries registries
     ) {
         final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
-        DynamicRegistryImpl.loadStaticJsonRegistry(new Registries.Delegating(registries) {
+        return load(registry, new Registries.Delegating(registries) {
             @Override
             public @NotNull DynamicRegistry<Dialog> dialog() {
                 return registry;
             }
-        }, registry, resource, null, codec);
-        return registry;
+        }, null, codec);
     }
 
     /**
@@ -171,4 +173,6 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
     @ApiStatus.Internal
     @NotNull SendablePacket registryDataPacket(@NotNull Registries registries, boolean excludeVanilla);
 
+    @Override
+    @NotNull RegistryKey<DynamicRegistry<T>> registryKey();
 }

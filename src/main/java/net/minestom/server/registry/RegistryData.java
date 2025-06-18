@@ -150,9 +150,9 @@ public final class RegistryData {
      * <p>Tags will be loaded from <code>/tags/{registryKey.path()}.json</code></p>
      */
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull Key registryKey, @NotNull Loader<T> loader) {
+    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull RegistryKey<Registry<T>> registryKey, @NotNull Loader<T> loader) {
         // Create the registry (data)
-        var entries = RegistryData.load(String.format("%s.json", registryKey.value()), true);
+        var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
         for (var entry : entries.asMap().keySet()) {
@@ -162,7 +162,7 @@ public final class RegistryData {
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
-        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(registryKey);
+        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(registryKey.key());
         return new StaticRegistry<>(registryKey, namespaces, ids, tags);
     }
 
@@ -192,40 +192,6 @@ public final class RegistryData {
 
     public interface Loader<T extends StaticProtocolObject<T>> {
         T get(String namespace, Properties properties);
-    }
-
-    @ApiStatus.Internal
-    public enum Resource {
-        // Dynamic Registries
-        BANNER_PATTERNS("banner_pattern.json"),
-        BIOMES("biome.json"),
-        CAT_VARIANTS("cat_variant.json"),
-        CHAT_TYPES("chat_type.json"),
-        CHICKEN_VARIANTS("chicken_variant.json"),
-        COW_VARIANTS("cow_variant.json"),
-        DAMAGE_TYPES("damage_type.json"),
-        DIALOGS("dialog.json"),
-        DIMENSION_TYPES("dimension_type.json"),
-        ENCHANTMENTS("enchantment.json"),
-        FROG_VARIANTS("frog_variant.json"),
-        JUKEBOX_SONGS("jukebox_song.json"),
-        INSTRUMENTS("instrument.json"),
-        PAINTING_VARIANTS("painting_variant.json"),
-        PIG_VARIANTS("pig_variant.json"),
-        TRIM_MATERIALS("trim_material.json"),
-        TRIM_PATTERNS("trim_pattern.json"),
-        WOLF_VARIANTS("wolf_variant.json"),
-        WOLF_SOUND_VARIANTS("wolf_sound_variant.json");
-
-        private final String name;
-
-        Resource(String name) {
-            this.name = name;
-        }
-
-        public @NotNull String fileName() {
-            return name;
-        }
     }
 
     public record GameEventEntry(Key key, Properties main) implements Entry {

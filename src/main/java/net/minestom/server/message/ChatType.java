@@ -1,11 +1,10 @@
 package net.minestom.server.message;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
-import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +34,7 @@ public sealed interface ChatType extends Holder.Direct<ChatType>, ChatTypes perm
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<ChatType> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:chat_type"), REGISTRY_CODEC, RegistryData.Resource.CHAT_TYPES);
+        return DynamicRegistry.load(BuiltinRegistries.CHAT_TYPE, REGISTRY_CODEC);
     }
 
     @NotNull ChatTypeDecoration chat();

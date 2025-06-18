@@ -9,7 +9,7 @@ import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.Holder;
 import net.minestom.server.registry.Registries;
-import net.minestom.server.registry.RegistryData;
+import net.minestom.server.registry.BuiltinRegistries;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,7 @@ public sealed interface TrimPattern extends Holder.Direct<TrimPattern>, TrimPatt
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<TrimPattern> createDefaultRegistry() {
-        return DynamicRegistry.create(Key.key("minecraft:trim_pattern"), REGISTRY_CODEC, RegistryData.Resource.TRIM_PATTERNS);
+        return DynamicRegistry.load(BuiltinRegistries.TRIM_PATTERN, REGISTRY_CODEC);
     }
 
     @NotNull Key assetId();
