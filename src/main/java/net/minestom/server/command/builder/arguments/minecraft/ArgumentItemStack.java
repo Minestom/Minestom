@@ -3,7 +3,6 @@ package net.minestom.server.command.builder.arguments.minecraft;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Result;
@@ -19,7 +18,6 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.component.CustomData;
 import net.minestom.server.registry.RegistryTranscoder;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -38,42 +36,26 @@ public class ArgumentItemStack extends Argument<ItemStack> {
     public static final int INVALID_MATERIAL = 3;
     public static final int INVALID_COMPONENT = 4;
 
-    private final TagStringIO tagStringIO;
-
     public ArgumentItemStack(String id) {
         super(id, true);
-        this.tagStringIO = MinestomAdventure.tagStringIO();
-    }
-
-    public ArgumentItemStack(String id, @NotNull TagStringIO tagParser) {
-        super(id, true);
-        Check.notNull(tagParser, "tagParser cannot be null.");
-        this.tagStringIO = tagParser;
     }
 
     @NotNull
     @Override
     public ItemStack parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, tagStringIO);
+        return staticParse(input);
     }
 
     @Override
     public ArgumentParserType parser() {
         return ArgumentParserType.ITEM_STACK;
     }
-    /**
-     * @deprecated use {@link Argument#parse(CommandSender, Argument)}
-     */
-    @Deprecated
-    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
-        return staticParse(input, MinestomAdventure.tagStringIO());
-    }
 
     /**
      * @deprecated use {@link Argument#parse(CommandSender, Argument)}
      */
     @SuppressWarnings("unchecked") @Deprecated
-    public static ItemStack staticParse(@NotNull String input, @NotNull TagStringIO tagStringIO) throws ArgumentSyntaxException {
+    public static ItemStack staticParse(@NotNull String input) throws ArgumentSyntaxException {
         var reader = new StringReader(input);
 
         final Material material = Material.fromKey(reader.readKey());
@@ -97,7 +79,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
                 reader.consume('=');
 
-                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag(tagStringIO));
+                final Result<Object> componentValueResult = (Result<Object>) component.decode(coder, reader.readTag());
                 components.set((DataComponent<Object>) component, componentValueResult.orElseThrow());
 
                 if (reader.peek() != ']')
@@ -108,7 +90,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
 
         // Parse the NBT
         if (reader.hasMore() && reader.peek() == '{') {
-            final BinaryTag nbt = reader.readTag(tagStringIO);
+            final BinaryTag nbt = reader.readTag();
             if (!(nbt instanceof CompoundBinaryTag compound))
                 throw new ArgumentSyntaxException("Item NBT must be compound", input, INVALID_NBT);
 
@@ -167,10 +149,10 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             return Key.key(input.substring(start, index));
         }
 
-        public @NotNull BinaryTag readTag(@NotNull TagStringIO tagStringIO) {
+        public @NotNull BinaryTag readTag() {
             try {
                 StringBuilder remainder = new StringBuilder();
-                final BinaryTag result = tagStringIO.asTag(input.substring(index), remainder);
+                final BinaryTag result = MinestomAdventure.tagStringIO().asTag(input.substring(index), remainder);
                 this.input = remainder.toString();
                 this.index = 0;
 
