@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public final class MojangUtils {
     private static final String FROM_UUID_URL = "https://sessionserver.mojang.com/session/minecraft/profile/%s?unsigned=false";
-    private static final String FROM_USERNAME_URL = "https://api.mojang.com/users/profiles/minecraft/%s";
+    private static final String FROM_USERNAME_URL = "https://api.minecraftservices.com/minecraft/profile/lookup/name/%s";
 
     // Auth
     private static final String BASE_AUTH_URL = ServerFlag.AUTH_URL.concat("?username=%s&serverId=%s");
