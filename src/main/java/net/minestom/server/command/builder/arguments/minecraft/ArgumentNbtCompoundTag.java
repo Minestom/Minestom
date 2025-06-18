@@ -1,13 +1,11 @@
 package net.minestom.server.command.builder.arguments.minecraft;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIO;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.command.ArgumentParserType;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.exception.ArgumentSyntaxException;
-import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -21,24 +19,15 @@ public class ArgumentNbtCompoundTag extends Argument<CompoundBinaryTag> {
 
     public static final int INVALID_NBT = 1;
 
-    private final TagStringIO tagStringIO;
-
     public ArgumentNbtCompoundTag(String id) {
         super(id, true);
-        this.tagStringIO = MinestomAdventure.tagStringIO();
-    }
-
-    public ArgumentNbtCompoundTag(String id, @NotNull TagStringIO parser) {
-        super(id, true);
-        Check.notNull(parser, "The parser cannot be null.");
-        this.tagStringIO = parser;
     }
 
     @NotNull
     @Override
     public CompoundBinaryTag parse(@NotNull CommandSender sender, @NotNull String input) throws ArgumentSyntaxException {
         try {
-            return tagStringIO.asCompound(input);
+            return MinestomAdventure.tagStringIO().asCompound(input);
         } catch (IOException e) {
             throw new ArgumentSyntaxException("NBTCompound is invalid", input, INVALID_NBT);
         }
