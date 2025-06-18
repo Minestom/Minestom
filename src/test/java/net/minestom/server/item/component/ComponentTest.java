@@ -1,7 +1,7 @@
 package net.minestom.server.item.component;
 
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.component.DataComponents;
@@ -37,7 +37,7 @@ public class ComponentTest extends AbstractItemComponentTest<Component> {
 
     @Test
     void testItemNameParseRegression() throws Exception {
-        var nbt = TagStringIOExt.readTag("{translate: \"item.minecraft.diamond\"}");
+        var nbt = MinestomAdventure.tagStringIO().asTag("{translate: \"item.minecraft.diamond\"}");
         var component = DataComponents.ITEM_NAME.decode(Transcoder.NBT, nbt);
         assertOk(component);
     }
