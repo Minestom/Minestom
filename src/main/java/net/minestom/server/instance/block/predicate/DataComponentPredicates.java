@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 public record DataComponentPredicates(@Nullable DataComponentMap exact,
                                       @Nullable Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
-    public static DataComponentPredicates EMPTY = new DataComponentPredicates(null, null);
+    public static final DataComponentPredicates EMPTY = new DataComponentPredicates(null, null);
 
     public DataComponentPredicates {
         if (predicates != null) {
@@ -124,7 +124,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
 
     private static final NetworkBuffer.Type<Map<ComponentPredicateType, DataComponentPredicate>> predicateNetworkType = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Map<ComponentPredicateType, DataComponentPredicate> value) {
+        public void write(@NotNull NetworkBuffer buffer, @Nullable Map<ComponentPredicateType, DataComponentPredicate> value) {
             if (value == null) {
                 NetworkBuffer.VAR_INT.write(buffer, 0);
                 return;
@@ -141,7 +141,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
         }
 
         @Override
-        public Map<ComponentPredicateType, DataComponentPredicate> read(@NotNull NetworkBuffer buffer) {
+        public @NotNull Map<ComponentPredicateType, DataComponentPredicate> read(@NotNull NetworkBuffer buffer) {
             Map<ComponentPredicateType, DataComponentPredicate> map = new HashMap<>();
             int size = NetworkBuffer.VAR_INT.read(buffer);
             final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
@@ -183,7 +183,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
         }
 
         @Override
-        public DataComponentPredicates read(@NotNull NetworkBuffer buffer) {
+        public @NotNull DataComponentPredicates read(@NotNull NetworkBuffer buffer) {
             DataComponentPredicates value = delegate.read(buffer);
             DataComponentMap exact = value.exact();
             // Read empty lists and compounds as null
@@ -199,7 +199,7 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
     };
 
     @Override
-    public boolean test(DataComponent.Holder holder) {
+    public boolean test(@NotNull DataComponent.Holder holder) {
         if (exact != null && !exact.entrySet().stream().allMatch(entry -> Objects.equals(holder.get(entry.component()), entry.value()))) {
             return false;
         }
