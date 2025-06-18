@@ -37,13 +37,13 @@ import java.util.function.Predicate;
  * @param blocks              The block names/tags to match.
  * @param state               The block properties to match.
  * @param nbt                 The block nbt to match.
- * @param componentPredicates Predicates to match a block entity's stored data components
+ * @param components          The block data components to match.
  */
 public record BlockPredicate(
         @Nullable RegistryTag<Block> blocks,
         @Nullable PropertiesPredicate state,
         @Nullable NbtPredicate nbt,
-        @NotNull DataComponentPredicates componentPredicates
+        @NotNull DataComponentPredicates components
 ) implements Predicate<Block> {
     /**
      * Matches all blocks.
@@ -60,7 +60,7 @@ public record BlockPredicate(
             RegistryTag.networkType(Registries::blocks).optional(), BlockPredicate::blocks,
             PropertiesPredicate.NETWORK_TYPE.optional(), BlockPredicate::state,
             NbtPredicate.NETWORK_TYPE.optional(), BlockPredicate::nbt,
-            DataComponentPredicates.NETWORK_TYPE, BlockPredicate::componentPredicates,
+            DataComponentPredicates.NETWORK_TYPE, BlockPredicate::components,
             BlockPredicate::new
     );
 
@@ -68,7 +68,7 @@ public record BlockPredicate(
             "blocks", RegistryTag.codec(Registries::blocks).optional(), BlockPredicate::blocks,
             "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
             "nbt", NbtPredicate.CODEC.optional(), BlockPredicate::nbt,
-            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::componentPredicates,
+            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::components,
             BlockPredicate::new
     );
 
@@ -108,11 +108,11 @@ public record BlockPredicate(
         this(blocks, state, nbt, null);
     }
 
-    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt, @Nullable DataComponentPredicates componentPredicates) {
+    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt, @Nullable DataComponentPredicates components) {
         this.blocks = blocks;
         this.state = state;
         this.nbt = nbt;
-        this.componentPredicates = Objects.requireNonNullElse(componentPredicates, DataComponentPredicates.EMPTY);
+        this.components = Objects.requireNonNullElse(components, DataComponentPredicates.EMPTY);
     }
 
     @Override
@@ -123,7 +123,7 @@ public record BlockPredicate(
             return false;
         if (nbt != null && (block.nbt() == null || !nbt.test(BlockUtils.extractClientNbt(block))))
             return false;
-        if ((componentPredicates.exact() == null || componentPredicates.exact().isEmpty()) && (componentPredicates.predicates() == null || componentPredicates.predicates().isEmpty()))
+        if ((components.exact() == null || components.exact().isEmpty()) && (components.predicates() == null || components.predicates().isEmpty()))
             return true;
         if (block.nbt() == null)
             return false; // If a block has no NBT (it's not a block entity), any component predicates must return false
@@ -132,8 +132,8 @@ public record BlockPredicate(
         final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
         Result<DataComponentMap> result = DataComponent.MAP_NBT_TYPE.decode(coder, componentsTag);
         switch (result) {
-            case Result.Ok(DataComponentMap components) -> {
-                return componentPredicates.test(components);
+            case Result.Ok(DataComponentMap componentMap) -> {
+                return components.test(componentMap);
             }
             case Result.Error<DataComponentMap> error -> throw new IllegalStateException(error.message());
         }
