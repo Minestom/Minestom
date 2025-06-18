@@ -16,7 +16,7 @@ import java.util.Map;
 
 public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     @NotNull Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
-            Key.key("minecraft:dialog_type"),
+            RegistryKey.unsafeOf("minecraft:dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),
             Map.entry(Key.key("server_links"), ServerLinks.CODEC),
             Map.entry(Key.key("dialog_list"), DialogList.CODEC),
@@ -66,7 +66,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Dialog> createDefaultRegistry(@NotNull Registries registries) {
         return DynamicRegistry.createForDialogWithSelfReferentialLoadingNightmare(
-                Key.key("minecraft:dialog"), REGISTRY_CODEC, RegistryData.Resource.DIALOGS, registries
+                BuiltinRegistries.DIALOG, REGISTRY_CODEC, registries
         );
     }
 

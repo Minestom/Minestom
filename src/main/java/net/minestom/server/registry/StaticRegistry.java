@@ -21,7 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ApiStatus.Internal
 final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registry<T> {
-    private final Key key;
+    private final RegistryKey<Registry<T>> registryKey;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<T> idToValue;
@@ -29,12 +29,12 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
 
     StaticRegistry(
-            @NotNull Key key,
+            @NotNull RegistryKey<Registry<T>> registryKey,
             @NotNull Map<Key, T> namespaces,
             @NotNull ObjectArray<T> ids,
             @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags
     ) {
-        this.key = key;
+        this.registryKey = registryKey;
         this.keyToValue = Map.copyOf(namespaces);
         var valueToKey = new HashMap<T, RegistryKey<T>>(namespaces.size());
         for (var entry : namespaces.entrySet())
@@ -45,8 +45,8 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     }
 
     @Override
-    public @NotNull Key key() {
-        return this.key;
+    public @NotNull RegistryKey<Registry<T>> registryKey() {
+        return registryKey;
     }
 
     @Override
