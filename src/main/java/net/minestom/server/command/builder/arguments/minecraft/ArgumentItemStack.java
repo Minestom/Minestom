@@ -167,7 +167,7 @@ public class ArgumentItemStack extends Argument<ItemStack> {
             return Key.key(input.substring(start, index));
         }
 
-        public @NotNull BinaryTag readTag(TagStringIO tagStringIO) {
+        public @NotNull BinaryTag readTag(@NotNull TagStringIO tagStringIO) {
             try {
                 StringBuilder remainder = new StringBuilder();
                 final BinaryTag result = tagStringIO.asTag(input.substring(index), remainder);
