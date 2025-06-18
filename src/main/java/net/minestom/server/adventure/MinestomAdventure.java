@@ -46,7 +46,7 @@ public final class MinestomAdventure {
     /**
      * Gets the {@link TagStringIO} instance used to convert SNBT.
      * This instance should be used for all Adventure related SNBT parsing and serialization.
-     * @implNote This instance of the {@link TagStringIO} is configured to accept and emit heterogeneous lists
+     * Note: This instance of the {@link TagStringIO} is configured to accept and emit heterogeneous lists
      *
      * @return the tag string IO instance
      */
