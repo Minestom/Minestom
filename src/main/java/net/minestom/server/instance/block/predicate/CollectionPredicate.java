@@ -25,10 +25,10 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
                                                              @Nullable Count<T, P> counts,
                                                              @Nullable Range.Int size) implements Predicate<Collection<T>> {
 
-    public static <T, P extends Predicate<T>> @NotNull Codec<CollectionPredicate<T, P>> createCodec(Codec<P> codec) {
+    public static <T, P extends Predicate<T>> @NotNull Codec<CollectionPredicate<T, P>> codec(@NotNull Codec<P> itemCodec) {
         return StructCodec.struct(
-                "contains", Contains.createCodec(codec).optional(), CollectionPredicate::contains,
-                "count", Count.createCodec(codec).optional(), CollectionPredicate::counts,
+                "contains", Contains.codec(itemCodec).optional(), CollectionPredicate::contains,
+                "count", Count.codec(itemCodec).optional(), CollectionPredicate::counts,
                 "size", DataComponentPredicates.INT_RANGE_CODEC.optional(), CollectionPredicate::size,
                 CollectionPredicate::new
         );
@@ -50,23 +50,26 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
             predicates = List.copyOf(predicates);
         }
 
-        public static <T, P extends Predicate<T>> @NotNull Codec<Contains<T, P>> createCodec(Codec<P> codec) {
-            return codec.listOrSingle().transform(Contains::new, Contains::predicates);
+        public static <T, P extends Predicate<T>> @NotNull Codec<Contains<T, P>> codec(@NotNull Codec<P> itemCodec) {
+            return itemCodec.listOrSingle().transform(Contains::new, Contains::predicates);
         }
 
         @Override
         public boolean test(@NotNull Collection<T> collection) {
-            List<Predicate<T>> predicates = new ArrayList<>(this.predicates);
             if (predicates.isEmpty()) {
                 return true;
+            } else if (collection.isEmpty()) {
+                return false;
             }
-            for (T t : collection) {
-                predicates.removeIf(p -> p.test(t));
-                if (predicates.isEmpty()) {
-                    return true;
+            outer: for (P predicate : predicates) {
+                for (T item : collection) {
+                    if (predicate.test(item)) {
+                        continue outer;
+                    }
                 }
+                return false;
             }
-            return false;
+            return true;
         }
     }
 
@@ -83,9 +86,9 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
 
         public record Entry<T, P extends Predicate<T>>(@NotNull P predicate,
                                                 @NotNull Range.Int count) implements Predicate<Collection<T>> {
-            public static <T, P extends Predicate<T>> @NotNull Codec<Entry<T, P>> createCodec(Codec<P> codec) {
+            public static <T, P extends Predicate<T>> @NotNull Codec<Entry<T, P>> codec(@NotNull Codec<P> itemCodec) {
                 return StructCodec.struct(
-                        "test", codec, Entry::predicate,
+                        "test", itemCodec, Entry::predicate,
                         "count", DataComponentPredicates.INT_RANGE_CODEC, Entry::count,
                         Entry::new
                 );
@@ -97,8 +100,8 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
             }
         }
 
-        public static <T, P extends Predicate<T>> @NotNull Codec<Count<T, P>> createCodec(Codec<P> codec) {
-            return Entry.createCodec(codec).listOrSingle().transform(Count::new, Count::entries);
+        public static <T, P extends Predicate<T>> @NotNull Codec<Count<T, P>> codec(@NotNull Codec<P> itemCodec) {
+            return Entry.codec(itemCodec).listOrSingle().transform(Count::new, Count::entries);
         }
 
         @Override
@@ -128,7 +131,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         /**
          * Specifies that <code>predicate</code> must match at least once.
          */
-        public Builder<T, P> mustContain(P predicate) {
+        public @NotNull Builder<T, P> mustContain(@NotNull P predicate) {
             containsList.add(predicate);
             return this;
         }
@@ -136,7 +139,7 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         /**
          * Specifies that the number of times that <code>predicate</code> matches must fall in the <code>count</code> range.
          */
-        public Builder<T, P> mustMatchCount(P predicate, Range.Int count) {
+        public @NotNull Builder<T, P> mustMatchCount(@NotNull P predicate, @NotNull Range.Int count) {
             countList.add(new Count.Entry<>(predicate, count));
             return this;
         }
@@ -144,12 +147,12 @@ public record CollectionPredicate<T, P extends Predicate<T>>(@Nullable Contains<
         /**
          * Specifies that the collection's size must be inside the <code>size</code> range.
          */
-        public Builder<T, P> matchSize(Range.Int size) {
+        public @NotNull Builder<T, P> matchSize(@Nullable Range.Int size) {
             this.size = size;
             return this;
         }
 
-        public CollectionPredicate<T, P> build() {
+        public @NotNull CollectionPredicate<T, P> build() {
             return new CollectionPredicate<>(new Contains<>(containsList), new Count<>(countList), size);
         }
     }

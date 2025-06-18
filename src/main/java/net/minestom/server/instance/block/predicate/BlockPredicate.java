@@ -104,7 +104,7 @@ public record BlockPredicate(
         this(null, null, null, predicates);
     }
 
-    public BlockPredicate(RegistryTag<Block> blocks, PropertiesPredicate state, NbtPredicate nbt) {
+    public BlockPredicate(@Nullable RegistryTag<Block> blocks, @Nullable PropertiesPredicate state, @Nullable NbtPredicate nbt) {
         this(blocks, state, nbt, null);
     }
 

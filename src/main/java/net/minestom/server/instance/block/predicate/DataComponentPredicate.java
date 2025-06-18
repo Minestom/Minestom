@@ -71,7 +71,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record EnchantmentListPredicate(@Nullable RegistryTag<Enchantment> enchantments,
                                     @Nullable Range.Int levels) implements Predicate<EnchantmentList> {
 
-        public static Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
+        public static final Codec<EnchantmentListPredicate> CODEC = StructCodec.struct(
                 "enchantments", RegistryTag.codec(Registries::enchantment).optional(), EnchantmentListPredicate::enchantments,
                 "levels", DataComponentPredicates.INT_RANGE_CODEC.optional(), EnchantmentListPredicate::levels,
                 EnchantmentListPredicate::new
@@ -103,7 +103,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see EnchantmentListPredicate Information about enchantment matching
      */
     record Enchantments(@NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
-        public static Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
+        public static final Codec<Enchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(Enchantments::new, Enchantments::children);
 
         public Enchantments {
             children = List.copyOf(children);
@@ -129,7 +129,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      */
     record StoredEnchantments(
             @NotNull List<@NotNull EnchantmentListPredicate> children) implements DataComponentPredicate {
-        public static Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
+        public static final Codec<StoredEnchantments> CODEC = EnchantmentListPredicate.CODEC.list().transform(StoredEnchantments::new, StoredEnchantments::children);
 
         public StoredEnchantments {
             children = List.copyOf(children);
@@ -153,7 +153,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @param potionTypes The types of potions to match. The object's potion type must be contained in {@code potionTypes} for this predicate to return true.
      */
     record Potions(@Nullable RegistryTag<PotionType> potionTypes) implements DataComponentPredicate {
-        public static Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType).transform(Potions::new, Potions::potionTypes).optional();
+        public static final Codec<Potions> CODEC = RegistryTag.codec(Registries::potionType).transform(Potions::new, Potions::potionTypes).optional();
 
         @Override
         public boolean test(@NotNull DataComponent.Holder holder) {
@@ -171,7 +171,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see NbtPredicate#compareNBT(BinaryTag, BinaryTag) Description of NBT comparison logic
      */
     record CustomData(@NotNull NbtPredicate nbt) implements DataComponentPredicate {
-        public static Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
+        public static final Codec<CustomData> CODEC = NbtPredicate.CODEC.transform(CustomData::new, CustomData::nbt);
 
         public CustomData(@Nullable CompoundBinaryTag nbt) {
             this(new NbtPredicate(nbt));
@@ -190,8 +190,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      * @see CollectionPredicate
      */
     record Container(@Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
-        public static Codec<Container> CODEC = StructCodec.struct(
-                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC).optional(), Container::items,
+        public static final Codec<Container> CODEC = StructCodec.struct(
+                "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), Container::items,
                 Container::new
         );
 
@@ -209,13 +209,13 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
      */
     record BundleContents(
             @Nullable CollectionPredicate<ItemStack, ItemPredicate> items) implements DataComponentPredicate {
-        public static Codec<BundleContents> CODEC = StructCodec.struct(
-                "items", CollectionPredicate.createCodec(ItemPredicate.CODEC).optional(), BundleContents::items,
+        public static final Codec<BundleContents> CODEC = StructCodec.struct(
+                "items", CollectionPredicate.codec(ItemPredicate.CODEC).optional(), BundleContents::items,
                 BundleContents::new
         );
 
         @Override
-        public boolean test(DataComponent.Holder holder) {
+        public boolean test(@NotNull DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
             return items == null || items.test(itemStacks != null ? itemStacks : List.of());
         }
@@ -253,7 +253,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             @Nullable Range.Int flightDuration) implements DataComponentPredicate {
 
         public static final Codec<Fireworks> CODEC = StructCodec.struct(
-                "explosions", CollectionPredicate.createCodec(FireworkExplosionPredicate.CODEC).optional(), Fireworks::explosions,
+                "explosions", CollectionPredicate.codec(FireworkExplosionPredicate.CODEC).optional(), Fireworks::explosions,
                 "flight_duration", DataComponentPredicates.INT_RANGE_CODEC.optional().optional(), Fireworks::flightDuration,
                 Fireworks::new
         );
@@ -296,7 +296,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
     record WritableBook(
             @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements DataComponentPredicate {
         public static final Codec<WritableBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WritableBook::pages,
+                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WritableBook::pages,
                 WritableBook::new
         );
 
@@ -335,7 +335,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                        @Nullable Range.Int generation, @Nullable Boolean resolved) implements DataComponentPredicate {
 
         public static final Codec<WrittenBook> CODEC = StructCodec.struct(
-                "pages", CollectionPredicate.createCodec(PagePredicate.CODEC).optional(), WrittenBook::pages,
+                "pages", CollectionPredicate.codec(PagePredicate.CODEC).optional(), WrittenBook::pages,
                 "author", Codec.STRING.optional(), WrittenBook::author,
                 "title", Codec.STRING.optional(), WrittenBook::title,
                 "generation", DataComponentPredicates.INT_RANGE_CODEC.optional(), WrittenBook::generation,
@@ -394,7 +394,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         );
 
         @Override
-        public boolean test(AttributeList.Modifier other) {
+        public boolean test(@NotNull AttributeList.Modifier other) {
             if (attribute != null && !attribute.key().equals(other.attribute().key()))
                 return false;
             if (id != null && !id.equals(other.modifier().id()))
@@ -416,7 +416,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
 
         public static final Codec<AttributeModifiers> CODEC = StructCodec.struct(
-                "modifiers", CollectionPredicate.createCodec(AttributeModifierPredicate.CODEC).optional(), AttributeModifiers::modifiers,
+                "modifiers", CollectionPredicate.codec(AttributeModifierPredicate.CODEC).optional(), AttributeModifiers::modifiers,
                 AttributeModifiers::new
         );
 
