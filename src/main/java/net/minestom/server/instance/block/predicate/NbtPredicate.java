@@ -3,7 +3,6 @@ package net.minestom.server.instance.block.predicate;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.nbt.ListBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.network.NetworkBuffer;
 import org.jetbrains.annotations.Nullable;
@@ -11,16 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Predicate;
 
 public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate<@Nullable BinaryTag> {
-    private static final Codec<CompoundBinaryTag> NBT_STRING_CODEC = Codec.STRING.transform(
-            string -> {
-                BinaryTag value = TagStringIOExt.readTag(string);
-                if (!(value instanceof CompoundBinaryTag compound))
-                    throw new IllegalArgumentException("Not a compound: " + value);
-                return compound;
-            },
-            TagStringIOExt::writeTag
-    );
-    public static final Codec<NbtPredicate> CODEC = Codec.NBT_COMPOUND.orElse(NBT_STRING_CODEC).transform(NbtPredicate::new, NbtPredicate::nbt);
+    public static final Codec<NbtPredicate> CODEC = Codec.NBT_COMPOUND_COERCED.transform(NbtPredicate::new, NbtPredicate::nbt);
     public static final NetworkBuffer.Type<NbtPredicate> NETWORK_TYPE = NetworkBuffer.NBT_COMPOUND.transform(NbtPredicate::new, NbtPredicate::nbt);
 
     /**

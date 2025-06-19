@@ -3,6 +3,7 @@ package net.minestom.server.codec;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
@@ -86,6 +87,16 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
         return compound;
     }, compound -> compound);
 
+    @NotNull Codec<CompoundBinaryTag> NBT_COMPOUND_COERCED = Codec.NBT_COMPOUND.orElse(Codec.STRING.transform(
+            string -> {
+                BinaryTag value = TagStringIOExt.readTag(string);
+                if (!(value instanceof CompoundBinaryTag compound))
+                    throw new IllegalArgumentException("Not a compound: " + value);
+                return compound;
+            },
+            TagStringIOExt::writeTag
+    ));
+
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
         return STRING.transform(
                 value -> Enum.valueOf(enumClass, value.toUpperCase(Locale.ROOT)),
@@ -150,11 +161,19 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }
 
     default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec, int maxSize) {
-        return new CodecImpl.MapImpl<>(Codec.this, valueCodec, maxSize);
+        return mapValue((ignored) -> valueCodec, maxSize);
     }
 
     default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Codec<V> valueCodec) {
-        return mapValue(valueCodec, Integer.MAX_VALUE);
+        return mapValue((ignored) -> valueCodec, Integer.MAX_VALUE);
+    }
+
+    default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Function<T, @NotNull Codec<V>> valueCodecGetter, int maxSize) {
+        return new CodecImpl.MapImpl<>(Codec.this, valueCodecGetter, maxSize);
+    }
+
+    default <V> @NotNull Codec<Map<T, V>> mapValue(@NotNull Function<T, @NotNull Codec<V>> valueCodecGetter) {
+        return mapValue(valueCodecGetter, Integer.MAX_VALUE);
     }
 
     default <R, T1 extends T, TR extends R> StructCodec<R> unionType(@NotNull Function<T, StructCodec<TR>> serializers, @NotNull Function<R, T1> keyFunc) {

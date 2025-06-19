@@ -1,5 +1,6 @@
 package net.minestom.server.registry;
 
+import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.damage.DamageType;
@@ -15,6 +16,7 @@ import net.minestom.server.game.GameEvent;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.banner.BannerPattern;
 import net.minestom.server.instance.block.jukebox.JukeboxSong;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
 import net.minestom.server.instance.fluid.Fluid;
 import net.minestom.server.item.Material;
 import net.minestom.server.item.armor.TrimMaterial;
@@ -118,6 +120,8 @@ public interface Registries {
     @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> enchantmentEntityEffects();
 
     @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects();
+
+    @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes();
 
     @FunctionalInterface
     interface Selector<T> {
@@ -274,6 +278,11 @@ public interface Registries {
         @Override
         public @NotNull DynamicRegistry<StructCodec<? extends LocationEffect>> enchantmentLocationEffects() {
             return delegate.enchantmentLocationEffects();
+        }
+
+        @Override
+        public @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> componentPredicateTypes() {
+            return delegate.componentPredicateTypes();
         }
     }
 }
