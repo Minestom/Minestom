@@ -239,6 +239,11 @@ public sealed interface ItemStack extends TagReadable, DataComponent.Holder, Hov
         return with(DataComponents.CUSTOM_DATA, get(DataComponents.CUSTOM_DATA, CustomData.EMPTY).withTag(tag, value));
     }
 
+    @Contract(value = "_ -> new", pure = true)
+    default @NotNull ItemStack withTag(@NotNull Tag<Boolean> tag) {
+        return withTag(tag, true);
+    }
+
     @Override
     @Contract(pure = true)
     default <T> @UnknownNullability T getTag(@NotNull Tag<T> tag) {
