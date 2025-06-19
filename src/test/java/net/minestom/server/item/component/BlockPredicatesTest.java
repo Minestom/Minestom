@@ -29,16 +29,14 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
     @Override
     protected @NotNull List<Map.Entry<String, BlockPredicates>> directReadWriteEntries() {
         return List.of(
-                // TODO(1.21.5)
-                entry("empty", new BlockPredicates(List.of()))
-//                entry("single, no tooltip", new BlockPredicates(BlockPredicate.ALL)),
-//                entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE)))
+                entry("empty", new BlockPredicates(List.of())),
+                entry("single, no tooltip", new BlockPredicates(BlockPredicate.ALL)),
+                entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE)))
         );
     }
 
     @Test
     public void testSingleBlockNbtInput() throws IOException {
-        assumeFalse(true, "TODO(1.21.5)");
         var tag = MinestomAdventure.tagStringIO().asTag("{blocks:'minecraft:stone'}");
         var component = assertOk(DataComponents.CAN_PLACE_ON.decode(Transcoder.NBT, tag));
         var expected = new BlockPredicates(new BlockPredicate(Block.STONE));
