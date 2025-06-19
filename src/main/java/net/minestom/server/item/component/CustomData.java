@@ -38,4 +38,8 @@ public record CustomData(@NotNull CompoundBinaryTag nbt) implements TagReadable 
         tagHandler.setTag(tag, value);
         return new CustomData(tagHandler.asCompound());
     }
+
+    public @NotNull CustomData withTag(@NotNull Tag<Boolean> tag) {
+        return withTag(tag, true);
+    }
 }

@@ -66,6 +66,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     @Contract(pure = true)
     <T> @NotNull Block withTag(@NotNull Tag<T> tag, @Nullable T value);
 
+    @Contract(pure = true)
+    default @NotNull Block withTag(@NotNull Tag<Boolean> tag) {
+        return withTag(tag, true);
+    }
+
     /**
      * Creates a new block with different nbt data.
      *
@@ -257,7 +262,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     }
 
     interface Getter {
-        @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition);
+        @UnknownNullability
+        Block getBlock(int x, int y, int z, @NotNull Condition condition);
 
         default @UnknownNullability Block getBlock(@NotNull Point point, @NotNull Condition condition) {
             return getBlock(point.blockX(), point.blockY(), point.blockZ(), condition);
