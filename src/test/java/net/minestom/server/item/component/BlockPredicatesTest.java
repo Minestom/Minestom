@@ -9,8 +9,8 @@ import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
+import net.minestom.server.instance.block.predicate.ComponentPredicateSet;
 import net.minestom.server.instance.block.predicate.DataComponentPredicate;
-import net.minestom.server.instance.block.predicate.DataComponentPredicates;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.registry.RegistryTag;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,7 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
                 entry("single, no tooltip", new BlockPredicates(BlockPredicate.ALL)),
                 entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE))),
                 entry("data component", new BlockPredicates(new BlockPredicate(DataComponentMap.builder().set(DataComponents.CUSTOM_DATA, new CustomData(testCompound)).build()))),
-                entry("component predicate", new BlockPredicates(new BlockPredicate(Map.of(DataComponentPredicates.ComponentPredicateType.CUSTOM_DATA, new DataComponentPredicate.CustomData(testCompound)))))
+                entry("component predicate", new BlockPredicates(new BlockPredicate(new ComponentPredicateSet().add(new DataComponentPredicate.CustomData(testCompound)))))
         );
     }
 

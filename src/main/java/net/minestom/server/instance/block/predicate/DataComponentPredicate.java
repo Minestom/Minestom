@@ -22,6 +22,7 @@ import net.minestom.server.item.predicate.ItemPredicate;
 import net.minestom.server.potion.PotionType;
 import net.minestom.server.registry.*;
 import net.minestom.server.utils.Range;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,6 +30,30 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
+
+    @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> REGISTRY = createDefaultRegistry();
+
+    @ApiStatus.Internal
+    static DynamicRegistry<Codec<? extends DataComponentPredicate>> createDefaultRegistry() {
+        final DynamicRegistry<Codec<? extends DataComponentPredicate>> registry = DynamicRegistry.create(Key.key("minecraft:data_component_predicate_type"));
+        registry.register("damage", Damage.CODEC);
+        registry.register("enchantments", Enchantments.CODEC);
+        registry.register("stored_enchantments", StoredEnchantments.CODEC);
+        registry.register("potion_contents", Potions.CODEC);
+        registry.register("custom_data", CustomData.CODEC);
+        registry.register("container", Container.CODEC);
+        registry.register("bundle_contents", BundleContents.CODEC);
+        registry.register("firework_explosion", FireworkExplosion.CODEC);
+        registry.register("fireworks", Fireworks.CODEC);
+        registry.register("writable_book_content", WritableBook.CODEC);
+        registry.register("written_book_content", WrittenBook.CODEC);
+        registry.register("attribute_modifiers", AttributeModifiers.CODEC);
+        registry.register("trim", ArmorTrim.CODEC);
+        registry.register("jukebox_playable", JukeboxPlayable.CODEC);
+        return registry;
+    }
+
+    @NotNull Codec<? extends DataComponentPredicate> codec();
 
     /**
      * Tests damage or remaining durability.
@@ -53,6 +78,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return (durability == null || durability.inRange(maxDamage - damageValue)) &&
                         (damage == null || damage.inRange(damageValue));
             }
+        }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
         }
     }
 
@@ -109,7 +139,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             children = List.copyOf(children);
         }
 
-        public Enchantments(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+        public Enchantments(@Nullable RegistryTag<Enchantment> enchantments,
                             @Nullable Range.Int levels) {
             this(List.of(new EnchantmentListPredicate(enchantments, levels)));
         }
@@ -118,6 +148,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(@NotNull DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.ENCHANTMENTS);
             return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
+        }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
         }
     }
 
@@ -135,7 +170,7 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             children = List.copyOf(children);
         }
 
-        public StoredEnchantments(@Nullable RegistryTag<net.minestom.server.item.enchant.Enchantment> enchantments,
+        public StoredEnchantments(@Nullable RegistryTag<Enchantment> enchantments,
                                   @Nullable Range.Int levels) {
             this(List.of(new EnchantmentListPredicate(enchantments, levels)));
         }
@@ -144,6 +179,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(@NotNull DataComponent.Holder holder) {
             EnchantmentList enchantments = holder.get(DataComponents.STORED_ENCHANTMENTS);
             return enchantments != null && children.stream().allMatch(enchantment -> enchantment.test(enchantments));
+        }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
         }
     }
 
@@ -162,12 +202,17 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             if (potion == null || potion.potion() == null) return false;
             return potionTypes.contains(potion.potion());
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests stored NBT data in the {@link DataComponents#CUSTOM_DATA} component
-     * @param nbt An NBT predicate to match against the object's custom data
      *
+     * @param nbt An NBT predicate to match against the object's custom data
      * @see NbtPredicate#compareNBT(BinaryTag, BinaryTag) Description of NBT comparison logic
      */
     record CustomData(@NotNull NbtPredicate nbt) implements DataComponentPredicate {
@@ -182,10 +227,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             net.minestom.server.item.component.CustomData other = holder.get(DataComponents.CUSTOM_DATA);
             return other != null && nbt.test(other.nbt());
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the items in the {@link DataComponents#CONTAINER} component.
+     *
      * @param items Predicates to match against the object's items
      * @see CollectionPredicate
      */
@@ -200,10 +251,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             List<ItemStack> itemStacks = holder.get(DataComponents.CONTAINER);
             return items == null || items.test(itemStacks != null ? itemStacks.stream().filter(item -> !item.isAir()).toList() : List.of());
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the items in the {@link DataComponents#BUNDLE_CONTENTS} component.
+     *
      * @param items Predicates to match against the object's items
      * @see CollectionPredicate
      */
@@ -218,6 +275,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
         public boolean test(@NotNull DataComponent.Holder holder) {
             List<ItemStack> itemStacks = holder.get(DataComponents.BUNDLE_CONTENTS);
             return items == null || items.test(itemStacks != null ? itemStacks : List.of());
+        }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
         }
     }
 
@@ -245,7 +307,8 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     /**
      * Tests the firework explosions and flight duration in the {@link DataComponents#FIREWORKS} component.
-     * @param explosions Predicates to match against the object's firework explosions, or null to allow any
+     *
+     * @param explosions     Predicates to match against the object's firework explosions, or null to allow any
      * @param flightDuration The allowed range of flight duration, or null to allow any
      */
     record Fireworks(
@@ -266,19 +329,25 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             return explosions == null || explosions.test(fireworks.explosions());
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the firework explosion in {@link DataComponents#FIREWORK_EXPLOSION}
+     *
      * @param delegate A predicate to match against the object's firework explosion
      */
     record FireworkExplosion(@NotNull Fireworks.FireworkExplosionPredicate delegate) implements DataComponentPredicate {
-        public static final Codec<FireworkExplosion> CODEC = Fireworks.FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
+        public static final Codec<FireworkExplosion> CODEC = FireworkExplosionPredicate.CODEC.transform(FireworkExplosion::new, FireworkExplosion::delegate);
 
         public FireworkExplosion(@Nullable net.minestom.server.item.component.FireworkExplosion.Shape shape,
                                  @Nullable Boolean hasTrail,
                                  @Nullable Boolean hasTwinkle) {
-            this(new Fireworks.FireworkExplosionPredicate(shape, hasTrail, hasTwinkle));
+            this(new FireworkExplosionPredicate(shape, hasTrail, hasTwinkle));
         }
 
         @Override
@@ -286,12 +355,18 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             net.minestom.server.item.component.FireworkExplosion explosion = holder.get(DataComponents.FIREWORK_EXPLOSION);
             return delegate.test(explosion);
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the content of pages in the {@link DataComponents#WRITABLE_BOOK_CONTENT} component.
-     * @see CollectionPredicate
+     *
      * @param pages Predicates to match against the book's pages
+     * @see CollectionPredicate
      */
     record WritableBook(
             @Nullable CollectionPredicate<FilteredText<String>, PagePredicate> pages) implements DataComponentPredicate {
@@ -318,16 +393,21 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             }
         }
 
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the content of pages in the {@link DataComponents#WRITTEN_BOOK_CONTENT} component.
-     * @see CollectionPredicate
-     * @param pages Predicates to match against the book's pages, or null to ignore
-     * @param author The expected author, or null to ignore
-     * @param title The expected title, or null to ignore
+     *
+     * @param pages      Predicates to match against the book's pages, or null to ignore
+     * @param author     The expected author, or null to ignore
+     * @param title      The expected title, or null to ignore
      * @param generation The expected generation, or null to ignore
-     * @param resolved The expected value of {@link WrittenBookContent#resolved()}, or null to ignore
+     * @param resolved   The expected value of {@link WrittenBookContent#resolved()}, or null to ignore
+     * @see CollectionPredicate
      */
     record WrittenBook(@Nullable CollectionPredicate<FilteredText<Component>, PagePredicate> pages,
                        @Nullable String author,
@@ -368,16 +448,21 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return text.text().equals(contents);
             }
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests an attribute modifier.
      *
      * @param attribute The type of attribute to match, or null to ignore
-     * @param id The attribute ID to match, or null to ignore
-     * @param amount The attribute's amount to match, or null to ignore
+     * @param id        The attribute ID to match, or null to ignore
+     * @param amount    The attribute's amount to match, or null to ignore
      * @param operation The attribute's operation to match, or null to ignore
-     * @param slot The attribute's equipment slot to match, or null to ignore
+     * @param slot      The attribute's equipment slot to match, or null to ignore
      */
     record AttributeModifierPredicate(@Nullable Attribute attribute, @Nullable Key id,
                                       @Nullable Range.Double amount,
@@ -409,8 +494,9 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
 
     /**
      * Tests attribute modifiers in the {@link DataComponents#ATTRIBUTE_MODIFIERS} component.
-     * @see CollectionPredicate
+     *
      * @param modifiers Predicates to match against the object's attribute modifiers
+     * @see CollectionPredicate
      */
     record AttributeModifiers(
             @Nullable CollectionPredicate<AttributeList.Modifier, AttributeModifierPredicate> modifiers) implements DataComponentPredicate {
@@ -427,12 +513,18 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             if (attributes == null) return false;
             return modifiers.test(attributes.modifiers());
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests armor trim material and pattern in the {@link DataComponents#TRIM} component.
+     *
      * @param material The trim material to match, or null to ignore
-     * @param pattern The trim pattern to match, or null to ignore
+     * @param pattern  The trim pattern to match, or null to ignore
      */
     record ArmorTrim(@Nullable RegistryTag<TrimMaterial> material,
                      @Nullable RegistryTag<TrimPattern> pattern) implements DataComponentPredicate {
@@ -451,10 +543,16 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
                 return false;
             return pattern == null || (!trim.pattern().isDirect() && pattern.contains(trim.pattern().asKey()));
         }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
+        }
     }
 
     /**
      * Tests the jukebox song in the {@link DataComponents#JUKEBOX_PLAYABLE} component.
+     *
      * @param songs The songs to accept, or null to ignore.
      */
     record JukeboxPlayable(@Nullable RegistryTag<JukeboxSong> songs) implements DataComponentPredicate {
@@ -469,6 +567,11 @@ public sealed interface DataComponentPredicate extends Predicate<DataComponent.H
             var song = holder.get(DataComponents.JUKEBOX_PLAYABLE);
             if (song == null) return false;
             return songs == null || songs.contains(song);
+        }
+
+        @Override
+        public @NotNull Codec<? extends DataComponentPredicate> codec() {
+            return CODEC;
         }
     }
 }

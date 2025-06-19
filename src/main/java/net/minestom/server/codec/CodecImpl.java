@@ -180,7 +180,7 @@ final class CodecImpl {
         }
     }
 
-    record MapImpl<K, V>(@NotNull Codec<K> keyCodec, @NotNull Codec<V> valueCodec,
+    record MapImpl<K, V>(@NotNull Codec<K> keyCodec, @NotNull Function<K, Codec<V>> valueCodecGetter,
                          int maxSize) implements Codec<Map<K, V>> {
         @Override
         public @NotNull <D> Result<Map<K, V>> decode(@NotNull Transcoder<D> coder, @NotNull D value) {
@@ -198,6 +198,12 @@ final class CodecImpl {
                 if (!(keyResult instanceof Result.Ok(K decodedKey)))
                     return keyResult.cast();
                 // The throwing decode here is fine since we are already iterating over known keys.
+                Codec<V> valueCodec;
+                try {
+                    valueCodec = valueCodecGetter.apply(decodedKey);
+                } catch (Exception e) {
+                    return new Result.Error<>(e.getMessage());
+                }
                 final Result<V> valueResult = valueCodec.decode(coder, map.getValue(key).orElseThrow());
                 if (!(valueResult instanceof Result.Ok(V decodedValue)))
                     return valueResult.cast();
@@ -218,6 +224,12 @@ final class CodecImpl {
                 final Result<D> keyResult = keyCodec.encode(coder, entry.getKey());
                 if (!(keyResult instanceof Result.Ok(D encodedKey)))
                     return keyResult.cast();
+                Codec<V> valueCodec;
+                try {
+                    valueCodec = valueCodecGetter.apply(entry.getKey());
+                } catch (Exception e) {
+                    return new Result.Error<>(e.getMessage());
+                }
                 final Result<D> valueResult = valueCodec.encode(coder, entry.getValue());
                 if (!(valueResult instanceof Result.Ok(D encodedValue)))
                     return valueResult.cast();
