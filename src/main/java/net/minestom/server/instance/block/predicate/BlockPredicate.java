@@ -70,7 +70,7 @@ public record BlockPredicate(
             "blocks", RegistryTag.codec(Registries::blocks).optional(), BlockPredicate::blocks,
             "state", PropertiesPredicate.CODEC.optional(), BlockPredicate::state,
             "nbt", Codec.NBT_COMPOUND.optional(), BlockPredicate::nbt,
-            StructCodec.INLINE, DataComponentPredicates.CODEC, BlockPredicate::componentPredicates,
+            StructCodec.INLINE, DataComponentPredicates.CODEC.optional(), BlockPredicate::componentPredicates,
             BlockPredicate::new
     );
 
