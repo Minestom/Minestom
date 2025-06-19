@@ -60,6 +60,9 @@ public class ClickPreprocessorTest {
 
     @Test
     public void testThrowType() {
+        assertProcessed(new Click.LeftDropCursor(), clickPacket(THROW, 1, 0, -999));
+        assertProcessed(new Click.RightDropCursor(), clickPacket(THROW, 1, 1, -999));
+
         assertProcessed(new Click.DropSlot(0, true), clickPacket(THROW, 1, 1, 0));
 
         assertProcessed(new Click.DropSlot(0, false), clickPacket(THROW, 1, 0, 0));
