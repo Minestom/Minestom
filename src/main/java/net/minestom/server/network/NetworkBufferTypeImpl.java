@@ -738,14 +738,14 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         }
     }
 
-    record MapType<K, V>(@NotNull Type<K> parent, @NotNull NetworkBuffer.Type<V> valueType,
+    record MapType<K, V>(@NotNull Type<K> parent, @NotNull Function<@NotNull K, NetworkBuffer.@NotNull Type<V>> valueTypeGetter,
                          int maxSize) implements NetworkBufferTypeImpl<Map<K, V>> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Map<K, V> map) {
             buffer.write(VAR_INT, map.size());
             for (Map.Entry<K, V> entry : map.entrySet()) {
                 buffer.write(parent, entry.getKey());
-                buffer.write(valueType, entry.getValue());
+                buffer.write(valueTypeGetter.apply(entry.getKey()), entry.getValue());
             }
         }
 
@@ -758,7 +758,7 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
             V[] values = (V[]) new Object[size];
             for (int i = 0; i < size; i++) {
                 keys[i] = buffer.read(parent);
-                values[i] = buffer.read(valueType);
+                values[i] = buffer.read(valueTypeGetter.apply(keys[i]));
             }
             return Map.copyOf(new Object2ObjectArrayMap<>(keys, values, size));
         }

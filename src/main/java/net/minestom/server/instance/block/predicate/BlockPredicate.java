@@ -96,7 +96,7 @@ public record BlockPredicate(
         this(null, null, null, new DataComponentPredicates(components, null));
     }
 
-    public BlockPredicate(@NotNull Map<DataComponentPredicates.ComponentPredicateType, DataComponentPredicate> predicates) {
+    public BlockPredicate(@NotNull ComponentPredicateSet predicates) {
         this(null, null, null, new DataComponentPredicates(null, predicates));
     }
 
