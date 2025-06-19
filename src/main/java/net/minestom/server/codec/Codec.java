@@ -3,8 +3,8 @@ package net.minestom.server.codec;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
@@ -88,13 +88,8 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     }, compound -> compound);
 
     @NotNull Codec<CompoundBinaryTag> NBT_COMPOUND_COERCED = Codec.NBT_COMPOUND.orElse(Codec.STRING.transform(
-            string -> {
-                BinaryTag value = TagStringIOExt.readTag(string);
-                if (!(value instanceof CompoundBinaryTag compound))
-                    throw new IllegalArgumentException("Not a compound: " + value);
-                return compound;
-            },
-            TagStringIOExt::writeTag
+            string -> MinestomAdventure.tagStringIO().asCompound(string),
+            tag -> MinestomAdventure.tagStringIO().asString(tag)
     ));
 
     static <E extends Enum<E>> @NotNull Codec<E> Enum(@NotNull Class<E> enumClass) {
