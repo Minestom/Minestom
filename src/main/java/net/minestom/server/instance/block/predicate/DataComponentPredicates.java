@@ -16,10 +16,12 @@ import net.minestom.server.utils.Range;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public record DataComponentPredicates(DataComponentMap exact,
-                                      Map<String, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
+                                      Map<ComponentPredicateType, DataComponentPredicate> predicates) implements Predicate<DataComponent.Holder> {
 
     public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
             "min", Codec.INT, Range.Int::min,
@@ -33,49 +35,62 @@ public record DataComponentPredicates(DataComponentMap exact,
             Range.Double::new
     ).orElse(Codec.DOUBLE.transform(Range.Double::new, Range.Double::min));
 
-    private static Codec<? extends DataComponentPredicate> getCodec(String type) {
-        return switch (type) {
-            case "damage" -> DataComponentPredicate.Damage.CODEC;
-            case "enchantments" -> DataComponentPredicate.Enchantments.CODEC;
-            case "stored_enchantments" -> DataComponentPredicate.StoredEnchantments.CODEC;
-            case "potion_contents" -> DataComponentPredicate.Potions.CODEC;
-            case "custom_data" -> DataComponentPredicate.CustomData.CODEC;
-            case "container" -> DataComponentPredicate.Container.CODEC;
-            case "bundle_contents" -> DataComponentPredicate.BundleContents.CODEC;
-            case "firework_explosion" -> DataComponentPredicate.FireworkExplosion.CODEC;
-            case "fireworks" -> DataComponentPredicate.Fireworks.CODEC;
-            case "writable_book_content" -> DataComponentPredicate.WritableBook.CODEC;
-            case "written_book_content" -> DataComponentPredicate.WrittenBook.CODEC;
-            case "attribute_modifiers" -> DataComponentPredicate.AttributeModifiers.CODEC;
-            case "trim" -> DataComponentPredicate.ArmorTrim.CODEC;
-            case "jukebox_playable" -> DataComponentPredicate.JukeboxPlayable.CODEC;
+    public enum ComponentPredicateType {
 
-            default -> throw new IllegalArgumentException("Unexpected component predicate type: " + type);
-        };
+        DAMAGE("damage", DataComponentPredicate.Damage.CODEC),
+        ENCHANTMENTS("enchantments", DataComponentPredicate.Enchantments.CODEC),
+        STORED_ENCHANTMENTS("stored_enchantments", DataComponentPredicate.StoredEnchantments.CODEC),
+        POTION_CONTENTS("potion_contents", DataComponentPredicate.Potions.CODEC),
+        CUSTOM_DATA("custom_data", DataComponentPredicate.CustomData.CODEC),
+        CONTAINER("container", DataComponentPredicate.Container.CODEC),
+        BUNDLE_CONTENTS("bundle_contents", DataComponentPredicate.BundleContents.CODEC),
+        FIREWORK_EXPLOSION("firework_explosion", DataComponentPredicate.FireworkExplosion.CODEC),
+        FIREWORKS("fireworks", DataComponentPredicate.Fireworks.CODEC),
+        WRITABLE_BOOK_CONTENT("writable_book_content", DataComponentPredicate.WritableBook.CODEC),
+        WRITTEN_BOOK_CONTENT("written_book_content", DataComponentPredicate.WrittenBook.CODEC),
+        ATTRIBUTE_MODIFIERS("attribute_modifiers", DataComponentPredicate.AttributeModifiers.CODEC),
+        TRIM("trim", DataComponentPredicate.ArmorTrim.CODEC),
+        JUKEBOX_PLAYABLE("jukebox_playable", DataComponentPredicate.JukeboxPlayable.CODEC);
+
+        private static final Map<String, ComponentPredicateType> BY_NAME = Arrays.stream(values()).collect(Collectors.toMap(ComponentPredicateType::name, Function.identity()));
+        public static final NetworkBuffer.Type<ComponentPredicateType> NETWORK_TYPE = NetworkBuffer.Enum(ComponentPredicateType.class);
+        public static final Codec<ComponentPredicateType> CODEC = Codec.STRING.transform(BY_NAME::get, ComponentPredicateType::name);
+
+        private final String name;
+        private final Codec<? extends DataComponentPredicate> codec;
+
+        ComponentPredicateType(String name, Codec<? extends DataComponentPredicate> codec) {
+            this.name = name;
+            this.codec = codec;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public Codec<? extends DataComponentPredicate> getCodec() {
+            return codec;
+        }
+
+        public static ComponentPredicateType getByName(String name) {
+            return BY_NAME.get(name);
+        }
+
+        public static ComponentPredicateType getById(int id) {
+            return values()[id];
+        }
     }
 
-    /**
-     * A list of data component predicate types as they appear in the MC source, used to populate their registry IDs for sending packets.
-     */
-    private static final List<String> COMPONENT_PREDICATE_REGISTRY_ORDER = List.of("damage", "enchantments", "stored_enchantments", "potion_contents", "custom_data", "container", "bundle_contents", "firework_explosion", "fireworks", "writable_book_content", "written_book_content", "attribute_modifiers", "trim", "jukebox_playable");
-
-    private static int getRegistryId(String type) {
-        return COMPONENT_PREDICATE_REGISTRY_ORDER.indexOf(type);
-    }
-
-    private static String getComponentPredicateType(int registryId) {
-        return COMPONENT_PREDICATE_REGISTRY_ORDER.get(registryId);
-    }
-
-    private static final Codec<Map<String, DataComponentPredicate>> predicateCodec = Codec.NBT_COMPOUND.transform(
+    private static final Codec<Map<ComponentPredicateType, DataComponentPredicate>> predicateCodec = Codec.NBT_COMPOUND.transform(
             nbt -> {
                 if (nbt == null) return null;
-                Map<String, DataComponentPredicate> map = new HashMap<>();
+                Map<ComponentPredicateType, DataComponentPredicate> map = new HashMap<>();
                 final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
                 for (var entry : nbt) {
-                    Codec<? extends DataComponentPredicate> codec = getCodec(entry.getKey());
+                    ComponentPredicateType type = ComponentPredicateType.getByName(entry.getKey());
+                    Codec<? extends DataComponentPredicate> codec = type.getCodec();
                     DataComponentPredicate value = codec.decode(coder, entry.getValue()).orElseThrow();
-                    map.put(entry.getKey(), value);
+                    map.put(type, value);
                 }
                 return map;
             },
@@ -85,9 +100,9 @@ public record DataComponentPredicates(DataComponentMap exact,
                 final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
                 for (var entry : map.entrySet()) {
                     //noinspection unchecked
-                    Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) getCodec(entry.getKey());
+                    Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) entry.getKey().getCodec();
                     BinaryTag value = codec.encode(coder, entry.getValue()).orElseThrow();
-                    builder.put(entry.getKey(), value);
+                    builder.put(entry.getKey().name(), value);
                 }
                 return builder.build();
             });
@@ -126,9 +141,9 @@ public record DataComponentPredicates(DataComponentMap exact,
             (DataComponentMap map) -> map == null ? List.of() : map.entrySet().stream().toList()
     );
 
-    private static final NetworkBuffer.Type<Map<String, DataComponentPredicate>> predicateNetworkType = new NetworkBuffer.Type<>() {
+    private static final NetworkBuffer.Type<Map<ComponentPredicateType, DataComponentPredicate>> predicateNetworkType = new NetworkBuffer.Type<>() {
         @Override
-        public void write(@NotNull NetworkBuffer buffer, Map<String, DataComponentPredicate> value) {
+        public void write(@NotNull NetworkBuffer buffer, Map<ComponentPredicateType, DataComponentPredicate> value) {
             if (value == null) {
                 NetworkBuffer.VAR_INT.write(buffer, 0);
                 return;
@@ -136,26 +151,24 @@ public record DataComponentPredicates(DataComponentMap exact,
             NetworkBuffer.VAR_INT.write(buffer, value.size());
             final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
             for (var entry : value.entrySet()) {
-                int id = getRegistryId(entry.getKey());
-                if (id == -1) continue;
-                NetworkBuffer.VAR_INT.write(buffer, id);
+                ComponentPredicateType.NETWORK_TYPE.write(buffer, entry.getKey());
                 //noinspection unchecked
-                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) getCodec(entry.getKey());
+                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) entry.getKey().getCodec();
                 BinaryTag tag = codec.encode(coder, entry.getValue()).orElseThrow();
                 NetworkBuffer.NBT.write(buffer, tag);
             }
         }
 
         @Override
-        public Map<String, DataComponentPredicate> read(@NotNull NetworkBuffer buffer) {
-            Map<String, DataComponentPredicate> map = new HashMap<>();
+        public Map<ComponentPredicateType, DataComponentPredicate> read(@NotNull NetworkBuffer buffer) {
+            Map<ComponentPredicateType, DataComponentPredicate> map = new HashMap<>();
             int size = NetworkBuffer.VAR_INT.read(buffer);
             final Transcoder<BinaryTag> coder = new RegistryTranscoder<>(Transcoder.NBT, MinecraftServer.process());
             for (int i = 0; i < size; i++) {
                 int id = NetworkBuffer.VAR_INT.read(buffer);
-                String type = getComponentPredicateType(id);
+                ComponentPredicateType type = ComponentPredicateType.getById(id);
                 //noinspection unchecked
-                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) getCodec(type);
+                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) type.getCodec();
                 BinaryTag nbt = NetworkBuffer.NBT_COMPOUND.read(buffer);
                 Result<DataComponentPredicate> result = codec.decode(coder, nbt);
                 map.put(type, result.orElseThrow());
@@ -165,8 +178,8 @@ public record DataComponentPredicates(DataComponentMap exact,
     };
 
     public static final Codec<DataComponentPredicates> CODEC = StructCodec.struct(
-            "components", DataComponent.PATCH_CODEC, DataComponentPredicates::exact,
-            "predicates", predicateCodec, DataComponentPredicates::predicates,
+            "components", DataComponent.PATCH_CODEC.optional(), DataComponentPredicates::exact,
+            "predicates", predicateCodec.optional(), DataComponentPredicates::predicates,
             DataComponentPredicates::new
     );
 
@@ -186,11 +199,16 @@ public record DataComponentPredicates(DataComponentMap exact,
         @Override
         public DataComponentPredicates read(@NotNull NetworkBuffer buffer) {
             DataComponentPredicates value = delegate.read(buffer);
-            if ((value.exact == null || value.exact.isEmpty()) && (value.predicates == null || value.predicates.isEmpty())) {
-                return null;
-            } else {
-                return value;
+            DataComponentMap exact = value.exact();
+            // Read empty lists and compounds as null
+            if (exact != null && exact.isEmpty()) {
+                exact = null;
             }
+            Map<ComponentPredicateType, DataComponentPredicate> predicates = value.predicates();
+            if (predicates != null && predicates.isEmpty()) {
+                predicates = null;
+            }
+            return new DataComponentPredicates(exact, predicates);
         }
     };
 
