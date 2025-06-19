@@ -2,6 +2,7 @@ package net.minestom.server.instance.block.predicate;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.component.DataComponent;
 import net.minestom.server.network.NetworkBuffer;
@@ -24,7 +25,7 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
     public static final Codec<ComponentPredicateSet> CODEC = RegistryKey.codec(Registries::componentPredicateTypes)
             .mapValue((key) -> {
                 //noinspection unchecked
-                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) DataComponentPredicate.REGISTRY.get(key);
+                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) MinecraftServer.componentPredicateTypes().get(key);
                 Check.notNull(codec, "Unknown DataComponentPredicate type");
                 return codec;
             })
@@ -33,7 +34,7 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
     public static final NetworkBuffer.Type<ComponentPredicateSet> NETWORK_TYPE = RegistryKey.networkType(Registries::componentPredicateTypes)
             .mapValue((key) -> {
                 //noinspection unchecked
-                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) DataComponentPredicate.REGISTRY.get(key);
+                Codec<DataComponentPredicate> codec = (Codec<DataComponentPredicate>) MinecraftServer.componentPredicateTypes().get(key);
                 Check.notNull(codec, "Unknown DataComponentPredicate type");
                 return NetworkBuffer.TypedNBT(codec);
             })
@@ -42,7 +43,7 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
     private @NotNull Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> toMap() {
         Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> map = new HashMap<>();
         for (Int2ObjectMap.Entry<DataComponentPredicate> entry : predicates.int2ObjectEntrySet()) {
-            var key = DataComponentPredicate.REGISTRY.getKey(entry.getIntKey());
+            var key = MinecraftServer.componentPredicateTypes().getKey(entry.getIntKey());
             map.put(key, entry.getValue());
         }
         return map;
@@ -58,9 +59,9 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
 
     public @NotNull ComponentPredicateSet add(@NotNull DataComponentPredicate predicate) {
         var newMap = new Int2ObjectArrayMap<>(predicates);
-        var key = DataComponentPredicate.REGISTRY.getKey(predicate.codec());
+        var key = MinecraftServer.componentPredicateTypes().getKey(predicate.codec());
         Check.notNull(key, "Unknown DataComponentPredicate type");
-        newMap.put(DataComponentPredicate.REGISTRY.getId(key), predicate);
+        newMap.put(MinecraftServer.componentPredicateTypes().getId(key), predicate);
         return new ComponentPredicateSet(newMap);
     }
 
