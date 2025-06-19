@@ -1,11 +1,16 @@
 package net.minestom.server.item.component;
 
 import net.minestom.server.adventure.MinestomAdventure;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.nbt.IntBinaryTag;
 import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponent;
+import net.minestom.server.component.DataComponentMap;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.predicate.BlockPredicate;
+import net.minestom.server.instance.block.predicate.DataComponentPredicate;
+import net.minestom.server.instance.block.predicate.DataComponentPredicates;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +22,6 @@ import static java.util.Map.entry;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicates> {
 
@@ -28,10 +32,13 @@ public class BlockPredicatesTest extends AbstractItemComponentTest<BlockPredicat
 
     @Override
     protected @NotNull List<Map.Entry<String, BlockPredicates>> directReadWriteEntries() {
+        CompoundBinaryTag testCompound = CompoundBinaryTag.builder().put("test", IntBinaryTag.intBinaryTag(123)).build();
         return List.of(
                 entry("empty", new BlockPredicates(List.of())),
                 entry("single, no tooltip", new BlockPredicates(BlockPredicate.ALL)),
-                entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE)))
+                entry("many", new BlockPredicates(List.of(BlockPredicate.ALL, BlockPredicate.NONE))),
+                entry("data component", new BlockPredicates(new BlockPredicate(DataComponentMap.builder().set(DataComponents.CUSTOM_DATA, new CustomData(testCompound)).build()))),
+                entry("component predicate", new BlockPredicates(new BlockPredicate(Map.of(DataComponentPredicates.ComponentPredicateType.CUSTOM_DATA, new DataComponentPredicate.CustomData(testCompound)))))
         );
     }
 
