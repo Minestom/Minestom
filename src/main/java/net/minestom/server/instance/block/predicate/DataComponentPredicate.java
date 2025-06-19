@@ -31,10 +31,8 @@ import java.util.function.Predicate;
 
 public sealed interface DataComponentPredicate extends Predicate<DataComponent.Holder> {
 
-    @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> REGISTRY = createDefaultRegistry();
-
     @ApiStatus.Internal
-    static DynamicRegistry<Codec<? extends DataComponentPredicate>> createDefaultRegistry() {
+    static @NotNull DynamicRegistry<Codec<? extends DataComponentPredicate>> createDefaultRegistry() {
         final DynamicRegistry<Codec<? extends DataComponentPredicate>> registry = DynamicRegistry.create(Key.key("minecraft:data_component_predicate_type"));
         registry.register("damage", Damage.CODEC);
         registry.register("enchantments", Enchantments.CODEC);
