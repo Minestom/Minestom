@@ -225,6 +225,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     @Override
     public String getProperty(@NotNull String property) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
+        final int length = propertyTypes.length;
+        if (length == 0) return null;
         try {
             final int key = findKeyIndex(propertyTypes, property, this);
             final long index = extractIndex(propertiesArray, key);
