@@ -169,7 +169,7 @@ public class InstanceContainer extends Instance {
                 BlockPlacementRule.PlacementState rulePlacement;
                 if (placement instanceof BlockHandler.PlayerPlacement pp) {
                     rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
+                            this, this, block, pp.getBlockFace(), blockPosition,
                             new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
                             pp.getPlayer().getPosition(),
                             pp.getPlayer().getItemInHand(pp.getHand()),
@@ -177,7 +177,7 @@ public class InstanceContainer extends Instance {
                     );
                 } else {
                     rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, null, blockPosition,
+                            this, this, block, null, blockPosition,
                             null, null, null,
                             false
                     );
@@ -678,6 +678,7 @@ public class InstanceContainer extends Instance {
 
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
+                    this,
                     this,
                     neighborPosition,
                     neighborBlock,
