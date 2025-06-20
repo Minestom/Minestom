@@ -15,11 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
@@ -224,6 +220,18 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     @Override
     public @NotNull Block defaultState() {
         return Block.fromBlockId(id());
+    }
+
+    @Override
+    public String getProperty(@NotNull String property) {
+        final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
+        try {
+            final int key = findKeyIndex(propertyTypes, property, this);
+            final long index = extractIndex(propertiesArray, key);
+            return propertyTypes[key].values().get((int) index);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     @Override
