@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.longs.LongArrayPriorityQueue;
 import it.unimi.dsi.fastutil.longs.LongPriorityQueue;
 import net.kyori.adventure.audience.MessageType;
 import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.inventory.Book;
@@ -31,6 +32,7 @@ import net.minestom.server.collision.BoundingBox;
 import net.minestom.server.command.CommandSender;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.*;
+import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.entity.metadata.LivingEntityMeta;
 import net.minestom.server.entity.metadata.PlayerMeta;
@@ -63,10 +65,7 @@ import net.minestom.server.network.PlayerProvider;
 import net.minestom.server.network.packet.client.ClientPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.ServerPacket;
-import net.minestom.server.network.packet.server.common.KeepAlivePacket;
-import net.minestom.server.network.packet.server.common.PluginMessagePacket;
-import net.minestom.server.network.packet.server.common.ResourcePackPopPacket;
-import net.minestom.server.network.packet.server.common.ResourcePackPushPacket;
+import net.minestom.server.network.packet.server.common.*;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.network.packet.server.play.data.WorldPos;
 import net.minestom.server.network.player.ClientSettings;
@@ -1013,6 +1012,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         sendPacket(new OpenBookPacket(PlayerHand.OFF));
         // Restore the item in offhand
         sendPacket(new SetSlotPacket((byte) 0, 0, (short) PlayerInventoryUtils.OFFHAND_SLOT, getItemInOffHand()));
+    }
+
+    @Override
+    public void showDialog(@NotNull DialogLike dialog) {
+        sendPacket(new ShowDialogPacket(Dialog.unwrap(dialog)));
+    }
+
+    // TODO(1.21.6): Implementation for pending adventure method in 4.24.0.
+    public void closeDialog() {
+        sendPacket(new ClearDialogPacket());
     }
 
     @Override
@@ -2181,6 +2190,16 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
 
     public void refreshInput(boolean forward, boolean backward, boolean left, boolean right, boolean jump, boolean shift, boolean sprint) {
         this.inputs.refresh(forward, backward, left, right, jump, shift, sprint);
+
+        boolean oldSneakingState = isSneaking();
+        setSneaking(shift);
+        if (oldSneakingState != shift) {
+            if (shift) {
+                EventDispatcher.call(new PlayerStartSneakingEvent(this));
+            } else {
+                EventDispatcher.call(new PlayerStopSneakingEvent(this));
+            }
+        }
     }
 
     /**

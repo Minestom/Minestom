@@ -48,6 +48,8 @@ public enum ArgumentParserType implements StaticProtocolObject<ArgumentParserTyp
 
     COLOR("color"),
 
+    HEX_COLOR("hex_color"),
+
     COMPONENT("component"),
 
     STYLE("style"),
@@ -121,6 +123,8 @@ public enum ArgumentParserType implements StaticProtocolObject<ArgumentParserTyp
     LOOT_PREDICATE("loot_predicate"),
 
     LOOT_MODIFIER("loot_modifier"),
+
+    DIALOG("dialog"),
 
     UUID("uuid");
 

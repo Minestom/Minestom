@@ -31,6 +31,30 @@ public interface StructCodec<R> extends Codec<R> {
         return encodeToMap(coder, value, coder.createMap());
     }
 
+    default StructCodec<R> orElseStruct(@NotNull StructCodec<R> other) {
+        return new StructCodec<>() {
+            @Override
+            public @NotNull <D> Result<R> decodeFromMap(@NotNull Transcoder<D> coder, @NotNull MapLike<D> map) {
+                final Result<R> primaryResult = StructCodec.this.decodeFromMap(coder, map);
+                if (primaryResult instanceof Result.Ok<R> primaryOk)
+                    return primaryOk;
+
+                // Primary did not work, try secondary
+                final Result<R> secondaryResult = other.decodeFromMap(coder, map);
+                if (secondaryResult instanceof Result.Ok<R> secondaryOk)
+                    return secondaryOk;
+
+                // Secondary did not work either, return error from primary.
+                return primaryResult;
+            }
+
+            @Override
+            public @NotNull <D> Result<D> encodeToMap(@NotNull Transcoder<D> coder, @NotNull R value, @NotNull MapBuilder<D> map) {
+                return StructCodec.this.encodeToMap(coder, value, map);
+            }
+        };
+    }
+
     static <R> StructCodec<R> struct(Supplier<R> ctor) {
         return new StructCodec<>() {
             @Override

@@ -31,7 +31,7 @@ public class ServerProcessTest {
         var process = MinecraftServer.updateProcess();
         process.start(new InetSocketAddress("localhost", 25565));
         var ticker = process.ticker();
-        assertDoesNotThrow(() -> ticker.tick(System.currentTimeMillis()));
+        assertDoesNotThrow(() -> ticker.tick(System.nanoTime()));
         assertDoesNotThrow(process::stop);
     }
 }
