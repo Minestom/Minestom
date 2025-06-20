@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
 import net.minestom.server.codec.CodecImpl.PrimitiveImpl;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.registry.Registries;
@@ -72,6 +73,8 @@ public interface Codec<T> extends Encoder<T>, Decoder<T> {
     @NotNull Codec<UUID> UUID_COERCED = UUID.orElse(Codec.STRING.transform(java.util.UUID::fromString, java.util.UUID::toString));
 
     @NotNull Codec<Component> COMPONENT = ComponentCodecs.COMPONENT;
+    
+    @NotNull Codec<Style> COMPONENT_STYLE = ComponentCodecs.STYLE;
 
     @NotNull Codec<Point> BLOCK_POSITION = new CodecImpl.BlockPositionImpl();
 
