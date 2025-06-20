@@ -75,7 +75,7 @@ public final class ClickPreprocessor {
      */
     private @Nullable Click processInvalidSlot(@NotNull ClientClickWindowPacket.ClickType type, byte button) {
         return switch (type) {
-            case PICKUP -> {
+            case PICKUP, THROW -> {
                 if (button == 0) yield new Click.LeftDropCursor();
                 if (button == 1) yield new Click.RightDropCursor();
                 yield null;
