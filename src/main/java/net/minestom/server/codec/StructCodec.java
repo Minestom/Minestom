@@ -1639,8 +1639,13 @@ public interface StructCodec<R> extends Codec<R> {
 
             return decodeResult.mapError(e -> key + ": " + e);
         }
-        if (codec instanceof CodecImpl.OptionalImpl<T> optional && !map.hasValue(key))
-            return new Result.Ok<>(optional.defaultValue());
+        if (codec instanceof CodecImpl.OptionalImpl<T>(Codec<T> inner, T defaultValue)) {
+            return switch (map.getValue(key)) {
+                case Result.Ok(D innerValue) -> inner.decode(coder, innerValue)
+                        .mapError(e -> key + ": " + e);
+                case Result.Error(String ignored) -> new Result.Ok<>(defaultValue);
+            };
+        }
         return map.getValue(key)
                 .map(innerValue -> codec.decode(coder, innerValue))
                 .mapError(e -> key + ": " + e);
