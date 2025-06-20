@@ -1,9 +1,9 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.key.Key;
-import net.kyori.adventure.nbt.TagStringIOExt;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.event.HoverEvent;
 import net.minestom.server.FeatureFlag;
 import net.minestom.server.MinecraftServer;
@@ -11,7 +11,6 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
-import net.minestom.server.codec.Transcoder;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -42,14 +41,13 @@ import net.minestom.server.monitoring.BenchmarkManager;
 import net.minestom.server.monitoring.TickMonitor;
 import net.minestom.server.network.packet.server.common.CustomReportDetailsPacket;
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
-import net.minestom.server.network.packet.server.common.ShowDialogPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
-import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.sound.SoundEvent;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -210,12 +208,19 @@ public class PlayerInit {
                         ),
                         null, 2
                 );
-                var coder = new RegistryTranscoder<>(Transcoder.JSON, MinecraftServer.process());
 
-                event.getPlayer().sendPacket(new ShowDialogPacket(dialog));
+                event.getPlayer().sendMessage(Component.text("Click for dialog!").clickEvent(ClickEvent.showDialog(dialog)));
             })
             .addListener(PlayerCustomClickEvent.class, event -> {
-                System.out.println(event.getKey() + " -> " + (event.getPayload() == null ? "null" : TagStringIOExt.writeTag(event.getPayload())));
+                String payload = "null";
+                if (event.getPayload() != null) {
+                    try {
+                        payload = MinestomAdventure.tagStringIO().asString(event.getPayload());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+                System.out.println(event.getKey() + " -> " + payload);
             })
             .addListener(PlayerPacketOutEvent.class, event -> {
                 //System.out.println("out " + event.getPacket().getClass().getSimpleName());

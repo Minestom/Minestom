@@ -1,5 +1,6 @@
 package net.minestom.server.dialog;
 
+import net.kyori.adventure.dialog.DialogLike;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.codec.Codec;
@@ -13,7 +14,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public sealed interface Dialog extends Holder.Direct<Dialog> {
+public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
     @NotNull Registry<StructCodec<? extends Dialog>> REGISTRY = DynamicRegistry.fromMap(
             Key.key("minecraft:dialog_type"),
             Map.entry(Key.key("notice"), Notice.CODEC),
@@ -26,6 +27,36 @@ public sealed interface Dialog extends Holder.Direct<Dialog> {
 
     @NotNull NetworkBuffer.Type<Holder<Dialog>> NETWORK_TYPE = Holder.networkType(Registries::dialog, REGISTRY_NETWORK_TYPE);
     @NotNull Codec<Holder<Dialog>> CODEC = Holder.codec(Registries::dialog, REGISTRY_CODEC);
+
+    /**
+     * <p>Creates a new adventure {@link DialogLike} for the dialog at the given key.</p>
+     *
+     * <p>Useful for sending a dialog which has been pre-sent to the client in the Dialog registry.</p>
+     *
+     * @param key the key of the dialog (must be registered)
+     * @return a new {@link DialogLike} for the dialog at the given key
+     */
+    static @NotNull DialogLike forKey(@NotNull RegistryKey<Dialog> key) {
+        return new RegistryKeyDialog(key);
+    }
+
+    @ApiStatus.Internal
+    static @NotNull DialogLike wrap(@NotNull Holder<Dialog> dialog) {
+        return switch (dialog) {
+            case Dialog direct -> direct;
+            case RegistryKey<Dialog> reference -> new RegistryKeyDialog(reference);
+            default -> throw new IllegalArgumentException("Unsupported dialog type: " + dialog.getClass().getName());
+        };
+    }
+
+    @ApiStatus.Internal
+    static @NotNull Holder<Dialog> unwrap(@NotNull DialogLike dialog) {
+        return switch (dialog) {
+            case Dialog direct -> direct;
+            case RegistryKeyDialog reference -> reference.key();
+            default -> throw new IllegalArgumentException("Unsupported dialog type: " + dialog.getClass().getName());
+        };
+    }
 
     /**
      * <p>Creates a new registry for dialogs, loading the vanilla dialogs.</p>
