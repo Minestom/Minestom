@@ -33,6 +33,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.chunksystem.ChunkManager;
 import net.minestom.server.network.packet.server.CachedPacket;
 import net.minestom.server.network.packet.server.play.*;
 import net.minestom.server.potion.Potion;
@@ -70,9 +71,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -313,36 +312,24 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position) {
-        return teleport(position, null, RelativeFlags.NONE);
+        return teleport(position, Vec.ZERO);
     }
 
     public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity) {
-        return teleport(position, velocity, null, RelativeFlags.NONE);
+        return teleport(position, velocity, RelativeFlags.NONE);
     }
 
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity,
                                                      @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        return teleport(position, chunks, flags, true);
-    }
-
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags) {
-        return teleport(position, velocity, chunks, flags, true);
-    }
-
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, long @Nullable [] chunks,
-                                                     @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
-                                                     boolean shouldConfirm) {
-        // Use delta coord if not providing a delta velocity (to avoid resetting velocity)
-        return teleport(position, Vec.ZERO, chunks, flags | RelativeFlags.DELTA_COORD, shouldConfirm);
+        return teleport(position, velocity, flags, true);
     }
 
     /**
-     * Teleports the entity only if the chunk at {@code position} is loaded or if
-     * {@link Instance#hasEnabledAutoChunkLoad()} returns true.
+     * Teleports the entity only if the chunk at {@code position} is loaded.
+     * <p>
+     * To ensure the chunk is loaded, the user should add a chunk claim ({@link ChunkManager#addClaim(int, int)}.
      *
      * @param position      the teleport position
-     * @param chunks        the chunk indexes to load before teleporting the entity,
      *                      indexes are from {@link CoordConversion#chunkIndex(int, int)},
      *                      can be null or empty to only load the chunk at {@code position}
      * @param flags         flags used to teleport the entity relatively rather than absolutely
@@ -350,7 +337,7 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param shouldConfirm if false, the teleportation will be done without confirmation
      * @throws IllegalStateException if you try to teleport an entity before settings its instance
      */
-    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity, long @Nullable [] chunks,
+    public @NotNull CompletableFuture<Void> teleport(@NotNull Pos position, @NotNull Vec velocity,
                                                      @MagicConstant(flagsFromClass = RelativeFlags.class) int flags,
                                                      boolean shouldConfirm) {
         Check.stateCondition(instance == null, "You need to use Entity#setInstance before teleporting an entity!");
@@ -366,24 +353,37 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             setPositionInternal(globalPosition);
             this.velocity = globalVelocity;
             refreshCoordinate(globalPosition);
-            if (this instanceof Player player)
+            if (this instanceof Player player) {
                 player.synchronizePositionAfterTeleport(position, velocity, flags, shouldConfirm);
+            }
             else synchronizePosition();
         };
 
-        if (chunks != null && chunks.length > 0) {
-            // Chunks need to be loaded before the teleportation can happen
-            return ChunkUtils.optionalLoadAll(instance, chunks, null).thenRun(endCallback);
-        }
         final Pos currentPosition = this.position;
         if (!currentPosition.sameChunk(globalPosition)) {
             // Ensure that the chunk is loaded
-            return instance.loadOptionalChunk(globalPosition).thenRun(endCallback);
+            var claim = instance.getChunkManager().addClaim(globalPosition);
+            return claim.chunkFuture().thenRun(endCallback).thenRun(() -> {
+                // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                instance.scheduler().scheduleTask(() -> instance.getChunkManager().removeClaim(claim.claim()), TaskSchedule.tick(10), TaskSchedule.stop());
+            });
         } else {
             // Position is in the same chunk, keep it sync
             endCallback.run();
             return AsyncUtils.empty();
         }
+    }
+
+    @ApiStatus.Internal
+    protected CompletableFuture<Void> teleportToDifferentChunk(Pos targetPosition, Runnable endCallback) {
+        // we add a temporary claim to make sure the entity can teleport to the given chunk
+        var chunkAndClaim = instance.getChunkManager().addClaim(targetPosition);
+        return chunkAndClaim.chunkFuture()
+                .thenRun(endCallback)
+                .thenRun(() -> {
+                    // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                    instance.scheduler().scheduleTask(() -> instance.getChunkManager().removeClaim(chunkAndClaim.claim()), TaskSchedule.tick(10), TaskSchedule.stop());
+                });
     }
 
     /**
@@ -669,7 +669,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                         // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
                         Vec blockPos = new Vec(x, y, z);
                         Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
+                        var rel1 = position.sub(blockPos);
+                        var rel2 = rel1.add(blockEntityVector);
+                        var i = block.registry().collisionShape().intersectBox(rel2, boundingBox);
+                        if (i) {
                             handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
                         }
                     }
@@ -809,10 +812,10 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
      * @param instance      the new instance of the entity
      * @param spawnPosition the spawn position for the entity.
      * @return a {@link CompletableFuture} called once the entity's instance has been set,
-     * this is due to chunks needing to load
+     * this is due to chunks needing to load. Can also complete exceptionally in case of cancelled events.
      * @throws IllegalStateException if {@code instance} has not been registered in {@link InstanceManager}
      */
-    public CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
+    public @NotNull CompletableFuture<Void> setInstance(@NotNull Instance instance, @NotNull Pos spawnPosition) {
         Check.stateCondition(!instance.isRegistered(),
                 "Instances need to be registered, please use InstanceManager#registerInstance or InstanceManager#registerSharedInstance");
         final Instance previousInstance = this.instance;
@@ -821,7 +824,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         }
         AddEntityToInstanceEvent event = new AddEntityToInstanceEvent(instance, this);
         EventDispatcher.call(event);
-        if (event.isCancelled()) return null; // TODO what to return?
+        if (event.isCancelled()) {
+            return CompletableFuture.failedFuture(new CancellationException("AddEntityToInstanceEvent has been cancelled"));
+        }
 
         if (previousInstance != null) removeFromInstance(previousInstance);
 
@@ -831,8 +836,12 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         this.lastSyncedPosition = spawnPosition;
         this.previousPhysicsResult = null;
         this.instance = instance;
-        return instance.loadOptionalChunk(spawnPosition).thenAccept(chunk -> {
+        // Add a temporary claim to ensure the chunk is loaded
+        var chunkAndClaim = instance.getChunkManager().addClaim(spawnPosition);
+
+        return chunkAndClaim.chunkFuture().thenAccept(chunk -> {
             try {
+                // TODO this should probably be moved at some point to a ticking thread.
                 Check.notNull(chunk, "Entity has been placed in an unloaded chunk!");
                 refreshCurrentChunk(chunk);
                 if (this instanceof Player player) {
@@ -843,6 +852,11 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
                 instance.getEntityTracker().register(this, spawnPosition, trackingTarget, trackingUpdate);
                 spawn();
                 EventDispatcher.call(new EntitySpawnEvent(this, instance));
+
+                instance.scheduler().scheduleTask(() -> {
+                    // Remove the claim after 10 ticks. This will help many tests pass, and shouldn't impact normal usage
+                    instance.getChunkManager().removeClaim(chunkAndClaim.claim());
+                }, TaskSchedule.tick(10), TaskSchedule.stop());
             } catch (Exception e) {
                 MinecraftServer.getExceptionManager().handleException(e);
             }
@@ -1381,7 +1395,9 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
             // Entity moved in a new chunk
             final Chunk newChunk = instance.getChunk(newChunkX, newChunkZ);
             Check.notNull(newChunk, "The entity {0} tried to move in an unloaded chunk at {1}", getEntityId(), newPosition);
-            if (this instanceof Player player) player.sendChunkUpdates(newChunk);
+            if (this instanceof Player player) {
+                player.sendChunkUpdates(newChunk);
+            }
             refreshCurrentChunk(newChunk);
         }
     }

@@ -174,7 +174,7 @@ public class LightingChunk extends DynamicChunk {
     }
 
     public void sendLighting() {
-        if (!isLoaded()) return;
+        if (!isLoaded() || !doneInit) return;
         sendPacketToViewers(partialLightCache);
     }
 
@@ -341,8 +341,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void tick(long time) {
-        super.tick(time);
+    public void tick0(long time) {
+        super.tick0(time);
 
         if (doneInit && resendTimer.get() > 0) {
             if (resendTimer.decrementAndGet() == 0) {
@@ -352,7 +352,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Chunk> flushQueue(Instance instance, Set<Point> queue, LightType type, QueueType queueType) {
-        Set<Light> sections = ConcurrentHashMap.newKeySet();
+        assert Thread.holdsLock(instance);
+
         Set<Point> newQueue = ConcurrentHashMap.newKeySet();
 
         Set<Chunk> responseChunks = ConcurrentHashMap.newKeySet();
@@ -402,8 +403,6 @@ public class LightingChunk extends DynamicChunk {
                                 Light.getNeighbors(chunk, point.blockY()),
                                 lightLookup, paletteLookup);
                     };
-
-                    sections.add(light);
 
                     light.flip();
                     newQueue.addAll(toAdd);
@@ -479,6 +478,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Point> getNearbyRequired(Instance instance, Point point, LightType type) {
+        assert Thread.holdsLock(instance);
+
         Set<Point> collected = new HashSet<>();
         collected.add(point);
 
@@ -486,6 +487,7 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
+
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
@@ -499,6 +501,7 @@ public class LightingChunk extends DynamicChunk {
 
         for (int x = point.blockX() - 1; x <= point.blockX() + 1; x++) {
             for (int z = point.blockZ() - 1; z <= point.blockZ() + 1; z++) {
+
                 Chunk chunkCheck = instance.getChunk(x, z);
                 if (chunkCheck == null) continue;
 
@@ -522,6 +525,8 @@ public class LightingChunk extends DynamicChunk {
     }
 
     private static Set<Point> collectRequiredNearby(Instance instance, Point point, LightType type) {
+        assert Thread.holdsLock(instance);
+
         final Set<Point> found = new HashSet<>();
         final ArrayDeque<Point> toCheck = new ArrayDeque<>();
 
@@ -569,10 +574,5 @@ public class LightingChunk extends DynamicChunk {
         LightingChunk lightingChunk = new LightingChunk(instance, chunkX, chunkZ, sections);
         lightingChunk.entries.putAll(entries);
         return lightingChunk;
-    }
-
-    @Override
-    public boolean isLoaded() {
-        return super.isLoaded() && doneInit;
     }
 }
