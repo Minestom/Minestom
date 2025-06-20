@@ -20,6 +20,10 @@ public interface TagWritable extends TagReadable {
      */
     <T> void setTag(@NotNull Tag<T> tag, @Nullable T value);
 
+    default void setTag(@NotNull Tag<Boolean> tag) {
+        setTag(tag, true);
+    }
+
     default void removeTag(@NotNull Tag<?> tag) {
         setTag(tag, null);
     }
