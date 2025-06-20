@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StructCodecTest {
 
@@ -68,6 +67,19 @@ public class StructCodecTest {
                 TheObject::new);
         var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{}"));
         assertEquals(new TheObject("defaultValue"), assertOk(result));
+    }
+
+    @Test
+    void singleFieldOptionalIncorrectTypeButNotMissing() {
+        record TheObject(String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional(), TheObject::name,
+                TheObject::new
+        );
+        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{\"name\": 2}"));
+        assertError("name: Not a string: BinaryTagType[IntBinaryTag 3 (numeric)]{value=2}", result);
     }
 
     @Test
