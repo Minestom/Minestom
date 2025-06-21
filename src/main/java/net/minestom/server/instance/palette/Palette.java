@@ -8,7 +8,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
-import static net.minestom.server.instance.palette.PaletteImpl.*;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
@@ -17,6 +16,17 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * 0 is the default value.
  */
 public sealed interface Palette permits PaletteImpl {
+    int BLOCK_DIMENSION = 16;
+    int BLOCK_PALETTE_MIN_BITS = 4;
+    int BLOCK_PALETTE_MAX_BITS = 8;
+    int BLOCK_PALETTE_DIRECT_BITS = 15;
+
+    int BIOME_DIMENSION = 4;
+    int BIOME_PALETTE_MIN_BITS = 1;
+    int BIOME_PALETTE_MAX_BITS = 3;
+    @ApiStatus.Internal
+    int BIOME_PALETTE_DIRECT_BITS = 6; // Vary based on biome count, this is just a sensible default
+
     static Palette blocks(int bitsPerEntry) {
         return sized(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
     }

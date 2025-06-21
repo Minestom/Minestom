@@ -15,17 +15,6 @@ import static net.minestom.server.instance.palette.Palettes.*;
 
 final class PaletteImpl implements Palette {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
-
-    static final int BLOCK_DIMENSION = 16;
-    static final int BLOCK_PALETTE_MIN_BITS = 4;
-    static final int BLOCK_PALETTE_MAX_BITS = 8;
-    static final int BLOCK_PALETTE_DIRECT_BITS = 15;
-
-    static final int BIOME_DIMENSION = 4;
-    static final int BIOME_PALETTE_MIN_BITS = 1;
-    static final int BIOME_PALETTE_MAX_BITS = 3;
-    static final int BIOME_PALETTE_DIRECT_BITS = 6; // Vary based on biome count, this is just a sensible default
-
     final byte dimension, minBitsPerEntry, maxBitsPerEntry, directBits;
 
     byte bitsPerEntry = 0;
