@@ -16,28 +16,27 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 public sealed interface Palette permits PaletteImpl {
     static Palette blocks(int bitsPerEntry) {
-        return sized(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, bitsPerEntry);
+        return sized(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
     }
 
     static Palette biomes(int bitsPerEntry) {
-        return sized(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, bitsPerEntry);
+        return sized(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS, bitsPerEntry);
     }
 
     static Palette blocks() {
-        return empty(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS);
+        return empty(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS);
     }
 
     static Palette biomes() {
-        return empty(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS);
+        return empty(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS);
     }
 
-    static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry) {
-        return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry);
+    static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
+        return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits);
     }
 
-    static Palette sized(int dimension, int minBitsPerEntry, int maxBitsPerEntry,
-                         int bitsPerEntry) {
-        return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
+    static Palette sized(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits, int bitsPerEntry) {
+        return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) directBits, (byte) bitsPerEntry);
     }
 
     int get(int x, int y, int z);
@@ -65,8 +64,6 @@ public sealed interface Palette permits PaletteImpl {
      * Returns the number of bits used per entry.
      */
     int bitsPerEntry();
-
-    int maxBitsPerEntry();
 
     int dimension();
 
@@ -128,10 +125,10 @@ public sealed interface Palette permits PaletteImpl {
         int apply(int x, int y, int z, int value);
     }
 
-    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS);
-    NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS);
+    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS);
+    NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS);
 
-    static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect) {
+    static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect, int directBits) {
         //noinspection unchecked
         return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
             @Override
@@ -154,7 +151,7 @@ public sealed interface Palette permits PaletteImpl {
                 if (bitsPerEntry == 0) {
                     // Single value palette
                     final int value = buffer.read(VAR_INT);
-                    PaletteImpl palette = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect);
+                    PaletteImpl palette = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
                     palette.count = value;
                     return palette;
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
@@ -163,7 +160,7 @@ public sealed interface Palette permits PaletteImpl {
                     int entriesPerLong = 64 / bitsPerEntry;
                     final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
                     for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
-                    return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, bitsPerEntry,
+                    return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             palette, data);
                 } else {
@@ -171,7 +168,7 @@ public sealed interface Palette permits PaletteImpl {
                     final int length = Palettes.arrayLength(dimension, bitsPerEntry);
                     final long[] data = new long[length];
                     for (int i = 0; i < length; i++) data[i] = buffer.read(LONG);
-                    return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, bitsPerEntry,
+                    return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             new int[0], data);
                 }
