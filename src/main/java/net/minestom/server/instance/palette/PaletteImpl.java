@@ -6,6 +6,7 @@ import it.unimi.dsi.fastutil.ints.IntOpenHashSet;
 import it.unimi.dsi.fastutil.ints.IntSet;
 import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
@@ -328,11 +329,13 @@ final class PaletteImpl implements Palette {
         assert values != null;
     }
 
-    private int paletteIndexToValue(int value) {
+    @Override
+    public int paletteIndexToValue(int value) {
         return hasPalette() ? paletteToValueList.elements()[value] : value;
     }
 
-    private int valueToPaletteIndex(int value) {
+    @Override
+    public int valueToPaletteIndex(int value) {
         if (!hasPalette()) return value;
         if (values == null) resize(minBitsPerEntry);
         final int lastPaletteIndex = this.paletteToValueList.size();
@@ -347,6 +350,16 @@ final class PaletteImpl implements Palette {
         this.paletteToValueList.add(value);
         assert lastPaletteIndex < maxPaletteSize(bpe);
         return lastPaletteIndex;
+    }
+
+    @Override
+    public int singleValue() {
+        return bitsPerEntry == 0 ? count : -1;
+    }
+
+    @Override
+    public long @Nullable [] indexedValues() {
+        return values;
     }
 
     boolean hasPalette() {

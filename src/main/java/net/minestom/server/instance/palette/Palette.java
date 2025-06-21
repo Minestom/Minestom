@@ -1,7 +1,9 @@
 package net.minestom.server.instance.palette;
 
 import net.minestom.server.network.NetworkBuffer;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
@@ -92,6 +94,24 @@ public sealed interface Palette permits PaletteImpl {
     boolean compare(@NotNull Palette palette);
 
     @NotNull Palette clone();
+
+    @ApiStatus.Internal
+    int paletteIndexToValue(int value);
+
+    @ApiStatus.Internal
+    int valueToPaletteIndex(int value);
+
+    /**
+     * Gets the single value of this palette if it is a single value palette, otherwise returns -1.
+     */
+    @ApiStatus.Internal
+    int singleValue();
+
+    /**
+     * Gets the value array if it has one, otherwise returns null (i.e. single value palette).
+     */
+    @ApiStatus.Internal
+    long @Nullable [] indexedValues();
 
     @FunctionalInterface
     interface EntrySupplier {
