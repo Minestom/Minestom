@@ -41,6 +41,10 @@ public final class Palettes {
         }
     }
 
+    public static int maxPaletteSize(int bitsPerEntry) {
+        return 1 << bitsPerEntry;
+    }
+
     public static int arrayLength(int dimension, int bitsPerEntry) {
         final int elementCount = dimension * dimension * dimension;
         final int valuesPerLong = 64 / bitsPerEntry;
@@ -53,7 +57,8 @@ public final class Palettes {
         final int valuesPerLong = 64 / bitsPerEntry;
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
-        return (int) (values[index] >> bitIndex) & ((1 << bitsPerEntry) - 1);
+        final int mask = (1 << bitsPerEntry) - 1;
+        return (int) (values[index] >> bitIndex) & mask;
     }
 
     public static int write(int dimension, int bitsPerEntry, long[] values,
@@ -82,17 +87,23 @@ public final class Palettes {
         int count = 0;
         for (long block : values) {
             for (int i = 0; i < valuesPerLong; i++) {
-                count += (block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1);
+                count += (int) ((block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1));
             }
         }
         return count;
     }
 
     public static int sectionIndex(int dimension, int x, int y, int z) {
-        final int dimensionMask = dimension - 1;
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
-        return (y & dimensionMask) << (dimensionBitCount << 1) |
-                (z & dimensionMask) << dimensionBitCount |
-                (x & dimensionMask);
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
+        return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
+    }
+
+    // Optimized operations
+
+    public static void getAllFill(byte dimension, int value, Palette.EntryConsumer consumer) {
+        for (byte y = 0; y < dimension; y++)
+            for (byte z = 0; z < dimension; z++)
+                for (byte x = 0; x < dimension; x++)
+                    consumer.accept(x, y, z, value);
     }
 }

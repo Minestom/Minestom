@@ -1,5 +1,6 @@
 package net.minestom.server.instance.anvil;
 
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.Section;
@@ -203,16 +204,17 @@ public class AnvilLoaderIntegrationTest {
             Section originalSection = originalChunk.getSection(section);
             Section reloadedSection = reloadedChunk.getSection(section);
 
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             // easiest equality check to write is a memory compare on written output
             var original = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) originalSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, originalSection.blockPalette());
-                buffer.write(Palette.BIOME_SERIALIZER, originalSection.biomePalette());
+                buffer.write(biomeSerializer, originalSection.biomePalette());
             });
             var reloaded = NetworkBuffer.makeArray(buffer -> {
                 buffer.write(SHORT, (short) reloadedSection.blockPalette().count());
                 buffer.write(Palette.BLOCK_SERIALIZER, reloadedSection.blockPalette());
-                buffer.write(Palette.BIOME_SERIALIZER, reloadedSection.biomePalette());
+                buffer.write(biomeSerializer, reloadedSection.biomePalette());
             });
             Assertions.assertArrayEquals(original, reloaded);
         }
