@@ -12,7 +12,7 @@ import static net.minestom.server.network.NetworkBuffer.*;
  * <p>
  * 0 is the default value.
  */
-public interface Palette {
+public sealed interface Palette permits PaletteImpl {
     static Palette blocks() {
         return newPalette(16, 8);
     }

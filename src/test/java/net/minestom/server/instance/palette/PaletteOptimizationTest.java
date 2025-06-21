@@ -13,14 +13,14 @@ public class PaletteOptimizationTest {
     @Test
     public void empty() {
         var palette = createPalette();
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
     }
 
     @Test
     public void single() {
         var palette = createPalette();
         palette.set(0, 0, 0, 1);
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
     }
 
     @Test
@@ -28,33 +28,38 @@ public class PaletteOptimizationTest {
         var random = new Random(12345);
         var palette = createPalette();
         palette.setAll((x, y, z) -> random.nextInt(256));
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
         palette.setAll((x, y, z) -> random.nextInt(2));
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
     }
 
     @Test
     public void manualFill() {
         var palette = createPalette();
         palette.setAll((x, y, z) -> 1);
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
         palette.setAll((x, y, z) -> 2);
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
         palette.setAll((x, y, z) -> 0);
-        paletteEquals(palette, optimized(palette));
+        paletteEqualsOptimized(palette);
     }
 
     PaletteImpl createPalette() {
         return (PaletteImpl) Palette.blocks();
     }
 
-    Palette optimized(Palette palette) {
+    Palette optimized(Palette palette, Palette.Optimization optimization) {
         palette = palette.clone();
-        palette.optimize(Palette.Optimization.SIZE);
+        palette.optimize(optimization);
         return palette;
     }
 
-    void paletteEquals(Palette palette, Palette optimized) {
+    void paletteEqualsOptimized(Palette palette) {
+        paletteEquals(palette, optimized(palette, Palette.Optimization.SIZE), true);
+        paletteEquals(palette, optimized(palette, Palette.Optimization.SPEED), false);
+    }
+
+    void paletteEquals(Palette palette, Palette optimized, boolean sizeCompare) {
         // Verify content
         assertEquals(palette.dimension(), optimized.dimension());
         for (int y = 0; y < palette.dimension(); y++) {
@@ -65,7 +70,7 @@ public class PaletteOptimizationTest {
             }
         }
         // Verify size
-        {
+        if (sizeCompare) {
             var array = NetworkBuffer.makeArray(Palette.BLOCK_SERIALIZER, palette);
             int length1 = array.length;
             array = NetworkBuffer.makeArray(Palette.BLOCK_SERIALIZER, optimized);

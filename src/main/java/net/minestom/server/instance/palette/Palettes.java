@@ -57,7 +57,8 @@ public final class Palettes {
         final int valuesPerLong = 64 / bitsPerEntry;
         final int index = sectionIndex / valuesPerLong;
         final int bitIndex = (sectionIndex - index * valuesPerLong) * bitsPerEntry;
-        return (int) (values[index] >> bitIndex) & ((1 << bitsPerEntry) - 1);
+        final int mask = (1 << bitsPerEntry) - 1;
+        return (int) (values[index] >> bitIndex) & mask;
     }
 
     public static int write(int dimension, int bitsPerEntry, long[] values,
