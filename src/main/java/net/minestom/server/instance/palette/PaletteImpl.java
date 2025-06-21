@@ -72,8 +72,7 @@ final class PaletteImpl implements Palette {
         validateCoord(x, y, z);
         if (bitsPerEntry == 0) return count;
         final int value = read(dimension(), bitsPerEntry, values, x, y, z);
-        // Change to palette value and return
-        return hasPalette() ? paletteToValueList.elements()[value] : value;
+        return paletteIndexToValue(value);
     }
 
     @Override
@@ -97,7 +96,7 @@ final class PaletteImpl implements Palette {
     @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(x, y, z);
-        value = paletteIndexToValue(value);
+        value = valueToPaletteIndex(value);
         final int oldValue = Palettes.write(dimension(), bitsPerEntry, values, x, y, z, value);
         // Check if block count needs to be updated
         final boolean currentAir = oldValue == 0;
@@ -135,7 +134,7 @@ final class PaletteImpl implements Palette {
                     }
                     // Set value in cache
                     if (value != 0) {
-                        value = paletteIndexToValue(value);
+                        value = valueToPaletteIndex(value);
                         count++;
                     }
                     cache[index++] = value;
@@ -169,7 +168,7 @@ final class PaletteImpl implements Palette {
             final int newValue = function.apply(x, y, z, value);
             final int index = arrayIndex.getPlain();
             arrayIndex.setPlain(index + 1);
-            cache[index] = newValue != value ? paletteIndexToValue(newValue) : value;
+            cache[index] = newValue != value ? valueToPaletteIndex(newValue) : value;
             if (newValue != 0) count.setPlain(count.getPlain() + 1);
         });
         assert arrayIndex.getPlain() == maxSize();
@@ -330,6 +329,10 @@ final class PaletteImpl implements Palette {
     }
 
     private int paletteIndexToValue(int value) {
+        return hasPalette() ? paletteToValueList.elements()[value] : value;
+    }
+
+    private int valueToPaletteIndex(int value) {
         if (!hasPalette()) return value;
         if (values == null) resize(minBitsPerEntry);
         final int lastPaletteIndex = this.paletteToValueList.size();
@@ -337,7 +340,7 @@ final class PaletteImpl implements Palette {
         if (lastPaletteIndex >= maxPaletteSize(bpe)) {
             // Palette is full, must resize
             resize((byte) (bpe + 1));
-            return paletteIndexToValue(value);
+            return valueToPaletteIndex(value);
         }
         final int lookup = valueToPaletteMap.putIfAbsent(value, lastPaletteIndex);
         if (lookup != -1) return lookup;
