@@ -268,11 +268,12 @@ public class DynamicChunk extends Chunk {
         synchronized (this) {
             heightmaps = getHeightmaps();
 
+            NetworkBuffer.Type<Palette> biomeSerializer = Palette.biomeSerializer(MinecraftServer.getBiomeRegistry().size());
             data = NetworkBuffer.makeArray(networkBuffer -> {
                 for (Section section : sections) {
                     networkBuffer.write(SHORT, (short) section.blockPalette().count());
                     networkBuffer.write(Palette.BLOCK_SERIALIZER, section.blockPalette());
-                    networkBuffer.write(Palette.BIOME_SERIALIZER, section.biomePalette());
+                    networkBuffer.write(biomeSerializer, section.biomePalette());
                 }
             });
         }

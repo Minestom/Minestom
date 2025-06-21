@@ -1,6 +1,7 @@
 package net.minestom.server.instance.palette;
 
 import net.minestom.server.network.NetworkBuffer;
+import net.minestom.server.utils.MathUtils;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -127,13 +128,23 @@ public sealed interface Palette permits PaletteImpl {
     }
 
     NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
-    NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS);
+
+    static NetworkBuffer.Type<Palette> biomeSerializer(int biomeCount) {
+        final int directBits = MathUtils.bitsToRepresent(biomeCount);
+        return serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, directBits);
+    }
 
     static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect, int directBits) {
         //noinspection unchecked
         return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
             @Override
             public void write(@NotNull NetworkBuffer buffer, PaletteImpl value) {
+                // Temporary fix for biome direct bits depending on the number of registered biomes
+                if (directBits != value.directBits && !value.hasPalette()) {
+                    PaletteImpl tmp = new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, (byte) directBits);
+                    tmp.setAll(value::get);
+                    value = tmp;
+                }
                 final byte bitsPerEntry = value.bitsPerEntry;
                 buffer.write(BYTE, bitsPerEntry);
                 if (bitsPerEntry == 0) {

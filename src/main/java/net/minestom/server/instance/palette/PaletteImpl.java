@@ -24,7 +24,7 @@ final class PaletteImpl implements Palette {
     static final int BIOME_DIMENSION = 4;
     static final int BIOME_PALETTE_MIN_BITS = 1;
     static final int BIOME_PALETTE_MAX_BITS = 3;
-    static final int BIOME_PALETTE_DIRECT_BITS = 6;
+    static final int BIOME_PALETTE_DIRECT_BITS = 6; // Vary based on biome count, this is just a sensible default
 
     final byte dimension, minBitsPerEntry, maxBitsPerEntry, directBits;
 

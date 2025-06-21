@@ -324,36 +324,39 @@ public class PaletteTest {
 
     @Test
     public void serializationBiomeEmpty() {
+        final var serializer = Palette.biomeSerializer(128);
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Palette palette = Palette.biomes();
-        buffer.write(Palette.BIOME_SERIALIZER, palette);
+        buffer.write(serializer, palette);
 
-        Palette deserialized = buffer.read(Palette.BIOME_SERIALIZER);
+        Palette deserialized = buffer.read(serializer);
         assertTrue(palette.compare(deserialized));
     }
 
     @Test
     public void serializationBiomePalette() {
+        final var serializer = Palette.biomeSerializer(128);
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
         Palette palette = Palette.biomes();
         palette.set(0, 0, 0, 1);
         palette.set(1, 0, 0, 2);
-        buffer.write(Palette.BIOME_SERIALIZER, palette);
+        buffer.write(serializer, palette);
 
-        Palette deserialized = buffer.read(Palette.BIOME_SERIALIZER);
+        Palette deserialized = buffer.read(serializer);
         assertTrue(palette.compare(deserialized));
     }
 
     @Test
     public void serializationBiomeDirect() {
+        final var serializer = Palette.biomeSerializer(128);
         NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
-        Random random = new Random(12345);
         Palette palette = Palette.biomes();
+        Random random = new Random(12345);
         palette.setAll((x, y, z) -> random.nextInt(2048));
 
-        buffer.write(Palette.BIOME_SERIALIZER, palette);
+        buffer.write(serializer, palette);
 
-        Palette deserialized = buffer.read(Palette.BIOME_SERIALIZER);
+        Palette deserialized = buffer.read(serializer);
         assertTrue(palette.compare(deserialized));
     }
 
