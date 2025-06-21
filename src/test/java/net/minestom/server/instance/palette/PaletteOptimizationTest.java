@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class PaletteOptimizationTest {
@@ -60,16 +59,7 @@ public class PaletteOptimizationTest {
     }
 
     void paletteEquals(Palette palette, Palette optimized, boolean sizeCompare) {
-        // Verify content
-        assertEquals(palette.dimension(), optimized.dimension());
-        for (int y = 0; y < palette.dimension(); y++) {
-            for (int z = 0; z < palette.dimension(); z++) {
-                for (int x = 0; x < palette.dimension(); x++) {
-                    assertEquals(palette.get(x, y, z), optimized.get(x, y, z));
-                }
-            }
-        }
-        // Verify size
+        assertTrue(palette.compare(optimized));
         if (sizeCompare) {
             var array = NetworkBuffer.makeArray(Palette.BLOCK_SERIALIZER, palette);
             int length1 = array.length;

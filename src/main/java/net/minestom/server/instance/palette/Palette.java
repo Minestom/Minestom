@@ -83,6 +83,14 @@ public sealed interface Palette permits PaletteImpl {
         SPEED,
     }
 
+    /**
+     * Compare palettes content independently of their storage format.
+     *
+     * @param palette the palette to compare with
+     * @return true if the palettes are equivalent, false otherwise
+     */
+    boolean compare(@NotNull Palette palette);
+
     @NotNull Palette clone();
 
     @FunctionalInterface
@@ -116,9 +124,7 @@ public sealed interface Palette permits PaletteImpl {
                     if (value.hasPalette()) {
                         buffer.write(VAR_INT.list(), value.paletteToValueList);
                     }
-                    for (long l : value.values) {
-                        buffer.write(LONG, l);
-                    }
+                    for (long l : value.values) buffer.write(LONG, l);
                 }
             }
 
@@ -136,15 +142,15 @@ public sealed interface Palette permits PaletteImpl {
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
                     int entriesPerLong = 64 / bitsPerEntry;
                     final long[] data = new long[(dimension * dimension * dimension) / entriesPerLong + 1];
-                    for (int i = 0; i < data.length; i++) {
-                        data[i] = buffer.read(LONG);
-                    }
+                    for (int i = 0; i < data.length; i++) data[i] = buffer.read(LONG);
                     return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             palette, data);
                 } else {
                     // Direct palette
-                    final long[] data = buffer.read(LONG_ARRAY);
+                    final int length = Palettes.arrayLength(dimension, bitsPerEntry);
+                    final long[] data = new long[length];
+                    for (int i = 0; i < length; i++) data[i] = buffer.read(LONG);
                     return new PaletteImpl((byte) dimension, (byte) minIndirect, (byte) maxIndirect, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             new int[0], data);

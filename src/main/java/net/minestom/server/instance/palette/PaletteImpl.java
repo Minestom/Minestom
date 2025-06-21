@@ -234,6 +234,25 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public boolean compare(@NotNull Palette p) {
+        final PaletteImpl palette = (PaletteImpl) p;
+        final int dimension = this.dimension();
+        if (palette.dimension() != dimension) return false;
+        if (palette.count == 0 && this.count == 0) return true;
+        if (palette.bitsPerEntry == 0 && this.bitsPerEntry == 0 && palette.count == this.count) return true;
+        for (int y = 0; y < dimension; y++) {
+            for (int z = 0; z < dimension; z++) {
+                for (int x = 0; x < dimension; x++) {
+                    final int value1 = this.get(x, y, z);
+                    final int value2 = palette.get(x, y, z);
+                    if (value1 != value2) return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
     public @NotNull Palette clone() {
         PaletteImpl clone = new PaletteImpl(dimension, minBitsPerEntry, maxBitsPerEntry);
         clone.bitsPerEntry = this.bitsPerEntry;

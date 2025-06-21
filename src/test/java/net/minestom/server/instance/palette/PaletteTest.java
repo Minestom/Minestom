@@ -2,10 +2,12 @@ package net.minestom.server.instance.palette;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -283,6 +285,41 @@ public class PaletteTest {
         assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3));
         assertThrows(Exception.class, () -> Palette.newPalette(6, 5, 3));
         assertDoesNotThrow(() -> Palette.newPalette(16, 5, 3));
+    }
+
+    @Test
+    public void serializationEmpty() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationPalette() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationDirect() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Random random = new Random(12345);
+        Palette palette = Palette.blocks();
+        palette.setAll((x, y, z) -> random.nextInt(2048));
+
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
     }
 
     private static List<Palette> testPalettes() {
