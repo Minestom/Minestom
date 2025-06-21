@@ -41,6 +41,10 @@ public final class Palettes {
         }
     }
 
+    public static int maxPaletteSize(int bitsPerEntry) {
+        return 1 << bitsPerEntry;
+    }
+
     public static int arrayLength(int dimension, int bitsPerEntry) {
         final int elementCount = dimension * dimension * dimension;
         final int valuesPerLong = 64 / bitsPerEntry;
@@ -94,5 +98,14 @@ public final class Palettes {
         return (y & dimensionMask) << (dimensionBitCount << 1) |
                 (z & dimensionMask) << dimensionBitCount |
                 (x & dimensionMask);
+    }
+
+    // Optimized operations
+
+    public static void getAllFill(byte dimension, int value, Palette.EntryConsumer consumer) {
+        for (byte y = 0; y < dimension; y++)
+            for (byte z = 0; z < dimension; z++)
+                for (byte x = 0; x < dimension; x++)
+                    consumer.accept(x, y, z, value);
     }
 }

@@ -14,15 +14,19 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 public interface Palette {
     static Palette blocks() {
-        return newPalette(16, 8, 4);
+        return newPalette(16, 8);
     }
 
     static Palette biomes() {
-        return newPalette(4, 3, 1);
+        return newPalette(4, 3);
+    }
+
+    static Palette newPalette(int dimension, int maxBitsPerEntry) {
+        return new PaletteImpl((byte) dimension, (byte) maxBitsPerEntry);
     }
 
     static Palette newPalette(int dimension, int maxBitsPerEntry, int bitsPerEntry) {
-        return new AdaptivePalette((byte) dimension, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
+        return new PaletteImpl((byte) dimension, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
     }
 
     int get(int x, int y, int z);
@@ -63,6 +67,13 @@ public interface Palette {
         return dimension * dimension * dimension;
     }
 
+    void optimize(Optimization focus);
+
+    enum Optimization {
+        SIZE,
+        SPEED,
+    }
+
     @NotNull Palette clone();
 
     @FunctionalInterface
@@ -84,39 +95,33 @@ public interface Palette {
     NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(4, 1, 3);
 
     static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect) {
-        return new NetworkBuffer.Type<>() {
+        //noinspection unchecked
+        return (NetworkBuffer.Type) new NetworkBuffer.Type<PaletteImpl>() {
             @Override
-            public void write(@NotNull NetworkBuffer buffer, Palette value) {
-                switch (value) {
-                    case AdaptivePalette adaptive -> {
-                        final SpecializedPalette optimized = adaptive.optimizedPalette();
-                        adaptive.palette = optimized;
-                        BLOCK_SERIALIZER.write(buffer, optimized);
+            public void write(@NotNull NetworkBuffer buffer, PaletteImpl value) {
+                final byte bitsPerEntry = value.bitsPerEntry;
+                buffer.write(BYTE, bitsPerEntry);
+                if (bitsPerEntry == 0) {
+                    buffer.write(VAR_INT, value.count);
+                } else {
+                    if (value.bitsPerEntry() <= value.maxBitsPerEntry()) { // Palette index
+                        buffer.write(VAR_INT.list(), value.paletteToValueList);
                     }
-                    case PaletteSingle single -> {
-                        buffer.write(BYTE, (byte) 0);
-                        buffer.write(VAR_INT, single.value());
+                    for (long l : value.values) {
+                        buffer.write(LONG, l);
                     }
-                    case PaletteIndirect indirect -> {
-                        buffer.write(BYTE, (byte) value.bitsPerEntry());
-                        if (indirect.bitsPerEntry() <= indirect.maxBitsPerEntry()) { // Palette index
-                            buffer.write(VAR_INT.list(), indirect.paletteToValueList);
-                        }
-                        for (long l : indirect.values) {
-                            buffer.write(LONG, l);
-                        }
-                    }
-                    default -> throw new UnsupportedOperationException("Unsupported palette type: " + value.getClass());
                 }
             }
 
             @Override
-            public Palette read(@NotNull NetworkBuffer buffer) {
+            public PaletteImpl read(@NotNull NetworkBuffer buffer) {
                 final byte bitsPerEntry = buffer.read(BYTE);
                 if (bitsPerEntry == 0) {
                     // Single valued 0-0
                     final int value = buffer.read(VAR_INT);
-                    return new PaletteSingle((byte) dimension, value);
+                    PaletteImpl palette = new PaletteImpl((byte) dimension, (byte) maxIndirect, (byte) 0);
+                    palette.count = value;
+                    return palette;
                 } else if (bitsPerEntry >= minIndirect && bitsPerEntry <= maxIndirect) {
                     // Indirect palette
                     final int[] palette = buffer.read(VAR_INT_ARRAY);
@@ -125,13 +130,13 @@ public interface Palette {
                     for (int i = 0; i < data.length; i++) {
                         data[i] = buffer.read(LONG);
                     }
-                    return new PaletteIndirect(dimension, maxIndirect, bitsPerEntry,
+                    return new PaletteImpl((byte) dimension, (byte) maxIndirect, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             palette, data);
                 } else {
                     // Direct palette
                     final long[] data = buffer.read(LONG_ARRAY);
-                    return new PaletteIndirect(dimension, maxIndirect, bitsPerEntry,
+                    return new PaletteImpl((byte) dimension, (byte) maxIndirect, bitsPerEntry,
                             Palettes.count(bitsPerEntry, data),
                             new int[0], data);
                 }

@@ -13,14 +13,14 @@ public class PaletteOptimizationTest {
     @Test
     public void empty() {
         var palette = createPalette();
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
     }
 
     @Test
     public void single() {
         var palette = createPalette();
         palette.set(0, 0, 0, 1);
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
     }
 
     @Test
@@ -28,24 +28,30 @@ public class PaletteOptimizationTest {
         var random = new Random(12345);
         var palette = createPalette();
         palette.setAll((x, y, z) -> random.nextInt(256));
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
         palette.setAll((x, y, z) -> random.nextInt(2));
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
     }
 
     @Test
     public void manualFill() {
         var palette = createPalette();
         palette.setAll((x, y, z) -> 1);
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
         palette.setAll((x, y, z) -> 2);
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
         palette.setAll((x, y, z) -> 0);
-        paletteEquals(palette.palette, palette.optimizedPalette());
+        paletteEquals(palette, optimized(palette));
     }
 
-    AdaptivePalette createPalette() {
-        return (AdaptivePalette) Palette.blocks();
+    PaletteImpl createPalette() {
+        return (PaletteImpl) Palette.blocks();
+    }
+
+    Palette optimized(Palette palette) {
+        palette = palette.clone();
+        palette.optimize(Palette.Optimization.SIZE);
+        return palette;
     }
 
     void paletteEquals(Palette palette, Palette optimized) {
