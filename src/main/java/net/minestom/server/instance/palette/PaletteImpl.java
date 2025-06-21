@@ -14,8 +14,18 @@ import static net.minestom.server.instance.palette.Palettes.*;
 
 final class PaletteImpl implements Palette {
     private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
-    private static final int DIRECT_BITS = 15;
-    final byte dimension, maxBitsPerEntry;
+
+    public static final int BLOCK_DIMENSION = 16;
+    public static final int BLOCK_PALETTE_MIN_BITS = 4;
+    public static final int BLOCK_PALETTE_MAX_BITS = 8;
+
+    public static final int BIOME_DIMENSION = 4;
+    public static final int BIOME_PALETTE_MIN_BITS = 1;
+    public static final int BIOME_PALETTE_MAX_BITS = 3;
+
+    public static final int DIRECT_BITS = 15;
+
+    final byte dimension, minBitsPerEntry, maxBitsPerEntry;
 
     byte bitsPerEntry = 0;
     int count = 0; // Serve as the single value if bitsPerEntry == 0
@@ -26,15 +36,16 @@ final class PaletteImpl implements Palette {
     // value = palette index
     private Int2IntOpenHashMap valueToPaletteMap;
 
-    PaletteImpl(byte dimension, byte maxBitsPerEntry) {
+    PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry) {
         validateDimension(dimension);
         this.dimension = dimension;
+        this.minBitsPerEntry = minBitsPerEntry;
         this.maxBitsPerEntry = maxBitsPerEntry;
     }
 
-    PaletteImpl(byte dimension, byte maxBitsPerEntry, byte bitsPerEntry,
+    PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte bitsPerEntry,
                 int count, int[] palette, long[] values) {
-        this(dimension, maxBitsPerEntry);
+        this(dimension, minBitsPerEntry, maxBitsPerEntry);
         this.bitsPerEntry = bitsPerEntry;
 
         this.count = count;
@@ -50,8 +61,8 @@ final class PaletteImpl implements Palette {
         }
     }
 
-    PaletteImpl(byte dimension, byte maxBitsPerEntry, byte bitsPerEntry) {
-        this(dimension, maxBitsPerEntry, bitsPerEntry,
+    PaletteImpl(byte dimension, byte minBitsPerEntry, byte maxBitsPerEntry, byte bitsPerEntry) {
+        this(dimension, minBitsPerEntry, maxBitsPerEntry, bitsPerEntry,
                 0, new int[]{0}, new long[arrayLength(dimension, bitsPerEntry)]
         );
     }
@@ -224,7 +235,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public @NotNull Palette clone() {
-        PaletteImpl clone = new PaletteImpl(dimension, maxBitsPerEntry);
+        PaletteImpl clone = new PaletteImpl(dimension, minBitsPerEntry, maxBitsPerEntry);
         clone.bitsPerEntry = this.bitsPerEntry;
         clone.count = this.count;
         if (bitsPerEntry == 0) return clone;
@@ -287,7 +298,7 @@ final class PaletteImpl implements Palette {
 
     void resize(byte newBitsPerEntry) {
         if (newBitsPerEntry > maxBitsPerEntry()) newBitsPerEntry = DIRECT_BITS;
-        PaletteImpl palette = new PaletteImpl(dimension, maxBitsPerEntry, newBitsPerEntry);
+        PaletteImpl palette = new PaletteImpl(dimension, minBitsPerEntry, maxBitsPerEntry, newBitsPerEntry);
         if (paletteToValueList != null) palette.paletteToValueList = paletteToValueList;
         if (valueToPaletteMap != null) palette.valueToPaletteMap = valueToPaletteMap;
         getAll(palette::set);
@@ -300,7 +311,7 @@ final class PaletteImpl implements Palette {
 
     private int paletteIndexToValue(int value) {
         if (!hasPalette()) return value;
-        if (values == null) resize((byte) 1);
+        if (values == null) resize(minBitsPerEntry);
         final int lastPaletteIndex = this.paletteToValueList.size();
         final byte bpe = this.bitsPerEntry;
         if (lastPaletteIndex >= maxPaletteSize(bpe)) {

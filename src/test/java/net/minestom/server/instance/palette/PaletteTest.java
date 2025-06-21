@@ -80,7 +80,7 @@ public class PaletteTest {
 
     @Test
     public void resize() {
-        Palette palette = Palette.newPalette(16, 5, 2);
+        Palette palette = Palette.newPalette(16, 1, 5, 2);
         palette.set(0, 0, 0, 1);
         assertEquals(2, palette.bitsPerEntry());
         palette.set(0, 0, 1, 2);
@@ -261,7 +261,7 @@ public class PaletteTest {
 
     @Test
     public void replaceLoop() {
-        var palette = Palette.newPalette(2, 15, 4);
+        var palette = Palette.newPalette(2, 1, 15, 4);
         palette.setAll((x, y, z) -> x + y + z);
         final int dimension = palette.dimension();
         for (int x = 0; x < dimension; x++) {
@@ -287,9 +287,9 @@ public class PaletteTest {
 
     private static List<Palette> testPalettes() {
         return List.of(
-                Palette.newPalette(2, 5, 3),
-                Palette.newPalette(4, 5, 3),
-                Palette.newPalette(8, 5, 3),
-                Palette.newPalette(16, 5, 3));
+                Palette.newPalette(2, 1, 5, 3),
+                Palette.newPalette(4, 1, 5, 3),
+                Palette.newPalette(8, 1, 5, 3),
+                Palette.newPalette(16, 1, 5, 3));
     }
 }
