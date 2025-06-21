@@ -52,7 +52,7 @@ final class PaletteImpl implements Palette {
         this.values = values;
 
         if (hasPalette()) {
-            this.paletteToValueList = new IntArrayList(palette.clone());
+            this.paletteToValueList = new IntArrayList(palette);
             this.valueToPaletteMap = new Int2IntOpenHashMap(palette.length);
             this.valueToPaletteMap.defaultReturnValue(-1);
             for (int i = 0; i < palette.length; i++) {
@@ -212,7 +212,7 @@ final class PaletteImpl implements Palette {
 
         // Count unique values
         IntSet uniqueValues = new IntOpenHashSet();
-        getAll((x, y, z, value) -> {uniqueValues.add(value);});
+        getAll((x, y, z, value) -> uniqueValues.add(value));
         final int uniqueCount = uniqueValues.size();
 
         // If only one unique value, use fill for maximum optimization
@@ -252,6 +252,7 @@ final class PaletteImpl implements Palette {
         return true;
     }
 
+    @SuppressWarnings("MethodDoesntCallSuperMethod")
     @Override
     public @NotNull Palette clone() {
         PaletteImpl clone = new PaletteImpl(dimension, minBitsPerEntry, maxBitsPerEntry);
