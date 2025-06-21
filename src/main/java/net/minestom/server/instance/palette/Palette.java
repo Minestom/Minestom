@@ -14,27 +14,27 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 public sealed interface Palette permits PaletteImpl {
     static Palette blocks(int bitsPerEntry) {
-        return newPalette(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, bitsPerEntry);
+        return sized(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, bitsPerEntry);
     }
 
     static Palette biomes(int bitsPerEntry) {
-        return newPalette(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, bitsPerEntry);
+        return sized(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, bitsPerEntry);
     }
 
     static Palette blocks() {
-        return newPalette(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS);
+        return empty(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS);
     }
 
     static Palette biomes() {
-        return newPalette(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS);
+        return empty(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS);
     }
 
-    static Palette newPalette(int dimension, int minBitsPerEntry, int maxBitsPerEntry) {
+    static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry);
     }
 
-    static Palette newPalette(int dimension, int minBitsPerEntry, int maxBitsPerEntry,
-                              int bitsPerEntry) {
+    static Palette sized(int dimension, int minBitsPerEntry, int maxBitsPerEntry,
+                         int bitsPerEntry) {
         return new PaletteImpl((byte) dimension, (byte) minBitsPerEntry, (byte) maxBitsPerEntry, (byte) bitsPerEntry);
     }
 
