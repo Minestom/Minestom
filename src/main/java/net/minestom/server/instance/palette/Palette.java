@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.function.IntUnaryOperator;
 
+import static net.minestom.server.instance.palette.PaletteImpl.*;
 import static net.minestom.server.network.NetworkBuffer.*;
 
 /**
@@ -16,19 +17,19 @@ import static net.minestom.server.network.NetworkBuffer.*;
  */
 public sealed interface Palette permits PaletteImpl {
     static Palette blocks(int bitsPerEntry) {
-        return sized(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
+        return sized(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS, bitsPerEntry);
     }
 
     static Palette biomes(int bitsPerEntry) {
-        return sized(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS, bitsPerEntry);
+        return sized(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS, bitsPerEntry);
     }
 
     static Palette blocks() {
-        return empty(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS);
+        return empty(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
     }
 
     static Palette biomes() {
-        return empty(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS);
+        return empty(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS);
     }
 
     static Palette empty(int dimension, int minBitsPerEntry, int maxBitsPerEntry, int directBits) {
@@ -125,8 +126,8 @@ public sealed interface Palette permits PaletteImpl {
         int apply(int x, int y, int z, int value);
     }
 
-    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(PaletteImpl.BLOCK_DIMENSION, PaletteImpl.BLOCK_PALETTE_MIN_BITS, PaletteImpl.BLOCK_PALETTE_MAX_BITS, PaletteImpl.BLOCK_PALETTE_DIRECT_BITS);
-    NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(PaletteImpl.BIOME_DIMENSION, PaletteImpl.BIOME_PALETTE_MIN_BITS, PaletteImpl.BIOME_PALETTE_MAX_BITS, PaletteImpl.BIOME_PALETTE_DIRECT_BITS);
+    NetworkBuffer.Type<Palette> BLOCK_SERIALIZER = serializer(BLOCK_DIMENSION, BLOCK_PALETTE_MIN_BITS, BLOCK_PALETTE_MAX_BITS, BLOCK_PALETTE_DIRECT_BITS);
+    NetworkBuffer.Type<Palette> BIOME_SERIALIZER = serializer(BIOME_DIMENSION, BIOME_PALETTE_MIN_BITS, BIOME_PALETTE_MAX_BITS, BIOME_PALETTE_DIRECT_BITS);
 
     static NetworkBuffer.Type<Palette> serializer(int dimension, int minIndirect, int maxIndirect, int directBits) {
         //noinspection unchecked
