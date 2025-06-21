@@ -87,18 +87,15 @@ public final class Palettes {
         int count = 0;
         for (long block : values) {
             for (int i = 0; i < valuesPerLong; i++) {
-                count += (block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1);
+                count += (int) ((block >>> i * bitsPerEntry) & ((1 << bitsPerEntry) - 1));
             }
         }
         return count;
     }
 
     public static int sectionIndex(int dimension, int x, int y, int z) {
-        final int dimensionMask = dimension - 1;
-        final int dimensionBitCount = MathUtils.bitsToRepresent(dimensionMask);
-        return (y & dimensionMask) << (dimensionBitCount << 1) |
-                (z & dimensionMask) << dimensionBitCount |
-                (x & dimensionMask);
+        final int dimensionBitCount = MathUtils.bitsToRepresent(dimension - 1);
+        return y << (dimensionBitCount << 1) | z << dimensionBitCount | x;
     }
 
     // Optimized operations
