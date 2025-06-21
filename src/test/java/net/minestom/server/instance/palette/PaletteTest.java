@@ -26,12 +26,10 @@ public class PaletteTest {
     public void placement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            final int dimension = palette.dimension();
             assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
             assertEquals(0, palette.count());
             palette.set(0, 0, 0, 64);
             assertEquals(64, palette.get(0, 0, 0));
-            assertEquals(64, palette.get(dimension, 0, 0), "Coordinate must be rounded to the palette dimension");
             assertEquals(1, palette.count());
 
             palette.set(1, 0, 0, 65);

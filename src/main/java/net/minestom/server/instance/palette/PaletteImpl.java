@@ -60,7 +60,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public int get(int x, int y, int z) {
-        validateCoord(x, y, z);
+        validateCoord(dimension, x, y, z);
         if (bitsPerEntry == 0) return count;
         final int value = read(dimension(), bitsPerEntry, values, x, y, z);
         return paletteIndexToValue(value);
@@ -86,7 +86,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void set(int x, int y, int z, int value) {
-        validateCoord(x, y, z);
+        validateCoord(dimension, x, y, z);
         value = valueToPaletteIndex(value);
         final int oldValue = Palettes.write(dimension(), bitsPerEntry, values, x, y, z, value);
         // Check if block count needs to be updated
@@ -144,7 +144,7 @@ final class PaletteImpl implements Palette {
 
     @Override
     public void replace(int x, int y, int z, @NotNull IntUnaryOperator operator) {
-        validateCoord(x, y, z);
+        validateCoord(dimension, x, y, z);
         final int oldValue = get(x, y, z);
         final int newValue = operator.applyAsInt(oldValue);
         if (oldValue != newValue) set(x, y, z, newValue);
@@ -351,13 +351,15 @@ final class PaletteImpl implements Palette {
         return bitsPerEntry <= maxBitsPerEntry;
     }
 
-    private static void validateCoord(int x, int y, int z) {
+    private static void validateCoord(int dimension, int x, int y, int z) {
         if (x < 0 || y < 0 || z < 0)
             throw new IllegalArgumentException("Coordinates must be non-negative");
+        if (x >= dimension || y >= dimension || z >= dimension)
+            throw new IllegalArgumentException("Coordinates must be less than the dimension size, got " + x + ", " + y + ", " + z + " for dimension " + dimension);
     }
 
     private static void validateDimension(int dimension) {
         if (dimension <= 1 || (dimension & dimension - 1) != 0)
-            throw new IllegalArgumentException("Dimension must be a positive power of 2");
+            throw new IllegalArgumentException("Dimension must be a positive power of 2, got " + dimension);
     }
 }
