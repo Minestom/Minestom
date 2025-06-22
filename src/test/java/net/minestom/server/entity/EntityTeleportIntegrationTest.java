@@ -114,7 +114,7 @@ public class EntityTeleportIntegrationTest {
         assertEquals(new Pos(0, 42, 0), entity.getPosition());
 
         entity.teleport(new Pos(Double.POSITIVE_INFINITY, 42, 52)).join();
-        CompletableFuture.runAsync(() -> entity.tick(System.currentTimeMillis()))
+        CompletableFuture.runAsync(() -> entity.tick(0 /* 0 is fine here, it's just a delta*/))
                 .get(10, TimeUnit.SECONDS);
         // This should not hang forever
 

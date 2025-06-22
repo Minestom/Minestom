@@ -39,6 +39,8 @@ interface StatisticTypes {
 
     StatisticType PIG_ONE_CM = StatisticTypeImpl.get("pig_one_cm");
 
+    StatisticType HAPPY_GHAST_ONE_CM = StatisticTypeImpl.get("happy_ghast_one_cm");
+
     StatisticType HORSE_ONE_CM = StatisticTypeImpl.get("horse_one_cm");
 
     StatisticType AVIATE_ONE_CM = StatisticTypeImpl.get("aviate_one_cm");

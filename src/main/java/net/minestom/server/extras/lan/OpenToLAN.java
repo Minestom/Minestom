@@ -103,14 +103,14 @@ public class OpenToLAN {
      */
     private static void ping() {
         if (!MinecraftServer.getServer().isOpen()) return;
-        if (packet == null || eventCooldown.isReady(System.currentTimeMillis())) {
+        if (packet == null || eventCooldown.isReady(System.nanoTime())) {
             final ServerListPingEvent event = new ServerListPingEvent(OPEN_TO_LAN);
             EventDispatcher.call(event);
 
             final byte[] data = OPEN_TO_LAN.getPingResponse(event.getResponseData()).getBytes(StandardCharsets.UTF_8);
             packet = new DatagramPacket(data, data.length, PING_ADDRESS);
 
-            eventCooldown.refreshLastUpdate(System.currentTimeMillis());
+            eventCooldown.refreshLastUpdate(System.nanoTime());
         }
 
         try {

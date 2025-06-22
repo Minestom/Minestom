@@ -115,8 +115,9 @@ final class TranscoderNbtImpl implements Transcoder<BinaryTag> {
 
     @Override
     public @NotNull Result<List<BinaryTag>> getList(@NotNull BinaryTag value) {
-        if (!(value instanceof ListBinaryTag listTag))
+        if (!(value instanceof ListBinaryTag listTagWrapped))
             return new Result.Error<>("Not a list: " + value);
+        final ListBinaryTag listTag = listTagWrapped.unwrapHeterogeneity();
         return new Result.Ok<>(new AbstractList<>() {
             @Override
             public BinaryTag get(int index) {

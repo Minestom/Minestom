@@ -1,10 +1,10 @@
 package net.minestom.server.network;
 
+import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.objects.Object2ObjectArrayMap;
 import net.kyori.adventure.nbt.BinaryTag;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -15,6 +15,7 @@ import net.minestom.server.registry.Registries;
 import net.minestom.server.registry.RegistryTranscoder;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.Unit;
+import net.minestom.server.utils.json.JsonUtil;
 import net.minestom.server.utils.nbt.BinaryTagReader;
 import net.minestom.server.utils.nbt.BinaryTagWriter;
 import net.minestom.server.utils.validate.Check;
@@ -395,14 +396,20 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
     record JsonComponentType() implements NetworkBufferTypeImpl<Component> {
         @Override
         public void write(@NotNull NetworkBuffer buffer, Component value) {
-            final String json = GsonComponentSerializer.gson().serialize(value);
+            final Transcoder<JsonElement> coder = buffer.registries() != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+                    : Transcoder.JSON;
+            final String json = JsonUtil.toJson(Codec.COMPONENT.encode(coder, value).orElseThrow());
             buffer.write(STRING, json);
         }
 
         @Override
         public Component read(@NotNull NetworkBuffer buffer) {
-            final String json = buffer.read(STRING);
-            return GsonComponentSerializer.gson().deserialize(json);
+            final Transcoder<JsonElement> coder = buffer.registries() != null
+                    ? new RegistryTranscoder<>(Transcoder.JSON, buffer.registries())
+                    : Transcoder.JSON;
+            final JsonElement json = JsonUtil.fromJson(buffer.read(STRING));
+            return Codec.COMPONENT.decode(coder, json).orElseThrow();
         }
     }
 
@@ -651,6 +658,28 @@ interface NetworkBufferTypeImpl<T> extends NetworkBuffer.Type<T> {
         @Override
         public T read(@NotNull NetworkBuffer buffer) {
             return buffer.read(BOOLEAN) ? buffer.read(parent) : null;
+        }
+    }
+
+    record LengthPrefixedType<T>(@NotNull Type<T> parent, int maxLength) implements NetworkBufferTypeImpl<T> {
+        @Override
+        public void write(@NotNull NetworkBuffer buffer, T value) {
+            // Write to another buffer and copy (kinda inefficient, but currently unused serverside so its ok for now)
+            final byte[] componentData = NetworkBuffer.makeArray(b -> parent.write(b, value), buffer.registries());
+            buffer.write(NetworkBuffer.BYTE_ARRAY, componentData);
+        }
+
+        @Override
+        public T read(@NotNull NetworkBuffer buffer) {
+            final int length = buffer.read(VAR_INT);
+            Check.argCondition(length > maxLength, "Value is too long (length: {0}, max: {1})", length, maxLength);
+
+            final long availableBytes = buffer.readableBytes();
+            Check.argCondition(length > availableBytes, "Value is too long (length: {0}, available: {1})", length, availableBytes);
+            final T value = parent.read(buffer);
+            Check.argCondition(buffer.readableBytes() != availableBytes - length, "Value is too short (length: {0}, available: {1})", length, availableBytes);
+
+            return value;
         }
     }
 

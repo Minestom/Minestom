@@ -58,6 +58,7 @@ public final class PacketListenerManager {
         setConfigurationListener(ClientSelectKnownPacksPacket.class, LoginListener::selectKnownPacks);
         setConfigurationListener(ClientFinishConfigurationPacket.class, LoginListener::finishConfigListener);
         setListener(ConnectionState.CONFIGURATION, ClientCookieResponsePacket.class, CookieListener::handleCookieResponse);
+        setConfigurationListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
 
         setPlayListener(ClientKeepAlivePacket.class, KeepAliveListener::listener);
         setPlayListener(ClientCommandChatPacket.class, ChatMessageListener::commandChatListener);
@@ -104,6 +105,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientPlayerLoadedPacket.class, PlayerLoadedListener::listener);
         setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
+        setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
     }
 
     /**

@@ -191,12 +191,16 @@ public sealed class MetadataDef {
         public static final Entry<Boolean> IS_SHOT_AT_ANGLE = index(2, Metadata::Boolean, false);
     }
 
-    public static final class ItemFrame extends MetadataDef {
+    public static sealed class Hanging extends MetadataDef {
+        public static final Entry<Direction> DIRECTION = index(0, Metadata::Direction, Direction.SOUTH);
+    }
+
+    public static final class ItemFrame extends Hanging {
         public static final Entry<ItemStack> ITEM = index(0, Metadata::ItemStack, ItemStack.AIR);
         public static final Entry<Integer> ROTATION = index(1, Metadata::VarInt, 0);
     }
 
-    public static final class Painting extends MetadataDef {
+    public static final class Painting extends Hanging {
         public static final Entry<Holder<PaintingVariant>> VARIANT = index(0, Metadata::PaintingVariant, PaintingVariant.KEBAB);
     }
 
@@ -467,6 +471,11 @@ public sealed class MetadataDef {
 
     public static final class Villager extends AbstractVillager {
         public static final Entry<VillagerMeta.VillagerData> VARIANT = index(0, Metadata::VillagerData, VillagerMeta.VillagerData.DEFAULT);
+    }
+
+    public static final class HappyGhast extends AgeableMob {
+        public static final Entry<Boolean> IS_LEASH_HOLDER = index(0, Metadata::Boolean, false);
+        public static final Entry<Boolean> STAYS_STILL = index(1, Metadata::Boolean, false);
     }
 
     public static final class IronGolem extends Mob {
