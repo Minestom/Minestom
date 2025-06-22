@@ -16,7 +16,7 @@ import java.util.List;
 public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
 
-    public static final List<Vec> BLOCK_UPDATE_SHAPE = List.of(
+    public static final List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
         Direction.UP.vec(),
         Direction.DOWN.vec(),
         Direction.NORTH.vec(),
@@ -60,10 +60,9 @@ public abstract class BlockPlacementRule {
      * @return {@code true} if the block will consider the update, {@code false} otherwise
      */
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
-        // Check if the offset is one of the 6 cardinal directions by default using
         for(Vec off : updateShape()) {
-            if (off.equals(offset)) {
-                return true; // if atleast one is true, consider the update
+            if (off.samePoint(offset)) {
+                return true;
             }
         }
         return false;
@@ -75,7 +74,7 @@ public abstract class BlockPlacementRule {
      * @return the shape of the block
      */
     public @NotNull List<Vec> updateShape() {
-        return BLOCK_UPDATE_SHAPE;
+        return DEFAULT_BLOCK_UPDATE_SHAPE;
     }
 
     public boolean isSelfReplaceable(@NotNull Replacement replacement) {

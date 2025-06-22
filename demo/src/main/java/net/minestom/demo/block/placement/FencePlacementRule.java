@@ -52,7 +52,6 @@ public class FencePlacementRule extends BlockPlacementRule {
 
     @Override
     public @NotNull List<Vec> updateShape() {
-        // Fences have a specific shape update logic, they connect to adjacent fence blocks
         return List.of(
                 Direction.NORTH.vec(),
                 Direction.SOUTH.vec(),
@@ -64,6 +63,6 @@ public class FencePlacementRule extends BlockPlacementRule {
     @Override
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
         // Fences should only consider updates from solid blocks that are next to them
-        return (updateShape().stream().anyMatch(offset::samePoint)) && block.isSolid() || block.isAir(); // ensure the block is solid
+        return super.considerUpdate(offset, block) && block.isSolid() || block.isAir(); // ensure the block is solid
     }
 }

@@ -53,7 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static net.minestom.server.instance.block.rule.BlockPlacementRule.BLOCK_UPDATE_SHAPE;
+import static net.minestom.server.instance.block.rule.BlockPlacementRule.DEFAULT_BLOCK_UPDATE_SHAPE;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -189,10 +189,9 @@ public class InstanceContainer extends Instance {
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
 
-            List<Vec> updateShape = blockPlacementRule == null ? BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
-
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
+                List<Vec> updateShape = blockPlacementRule == null ? DEFAULT_BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
                 executeNeighboursBlockPlacementRule(blockPosition, updateShape, updateDistance);
             }
 
