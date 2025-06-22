@@ -3,6 +3,7 @@ package net.minestom.server.instance;
 import net.minestom.server.instance.light.Light;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -54,14 +55,24 @@ public final class Section {
         return new Section(this.blockPalette.clone(), this.biomePalette.clone(), skyLight, blockLight);
     }
 
-    public void setSkyLight(byte[] copyArray) {
+    /**
+     * Sets the skylight. This setter does not set permanent skylight.
+     *
+     * @param copyArray the skylight array to set
+     */
+    public void setSkyLight(byte @Nullable [] copyArray) {
         if (copyArray == null || copyArray.length == 0) this.skyLight.set(EMPTY_CONTENT);
         else if (Arrays.equals(copyArray, EMPTY_CONTENT)) this.skyLight.set(EMPTY_CONTENT);
         else if (Arrays.equals(copyArray, CONTENT_FULLY_LIT)) this.skyLight.set(CONTENT_FULLY_LIT);
         else this.skyLight.set(copyArray);
     }
 
-    public void setBlockLight(byte[] copyArray) {
+    /**
+     * Sets the block light. This setter does not set permanent block light.
+     *
+     * @param copyArray the block light array to set
+     */
+    public void setBlockLight(byte @Nullable [] copyArray) {
         if (copyArray == null || copyArray.length == 0) this.blockLight.set(EMPTY_CONTENT);
         else if (Arrays.equals(copyArray, EMPTY_CONTENT)) this.blockLight.set(EMPTY_CONTENT);
         else if (Arrays.equals(copyArray, CONTENT_FULLY_LIT)) this.blockLight.set(CONTENT_FULLY_LIT);

@@ -7,14 +7,19 @@ import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 public final class LightCompute {
     static final Direction[] DIRECTIONS = Direction.values();
-    static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
     static final int SECTION_SIZE = 16;
+    /**
+     * One chunk section is 16x16x16.
+     * One byte stores to light values, each 4 bit
+     */
+    static final int LIGHT_LENGTH = SECTION_SIZE * SECTION_SIZE * SECTION_SIZE / 2;
 
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];
     public static final byte[] CONTENT_FULLY_LIT = new byte[LIGHT_LENGTH];
@@ -26,7 +31,7 @@ public final class LightCompute {
     /**
      * Computes light in one section
      * <p>
-     * Takes queue of lights positions and spreads light from this positions in 3d using Breadth-first search
+     * Takes queue of light positions and spreads light from this positions in 3d using Breadth-first search
      *
      * @param blockPalette blocks placed in section
      * @param lightPre     shorts queue in format: [4bit light level][4bit y][4bit z][4bit x]
@@ -115,12 +120,20 @@ public final class LightCompute {
         return Block.fromStateId(palette.get(x, y, z));
     }
 
-    public static byte[] bake(byte[] content1, byte[] content2) {
-        if (content1 == null && content2 == null) return EMPTY_CONTENT;
-        if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
+    /**
+     * Bakes two lighting data sets into one.
+     * <p>
+     * This simply is a {@link Math#max(int, int)} call for the light levels at every position.
+     *
+     * @param content1 the first data set
+     * @param content2 the second data set
+     * @return the baked data set
+     */
+    public static byte @NotNull [] bake(byte @NotNull [] content1, byte @NotNull [] content2) {
+        assert content1.length == LIGHT_LENGTH;
+        assert content2.length == LIGHT_LENGTH;
 
-        if (content1 == null) return content2;
-        if (content2 == null) return content1;
+        if (content1 == EMPTY_CONTENT && content2 == EMPTY_CONTENT) return EMPTY_CONTENT;
 
         if (Arrays.equals(content1, EMPTY_CONTENT) && Arrays.equals(content2, EMPTY_CONTENT)) return EMPTY_CONTENT;
 

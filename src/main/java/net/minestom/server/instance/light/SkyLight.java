@@ -7,6 +7,8 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,9 +17,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static net.minestom.server.instance.light.LightCompute.*;
 
 final class SkyLight implements Light {
-    private byte[] content;
-    private byte[] contentPropagation;
-    private byte[] contentPropagationSwap;
+    private byte @Nullable [] content;
+    private byte @Nullable [] contentPropagation;
+    private byte @Nullable [] contentPropagationSwap;
 
     private volatile boolean isValidBorders = true;
     private final AtomicBoolean needsSend = new AtomicBoolean(false);
@@ -139,7 +141,7 @@ final class SkyLight implements Light {
     @ApiStatus.Internal
     public void set(byte[] copyArray) {
         this.content = copyArray.clone();
-        this.contentPropagation = this.content;
+        this.contentPropagation = null;
         this.isValidBorders = true;
         this.needsSend.set(true);
     }
@@ -150,7 +152,7 @@ final class SkyLight implements Light {
     }
 
     @Override
-    public byte[] array() {
+    public byte @NotNull [] array() {
         if (content == null) return new byte[0];
         if (contentPropagation == null) return content;
         var res = LightCompute.bake(contentPropagation, content);
@@ -219,7 +221,8 @@ final class SkyLight implements Light {
         if (!fullyLit) {
             ShortArrayFIFOQueue queue = buildExternalQueue(blockPalette, neighbors, content, lightLookup, paletteLookup);
             contentPropagationTemp = LightCompute.compute(blockPalette, queue);
-            this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap, contentPropagationTemp);
+            var contentPropagationSwap = this.contentPropagationSwap;
+            this.contentPropagationSwap = LightCompute.bake(contentPropagationSwap == null ? EMPTY_CONTENT : contentPropagationSwap, contentPropagationTemp);
         } else {
             this.contentPropagationSwap = null;
         }
