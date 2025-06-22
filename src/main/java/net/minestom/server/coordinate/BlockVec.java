@@ -8,7 +8,7 @@ import java.util.function.DoubleUnaryOperator;
 
 /**
  * Represents an immutable block position.
- *
+ * <p>
  * Usage note: If you accept a block position as an argument to a method,
  * it's usually better to accept a Point rather than a BlockVec to avoid
  * callers continually having to convert.
