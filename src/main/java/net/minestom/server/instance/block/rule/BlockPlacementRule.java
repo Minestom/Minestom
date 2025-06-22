@@ -7,11 +7,21 @@ import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
+import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
+
+    public static final Vec[] BLOCK_UPDATE_SHAPE = {
+        Direction.UP.vec(),
+        Direction.DOWN.vec(),
+        Direction.NORTH.vec(),
+        Direction.SOUTH.vec(),
+        Direction.EAST.vec(),
+        Direction.WEST.vec()
+    };
 
     protected final Block block;
 
@@ -48,13 +58,13 @@ public abstract class BlockPlacementRule {
      * @return {@code true} if the block will consider the update, {@code false} otherwise
      */
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
-        // Check if the offset is one of the 6 cardinal directions by default
-        return offset.equals(new Vec(1, 0, 0)) || // east
-                offset.equals(new Vec(-1, 0, 0)) || // west
-                offset.equals(new Vec(0, 0, 1)) || // south
-                offset.equals(new Vec(0, 0, -1)) || // north
-                offset.equals(new Vec(0, 1, 0)) || // up
-                offset.equals(new Vec(0, -1, 0)); // down
+        // Check if the offset is one of the 6 cardinal directions by default using
+        return offset.equals(Direction.UP.vec()) ||
+                offset.equals(Direction.DOWN.vec()) ||
+                offset.equals(Direction.NORTH.vec()) ||
+                offset.equals(Direction.SOUTH.vec()) ||
+                offset.equals(Direction.EAST.vec()) ||
+                offset.equals(Direction.WEST.vec());
     }
 
     /**
@@ -63,14 +73,7 @@ public abstract class BlockPlacementRule {
      * @return the shape of the block
      */
     public @NotNull Vec[] updateShape() {
-        return new Vec[]{
-                new Vec(1, 0, 0), // east
-                new Vec(-1, 0, 0), // west
-                new Vec(0, 0, 1), // south
-                new Vec(0, 0, -1), // north
-                new Vec(0, 1, 0), // up
-                new Vec(0, -1, 0) // down
-        };
+        return BLOCK_UPDATE_SHAPE;
     }
 
     public boolean isSelfReplaceable(@NotNull Replacement replacement) {

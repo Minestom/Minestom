@@ -53,6 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.instance.block.rule.BlockPlacementRule.BLOCK_UPDATE_SHAPE;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -62,15 +63,6 @@ public class InstanceContainer extends Instance {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
-
-    private static final Vec[] BLOCK_UPDATE_SHAPE = {
-            new Vec(1, 0, 0), // east
-            new Vec(-1, 0, 0), // west
-            new Vec(0, 0, 1), // south
-            new Vec(0, 0, -1), // north
-            new Vec(0, 1, 0), // up
-            new Vec(0, -1, 0) // down
-    };
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();

@@ -4,6 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
+import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -52,10 +53,10 @@ public class FencePlacementRule extends BlockPlacementRule {
     public @NotNull Vec[] updateShape() {
         // Fences have a specific shape update logic, they connect to adjacent fence blocks
         return new Vec[]{
-                new Vec(1, 0, 0), // east
-                new Vec(-1, 0, 0), // west
-                new Vec(0, 0, 1), // south
-                new Vec(0, 0, -1) // north
+                Direction.NORTH.vec(),
+                Direction.SOUTH.vec(),
+                Direction.EAST.vec(),
+                Direction.WEST.vec()
         };
     }
 
