@@ -61,7 +61,7 @@ public abstract class BlockPlacementRule {
      */
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
         // Check if the offset is one of the 6 cardinal directions by default using
-        return updateShape().contains(offset);
+        return updateShape().stream().anyMatch(offset::samePoint);
     }
 
     /**

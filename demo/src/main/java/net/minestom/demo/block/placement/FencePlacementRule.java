@@ -64,10 +64,6 @@ public class FencePlacementRule extends BlockPlacementRule {
     @Override
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
         // Fences should only consider updates from solid blocks that are next to them
-        return (offset.samePoint(new Vec(1, 0, 0)) || // east
-               offset.samePoint(new Vec(-1, 0, 0)) || // west
-               offset.samePoint(new Vec(0, 0, 1)) || // south
-               offset.samePoint(new Vec(0, 0, -1))) && // north
-                block.isSolid() || block.isAir(); // ensure the block is solid
+        return (updateShape().stream().anyMatch(offset::samePoint)) && block.isSolid() || block.isAir(); // ensure the block is solid
     }
 }
