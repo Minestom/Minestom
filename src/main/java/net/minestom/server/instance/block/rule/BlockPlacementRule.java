@@ -2,6 +2,7 @@ package net.minestom.server.instance.block.rule;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
@@ -38,6 +39,40 @@ public abstract class BlockPlacementRule {
      */
     public abstract @Nullable Block blockPlace(@NotNull PlacementState placementState);
 
+    /**
+     * Called to determine if the block should be updated based on the offset and the block that is being placed.
+     * This is used to determine if the block should be updated when a new block signals this block to update.
+     *
+     * @param offset The offset from the current block position
+     * @param block  The block that is being placed
+     * @return {@code true} if the block will consider the update, {@code false} otherwise
+     */
+    public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
+        // Check if the offset is one of the 6 cardinal directions by default
+        return offset.equals(new Vec(1, 0, 0)) || // east
+                offset.equals(new Vec(-1, 0, 0)) || // west
+                offset.equals(new Vec(0, 0, 1)) || // south
+                offset.equals(new Vec(0, 0, -1)) || // north
+                offset.equals(new Vec(0, 1, 0)) || // up
+                offset.equals(new Vec(0, -1, 0)); // down
+    }
+
+    /**
+     * The update shape of the block, used to determine which blocks should attempt to be updated by this block.
+     *
+     * @return the shape of the block
+     */
+    public @NotNull Vec[] updateShape() {
+        return new Vec[]{
+                new Vec(1, 0, 0), // east
+                new Vec(-1, 0, 0), // west
+                new Vec(0, 0, 1), // south
+                new Vec(0, 0, -1), // north
+                new Vec(0, 1, 0), // up
+                new Vec(0, -1, 0) // down
+        };
+    }
+
     public boolean isSelfReplaceable(@NotNull Replacement replacement) {
         return false;
     }
@@ -67,9 +102,9 @@ public abstract class BlockPlacementRule {
     }
 
     public record UpdateState(@NotNull Block.Getter instance,
-                              @NotNull Point blockPosition,
                               @NotNull Block currentBlock,
-                              @NotNull BlockFace fromFace) {
+                              @NotNull Point blockPosition,
+                              @NotNull Vec offset) {
     }
 
     public record Replacement(

@@ -8,6 +8,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.minestom.demo.block.TestBlockHandler;
 import net.minestom.demo.block.placement.BedPlacementRule;
 import net.minestom.demo.block.placement.DripstonePlacementRule;
+import net.minestom.demo.block.placement.FencePlacementRule;
 import net.minestom.demo.commands.*;
 import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
@@ -40,6 +41,9 @@ public class Main {
         var beds = Block.values().stream().filter(block -> block.registry().blockEntityId() == 25).toList();
         beds.forEach(block -> blockManager.registerBlockPlacementRule(new BedPlacementRule(block)));
         blockManager.registerHandler(TestBlockHandler.INSTANCE.getKey(), () -> TestBlockHandler.INSTANCE);
+
+        var fenceBlocks = Block.values().stream().filter(block -> block.name().endsWith("_fence")).toList();
+        fenceBlocks.forEach(block -> blockManager.registerBlockPlacementRule(new FencePlacementRule(block)));
 
         CommandManager commandManager = MinecraftServer.getCommandManager();
         commandManager.register(new TestCommand());

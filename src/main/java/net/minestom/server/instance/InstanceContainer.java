@@ -63,8 +63,13 @@ public class InstanceContainer extends Instance {
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
 
-    private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
+    private static final Vec[] BLOCK_UPDATE_SHAPE = {
+            new Vec(1, 0, 0), // east
+            new Vec(-1, 0, 0), // west
+            new Vec(0, 0, 1), // south
+            new Vec(0, 0, -1), // north
+            new Vec(0, 1, 0), // up
+            new Vec(0, -1, 0) // down
     };
 
     // the shared instances assigned to this instance
@@ -192,9 +197,11 @@ public class InstanceContainer extends Instance {
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
 
+            Vec[] updateShape = blockPlacementRule == null ? BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
+
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
-                executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
+                executeNeighboursBlockPlacementRule(blockPosition, updateShape, updateDistance);
             }
 
             // Refresh player chunk block
@@ -663,28 +670,26 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull Vec[] updateShape, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
-        for (var updateFace : BLOCK_UPDATE_FACES) {
-            var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
+        for (var offset : updateShape) {
+            final Point neighborPosition = blockPosition.add(offset);
+
+            if (neighborPosition.blockY() < getCachedDimensionType().minY() || neighborPosition.blockY() > getCachedDimensionType().height())
                 continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            final Block neighborBlock = cache.getBlock(neighborPosition, Condition.NONE);
             if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
+            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance() ||
+                !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
                 continue;
 
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
                     this,
-                    neighborPosition,
                     neighborBlock,
-                    updateFace.getOppositeFace()
+                    neighborPosition,
+                    offset
             ));
             if (neighborBlock != newNeighborBlock) {
                 final Chunk chunk = getChunkAt(neighborPosition);
