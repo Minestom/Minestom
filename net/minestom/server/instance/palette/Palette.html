@@ -66,15 +66,25 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#field-detail" tabindex="0">Field Details</a>
 <ol class="toc-list">
+<li><a href="#BLOCK_DIMENSION" tabindex="0">BLOCK_DIMENSION</a></li>
+<li><a href="#BLOCK_PALETTE_MIN_BITS" tabindex="0">BLOCK_PALETTE_MIN_BITS</a></li>
+<li><a href="#BLOCK_PALETTE_MAX_BITS" tabindex="0">BLOCK_PALETTE_MAX_BITS</a></li>
+<li><a href="#BLOCK_PALETTE_DIRECT_BITS" tabindex="0">BLOCK_PALETTE_DIRECT_BITS</a></li>
+<li><a href="#BIOME_DIMENSION" tabindex="0">BIOME_DIMENSION</a></li>
+<li><a href="#BIOME_PALETTE_MIN_BITS" tabindex="0">BIOME_PALETTE_MIN_BITS</a></li>
+<li><a href="#BIOME_PALETTE_MAX_BITS" tabindex="0">BIOME_PALETTE_MAX_BITS</a></li>
+<li><a href="#BIOME_PALETTE_DIRECT_BITS" tabindex="0">BIOME_PALETTE_DIRECT_BITS</a></li>
 <li><a href="#BLOCK_SERIALIZER" tabindex="0">BLOCK_SERIALIZER</a></li>
-<li><a href="#BIOME_SERIALIZER" tabindex="0">BIOME_SERIALIZER</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
+<li><a href="#blocks(int)" tabindex="0">blocks(int)</a></li>
+<li><a href="#biomes(int)" tabindex="0">biomes(int)</a></li>
 <li><a href="#blocks()" tabindex="0">blocks()</a></li>
 <li><a href="#biomes()" tabindex="0">biomes()</a></li>
-<li><a href="#newPalette(int,int,int)" tabindex="0">newPalette(int, int, int)</a></li>
+<li><a href="#empty(int,int,int,int)" tabindex="0">empty(int, int, int, int)</a></li>
+<li><a href="#sized(int,int,int,int,int)" tabindex="0">sized(int, int, int, int, int)</a></li>
 <li><a href="#get(int,int,int)" tabindex="0">get(int, int, int)</a></li>
 <li><a href="#getAll(net.minestom.server.instance.palette.Palette.EntryConsumer)" tabindex="0">getAll(Palette.EntryConsumer)</a></li>
 <li><a href="#getAllPresent(net.minestom.server.instance.palette.Palette.EntryConsumer)" tabindex="0">getAllPresent(Palette.EntryConsumer)</a></li>
@@ -85,11 +95,17 @@ loadScripts(document, 'script');</script>
 <li><a href="#replaceAll(net.minestom.server.instance.palette.Palette.EntryFunction)" tabindex="0">replaceAll(Palette.EntryFunction)</a></li>
 <li><a href="#count()" tabindex="0">count()</a></li>
 <li><a href="#bitsPerEntry()" tabindex="0">bitsPerEntry()</a></li>
-<li><a href="#maxBitsPerEntry()" tabindex="0">maxBitsPerEntry()</a></li>
 <li><a href="#dimension()" tabindex="0">dimension()</a></li>
 <li><a href="#maxSize()" tabindex="0">maxSize()</a></li>
+<li><a href="#optimize(net.minestom.server.instance.palette.Palette.Optimization)" tabindex="0">optimize(Palette.Optimization)</a></li>
+<li><a href="#compare(net.minestom.server.instance.palette.Palette)" tabindex="0">compare(Palette)</a></li>
 <li><a href="#clone()" tabindex="0">clone()</a></li>
-<li><a href="#serializer(int,int,int)" tabindex="0">serializer(int, int, int)</a></li>
+<li><a href="#paletteIndexToValue(int)" tabindex="0">paletteIndexToValue(int)</a></li>
+<li><a href="#valueToPaletteIndex(int)" tabindex="0">valueToPaletteIndex(int)</a></li>
+<li><a href="#singleValue()" tabindex="0">singleValue()</a></li>
+<li><a href="#indexedValues()" tabindex="0">indexedValues()</a></li>
+<li><a href="#biomeSerializer(int)" tabindex="0">biomeSerializer(int)</a></li>
+<li><a href="#serializer(int,int,int,int)" tabindex="0">serializer(int, int, int, int)</a></li>
 </ol>
 </li>
 </ol>
@@ -102,7 +118,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <hr>
 <div class="horizontal-scroll">
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name type-name-label">Palette</span></div>
+<div class="type-signature"><span class="modifiers">public sealed interface </span><span class="element-name type-name-label">Palette</span></div>
 <div class="block">Represents a palette used to store blocks and biomes.
  <p>
  0 is the default value.</div>
@@ -128,6 +144,9 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static interface&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="Palette.EntrySupplier.html" class="type-name-link" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static enum&nbsp;</code></div>
+<div class="col-second odd-row-color"><code><a href="Palette.Optimization.html" class="type-name-link" title="enum class in net.minestom.server.instance.palette">Palette.Optimization</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -140,12 +159,33 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
-<div class="col-second even-row-color"><code><a href="#BIOME_SERIALIZER" class="member-name-link">BIOME_SERIALIZER</a></code></div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#BIOME_DIMENSION" class="member-name-link">BIOME_DIMENSION</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
-<div class="col-first odd-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
-<div class="col-second odd-row-color"><code><a href="#BLOCK_SERIALIZER" class="member-name-link">BLOCK_SERIALIZER</a></code></div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#BIOME_PALETTE_DIRECT_BITS" class="member-name-link">BIOME_PALETTE_DIRECT_BITS</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#BIOME_PALETTE_MAX_BITS" class="member-name-link">BIOME_PALETTE_MAX_BITS</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#BIOME_PALETTE_MIN_BITS" class="member-name-link">BIOME_PALETTE_MIN_BITS</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#BLOCK_DIMENSION" class="member-name-link">BLOCK_DIMENSION</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#BLOCK_PALETTE_DIRECT_BITS" class="member-name-link">BLOCK_PALETTE_DIRECT_BITS</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#BLOCK_PALETTE_MAX_BITS" class="member-name-link">BLOCK_PALETTE_MAX_BITS</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-first odd-row-color"><code>static final int</code></div>
+<div class="col-second odd-row-color"><code><a href="#BLOCK_PALETTE_MIN_BITS" class="member-name-link">BLOCK_PALETTE_MIN_BITS</a></code></div>
+<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-first even-row-color"><code>static final <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
+<div class="col-second even-row-color"><code><a href="#BLOCK_SERIALIZER" class="member-name-link">BLOCK_SERIALIZER</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -163,6 +203,12 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#biomes()" class="member-name-link">biomes</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#biomes(int)" class="member-name-link">biomes</a><wbr>(int&nbsp;bitsPerEntry)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#biomeSerializer(int)" class="member-name-link">biomeSerializer</a><wbr>(int&nbsp;biomeCount)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#bitsPerEntry()" class="member-name-link">bitsPerEntry</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -171,9 +217,17 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#blocks()" class="member-name-link">blocks</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#clone()" class="member-name-link">clone</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#blocks(int)" class="member-name-link">blocks</a><wbr>(int&nbsp;bitsPerEntry)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#clone()" class="member-name-link">clone</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#compare(net.minestom.server.instance.palette.Palette)" class="member-name-link">compare</a><wbr>(@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;palette)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Compare palettes content independently of their storage format.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#count()" class="member-name-link">count</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -182,33 +236,42 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#dimension()" class="member-name-link">dimension</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#fill(int)" class="member-name-link">fill</a><wbr>(int&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#get(int,int,int)" class="member-name-link">get</a><wbr>(int&nbsp;x,
- int&nbsp;y,
- int&nbsp;z)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAll(net.minestom.server.instance.palette.Palette.EntryConsumer)" class="member-name-link">getAll</a><wbr>(@NotNull <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#empty(int,int,int,int)" class="member-name-link">empty</a><wbr>(int&nbsp;dimension,
+ int&nbsp;minBitsPerEntry,
+ int&nbsp;maxBitsPerEntry,
+ int&nbsp;directBits)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAllPresent(net.minestom.server.instance.palette.Palette.EntryConsumer)" class="member-name-link">getAllPresent</a><wbr>(@NotNull <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#fill(int)" class="member-name-link">fill</a><wbr>(int&nbsp;value)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#maxBitsPerEntry()" class="member-name-link">maxBitsPerEntry</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#get(int,int,int)" class="member-name-link">get</a><wbr>(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#maxSize()" class="member-name-link">maxSize</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAll(net.minestom.server.instance.palette.Palette.EntryConsumer)" class="member-name-link">getAll</a><wbr>(@NotNull <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getAllPresent(net.minestom.server.instance.palette.Palette.EntryConsumer)" class="member-name-link">getAllPresent</a><wbr>(@NotNull <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>long @Nullable []</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#indexedValues()" class="member-name-link">indexedValues</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets the value array if it has one, otherwise returns null (i.e.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code>default int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5"><code><a href="#maxSize()" class="member-name-link">maxSize</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab5">
 <div class="block">Returns the maximum number of entries in this palette.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1"><code><a href="#newPalette(int,int,int)" class="member-name-link">newPalette</a><wbr>(int&nbsp;dimension,
- int&nbsp;maxBitsPerEntry,
- int&nbsp;bitsPerEntry)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#optimize(net.minestom.server.instance.palette.Palette.Optimization)" class="member-name-link">optimize</a><wbr>(<a href="Palette.Optimization.html" title="enum class in net.minestom.server.instance.palette">Palette.Optimization</a>&nbsp;focus)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#paletteIndexToValue(int)" class="member-name-link">paletteIndexToValue</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(int,int,int,java.util.function.IntUnaryOperator)" class="member-name-link">replace</a><wbr>(int&nbsp;x,
  int&nbsp;y,
@@ -219,9 +282,10 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replaceAll(net.minestom.server.instance.palette.Palette.EntryFunction)" class="member-name-link">replaceAll</a><wbr>(@NotNull <a href="Palette.EntryFunction.html" title="interface in net.minestom.server.instance.palette">Palette.EntryFunction</a>&nbsp;function)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a><wbr>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#serializer(int,int,int)" class="member-name-link">serializer</a><wbr>(int&nbsp;dimension,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#serializer(int,int,int,int)" class="member-name-link">serializer</a><wbr>(int&nbsp;dimension,
  int&nbsp;minIndirect,
- int&nbsp;maxIndirect)</code></div>
+ int&nbsp;maxIndirect,
+ int&nbsp;directBits)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#set(int,int,int,int)" class="member-name-link">set</a><wbr>(int&nbsp;x,
@@ -232,6 +296,21 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)" class="member-name-link">setAll</a><wbr>(@NotNull <a href="Palette.EntrySupplier.html" title="interface in net.minestom.server.instance.palette">Palette.EntrySupplier</a>&nbsp;supplier)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#singleValue()" class="member-name-link">singleValue</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Gets the single value of this palette if it is a single value palette, otherwise returns -1.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1"><code>static <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1"><code><a href="#sized(int,int,int,int,int)" class="member-name-link">sized</a><wbr>(int&nbsp;dimension,
+ int&nbsp;minBitsPerEntry,
+ int&nbsp;maxBitsPerEntry,
+ int&nbsp;directBits,
+ int&nbsp;bitsPerEntry)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#valueToPaletteIndex(int)" class="member-name-link">valueToPaletteIndex</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -247,18 +326,139 @@ loadScripts(document, 'script');</script>
 <h2>Field Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="BLOCK_SERIALIZER">
-<h3>BLOCK_SERIALIZER</h3>
+<section class="detail" id="BLOCK_DIMENSION">
+<h3>BLOCK_DIMENSION</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">BLOCK_SERIALIZER</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_DIMENSION</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BLOCK_DIMENSION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="BIOME_SERIALIZER">
-<h3>BIOME_SERIALIZER</h3>
+<section class="detail" id="BLOCK_PALETTE_MIN_BITS">
+<h3>BLOCK_PALETTE_MIN_BITS</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">BIOME_SERIALIZER</span></div>
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_PALETTE_MIN_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BLOCK_PALETTE_MIN_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BLOCK_PALETTE_MAX_BITS">
+<h3>BLOCK_PALETTE_MAX_BITS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_PALETTE_MAX_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BLOCK_PALETTE_MAX_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BLOCK_PALETTE_DIRECT_BITS">
+<h3>BLOCK_PALETTE_DIRECT_BITS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BLOCK_PALETTE_DIRECT_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BLOCK_PALETTE_DIRECT_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BIOME_DIMENSION">
+<h3>BIOME_DIMENSION</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BIOME_DIMENSION</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BIOME_DIMENSION">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BIOME_PALETTE_MIN_BITS">
+<h3>BIOME_PALETTE_MIN_BITS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BIOME_PALETTE_MIN_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BIOME_PALETTE_MIN_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BIOME_PALETTE_MAX_BITS">
+<h3>BIOME_PALETTE_MAX_BITS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BIOME_PALETTE_MAX_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BIOME_PALETTE_MAX_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BIOME_PALETTE_DIRECT_BITS">
+<h3>BIOME_PALETTE_DIRECT_BITS</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="modifiers">static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">BIOME_PALETTE_DIRECT_BITS</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../../constant-values.html#net.minestom.server.instance.palette.Palette.BIOME_PALETTE_DIRECT_BITS">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="BLOCK_SERIALIZER">
+<h3>BLOCK_SERIALIZER</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static final</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">BLOCK_SERIALIZER</span></div>
 </div>
 </section>
 </li>
@@ -270,6 +470,22 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="blocks(int)">
+<h3>blocks</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">blocks</span><wbr><span class="parameters">(int&nbsp;bitsPerEntry)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="biomes(int)">
+<h3>biomes</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">biomes</span><wbr><span class="parameters">(int&nbsp;bitsPerEntry)</span></div>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="blocks()">
 <h3>blocks</h3>
@@ -287,11 +503,24 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="newPalette(int,int,int)">
-<h3>newPalette</h3>
+<section class="detail" id="empty(int,int,int,int)">
+<h3>empty</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">newPalette</span><wbr><span class="parameters">(int&nbsp;dimension,
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">empty</span><wbr><span class="parameters">(int&nbsp;dimension,
+ int&nbsp;minBitsPerEntry,
  int&nbsp;maxBitsPerEntry,
+ int&nbsp;directBits)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sized(int,int,int,int,int)">
+<h3>sized</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a></span>&nbsp;<span class="element-name">sized</span><wbr><span class="parameters">(int&nbsp;dimension,
+ int&nbsp;minBitsPerEntry,
+ int&nbsp;maxBitsPerEntry,
+ int&nbsp;directBits,
  int&nbsp;bitsPerEntry)</span></div>
 </div>
 </section>
@@ -392,14 +621,6 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="maxBitsPerEntry()">
-<h3>maxBitsPerEntry</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="return-type">int</span>&nbsp;<span class="element-name">maxBitsPerEntry</span>()</div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="dimension()">
 <h3>dimension</h3>
 <div class="horizontal-scroll">
@@ -417,6 +638,30 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="optimize(net.minestom.server.instance.palette.Palette.Optimization)">
+<h3>optimize</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">optimize</span><wbr><span class="parameters">(<a href="Palette.Optimization.html" title="enum class in net.minestom.server.instance.palette">Palette.Optimization</a>&nbsp;focus)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="compare(net.minestom.server.instance.palette.Palette)">
+<h3>compare</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name">compare</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;palette)</span></div>
+<div class="block">Compare palettes content independently of their storage format.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>palette</code> - the palette to compare with</dd>
+<dt>Returns:</dt>
+<dd>true if the palettes are equivalent, false otherwise</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="clone()">
 <h3>clone</h3>
 <div class="horizontal-scroll">
@@ -426,12 +671,59 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="serializer(int,int,int)">
+<section class="detail" id="paletteIndexToValue(int)">
+<h3>paletteIndexToValue</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">paletteIndexToValue</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="valueToPaletteIndex(int)">
+<h3>valueToPaletteIndex</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">valueToPaletteIndex</span><wbr><span class="parameters">(int&nbsp;value)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="singleValue()">
+<h3>singleValue</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="return-type">int</span>&nbsp;<span class="element-name">singleValue</span>()</div>
+<div class="block">Gets the single value of this palette if it is a single value palette, otherwise returns -1.</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="indexedValues()">
+<h3>indexedValues</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@Internal
+</span><span class="return-type">long @Nullable []</span>&nbsp;<span class="element-name">indexedValues</span>()</div>
+<div class="block">Gets the value array if it has one, otherwise returns null (i.e. single value palette).</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="biomeSerializer(int)">
+<h3>biomeSerializer</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">biomeSerializer</span><wbr><span class="parameters">(int&nbsp;biomeCount)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="serializer(int,int,int,int)">
 <h3>serializer</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">static</span>&nbsp;<span class="return-type"><a href="../../network/NetworkBuffer.Type.html" title="interface in net.minestom.server.network">NetworkBuffer.Type</a>&lt;<a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&gt;</span>&nbsp;<span class="element-name">serializer</span><wbr><span class="parameters">(int&nbsp;dimension,
  int&nbsp;minIndirect,
- int&nbsp;maxIndirect)</span></div>
+ int&nbsp;maxIndirect,
+ int&nbsp;directBits)</span></div>
 </div>
 </section>
 </li>

@@ -66,12 +66,14 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#pack(int%5B%5D,int)" tabindex="0">pack(int[], int)</a></li>
 <li><a href="#unpack(int%5B%5D,long%5B%5D,int)" tabindex="0">unpack(int[], long[], int)</a></li>
+<li><a href="#maxPaletteSize(int)" tabindex="0">maxPaletteSize(int)</a></li>
 <li><a href="#arrayLength(int,int)" tabindex="0">arrayLength(int, int)</a></li>
 <li><a href="#read(int,int,long%5B%5D,int,int,int)" tabindex="0">read(int, int, long[], int, int, int)</a></li>
 <li><a href="#write(int,int,long%5B%5D,int,int,int,int)" tabindex="0">write(int, int, long[], int, int, int, int)</a></li>
 <li><a href="#fill(int,long%5B%5D,int)" tabindex="0">fill(int, long[], int)</a></li>
 <li><a href="#count(int,long%5B%5D)" tabindex="0">count(int, long[])</a></li>
 <li><a href="#sectionIndex(int,int,int,int)" tabindex="0">sectionIndex(int, int, int, int)</a></li>
+<li><a href="#getAllFill(byte,int,net.minestom.server.instance.palette.Palette.EntryConsumer)" tabindex="0">getAllFill(byte, int, Palette.EntryConsumer)</a></li>
 </ol>
 </li>
 </ol>
@@ -116,6 +118,14 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#fill(int,long%5B%5D,int)" class="member-name-link">fill</a><wbr>(int&nbsp;bitsPerEntry,
  long[]&nbsp;values,
  int&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#getAllFill(byte,int,net.minestom.server.instance.palette.Palette.EntryConsumer)" class="member-name-link">getAllFill</a><wbr>(byte&nbsp;dimension,
+ int&nbsp;value,
+ <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#maxPaletteSize(int)" class="member-name-link">maxPaletteSize</a><wbr>(int&nbsp;bitsPerEntry)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static long[]</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#pack(int%5B%5D,int)" class="member-name-link">pack</a><wbr>(int[]&nbsp;ints,
@@ -186,6 +196,14 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="maxPaletteSize(int)">
+<h3>maxPaletteSize</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">maxPaletteSize</span><wbr><span class="parameters">(int&nbsp;bitsPerEntry)</span></div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="arrayLength(int,int)">
 <h3>arrayLength</h3>
 <div class="horizontal-scroll">
@@ -248,6 +266,16 @@ loadScripts(document, 'script');</script>
  int&nbsp;x,
  int&nbsp;y,
  int&nbsp;z)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getAllFill(byte,int,net.minestom.server.instance.palette.Palette.EntryConsumer)">
+<h3>getAllFill</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">getAllFill</span><wbr><span class="parameters">(byte&nbsp;dimension,
+ int&nbsp;value,
+ <a href="Palette.EntryConsumer.html" title="interface in net.minestom.server.instance.palette">Palette.EntryConsumer</a>&nbsp;consumer)</span></div>
 </div>
 </section>
 </li>
