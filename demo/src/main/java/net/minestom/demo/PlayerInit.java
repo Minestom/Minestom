@@ -1,6 +1,7 @@
 package net.minestom.demo;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.nbt.*;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -11,6 +12,7 @@ import net.minestom.server.advancements.FrameType;
 import net.minestom.server.advancements.Notification;
 import net.minestom.server.adventure.MinestomAdventure;
 import net.minestom.server.adventure.audience.Audiences;
+import net.minestom.server.adventure.serializer.nbt.NbtComponentSerializer;
 import net.minestom.server.component.DataComponents;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
@@ -30,6 +32,7 @@ import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.LightingChunk;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.inventory.PlayerInventory;
@@ -43,6 +46,7 @@ import net.minestom.server.network.packet.server.common.CustomReportDetailsPacke
 import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.network.packet.server.play.TrackedWaypointPacket;
 import net.minestom.server.sound.SoundEvent;
+import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.Either;
 import net.minestom.server.utils.MathUtils;
 import net.minestom.server.utils.time.TimeUnit;
@@ -55,6 +59,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class PlayerInit {
 
@@ -329,6 +335,18 @@ public class PlayerInit {
                 } else if (event.getClickedItem().material() == Material.ENCHANTED_GOLDEN_APPLE) {
                     event.setCancelled(true);
                 }
+            })
+            .addListener(PlayerBlockPlaceEvent.class, event -> {
+                Block block = event.getBlock();
+                BlockHandler handler = block.handler();
+                if (handler != null) return;
+                event.setBlock(event.getBlock().withHandler(MinecraftServer.getBlockManager().getHandler(block.key().asString())));
+            })
+            .addListener(PlayerEditSignEvent.class, event -> {
+                event.getLines()
+                        .stream()
+                        .map(Component::text)
+                        .forEach(comp -> event.getPlayer().sendMessage(comp));
             });
 
     {
