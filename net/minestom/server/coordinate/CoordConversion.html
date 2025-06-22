@@ -87,6 +87,12 @@ loadScripts(document, 'script');</script>
 <li><a href="#chunkBlockIndexGetY(int)" tabindex="0">chunkBlockIndexGetY(int)</a></li>
 <li><a href="#chunkBlockIndexGetZ(int)" tabindex="0">chunkBlockIndexGetZ(int)</a></li>
 <li><a href="#chunkBlockIndexGetGlobal(int,int,int)" tabindex="0">chunkBlockIndexGetGlobal(int, int, int)</a></li>
+<li><a href="#sectionBlockIndex(int,int,int)" tabindex="0">sectionBlockIndex(int, int, int)</a></li>
+<li><a href="#sectionBlockIndexGetX(int)" tabindex="0">sectionBlockIndexGetX(int)</a></li>
+<li><a href="#sectionBlockIndexGetY(int)" tabindex="0">sectionBlockIndexGetY(int)</a></li>
+<li><a href="#sectionBlockIndexGetZ(int)" tabindex="0">sectionBlockIndexGetZ(int)</a></li>
+<li><a href="#encodeSectionBlockChange(int,long)" tabindex="0">encodeSectionBlockChange(int, long)</a></li>
+<li><a href="#encodeSectionBlockChange(int,int,int,long)" tabindex="0">encodeSectionBlockChange(int, int, int, long)</a></li>
 </ol>
 </li>
 </ol>
@@ -173,6 +179,16 @@ loadScripts(document, 'script');</script>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#chunkToRegionLocal(int)" class="member-name-link">chunkToRegionLocal</a><wbr>(int&nbsp;chunkCoordinate)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encodeSectionBlockChange(int,int,int,long)" class="member-name-link">encodeSectionBlockChange</a><wbr>(int&nbsp;localX,
+ int&nbsp;localY,
+ int&nbsp;localZ,
+ long&nbsp;value)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#encodeSectionBlockChange(int,long)" class="member-name-link">encodeSectionBlockChange</a><wbr>(int&nbsp;sectionBlockIndex,
+ long&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#floorSection(int)" class="member-name-link">floorSection</a><wbr>(int&nbsp;coordinate)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
@@ -187,6 +203,20 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#globalToSectionRelative(int)" class="member-name-link">globalToSectionRelative</a><wbr>(int&nbsp;xyz)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndex(int,int,int)" class="member-name-link">sectionBlockIndex</a><wbr>(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndexGetX(int)" class="member-name-link">sectionBlockIndexGetX</a><wbr>(int&nbsp;index)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndexGetY(int)" class="member-name-link">sectionBlockIndexGetY</a><wbr>(int&nbsp;index)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndexGetZ(int)" class="member-name-link">sectionBlockIndexGetZ</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
@@ -361,6 +391,60 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">chunkBlockIndexGetGlobal</span><wbr><span class="parameters">(int&nbsp;index,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionBlockIndex(int,int,int)">
+<h3>sectionBlockIndex</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionBlockIndex</span><wbr><span class="parameters">(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionBlockIndexGetX(int)">
+<h3>sectionBlockIndexGetX</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionBlockIndexGetX</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionBlockIndexGetY(int)">
+<h3>sectionBlockIndexGetY</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionBlockIndexGetY</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionBlockIndexGetZ(int)">
+<h3>sectionBlockIndexGetZ</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionBlockIndexGetZ</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="encodeSectionBlockChange(int,long)">
+<h3>encodeSectionBlockChange</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">encodeSectionBlockChange</span><wbr><span class="parameters">(int&nbsp;sectionBlockIndex,
+ long&nbsp;value)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="encodeSectionBlockChange(int,int,int,long)">
+<h3>encodeSectionBlockChange</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">encodeSectionBlockChange</span><wbr><span class="parameters">(int&nbsp;localX,
+ int&nbsp;localY,
+ int&nbsp;localZ,
+ long&nbsp;value)</span></div>
 </div>
 </section>
 </li>
