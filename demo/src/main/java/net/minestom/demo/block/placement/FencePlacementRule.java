@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class FencePlacementRule extends BlockPlacementRule {
@@ -50,21 +51,19 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Vec[] updateShape() {
+    public @NotNull List<Vec> updateShape() {
         // Fences have a specific shape update logic, they connect to adjacent fence blocks
-        return new Vec[]{
+        return List.of(
                 Direction.NORTH.vec(),
                 Direction.SOUTH.vec(),
                 Direction.EAST.vec(),
                 Direction.WEST.vec()
-        };
+        );
     }
 
     @Override
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
         // Fences should only consider updates from solid blocks that are next to them
-        System.out.println(offset);
-        System.out.println(block);
         return (offset.equals(new Vec(1, 0, 0)) || // east
                offset.equals(new Vec(-1, 0, 0)) || // west
                offset.equals(new Vec(0, 0, 1)) || // south

@@ -189,7 +189,7 @@ public class InstanceContainer extends Instance {
             // Set the block
             chunk.setBlock(x, y, z, block, placement, destroy);
 
-            Vec[] updateShape = blockPlacementRule == null ? BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
+            List<Vec> updateShape = blockPlacementRule == null ? BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
@@ -662,7 +662,7 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull Vec[] updateShape, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull List<Vec> updateShape, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
         for (var offset : updateShape) {
             final Point neighborPosition = blockPosition.add(offset);

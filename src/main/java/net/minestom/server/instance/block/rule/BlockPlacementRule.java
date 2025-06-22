@@ -11,17 +11,19 @@ import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+
 public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
 
-    public static final Vec[] BLOCK_UPDATE_SHAPE = {
+    public static final List<Vec> BLOCK_UPDATE_SHAPE = List.of(
         Direction.UP.vec(),
         Direction.DOWN.vec(),
         Direction.NORTH.vec(),
         Direction.SOUTH.vec(),
         Direction.EAST.vec(),
         Direction.WEST.vec()
-    };
+    );
 
     protected final Block block;
 
@@ -59,12 +61,7 @@ public abstract class BlockPlacementRule {
      */
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
         // Check if the offset is one of the 6 cardinal directions by default using
-        return offset.equals(Direction.UP.vec()) ||
-                offset.equals(Direction.DOWN.vec()) ||
-                offset.equals(Direction.NORTH.vec()) ||
-                offset.equals(Direction.SOUTH.vec()) ||
-                offset.equals(Direction.EAST.vec()) ||
-                offset.equals(Direction.WEST.vec());
+        return updateShape().contains(offset);
     }
 
     /**
@@ -72,7 +69,7 @@ public abstract class BlockPlacementRule {
      *
      * @return the shape of the block
      */
-    public @NotNull Vec[] updateShape() {
+    public @NotNull List<Vec> updateShape() {
         return BLOCK_UPDATE_SHAPE;
     }
 
