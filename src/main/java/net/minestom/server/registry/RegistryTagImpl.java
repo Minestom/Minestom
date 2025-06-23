@@ -80,9 +80,8 @@ final class RegistryTagImpl {
         }
 
         private void invalidate() {
-            var process = MinecraftServer.process();
-            if (process == null) return;
-            process.connection().invalidateTags();
+            if (MinecraftServer.isInitializing()) return;
+            MinecraftServer.getConnectionManager().invalidateTags();
         }
     }
 

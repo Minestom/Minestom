@@ -68,13 +68,20 @@ public final class MinecraftServer implements MinecraftConstants {
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
+    // Required because the server process can call itself cyclically; to see if its unsealed.
+    private static volatile boolean initializing = false;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        updateProcess();
+        try {
+            initializing = true;
+            updateProcess();
+        } finally {
+            initializing = false;
+        }
         return new MinecraftServer();
     }
 
@@ -103,7 +110,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setBrandName(@NotNull String brandName) {
         MinecraftServer.brandName = brandName;
-        PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
+        if (hasStartedSafe()) PacketSendingUtils.broadcastPlayPacket(PluginMessagePacket.brandPacket(brandName));
     }
 
     /**
@@ -123,7 +130,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void setDifficulty(@NotNull Difficulty difficulty) {
         MinecraftServer.difficulty = difficulty;
-        PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
+        if (hasStartedSafe()) PacketSendingUtils.broadcastPlayPacket(new ServerDifficultyPacket(difficulty, true));
     }
 
     public static @UnknownNullability ServerProcess process() {
@@ -237,7 +244,7 @@ public final class MinecraftServer implements MinecraftConstants {
      * @throws IllegalStateException if this is called after the server started
      */
     public static void setCompressionThreshold(int compressionThreshold) {
-        Check.stateCondition(serverProcess != null && serverProcess.isAlive(), "The compression threshold cannot be changed after the server has been started.");
+        Check.stateCondition(hasStartedSafe(), "The compression threshold cannot be changed after the server has been started.");
         MinecraftServer.compressionThreshold = compressionThreshold;
     }
 
@@ -336,5 +343,19 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void stopCleanly() {
         serverProcess.stop();
+    }
+
+    /**
+     * Checks to see if the server is allowed to start class loading, sealed classes.
+     * @return true if the server is initializing, false otherwise.
+     */
+    @ApiStatus.Internal
+    public static boolean isInitializing() {
+        return initializing;
+    }
+
+    private static boolean hasStartedSafe() {
+        // Used for anything that can be called before the server is initialized.
+        return serverProcess != null && serverProcess.isAlive();
     }
 }

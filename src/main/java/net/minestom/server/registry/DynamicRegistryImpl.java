@@ -314,7 +314,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     }
 
     static boolean isFrozen() {
-        return canFreeze() && MinecraftServer.process() != null && MinecraftServer.isStarted();
+        return canFreeze() && !MinecraftServer.isInitializing();
     }
 
     static boolean canFreeze() {
