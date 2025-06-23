@@ -1,14 +1,13 @@
 package net.minestom.server.codec;
 
 import net.kyori.adventure.nbt.BinaryTag;
-import net.kyori.adventure.nbt.TagStringIOExt;
+import net.minestom.server.adventure.MinestomAdventure;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 
 import static net.minestom.server.codec.CodecAssertions.assertError;
 import static net.minestom.server.codec.CodecAssertions.assertOk;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StructCodecTest {
 
@@ -71,6 +70,19 @@ public class StructCodecTest {
     }
 
     @Test
+    void singleFieldOptionalIncorrectTypeButNotMissing() {
+        record TheObject(String name) {
+        }
+
+        var codec = StructCodec.struct(
+                "name", Codec.STRING.optional(), TheObject::name,
+                TheObject::new
+        );
+        var result = codec.decode(TranscoderNbtImpl.INSTANCE, snbt("{\"name\": 2}"));
+        assertError("name: Not a string: BinaryTagType[IntBinaryTag 3 (numeric)]{value=2}", result);
+    }
+
+    @Test
     void inlineField() {
         record InnerObject(String value) {
         }
@@ -113,7 +125,7 @@ public class StructCodecTest {
     }
 
     private @NotNull BinaryTag snbt(@NotNull String snbt) {
-        return assertDoesNotThrow(() -> TagStringIOExt.readTag(snbt));
+        return assertDoesNotThrow(() -> MinestomAdventure.tagStringIO().asTag(snbt));
     }
 
 

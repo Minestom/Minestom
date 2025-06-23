@@ -95,4 +95,32 @@ public final class CoordConversion {
         final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
         return new Vec(x, y, z);
     }
+
+    // BLOCK INDEX FROM SECTION (0-15 for each coordinate)
+
+    public static int sectionBlockIndex(int x, int y, int z) {
+        return (x << 8) | (z << 4) | y;
+    }
+
+    public static int sectionBlockIndexGetX(int index) {
+        return (index >> 8) & 0xF;
+    }
+
+    public static int sectionBlockIndexGetY(int index) {
+        return index & 0xF;
+    }
+
+    public static int sectionBlockIndexGetZ(int index) {
+        return (index >> 4) & 0xF;
+    }
+
+    public static long encodeSectionBlockChange(int sectionBlockIndex, long value) {
+        // To use with `MultiBlockChangePacket`
+        final long blockState = value << 12;
+        return blockState | (long) sectionBlockIndex;
+    }
+
+    public static long encodeSectionBlockChange(int localX, int localY, int localZ, long value) {
+        return encodeSectionBlockChange(sectionBlockIndex(localX, localY, localZ), value);
+    }
 }

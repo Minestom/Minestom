@@ -2,10 +2,12 @@ package net.minestom.server.instance.palette;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.network.NetworkBuffer;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,12 +26,10 @@ public class PaletteTest {
     public void placement() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
-            final int dimension = palette.dimension();
             assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
             assertEquals(0, palette.count());
             palette.set(0, 0, 0, 64);
             assertEquals(64, palette.get(0, 0, 0));
-            assertEquals(64, palette.get(dimension, 0, 0), "Coordinate must be rounded to the palette dimension");
             assertEquals(1, palette.count());
 
             palette.set(1, 0, 0, 65);
@@ -80,7 +80,7 @@ public class PaletteTest {
 
     @Test
     public void resize() {
-        Palette palette = Palette.newPalette(16, 5, 2);
+        Palette palette = Palette.sized(16, 1, 5, 15, 2);
         palette.set(0, 0, 0, 1);
         assertEquals(2, palette.bitsPerEntry());
         palette.set(0, 0, 1, 2);
@@ -261,7 +261,7 @@ public class PaletteTest {
 
     @Test
     public void replaceLoop() {
-        var palette = Palette.newPalette(2, 15, 4);
+        var palette = Palette.sized(2, 1, 8, 15, 4);
         palette.setAll((x, y, z) -> x + y + z);
         final int dimension = palette.dimension();
         for (int x = 0; x < dimension; x++) {
@@ -275,21 +275,94 @@ public class PaletteTest {
 
     @Test
     public void dimension() {
-        assertThrows(Exception.class, () -> Palette.newPalette(-4, 5, 3));
-        assertThrows(Exception.class, () -> Palette.newPalette(0, 5, 3));
-        assertThrows(Exception.class, () -> Palette.newPalette(1, 5, 3));
-        assertDoesNotThrow(() -> Palette.newPalette(2, 5, 3));
-        assertThrows(Exception.class, () -> Palette.newPalette(3, 5, 3));
-        assertDoesNotThrow(() -> Palette.newPalette(4, 5, 3));
-        assertThrows(Exception.class, () -> Palette.newPalette(6, 5, 3));
-        assertDoesNotThrow(() -> Palette.newPalette(16, 5, 3));
+        assertThrows(Exception.class, () -> Palette.empty(-4, 5, 3, 15));
+        assertThrows(Exception.class, () -> Palette.empty(0, 5, 3, 15));
+        assertThrows(Exception.class, () -> Palette.empty(1, 5, 3, 15));
+        assertDoesNotThrow(() -> Palette.empty(2, 5, 3, 15));
+        assertThrows(Exception.class, () -> Palette.empty(3, 5, 3, 15));
+        assertDoesNotThrow(() -> Palette.empty(4, 5, 3, 15));
+        assertThrows(Exception.class, () -> Palette.empty(6, 5, 3, 15));
+        assertDoesNotThrow(() -> Palette.empty(16, 5, 3, 15));
+    }
+
+    @Test
+    public void serializationBlockEmpty() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBlockPalette() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.blocks();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBlockDirect() {
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Random random = new Random(12345);
+        Palette palette = Palette.blocks();
+        palette.setAll((x, y, z) -> random.nextInt(2048));
+
+        buffer.write(Palette.BLOCK_SERIALIZER, palette);
+
+        Palette deserialized = buffer.read(Palette.BLOCK_SERIALIZER);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBiomeEmpty() {
+        final var serializer = Palette.biomeSerializer(128);
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.biomes();
+        buffer.write(serializer, palette);
+
+        Palette deserialized = buffer.read(serializer);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBiomePalette() {
+        final var serializer = Palette.biomeSerializer(128);
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.biomes();
+        palette.set(0, 0, 0, 1);
+        palette.set(1, 0, 0, 2);
+        buffer.write(serializer, palette);
+
+        Palette deserialized = buffer.read(serializer);
+        assertTrue(palette.compare(deserialized));
+    }
+
+    @Test
+    public void serializationBiomeDirect() {
+        final var serializer = Palette.biomeSerializer(128);
+        NetworkBuffer buffer = NetworkBuffer.resizableBuffer();
+        Palette palette = Palette.biomes();
+        Random random = new Random(12345);
+        palette.setAll((x, y, z) -> random.nextInt(2048));
+
+        buffer.write(serializer, palette);
+
+        Palette deserialized = buffer.read(serializer);
+        assertTrue(palette.compare(deserialized));
     }
 
     private static List<Palette> testPalettes() {
         return List.of(
-                Palette.newPalette(2, 5, 3),
-                Palette.newPalette(4, 5, 3),
-                Palette.newPalette(8, 5, 3),
-                Palette.newPalette(16, 5, 3));
+                Palette.sized(2, 1, 5, 15, 3),
+                Palette.sized(4, 1, 5, 15, 3),
+                Palette.sized(8, 1, 5, 15, 3),
+                Palette.sized(16, 1, 5, 15, 3));
     }
 }

@@ -114,7 +114,7 @@ tasks {
             addStringOption("-release", javaVersion)
             // Links to external javadocs
             links("https://docs.oracle.com/en/java/javase/${javaVersion}/docs/api/")
-            links("https://jd.advntr.dev/api/${libs.versions.adventure.get()}/")
+            links("https://javadoc.io/doc/net.kyori/adventure-api/${libs.versions.adventure.get()}/")
         }
     }
 

@@ -223,7 +223,7 @@ public sealed interface Point permits Vec, Pos, BlockVec {
     }
 
     default boolean samePoint(double x, double y, double z) {
-        return Double.compare(x, x()) == 0 && Double.compare(y, y()) == 0 && Double.compare(z, z()) == 0;
+        return x == x() && y == y() && z == z();
     }
 
     /**

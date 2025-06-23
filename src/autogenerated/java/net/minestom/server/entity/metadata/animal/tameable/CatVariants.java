@@ -7,25 +7,25 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface CatVariants {
-    RegistryKey<CatVariant> BLACK = RegistryKey.unsafeOf("minecraft:black");
+    RegistryKey<CatVariant> BLACK = RegistryKey.unsafeOf("black");
 
-    RegistryKey<CatVariant> ALL_BLACK = RegistryKey.unsafeOf("minecraft:all_black");
+    RegistryKey<CatVariant> ALL_BLACK = RegistryKey.unsafeOf("all_black");
 
-    RegistryKey<CatVariant> CALICO = RegistryKey.unsafeOf("minecraft:calico");
+    RegistryKey<CatVariant> CALICO = RegistryKey.unsafeOf("calico");
 
-    RegistryKey<CatVariant> JELLIE = RegistryKey.unsafeOf("minecraft:jellie");
+    RegistryKey<CatVariant> JELLIE = RegistryKey.unsafeOf("jellie");
 
-    RegistryKey<CatVariant> TABBY = RegistryKey.unsafeOf("minecraft:tabby");
+    RegistryKey<CatVariant> TABBY = RegistryKey.unsafeOf("tabby");
 
-    RegistryKey<CatVariant> RAGDOLL = RegistryKey.unsafeOf("minecraft:ragdoll");
+    RegistryKey<CatVariant> RAGDOLL = RegistryKey.unsafeOf("ragdoll");
 
-    RegistryKey<CatVariant> SIAMESE = RegistryKey.unsafeOf("minecraft:siamese");
+    RegistryKey<CatVariant> SIAMESE = RegistryKey.unsafeOf("siamese");
 
-    RegistryKey<CatVariant> PERSIAN = RegistryKey.unsafeOf("minecraft:persian");
+    RegistryKey<CatVariant> PERSIAN = RegistryKey.unsafeOf("persian");
 
-    RegistryKey<CatVariant> BRITISH_SHORTHAIR = RegistryKey.unsafeOf("minecraft:british_shorthair");
+    RegistryKey<CatVariant> BRITISH_SHORTHAIR = RegistryKey.unsafeOf("british_shorthair");
 
-    RegistryKey<CatVariant> RED = RegistryKey.unsafeOf("minecraft:red");
+    RegistryKey<CatVariant> RED = RegistryKey.unsafeOf("red");
 
-    RegistryKey<CatVariant> WHITE = RegistryKey.unsafeOf("minecraft:white");
+    RegistryKey<CatVariant> WHITE = RegistryKey.unsafeOf("white");
 }

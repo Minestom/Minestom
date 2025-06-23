@@ -15,11 +15,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 import org.jetbrains.annotations.Unmodifiable;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                  long propertiesArray,
@@ -94,8 +90,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
                             assert propertyTypes.length == propertyMap.size();
                             long propertiesValue = 0;
                             for (Map.Entry<String, String> entry : propertyMap.entrySet()) {
-                                final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), null);
-                                final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), null);
+                                final byte keyIndex = findKeyIndexThrow(propertyTypes, entry.getKey(), null);
+                                final byte valueIndex = findValueIndexThrow(propertyTypes[keyIndex], entry.getValue(), null);
                                 propertiesValue = updateIndex(propertiesValue, keyIndex, valueIndex);
                             }
 
@@ -149,8 +145,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     public @NotNull Block withProperty(@NotNull String property, @NotNull String value) {
         final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
         assert propertyTypes != null;
-        final byte keyIndex = findKeyIndex(propertyTypes, property, this);
-        final byte valueIndex = findValueIndex(propertyTypes[keyIndex], value, this);
+        final byte keyIndex = findKeyIndexThrow(propertyTypes, property, this);
+        final byte valueIndex = findValueIndexThrow(propertyTypes[keyIndex], value, this);
         final long updatedProperties = updateIndex(propertiesArray, keyIndex, valueIndex);
         return compute(updatedProperties);
     }
@@ -162,8 +158,8 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         assert propertyTypes != null;
         long updatedProperties = this.propertiesArray;
         for (Map.Entry<String, String> entry : properties.entrySet()) {
-            final byte keyIndex = findKeyIndex(propertyTypes, entry.getKey(), this);
-            final byte valueIndex = findValueIndex(propertyTypes[keyIndex], entry.getValue(), this);
+            final byte keyIndex = findKeyIndexThrow(propertyTypes, entry.getKey(), this);
+            final byte valueIndex = findValueIndexThrow(propertyTypes[keyIndex], entry.getValue(), this);
             updatedProperties = updateIndex(updatedProperties, keyIndex, valueIndex);
         }
         return compute(updatedProperties);
@@ -227,6 +223,17 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
     }
 
     @Override
+    public String getProperty(@NotNull String property) {
+        final PropertyType[] propertyTypes = PROPERTIES_TYPE.get(id());
+        final int length = propertyTypes.length;
+        if (length == 0) return null;
+        final int key = findKeyIndex(propertyTypes, property);
+        if (key == -1) return null; // Property not found
+        final long index = extractIndex(propertiesArray, key);
+        return propertyTypes[key].values().get((int) index);
+    }
+
+    @Override
     public @NotNull Collection<@NotNull Block> possibleStates() {
         return Collection.class.cast(possibleProperties().values());
     }
@@ -267,26 +274,40 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         return new BlockImpl(block.registry(), block.propertiesArray, nbt, handler);
     }
 
-    private static byte findKeyIndex(PropertyType[] properties, String key, BlockImpl block) {
+    private static byte findKeyIndex(PropertyType[] properties, String key) {
         for (byte i = 0; i < properties.length; i++) {
             if (properties[i].key().equals(key)) return i;
         }
-        if (block != null) {
-            throw new IllegalArgumentException("Property " + key + " is not valid for block " + block);
-        } else {
-            throw new IllegalArgumentException("Unknown property key: " + key);
-        }
+        return -1;
     }
 
-    private static byte findValueIndex(PropertyType propertyType, String value, BlockImpl block) {
+    private static byte findValueIndex(PropertyType propertyType, String value) {
         final List<String> values = propertyType.values();
-        final byte index = (byte) values.indexOf(value);
-        if (index != -1) return index;
-        if (block != null) {
-            throw new IllegalArgumentException("Property " + propertyType.key() + " value " + value + " is not valid for block " + block);
-        } else {
-            throw new IllegalArgumentException("Unknown property value: " + value);
+        return (byte) values.indexOf(value);
+    }
+
+    private static byte findKeyIndexThrow(PropertyType[] properties, String key, BlockImpl block) {
+        final byte index = findKeyIndex(properties, key);
+        if (index == -1) {
+            if (block != null) {
+                throw new IllegalArgumentException("Property " + key + " is not valid for block " + block);
+            } else {
+                throw new IllegalArgumentException("Unknown property key: " + key);
+            }
         }
+        return index;
+    }
+
+    private static byte findValueIndexThrow(PropertyType propertyType, String value, BlockImpl block) {
+        final byte index = findValueIndex(propertyType, value);
+        if (index == -1) {
+            if (block != null) {
+                throw new IllegalArgumentException("Property " + propertyType.key() + " value " + value + " is not valid for block " + block);
+            } else {
+                throw new IllegalArgumentException("Unknown property value: " + value);
+            }
+        }
+        return index;
     }
 
     private record PropertyType(String key, List<String> values) {

@@ -7,87 +7,87 @@ import net.minestom.server.registry.RegistryKey;
  */
 @SuppressWarnings("unused")
 interface Enchantments {
-    RegistryKey<Enchantment> DEPTH_STRIDER = RegistryKey.unsafeOf("minecraft:depth_strider");
+    RegistryKey<Enchantment> DEPTH_STRIDER = RegistryKey.unsafeOf("depth_strider");
 
-    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.unsafeOf("minecraft:vanishing_curse");
+    RegistryKey<Enchantment> VANISHING_CURSE = RegistryKey.unsafeOf("vanishing_curse");
 
-    RegistryKey<Enchantment> EFFICIENCY = RegistryKey.unsafeOf("minecraft:efficiency");
+    RegistryKey<Enchantment> EFFICIENCY = RegistryKey.unsafeOf("efficiency");
 
-    RegistryKey<Enchantment> IMPALING = RegistryKey.unsafeOf("minecraft:impaling");
+    RegistryKey<Enchantment> IMPALING = RegistryKey.unsafeOf("impaling");
 
-    RegistryKey<Enchantment> WIND_BURST = RegistryKey.unsafeOf("minecraft:wind_burst");
+    RegistryKey<Enchantment> WIND_BURST = RegistryKey.unsafeOf("wind_burst");
 
-    RegistryKey<Enchantment> BANE_OF_ARTHROPODS = RegistryKey.unsafeOf("minecraft:bane_of_arthropods");
+    RegistryKey<Enchantment> BANE_OF_ARTHROPODS = RegistryKey.unsafeOf("bane_of_arthropods");
 
-    RegistryKey<Enchantment> BINDING_CURSE = RegistryKey.unsafeOf("minecraft:binding_curse");
+    RegistryKey<Enchantment> BINDING_CURSE = RegistryKey.unsafeOf("binding_curse");
 
-    RegistryKey<Enchantment> PUNCH = RegistryKey.unsafeOf("minecraft:punch");
+    RegistryKey<Enchantment> PUNCH = RegistryKey.unsafeOf("punch");
 
-    RegistryKey<Enchantment> FLAME = RegistryKey.unsafeOf("minecraft:flame");
+    RegistryKey<Enchantment> FLAME = RegistryKey.unsafeOf("flame");
 
-    RegistryKey<Enchantment> RIPTIDE = RegistryKey.unsafeOf("minecraft:riptide");
+    RegistryKey<Enchantment> RIPTIDE = RegistryKey.unsafeOf("riptide");
 
-    RegistryKey<Enchantment> BLAST_PROTECTION = RegistryKey.unsafeOf("minecraft:blast_protection");
+    RegistryKey<Enchantment> BLAST_PROTECTION = RegistryKey.unsafeOf("blast_protection");
 
-    RegistryKey<Enchantment> FROST_WALKER = RegistryKey.unsafeOf("minecraft:frost_walker");
+    RegistryKey<Enchantment> FROST_WALKER = RegistryKey.unsafeOf("frost_walker");
 
-    RegistryKey<Enchantment> PROTECTION = RegistryKey.unsafeOf("minecraft:protection");
+    RegistryKey<Enchantment> PROTECTION = RegistryKey.unsafeOf("protection");
 
-    RegistryKey<Enchantment> FIRE_ASPECT = RegistryKey.unsafeOf("minecraft:fire_aspect");
+    RegistryKey<Enchantment> FIRE_ASPECT = RegistryKey.unsafeOf("fire_aspect");
 
-    RegistryKey<Enchantment> LOYALTY = RegistryKey.unsafeOf("minecraft:loyalty");
+    RegistryKey<Enchantment> LOYALTY = RegistryKey.unsafeOf("loyalty");
 
-    RegistryKey<Enchantment> SWEEPING_EDGE = RegistryKey.unsafeOf("minecraft:sweeping_edge");
+    RegistryKey<Enchantment> SWEEPING_EDGE = RegistryKey.unsafeOf("sweeping_edge");
 
-    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("minecraft:fire_protection");
+    RegistryKey<Enchantment> FIRE_PROTECTION = RegistryKey.unsafeOf("fire_protection");
 
-    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("minecraft:quick_charge");
+    RegistryKey<Enchantment> QUICK_CHARGE = RegistryKey.unsafeOf("quick_charge");
 
-    RegistryKey<Enchantment> RESPIRATION = RegistryKey.unsafeOf("minecraft:respiration");
+    RegistryKey<Enchantment> RESPIRATION = RegistryKey.unsafeOf("respiration");
 
-    RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.unsafeOf("minecraft:luck_of_the_sea");
+    RegistryKey<Enchantment> LUCK_OF_THE_SEA = RegistryKey.unsafeOf("luck_of_the_sea");
 
-    RegistryKey<Enchantment> SOUL_SPEED = RegistryKey.unsafeOf("minecraft:soul_speed");
+    RegistryKey<Enchantment> SOUL_SPEED = RegistryKey.unsafeOf("soul_speed");
 
-    RegistryKey<Enchantment> DENSITY = RegistryKey.unsafeOf("minecraft:density");
+    RegistryKey<Enchantment> DENSITY = RegistryKey.unsafeOf("density");
 
-    RegistryKey<Enchantment> POWER = RegistryKey.unsafeOf("minecraft:power");
+    RegistryKey<Enchantment> POWER = RegistryKey.unsafeOf("power");
 
-    RegistryKey<Enchantment> SILK_TOUCH = RegistryKey.unsafeOf("minecraft:silk_touch");
+    RegistryKey<Enchantment> SILK_TOUCH = RegistryKey.unsafeOf("silk_touch");
 
-    RegistryKey<Enchantment> CHANNELING = RegistryKey.unsafeOf("minecraft:channeling");
+    RegistryKey<Enchantment> CHANNELING = RegistryKey.unsafeOf("channeling");
 
-    RegistryKey<Enchantment> FORTUNE = RegistryKey.unsafeOf("minecraft:fortune");
+    RegistryKey<Enchantment> FORTUNE = RegistryKey.unsafeOf("fortune");
 
-    RegistryKey<Enchantment> LOOTING = RegistryKey.unsafeOf("minecraft:looting");
+    RegistryKey<Enchantment> LOOTING = RegistryKey.unsafeOf("looting");
 
-    RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("minecraft:breach");
+    RegistryKey<Enchantment> BREACH = RegistryKey.unsafeOf("breach");
 
-    RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("minecraft:piercing");
+    RegistryKey<Enchantment> PIERCING = RegistryKey.unsafeOf("piercing");
 
-    RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("minecraft:mending");
+    RegistryKey<Enchantment> MENDING = RegistryKey.unsafeOf("mending");
 
-    RegistryKey<Enchantment> FEATHER_FALLING = RegistryKey.unsafeOf("minecraft:feather_falling");
+    RegistryKey<Enchantment> FEATHER_FALLING = RegistryKey.unsafeOf("feather_falling");
 
-    RegistryKey<Enchantment> SHARPNESS = RegistryKey.unsafeOf("minecraft:sharpness");
+    RegistryKey<Enchantment> SHARPNESS = RegistryKey.unsafeOf("sharpness");
 
-    RegistryKey<Enchantment> KNOCKBACK = RegistryKey.unsafeOf("minecraft:knockback");
+    RegistryKey<Enchantment> KNOCKBACK = RegistryKey.unsafeOf("knockback");
 
-    RegistryKey<Enchantment> SMITE = RegistryKey.unsafeOf("minecraft:smite");
+    RegistryKey<Enchantment> SMITE = RegistryKey.unsafeOf("smite");
 
-    RegistryKey<Enchantment> INFINITY = RegistryKey.unsafeOf("minecraft:infinity");
+    RegistryKey<Enchantment> INFINITY = RegistryKey.unsafeOf("infinity");
 
-    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.unsafeOf("minecraft:projectile_protection");
+    RegistryKey<Enchantment> PROJECTILE_PROTECTION = RegistryKey.unsafeOf("projectile_protection");
 
-    RegistryKey<Enchantment> THORNS = RegistryKey.unsafeOf("minecraft:thorns");
+    RegistryKey<Enchantment> THORNS = RegistryKey.unsafeOf("thorns");
 
-    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.unsafeOf("minecraft:aqua_affinity");
+    RegistryKey<Enchantment> AQUA_AFFINITY = RegistryKey.unsafeOf("aqua_affinity");
 
-    RegistryKey<Enchantment> LURE = RegistryKey.unsafeOf("minecraft:lure");
+    RegistryKey<Enchantment> LURE = RegistryKey.unsafeOf("lure");
 
-    RegistryKey<Enchantment> MULTISHOT = RegistryKey.unsafeOf("minecraft:multishot");
+    RegistryKey<Enchantment> MULTISHOT = RegistryKey.unsafeOf("multishot");
 
-    RegistryKey<Enchantment> SWIFT_SNEAK = RegistryKey.unsafeOf("minecraft:swift_sneak");
+    RegistryKey<Enchantment> SWIFT_SNEAK = RegistryKey.unsafeOf("swift_sneak");
 
-    RegistryKey<Enchantment> UNBREAKING = RegistryKey.unsafeOf("minecraft:unbreaking");
+    RegistryKey<Enchantment> UNBREAKING = RegistryKey.unsafeOf("unbreaking");
 }

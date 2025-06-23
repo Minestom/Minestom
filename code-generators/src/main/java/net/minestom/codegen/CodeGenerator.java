@@ -8,14 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Modifier;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Locale;
 
 public class CodeGenerator {
     protected static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
@@ -46,18 +44,16 @@ public class CodeGenerator {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            final String constantName = namespace
-                    .replace("minecraft:", "")
-                    .replace(".", "_")
-                    .toUpperCase(Locale.ROOT);
+            final String constantName = Generators.namespaceToConstant(namespace);
+            final String namespaceString = Generators.namespaceShort(namespace);
             blockConstantsClass.addField(
                     FieldSpec.builder(typeClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // TypeClass.STONE = MaterialLoader.fromNamespaceId("minecraft:stone")
+                                    // TypeClass.STONE = MaterialLoader.get("stone")
                                     "$T.get($S)",
                                     loaderClass,
-                                    namespace
+                                    namespaceString
                             )
                             .build()
             );
@@ -91,21 +87,16 @@ public class CodeGenerator {
 
         // Use data
         json.keySet().forEach(namespace -> {
-            String constantName = namespace
-                    .replace("minecraft:", "")
-                    .replace(".", "_")
-                    .toUpperCase(Locale.ROOT);
-            if (!SourceVersion.isName(constantName)) {
-                constantName = "_" + constantName;
-            }
+            final String constantName = Generators.namespaceToConstant(namespace);
+            final String namespaceString = Generators.namespaceShort(namespace);
             blockConstantsClass.addField(
                     FieldSpec.builder(typedRegistryKeyClass, constantName)
                             .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             .initializer(
-                                    // TypeClass.STONE = NamespaceID.from("minecraft:stone")
+                                    // TypeClass.STONE = NamespaceID.unsafeOf("stone")
                                     "$T.unsafeOf($S)",
                                     registryKeyClass,
-                                    namespace
+                                    namespaceString
                             )
                             .build()
             );
