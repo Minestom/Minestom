@@ -92,6 +92,41 @@ public class CoordinateTest {
     }
 
     @Test
+    public void vecNegCompare() {
+        assertFalse(Vec.ZERO.samePoint(Vec.ONE.neg()));
+        assertTrue(Vec.ZERO.samePoint(Vec.ZERO.neg()));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0, 0, 0)));
+        assertTrue(Vec.ZERO.samePoint(new Vec(-0, -0, -0)));
+    }
+
+    @Test
+    public void vecNanCompare() {
+        Vec nanX = new Vec(Double.NaN, 0, 0);
+        Vec nanY = new Vec(0, Double.NaN, 0);
+        Vec nanZ = new Vec(0, 0, Double.NaN);
+        Vec nanAll = new Vec(Double.NaN, Double.NaN, Double.NaN);
+        Vec normal = Vec.ZERO;
+
+        // NaN is not equal to itself
+        assertFalse(nanX.samePoint(nanX));
+        assertFalse(nanY.samePoint(nanY));
+        assertFalse(nanZ.samePoint(nanZ));
+        assertFalse(nanAll.samePoint(nanAll));
+
+        // NaN vectors are not equal to normal vectors
+        assertFalse(nanX.samePoint(normal));
+        assertFalse(nanY.samePoint(normal));
+        assertFalse(nanZ.samePoint(normal));
+        assertFalse(nanAll.samePoint(normal));
+
+        // Different NaN vectors are not equal to each other
+        assertFalse(nanX.samePoint(nanY));
+        assertFalse(nanX.samePoint(nanZ));
+        assertFalse(nanY.samePoint(nanZ));
+        assertFalse(nanX.samePoint(nanAll));
+    }
+
+    @Test
     public void toSectionRelativeCoordinate() {
         assertEquals(8, CoordConversion.globalToSectionRelative(-40));
         assertEquals(12, CoordConversion.globalToSectionRelative(-20));
