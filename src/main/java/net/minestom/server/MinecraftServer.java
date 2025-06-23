@@ -68,25 +68,19 @@ public final class MinecraftServer implements MinecraftConstants {
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
-    // Required because the server process can call itself cyclically; to see if its unsealed.
-    private static volatile boolean initializing = false;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
-        try {
-            initializing = true;
-            updateProcess();
-        } finally {
-            initializing = false;
-        }
+        updateProcess();
         return new MinecraftServer();
     }
 
     @ApiStatus.Internal
     public static ServerProcess updateProcess() {
+        serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
         serverProcess = process;
         return process;
@@ -351,7 +345,7 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     @ApiStatus.Internal
     public static boolean isInitializing() {
-        return initializing;
+        return serverProcess == null;
     }
 
     private static boolean hasStartedSafe() {
