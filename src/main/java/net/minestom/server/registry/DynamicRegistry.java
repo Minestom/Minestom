@@ -173,7 +173,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
 
     /**
      * <p>Returns a {@link SendablePacket} potentially excluding vanilla entries if possible. It is never possible to
-     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(Key, T)}.</p>
+     * exclude vanilla entries if one has been overridden (e.g. via {@link #register(Keyed, T)}.</p>
      *
      * @param registries     Registries provider
      * @param excludeVanilla Whether to exclude vanilla entries

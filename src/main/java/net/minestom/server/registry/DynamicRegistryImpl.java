@@ -135,7 +135,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 idToValue.add(object);
                 idToKey.add(registryKey);
                 keyToId.put(registryKey, idToValue.size() - 1);
-                packById.add(pack);
+                if (pack != null) packById.add(pack); // Dont add for null, handled.
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
@@ -302,6 +302,17 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
      */
     @Contract(pure = true)
     @NotNull DynamicRegistryImpl<T> compact() {
+        if (canFreeze()) {
+            return new DynamicRegistryImpl<>(registryKey, codec,
+                    List.copyOf(idToValue),
+                    Map.copyOf(keyToId),
+                    List.copyOf(idToKey),
+                    Map.copyOf(keyToValue),
+                    Map.copyOf(valueToKey),
+                    List.copyOf(packById), //TODO null packById existing entry. (determine use case)
+                    ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags)
+            );
+        }
         // Create new instances so they are trimmed to size without downcasting.
         return new DynamicRegistryImpl<>(registryKey, codec,
                 new ArrayList<>(idToValue),
