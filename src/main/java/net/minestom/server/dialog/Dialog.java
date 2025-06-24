@@ -65,9 +65,12 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Dialog> createDefaultRegistry(@NotNull Registries registries) {
-        return DynamicRegistry.createForDialogWithSelfReferentialLoadingNightmare(
-                BuiltinRegistries.DIALOG, REGISTRY_CODEC, registries
-        );
+        return DynamicRegistry.load(BuiltinRegistries.DIALOG, REGISTRY_CODEC, registry -> new Registries.Delegating(registries) {
+            @Override
+            public @NotNull DynamicRegistry<Dialog> dialog() {
+                return registry;
+            }
+        }, null, REGISTRY_CODEC);
     }
 
     record Notice(@NotNull DialogMetadata metadata, @NotNull DialogActionButton action) implements Dialog {

@@ -4,10 +4,8 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
-import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Player;
 import net.minestom.server.gamedata.DataPack;
-import net.minestom.server.item.enchant.Enchantment;
 import net.minestom.server.network.packet.server.SendablePacket;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -16,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * <p>Holds registry data for any of the registries controlled by the server. Entries in registries should be referenced
@@ -34,15 +34,9 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
 
     @SafeVarargs
     static <T> @NotNull DynamicRegistry<T> fromMap(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Map.Entry<Key, T>... entries) {
-        var registry = new DynamicRegistryImpl<T>(key, null);
-        for (var entry : entries)
-            registry.register(entry.getKey(), entry.getValue(), null);
-        return registry.compact();
-    }
-
-    @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key) {
-        return new DynamicRegistryImpl<>(key, null);
+        return create(key, null, registry -> {
+            for (var entry : entries) registry.register(entry.getKey(), entry.getValue(), null);
+        });
     }
 
     /**
@@ -51,8 +45,42 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
-        return new DynamicRegistryImpl<>(key, codec);
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key) {
+        return create(key, null);
+    }
+
+    /**
+     * Creates a new empty registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec) {
+        return create(key, codec, null);
+    }
+
+    /**
+     * Creates a new empty registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer) {
+        return create(key, codec, consumer, MinecraftServer.detourRegistry());
+    }
+
+    /**
+     * Creates a new empty registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T> @NotNull DynamicRegistry<T> create(@NotNull RegistryKey<DynamicRegistry<T>> key, @Nullable Codec<T> codec, @Nullable Consumer<DynamicRegistry<T>> consumer, @Nullable DetourRegistry detourRegistry) {
+        var registry = new DynamicRegistryImpl<>(key, codec);
+        if (consumer != null) consumer.accept(registry);
+        if (detourRegistry != null)
+            registry = (DynamicRegistryImpl<T>) detourRegistry.consume(registry.registryKey(), registry);
+        return registry.compact();
     }
 
     /**
@@ -72,7 +100,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries) {
-        return load(key, codec, registries, null, null);
+        return load(key, codec, registries != null ? (ignored) -> registries : null, null, null);
     }
 
     /**
@@ -81,44 +109,15 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
-        final DynamicRegistryImpl<T> registry = new DynamicRegistryImpl<>(key, codec);
-        return load(registry, registries, idComparator, readCodec);
-    }
-
-    @ApiStatus.Internal
-    private static <T> @NotNull DynamicRegistry<T> load(@NotNull DynamicRegistryImpl<T> registry, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
         final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
-        DynamicRegistryImpl.loadStaticJsonRegistry(detourRegistry, registries, registry, idComparator, Objects.requireNonNullElse(readCodec, registry.codec()));
-        if (detourRegistry != null) registry = (DynamicRegistryImpl<T>) detourRegistry.consume(registry.registryKey(), registry);
-        return registry.compact();
-    }
-
-
-    @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Enchantment> createForEnchantmentsWithSelfReferentialLoadingNightmare(
-            @NotNull RegistryKey<DynamicRegistry<Enchantment>> key, @NotNull Codec<Enchantment> codec, @NotNull Registries registries
-    ) {
-        final DynamicRegistryImpl<Enchantment> registry = new DynamicRegistryImpl<>(key, codec);
-        return load(registry, new Registries.Delegating(registries) {
-            @Override
-            public @NotNull DynamicRegistry<Enchantment> enchantment() {
-                return registry;
-            }
-        }, null, codec);
-    }
-
-    @ApiStatus.Internal
-    static @NotNull DynamicRegistry<Dialog> createForDialogWithSelfReferentialLoadingNightmare(
-            @NotNull RegistryKey<DynamicRegistry<Dialog>> key, @NotNull Codec<Dialog> codec, @NotNull Registries registries
-    ) {
-        final DynamicRegistryImpl<Dialog> registry = new DynamicRegistryImpl<>(key, codec);
-        return load(registry, new Registries.Delegating(registries) {
-            @Override
-            public @NotNull DynamicRegistry<Dialog> dialog() {
-                return registry;
-            }
-        }, null, codec);
+        return create(key, codec, registry -> DynamicRegistryImpl.loadStaticJsonRegistry(
+                registryFunction != null ? registryFunction.apply(registry) : null, // Gross but self-referential loading nightmare requirement.
+                (DynamicRegistryImpl<T>) registry,
+                idComparator,
+                Objects.requireNonNullElse(readCodec, ((DynamicRegistryImpl<T>) registry).codec()),
+                detourRegistry
+        ), detourRegistry);
     }
 
     /**

@@ -48,9 +48,12 @@ public sealed interface Enchantment extends Enchantments permits EnchantmentImpl
      */
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<Enchantment> createDefaultRegistry(@NotNull Registries registries) {
-        return DynamicRegistry.createForEnchantmentsWithSelfReferentialLoadingNightmare(
-                BuiltinRegistries.ENCHANTMENT, REGISTRY_CODEC, registries
-        );
+        return DynamicRegistry.load(BuiltinRegistries.ENCHANTMENT, REGISTRY_CODEC, registry -> new Registries.Delegating(registries) {
+            @Override
+            public @NotNull DynamicRegistry<Enchantment> enchantment() {
+                return registry;
+            }
+        }, null, REGISTRY_CODEC);
     }
 
     @NotNull Component description();
