@@ -1,6 +1,8 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.dialog.Dialog;
 import net.minestom.server.entity.Player;
@@ -84,7 +86,9 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
 
     @ApiStatus.Internal
     private static <T> @NotNull DynamicRegistry<T> load(@NotNull DynamicRegistryImpl<T> registry, @Nullable Registries registries, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
-        DynamicRegistryImpl.loadStaticJsonRegistry(registries, registry, idComparator, Objects.requireNonNullElse(readCodec, registry.codec()));
+        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
+        DynamicRegistryImpl.loadStaticJsonRegistry(detourRegistry, registries, registry, idComparator, Objects.requireNonNullElse(readCodec, registry.codec()));
+        if (detourRegistry != null) registry = (DynamicRegistryImpl<T>) detourRegistry.consume(registry.registryKey(), registry);
         return registry.compact();
     }
 
@@ -132,13 +136,18 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
         return register(Key.key(id), object, null);
     }
 
-    default @NotNull RegistryKey<T> register(@NotNull Key id, @NotNull T object) {
-        return register(id, object, null);
+    default @NotNull RegistryKey<T> register(@NotNull Keyed id, @NotNull T object) {
+        return register(id.key(), object, null);
     }
 
     @ApiStatus.Internal
     default @NotNull RegistryKey<T> register(@NotNull String id, @NotNull T object, @Nullable DataPack pack) {
         return register(Key.key(id), object, pack);
+    }
+
+    @ApiStatus.Internal
+    default @NotNull RegistryKey<T> register(@NotNull Keyed id, @NotNull T object, @Nullable DataPack pack) {
+        return register(id.key(), object, pack);
     }
 
     @ApiStatus.Internal

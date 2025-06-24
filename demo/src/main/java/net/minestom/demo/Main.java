@@ -1,6 +1,8 @@
 package net.minestom.demo;
 
+import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
@@ -13,6 +15,13 @@ import net.minestom.demo.recipe.ShapelessRecipe;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.command.CommandManager;
 import net.minestom.server.component.DataComponents;
+import net.minestom.server.dialog.Dialog;
+import net.minestom.server.dialog.DialogAction;
+import net.minestom.server.dialog.DialogActionButton;
+import net.minestom.server.dialog.DialogAfterAction;
+import net.minestom.server.dialog.DialogBody;
+import net.minestom.server.dialog.DialogInput;
+import net.minestom.server.dialog.DialogMetadata;
 import net.minestom.server.event.server.ServerListPingEvent;
 import net.minestom.server.extras.lan.OpenToLAN;
 import net.minestom.server.extras.lan.OpenToLANConfig;
@@ -22,6 +31,8 @@ import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
 import net.minestom.server.ping.ResponseData;
 import net.minestom.server.recipe.RecipeBookCategory;
+import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.identity.NamedAndIdentified;
 import net.minestom.server.utils.time.TimeUnit;
 
@@ -32,6 +43,52 @@ public class Main {
 
     public static void main(String[] args) {
         MinecraftServer.setCompressionThreshold(0);
+
+        RegistryKey<Dialog> newInput = RegistryKey.unsafeOf("cookie:test");
+        MinecraftServer.detourRegistryInit().register(BuiltinRegistries.DIALOG, (dialogRegistry) -> {
+            var dialog = new Dialog.MultiAction(
+                    new DialogMetadata(
+                            Component.text("Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?Are you sure you want to confirm?").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))),
+                            null, true, false,
+                            DialogAfterAction.CLOSE,
+                            List.of(
+                                    new DialogBody.PlainMessage(Component.text("plain message here").hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                    new DialogBody.Item(ItemStack.of(Material.DIAMOND, 5),
+                                            new DialogBody.PlainMessage(Component.text("item message"), DialogBody.PlainMessage.DEFAULT_WIDTH),
+                                            false, true, 16, 16)
+                            ),
+                            List.of(
+                                    new DialogInput.Text("text", DialogInput.DEFAULT_WIDTH * 2, Component.text("Enter some text")
+                                            .hoverEvent(HoverEvent.showText(Component.text("Hover text here"))), true, "", Integer.MAX_VALUE, new DialogInput.Text.Multiline(15, null)),
+                                    new DialogInput.Boolean("bool", Component.text("Checkbox"), false, "true", "false"),
+                                    new DialogInput.SingleOption("single_option", DialogInput.DEFAULT_WIDTH, List.of(
+                                            new DialogInput.SingleOption.Option("option1", Component.text("Option 1"), true),
+                                            new DialogInput.SingleOption.Option("option2", Component.text("Option 2"), false),
+                                            new DialogInput.SingleOption.Option("option3", Component.text("Option 3"), false)
+                                    ), Component.text("Single option"), true),
+                                    new DialogInput.NumberRange("number_range", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f),
+                                    new DialogInput.NumberRange("number_r2ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f),
+                                    new DialogInput.NumberRange("number_r3ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f),
+                                    new DialogInput.NumberRange("number_r4ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f),
+                                    new DialogInput.NumberRange("number_r5ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f),
+                                    new DialogInput.NumberRange("number_r6ange", DialogInput.DEFAULT_WIDTH, Component.text("Number range"),
+                                            "options.generic_value", 0, 500, 250f, 1f)
+                            )
+                    ),
+                    List.of(
+                            new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, new DialogAction.DynamicCustom(Key.key("done_action"), null)),
+                            new DialogActionButton(Component.text("Done"), null, DialogActionButton.DEFAULT_WIDTH, null)
+                    ),
+                    null, 2
+            );
+            dialogRegistry.register(newInput, dialog);
+            return dialogRegistry;
+        });
 
         MinecraftServer minecraftServer = MinecraftServer.init();
 

@@ -44,6 +44,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
@@ -155,39 +156,47 @@ public final class RegistryData {
         var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
+        final DetourRegistry registry = MinecraftServer.detourRegistry();
         for (var entry : entries.asMap().keySet()) {
             final Properties properties = entries.section(entry);
             final T value = loader.get(entry, properties);
+            if (registry != null) Check.stateCondition(registry.hasDetour(value.key()), "Static registry object {0} has detours registered, which is not currently supported!", value.key());
             ids.set(value.id(), value);
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
-        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(registryKey.key());
+        Map<TagKey<T>, RegistryTag<T>> tags = loadTags(registryKey.key());
+        if (registry != null) Check.stateCondition(registry.hasDetour(registryKey), "Static registry {0} has detours registered, which is not currently supported!", registryKey);
         return new StaticRegistry<>(registryKey, namespaces, ids, tags);
     }
 
     @ApiStatus.Internal
-    static <T> @Unmodifiable Map<TagKey<T>, RegistryTagImpl.Backed<T>> loadTags(@NotNull Key registryKey) {
+    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
-        final HashMap<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new HashMap<>(tagJson.size());
+        final HashMap<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
+        final DetourRegistry registry = MinecraftServer.detourRegistry();
         for (String tagName : tagJson.asMap().keySet()) {
             final TagKeyImpl<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
-            final RegistryTagImpl.Backed<T> tagValue = tags.computeIfAbsent(tagKey, RegistryTagImpl.Backed::new);
-            getTagValues(tagValue, tagJson, tagName);
+            Check.stateCondition(tags.get(tagKey) != null, "Duplicate tag key found: {0}", tagName);
+            RegistryTag<T> tag = RegistryTag.builder(tagKey, builder -> {
+                getTagValues(builder, tagJson, tagName);
+                if (registry != null) registry.consumeTag(tagKey, builder);
+            });
+            // Exclude empty tags.
+            if (tag.size() > 0) tags.put(tagKey, tag);
         }
         return Map.copyOf(tags);
     }
 
-    private static <T> void getTagValues(@NotNull RegistryTagImpl.Backed<T> tag, Properties main, String value) {
+    private static <T> void getTagValues(@NotNull RegistryTag.Builder<T> tag, Properties main, String value) {
         Properties section = main.section(value);
-        final List<String> tagValues = section.getList("values");
-        tagValues.forEach(tagString -> {
+        for (var tagString: section.<String>getList("values")) {
             if (tagString.startsWith("#")) {
                 getTagValues(tag, main, tagString.substring(1));
             } else {
                 tag.add(RegistryKey.unsafeOf(tagString));
             }
-        });
+        }
     }
 
     public interface Loader<T extends StaticProtocolObject<T>> {
