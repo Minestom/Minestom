@@ -109,7 +109,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      * @see Registries
      */
     @ApiStatus.Internal
-    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<String> idComparator, @Nullable Codec<T> readCodec) {
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction, @Nullable Comparator<RegistryKey<T>> idComparator, @Nullable Codec<T> readCodec) {
         final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         return create(key, codec, registry -> DynamicRegistryImpl.loadStaticJsonRegistry(
                 registryFunction != null ? registryFunction.apply(registry) : null, // Gross but self-referential loading nightmare requirement.
