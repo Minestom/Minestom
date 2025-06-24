@@ -1,13 +1,12 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Keyed;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.UnknownNullability;
 
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -15,10 +14,11 @@ import java.util.function.Function;
  * <p>
  *     Detours are used in pre-initialization of a {@link Registry}.
  *     They are used to modify the behavior of registry entries before they are fully initialized.
- *     This way they can be "frozen" which prohibits further modifications to the registry entries.
+ *     This way they can be "frozen", which prohibits further modifications to the registry entries.
  * </p>
  * <p>
  *     Note: The detour registry can only be used during the pre-initialization phase of the server.
+ *     See {@link MinecraftServer#detourRegistryInit()} for more information.
  * </p>
  */
 public sealed interface DetourRegistry permits DetourRegistryImpl {

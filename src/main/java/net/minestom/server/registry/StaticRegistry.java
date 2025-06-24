@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -41,7 +42,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
             valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
         this.valueToKey = Map.copyOf(valueToKey);
         this.idToValue = ids.toList();
-        this.tags = new ConcurrentHashMap<>(tags);
+        this.tags = ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags);
     }
 
     @Override

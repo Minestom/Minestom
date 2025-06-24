@@ -3,11 +3,13 @@ package net.minestom.server.registry;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.Keyed;
 import net.minestom.server.utils.validate.Check;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@ApiStatus.Internal
 final class DetourRegistryImpl implements DetourRegistry {
     private final Map<Key, Detour<?>> detours;
 

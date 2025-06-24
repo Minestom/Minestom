@@ -25,6 +25,8 @@ import java.util.Objects;
  * <p>Builtin registries should be accessed via a {@link Registries} instance (currently implemented by
  * {@link net.minestom.server.ServerProcess}, or from {@link net.minestom.server.MinecraftServer} static methods.</p>
  *
+ * <p>All registry keys for built-in registries are stored at {@link BuiltinRegistries}</p>
+ *
  * @param <T> The type of the registry entries
  * @see Registries
  */
