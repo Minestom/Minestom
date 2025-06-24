@@ -181,8 +181,7 @@ public final class RegistryData {
                 processTagValues(builder, tagJson, tagName);
                 if (registry != null) registry.consumeTag(tagKey, builder);
             });
-            // Exclude empty tags.
-            if (tag.size() > 0) tags.put(tagKey, tag);
+            tags.put(tagKey, tag);
         }
         return Map.copyOf(tags);
     }
