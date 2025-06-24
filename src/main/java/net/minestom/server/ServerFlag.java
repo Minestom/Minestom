@@ -67,6 +67,9 @@ public final class ServerFlag {
     // Entities
     public static final boolean ENFORCE_INTERACTION_LIMIT = booleanProperty("minestom.enforce-entity-interaction-range", true);
 
+    // Registries
+    public static final boolean REGISTRY_IMMUTABLE_TAGS = booleanProperty("minestom.registry.immutable-tags", false);
+
     // Experimental/Unstable
     public static final boolean REGISTRY_UNSAFE_OPS = booleanProperty("minestom.registry.unsafe-ops");
     public static final boolean EVENT_NODE_ALLOW_MULTIPLE_PARENTS = booleanProperty("minestom.event.multiple-parents");

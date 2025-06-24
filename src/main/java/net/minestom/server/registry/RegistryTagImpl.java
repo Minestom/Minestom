@@ -1,6 +1,7 @@
 package net.minestom.server.registry;
 
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -49,13 +50,12 @@ final class RegistryTagImpl {
         private final Set<RegistryKey<T>> entries;
 
         Backed(@NotNull TagKey<T> key) {
-            this.key = key;
-            this.entries = new CopyOnWriteArraySet<>();
+            this(key, Set.of());
         }
 
         Backed(@NotNull TagKey<T> key, @NotNull Set<RegistryKey<T>> entries) {
             this.key = key;
-            this.entries = entries;
+            this.entries = ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
         }
 
         @Override
