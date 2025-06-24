@@ -126,10 +126,11 @@ final class RegistryTagImpl {
 
     static final class BuilderImpl<T> implements RegistryTag.Builder<T> {
         private final TagKey<T> key;
-        private final List<RegistryKey<T>> entries = new ArrayList<>();
+        private final List<RegistryKey<T>> entries;
 
         BuilderImpl(@Nullable TagKey<T> key) {
             this.key = key;
+            this.entries = new ArrayList<>();
         }
 
         public boolean add(@NotNull RegistryKey<T> key) {
