@@ -269,6 +269,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             packById = this.packById;
         }
         List<RegistryDataPacket.Entry> entries = new ArrayList<>(idToValue.size());
+        final int packByIdSize = packById.size();
         for (int i = 0; i < idToValue.size(); i++) {
             CompoundBinaryTag data = null;
             // sorta todo, sorta just a note:
@@ -280,7 +281,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             // like material, block, etc generate entries which are behind feature flags, whereas the ones which inspect
             // static assets (the traditionally dynamic registries), do not generate those assets.
             T entry = idToValue.get(i);
-            DataPack pack = packById.get(i);
+            DataPack pack = i < packByIdSize ? packById.get(i) : null;
             if (!excludeVanilla || pack != DataPack.MINECRAFT_CORE) {
                 final Result<BinaryTag> entryResult = codec.encode(transcoder, entry);
                 if (entryResult instanceof Result.Ok(BinaryTag tag)) {
