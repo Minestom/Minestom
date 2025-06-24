@@ -36,6 +36,12 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      */
     <T> void register(@NotNull RegistryKey<T> key, @NotNull Detour<T> detour);
 
+    /**
+     * Registers a detour for the given tag key.
+     * @param key the tag key to register the detour for
+     * @param detour the detour to register
+     * @param <T> the type of the registry entry
+     */
     <T> void registerTag(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour);
 
     /**
