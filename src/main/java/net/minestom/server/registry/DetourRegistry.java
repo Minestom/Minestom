@@ -68,7 +68,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param <T> the type of the registry entry
      */
     @ApiStatus.Experimental
-    @Contract(mutates = "param2") // Possibility of modifying the value in place
+    @Contract(mutates = "param2")
     <T> @NotNull T consume(@NotNull RegistryKey<T> key, @NotNull T value);
 
     /**
@@ -77,6 +77,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param <T> the type of the registry entry
      */
     @ApiStatus.Experimental
+    @Contract(mutates = "param2")
     <T> void consumeTag(@NotNull TagKey<T> key, @NotNull RegistryTag.Builder<T> builder);
 
     /**
@@ -85,7 +86,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
      * @param <T> the type of the value that the detour applies to
      */
     @FunctionalInterface
-    interface Detour<T> extends Function<T, T>, Consumer<T> {
+    interface Detour<T> extends Function<T, T> {
 
         /**
          * Applies the detour to the given value.
@@ -93,8 +94,7 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
          * @param value the value to apply the detour to
          * @return the modified value
          */
-        @UnknownNullability
-        T apply(@NotNull T value);
+        @NotNull T apply(@NotNull T value);
 
         /**
          * Combines this detour with another detour, creating a new detour that applies both in sequence.
@@ -108,11 +108,6 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
                 T intermediate = this.apply(value);
                 return after.apply(intermediate);
             };
-        }
-
-        @Override
-        default void accept(@NotNull T value) {
-            this.apply(value);
         }
     }
 }

@@ -22,7 +22,7 @@ final class DetourRegistryImpl implements DetourRegistry {
 
     @Override
     public <T> void registerTag(@NotNull TagKey<T> key, @NotNull Detour<RegistryTag.Builder<T>> detour) {
-        this.registerTag(key, detour);
+        this.registerKeyed(key, detour);
     }
 
     @Override
