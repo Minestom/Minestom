@@ -15,17 +15,23 @@ import net.minestom.server.potion.PotionEffect;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryTag;
 import net.minestom.server.registry.TagKey;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BlockBreakCalculation {
 
     public static final int UNBREAKABLE = -1;
-    private static final RegistryTag<Fluid> WATER_TAG = Fluid.staticRegistry().getOrCreateTag(TagKey.ofHash("#minecraft:water"));
+    private static final RegistryTag<Fluid> WATER_TAG = Fluid.staticRegistry().getTag(TagKey.ofHash("#minecraft:water"));
     // The vanilla client checks for bamboo breaking speed with item instanceof SwordItem.
     // We could either check all sword ID's, or the sword tag.
     // Since tags are immutable, checking the tag seems easier to understand
-    private static final RegistryTag<Material> SWORD_TAG = Material.staticRegistry().getOrCreateTag(TagKey.ofHash("#minecraft:swords"));
+    private static final RegistryTag<Material> SWORD_TAG = Material.staticRegistry().getTag(TagKey.ofHash("#minecraft:swords"));
+
+    static {
+        Check.notNull(WATER_TAG, "Water tag cannot be null");
+        Check.notNull(SWORD_TAG, "Sword tag cannot be null");
+    }
 
     /**
      * Calculates the block break time in ticks
