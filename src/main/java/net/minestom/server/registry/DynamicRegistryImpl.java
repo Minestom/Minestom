@@ -334,7 +334,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec, @Nullable DetourRegistry detourRegistry) {
+    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<RegistryKey<T>> idComparator, @NotNull Codec<T> codec, @Nullable DetourRegistry detourRegistry) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
@@ -347,15 +347,20 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
             final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
-            if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
+            // Kind of a ugly solution, but we need to sort the entries by key to ensure that the order is deterministic.
+            if (idComparator != null) entries.sort(Map.Entry.comparingByKey((a, b) -> {
+                final RegistryKey<T> keyA = RegistryKey.unsafeOf(a);
+                final RegistryKey<T> keyB = RegistryKey.unsafeOf(b);
+                return idComparator.compare(keyA, keyB);
+            }));
             for (Map.Entry<String, JsonElement> entry : entries) {
-                final String namespace = entry.getKey();
+                final RegistryKey<T> key = RegistryKey.unsafeOf(entry.getKey());
                 final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
-                    if (detourRegistry != null) value = detourRegistry.consume(RegistryKey.unsafeOf(namespace), value);
-                    registry.register(namespace, value, DataPack.MINECRAFT_CORE);
+                    if (detourRegistry != null) value = detourRegistry.consume(key, value);
+                    registry.register(key, value, DataPack.MINECRAFT_CORE);
                 } else {
-                    throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
+                    throw new IllegalStateException("Failed to decode registry entry " + key.name() + " for registry " + registry.key() + ": " + valueResult);
                 }
             }
         } catch (Exception e) {
