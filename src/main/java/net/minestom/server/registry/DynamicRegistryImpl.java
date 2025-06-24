@@ -42,7 +42,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<DataPack> packById;
 
-    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
+    private final Map<TagKey<T>, RegistryTag<T>> tags;
 
     private final RegistryKey<DynamicRegistry<T>> registryKey;
     private final Codec<T> codec;
@@ -65,7 +65,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     DynamicRegistryImpl(@NotNull RegistryKey<DynamicRegistry<T>> registryKey, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
                         @NotNull Map<RegistryKey<T>, Integer> keyToId, @NotNull List<RegistryKey<T>> idToKey,
                         @NotNull Map<Key, T> keyToValue, @NotNull Map<T, RegistryKey<T>> valueToKey,
-                        @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
+                        @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTag<T>> tags) {
         this.registryKey = registryKey;
         this.codec = codec;
         this.idToValue = idToValue;
@@ -168,7 +168,8 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
             // Remove all references from tags
             for (final var tag : tags.values()) {
-                tag.remove(registryKey);
+                if (tag instanceof RegistryTagImpl.Backed<T> backedTag)
+                    backedTag.remove(registryKey);
             }
 
             vanillaRegistryDataPacket.invalidate();
@@ -242,7 +243,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
     @Override
     public TagsPacket.@NotNull Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
-        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+        for (final RegistryTag<T> tag : tags.values()) {
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var registryKey : tag)
@@ -321,7 +322,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         return !ServerFlag.REGISTRY_UNSAFE_OPS && !ServerFlag.INSIDE_TEST;
     }
 
-    static <T> void loadStaticJsonRegistry(@Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
+    static <T> void loadStaticJsonRegistry(@Nullable DetourRegistry detourRegistry, @Nullable Registries registries, @NotNull DynamicRegistryImpl<T> registry, @Nullable Comparator<String> idComparator, @NotNull Codec<T> codec) {
         try (InputStream resourceStream = RegistryData.loadRegistryFile(String.format("%s.json", registry.key().value()))) {
             Check.notNull(resourceStream, "Resource {0} does not exist!", registry.key().value());
             final JsonElement json = JsonUtil.fromJson(new InputStreamReader(resourceStream, StandardCharsets.UTF_8));
@@ -335,6 +336,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                 final String namespace = entry.getKey();
                 final Result<T> valueResult = codec.decode(transcoder, entry.getValue());
                 if (valueResult instanceof Result.Ok(T value)) {
+                    if (detourRegistry != null) value = detourRegistry.consume(RegistryKey.unsafeOf(namespace), value);
                     registry.register(namespace, value, DataPack.MINECRAFT_CORE);
                 } else {
                     throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
@@ -342,7 +344,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             }
 
             // Load tags if present
-            Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = RegistryData.loadTags(registry.key());
+            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(registry.key());
             registry.tags.putAll(tags);
         } catch (Exception e) {
             throw new RuntimeException(e);

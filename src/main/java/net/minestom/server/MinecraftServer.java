@@ -28,6 +28,7 @@ import net.minestom.server.network.packet.server.common.PluginMessagePacket;
 import net.minestom.server.network.packet.server.play.ServerDifficultyPacket;
 import net.minestom.server.network.socket.Server;
 import net.minestom.server.recipe.RecipeManager;
+import net.minestom.server.registry.DetourRegistry;
 import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.scoreboard.TeamManager;
 import net.minestom.server.thread.TickSchedulerThread;
@@ -39,6 +40,7 @@ import net.minestom.server.world.DimensionType;
 import net.minestom.server.world.biome.Biome;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.UnknownNullability;
 
 import java.net.InetSocketAddress;
@@ -68,6 +70,7 @@ public final class MinecraftServer implements MinecraftConstants {
 
     // In-Game Manager
     private static volatile ServerProcess serverProcess;
+    private static volatile DetourRegistry detourRegistry;
 
     private static int compressionThreshold = 256;
     private static String brandName = "Minestom";
@@ -83,6 +86,9 @@ public final class MinecraftServer implements MinecraftConstants {
         serverProcess = null;
         ServerProcess process = new ServerProcessImpl();
         serverProcess = process;
+        // Finalize the detour registry if it has been used
+        Check.stateCondition(detourRegistry != null && detourRegistry.hasDetours(), "Detour registry has not fully been consumed!");
+        detourRegistry = null; // Reset the detour registry after initialization
         return process;
     }
 
@@ -337,6 +343,26 @@ public final class MinecraftServer implements MinecraftConstants {
      */
     public static void stopCleanly() {
         serverProcess.stop();
+    }
+
+    /**
+     * Initializes the detour registry, used to register detours for built-in registries.
+     * @return the detour registry
+     */
+    public static @NotNull DetourRegistry detourRegistryInit() {
+        Check.stateCondition(hasStartedSafe(), "Cannot use the detour registry after the server has started.");
+        return (detourRegistry = DetourRegistry.detourRegistry());
+    }
+
+    /**
+     * Gets the detour registry, used to register detours for built-in registries. See {@link DetourRegistry}
+     * <p>Requires {@link #detourRegistryInit()}</p>
+     *
+     * @return the detour registry
+     * @throws IllegalStateException if called after the server has started
+     */
+    public static @Nullable DetourRegistry detourRegistry() {
+        return detourRegistry;
     }
 
     /**

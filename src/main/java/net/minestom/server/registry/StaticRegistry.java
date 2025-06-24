@@ -26,13 +26,13 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<T> idToValue;
 
-    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
+    private final Map<TagKey<T>, RegistryTag<T>> tags;
 
     StaticRegistry(
             @NotNull RegistryKey<Registry<T>> registryKey,
             @NotNull Map<Key, T> namespaces,
             @NotNull ObjectArray<T> ids,
-            @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags
+            @NotNull Map<TagKey<T>, RegistryTag<T>> tags
     ) {
         this.registryKey = registryKey;
         this.keyToValue = Map.copyOf(namespaces);
@@ -126,7 +126,8 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     @Override
     public TagsPacket.@NotNull Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
-        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+        for (final RegistryTag<T> entry : tags.values()) {
+            if (!(entry instanceof RegistryTagImpl.Backed<T> tag)) continue;
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var staticEntry : tag) {
