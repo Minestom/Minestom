@@ -341,7 +341,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (!(json instanceof JsonObject root))
                 throw new IllegalStateException("Failed to load registry " + registry.key() + ": expected a JSON object, got " + json);
 
-            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false, true) : Transcoder.JSON;
+            // Load tags if present, Required here because the transcoder will try and read them while parsing the registry.
+            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(registry.key());
+            registry.tags.putAll(tags);
+
+            final Transcoder<JsonElement> transcoder = registries != null ? new RegistryTranscoder<>(Transcoder.JSON, registries, false) : Transcoder.JSON;
             List<Map.Entry<String, JsonElement>> entries = new ArrayList<>(root.entrySet());
             if (idComparator != null) entries.sort(Map.Entry.comparingByKey(idComparator));
             for (Map.Entry<String, JsonElement> entry : entries) {
@@ -354,10 +358,6 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                     throw new IllegalStateException("Failed to decode registry entry " + namespace + " for registry " + registry.key() + ": " + valueResult);
                 }
             }
-
-            // Load tags if present
-            Map<TagKey<T>, RegistryTag<T>> tags = RegistryData.loadTags(registry.key());
-            registry.tags.putAll(tags);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
