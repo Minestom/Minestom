@@ -44,7 +44,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * Handles registry data, used by {@link StaticProtocolObject} implementations and is strictly internal.
@@ -179,7 +178,7 @@ public final class RegistryData {
             final TagKeyImpl<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
             Check.stateCondition(tags.get(tagKey) != null, "Duplicate tag key found: {0}", tagName);
             RegistryTag<T> tag = RegistryTag.builder(tagKey, builder -> {
-                getTagValues(builder, tagJson, tagName);
+                processTagValues(builder, tagJson, tagName);
                 if (registry != null) registry.consumeTag(tagKey, builder);
             });
             // Exclude empty tags.
@@ -188,13 +187,13 @@ public final class RegistryData {
         return Map.copyOf(tags);
     }
 
-    private static <T> void getTagValues(@NotNull RegistryTag.Builder<T> tag, Properties main, String value) {
+    private static <T> void processTagValues(@NotNull RegistryTag.Builder<T> builder, Properties main, String value) {
         Properties section = main.section(value);
         for (var tagString: section.<String>getList("values")) {
             if (tagString.startsWith("#")) {
-                getTagValues(tag, main, tagString.substring(1));
+                processTagValues(builder, main, tagString.substring(1));
             } else {
-                tag.add(RegistryKey.unsafeOf(tagString));
+                builder.add(RegistryKey.unsafeOf(tagString));
             }
         }
     }
