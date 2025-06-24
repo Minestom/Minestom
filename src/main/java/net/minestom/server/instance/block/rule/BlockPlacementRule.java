@@ -3,6 +3,7 @@ package net.minestom.server.instance.block.rule;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.item.ItemStack;
@@ -14,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 
 public abstract class BlockPlacementRule {
-    public static final int DEFAULT_UPDATE_RANGE = 10;
 
     public static final List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
         Direction.UP.vec(),
@@ -85,16 +85,8 @@ public abstract class BlockPlacementRule {
         return block;
     }
 
-    /**
-     * The max distance where a block update can be triggered. It is not based on block, so if the value is 3 and a completely
-     * different block updates 3 blocks away it could still trigger an update.
-     */
-    public int maxUpdateDistance() {
-        return DEFAULT_UPDATE_RANGE;
-    }
-
     public record PlacementState(
-            @NotNull Block.Getter instance,
+            @NotNull Instance instance,
             @NotNull Block block,
             @Nullable BlockFace blockFace,
             @NotNull Point placePosition,
@@ -105,7 +97,7 @@ public abstract class BlockPlacementRule {
     ) {
     }
 
-    public record UpdateState(@NotNull Block.Getter instance,
+    public record UpdateState(@NotNull Instance instance,
                               @NotNull Block currentBlock,
                               @NotNull Point blockPosition,
                               @NotNull Vec offset) {

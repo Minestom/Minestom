@@ -90,6 +90,10 @@ public class InstanceContainer extends Instance {
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
+    private static final int MAX_BLOCK_UPDATES_TICK = Integer.parseInt(
+            System.getProperty("minestom.instance.maxUpdateDistance", "2048").trim()
+    );
+
     public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
     }
@@ -672,8 +676,7 @@ public class InstanceContainer extends Instance {
             if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance() ||
-                !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
+            if (neighborBlockPlacementRule == null || updateDistance >= MAX_BLOCK_UPDATES_TICK || !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
                 continue;
 
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(

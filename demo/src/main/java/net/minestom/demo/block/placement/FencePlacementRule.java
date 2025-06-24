@@ -2,6 +2,7 @@ package net.minestom.demo.block.placement;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
+import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.Direction;
@@ -35,15 +36,14 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @NotNull
-    private Block calculateConnections(Block.Getter instance, Point position) {
-        Map<String, String> connections = new HashMap<>(
-            Map.of(
-                "north", instance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false",
-                "south", instance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false",
-                "west", instance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false",
-                "east", instance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false"
-            )
-        );
+    private Block calculateConnections(Instance instance, Point position) {
+        Map<String, String> connections = new HashMap<>();
+
+            instance.loadChunk(position.add(0, 0, -1)).thenAccept(chunk -> connections.put("north", instance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false"));
+            instance.loadChunk(position.add(0, 0, 1)).thenAccept(chunk -> connections.put("south", instance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false"));
+            instance.loadChunk(position.add(-1, 0, 0)).thenAccept(chunk -> connections.put("west", instance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false"));
+            instance.loadChunk(position.add(1, 0, 0)).thenAccept(chunk -> connections.put("east", instance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false"));
+            instance.loadChunk(position);
 
         return block.withProperties(
                 connections
