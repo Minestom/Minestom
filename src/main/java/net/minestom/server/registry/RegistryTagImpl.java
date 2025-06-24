@@ -144,11 +144,11 @@ final class RegistryTagImpl {
         }
 
         RegistryTag<T> build() {
-            if (entries.isEmpty()) {
-                return RegistryTag.empty();
-            } if (key != null) {
+            if (key != null) {
                 return new Backed<>(key, Set.copyOf(entries));
-            } else {
+            } else if (entries.isEmpty()) {
+                return RegistryTag.empty();
+            }  else {
                 return new Direct<T>(entries);
             }
         }
