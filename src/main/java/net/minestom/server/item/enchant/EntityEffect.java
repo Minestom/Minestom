@@ -1,6 +1,5 @@
 package net.minestom.server.item.enchant;
 
-import net.kyori.adventure.key.Key;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.coordinate.Point;
@@ -21,27 +20,28 @@ import java.util.List;
 
 
 public non-sealed interface EntityEffect extends Enchantment.Effect {
+    @NotNull RegistryKey<DynamicRegistry<StructCodec<? extends EntityEffect>>> REGISTRY_KEY = RegistryKey.unsafeOf("minestom:enchantment_entity_effect");
 
     @NotNull StructCodec<EntityEffect> CODEC = Codec.RegistryTaggedUnion(
             Registries::enchantmentEntityEffects, EntityEffect::codec, "type");
 
     @ApiStatus.Internal
     static @NotNull DynamicRegistry<StructCodec<? extends EntityEffect>> createDefaultRegistry() {
-        final DynamicRegistry<StructCodec<? extends EntityEffect>> registry = DynamicRegistry.create(RegistryKey.unsafeOf("minestom:enchantment_entity_effect"));
-        registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("apply_mob_effect", ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("change_item_damage", ChangeItemDamage.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("damage_entity", DamageEntity.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("explode", Explode.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("ignite", Ignite.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("play_sound", PlaySound.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("replace_block", ReplaceBlock.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("replace_disk", ReplaceDisc.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("run_function", RunFunction.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("set_block_properties", SetBlockProperties.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("spawn_particles", SpawnParticles.CODEC, DataPack.MINECRAFT_CORE);
-        registry.register("summon_entity", SummonEntity.CODEC, DataPack.MINECRAFT_CORE);
-        return registry;
+        return DynamicRegistry.create(REGISTRY_KEY, null, registry -> {
+            registry.register("all_of", AllOf.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("apply_mob_effect", ApplyPotionEffect.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("change_item_damage", ChangeItemDamage.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("damage_entity", DamageEntity.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("explode", Explode.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("ignite", Ignite.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("play_sound", PlaySound.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("replace_block", ReplaceBlock.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("replace_disk", ReplaceDisc.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("run_function", RunFunction.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("set_block_properties", SetBlockProperties.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("spawn_particles", SpawnParticles.CODEC, DataPack.MINECRAFT_CORE);
+            registry.register("summon_entity", SummonEntity.CODEC, DataPack.MINECRAFT_CORE);
+        });
     }
 
     @NotNull StructCodec<? extends EntityEffect> codec();
