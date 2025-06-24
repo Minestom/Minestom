@@ -74,7 +74,6 @@ public sealed interface DetourRegistry permits DetourRegistryImpl {
     /**
      * Consumes the detour for the given registry key and applies it to the provided value.
      * @param key the registry key to consume the detour for
-     * @return the modified value after applying the detour
      * @param <T> the type of the registry entry
      */
     @ApiStatus.Experimental
