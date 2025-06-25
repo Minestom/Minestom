@@ -26,12 +26,12 @@ import java.util.stream.StreamSupport;
 public class GenericEnumGenerator extends MinestomCodeGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(GenericEnumGenerator.class);
 
-    private final String packageName;
-    private final String className;
-    private final InputStream entriesFile;
-    private final File outputFolder;
+    protected final String packageName;
+    protected final String className;
+    protected final InputStream entriesFile;
+    protected final File outputFolder;
 
-    private boolean isPackagePrivate = false;
+    protected boolean isPackagePrivate = false;
 
     public GenericEnumGenerator(
             @NotNull String packageName, @NotNull String className,
@@ -41,6 +41,10 @@ public class GenericEnumGenerator extends MinestomCodeGenerator {
         this.className = className;
         this.entriesFile = entriesFile;
         this.outputFolder = outputFolder;
+    }
+
+    public GenericEnumGenerator(@NotNull Generators.StaticEntry entry, @NotNull File outputFolder) {
+        this(entry.packageName(), entry.generatedName(), entry.resource(), outputFolder);
     }
 
     public GenericEnumGenerator packagePrivate() {

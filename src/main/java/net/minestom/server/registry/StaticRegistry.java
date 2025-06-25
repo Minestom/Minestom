@@ -1,9 +1,11 @@
 package net.minestom.server.registry;
 
 import net.kyori.adventure.key.Key;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,32 +23,32 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @ApiStatus.Internal
 final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registry<T> {
-    private final Key key;
+    private final RegistryKey<Registry<T>> registryKey;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<T> idToValue;
 
-    private final Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags;
+    private final Map<TagKey<T>, RegistryTag<T>> tags;
 
     StaticRegistry(
-            @NotNull Key key,
+            @NotNull RegistryKey<Registry<T>> registryKey,
             @NotNull Map<Key, T> namespaces,
             @NotNull ObjectArray<T> ids,
-            @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags
+            @NotNull Map<TagKey<T>, RegistryTag<T>> tags
     ) {
-        this.key = key;
+        this.registryKey = registryKey;
         this.keyToValue = Map.copyOf(namespaces);
         var valueToKey = new HashMap<T, RegistryKey<T>>(namespaces.size());
         for (var entry : namespaces.entrySet())
             valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
         this.valueToKey = Map.copyOf(valueToKey);
         this.idToValue = ids.toList();
-        this.tags = new ConcurrentHashMap<>(tags);
+        this.tags = ServerFlag.REGISTRY_FREEZING_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags);
     }
 
     @Override
-    public @NotNull Key key() {
-        return this.key;
+    public @NotNull RegistryKey<Registry<T>> registryKey() {
+        return registryKey;
     }
 
     @Override
@@ -110,7 +112,11 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
 
     @Override
     public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
-        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        if (!ServerFlag.REGISTRY_FREEZING_TAGS)
+            return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        final RegistryTag<T> tag = this.tags.get(key);
+        Check.notNull(tag, "Tag key `{0}` is not registered, while the tags are frozen!", key.hashedKey());
+        return tag;
     }
 
     @Override
@@ -126,7 +132,8 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
     @Override
     public TagsPacket.@NotNull Registry tagRegistry() {
         final List<TagsPacket.Tag> tagList = new ArrayList<>(tags.size());
-        for (final RegistryTagImpl.Backed<T> tag : tags.values()) {
+        for (final RegistryTag<T> entry : tags.values()) {
+            if (!(entry instanceof RegistryTagImpl.Backed<T> tag)) continue;
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var staticEntry : tag) {
