@@ -41,7 +41,7 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
             .transform(ComponentPredicateSet::fromMap, ComponentPredicateSet::toMap);
 
     private @NotNull Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> toMap() {
-        Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> map = new HashMap<>();
+        Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> map = new HashMap<>(this.predicates.size());
         for (Int2ObjectMap.Entry<DataComponentPredicate> entry : predicates.int2ObjectEntrySet()) {
             var key = MinecraftServer.componentPredicateTypes().getKey(entry.getIntKey());
             map.put(key, entry.getValue());
@@ -50,7 +50,7 @@ public record ComponentPredicateSet(Int2ObjectMap<DataComponentPredicate> predic
     }
 
     private static @NotNull ComponentPredicateSet fromMap(@NotNull Map<RegistryKey<Codec<? extends DataComponentPredicate>>, DataComponentPredicate> input) {
-        ComponentPredicateSet map = new ComponentPredicateSet();
+        ComponentPredicateSet map = new ComponentPredicateSet(new Int2ObjectArrayMap<>(input.size()));
         for (DataComponentPredicate predicate : input.values()) {
             map = map.add(predicate);
         }
