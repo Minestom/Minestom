@@ -5,7 +5,6 @@ import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.batch.Batch;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
@@ -244,13 +243,21 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
     /**
      * Represents an element which can place blocks at position.
      * <p>
-     * Notably used by {@link Instance}, {@link Batch}.
+     * Notably used by {@link Instance}, {@link BlockBatch}.
      */
     interface Setter {
         void setBlock(int x, int y, int z, @NotNull Block block);
 
         default void setBlock(@NotNull Point blockPosition, @NotNull Block block) {
             setBlock(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), block);
+        }
+
+        default void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+            batch.getAll((x1, y1, z1, block) -> setBlock(x + x1, y + y1, z + z1, block));
+        }
+
+        default void setBlockBatch(@NotNull Point blockPosition, @NotNull BlockBatch batch) {
+            setBlockBatch(blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(), batch);
         }
     }
 
@@ -267,6 +274,26 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
 
         default @NotNull Block getBlock(@NotNull Point point) {
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
+        }
+
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point p1, @NotNull Point p2) {
+            final int minX = Math.min(p1.blockX(), p2.blockX());
+            final int minY = Math.min(p1.blockY(), p2.blockY());
+            final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+            final int maxX = Math.max(p1.blockX(), p2.blockX());
+            final int maxY = Math.max(p1.blockY(), p2.blockY());
+            final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+            return BlockBatch.explicit(builder -> {
+                for (int x = minX; x <= maxX; x++) {
+                    for (int y = minY; y <= maxY; y++) {
+                        for (int z = minZ; z <= maxZ; z++) {
+                            final int bX = x - minX, bY = y - minY, bZ = z - minZ;
+                            final Block block = getBlock(x, y, z);
+                            builder.setBlock(bX, bY, bZ, block);
+                        }
+                    }
+                }
+            });
         }
 
         /**

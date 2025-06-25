@@ -1,0 +1,144 @@
+package net.minestom.server.instance.block;
+
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
+import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.UnknownNullability;
+
+import static net.minestom.server.coordinate.CoordConversion.*;
+
+record BlockBatchImpl(
+        OptionImpl option,
+        Long2ObjectMap<SectionState> sectionStates
+) implements BlockBatch {
+    @Override
+    public @UnknownNullability Block getBlock(int x, int y, int z, @NotNull Condition condition) {
+        final long sectionIndex = sectionIndexGlobal(x, y, z);
+        final SectionState sectionState = sectionStates.get(sectionIndex);
+        if (sectionState == null) return Block.AIR;
+        final Palette palette = sectionState.palette;
+        final int localX = globalToSectionRelative(x);
+        final int localY = globalToSectionRelative(y);
+        final int localZ = globalToSectionRelative(z);
+        int index = palette.get(localX, localY, localZ);
+        if (!option.implicitAirBoundaries) index--;
+        if (!option.onlyState) {
+            final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
+            Block block = sectionState.blockStates.get(sectionBlockIndex);
+            if (block != null) return block;
+        }
+        return Block.fromStateId(index);
+    }
+
+    @Override
+    public void getAll(@NotNull EntryConsumer consumer) {
+        for (Long2ObjectMap.Entry<SectionState> entry : sectionStates.long2ObjectEntrySet()) {
+            final long sectionIndex = entry.getLongKey();
+            final SectionState sectionState = entry.getValue();
+            final Palette palette = sectionState.palette;
+            final int sectionX = sectionIndexGetX(sectionIndex);
+            final int sectionY = sectionIndexGetY(sectionIndex);
+            final int sectionZ = sectionIndexGetZ(sectionIndex);
+            if (option.implicitAirBoundaries) {
+                // Direct palette copies
+                palette.getAll((x, y, z, value) -> {
+                    final int globalX = sectionX * 16 + x;
+                    final int globalY = sectionY * 16 + y;
+                    final int globalZ = sectionZ * 16 + z;
+                    final Block block = Block.fromStateId(value);
+                    assert block != null;
+                    consumer.accept(globalX, globalY, globalZ, block);
+                });
+            } else {
+                // Palette values are +1
+                palette.getAllPresent((x, y, z, value) -> {
+                    final int globalX = sectionX * 16 + x;
+                    final int globalY = sectionY * 16 + y;
+                    final int globalZ = sectionZ * 16 + z;
+                    final Block block = Block.fromStateId(value - 1);
+                    assert block != null;
+                    consumer.accept(globalX, globalY, globalZ, block);
+                });
+            }
+        }
+    }
+
+    @Override
+    public int count() {
+        if (option.implicitAirBoundaries) {
+            return sectionStates.size() * 16 * 16 * 16;
+        } else {
+            int count = 0;
+            for (SectionState sectionState : sectionStates.values()) {
+                count += sectionState.palette.count();
+            }
+            return count;
+        }
+    }
+
+    record OptionImpl(boolean onlyState, boolean implicitAirBoundaries) implements Option {
+    }
+
+    final static class BuilderImpl implements Builder {
+        private final OptionImpl option;
+        private final Long2ObjectMap<SectionState> sectionStates = new Long2ObjectOpenHashMap<>();
+
+        BuilderImpl(Option option) {
+            this.option = (OptionImpl) option;
+        }
+
+        SectionState sectionState(long sectionIndex) {
+            return sectionStates.computeIfAbsent(
+                    sectionIndex,
+                    k -> new SectionState(Palette.blocks(), option.onlyState ? null : new Int2ObjectOpenHashMap<>())
+            );
+        }
+
+        @Override
+        public void setBlock(int x, int y, int z, @NotNull Block block) {
+            final long sectionIndex = sectionIndexGlobal(x, y, z);
+            SectionState sectionState = sectionState(sectionIndex);
+            final Palette palette = sectionState.palette;
+            final int localX = globalToSectionRelative(x);
+            final int localY = globalToSectionRelative(y);
+            final int localZ = globalToSectionRelative(z);
+            int index = block.stateId();
+            if (!option.implicitAirBoundaries) index++;
+            palette.set(localX, localY, localZ, index);
+
+            if (!option.onlyState) {
+                final CompoundBinaryTag compound = block.nbt();
+                final BlockHandler handler = block.handler();
+                if (compound != null || handler != null) {
+                    final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
+                    sectionState.blockStates.put(sectionBlockIndex, block);
+                }
+            }
+        }
+
+        @Override
+        public void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette) {
+            final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
+            if (!option.implicitAirBoundaries) {
+                // Copy the palette with +1 for each value
+                Palette adjustedPalette = Palette.blocks();
+                palette.getAll((x, y, z, value) -> adjustedPalette.set(x, y, z, value + 1));
+                palette = adjustedPalette;
+            } else {
+                palette = palette.clone();
+            }
+            sectionStates.put(sectionIndex, new SectionState(palette, option.onlyState ? null : new Int2ObjectOpenHashMap<>()));
+        }
+
+        BlockBatchImpl build() {
+            return new BlockBatchImpl(option, sectionStates);
+        }
+    }
+
+    record SectionState(Palette palette, Int2ObjectMap<Block> blockStates) {
+    }
+}
