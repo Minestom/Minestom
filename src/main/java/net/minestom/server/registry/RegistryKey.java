@@ -33,7 +33,7 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
 
     /**
      * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Registry keys are returned from {@link DynamicRegistry#register(Keyed, Object)}.
      */
     @ApiStatus.Internal
     static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull String key) {
@@ -42,7 +42,7 @@ public non-sealed interface RegistryKey<T> extends Holder<T>, Keyed {
 
     /**
      * Creates a new {@link RegistryKey} from the given raw string. Should not be used externally.
-     * Registry keys are returned from {@link DynamicRegistry#register(Key, Object)}.
+     * Registry keys are returned from {@link DynamicRegistry#register(Keyed, Object)}.
      */
     @ApiStatus.Internal
     static <T> @NotNull RegistryKey<T> unsafeOf(@NotNull Key key) {
