@@ -131,8 +131,8 @@ public class ArgumentTypeTest {
         assertArg(arg, new Range.Float(0f, 50f), "0..50");
         assertArg(arg, new Range.Float(0f, 0f), "0..0");
         assertArg(arg, new Range.Float(-50f, 0f), "-50..0");
-        assertArg(arg, new Range.Float(-Float.MAX_VALUE, 50f), "..50");
-        assertArg(arg, new Range.Float(0f, Float.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Float(null, 50f), "..50");
+        assertArg(arg, new Range.Float(0f, null), "0..");
         assertArg(arg, new Range.Float(-Float.MAX_VALUE, Float.MAX_VALUE), "-3.4028235E38..3.4028235E38");
         assertArg(arg, new Range.Float(0.5f, 24f), "0.5..24");
         assertArg(arg, new Range.Float(12f, 45.6f), "12..45.6");
@@ -147,8 +147,8 @@ public class ArgumentTypeTest {
         assertArg(arg, new Range.Int(0, 50), "0..50");
         assertArg(arg, new Range.Int(0, 0), "0..0");
         assertArg(arg, new Range.Int(-50, 0), "-50..0");
-        assertArg(arg, new Range.Int(Integer.MIN_VALUE, 50), "..50");
-        assertArg(arg, new Range.Int(0, Integer.MAX_VALUE), "0..");
+        assertArg(arg, new Range.Int(null, 50), "..50");
+        assertArg(arg, new Range.Int(0, null), "0..");
         assertArg(arg, new Range.Int(Integer.MIN_VALUE, Integer.MAX_VALUE), "-2147483648..2147483647");
 
         assertInvalidArg(arg, "..");

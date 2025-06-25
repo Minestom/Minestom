@@ -11,7 +11,7 @@ import net.minestom.server.utils.Range;
 public class ArgumentIntRange extends ArgumentRange<Range.Int, Integer> {
 
     public ArgumentIntRange(String id) {
-        super(id, Integer.MIN_VALUE, Integer.MAX_VALUE, Integer::parseInt, Range.Int::new);
+        super(id, Integer::parseInt, Range.Int::new);
     }
 
     @Override
