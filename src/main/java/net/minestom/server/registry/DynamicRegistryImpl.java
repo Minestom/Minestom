@@ -208,10 +208,10 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
-        if (!ServerFlag.REGISTRY_IMMUTABLE_TAGS)
+        if (!ServerFlag.REGISTRY_FREEZING_TAGS || MinecraftServer.isInitializing())
             return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
         final RegistryTag<T> tag = this.tags.get(key);
-        Check.notNull(tag, "Tag key `{0}` is not registered", key.hashedKey());
+        Check.notNull(tag, "Tag key `{0}` is not registered, while the tags are frozen!", key.hashedKey());
         return tag;
     }
 
@@ -315,7 +315,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
                     Map.copyOf(keyToValue),
                     Map.copyOf(valueToKey),
                     List.copyOf(packById), //TODO null packById existing entry. (determine use case)
-                    ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags)
+                    ServerFlag.REGISTRY_FREEZING_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags)
             );
         }
         // Create new instances so they are trimmed to size without downcasting.

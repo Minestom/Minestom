@@ -43,7 +43,7 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
             valueToKey.put(entry.getValue(), new RegistryKeyImpl<>(entry.getKey()));
         this.valueToKey = Map.copyOf(valueToKey);
         this.idToValue = ids.toList();
-        this.tags = ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags);
+        this.tags = ServerFlag.REGISTRY_FREEZING_TAGS ? Map.copyOf(tags) : new ConcurrentHashMap<>(tags);
     }
 
     @Override
@@ -112,10 +112,10 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
 
     @Override
     public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
-        if (!ServerFlag.REGISTRY_IMMUTABLE_TAGS)
+        if (!ServerFlag.REGISTRY_FREEZING_TAGS)
             return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
         final RegistryTag<T> tag = this.tags.get(key);
-        Check.notNull(tag, "Tag key `{0}` is not registered", key.hashedKey());
+        Check.notNull(tag, "Tag key `{0}` is not registered, while the tags are frozen!", key.hashedKey());
         return tag;
     }
 
