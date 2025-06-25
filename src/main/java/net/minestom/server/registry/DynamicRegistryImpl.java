@@ -134,8 +134,13 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             if (id == null) {
                 idToValue.add(object);
                 idToKey.add(registryKey);
-                keyToId.put(registryKey, idToValue.size() - 1);
-                if (pack != null) packById.add(pack); // Dont add null packs, handled by getPack
+                id = idToValue.size() - 1;
+                keyToId.put(registryKey, id);
+                if (pack != null) {
+                    Check.stateCondition(packById.size() != id,
+                            "Registry `{0}` tried to register `{1}` with a not null pack, but is padded with null packs. Make sure to register all entries with null packs at the end!", registryKey.name(), key);
+                    packById.add(pack); // Dont add null packs, handled by getPack
+                }
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
