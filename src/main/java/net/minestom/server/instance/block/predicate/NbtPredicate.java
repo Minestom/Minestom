@@ -37,6 +37,8 @@ public record NbtPredicate(@Nullable CompoundBinaryTag nbt) implements Predicate
             ListBinaryTag comparisonList = ((ListBinaryTag) comparison);
             if (guaranteeList.isEmpty()) {
                 return comparisonList.isEmpty();
+            } else if (comparisonList.size() < guaranteeList.size()) {
+                return false;
             }
             for (BinaryTag nbt : guaranteeList) {
                 boolean contains = false;
