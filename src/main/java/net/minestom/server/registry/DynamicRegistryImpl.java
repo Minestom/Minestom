@@ -208,7 +208,11 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
-        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        if (!ServerFlag.REGISTRY_IMMUTABLE_TAGS)
+            return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        final RegistryTag<T> tag = this.tags.get(key);
+        Check.notNull(tag, "Tag key `{0}` is not registered", key.hashedKey());
+        return tag;
     }
 
     @Override

@@ -5,6 +5,7 @@ import net.minestom.server.ServerFlag;
 import net.minestom.server.gamedata.DataPack;
 import net.minestom.server.network.packet.server.common.TagsPacket;
 import net.minestom.server.utils.collection.ObjectArray;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -111,7 +112,11 @@ final class StaticRegistry<T extends StaticProtocolObject<T>> implements Registr
 
     @Override
     public @NotNull RegistryTag<T> getOrCreateTag(@NotNull TagKey<T> key) {
-        return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        if (!ServerFlag.REGISTRY_IMMUTABLE_TAGS)
+            return this.tags.computeIfAbsent(key, RegistryTagImpl.Backed::new);
+        final RegistryTag<T> tag = this.tags.get(key);
+        Check.notNull(tag, "Tag key `{0}` is not registered", key.hashedKey());
+        return tag;
     }
 
     @Override
