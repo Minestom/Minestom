@@ -3,14 +3,11 @@ package net.minestom.server.registry;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
 import net.minestom.server.utils.validate.Check;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -55,7 +52,7 @@ final class RegistryTagImpl {
 
         Backed(@NotNull TagKey<T> key, @NotNull Set<RegistryKey<T>> entries) {
             this.key = key;
-            this.entries = ServerFlag.REGISTRY_IMMUTABLE_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
+            this.entries = ServerFlag.REGISTRY_FREEZING_TAGS ? Set.copyOf(entries) : new CopyOnWriteArraySet<>(entries);
         }
 
         @Override
