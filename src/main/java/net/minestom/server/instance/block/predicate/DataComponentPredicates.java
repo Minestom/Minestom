@@ -20,14 +20,14 @@ public record DataComponentPredicates(@Nullable DataComponentMap exact,
     public static final DataComponentPredicates EMPTY = new DataComponentPredicates(null, null);
 
     public static final Codec<Range.Int> INT_RANGE_CODEC = StructCodec.struct(
-            "min", Codec.INT, Range.Int::min,
-            "max", Codec.INT, Range.Int::max,
+            "min", Codec.INT.optional(), Range.Int::min,
+            "max", Codec.INT.optional(), Range.Int::max,
             Range.Int::new
     ).orElse(Codec.INT.transform(Range.Int::new, Range.Int::min));
 
     public static final Codec<Range.Double> DOUBLE_RANGE_CODEC = StructCodec.struct(
-            "min", Codec.DOUBLE, Range.Double::min,
-            "max", Codec.DOUBLE, Range.Double::max,
+            "min", Codec.DOUBLE.optional(), Range.Double::min,
+            "max", Codec.DOUBLE.optional(), Range.Double::max,
             Range.Double::new
     ).orElse(Codec.DOUBLE.transform(Range.Double::new, Range.Double::min));
 
