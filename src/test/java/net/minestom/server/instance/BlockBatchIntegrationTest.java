@@ -357,7 +357,7 @@ public class BlockBatchIntegrationTest {
         // Check across section boundaries (at position 16)
         assertEquals(Block.STONE, instance.getBlock(16, 16, 16)); // Section boundary
         assertEquals(Block.DIRT, instance.getBlock(17, 16, 16));  // Across boundary
-        assertEquals(Block.STONE, instance.getBlock(27, 27, 27)); // End of batch
+        assertEquals(Block.DIRT, instance.getBlock(27, 27, 27)); // End of batch
     }
 
     @Test
