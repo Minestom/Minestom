@@ -46,6 +46,12 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
         return batch(option, consumer);
     }
 
+    static @NotNull BlockBatch empty() {
+        final Option option = new OptionImpl(true, true);
+        return batch(option, builder -> {
+        });
+    }
+
     void getAll(@NotNull EntryConsumer consumer);
 
     /**

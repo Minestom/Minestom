@@ -3,6 +3,8 @@ package net.minestom.server.instance;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
@@ -213,16 +215,117 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
-        final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
-        if (sectionAligned(x, y, z)) {
-            setBlockBatchAligned(x, y, z, batchImpl);
+    public @NotNull BlockBatch getBlockBatch(@NotNull Point p1, @NotNull Point p2) {
+        final int minX = Math.min(p1.blockX(), p2.blockX());
+        final int minY = Math.min(p1.blockY(), p2.blockY());
+        final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+        final int maxX = Math.max(p1.blockX(), p2.blockX());
+        final int maxY = Math.max(p1.blockY(), p2.blockY());
+        final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+
+        final int minSectionX = globalToChunk(minX), minSectionY = globalToChunk(minY), minSectionZ = globalToChunk(minZ);
+        final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
+
+        LongSet sectionIndexes = new LongOpenHashSet();
+        Set<Point> blockCoords = new HashSet<>();
+
+        // Iterate through all sections in the bounding box
+        for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
+            for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
+                    // Calculate section bounds in global coordinates
+                    final int sectionMinX = sectionX * 16;
+                    final int sectionMinY = sectionY * 16;
+                    final int sectionMinZ = sectionZ * 16;
+                    final int sectionMaxX = sectionMinX + 15;
+                    final int sectionMaxY = sectionMinY + 15;
+                    final int sectionMaxZ = sectionMinZ + 15;
+
+                    // Check if this section is fully contained within the requested bounds
+                    if (sectionMinX >= minX && sectionMaxX <= maxX &&
+                            sectionMinY >= minY && sectionMaxY <= maxY &&
+                            sectionMinZ >= minZ && sectionMaxZ <= maxZ) {
+                        // Section is fully contained - add to sectionIndexes
+                        sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
+                    } else {
+                        // Section is partially contained - add individual blocks to blockCoords
+                        final int blockMinX = Math.max(sectionMinX, minX);
+                        final int blockMaxX = Math.min(sectionMaxX, maxX);
+                        final int blockMinY = Math.max(sectionMinY, minY);
+                        final int blockMaxY = Math.min(sectionMaxY, maxY);
+                        final int blockMinZ = Math.max(sectionMinZ, minZ);
+                        final int blockMaxZ = Math.min(sectionMaxZ, maxZ);
+
+                        for (int x = blockMinX; x <= blockMaxX; x++) {
+                            for (int y = blockMinY; y <= blockMaxY; y++) {
+                                for (int z = blockMinZ; z <= blockMaxZ; z++) {
+                                    blockCoords.add(new BlockVec(x, y, z));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (blockCoords.isEmpty()) {
+            // Fast aligned batch
+            return BlockBatch.aligned(builder -> {
+                for (long sectionIdx : sectionIndexes) {
+                    final int sectionX = sectionIndexGetX(sectionIdx);
+                    final int sectionY = sectionIndexGetY(sectionIdx);
+                    final int sectionZ = sectionIndexGetZ(sectionIdx);
+                    Chunk chunk = getChunk(sectionX, sectionZ);
+                    if (chunk == null) continue;
+                    Section section = chunk.getSection(sectionY);
+                    Palette palette = section.blockPalette();
+                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                }
+            });
         } else {
-            setBlockBatchUnaligned(x, y, z, batchImpl);
+            // Slower unaligned batch
+            return BlockBatch.unaligned(builder -> {
+                // Add fully contained sections
+                for (long sectionIdx : sectionIndexes) {
+                    final int sectionX = sectionIndexGetX(sectionIdx);
+                    final int sectionY = sectionIndexGetY(sectionIdx);
+                    final int sectionZ = sectionIndexGetZ(sectionIdx);
+                    Chunk chunk = getChunk(sectionX, sectionZ);
+                    if (chunk == null) continue;
+                    Section section = chunk.getSection(sectionY);
+                    Palette palette = section.blockPalette();
+                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                }
+                // Add individual blocks from partially contained sections
+                for (Point coord : blockCoords) {
+                    final Block block = getBlock(coord);
+                    builder.setBlock(coord, block);
+                }
+            });
         }
     }
 
-    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch) {
+    @Override
+    public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+        final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
+        LongSet chunkIndexes = new LongOpenHashSet();
+        if (sectionAligned(x, y, z)) {
+            setBlockBatchAligned(x, y, z, batchImpl, chunkIndexes);
+        } else {
+            setBlockBatchUnaligned(x, y, z, batchImpl, chunkIndexes);
+        }
+        // Invalidate all affected chunks
+        for (long chunkIndex : chunkIndexes) {
+            final int chunkX = chunkIndexGetX(chunkIndex);
+            final int chunkZ = chunkIndexGetZ(chunkIndex);
+            final Chunk chunk = getChunk(chunkX, chunkZ);
+            if (chunk == null) continue;
+            chunk.invalidate();
+            chunk.sendChunk();
+        }
+    }
+
+    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
         // Each batch section map to a single instance section
         for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
@@ -241,6 +344,7 @@ public class InstanceContainer extends Instance {
             // Get the target chunk
             final Chunk targetChunk = loadOptionalChunk(targetSectionX, targetSectionZ).join();
             if (targetChunk == null) continue;
+            chunkIndexes.add(chunkIndex(targetSectionX, targetSectionZ));
             synchronized (targetChunk) {
                 final Section targetSection = targetChunk.getSection(targetSectionY);
                 if (batch.option().aligned()) {
@@ -272,13 +376,11 @@ public class InstanceContainer extends Instance {
                         setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
                     }
                 }
-                invalidateSection(targetSectionX, targetSectionY, targetSectionZ);
-                targetChunk.sendChunk();
             }
         }
     }
 
-    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch) {
+    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
         // For unaligned batches, a single batch section can affect multiple instance sections
         for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
@@ -309,6 +411,7 @@ public class InstanceContainer extends Instance {
                         // Get the target chunk
                         final Chunk targetChunk = loadOptionalChunk(instanceSectionX, instanceSectionZ).join();
                         if (targetChunk == null) continue;
+                        chunkIndexes.add(chunkIndex(instanceSectionX, instanceSectionZ));
                         synchronized (targetChunk) {
                             final Section targetSection = targetChunk.getSection(instanceSectionY);
 
@@ -396,8 +499,6 @@ public class InstanceContainer extends Instance {
                                     }
                                 }
                             }
-                            invalidateSection(instanceSectionX, instanceSectionY, instanceSectionZ);
-                            targetChunk.sendChunk();
                         }
                     }
                 }
