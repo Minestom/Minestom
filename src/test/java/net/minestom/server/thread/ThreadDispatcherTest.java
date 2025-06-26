@@ -126,6 +126,7 @@ public class ThreadDispatcherTest {
             }
         }, threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
+        dispatcher.start();
 
         Map<Updater, Thread> threads = new ConcurrentHashMap<>();
         Map<Updater, Thread> threads2 = new ConcurrentHashMap<>();
