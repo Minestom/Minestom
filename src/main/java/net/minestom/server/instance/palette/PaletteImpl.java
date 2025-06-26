@@ -169,6 +169,161 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ) {
+        if (offsetX == 0 && offsetY == 0 && offsetZ == 0) {
+            copyFrom(source);
+            return;
+        }
+
+        final PaletteImpl sourcePalette = (PaletteImpl) source;
+        final int sourceDimension = sourcePalette.dimension();
+        final int targetDimension = this.dimension();
+        if (sourceDimension != targetDimension) {
+            throw new IllegalArgumentException("Source palette dimension (" + sourceDimension +
+                    ") must equal target palette dimension (" + targetDimension + ")");
+        }
+
+        // Calculate the actual copy bounds - only copy what fits within target bounds
+        final int maxX = Math.min(sourceDimension, targetDimension - offsetX);
+        final int maxY = Math.min(sourceDimension, targetDimension - offsetY);
+        final int maxZ = Math.min(sourceDimension, targetDimension - offsetZ);
+
+        // Early exit if nothing to copy (offset pushes everything out of bounds)
+        if (maxX <= 0 || maxY <= 0 || maxZ <= 0) {
+            return;
+        }
+
+        // Fast path: if source is single-value palette
+        if (sourcePalette.bitsPerEntry == 0) {
+            if (sourcePalette.count == 0) return; // Nothing to copy (all air)
+
+            // Fill the region with the single value - optimized loop order
+            final int value = sourcePalette.count;
+            final int paletteValue = valueToPaletteIndex(value);
+
+            // Direct write to avoid repeated palette lookups
+            for (int y = 0; y < maxY; y++) {
+                final int targetY = offsetY + y;
+                for (int z = 0; z < maxZ; z++) {
+                    final int targetZ = offsetZ + z;
+                    for (int x = 0; x < maxX; x++) {
+                        final int targetX = offsetX + x;
+                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, paletteValue);
+                        // Update count based on air transitions
+                        final boolean wasAir = oldValue == 0;
+                        final boolean isAir = paletteValue == 0;
+                        if (wasAir != isAir) {
+                            this.count += wasAir ? 1 : -1;
+                        }
+                    }
+                }
+            }
+            return;
+        }
+
+        // Source is empty, fill target region with air
+        if (sourcePalette.count == 0) {
+            int removedBlocks = 0;
+            for (int y = 0; y < maxY; y++) {
+                final int targetY = offsetY + y;
+                for (int z = 0; z < maxZ; z++) {
+                    final int targetZ = offsetZ + z;
+                    for (int x = 0; x < maxX; x++) {
+                        final int targetX = offsetX + x;
+                        final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, 0);
+                        if (oldValue != 0) removedBlocks++;
+                    }
+                }
+            }
+            this.count -= removedBlocks;
+            return;
+        }
+
+        // General case: copy each value individually with bounds checking
+        // Use optimized access patterns to minimize cache misses
+        final long[] sourceValues = sourcePalette.values;
+        final int sourceBitsPerEntry = sourcePalette.bitsPerEntry;
+        final int sourceMask = (1 << sourceBitsPerEntry) - 1;
+        final int sourceValuesPerLong = 64 / sourceBitsPerEntry;
+        final int sourceDimensionBitCount = MathUtils.bitsToRepresent(sourceDimension - 1);
+        final int sourceShiftedDimensionBitCount = sourceDimensionBitCount << 1;
+        final int[] sourcePaletteIds = sourcePalette.hasPalette() ? sourcePalette.paletteToValueList.elements() : null;
+
+        int countDelta = 0;
+        for (int y = 0; y < maxY; y++) {
+            final int targetY = offsetY + y;
+            for (int z = 0; z < maxZ; z++) {
+                final int targetZ = offsetZ + z;
+                for (int x = 0; x < maxX; x++) {
+                    final int targetX = offsetX + x;
+
+                    final int sourceIndex = y << sourceShiftedDimensionBitCount | z << sourceDimensionBitCount | x;
+                    final int longIndex = sourceIndex / sourceValuesPerLong;
+                    final int bitIndex = (sourceIndex - longIndex * sourceValuesPerLong) * sourceBitsPerEntry;
+                    final int sourcePaletteIndex = (int) (sourceValues[longIndex] >> bitIndex) & sourceMask;
+                    final int sourceValue = sourcePaletteIds != null && sourcePaletteIndex < sourcePaletteIds.length ?
+                            sourcePaletteIds[sourcePaletteIndex] : sourcePaletteIndex;
+
+                    // Convert to target palette index and write
+                    final int targetPaletteIndex = valueToPaletteIndex(sourceValue);
+                    final int oldValue = Palettes.write(targetDimension, bitsPerEntry, values, targetX, targetY, targetZ, targetPaletteIndex);
+
+                    // Update count
+                    final boolean wasAir = oldValue == 0;
+                    final boolean isAir = targetPaletteIndex == 0;
+                    if (wasAir != isAir) {
+                        countDelta += wasAir ? 1 : -1;
+                    }
+                }
+            }
+        }
+
+        this.count += countDelta;
+    }
+
+    @Override
+    public void copyFrom(@NotNull Palette source) {
+        final PaletteImpl sourcePalette = (PaletteImpl) source;
+        final int sourceDimension = sourcePalette.dimension();
+        final int targetDimension = this.dimension();
+        if (sourceDimension != targetDimension) {
+            throw new IllegalArgumentException("Source palette dimension (" + sourceDimension +
+                    ") must equal target palette dimension (" + targetDimension + ")");
+        }
+
+        if (sourcePalette.bitsPerEntry == 0) {
+            fill(sourcePalette.count);
+            return;
+        }
+        if (sourcePalette.count == 0) {
+            fill(0);
+            return;
+        }
+
+        // Copy
+        this.bitsPerEntry = sourcePalette.bitsPerEntry;
+        this.count = sourcePalette.count;
+
+        if (sourcePalette.values != null) {
+            this.values = sourcePalette.values.clone();
+        } else {
+            this.values = null;
+        }
+
+        if (sourcePalette.paletteToValueList != null) {
+            this.paletteToValueList = new IntArrayList(sourcePalette.paletteToValueList);
+        } else {
+            this.paletteToValueList = null;
+        }
+
+        if (sourcePalette.valueToPaletteMap != null) {
+            this.valueToPaletteMap = new Int2IntOpenHashMap(sourcePalette.valueToPaletteMap);
+        } else {
+            this.valueToPaletteMap = null;
+        }
+    }
+
+    @Override
     public int count() {
         if (bitsPerEntry == 0) {
             return count == 0 ? 0 : maxSize();
