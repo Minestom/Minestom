@@ -247,8 +247,21 @@ public class InstanceContainer extends Instance {
             final int offsetY = globalToSectionRelative(y);
             final int offsetZ = globalToSectionRelative(z);
 
-            // FIXME: if not section-aligned, we need to adjust the palette values (they are +1)
-            targetSection.blockPalette().copyFrom(sectionState.palette(), offsetX, offsetY, offsetZ);
+            if (batchImpl.option().sectionAligned()) {
+                // Section-aligned: direct palette copy (values are not offset)
+                targetSection.blockPalette().copyFrom(sectionState.palette(), offsetX, offsetY, offsetZ);
+            } else {
+                // Non-section-aligned: values are +1, need to adjust and use getAllPresent
+                sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
+                    final int targetX = localX + offsetX;
+                    final int targetY = localY + offsetY;
+                    final int targetZ = localZ + offsetZ;
+                    // Check bounds to avoid writing outside the target section
+                    if (targetX >= 0 && targetX < 16 && targetY >= 0 && targetY < 16 && targetZ >= 0 && targetZ < 16) {
+                        targetSection.blockPalette().set(targetX, targetY, targetZ, value - 1);
+                    }
+                });
+            }
 
             // Handle block states if present (for blocks with NBT or handlers)
             if (sectionState.blockStates() != null && !sectionState.blockStates().isEmpty()) {
