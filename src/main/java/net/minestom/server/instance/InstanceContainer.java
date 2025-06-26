@@ -219,9 +219,17 @@ public class InstanceContainer extends Instance {
             super.setBlockBatch(x, y, z, batch);
             return;
         }
+        final boolean aligned = globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
+        if (aligned) {
+            setBlockBatchAligned(x, y, z, batchImpl);
+        } else {
+            super.setBlockBatch(x, y, z, batch);
+        }
+    }
 
-        // Use efficient palette copying for BlockBatchImpl
-        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batchImpl.sectionStates().long2ObjectEntrySet()) {
+    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch) {
+        // Each batch section map to a single instance section
+        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
             final long sectionIndex = entry.getLongKey();
             final BlockBatchImpl.SectionState sectionState = entry.getValue();
 
@@ -239,32 +247,18 @@ public class InstanceContainer extends Instance {
             final Chunk targetChunk = loadOptionalChunk(targetSectionX, targetSectionZ).join();
             if (targetChunk == null) continue;
 
-            // Get the target section
             final Section targetSection = targetChunk.getSection(targetSectionY);
-
-            // Copy the palette data efficiently
-            final int offsetX = globalToSectionRelative(x);
-            final int offsetY = globalToSectionRelative(y);
-            final int offsetZ = globalToSectionRelative(z);
-
-            if (batchImpl.option().sectionAligned()) {
-                // Section-aligned: direct palette copy (values are not offset)
-                targetSection.blockPalette().copyFrom(sectionState.palette(), offsetX, offsetY, offsetZ);
+            if (batch.option().sectionAligned()) {
+                // Section-aligned: direct palette copy
+                targetSection.blockPalette().copyFrom(sectionState.palette());
             } else {
                 // Non-section-aligned: values are +1, need to adjust and use getAllPresent
-                sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
-                    final int targetX = localX + offsetX;
-                    final int targetY = localY + offsetY;
-                    final int targetZ = localZ + offsetZ;
-                    // Check bounds to avoid writing outside the target section
-                    if (targetX >= 0 && targetX < 16 && targetY >= 0 && targetY < 16 && targetZ >= 0 && targetZ < 16) {
-                        targetSection.blockPalette().set(targetX, targetY, targetZ, value - 1);
-                    }
-                });
+                sectionState.palette().getAllPresent((localX, localY, localZ, value) ->
+                        targetSection.blockPalette().set(localX, localY, localZ, value - 1));
             }
 
             // Handle block states if present (for blocks with NBT or handlers)
-            if (sectionState.blockStates() != null && !sectionState.blockStates().isEmpty()) {
+            if (!batch.option().onlyState()) {
                 // For blocks with NBT or handlers, we still need to set them individually
                 // as palette copy only handles the state IDs
                 for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
@@ -272,9 +266,9 @@ public class InstanceContainer extends Instance {
                     final Block block = blockEntry.getValue();
 
                     // Convert section block index back to coordinates
-                    final int localX = (blockIndex >> 8) & 0xF;
-                    final int localY = (blockIndex >> 4) & 0xF;
-                    final int localZ = blockIndex & 0xF;
+                    final int localX = sectionBlockIndexGetX(blockIndex);
+                    final int localY = sectionBlockIndexGetY(blockIndex);
+                    final int localZ = sectionBlockIndexGetZ(blockIndex);
 
                     final int globalBlockX = (batchSectionX * 16) + localX + x;
                     final int globalBlockY = (batchSectionY * 16) + localY + y;

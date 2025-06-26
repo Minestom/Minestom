@@ -51,6 +51,14 @@ record BlockBatchImpl(
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
+                    if (!option.onlyState) {
+                        final int sectionBlockIndex = sectionBlockIndex(x, y, z);
+                        Block block = sectionState.blockStates.get(sectionBlockIndex);
+                        if (block != null) {
+                            consumer.accept(globalX, globalY, globalZ, block);
+                            return;
+                        }
+                    }
                     final Block block = Block.fromStateId(value);
                     assert block != null;
                     consumer.accept(globalX, globalY, globalZ, block);
@@ -61,6 +69,14 @@ record BlockBatchImpl(
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
+                    if (!option.onlyState) {
+                        final int sectionBlockIndex = sectionBlockIndex(x, y, z);
+                        Block block = sectionState.blockStates.get(sectionBlockIndex);
+                        if (block != null) {
+                            consumer.accept(globalX, globalY, globalZ, block);
+                            return;
+                        }
+                    }
                     final Block block = Block.fromStateId(value - 1);
                     assert block != null;
                     consumer.accept(globalX, globalY, globalZ, block);
