@@ -9,7 +9,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockBatch;
+import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.inventory.Inventory;
 import net.minestom.server.inventory.InventoryType;
 import net.minestom.server.item.ItemStack;

@@ -1,10 +1,12 @@
-package net.minestom.server.instance.block;
+package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;

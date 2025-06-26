@@ -279,6 +279,11 @@ public abstract class Instance implements Block.Getter, Block.Setter,
         unloadChunk(chunk);
     }
 
+    public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
+        final Chunk chunk = getChunk(sectionX, sectionZ);
+        if (chunk != null) chunk.invalidate();
+    }
+
     /**
      * Gets the loaded {@link Chunk} at a position.
      * <p>

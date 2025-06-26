@@ -2,7 +2,6 @@ package net.minestom.server.instance;
 
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockBatch;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

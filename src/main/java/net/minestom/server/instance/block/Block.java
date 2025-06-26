@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.key.KeyPattern;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.registry.Registry;

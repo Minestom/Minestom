@@ -1,12 +1,13 @@
-package net.minestom.server.instance.block;
+package net.minestom.server.instance;
 
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
-import static net.minestom.server.instance.block.BlockBatchImpl.BuilderImpl;
-import static net.minestom.server.instance.block.BlockBatchImpl.OptionImpl;
+import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
+import static net.minestom.server.instance.BlockBatchImpl.OptionImpl;
 
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     static @NotNull BlockBatch batch(@NotNull Option option, @NotNull Consumer<@NotNull Builder> consumer) {
