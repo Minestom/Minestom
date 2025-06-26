@@ -293,8 +293,11 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                     for (int y = minY; y <= maxY; y++) {
                         for (int z = minZ; z <= maxZ; z++) {
                             final int bX = x - minX, bY = y - minY, bZ = z - minZ;
-                            final Block block = getBlock(x, y, z);
-                            builder.setBlock(bX, bY, bZ, block);
+                            try {
+                                final Block block = getBlock(x, y, z);
+                                builder.setBlock(bX, bY, bZ, block);
+                            } catch (Exception ignored) {
+                            }
                         }
                     }
                 }
