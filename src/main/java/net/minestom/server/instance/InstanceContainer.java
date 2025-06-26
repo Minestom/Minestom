@@ -243,7 +243,7 @@ public class InstanceContainer extends Instance {
             if (targetChunk == null) continue;
 
             final Section targetSection = targetChunk.getSection(targetSectionY);
-            if (batch.option().sectionAligned()) {
+            if (batch.option().aligned()) {
                 // Section-aligned: direct palette copy
                 targetSection.blockPalette().copyFrom(sectionState.palette());
             } else {
@@ -323,7 +323,7 @@ public class InstanceContainer extends Instance {
                         final int overlapMinZ = Math.max(globalSectionZ, instanceGlobalZ);
                         final int overlapMaxZ = Math.min(globalSectionZ + 15, instanceGlobalZ + 15);
 
-                        if (batch.option().sectionAligned()) {
+                        if (batch.option().aligned()) {
                             // Use optimized copyFrom with offset for section-aligned batches
                             final int offsetX = overlapMinX - instanceGlobalX;
                             final int offsetY = overlapMinY - instanceGlobalY;

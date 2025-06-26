@@ -25,7 +25,7 @@ public class BlockBatchIntegrationTest {
     @Test
     public void basicAligned(Env env) {
         var instance = env.createEmptyInstance();
-        BlockBatch batch = BlockBatch.sectionAligned(builder -> builder.setBlock(0, 0, 0, Block.STONE));
+        BlockBatch batch = BlockBatch.aligned(builder -> builder.setBlock(0, 0, 0, Block.STONE));
         instance.setBlockBatch(Vec.ONE, batch);
         assertEquals(Block.STONE, instance.getBlock(1, 1, 1));
         assertEquals(Block.AIR, instance.getBlock(0, 0, 0));
@@ -53,7 +53,7 @@ public class BlockBatchIntegrationTest {
     @Test
     public void multipleBlocksAligned(Env env) {
         var instance = env.createEmptyInstance();
-        BlockBatch batch = BlockBatch.sectionAligned(builder -> {
+        BlockBatch batch = BlockBatch.aligned(builder -> {
             builder.setBlock(0, 0, 0, Block.STONE);
             builder.setBlock(15, 0, 0, Block.DIRT);
             builder.setBlock(0, 15, 0, Block.GRASS_BLOCK);
@@ -73,7 +73,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a large batch with many blocks
-        BlockBatch batch = BlockBatch.sectionAligned(builder -> {
+        BlockBatch batch = BlockBatch.aligned(builder -> {
             for (int x = 0; x < 16; x++) {
                 for (int y = 0; y < 16; y++) {
                     for (int z = 0; z < 16; z++) {
@@ -264,7 +264,7 @@ public class BlockBatchIntegrationTest {
             }
         });
 
-        BlockBatch alignedBatch = BlockBatch.sectionAligned(builder -> {
+        BlockBatch alignedBatch = BlockBatch.aligned(builder -> {
             for (int x = 0; x < 4; x++) {
                 for (int y = 0; y < 4; y++) {
                     for (int z = 0; z < 4; z++) {
@@ -330,7 +330,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a section-aligned batch - this should use the optimized palette copying
-        BlockBatch batch = BlockBatch.sectionAligned(builder -> {
+        BlockBatch batch = BlockBatch.aligned(builder -> {
             // Fill a complete section
             for (int x = 0; x < 16; x++) {
                 for (int y = 0; y < 16; y++) {

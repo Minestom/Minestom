@@ -34,12 +34,12 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
         return batch(option, consumer);
     }
 
-    static @NotNull BlockBatch sectionAligned(@NotNull Consumer<@NotNull Builder> consumer) {
+    static @NotNull BlockBatch aligned(@NotNull Consumer<@NotNull Builder> consumer) {
         final Option option = new OptionImpl(false, true);
         return batch(option, consumer);
     }
 
-    static @NotNull BlockBatch sectionAlignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
+    static @NotNull BlockBatch alignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
         final Option option = new OptionImpl(true, true);
         return batch(option, consumer);
     }
@@ -79,7 +79,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
          *
          * @return true if section aligned
          */
-        boolean sectionAligned();
+        boolean aligned();
     }
 
     sealed interface Builder extends Block.Setter permits BuilderImpl {
