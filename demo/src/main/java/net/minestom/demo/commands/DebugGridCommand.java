@@ -30,7 +30,7 @@ public class DebugGridCommand extends Command {
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         Player player = (Player) sender;
         final Point point = context.get(center).from(player);
-        final BlockBatch blockBatch = BlockBatch.explicit(builder -> {
+        final BlockBatch blockBatch = BlockBatch.unaligned(builder -> {
             final Integer radius = context.get(this.radius);
             for (int x = -radius / 2; x < radius / 2; x++) {
                 for (int z = -radius / 2; z < radius / 2; z++) {

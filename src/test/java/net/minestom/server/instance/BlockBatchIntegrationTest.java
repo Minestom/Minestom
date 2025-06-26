@@ -14,9 +14,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class BlockBatchIntegrationTest {
 
     @Test
-    public void basicExplicit(Env env) {
+    public void basicUnaligned(Env env) {
         var instance = env.createEmptyInstance();
-        BlockBatch batch = BlockBatch.explicit(builder -> builder.setBlock(0, 0, 0, Block.STONE));
+        BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlock(0, 0, 0, Block.STONE));
         instance.setBlockBatch(Vec.ONE, batch);
         assertEquals(Block.STONE, instance.getBlock(1, 1, 1));
         assertEquals(Block.AIR, instance.getBlock(0, 0, 0));
@@ -32,9 +32,9 @@ public class BlockBatchIntegrationTest {
     }
 
     @Test
-    public void multipleBlocksExplicit(Env env) {
+    public void multipleBlocksUnaligned(Env env) {
         var instance = env.createEmptyInstance();
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             builder.setBlock(0, 0, 0, Block.STONE);
             builder.setBlock(1, 0, 0, Block.DIRT);
             builder.setBlock(0, 1, 0, Block.GRASS_BLOCK);
@@ -101,7 +101,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a batch spanning multiple sections
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Section 0,0,0
             builder.setBlock(0, 0, 0, Block.STONE);
             builder.setBlock(15, 15, 15, Block.DIRT);
@@ -131,7 +131,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a batch that crosses chunk boundaries
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Chunk 0,0
             builder.setBlock(0, 0, 0, Block.STONE);
             builder.setBlock(15, 0, 15, Block.DIRT);
@@ -176,7 +176,7 @@ public class BlockBatchIntegrationTest {
                 .putString("Text1", "{\"text\":\"Hello\"}")
                 .build());
 
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             builder.setBlock(0, 0, 0, chestWithItems);
             builder.setBlock(1, 0, 0, signWithText);
             builder.setBlock(2, 0, 0, Block.STONE); // Regular block
@@ -198,7 +198,7 @@ public class BlockBatchIntegrationTest {
         instance.setBlock(10, 10, 10, Block.STONE);
 
         // Apply empty batch
-        BlockBatch emptyBatch = BlockBatch.explicit(builder -> {
+        BlockBatch emptyBatch = BlockBatch.unaligned(builder -> {
             // No blocks added
         });
 
@@ -218,7 +218,7 @@ public class BlockBatchIntegrationTest {
         instance.setBlock(2, 0, 0, Block.GRASS_BLOCK);
 
         // Create batch that overwrites some blocks
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             builder.setBlock(0, 0, 0, Block.DIAMOND_BLOCK); // Overwrite stone
             builder.setBlock(3, 0, 0, Block.GOLD_BLOCK); // New block
         });
@@ -236,7 +236,7 @@ public class BlockBatchIntegrationTest {
     public void negativeCoordinates(Env env) {
         var instance = env.createEmptyInstance();
 
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             builder.setBlock(0, 0, 0, Block.STONE);
             builder.setBlock(-1, -1, -1, Block.DIRT);
             builder.setBlock(5, 5, 5, Block.DIAMOND_BLOCK);
@@ -254,7 +254,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create identical batches using different methods
-        BlockBatch explicitBatch = BlockBatch.explicit(builder -> {
+        BlockBatch explicitBatch = BlockBatch.unaligned(builder -> {
             for (int x = 0; x < 4; x++) {
                 for (int y = 0; y < 4; y++) {
                     for (int z = 0; z < 4; z++) {
@@ -295,7 +295,7 @@ public class BlockBatchIntegrationTest {
 
         // Create a batch with blocks in one section that will span multiple target sections
         // when an offset is applied
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Fill most of a 16x16x16 section with blocks
             for (int x = 0; x < 16; x++) {
                 for (int y = 0; y < 16; y++) {
@@ -375,7 +375,7 @@ public class BlockBatchIntegrationTest {
                 .putString("Text1", "{\"text\":\"Cross Section\"}")
                 .build());
 
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Place blocks that will end up in different sections due to offset
             builder.setBlock(0, 0, 0, chestWithItems);   // Will be at (10,10,10) - section (0,0,0)
             builder.setBlock(8, 8, 8, signWithText);     // Will be at (18,18,18) - section (1,1,1)
@@ -405,7 +405,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a batch with a pattern
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             for (int x = 0; x < 32; x++) {
                 for (int z = 0; z < 32; z++) {
                     builder.setBlock(x, 5, z, Block.STONE);
@@ -435,7 +435,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a batch that will have blocks in multiple sections
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Section at (0,0,0) in batch coordinates
             for (int i = 0; i < 8; i++) {
                 builder.setBlock(i, i, i, Block.STONE);
@@ -483,7 +483,7 @@ public class BlockBatchIntegrationTest {
         var instance = env.createEmptyInstance();
 
         // Create a batch where only part of a section overlaps with target sections
-        BlockBatch batch = BlockBatch.explicit(builder -> {
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
             // Create a 10x10x10 cube starting at origin
             for (int x = 0; x < 10; x++) {
                 for (int y = 0; y < 10; y++) {

@@ -4,10 +4,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectMaps;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minestom.server.coordinate.CoordConversion;
-import net.minestom.server.instance.Chunk;
-import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.InstanceContainer;
-import net.minestom.server.instance.LightingChunk;
+import net.minestom.server.instance.*;
 import net.minestom.server.instance.block.Block;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -17,6 +14,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * A {@link Batch} which can be used when changes are required across chunk borders,
@@ -27,7 +25,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see Batch
  * @see RelativeBlockBatch
+ * @deprecated Use {@link net.minestom.server.instance.BlockBatch#unaligned(Consumer)} with {@link Block.Setter#setBlockBatch(BlockBatch)}
  */
+@Deprecated
 public class AbsoluteBlockBatch implements Batch<Runnable> {
 
     // In the form of <Chunk Index, Batch>

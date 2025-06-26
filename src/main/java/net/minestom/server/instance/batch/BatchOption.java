@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Represents options for {@link Batch}s.
  */
+@Deprecated
 public class BatchOption {
 
     private boolean fullChunk = false;

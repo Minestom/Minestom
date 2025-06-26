@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
@@ -9,6 +10,7 @@ import java.util.function.Consumer;
 import static net.minestom.server.instance.BlockBatchImpl.BuilderImpl;
 import static net.minestom.server.instance.BlockBatchImpl.OptionImpl;
 
+@ApiStatus.Experimental
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     static @NotNull BlockBatch batch(@NotNull Option option, @NotNull Consumer<@NotNull Builder> consumer) {
         BuilderImpl builder = new BuilderImpl(option);
@@ -21,7 +23,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * <p>
      * Most flexible option, but also the least performant.
      */
-    static @NotNull BlockBatch explicit(@NotNull Consumer<@NotNull Builder> consumer) {
+    static @NotNull BlockBatch unaligned(@NotNull Consumer<@NotNull Builder> consumer) {
         final Option option = new OptionImpl(false, false);
         return batch(option, consumer);
     }
@@ -29,7 +31,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     /**
      * Block batch that only place explicitly set blocks, ignoring nbt and handlers.
      */
-    static @NotNull BlockBatch explicitStates(@NotNull Consumer<@NotNull Builder> consumer) {
+    static @NotNull BlockBatch unalignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
         final Option option = new OptionImpl(true, false);
         return batch(option, consumer);
     }

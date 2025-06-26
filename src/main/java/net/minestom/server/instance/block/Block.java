@@ -288,7 +288,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             final int maxX = Math.max(p1.blockX(), p2.blockX());
             final int maxY = Math.max(p1.blockY(), p2.blockY());
             final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
-            return BlockBatch.explicit(builder -> {
+            return BlockBatch.unaligned(builder -> {
                 for (int x = minX; x <= maxX; x++) {
                     for (int y = minY; y <= maxY; y++) {
                         for (int z = minZ; z <= maxZ; z++) {

@@ -66,7 +66,7 @@ public class TestInstabreakCommand extends Command {
             player.openInventory(new Inventory(InventoryType.ANVIL, Component.translatable("container.repair")));
         }, ArgumentType.Literal("anvil"));
 
-        BlockBatch areaBatch = BlockBatch.explicit(builder -> {
+        BlockBatch areaBatch = BlockBatch.unaligned(builder -> {
             for (int x = -20; x < 21; x++) {
                 for (int z = -20; z < 21; z++) {
                     for (int y = -10; y < 0; y++) {

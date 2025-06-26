@@ -10,7 +10,7 @@ public class BlockBatchTest {
 
     @Test
     public void basic() {
-        BlockBatch batch = BlockBatch.explicit(builder -> builder.setBlock(0, 0, 0, Block.STONE));
+        BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlock(0, 0, 0, Block.STONE));
         assertEquals(Block.STONE, batch.getBlock(0, 0, 0));
     }
 
@@ -19,10 +19,10 @@ public class BlockBatchTest {
         Block block = Block.STONE.withNbt(CompoundBinaryTag.builder()
                 .putInt("Count", 5)
                 .build());
-        BlockBatch batch = BlockBatch.explicit(builder -> builder.setBlock(0, 0, 0, block));
+        BlockBatch batch = BlockBatch.unaligned(builder -> builder.setBlock(0, 0, 0, block));
         assertEquals(block, batch.getBlock(0, 0, 0));
 
-        batch = BlockBatch.explicitStates(builder -> builder.setBlock(0, 0, 0, block));
+        batch = BlockBatch.unalignedStates(builder -> builder.setBlock(0, 0, 0, block));
         assertEquals(Block.STONE, batch.getBlock(0, 0, 0));
     }
 }
