@@ -214,14 +214,11 @@ public class InstanceContainer extends Instance {
 
     @Override
     public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
-        if (!(batch instanceof BlockBatchImpl batchImpl)) {
-            super.setBlockBatch(x, y, z, batch);
-            return;
-        }
+        final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
         if (sectionAligned(x, y, z)) {
             setBlockBatchAligned(x, y, z, batchImpl);
         } else {
-            super.setBlockBatch(x, y, z, batch);
+            setBlockBatchUnaligned(x, y, z, batchImpl);
         }
     }
 
@@ -275,10 +272,134 @@ public class InstanceContainer extends Instance {
                     setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
                 }
             }
-
-            // TODO send block packet
-
             invalidateSection(targetSectionX, targetSectionY, targetSectionZ);
+            // TODO send block packet
+        }
+    }
+
+    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch) {
+        // For unaligned batches, a single batch section can affect multiple instance sections
+        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
+            final long sectionIndex = entry.getLongKey();
+            final BlockBatchImpl.SectionState sectionState = entry.getValue();
+
+            // Extract section coordinates from the batch
+            final int batchSectionX = sectionIndexGetX(sectionIndex);
+            final int batchSectionY = sectionIndexGetY(sectionIndex);
+            final int batchSectionZ = sectionIndexGetZ(sectionIndex);
+
+            // Calculate global coordinates of this batch section
+            final int globalSectionX = batchSectionX * 16 + x;
+            final int globalSectionY = batchSectionY * 16 + y;
+            final int globalSectionZ = batchSectionZ * 16 + z;
+
+            // Find all instance sections that this batch section affects
+            final int minInstanceSectionX = globalToChunk(globalSectionX);
+            final int maxInstanceSectionX = globalToChunk(globalSectionX + 15);
+            final int minInstanceSectionY = globalToChunk(globalSectionY);
+            final int maxInstanceSectionY = globalToChunk(globalSectionY + 15);
+            final int minInstanceSectionZ = globalToChunk(globalSectionZ);
+            final int maxInstanceSectionZ = globalToChunk(globalSectionZ + 15);
+
+            // Iterate through all affected instance sections
+            for (int instanceSectionX = minInstanceSectionX; instanceSectionX <= maxInstanceSectionX; instanceSectionX++) {
+                for (int instanceSectionY = minInstanceSectionY; instanceSectionY <= maxInstanceSectionY; instanceSectionY++) {
+                    for (int instanceSectionZ = minInstanceSectionZ; instanceSectionZ <= maxInstanceSectionZ; instanceSectionZ++) {
+                        // Get the target chunk
+                        final Chunk targetChunk = loadOptionalChunk(instanceSectionX, instanceSectionZ).join();
+                        if (targetChunk == null) continue;
+
+                        final Section targetSection = targetChunk.getSection(instanceSectionY);
+
+                        // Calculate the overlap region
+                        final int instanceGlobalX = instanceSectionX * 16;
+                        final int instanceGlobalY = instanceSectionY * 16;
+                        final int instanceGlobalZ = instanceSectionZ * 16;
+
+                        final int overlapMinX = Math.max(globalSectionX, instanceGlobalX);
+                        final int overlapMaxX = Math.min(globalSectionX + 15, instanceGlobalX + 15);
+                        final int overlapMinY = Math.max(globalSectionY, instanceGlobalY);
+                        final int overlapMaxY = Math.min(globalSectionY + 15, instanceGlobalY + 15);
+                        final int overlapMinZ = Math.max(globalSectionZ, instanceGlobalZ);
+                        final int overlapMaxZ = Math.min(globalSectionZ + 15, instanceGlobalZ + 15);
+
+                        if (batch.option().sectionAligned()) {
+                            // Use optimized copyFrom with offset for section-aligned batches
+                            final int offsetX = overlapMinX - instanceGlobalX;
+                            final int offsetY = overlapMinY - instanceGlobalY;
+                            final int offsetZ = overlapMinZ - instanceGlobalZ;
+
+                            // Create a temporary palette for the overlap region
+                            final Palette tempPalette = Palette.blocks();
+                            final int batchOffsetX = overlapMinX - globalSectionX;
+                            final int batchOffsetY = overlapMinY - globalSectionY;
+                            final int batchOffsetZ = overlapMinZ - globalSectionZ;
+
+                            // Copy the overlapping region from batch palette to temp palette
+                            for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
+                                for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
+                                    for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
+                                        final int value = sectionState.palette().get(batchOffsetX + dx, batchOffsetY + dy, batchOffsetZ + dz);
+                                        if (value != 0) { // Only copy non-air blocks
+                                            tempPalette.set(dx, dy, dz, value);
+                                        }
+                                    }
+                                }
+                            }
+
+                            // Copy from temp palette to target section with offset
+                            targetSection.blockPalette().copyFrom(tempPalette, offsetX, offsetY, offsetZ);
+                        } else {
+                            // Use getAllPresent for non-section-aligned batches
+                            sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
+                                final int globalX = globalSectionX + localX;
+                                final int globalY = globalSectionY + localY;
+                                final int globalZ = globalSectionZ + localZ;
+
+                                // Check if this block is within the current instance section
+                                if (globalX >= overlapMinX && globalX <= overlapMaxX &&
+                                        globalY >= overlapMinY && globalY <= overlapMaxY &&
+                                        globalZ >= overlapMinZ && globalZ <= overlapMaxZ) {
+
+                                    final int targetX = globalX - instanceGlobalX;
+                                    final int targetY = globalY - instanceGlobalY;
+                                    final int targetZ = globalZ - instanceGlobalZ;
+
+                                    // Values are +1 in non-section-aligned batches
+                                    targetSection.blockPalette().set(targetX, targetY, targetZ, value - 1);
+                                }
+                            });
+                        }
+
+                        // Handle block states if present (for blocks with NBT or handlers)
+                        if (!batch.option().onlyState()) {
+                            for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+                                final int blockIndex = blockEntry.getIntKey();
+                                final Block block = blockEntry.getValue();
+
+                                // Convert section block index back to coordinates
+                                final int localX = sectionBlockIndexGetX(blockIndex);
+                                final int localY = sectionBlockIndexGetY(blockIndex);
+                                final int localZ = sectionBlockIndexGetZ(blockIndex);
+
+                                final int globalBlockX = globalSectionX + localX;
+                                final int globalBlockY = globalSectionY + localY;
+                                final int globalBlockZ = globalSectionZ + localZ;
+
+                                // Check if this block is within the current instance section
+                                if (globalBlockX >= overlapMinX && globalBlockX <= overlapMaxX &&
+                                        globalBlockY >= overlapMinY && globalBlockY <= overlapMaxY &&
+                                        globalBlockZ >= overlapMinZ && globalBlockZ <= overlapMaxZ) {
+
+                                    setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
+                                }
+                            }
+                        }
+                        invalidateSection(instanceSectionX, instanceSectionY, instanceSectionZ);
+                        // TODO send block packet
+                    }
+                }
+            }
         }
     }
 
