@@ -215,12 +215,10 @@ public class InstanceContainer extends Instance {
     @Override
     public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
         if (!(batch instanceof BlockBatchImpl batchImpl)) {
-            // Fallback to default implementation for non-BlockBatchImpl instances
             super.setBlockBatch(x, y, z, batch);
             return;
         }
-        final boolean aligned = globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
-        if (aligned) {
+        if (sectionAligned(x, y, z)) {
             setBlockBatchAligned(x, y, z, batchImpl);
         } else {
             super.setBlockBatch(x, y, z, batch);
