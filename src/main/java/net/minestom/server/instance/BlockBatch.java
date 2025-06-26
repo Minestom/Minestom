@@ -34,6 +34,16 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
         return batch(option, consumer);
     }
 
+    static @NotNull BlockBatch sectionAligned(@NotNull Consumer<@NotNull Builder> consumer) {
+        final Option option = new OptionImpl(false, true);
+        return batch(option, consumer);
+    }
+
+    static @NotNull BlockBatch sectionAlignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
+        final Option option = new OptionImpl(true, true);
+        return batch(option, consumer);
+    }
+
     void getAll(@NotNull EntryConsumer consumer);
 
     /**
@@ -62,13 +72,14 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
         boolean onlyState();
 
         /**
-         * Whether to consider unset blocks at section boundaries as air implicitly, improving performance.
+         * Whether the batch is section-aligned, meaning that it implicitly considers unset blocks as air.
          * <p>
-         * Has the potential to increase performance by allowing direct palette copies.
+         * This is useful for performance optimizations, as entire sections can be copied
+         * without checking each block individually.
          *
-         * @return true if unset blocks are considered air implicitly
+         * @return true if section aligned
          */
-        boolean implicitAirBoundaries();
+        boolean sectionAligned();
     }
 
     sealed interface Builder extends Block.Setter permits BuilderImpl {

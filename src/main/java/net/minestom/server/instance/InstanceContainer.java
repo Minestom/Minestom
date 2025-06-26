@@ -1,11 +1,12 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -53,6 +54,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -128,7 +130,7 @@ public class InstanceContainer extends Instance {
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
+            chunk = loadChunk(globalToChunk(x), globalToChunk(z)).join();
         }
         if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
     }
@@ -211,6 +213,71 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+        if (!(batch instanceof BlockBatchImpl batchImpl)) {
+            // Fallback to default implementation for non-BlockBatchImpl instances
+            super.setBlockBatch(x, y, z, batch);
+            return;
+        }
+
+        // Use efficient palette copying for BlockBatchImpl
+        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batchImpl.sectionStates().long2ObjectEntrySet()) {
+            final long sectionIndex = entry.getLongKey();
+            final BlockBatchImpl.SectionState sectionState = entry.getValue();
+
+            // Extract section coordinates from the batch
+            final int batchSectionX = sectionIndexGetX(sectionIndex);
+            final int batchSectionY = sectionIndexGetY(sectionIndex);
+            final int batchSectionZ = sectionIndexGetZ(sectionIndex);
+
+            // Calculate target section coordinates with offset
+            final int targetSectionX = batchSectionX + globalToChunk(x);
+            final int targetSectionY = batchSectionY + globalToChunk(y);
+            final int targetSectionZ = batchSectionZ + globalToChunk(z);
+
+            // Get the target chunk
+            final Chunk targetChunk = loadOptionalChunk(targetSectionX, targetSectionZ).join();
+            if (targetChunk == null) continue;
+
+            // Get the target section
+            final Section targetSection = targetChunk.getSection(targetSectionY);
+
+            // Copy the palette data efficiently
+            final int offsetX = globalToSectionRelative(x);
+            final int offsetY = globalToSectionRelative(y);
+            final int offsetZ = globalToSectionRelative(z);
+
+            // FIXME: if not section-aligned, we need to adjust the palette values (they are +1)
+            targetSection.blockPalette().copyFrom(sectionState.palette(), offsetX, offsetY, offsetZ);
+
+            // Handle block states if present (for blocks with NBT or handlers)
+            if (sectionState.blockStates() != null && !sectionState.blockStates().isEmpty()) {
+                // For blocks with NBT or handlers, we still need to set them individually
+                // as palette copy only handles the state IDs
+                for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+                    final int blockIndex = blockEntry.getIntKey();
+                    final Block block = blockEntry.getValue();
+
+                    // Convert section block index back to coordinates
+                    final int localX = (blockIndex >> 8) & 0xF;
+                    final int localY = (blockIndex >> 4) & 0xF;
+                    final int localZ = blockIndex & 0xF;
+
+                    final int globalBlockX = (batchSectionX * 16) + localX + x;
+                    final int globalBlockY = (batchSectionY * 16) + localY + y;
+                    final int globalBlockZ = (batchSectionZ * 16) + localZ + z;
+
+                    setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
+                }
+            }
+
+            // TODO send block packet
+
+            invalidateSection(targetSectionX, targetSectionY, targetSectionZ);
+        }
+    }
+
+    @Override
     public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
         final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
@@ -273,7 +340,7 @@ public class InstanceContainer extends Instance {
         // Remove all entities in chunk
         getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).forEach(Entity::remove);
         // Clear cache
-        this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
+        this.chunks.remove(chunkIndex(chunkX, chunkZ));
         chunk.unload();
         chunkLoader.unloadChunk(chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
@@ -282,7 +349,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+        return chunks.get(chunkIndex(chunkX, chunkZ));
     }
 
     @Override
@@ -322,7 +389,7 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        final long index = CoordConversion.chunkIndex(chunkX, chunkZ);
+        final long index = chunkIndex(chunkX, chunkZ);
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
         if (prev != null) return prev;
         final IChunkLoader loader = chunkLoader;
@@ -408,7 +475,7 @@ public class InstanceContainer extends Instance {
                             forkChunk.invalidate();
                             forkChunk.sendChunk();
                         } else {
-                            final long index = CoordConversion.chunkIndex(start);
+                            final long index = chunkIndex(start);
                             this.generationForks.compute(index, (i, sectionModifiers) -> {
                                 if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
                                 sectionModifiers.add(sectionModifier);
@@ -430,7 +497,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void processFork(Chunk chunk) {
-        this.generationForks.compute(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
+        this.generationForks.compute(chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
             if (sectionModifiers != null) {
                 for (var sectionModifier : sectionModifiers) {
                     applyFork(chunk, sectionModifier);
@@ -458,9 +525,9 @@ public class InstanceContainer extends Instance {
             Int2ObjectMaps.fastForEach(cache, blockEntry -> {
                 final int index = blockEntry.getIntKey();
                 final Block block = blockEntry.getValue();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index) + height;
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final int x = chunkBlockIndexGetX(index);
+                final int y = chunkBlockIndexGetY(index) + height;
+                final int z = chunkBlockIndexGetZ(index);
                 chunk.setBlock(x, y, z, block);
             });
         }
@@ -705,7 +772,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(@NotNull Chunk chunk) {
-        this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        this.chunks.put(chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
     }

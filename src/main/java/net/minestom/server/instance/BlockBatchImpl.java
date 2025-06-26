@@ -27,7 +27,7 @@ record BlockBatchImpl(
         final int localY = globalToSectionRelative(y);
         final int localZ = globalToSectionRelative(z);
         int index = palette.get(localX, localY, localZ);
-        if (!option.implicitAirBoundaries) index--;
+        if (!option.sectionAligned) index--;
         if (!option.onlyState) {
             final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
             Block block = sectionState.blockStates.get(sectionBlockIndex);
@@ -45,7 +45,7 @@ record BlockBatchImpl(
             final int sectionX = sectionIndexGetX(sectionIndex);
             final int sectionY = sectionIndexGetY(sectionIndex);
             final int sectionZ = sectionIndexGetZ(sectionIndex);
-            if (option.implicitAirBoundaries) {
+            if (option.sectionAligned) {
                 // Direct palette copies
                 palette.getAll((x, y, z, value) -> {
                     final int globalX = sectionX * 16 + x;
@@ -71,7 +71,7 @@ record BlockBatchImpl(
 
     @Override
     public int count() {
-        if (option.implicitAirBoundaries) {
+        if (option.sectionAligned) {
             return sectionStates.size() * 16 * 16 * 16;
         } else {
             int count = 0;
@@ -82,7 +82,7 @@ record BlockBatchImpl(
         }
     }
 
-    record OptionImpl(boolean onlyState, boolean implicitAirBoundaries) implements Option {
+    record OptionImpl(boolean onlyState, boolean sectionAligned) implements Option {
     }
 
     final static class BuilderImpl implements Builder {
@@ -109,7 +109,7 @@ record BlockBatchImpl(
             final int localY = globalToSectionRelative(y);
             final int localZ = globalToSectionRelative(z);
             int index = block.stateId();
-            if (!option.implicitAirBoundaries) index++;
+            if (!option.sectionAligned) index++;
             palette.set(localX, localY, localZ, index);
 
             if (!option.onlyState) {
@@ -125,7 +125,7 @@ record BlockBatchImpl(
         @Override
         public void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette) {
             final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
-            if (!option.implicitAirBoundaries) {
+            if (!option.sectionAligned) {
                 // Copy the palette with +1 for each value
                 Palette adjustedPalette = Palette.blocks();
                 palette.getAll((x, y, z, value) -> adjustedPalette.set(x, y, z, value + 1));
