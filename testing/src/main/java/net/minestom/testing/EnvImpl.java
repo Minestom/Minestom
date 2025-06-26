@@ -20,6 +20,9 @@ final class EnvImpl implements Env {
     public EnvImpl(ServerProcess process) {
         this.process = process;
 
+        // Start the dispatcher threads if not already started.
+        process().dispatcher().start();
+
         // Use player provider to disable queued chunk sending.
         // Set here to allow an individual test to override if they want.
         process.connection().setPlayerProvider(TestConnectionImpl.TestPlayerImpl::new);
@@ -50,13 +53,6 @@ final class EnvImpl implements Env {
         handler.addListener(listener);
         this.listeners.add(flexible);
         return flexible;
-    }
-
-    @Override
-    public void ensureDispatcherStarted() {
-        // Start the tick threads if it is not already running.
-        if (!process().dispatcher().isAlive())
-            process().dispatcher().start();
     }
 
     void cleanup() {
