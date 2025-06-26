@@ -52,6 +52,13 @@ final class EnvImpl implements Env {
         return flexible;
     }
 
+    @Override
+    public void ensureDispatcherStarted() {
+        // Start the tick threads if it is not already running.
+        if (!process().dispatcher().isAlive())
+            process().dispatcher().start();
+    }
+
     void cleanup() {
         this.listeners.forEach(FlexibleListenerImpl::check);
         this.process.stop();

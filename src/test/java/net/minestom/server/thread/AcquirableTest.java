@@ -25,6 +25,7 @@ public class AcquirableTest {
         Object second = new Object();
 
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), 2);
+        dispatcher.start();
         dispatcher.createPartition(first);
         dispatcher.createPartition(second);
 

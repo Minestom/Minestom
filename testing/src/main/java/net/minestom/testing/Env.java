@@ -22,11 +22,15 @@ public interface Env {
 
     <E extends Event> @NotNull FlexibleListener<E> listen(@NotNull Class<E> eventType);
 
+    void ensureDispatcherStarted();
+
     default void tick() {
+        this.ensureDispatcherStarted();
         process().ticker().tick(System.nanoTime());
     }
 
     default boolean tickWhile(BooleanSupplier condition, Duration timeout) {
+        this.ensureDispatcherStarted();
         var ticker = process().ticker();
         final long start = System.nanoTime();
         while (condition.getAsBoolean()) {
