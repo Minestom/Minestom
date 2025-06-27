@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
@@ -158,19 +159,19 @@ public class LightingChunk extends DynamicChunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
-        super.setBlock(x, y, z, block, placement, destroy);
+    public @NotNull Block setBlock(@NotNull BlockChange mutation) {
+        super.setBlock(mutation);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
-        int coordinate = CoordConversion.globalToChunk(y);
+        int coordinate = CoordConversion.globalToChunk(mutation.blockPosition().y());
         if (doneInit && !freezeInvalidation) {
             invalidateNeighborsSection(coordinate);
             invalidateResendDelay();
             this.partialLightCache.invalidate();
         }
+
+        return mutation.block();
     }
 
     public void sendLighting() {
