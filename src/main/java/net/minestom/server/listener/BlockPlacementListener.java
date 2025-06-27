@@ -165,7 +165,7 @@ public class BlockPlacementListener {
 
         // Place the block
         Block resultBlock = playerBlockPlaceEvent.getBlock();
-        instance.placeBlock(new BlockChange.Player(instance, placementPosition, resultBlock, blockFace, player), playerBlockPlaceEvent.shouldDoBlockUpdates());
+        instance.placeBlock(new BlockChange.Player(instance, placementPosition, resultBlock, blockFace, player, packet.hand(), cursorPosition), playerBlockPlaceEvent.shouldDoBlockUpdates());
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {

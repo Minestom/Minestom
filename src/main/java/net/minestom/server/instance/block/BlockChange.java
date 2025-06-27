@@ -1,6 +1,7 @@
 package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.entity.PlayerHand;
 import org.jetbrains.annotations.NotNull;
 
 public sealed interface BlockChange {
@@ -31,16 +32,15 @@ public sealed interface BlockChange {
     record Player(
         @NotNull Block.Getter instance, @NotNull Point blockPosition,
         @NotNull Block block, @NotNull BlockFace blockFace,
-        @NotNull net.minestom.server.entity.Player player
+        @NotNull net.minestom.server.entity.Player player, @NotNull PlayerHand hand,
+        @NotNull Point cursorPosition
     ) implements BlockChange {
-
-        public @NotNull net.minestom.server.entity.Player player() {
-            return player;
-        }
 
         @Override
         public @NotNull BlockChange.Player withBlock(@NotNull Block newBlock) {
-            return new Player(instance, blockPosition, newBlock, blockFace, player);
+            return new Player(instance, blockPosition,
+                                newBlock, blockFace,
+                                player, hand, cursorPosition);
         }
     }
 }

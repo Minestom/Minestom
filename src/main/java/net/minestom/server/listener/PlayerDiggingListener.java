@@ -186,7 +186,8 @@ public final class PlayerDiggingListener {
                                             Point blockPosition, Block previousBlock,
                                             BlockFace blockFace) {
         // Unverified block break, client is fully responsible
-        final boolean success = instance.breakBlock(new BlockChange.Player(instance, blockPosition, Block.AIR, blockFace, player), true);
+        assert player.getItemUseHand() != null; // Item use hand should never be null here, but this is also bad. should fix
+        final boolean success = instance.breakBlock(new BlockChange.Player(instance, blockPosition, Block.AIR, blockFace, player, player.getItemUseHand(), player.getPosition().direction()), true);
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {
