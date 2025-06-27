@@ -65,9 +65,11 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
-<li><a href="#exhaustion(float)" tabindex="0">exhaustion(float)</a></li>
 <li><a href="#messageId(java.lang.String)" tabindex="0">messageId(String)</a></li>
 <li><a href="#scaling(java.lang.String)" tabindex="0">scaling(String)</a></li>
+<li><a href="#exhaustion(float)" tabindex="0">exhaustion(float)</a></li>
+<li><a href="#effects(java.lang.String)" tabindex="0">effects(String)</a></li>
+<li><a href="#deathMessageType(java.lang.String)" tabindex="0">deathMessageType(String)</a></li>
 <li><a href="#build()" tabindex="0">build()</a></li>
 </ol>
 </li>
@@ -109,6 +111,12 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#build()" class="member-name-link">build</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#deathMessageType(java.lang.String)" class="member-name-link">deathMessageType</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;deathMessageType)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#effects(java.lang.String)" class="member-name-link">effects</a><wbr>(@Nullable <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;effects)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exhaustion(float)" class="member-name-link">exhaustion</a><wbr>(float&nbsp;exhaustion)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></code></div>
@@ -135,15 +143,6 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="exhaustion(float)">
-<h3>exhaustion</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations">@NotNull
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></span>&nbsp;<span class="element-name">exhaustion</span><wbr><span class="parameters">(float&nbsp;exhaustion)</span></div>
-</div>
-</section>
-</li>
-<li>
 <section class="detail" id="messageId(java.lang.String)">
 <h3>messageId</h3>
 <div class="horizontal-scroll">
@@ -160,6 +159,35 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@NotNull
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></span>&nbsp;<span class="element-name">scaling</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scaling)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="exhaustion(float)">
+<h3>exhaustion</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></span>&nbsp;<span class="element-name">exhaustion</span><wbr><span class="parameters">(float&nbsp;exhaustion)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="effects(java.lang.String)">
+<h3>effects</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></span>&nbsp;<span class="element-name">effects</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;effects)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="deathMessageType(java.lang.String)">
+<h3>deathMessageType</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="annotations">@NotNull
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">@NotNull <a href="DamageType.Builder.html" title="class in net.minestom.server.entity.damage">DamageType.Builder</a></span>&nbsp;<span class="element-name">deathMessageType</span><wbr><span class="parameters">(@Nullable
+ @Nullable <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;deathMessageType)</span></div>
 </div>
 </section>
 </li>
