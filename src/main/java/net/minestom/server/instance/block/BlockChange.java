@@ -4,7 +4,7 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.PlayerHand;
 import org.jetbrains.annotations.NotNull;
 
-public sealed interface BlockChange {
+public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Player, BlockChange.Replacement {
 
     @NotNull
     Block.Getter instance();
