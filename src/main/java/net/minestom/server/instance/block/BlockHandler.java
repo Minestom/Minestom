@@ -25,14 +25,14 @@ public interface BlockHandler {
     /**
      * Called when a block has been placed.
      */
-    default @NotNull Block onPlace(@NotNull BlockChange mutation) {
-        return mutation.block();
+    default @NotNull Block onPlace(@NotNull BlockChange blockChange) {
+        return blockChange.block();
     }
 
     /**
      * Called when a block has been destroyed or replaced.
      */
-    default @NotNull Block onDestroy(@NotNull BlockChange mutation) {
+    default @NotNull Block onDestroy(@NotNull BlockChange blockChange) {
         return Block.AIR;
     }
 
@@ -40,10 +40,10 @@ public interface BlockHandler {
      * Handles interactions with this block. Can also block normal item use (containers should block when opening the
      * menu, this prevents the player from placing a block when opening it for instance).
      *
-     * @param interaction the interaction details
+     * @param blockChange the interaction details
      * @return true to let the block interaction happens, false to cancel
      */
-    default boolean onInteract(@NotNull Interaction interaction) {
+    default boolean onInteract(@NotNull BlockChange.Player blockChange) {
         return true;
     }
 
@@ -83,55 +83,6 @@ public interface BlockHandler {
      */
     @NotNull
     Key getKey();
-
-    final class Interaction {
-        private final Block block;
-        private final Instance instance;
-        private final BlockFace blockFace;
-        private final Point blockPosition;
-        private final Point cursorPosition;
-        private final Player player;
-        private final PlayerHand hand;
-
-        @ApiStatus.Internal
-        public Interaction(Block block, Instance instance, BlockFace blockFace, Point blockPosition, Point cursorPosition, Player player, PlayerHand hand) {
-            this.block = block;
-            this.instance = instance;
-            this.blockFace = blockFace;
-            this.blockPosition = blockPosition;
-            this.cursorPosition = cursorPosition;
-            this.player = player;
-            this.hand = hand;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull BlockFace getBlockFace() {
-            return blockFace;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Point getCursorPosition() {
-            return cursorPosition;
-        }
-
-        public @NotNull Player getPlayer() {
-            return player;
-        }
-
-        public @NotNull PlayerHand getHand() {
-            return hand;
-        }
-    }
 
     final class Touch {
         private final Block block;
