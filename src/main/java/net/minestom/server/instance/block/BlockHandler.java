@@ -33,7 +33,7 @@ public interface BlockHandler {
      * Called when a block has been destroyed or replaced.
      */
     default @NotNull Block onDestroy(@NotNull BlockChange mutation) {
-        return mutation.block();
+        return Block.AIR;
     }
 
     /**

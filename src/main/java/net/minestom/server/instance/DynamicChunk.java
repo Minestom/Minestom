@@ -6,6 +6,7 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
+import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockHandler;
@@ -109,11 +110,17 @@ public class DynamicChunk extends Chunk {
 
         this.entries.remove(index);
 
+        if (shouldCache) {
+            this.entries.put(index, block);
+        }
+
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            block = lastCachedBlock.handler().onDestroy(mutation);
+            block = lastCachedBlock.handler().onDestroy(new BlockChange.Instance(instance, mutation.blockPosition(), block));
         }
         if (handler != null) {
-            block = handler.onPlace(mutation);
+            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
+            final Block finalBlock = block;
+            block = handler.onPlace(new BlockChange.Instance(instance, absoluteBlockPosition, finalBlock));
         }
 
         if (handler != null && handler.isTickable()) {
@@ -122,16 +129,11 @@ public class DynamicChunk extends Chunk {
             this.tickableMap.remove(index);
         }
 
-        // Cache the new block if needed
-        if (shouldCache) {
-            this.entries.put(index, block);
-        }
-
         section.blockPalette().set(
-                sectionRelativeX,
-                globalToSectionRelative(y),
-                sectionRelativeZ,
-                block.stateId()
+            sectionRelativeX,
+            globalToSectionRelative(y),
+            sectionRelativeZ,
+            block.stateId()
         );
 
         // UpdateHeightMaps
