@@ -21,19 +21,19 @@ public class BedPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
-        if( !(mutation instanceof BlockChange.Player mut)) {
-            return mutation.block(); // not a player placement
+    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
+        if( !(blockChange instanceof BlockChange.Player mut)) {
+            return blockChange.block(); // not a player placement
         }
         var playerPosition = mut.player().getPosition();
         var facing = BlockFace.fromYaw(playerPosition.yaw());
 
         //todo bad code using instance directly
-        if (!(mut.instance() instanceof Instance instance)) return mutation.block();
+        if (!(mut.instance() instanceof Instance instance)) return blockChange.block();
 
-        var headPosition = mutation.blockPosition().relative(facing);
+        var headPosition = blockChange.blockPosition().relative(facing);
         if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
-            return mutation.block();
+            return blockChange.block();
 
         var headBlock = this.block.withProperty(PROP_PART, "head")
                 .withProperty(PROP_FACING, facing.name().toLowerCase());

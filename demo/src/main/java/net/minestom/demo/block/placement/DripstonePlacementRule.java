@@ -19,9 +19,9 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
-        if (!(mutation instanceof BlockChange.Player mut)) {
-            return mutation.block(); // not a player placement
+    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
+        if (!(blockChange instanceof BlockChange.Player mut)) {
+            return blockChange.block(); // not a player placement
         }
         var blockFace = mut.blockFace();
         var direction = switch (blockFace) {

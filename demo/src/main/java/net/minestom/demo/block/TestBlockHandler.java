@@ -15,12 +15,12 @@ public class TestBlockHandler implements BlockHandler {
     }
 
     @Override
-    public @NotNull Block onPlace(@NotNull BlockChange mutation) {
+    public @NotNull Block onPlace(@NotNull BlockChange blockChange) {
         return Block.DIAMOND_BLOCK;
     }
 
     @Override
-    public @NotNull Block onDestroy(@NotNull BlockChange mutation) {
+    public @NotNull Block onDestroy(@NotNull BlockChange blockChange) {
         return Block.EMERALD_BLOCK;
     }
 }
