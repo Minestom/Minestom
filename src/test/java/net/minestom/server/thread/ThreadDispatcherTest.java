@@ -20,6 +20,7 @@ public class ThreadDispatcherTest {
     public void elementTick() {
         final AtomicInteger counter = new AtomicInteger();
         ThreadDispatcher<Object> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
         assertThrows(Exception.class, () -> dispatcher.threads().add(new TickThread(1)));
 
@@ -50,6 +51,7 @@ public class ThreadDispatcherTest {
         final AtomicInteger counter1 = new AtomicInteger();
         final AtomicInteger counter2 = new AtomicInteger();
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.singleThread();
+        dispatcher.start();
         assertEquals(1, dispatcher.threads().size());
 
         Tickable partition = (time) -> counter1.incrementAndGet();
@@ -79,6 +81,7 @@ public class ThreadDispatcherTest {
         final int threadCount = 10;
         ThreadDispatcher<Tickable> dispatcher = ThreadDispatcher.of(ThreadProvider.counter(), threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
+        dispatcher.start();
 
         final AtomicInteger counter = new AtomicInteger();
         Set<Thread> threads = new CopyOnWriteArraySet<>();
@@ -123,6 +126,7 @@ public class ThreadDispatcherTest {
             }
         }, threadCount);
         assertEquals(threadCount, dispatcher.threads().size());
+        dispatcher.start();
 
         Map<Updater, Thread> threads = new ConcurrentHashMap<>();
         Map<Updater, Thread> threads2 = new ConcurrentHashMap<>();
