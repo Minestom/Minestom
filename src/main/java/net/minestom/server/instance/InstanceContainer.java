@@ -156,8 +156,11 @@ public class InstanceContainer extends Instance {
             this.lastBlockChangeTime = System.nanoTime();
 
             final BlockPlacementRule placementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(mutation.block());
-            if(placementRule != null && doBlockUpdates) {
-                mutation = mutation.withBlock(placementRule.blockPlace(mutation));
+            if (placementRule != null && doBlockUpdates) {
+                Block placedBlock = placementRule.blockPlace(mutation);
+                if (placedBlock != null) { // idiot prevention
+                    mutation = mutation.withBlock(placedBlock);
+                }
             }
 
             mutation = mutation.withBlock(chunk.setBlock(mutation));
