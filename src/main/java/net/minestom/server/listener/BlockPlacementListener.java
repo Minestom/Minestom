@@ -16,10 +16,7 @@ import net.minestom.server.event.player.PlayerBlockPlaceEvent;
 import net.minestom.server.event.player.PlayerUseItemOnBlockEvent;
 import net.minestom.server.instance.Chunk;
 import net.minestom.server.instance.Instance;
-import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
-import net.minestom.server.instance.block.BlockManager;
+import net.minestom.server.instance.block.*;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -168,12 +165,7 @@ public class BlockPlacementListener {
 
         // Place the block
         Block resultBlock = playerBlockPlaceEvent.getBlock();
-<<<<<<< HEAD
-        instance.placeBlock(new BlockHandler.PlayerPlacement(resultBlock, instance, placementPosition, player, hand, blockFace,
-                packet.cursorPositionX(), packet.cursorPositionY(), packet.cursorPositionZ()), playerBlockPlaceEvent.shouldDoBlockUpdates());
-=======
-        instance.placeBlock(new BlockChange.Player(instance, placementPosition, resultBlock, blockFace, player), playerBlockPlaceEvent.shouldDoBlockUpdates());
->>>>>>> cc02c79fb (Cleanup)
+        instance.placeBlock(new BlockChange.Player(instance, placementPosition, resultBlock, blockFace, player, packet.hand(), cursorPosition), playerBlockPlaceEvent.shouldDoBlockUpdates());
         player.sendPacket(new AcknowledgeBlockChangePacket(packet.sequence()));
         // Block consuming
         if (playerBlockPlaceEvent.doesConsumeBlock()) {
