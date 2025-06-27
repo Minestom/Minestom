@@ -2,7 +2,6 @@ package net.minestom.server.instance.block;
 
 import net.minestom.server.coordinate.Point;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public sealed interface BlockChange {
 
@@ -15,20 +14,17 @@ public sealed interface BlockChange {
     @NotNull
     Block block();
 
-    @Nullable
-    BlockFace blockFace();
-
     @NotNull
     BlockChange withBlock(@NotNull Block newBlock);
 
     record Instance(
         @NotNull Block.Getter instance, @NotNull Point blockPosition,
-        @NotNull Block block, @Nullable BlockFace blockFace
+        @NotNull Block block
     ) implements BlockChange {
 
         @Override
-        public @NotNull BlockChange withBlock(@NotNull Block newBlock) {
-            return new Instance(instance, blockPosition, newBlock, blockFace);
+        public @NotNull BlockChange.Instance withBlock(@NotNull Block newBlock) {
+            return new Instance(instance, blockPosition, newBlock);
         }
     }
 
