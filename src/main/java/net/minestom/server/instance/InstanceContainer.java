@@ -342,7 +342,8 @@ public class InstanceContainer extends Instance {
             final int targetSectionZ = batchSectionZ + globalToChunk(z);
 
             // Get the target chunk
-            final Chunk targetChunk = loadOptionalChunk(targetSectionX, targetSectionZ).join();
+            final Chunk targetChunk = batch.option().generate() ?
+                    loadOptionalChunk(targetSectionX, targetSectionZ).join() : getChunk(targetSectionX, targetSectionZ);
             if (targetChunk == null) continue;
             chunkIndexes.add(chunkIndex(targetSectionX, targetSectionZ));
             synchronized (targetChunk) {
@@ -409,7 +410,8 @@ public class InstanceContainer extends Instance {
                 for (int instanceSectionY = minInstanceSectionY; instanceSectionY <= maxInstanceSectionY; instanceSectionY++) {
                     for (int instanceSectionZ = minInstanceSectionZ; instanceSectionZ <= maxInstanceSectionZ; instanceSectionZ++) {
                         // Get the target chunk
-                        final Chunk targetChunk = loadOptionalChunk(instanceSectionX, instanceSectionZ).join();
+                        final Chunk targetChunk = batch.option().generate() ?
+                                loadOptionalChunk(instanceSectionX, instanceSectionZ).join() : getChunk(instanceSectionX, instanceSectionZ);
                         if (targetChunk == null) continue;
                         chunkIndexes.add(chunkIndex(instanceSectionX, instanceSectionZ));
                         synchronized (targetChunk) {

@@ -296,7 +296,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                             try {
                                 final Block block = getBlock(x, y, z);
                                 builder.setBlock(bX, bY, bZ, block);
-                            } catch (Exception ignored) {
+                            } catch (NullPointerException ignored) {
                             }
                         }
                     }

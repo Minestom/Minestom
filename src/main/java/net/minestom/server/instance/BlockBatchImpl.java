@@ -98,7 +98,7 @@ record BlockBatchImpl(
         }
     }
 
-    record OptionImpl(boolean onlyState, boolean aligned) implements Option {
+    record OptionImpl(boolean onlyState, boolean aligned, boolean generate) implements Option {
     }
 
     final static class BuilderImpl implements Builder {

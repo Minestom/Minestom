@@ -24,7 +24,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * Most flexible option, but also the least performant.
      */
     static @NotNull BlockBatch unaligned(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(false, false);
+        final Option option = new OptionImpl(false, false, true);
         return batch(option, consumer);
     }
 
@@ -32,22 +32,22 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * Block batch that only place explicitly set blocks, ignoring nbt and handlers.
      */
     static @NotNull BlockBatch unalignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(true, false);
+        final Option option = new OptionImpl(true, false, true);
         return batch(option, consumer);
     }
 
     static @NotNull BlockBatch aligned(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(false, true);
+        final Option option = new OptionImpl(false, true, true);
         return batch(option, consumer);
     }
 
     static @NotNull BlockBatch alignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(true, true);
+        final Option option = new OptionImpl(true, true, true);
         return batch(option, consumer);
     }
 
     static @NotNull BlockBatch empty() {
-        final Option option = new OptionImpl(true, true);
+        final Option option = new OptionImpl(true, true, false);
         return batch(option, builder -> {
         });
     }
@@ -88,6 +88,11 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
          * @return true if section aligned
          */
         boolean aligned();
+
+        /**
+         * Whether the batch should do world generation if unloaded.
+         */
+        boolean generate();
     }
 
     sealed interface Builder extends Block.Setter permits BuilderImpl {
