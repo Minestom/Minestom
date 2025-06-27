@@ -76,6 +76,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#deletePartition(P)" tabindex="0">deletePartition(P)</a></li>
 <li><a href="#updateElement(net.minestom.server.Tickable,P)" tabindex="0">updateElement(Tickable, P)</a></li>
 <li><a href="#removeElement(net.minestom.server.Tickable)" tabindex="0">removeElement(Tickable)</a></li>
+<li><a href="#start()" tabindex="0">start()</a></li>
+<li><a href="#isAlive()" tabindex="0">isAlive()</a></li>
 <li><a href="#shutdown()" tabindex="0">shutdown()</a></li>
 </ol>
 </li>
@@ -154,45 +156,55 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Deletes an existing partition.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;P&gt;&nbsp;@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;P&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.thread.ThreadProvider,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
- int&nbsp;threadCount)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
-<div class="block">Creates a new ThreadDispatcher using default thread names (ex.</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isAlive()" class="member-name-link">isAlive</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Checks if all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a> are alive.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;P&gt;&nbsp;@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;P&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.thread.ThreadProvider,java.util.function.IntFunction,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
- @NotNull <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;nameGenerator,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.thread.ThreadProvider,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
  int&nbsp;threadCount)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Creates a new ThreadDispatcher using default thread names (ex.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;P&gt;&nbsp;@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;P&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#of(net.minestom.server.thread.ThreadProvider,java.util.function.IntFunction,int)" class="member-name-link">of</a><wbr>(@NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
+ @NotNull <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;nameGenerator,
+ int&nbsp;threadCount)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a new ThreadDispatcher using the caller-provided thread name generator <code>nameGenerator</code>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshThreads()" class="member-name-link">refreshThreads</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshThreads()" class="member-name-link">refreshThreads</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Refreshes all thread as per <a href="#refreshThreads(long)"><code>refreshThreads(long)</code></a>, with a timeout of
  <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/Long.html#MAX_VALUE" title="class or interface in java.lang" class="external-link"><code>Long.MAX_VALUE</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshThreads(long)" class="member-name-link">refreshThreads</a><wbr>(long&nbsp;nanoTimeout)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshThreads(long)" class="member-name-link">refreshThreads</a><wbr>(long&nbsp;nanoTimeout)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Called at the end of each tick to clear removed tickables, refresh the partition linked to a tickable, and
  partition threads based on <a href="ThreadProvider.html#findThread(T)"><code>ThreadProvider.findThread(Object)</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeElement(net.minestom.server.Tickable)" class="member-name-link">removeElement</a><wbr>(@NotNull <a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>&nbsp;tickable)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#removeElement(net.minestom.server.Tickable)" class="member-name-link">removeElement</a><wbr>(@NotNull <a href="../Tickable.html" title="interface in net.minestom.server">Tickable</a>&nbsp;tickable)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Removes a <a href="../Tickable.html" title="interface in net.minestom.server"><code>Tickable</code></a>.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#shutdown()" class="member-name-link">shutdown</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Shutdowns all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;P&gt;&nbsp;@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;P&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#singleThread()" class="member-name-link">singleThread</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static &lt;P&gt;&nbsp;@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a><wbr>&lt;P&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#singleThread()" class="member-name-link">singleThread</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
 <div class="block">Creates a single-threaded dispatcher that uses default thread names.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Starts all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@Unmodifiable @NotNull <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;@NotNull <a href="TickThread.html" title="class in net.minestom.server.thread">TickThread</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#threads()" class="member-name-link">threads</a>()</code></div>
@@ -231,11 +243,13 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="of(net.minestom.server.thread.ThreadProvider,int)">
 <h3>of</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations">@NotNull
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;P&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&lt;P&gt;</span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
  int&nbsp;threadCount)</span></div>
-<div class="block">Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).</div>
+<div class="block">Creates a new ThreadDispatcher using default thread names (ex. Ms-Tick-n).
+ <p>Remember to start the dispatcher using <a href="#start()"><code>start()</code></a></p></div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><span id="of(net.minestom.server.thread.ThreadProvider,int)-type-param-P"><code>P</code> - the dispatcher partition type</span></dd>
@@ -252,14 +266,16 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="of(net.minestom.server.thread.ThreadProvider,java.util.function.IntFunction,int)">
 <h3>of</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations">@NotNull
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;P&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&lt;P&gt;</span>&nbsp;<span class="element-name">of</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="ThreadProvider.html" title="interface in net.minestom.server.thread">ThreadProvider</a>&lt;P&gt;&nbsp;provider,
  @NotNull
  @NotNull <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/function/IntFunction.html" title="class or interface in java.util.function" class="external-link">IntFunction</a>&lt;<a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;nameGenerator,
  int&nbsp;threadCount)</span></div>
 <div class="block">Creates a new ThreadDispatcher using the caller-provided thread name generator <code>nameGenerator</code>. This is
- useful to disambiguate custom ThreadDispatcher instances from ones used in core Minestom code.</div>
+ useful to disambiguate custom ThreadDispatcher instances from ones used in core Minestom code.
+ <p>Remember to start the dispatcher using <a href="#start()"><code>start()</code></a></p></div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><span id="of(net.minestom.server.thread.ThreadProvider,java.util.function.IntFunction,int)-type-param-P"><code>P</code> - the dispatcher partition type</span></dd>
@@ -277,9 +293,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="singleThread()">
 <h3>singleThread</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="annotations">@NotNull
+<div class="member-signature"><span class="annotations">@Contract(pure=true)
+@NotNull
 </span><span class="modifiers">public static</span>&nbsp;<span class="type-parameters">&lt;P&gt;</span>&nbsp;<span class="return-type">@NotNull <a href="ThreadDispatcher.html" title="class in net.minestom.server.thread">ThreadDispatcher</a>&lt;P&gt;</span>&nbsp;<span class="element-name">singleThread</span>()</div>
-<div class="block">Creates a single-threaded dispatcher that uses default thread names.</div>
+<div class="block">Creates a single-threaded dispatcher that uses default thread names.
+ <p>Remember to start the dispatcher using <a href="#start()"><code>start()</code></a></p></div>
 <dl class="notes">
 <dt>Type Parameters:</dt>
 <dd><span id="singleThread()-type-param-P"><code>P</code> - the dispatcher partition type</span></dd>
@@ -398,6 +416,30 @@ loadScripts(document, 'script');</script>
 <dl class="notes">
 <dt>Parameters:</dt>
 <dd><code>tickable</code> - the Tickable to remove</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="start()">
+<h3>start</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">start</span>()</div>
+<div class="block">Starts all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a>.
+ <p>
+ This will throw an <a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/lang/IllegalThreadStateException.html" title="class or interface in java.lang" class="external-link"><code>IllegalThreadStateException</code></a> if the threads have already been started.</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="isAlive()">
+<h3>isAlive</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isAlive</span>()</div>
+<div class="block">Checks if all the <a href="TickThread.html" title="class in net.minestom.server.thread"><code>tick threads</code></a> are alive.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if all threads are alive, false otherwise</dd>
 </dl>
 </div>
 </section>
