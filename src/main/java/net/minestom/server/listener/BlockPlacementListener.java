@@ -106,14 +106,17 @@ public class BlockPlacementListener {
         );
 
         var interactedPlacementRule = BLOCK_MANAGER.getBlockPlacementRule(interactedBlock);
-        if (!interactedBlock.isAir() && (interactedPlacementRule == null || !interactedPlacementRule.isSelfReplaceable(replacement))) {
-            // If the block is not replaceable, try to place next to it.
+        boolean interactedReplaceable = interactedBlock.isAir() ||
+                (interactedPlacementRule != null && interactedPlacementRule.isSelfReplaceable(replacement));
+
+        if (!interactedReplaceable) {
             placementPosition = blockPosition.relative(blockFace);
 
             var placementBlock = instance.getBlock(placementPosition);
             var placementRule = BLOCK_MANAGER.getBlockPlacementRule(placementBlock);
-            if (!placementBlock.registry().isReplaceable() && !(placementRule != null && placementRule.isSelfReplaceable(replacement.withOffset(true)))) {
-                // If the block is still not replaceable, cancel the placement
+            boolean placementReplaceable = placementBlock.registry().isReplaceable() ||
+                    (placementRule != null && placementRule.isSelfReplaceable(replacement.withOffset(true)));
+            if (!placementReplaceable) {
                 canPlaceBlock = false;
             }
         }
