@@ -18,6 +18,7 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
@@ -133,7 +134,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x,y,z), block, null), doBlockUpdates, 0);
     }
 
     /**
@@ -142,116 +143,81 @@ public class InstanceContainer extends Instance {
      * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
      *
      * @param chunk the {@link Chunk} which should be loaded
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
-     * @param block the block to place
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
+    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, @NotNull BlockChange mutation,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
+
+        final Point blockPosition = mutation.blockPosition();
+
         final DimensionType dim = getCachedDimensionType();
-        if (y >= dim.maxY() || y < dim.minY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
+        if (blockPosition.y() >= dim.maxY() || blockPosition.y() < dim.minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), blockPosition.y());
             return;
         }
 
         synchronized (chunk) {
-            // Refresh the last block change time
             this.lastBlockChangeTime = System.nanoTime();
-            final BlockVec blockPosition = new BlockVec(x, y, z);
-            if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
-                // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
-                // This can happen with nether portals which break the entire frame when a portal block is broken
-                return;
-            }
-            this.currentlyChangingBlocks.put(blockPosition, block);
 
-            // Change id based on neighbors
-            final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
-            if (placement != null && blockPlacementRule != null && doBlockUpdates) {
-                BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
-                    );
-                } else {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, null, blockPosition,
-                            null, null, null,
-                            false
-                    );
-                }
-
-                block = blockPlacementRule.blockPlace(rulePlacement);
-                if (block == null) block = Block.AIR;
+            final BlockPlacementRule placementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(mutation.block());
+            if(placementRule != null && doBlockUpdates) {
+                mutation = mutation.withBlock(placementRule.blockPlace(mutation));
             }
 
-            // Set the block
-            chunk.setBlock(x, y, z, block, placement, destroy);
+            mutation = mutation.withBlock(chunk.setBlock(mutation));
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
                 executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
             }
 
+            final Block block = mutation.block();
+
             // Refresh player chunk block
-            {
-                chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                RegistryData.BlockEntry registry = block.registry();
-                if (registry.isBlockEntity()) {
-                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
-                }
+            chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+            RegistryData.BlockEntry registry = block.registry();
+            if (registry.isBlockEntity()) {
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
             }
-            EventDispatcher.call(new InstanceBlockUpdateEvent(this, blockPosition, block));
+            EventDispatcher.call(new InstanceBlockUpdateEvent(this, new BlockVec(blockPosition), block));
         }
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        final Point blockPosition = placement.getBlockPosition();
-        final Chunk chunk = getChunkAt(blockPosition);
+    public boolean placeBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(mutation.blockPosition());
         if (!isLoaded(chunk)) return false;
-        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null, doBlockUpdates, 0);
+        UNSAFE_setBlock(chunk, mutation, doBlockUpdates, 0);
         return true;
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        final Chunk chunk = getChunkAt(blockPosition);
+    public boolean breakBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(mutation.blockPosition());
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
-        final Block block = getBlock(blockPosition);
-        final int x = blockPosition.blockX();
-        final int y = blockPosition.blockY();
-        final int z = blockPosition.blockZ();
+        final Block block = getBlock(mutation.blockPosition());
         if (block.isAir()) {
             // The player probably have a wrong version of this chunk section, send it
-            chunk.sendChunk(player);
+            chunk.sendChunk(mutation.player());
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(mutation.player(), block, Block.AIR, new BlockVec(mutation.blockPosition()), mutation.blockFace());
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
-            UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+            mutation = mutation.withBlock(blockBreakEvent.getResultBlock());
+            UNSAFE_setBlock(chunk, mutation, doBlockUpdates, 0);
             // Send the block break effect packet
+            BlockChange.@NotNull Player finalMutation = mutation;
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
-                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
+                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), mutation.blockPosition(), block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
-                    (viewer) -> !viewer.equals(player));
+                    (viewer) -> !viewer.equals(finalMutation.player()));
         }
         return allowed;
     }
@@ -694,17 +660,20 @@ public class InstanceContainer extends Instance {
                 continue;
 
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-            final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
+
+            BlockChange mutation = new BlockChange.Instance(
                     this,
                     neighborPosition,
                     neighborBlock,
                     updateFace.getOppositeFace()
-            ));
-            if (neighborBlock != newNeighborBlock) {
+            );
+
+            mutation = mutation.withBlock(neighborBlockPlacementRule.blockUpdate(mutation));
+
+            if (neighborBlock != mutation.block()) {
                 final Chunk chunk = getChunkAt(neighborPosition);
                 if (!isLoaded(chunk)) continue;
-                UNSAFE_setBlock(chunk, neighborPosition.blockX(), neighborPosition.blockY(), neighborPosition.blockZ(), newNeighborBlock,
-                        null, null, true, updateDistance + 1);
+                UNSAFE_setBlock(chunk, mutation, true, updateDistance + 1);
             }
         }
     }
