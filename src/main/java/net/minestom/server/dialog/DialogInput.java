@@ -31,6 +31,7 @@ public sealed interface DialogInput {
             @NotNull String onTrue,
             @NotNull String onFalse
     ) implements DialogInput {
+
         public static final StructCodec<Boolean> CODEC = StructCodec.struct(
                 "key", Codec.STRING, Boolean::key,
                 "label", Codec.COMPONENT, Boolean::label,
@@ -38,6 +39,10 @@ public sealed interface DialogInput {
                 "on_true", StructCodec.STRING.optional("true"), Boolean::onTrue,
                 "on_false", StructCodec.STRING.optional("false"), Boolean::onFalse,
                 Boolean::new);
+
+        public Boolean {
+            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
@@ -53,6 +58,7 @@ public sealed interface DialogInput {
             @Nullable Float initial,
             @Nullable Float step
     ) implements DialogInput {
+
         public static final StructCodec<NumberRange> CODEC = StructCodec.struct(
                 "key", Codec.STRING, NumberRange::key,
                 "width", Codec.INT.optional(DEFAULT_WIDTH), NumberRange::width,
@@ -63,6 +69,10 @@ public sealed interface DialogInput {
                 "initial", Codec.FLOAT.optional(), NumberRange::initial,
                 "step", Codec.FLOAT.optional(), NumberRange::step,
                 NumberRange::new);
+
+        public NumberRange {
+            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
@@ -85,6 +95,7 @@ public sealed interface DialogInput {
                 SingleOption::new);
 
         public SingleOption {
+            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
             boolean found = false;
             for (var option : options) {
                 if (!option.initial) continue;
@@ -124,6 +135,10 @@ public sealed interface DialogInput {
                 "max_length", Codec.INT.optional(32), Text::maxLength,
                 "multiline", Multiline.CODEC.optional(), Text::multiline,
                 Text::new);
+
+        public Text {
+            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
