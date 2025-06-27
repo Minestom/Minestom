@@ -230,7 +230,12 @@ public final class ThreadDispatcher<P> {
      * @return true if all threads are alive, false otherwise
      */
     public boolean isAlive() {
-        return this.threads.stream().allMatch(Thread::isAlive);
+        for (TickThread thread : threads) {
+            if (!thread.isAlive()) {
+                return false;
+            }
+        }
+        return !threads.isEmpty();
     }
 
     /**
