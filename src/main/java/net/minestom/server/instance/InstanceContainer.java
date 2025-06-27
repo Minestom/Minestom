@@ -349,12 +349,18 @@ public class InstanceContainer extends Instance {
             synchronized (targetChunk) {
                 final Section targetSection = targetChunk.getSection(targetSectionY);
                 if (batch.option().aligned()) {
+                    clearSectionNbtData(targetChunk, targetSectionX, targetSectionY, targetSectionZ);
                     // Section-aligned: direct palette copy
                     targetSection.blockPalette().copyFrom(sectionState.palette());
                 } else {
-                    // Non-section-aligned: values are +1, need to adjust and use getAllPresent
-                    sectionState.palette().getAllPresent((localX, localY, localZ, value) ->
-                            targetSection.blockPalette().set(localX, localY, localZ, value - 1));
+                    // For non-section-aligned, clear NBT for specific blocks being overwritten
+                    sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
+                        final int globalBlockX = (targetSectionX * 16) + localX;
+                        final int globalBlockY = (targetSectionY * 16) + localY;
+                        final int globalBlockZ = (targetSectionZ * 16) + localZ;
+                        clearBlockNbtData(targetChunk, globalBlockX, globalBlockY, globalBlockZ);
+                        targetSection.blockPalette().set(localX, localY, localZ, value - 1);
+                    });
                 }
 
                 // Handle block states if present (for blocks with NBT or handlers)
@@ -435,6 +441,18 @@ public class InstanceContainer extends Instance {
                                 final int offsetY = overlapMinY - instanceGlobalY;
                                 final int offsetZ = overlapMinZ - instanceGlobalZ;
 
+                                // Clear NBT data for blocks that will be overwritten in the overlap region
+                                for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
+                                    for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
+                                        for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
+                                            final int globalX = overlapMinX + dx;
+                                            final int globalY = overlapMinY + dy;
+                                            final int globalZ = overlapMinZ + dz;
+                                            clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
+                                        }
+                                    }
+                                }
+
                                 // Create a temporary palette for the overlap region
                                 final Palette tempPalette = Palette.blocks();
                                 final int batchOffsetX = overlapMinX - globalSectionX;
@@ -470,6 +488,9 @@ public class InstanceContainer extends Instance {
                                         final int targetX = globalX - instanceGlobalX;
                                         final int targetY = globalY - instanceGlobalY;
                                         final int targetZ = globalZ - instanceGlobalZ;
+
+                                        // Clear NBT data for this specific block position
+                                        clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
 
                                         // Values are +1 in non-section-aligned batches
                                         targetSection.blockPalette().set(targetX, targetY, targetZ, value - 1);
@@ -1006,5 +1027,35 @@ public class InstanceContainer extends Instance {
         this.chunks.put(chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    /**
+     * Clears NBT data for all blocks in a section.
+     * This is called when an entire section is being replaced by a batch operation.
+     */
+    private void clearSectionNbtData(@NotNull Chunk chunk, int sectionX, int sectionY, int sectionZ) {
+        // Clear NBT data for all blocks in this section
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    final int globalX = sectionX * 16 + x;
+                    final int globalY = sectionY * 16 + y;
+                    final int globalZ = sectionZ * 16 + z;
+                    clearBlockNbtData(chunk, globalX, globalY, globalZ);
+                }
+            }
+        }
+    }
+
+    /**
+     * Clears NBT data for a specific block position.
+     * This ensures that when a block is overwritten, any existing NBT data is properly removed.
+     */
+    private void clearBlockNbtData(@NotNull Chunk chunk, int x, int y, int z) {
+        final Block currentBlock = chunk.getBlock(x, y, z);
+        // If the current block has data, we need to clear it
+        if (currentBlock.hasNbt() || currentBlock.handler() != null) {
+            chunk.setBlock(x, y, z, Block.AIR);
+        }
     }
 }

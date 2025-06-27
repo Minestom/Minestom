@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @EnvTest
 public class BlockBatchIntegrationTest {
@@ -515,5 +516,156 @@ public class BlockBatchIntegrationTest {
         assertEquals(Block.AIR, instance.getBlock(12, 22, 12));
         assertEquals(Block.AIR, instance.getBlock(12, 12, 11));
         assertEquals(Block.AIR, instance.getBlock(12, 12, 22));
+    }
+
+    @Test
+    public void batchOverwritesNbtBlocks(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // First, set a block with NBT manually
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("Items", "[{id:\"minecraft:diamond\",Count:1b}]")
+                .build());
+
+        Block signWithText = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:sign")
+                .putString("Text1", "{\"text\":\"Original Text\"}")
+                .build());
+
+        // Set blocks with NBT at specific positions
+        instance.setBlock(10, 10, 10, chestWithItems);
+        instance.setBlock(11, 10, 10, signWithText);
+        instance.setBlock(12, 10, 10, Block.STONE); // Regular block for control
+
+        // Verify the blocks with NBT are properly set
+        Block placedChest = instance.getBlock(10, 10, 10);
+        Block placedSign = instance.getBlock(11, 10, 10);
+        assertEquals(Block.CHEST, placedChest.withNbt(null));
+        assertEquals(Block.OAK_SIGN, placedSign.withNbt(null));
+        assertNotNull(placedChest.nbt());
+        assertNotNull(placedSign.nbt());
+        assertEquals("minecraft:chest", placedChest.nbt().getString("id"));
+        assertEquals("minecraft:sign", placedSign.nbt().getString("id"));
+
+        // Create a batch that overwrites these blocks with blocks WITHOUT NBT
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            builder.setBlock(0, 0, 0, Block.DIRT); // Overwrite chest
+            builder.setBlock(1, 0, 0, Block.GRASS_BLOCK); // Overwrite sign
+            builder.setBlock(2, 0, 0, Block.COBBLESTONE); // Overwrite stone
+        });
+
+        // Apply the batch at the same location
+        instance.setBlockBatch(10, 10, 10, batch);
+
+        // Verify that the blocks have been overwritten and NBT is removed
+        Block newChestPos = instance.getBlock(10, 10, 10);
+        Block newSignPos = instance.getBlock(11, 10, 10);
+        Block newStonePos = instance.getBlock(12, 10, 10);
+
+        assertEquals(Block.DIRT, newChestPos);
+        assertEquals(Block.GRASS_BLOCK, newSignPos);
+        assertEquals(Block.COBBLESTONE, newStonePos);
+
+        // Most importantly, verify that no NBT remains
+        assertNull(newChestPos.nbt());
+        assertNull(newSignPos.nbt());
+        assertNull(newStonePos.nbt());
+    }
+
+    @Test
+    public void batchOverwritesNbtBlocksAligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Set blocks with NBT in a section-aligned manner
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "{\"text\":\"Test Chest\"}")
+                .build());
+
+        // Fill a 4x4x4 area with chests that have NBT
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                for (int z = 0; z < 4; z++) {
+                    instance.setBlock(16 + x, 16 + y, 16 + z, chestWithItems);
+                }
+            }
+        }
+
+        // Verify some of the blocks have NBT
+        Block testChest = instance.getBlock(16, 16, 16);
+        assertEquals(Block.CHEST, testChest.withNbt(null));
+        assertNotNull(testChest.nbt());
+        assertEquals("minecraft:chest", testChest.nbt().getString("id"));
+
+        // Create an aligned batch that overwrites with blocks without NBT
+        BlockBatch batch = BlockBatch.aligned(builder -> {
+            for (int x = 0; x < 16; x++) {
+                for (int y = 0; y < 16; y++) {
+                    for (int z = 0; z < 16; z++) {
+                        if (x < 4 && y < 4 && z < 4) {
+                            // Overwrite the chest area with stone (no NBT)
+                            builder.setBlock(x, y, z, Block.STONE);
+                        }
+                    }
+                }
+            }
+        });
+
+        // Apply the batch
+        instance.setBlockBatch(16, 16, 16, batch);
+
+        // Verify that all the chests are now stone blocks without NBT
+        for (int x = 0; x < 4; x++) {
+            for (int y = 0; y < 4; y++) {
+                for (int z = 0; z < 4; z++) {
+                    Block block = instance.getBlock(16 + x, 16 + y, 16 + z);
+                    assertEquals(Block.STONE, block,
+                        "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should be STONE");
+                    assertNull(block.nbt(),
+                        "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should not have NBT");
+                }
+            }
+        }
+    }
+
+    @Test
+    public void batchOverwritesNbtBlocksMixed(Env env) {
+        var instance = env.createEmptyInstance();
+
+        // Set blocks with NBT in a mixed manner
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "{\"text\":\"Test Chest\"}")
+                .build());
+
+        Block signWithText = Block.OAK_SIGN.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:sign")
+                .putString("Text1", "{\"text\":\"Original Text\"}")
+                .build());
+
+        // Set initial blocks with NBT
+        instance.setBlock(0, 0, 0, chestWithItems);
+        instance.setBlock(1, 0, 0, signWithText);
+
+        // Create a batch that overwrites with blocks without NBT
+        BlockBatch batch = BlockBatch.unaligned(builder -> {
+            builder.setBlock(0, 0, 0, Block.DIRT); // Overwrite chest
+            builder.setBlock(1, 0, 0, Block.GRASS_BLOCK); // Overwrite sign
+        });
+
+        // Apply the batch
+        instance.setBlockBatch(0, 0, 0, batch);
+
+        // Verify that the blocks have been overwritten and NBT is removed
+        Block newChestPos = instance.getBlock(0, 0, 0);
+        Block newSignPos = instance.getBlock(1, 0, 0);
+
+        assertEquals(Block.DIRT, newChestPos);
+        assertEquals(Block.GRASS_BLOCK, newSignPos);
+
+        // Most importantly, verify that no NBT remains
+        assertNull(newChestPos.nbt());
+        assertNull(newSignPos.nbt());
     }
 }
