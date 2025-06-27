@@ -23,6 +23,16 @@ public final class CoordConversion {
         return xyz & 0xF;
     }
 
+    public static boolean sectionAligned(int xyz) {
+        // Check if the coordinate is aligned to a section (0-15)
+        return (xyz & 0xF) == 0;
+    }
+
+    public static boolean sectionAligned(int x, int y, int z) {
+        // Check if all coordinates are aligned to a section (0-15)
+        return (x & 0xF) == 0 && (y & 0xF) == 0 && (z & 0xF) == 0;
+    }
+
     public static int chunkToRegion(int chunkCoordinate) {
         return chunkCoordinate >> 5;
     }
@@ -94,6 +104,42 @@ public final class CoordConversion {
         final int y = chunkBlockIndexGetY(index);
         final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
         return new Vec(x, y, z);
+    }
+
+    // SECTION INDEX
+
+    public static long sectionIndex(int sectionX, int sectionY, int sectionZ) {
+        // Use 21 bits for each, with sign extension
+        final long x = sectionX & 0x1FFFFF;
+        final long y = sectionY & 0x1FFFFF;
+        final long z = sectionZ & 0x1FFFFF;
+        return (x << 42) | (y << 21) | z;
+    }
+
+    public static int sectionIndexGetX(long index) {
+        int x = (int) (index >> 42) & 0x1FFFFF;
+        // Sign extension for 21 bits
+        if ((x & 0x100000) != 0) x |= ~0x1FFFFF;
+        return x;
+    }
+
+    public static int sectionIndexGetY(long index) {
+        int y = (int) (index >> 21) & 0x1FFFFF;
+        if ((y & 0x100000) != 0) y |= ~0x1FFFFF;
+        return y;
+    }
+
+    public static int sectionIndexGetZ(long index) {
+        int z = (int) index & 0x1FFFFF;
+        if ((z & 0x100000) != 0) z |= ~0x1FFFFF;
+        return z;
+    }
+
+    public static long sectionIndexGlobal(int x, int y, int z) {
+        final int sectionX = globalToChunk(x);
+        final int sectionY = globalToChunk(y);
+        final int sectionZ = globalToChunk(z);
+        return sectionIndex(sectionX, sectionY, sectionZ);
     }
 
     // BLOCK INDEX FROM SECTION (0-15 for each coordinate)
