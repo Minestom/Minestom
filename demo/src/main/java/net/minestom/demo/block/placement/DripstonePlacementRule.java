@@ -3,7 +3,11 @@ package net.minestom.demo.block.placement;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+<<<<<<< HEAD
 import net.minestom.server.instance.block.BlockFace;
+=======
+import net.minestom.server.instance.block.BlockChange;
+>>>>>>> cc02c79fb (Cleanup)
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,8 +24,16 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
+<<<<<<< HEAD
     public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
         var blockFace = Objects.requireNonNullElse(placementState.blockFace(), BlockFace.TOP);
+=======
+    public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+        if (!(mutation instanceof BlockChange.Player mut)) {
+            return mutation.block(); // not a player placement
+        }
+        var blockFace = mut.blockFace();
+>>>>>>> cc02c79fb (Cleanup)
         var direction = switch (blockFace) {
             case TOP -> "up";
             case BOTTOM -> "down";
@@ -35,10 +47,17 @@ public class DripstonePlacementRule extends BlockPlacementRule {
     }
 
     @Override
+<<<<<<< HEAD
     public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
         var direction = updateState.currentBlock().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
         var newThickness = getThickness(updateState.instance(), updateState.blockPosition(), direction);
         return updateState.currentBlock().withProperty(PROP_THICKNESS, newThickness);
+=======
+    public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
+        var direction = mutation.block().getProperty(PROP_VERTICAL_DIRECTION).equals("up");
+        var newThickness = getThickness(mutation.instance(), mutation.blockPosition(), direction);
+        return mutation.block().withProperty(PROP_THICKNESS, newThickness);
+>>>>>>> cc02c79fb (Cleanup)
     }
 
     private @NotNull String getThickness(@NotNull Block.Getter instance, @NotNull Point blockPosition, boolean direction) {

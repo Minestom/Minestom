@@ -4,7 +4,11 @@ import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+<<<<<<< HEAD
 import net.minestom.server.item.ItemStack;
+=======
+import net.minestom.server.instance.block.BlockChange;
+>>>>>>> cc02c79fb (Cleanup)
 import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,8 +29,13 @@ public abstract class BlockPlacementRule {
      * @param updateState The current parameters to the block update
      * @return the updated block
      */
+<<<<<<< HEAD
     public @NotNull Block blockUpdate(@NotNull UpdateState updateState) {
         return updateState.currentBlock();
+=======
+    public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
+        return mutation.block();
+>>>>>>> cc02c79fb (Cleanup)
     }
 
     /**
@@ -36,7 +45,11 @@ public abstract class BlockPlacementRule {
      * @param placementState The current parameters to the block placement
      * @return the block to place, {@code null} to cancel
      */
+<<<<<<< HEAD
     public abstract @Nullable Block blockPlace(@NotNull PlacementState placementState);
+=======
+    public abstract @NotNull Block blockPlace(@NotNull BlockChange mutation);
+>>>>>>> cc02c79fb (Cleanup)
 
     public boolean isSelfReplaceable(@NotNull Replacement replacement) {
         return false;

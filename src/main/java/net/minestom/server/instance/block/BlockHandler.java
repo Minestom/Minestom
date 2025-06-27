@@ -27,7 +27,12 @@ public interface BlockHandler {
      *
      * @param placement the placement details
      */
+<<<<<<< HEAD
     default void onPlace(@NotNull Placement placement) {
+=======
+    default @NotNull Block onPlace(@NotNull BlockChange mutation) {
+        return mutation.block();
+>>>>>>> cc02c79fb (Cleanup)
     }
 
     /**
@@ -35,7 +40,12 @@ public interface BlockHandler {
      *
      * @param destroy the destroy details
      */
+<<<<<<< HEAD
     default void onDestroy(@NotNull Destroy destroy) {
+=======
+    default @NotNull Block onDestroy(@NotNull BlockChange mutation) {
+        return mutation.block();
+>>>>>>> cc02c79fb (Cleanup)
     }
 
     /**

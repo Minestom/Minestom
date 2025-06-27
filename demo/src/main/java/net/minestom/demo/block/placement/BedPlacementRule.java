@@ -4,6 +4,10 @@ import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+<<<<<<< HEAD
+=======
+import net.minestom.server.instance.block.BlockChange;
+>>>>>>> cc02c79fb (Cleanup)
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -24,8 +28,16 @@ public class BedPlacementRule extends BlockPlacementRule {
     }
 
     @Override
+<<<<<<< HEAD
     public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
         var playerPosition = Objects.requireNonNullElse(placementState.playerPosition(), Pos.ZERO);
+=======
+    public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+        if( !(mutation instanceof BlockChange.Player mut)) {
+            return mutation.block(); // not a player placement
+        }
+        var playerPosition = mut.player().getPosition();
+>>>>>>> cc02c79fb (Cleanup)
         var facing = BlockFace.fromYaw(playerPosition.yaw());
 
         //todo bad code using instance directly

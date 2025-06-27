@@ -17,6 +17,10 @@ import net.minestom.server.event.player.PlayerSwapItemEvent;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+<<<<<<< HEAD
+=======
+import net.minestom.server.instance.block.BlockChange;
+>>>>>>> cc02c79fb (Cleanup)
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.component.BlockPredicates;
 import net.minestom.server.item.component.Tool;
@@ -185,7 +189,11 @@ public final class PlayerDiggingListener {
                                             Player player,
                                             Point blockPosition, Block previousBlock, BlockFace blockFace) {
         // Unverified block break, client is fully responsible
+<<<<<<< HEAD
         final boolean success = instance.breakBlock(player, blockPosition, blockFace);
+=======
+        final boolean success = instance.breakBlock(new BlockChange.Player(instance, blockPosition, Block.AIR, blockFace, player), true);
+>>>>>>> cc02c79fb (Cleanup)
         final Block updatedBlock = instance.getBlock(blockPosition);
         if (!success) {
             if (previousBlock.isSolid()) {
