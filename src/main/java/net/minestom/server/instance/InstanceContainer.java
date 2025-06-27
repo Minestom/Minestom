@@ -134,7 +134,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x,y,z), block, null), doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x,y,z), block), doBlockUpdates, 0);
     }
 
     /**
@@ -664,8 +664,7 @@ public class InstanceContainer extends Instance {
             BlockChange mutation = new BlockChange.Instance(
                     this,
                     neighborPosition,
-                    neighborBlock,
-                    updateFace.getOppositeFace()
+                    neighborBlock
             );
 
             mutation = mutation.withBlock(neighborBlockPlacementRule.blockUpdate(mutation));
