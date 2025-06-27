@@ -90,8 +90,9 @@ public interface BlockHandler {
     ) { }
 
     record Tick(
-            @NotNull Block block, @NotNull Instance instance,
-            @NotNull Point blockPosition) { }
+        @NotNull Block block, @NotNull Instance instance,
+        @NotNull Point blockPosition
+    ) { }
 
     /**
      * Handler used for loaded blocks with unknown namespace
