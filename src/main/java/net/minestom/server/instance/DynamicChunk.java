@@ -100,12 +100,15 @@ public class DynamicChunk extends Chunk {
         int sectionRelativeZ = globalToSectionRelative(z);
 
         final int index = CoordConversion.chunkBlockIndex(x, y, z);
+
         // Handler
         final BlockHandler handler = block.handler();
         final boolean shouldCache = handler != null || block.hasNbt() || block.registry().isBlockEntity();
-        final Block lastCachedBlock = shouldCache ? this.entries.get(index) : null;
 
-        // Handle previous destroy and new placement
+        final Block lastCachedBlock = this.entries.get(index);
+
+        this.entries.remove(index);
+
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             block = lastCachedBlock.handler().onDestroy(mutation);
         }
@@ -113,17 +116,15 @@ public class DynamicChunk extends Chunk {
             block = handler.onPlace(mutation);
         }
 
-        // Block tick
         if (handler != null && handler.isTickable()) {
             this.tickableMap.put(index, block);
         } else {
             this.tickableMap.remove(index);
         }
 
+        // Cache the new block if needed
         if (shouldCache) {
             this.entries.put(index, block);
-        } else {
-            this.entries.remove(index);
         }
 
         section.blockPalette().set(
