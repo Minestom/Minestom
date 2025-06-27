@@ -53,6 +53,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.instance.block.rule.BlockPlacementRule.DEFAULT_BLOCK_UPDATE_SHAPE;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -62,10 +63,6 @@ public class InstanceContainer extends Instance {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
-
-    private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
-    };
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -92,6 +89,10 @@ public class InstanceContainer extends Instance {
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
+
+    private static final int MAX_BLOCK_UPDATES_TICK = Integer.parseInt(
+            System.getProperty("minestom.instance.maxUpdateDistance", "2048").trim()
+    );
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
         this(uuid, dimensionType, null, dimensionType.key());
@@ -194,7 +195,8 @@ public class InstanceContainer extends Instance {
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
-                executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
+                List<Vec> updateShape = blockPlacementRule == null ? DEFAULT_BLOCK_UPDATE_SHAPE : blockPlacementRule.updateShape();
+                executeNeighboursBlockPlacementRule(blockPosition, updateShape, updateDistance);
             }
 
             // Refresh player chunk block
@@ -663,28 +665,25 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull List<Vec> updateShape, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
-        for (var updateFace : BLOCK_UPDATE_FACES) {
-            var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
+        for (var offset : updateShape) {
+            final Point neighborPosition = blockPosition.add(offset);
+
+            if (neighborPosition.blockY() < getCachedDimensionType().minY() || neighborPosition.blockY() > getCachedDimensionType().height())
                 continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            final Block neighborBlock = cache.getBlock(neighborPosition, Condition.NONE);
             if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
+            if (neighborBlockPlacementRule == null || updateDistance >= MAX_BLOCK_UPDATES_TICK || !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
                 continue;
 
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
             final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
                     this,
-                    neighborPosition,
                     neighborBlock,
-                    updateFace.getOppositeFace()
+                    neighborPosition,
+                    offset
             ));
             if (neighborBlock != newNeighborBlock) {
                 final Chunk chunk = getChunkAt(neighborPosition);
