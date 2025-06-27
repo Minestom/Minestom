@@ -84,61 +84,14 @@ public interface BlockHandler {
     @NotNull
     Key getKey();
 
-    final class Touch {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-        private final Entity touching;
+    record Touch(
+        @NotNull Block block, @NotNull Instance instance,
+        @NotNull Point blockPosition, @NotNull Entity touching
+    ) { }
 
-        @ApiStatus.Internal
-        public Touch(Block block, Instance instance, Point blockPosition, Entity touching) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-            this.touching = touching;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-
-        public @NotNull Entity getTouching() {
-            return touching;
-        }
-    }
-
-    final class Tick {
-        private final Block block;
-        private final Instance instance;
-        private final Point blockPosition;
-
-        @ApiStatus.Internal
-        public Tick(Block block, Instance instance, Point blockPosition) {
-            this.block = block;
-            this.instance = instance;
-            this.blockPosition = blockPosition;
-        }
-
-        public @NotNull Block getBlock() {
-            return block;
-        }
-
-        public @NotNull Instance getInstance() {
-            return instance;
-        }
-
-        public @NotNull Point getBlockPosition() {
-            return blockPosition;
-        }
-    }
+    record Tick(
+            @NotNull Block block, @NotNull Instance instance,
+            @NotNull Point blockPosition) { }
 
     /**
      * Handler used for loaded blocks with unknown namespace
