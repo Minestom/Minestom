@@ -569,7 +569,6 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
             EventDispatcher.call(new PlayerDisconnectEvent(this));
         }
 
-        super.remove(permanent);
 
         final AbstractInventory currentInventory = getOpenInventory();
         if (currentInventory != null) currentInventory.removeViewer(this);
@@ -595,6 +594,8 @@ public class Player extends LivingEntity implements CommandSender, HoverEventSou
         // Prevent the player from being stuck in loading screen, or just unable to interact with the server
         // This should be considered as a bug, since the player will ultimately time out anyway.
         if (permanent && playerConnection.isOnline()) kick(REMOVE_MESSAGE);
+
+        super.remove(permanent);
     }
 
     @Override
