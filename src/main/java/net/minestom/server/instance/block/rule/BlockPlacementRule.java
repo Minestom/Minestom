@@ -1,10 +1,7 @@
 package net.minestom.server.instance.block.rule;
 
-import net.minestom.server.coordinate.Point;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockChange;
-import net.minestom.server.item.Material;
 import org.jetbrains.annotations.NotNull;
 
 public abstract class BlockPlacementRule {
@@ -32,7 +29,7 @@ public abstract class BlockPlacementRule {
      */
     public abstract @NotNull Block blockPlace(@NotNull BlockChange blockChange);
 
-    public boolean isSelfReplaceable(@NotNull Replacement replacement) {
+    public boolean isSelfReplaceable(@NotNull BlockChange.Replacement blockChange) {
         return false;
     }
 
@@ -46,18 +43,5 @@ public abstract class BlockPlacementRule {
      */
     public int maxUpdateDistance() {
         return DEFAULT_UPDATE_RANGE;
-    }
-
-    public record Replacement(
-            @NotNull Block block,
-            @NotNull BlockFace blockFace,
-            @NotNull Point cursorPosition,
-            /**
-			 * Whether or not the placement position is offset from the clicked block
-			 * position.
-			 */
-            @NotNull boolean isOffset,
-            @NotNull Material material
-    ) {
     }
 }

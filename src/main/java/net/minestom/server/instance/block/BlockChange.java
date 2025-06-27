@@ -43,4 +43,21 @@ public sealed interface BlockChange {
                                 player, hand, cursorPosition);
         }
     }
+
+    record Replacement(
+        @NotNull Block.Getter instance, @NotNull Point blockPosition,
+        @NotNull Block block, @NotNull BlockFace blockFace,
+        @NotNull Point cursorPosition, boolean isOffset,
+        @NotNull net.minestom.server.item.Material material
+    ) implements BlockChange {
+
+        @Override
+        public @NotNull BlockChange.Replacement withBlock(@NotNull Block newBlock) {
+            return new Replacement(instance, blockPosition, newBlock, blockFace, cursorPosition, isOffset, material);
+        }
+
+        public @NotNull BlockChange.Replacement withOffset(boolean newOffset) {
+            return new Replacement(instance, blockPosition, block, blockFace, cursorPosition, newOffset, material);
+        }
+    }
 }
