@@ -16,7 +16,7 @@ import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockMutation;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
@@ -130,7 +130,7 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockMutation.Instance(this, new Vec(x,y,z), block, null), doBlockUpdates, 0);
+        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x,y,z), block, null), doBlockUpdates, 0);
     }
 
     /**
@@ -140,7 +140,7 @@ public class InstanceContainer extends Instance {
      *
      * @param chunk the {@link Chunk} which should be loaded
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, @NotNull BlockMutation mutation,
+    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, @NotNull BlockChange mutation,
                                               boolean doBlockUpdates, int updateDistance) {
         if (chunk.isReadOnly()) return;
 
@@ -181,7 +181,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockMutation.Player mutation, boolean doBlockUpdates) {
+    public boolean placeBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(mutation.blockPosition());
         if (!isLoaded(chunk)) return false;
         UNSAFE_setBlock(chunk, mutation, doBlockUpdates, 0);
@@ -189,7 +189,7 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean breakBlock(@NotNull BlockMutation.Player mutation, boolean doBlockUpdates) {
+    public boolean breakBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
         final Chunk chunk = getChunkAt(mutation.blockPosition());
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
@@ -206,10 +206,10 @@ public class InstanceContainer extends Instance {
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            mutation = (BlockMutation.Player) mutation.withBlock(blockBreakEvent.getResultBlock());
+            mutation = mutation.withBlock(blockBreakEvent.getResultBlock());
             UNSAFE_setBlock(chunk, mutation, doBlockUpdates, 0);
             // Send the block break effect packet
-            BlockMutation.@NotNull Player finalMutation = mutation;
+            BlockChange.@NotNull Player finalMutation = mutation;
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), mutation.blockPosition(), block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
@@ -646,7 +646,7 @@ public class InstanceContainer extends Instance {
 
             final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
 
-            BlockMutation mutation = new BlockMutation.Instance(
+            BlockChange mutation = new BlockChange.Instance(
                     this,
                     neighborPosition,
                     neighborBlock,

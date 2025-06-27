@@ -1,14 +1,11 @@
 package net.minestom.demo.block.placement;
 
-import net.minestom.server.coordinate.Pos;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockFace;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
-import java.util.Objects;
 
 /**
  * https://gist.github.com/mworzala/0676c28343310458834d70ed29b11a37
@@ -24,21 +21,24 @@ public class BedPlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(@NotNull PlacementState placementState) {
-        var playerPosition = Objects.requireNonNullElse(placementState.playerPosition(), Pos.ZERO);
+    public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
+        if( !(mutation instanceof BlockChange.Player mut)) {
+            return mutation.block(); // not a player placement
+        }
+        var playerPosition = mut.player().getPosition();
         var facing = BlockFace.fromYaw(playerPosition.yaw());
 
         //todo bad code using instance directly
-        if (!(placementState.instance() instanceof Instance instance)) return null;
+        if (!(mut.instance() instanceof Instance instance)) return mutation.block();
 
-        var headPosition = placementState.placePosition().relative(facing);
+        var headPosition = mutation.blockPosition().relative(facing);
         if (!instance.getBlock(headPosition, Block.Getter.Condition.TYPE).isAir())
-            return null;
+            return mutation.block();
 
         var headBlock = this.block.withProperty(PROP_PART, "head")
                 .withProperty(PROP_FACING, facing.name().toLowerCase());
         instance.setBlock(headPosition, headBlock);
 
-        return headBlock.withProperty(PROP_PART, "foot");
+        return mut.block().withProperty(PROP_PART, "foot").withProperty(PROP_FACING, facing.name().toLowerCase());
     }
 }
