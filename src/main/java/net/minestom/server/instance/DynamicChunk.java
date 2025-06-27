@@ -117,6 +117,7 @@ public class DynamicChunk extends Chunk {
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             block = lastCachedBlock.handler().onDestroy(new BlockChange.Instance(instance, mutation.blockPosition(), block));
         }
+
         if (handler != null) {
             var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
             final Block finalBlock = block;
