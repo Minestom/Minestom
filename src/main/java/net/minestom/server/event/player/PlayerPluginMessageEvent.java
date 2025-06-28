@@ -6,7 +6,7 @@ import net.minestom.server.network.packet.client.common.ClientPluginMessagePacke
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Called when a player send {@link ClientPluginMessagePacket}.
+ * Called when a player sends a {@link ClientPluginMessagePacket}.
  */
 public class PlayerPluginMessageEvent implements PlayerInstanceEvent {
 
@@ -46,6 +46,7 @@ public class PlayerPluginMessageEvent implements PlayerInstanceEvent {
      * @return the message
      */
     @NotNull
+    @Deprecated(forRemoval = true)
     public String getMessageString() {
         return new String(message);
     }
