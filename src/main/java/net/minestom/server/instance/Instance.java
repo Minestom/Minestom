@@ -2,10 +2,13 @@ package net.minestom.server.instance;
 
 import it.unimi.dsi.fastutil.objects.ObjectArraySet;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
+import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.pointer.PointersSupplier;
 import net.kyori.adventure.sound.Sound;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.ServerFlag;
@@ -70,7 +73,12 @@ import java.util.stream.Collectors;
  * you need to be sure to signal the {@link ThreadDispatcher} of every partition/element changes.
  */
 public abstract class Instance implements Block.Getter, Block.Setter,
-        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience {
+        Tickable, Schedulable, Snapshotable, EventHandler<InstanceEvent>, Taggable, PacketGroupingAudience, Pointered, Identified {
+
+    // Adventure pointers
+    protected static final PointersSupplier<Instance> INSTANCE_POINTERS_SUPPLIER = PointersSupplier.<Instance>builder()
+            .resolving(Identity.UUID, Instance::getUuid)
+            .build();
 
     private boolean registered;
 
@@ -115,9 +123,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     // the explosion supplier
     private ExplosionSupplier explosionSupplier;
 
-    // Adventure
-    private final Pointers pointers;
-
     /**
      * Creates a new instance.
      *
@@ -153,10 +158,6 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
         this.worldBorder = WorldBorder.DEFAULT_BORDER;
         targetBorderDiameter = this.worldBorder.diameter();
-
-        this.pointers = Pointers.builder()
-                .withDynamic(Identity.UUID, this::getUuid)
-                .build();
 
         final ServerProcess process = MinecraftServer.process();
         if (process != null) {
@@ -970,7 +971,12 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     @Override
     public @NotNull Pointers pointers() {
-        return this.pointers;
+        return INSTANCE_POINTERS_SUPPLIER.view(this);
+    }
+
+    @Override
+    public @NotNull Identity identity() {
+        return Identity.identity(this.uuid);
     }
 
     public int getBlockLight(int blockX, int blockY, int blockZ) {

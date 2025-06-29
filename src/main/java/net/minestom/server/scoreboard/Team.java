@@ -2,6 +2,7 @@ package net.minestom.server.scoreboard;
 
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.pointer.Pointers;
+import net.kyori.adventure.pointer.PointersSupplier;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
@@ -27,6 +28,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class Team implements PacketGroupingAudience {
     private static final byte ALLOW_FRIENDLY_FIRE_BIT = 0x01;
     private static final byte SEE_INVISIBLE_PLAYERS_BIT = 0x02;
+
+    protected static final PointersSupplier<Team> TEAM_POINTERS_SUPPLIER = PointersSupplier.<Team>builder()
+            .resolving(Identity.NAME, Team::getTeamName)
+            .resolving(Identity.DISPLAY_NAME, Team::getTeamDisplayName)
+            .build();
 
     /**
      * A collection of all registered entities who are on the team.
@@ -72,9 +78,6 @@ public class Team implements PacketGroupingAudience {
     private final Set<Player> playerMembers = ConcurrentHashMap.newKeySet();
     private boolean isPlayerMembersUpToDate;
 
-    // Adventure
-    private final Pointers pointers;
-
     /**
      * Default constructor to creates a team.
      *
@@ -93,11 +96,6 @@ public class Team implements PacketGroupingAudience {
         this.suffix = Component.empty();
 
         this.members = new CopyOnWriteArraySet<>();
-
-        this.pointers = Pointers.builder()
-                .withDynamic(Identity.NAME, this::getTeamName)
-                .withDynamic(Identity.DISPLAY_NAME, this::getTeamDisplayName)
-                .build();
     }
 
     /**
@@ -487,6 +485,6 @@ public class Team implements PacketGroupingAudience {
 
     @Override
     public @NotNull Pointers pointers() {
-        return this.pointers;
+        return TEAM_POINTERS_SUPPLIER.view(this);
     }
 }
