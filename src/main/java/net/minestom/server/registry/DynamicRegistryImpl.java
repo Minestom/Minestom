@@ -63,22 +63,18 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     // Used to create compressed registries
     DynamicRegistryImpl(@NotNull Key key, @Nullable Codec<T> codec, @NotNull List<T> idToValue,
-                        @NotNull List<RegistryKey<T>> idToKey, @NotNull Map<Key, T> keyToValue,
-                        @NotNull Map<T, RegistryKey<T>> valueToKey, @NotNull List<DataPack> packById,
-                        @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
+                        @NotNull Map<RegistryKey<T>, Integer> keyToId, @NotNull List<RegistryKey<T>> idToKey,
+                        @NotNull Map<Key, T> keyToValue, @NotNull Map<T, RegistryKey<T>> valueToKey,
+                        @NotNull List<DataPack> packById, @NotNull Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags) {
         this.key = key;
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
-        this.keyToId = new HashMap<>();
+        this.keyToId = keyToId;
         this.keyToValue = keyToValue;
         this.valueToKey = valueToKey;
         this.packById = packById;
         this.tags = tags;
-
-        for (int id = 0; id < idToKey.size(); id++) {
-            keyToId.put(idToKey.get(id), id);
-        }
     }
 
     @Override
@@ -123,7 +119,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public int getId(@NotNull RegistryKey<T> key) {
-        return keyToId.get(key);
+        return keyToId.getOrDefault(key, -1);
     }
 
     @Override
@@ -308,6 +304,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         // Create new instances so they are trimmed to size without downcasting.
         return new DynamicRegistryImpl<>(key, codec,
                 new ArrayList<>(idToValue),
+                new HashMap<>(keyToId),
                 new ArrayList<>(idToKey),
                 new HashMap<>(keyToValue),
                 new HashMap<>(valueToKey),

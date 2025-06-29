@@ -1,8 +1,8 @@
 package net.minestom.server.registry;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.world.biome.Biome;
 import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.concurrent.TimeUnit;
 
@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 public class DynamicRegistryGetIdBenchmark {
     private DynamicRegistry<Biome> registry;
-    private final RegistryKey<Biome> biome = Biome.PALE_GARDEN;
 
     @Setup
     public void setup() {
@@ -22,7 +21,7 @@ public class DynamicRegistryGetIdBenchmark {
     }
 
     @Benchmark
-    public int getId() {
-        return registry.getId(biome);
+    public void getId(Blackhole blackhole) {
+        blackhole.consume(registry.getId(RegistryKey.unsafeOf("pale_garden")));
     }
 }
