@@ -979,7 +979,7 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     @Override
     @Contract(pure = true)
     public @NotNull Identity identity() {
-        return Identity.identity(this.uuid);
+        return Identity.identity(this.uuid); // Warning, do not pull up until this.uuid is final
     }
 
     public int getBlockLight(int blockX, int blockY, int blockZ) {
