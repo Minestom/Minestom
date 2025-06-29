@@ -52,7 +52,6 @@ final class MetadataImpl {
         EMPTY_VALUES.set(TYPE_POSE, Pose(EntityPose.STANDING));
         EMPTY_VALUES.set(TYPE_CAT_VARIANT, CatVariant(CatVariant.TABBY));
         EMPTY_VALUES.set(TYPE_WOLF_VARIANT, WolfVariant(WolfVariant.PALE));
-        EMPTY_VALUES.set(TYPE_FROG_VARIANT, FrogVariant(FrogMeta.Variant.TEMPERATE));
         // OptGlobalPos
         EMPTY_VALUES.set(TYPE_PAINTING_VARIANT, PaintingVariant(PaintingVariant.KEBAB));
         EMPTY_VALUES.set(TYPE_SNIFFER_STATE, SnifferState(SnifferMeta.State.IDLING));
