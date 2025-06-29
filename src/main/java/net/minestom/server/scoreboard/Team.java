@@ -13,6 +13,7 @@ import net.minestom.server.network.packet.server.play.TeamsPacket;
 import net.minestom.server.network.packet.server.play.TeamsPacket.CollisionRule;
 import net.minestom.server.network.packet.server.play.TeamsPacket.NameTagVisibility;
 import net.minestom.server.utils.PacketSendingUtils;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -484,6 +485,7 @@ public class Team implements PacketGroupingAudience {
     }
 
     @Override
+    @Contract(pure = true)
     public @NotNull Pointers pointers() {
         return TEAM_POINTERS_SUPPLIER.view(this);
     }

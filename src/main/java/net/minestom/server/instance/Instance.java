@@ -52,6 +52,7 @@ import net.minestom.server.utils.chunk.ChunkSupplier;
 import net.minestom.server.utils.validate.Check;
 import net.minestom.server.world.DimensionType;
 import org.jetbrains.annotations.ApiStatus;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -970,11 +971,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
     }
 
     @Override
+    @Contract(pure = true)
     public @NotNull Pointers pointers() {
         return INSTANCE_POINTERS_SUPPLIER.view(this);
     }
 
     @Override
+    @Contract(pure = true)
     public @NotNull Identity identity() {
         return Identity.identity(this.uuid);
     }
