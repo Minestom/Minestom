@@ -151,10 +151,6 @@ public final class Metadata {
         return new MetadataImpl.EntryImpl<>(TYPE_WOLF_SOUND_VARIANT, value, WolfSoundVariant.NETWORK_TYPE);
     }
 
-    public static Entry<FrogMeta.Variant> FrogVariant(@NotNull FrogMeta.Variant value) {
-        return new MetadataImpl.EntryImpl<>(TYPE_FROG_VARIANT, value, FrogMeta.Variant.NETWORK_TYPE);
-    }
-
     public static Entry<RegistryKey<PigVariant>> PigVariant(@NotNull RegistryKey<PigVariant> value) {
         return new MetadataImpl.EntryImpl<>(TYPE_PIG_VARIANT, value, PigVariant.NETWORK_TYPE);
     }
