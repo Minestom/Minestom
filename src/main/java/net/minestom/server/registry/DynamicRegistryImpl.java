@@ -37,6 +37,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     private final List<T> idToValue;
     private final List<RegistryKey<T>> idToKey;
+    private final Map<RegistryKey<T>, Integer> keyToId;
     private final Map<Key, T> keyToValue;
     private final Map<T, RegistryKey<T>> valueToKey;
     private final List<DataPack> packById;
@@ -52,6 +53,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         // Expect stale data possibilities with unsafe ops.
         this.idToValue = new ArrayList<>();
         this.idToKey = new ArrayList<>();
+        this.keyToId = new HashMap<>();
         this.keyToValue = new HashMap<>();
         this.valueToKey = new HashMap<>();
         this.packById = new ArrayList<>();
@@ -68,10 +70,15 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
         this.codec = codec;
         this.idToValue = idToValue;
         this.idToKey = idToKey;
+        this.keyToId = new HashMap<>();
         this.keyToValue = keyToValue;
         this.valueToKey = valueToKey;
         this.packById = packById;
         this.tags = tags;
+
+        for (int id = 0; id < idToKey.size(); id++) {
+            keyToId.put(idToKey.get(id), id);
+        }
     }
 
     @Override
@@ -116,7 +123,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
     @Override
     public int getId(@NotNull RegistryKey<T> key) {
-        return idToKey.indexOf(key);
+        return keyToId.get(key);
     }
 
     @Override
@@ -125,16 +132,18 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
-            int id = idToKey.indexOf(registryKey); // Array set at home
+            Integer id = keyToId.get(registryKey); // Array set at home
             keyToValue.put(key, object);
             valueToKey.put(object, registryKey);
-            if (id == -1) {
+            if (id == null) {
                 idToValue.add(object);
                 idToKey.add(registryKey);
+                keyToId.put(registryKey, idToValue.size() - 1);
                 packById.add(pack);
             } else {
                 idToValue.set(id, object);
                 idToKey.set(id, registryKey);
+                keyToId.put(registryKey, id);
                 packById.set(id, pack);
             }
 
@@ -149,12 +158,14 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
 
         final RegistryKey<T> registryKey = new RegistryKeyImpl<>(key);
         synchronized (REGISTRY_LOCK) {
-            int id = idToKey.indexOf(registryKey);
-            if (id == -1) return false;
+            Integer idObject = keyToId.get(registryKey);
+            if (idObject == null) return false;
+            int id = idObject;
 
             // Remove value from all mappings (shifting down indices)
             idToValue.remove(id);
             idToKey.remove(registryKey);
+            keyToId.remove(registryKey);
             var value = keyToValue.remove(key);
             valueToKey.remove(value);
             packById.remove(id);
@@ -239,7 +250,7 @@ final class DynamicRegistryImpl<T> implements DynamicRegistry<T> {
             final int[] entries = new int[tag.size()];
             int i = 0;
             for (var registryKey : tag)
-                entries[i++] = idToKey.indexOf(registryKey);
+                entries[i++] = keyToId.get(registryKey);
             tagList.add(new TagsPacket.Tag(tag.key().key().asString(), entries));
         }
         return new TagsPacket.Registry(key().asString(), tagList);
