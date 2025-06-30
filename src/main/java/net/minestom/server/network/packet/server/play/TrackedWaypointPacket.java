@@ -49,10 +49,33 @@ public record TrackedWaypointPacket(
         public static final Key DEFAULT_STYLE = Key.key("default");
         public static final Icon DEFAULT = new Icon(DEFAULT_STYLE, null);
 
-        public static final NetworkBuffer.Type<Icon> NETWORK_TYPE = NetworkBufferTemplate.template(
-                NetworkBuffer.KEY, Icon::style,
-                Color.NETWORK_TYPE.optional(), Icon::color,
-                Icon::new);
+        public static final NetworkBuffer.Type<Icon> NETWORK_TYPE = new NetworkBuffer.Type<>() {
+            @Override
+            public void write(@NotNull NetworkBuffer buffer, @NotNull Icon value) {
+                buffer.write(NetworkBuffer.KEY, value.style());
+                final RGBLike color = value.color();
+                buffer.write(NetworkBuffer.BOOLEAN, color != null);
+                if (color != null) {
+                    buffer.write(NetworkBuffer.BYTE, (byte) color.red());
+                    buffer.write(NetworkBuffer.BYTE, (byte) color.green());
+                    buffer.write(NetworkBuffer.BYTE, (byte) color.blue());
+                }
+            }
+
+            @Override
+            public @NotNull Icon read(@NotNull NetworkBuffer buffer) {
+                final Key style = buffer.read(NetworkBuffer.KEY);
+                final boolean hasColor = buffer.read(NetworkBuffer.BOOLEAN);
+                RGBLike color = null;
+                if (hasColor) {
+                    final int red = buffer.read(NetworkBuffer.BYTE);
+                    final int green = buffer.read(NetworkBuffer.BYTE);
+                    final int blue = buffer.read(NetworkBuffer.BYTE);
+                    color = new Color(red, green, blue);
+                }
+                return new Icon(style, color);
+            }
+        };
 
         public Icon(@NotNull Key style) {
             this(style, null);
