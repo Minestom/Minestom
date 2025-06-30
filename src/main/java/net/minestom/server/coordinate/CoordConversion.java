@@ -3,6 +3,8 @@ package net.minestom.server.coordinate;
 import org.jetbrains.annotations.NotNull;
 
 public final class CoordConversion {
+    public static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
+
     // COORDINATE CONVERSIONS
 
     public static int globalToBlock(double xyz) {

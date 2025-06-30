@@ -227,7 +227,7 @@ public class InstanceContainer extends Instance {
         final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
 
         LongSet sectionIndexes = new LongOpenHashSet();
-        Set<Point> blockCoords = new HashSet<>();
+        Set<BlockVec> blockCoords = new HashSet<>();
 
         // Iterate through all sections in the bounding box
         for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
@@ -277,9 +277,11 @@ public class InstanceContainer extends Instance {
                     final int sectionZ = sectionIndexGetZ(sectionIdx);
                     Chunk chunk = getChunk(sectionX, sectionZ);
                     if (chunk == null) continue;
-                    Section section = chunk.getSection(sectionY);
-                    Palette palette = section.blockPalette();
-                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    synchronized (chunk) {
+                        Section section = chunk.getSection(sectionY);
+                        Palette palette = section.blockPalette();
+                        builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    }
                 }
             });
         } else {
@@ -292,12 +294,14 @@ public class InstanceContainer extends Instance {
                     final int sectionZ = sectionIndexGetZ(sectionIdx);
                     Chunk chunk = getChunk(sectionX, sectionZ);
                     if (chunk == null) continue;
-                    Section section = chunk.getSection(sectionY);
-                    Palette palette = section.blockPalette();
-                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    synchronized (chunk) {
+                        Section section = chunk.getSection(sectionY);
+                        Palette palette = section.blockPalette();
+                        builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    }
                 }
                 // Add individual blocks from partially contained sections
-                for (Point coord : blockCoords) {
+                for (BlockVec coord : blockCoords) {
                     final Block block = getBlock(coord);
                     builder.setBlock(coord, block);
                 }

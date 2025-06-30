@@ -89,7 +89,7 @@ record BlockBatchImpl(
     @Override
     public int count() {
         if (option.aligned) {
-            return sectionStates.size() * 16 * 16 * 16;
+            return sectionStates.size() * SECTION_BLOCK_COUNT;
         } else {
             int count = 0;
             for (SectionState sectionState : sectionStates.values()) {
@@ -132,9 +132,12 @@ record BlockBatchImpl(
             if (!option.onlyState) {
                 final CompoundBinaryTag compound = block.nbt();
                 final BlockHandler handler = block.handler();
+                final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
                 if (compound != null || handler != null) {
-                    final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
                     sectionState.blockStates.put(sectionBlockIndex, block);
+                } else {
+                    // Necessary overhead to support overwriting blocks
+                    sectionState.blockStates.remove(sectionBlockIndex);
                 }
             }
         }

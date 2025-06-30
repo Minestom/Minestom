@@ -7,9 +7,8 @@ import net.minestom.testing.Env;
 import net.minestom.testing.EnvTest;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class BlockBatchIntegrationTest {
@@ -621,9 +620,9 @@ public class BlockBatchIntegrationTest {
                 for (int z = 0; z < 4; z++) {
                     Block block = instance.getBlock(16 + x, 16 + y, 16 + z);
                     assertEquals(Block.STONE, block,
-                        "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should be STONE");
+                            "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should be STONE");
                     assertNull(block.nbt(),
-                        "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should not have NBT");
+                            "Block at (" + (16 + x) + "," + (16 + y) + "," + (16 + z) + ") should not have NBT");
                 }
             }
         }
@@ -667,5 +666,63 @@ public class BlockBatchIntegrationTest {
         // Most importantly, verify that no NBT remains
         assertNull(newChestPos.nbt());
         assertNull(newSignPos.nbt());
+    }
+
+    @Test
+    public void instanceGetBatch(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block chestWithItems = Block.CHEST;
+        instance.setBlock(0, 0, 0, chestWithItems);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO);
+        assertNotNull(batch);
+        assertEquals(1, batch.count());
+        assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void instanceGetBatchState(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "{\"text\":\"Test Chest\"}")
+                .build());
+        instance.setBlock(0, 0, 0, chestWithItems);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO);
+        assertNotNull(batch);
+        assertEquals(1, batch.count());
+        assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void instanceGetBatchAligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block chestWithItems = Block.CHEST;
+        instance.setBlock(0, 0, 0, chestWithItems);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        assertNotNull(batch);
+        assertEquals(SECTION_BLOCK_COUNT, batch.count());
+        assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
+    }
+
+    @Test
+    public void instanceGetBatchStateAligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "{\"text\":\"Test Chest\"}")
+                .build());
+        instance.setBlock(0, 0, 0, chestWithItems);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        assertNotNull(batch);
+        assertEquals(SECTION_BLOCK_COUNT, batch.count());
+        assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
     }
 }
