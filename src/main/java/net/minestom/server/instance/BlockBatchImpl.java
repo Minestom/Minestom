@@ -22,17 +22,18 @@ record BlockBatchImpl(
         final long sectionIndex = sectionIndexGlobal(x, y, z);
         final SectionState sectionState = sectionStates.get(sectionIndex);
         if (sectionState == null) return Block.AIR;
-        final Palette palette = sectionState.palette;
         final int localX = globalToSectionRelative(x);
         final int localY = globalToSectionRelative(y);
         final int localZ = globalToSectionRelative(z);
-        int index = palette.get(localX, localY, localZ);
-        if (!option.aligned) index--;
-        if (!option.onlyState) {
+        if (condition != Condition.TYPE && !option.onlyState) {
             final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
             Block block = sectionState.blockStates.get(sectionBlockIndex);
             if (block != null) return block;
         }
+        // Stateless block
+        final Palette palette = sectionState.palette;
+        int index = palette.get(localX, localY, localZ);
+        if (!option.aligned) index--;
         return Block.fromStateId(index);
     }
 
