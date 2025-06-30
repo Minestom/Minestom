@@ -12,6 +12,11 @@ import static net.minestom.server.instance.BlockBatchImpl.OptionImpl;
 
 @ApiStatus.Experimental
 public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
+    Option UNALIGNED = new OptionImpl(false, false, true);
+    Option UNALIGNED_STATES = new OptionImpl(true, false, true);
+    Option ALIGNED = new OptionImpl(false, true, true);
+    Option ALIGNED_STATES = new OptionImpl(true, true, true);
+
     static @NotNull BlockBatch batch(@NotNull Option option, @NotNull Consumer<@NotNull Builder> consumer) {
         BuilderImpl builder = new BuilderImpl(option);
         consumer.accept(builder);
@@ -24,26 +29,22 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * Most flexible option, but also the least performant.
      */
     static @NotNull BlockBatch unaligned(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(false, false, true);
-        return batch(option, consumer);
+        return batch(UNALIGNED, consumer);
     }
 
     /**
      * Block batch that only place explicitly set blocks, ignoring nbt and handlers.
      */
     static @NotNull BlockBatch unalignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(true, false, true);
-        return batch(option, consumer);
+        return batch(UNALIGNED_STATES, consumer);
     }
 
     static @NotNull BlockBatch aligned(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(false, true, true);
-        return batch(option, consumer);
+        return batch(ALIGNED, consumer);
     }
 
     static @NotNull BlockBatch alignedStates(@NotNull Consumer<@NotNull Builder> consumer) {
-        final Option option = new OptionImpl(true, true, true);
-        return batch(option, consumer);
+        return batch(ALIGNED_STATES, consumer);
     }
 
     static @NotNull BlockBatch empty() {
