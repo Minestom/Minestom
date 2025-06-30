@@ -24,6 +24,13 @@ public sealed interface DialogInput {
             Map.entry(Key.key("text"), Text.CODEC));
     @NotNull StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
 
+    static boolean keyIsValidate(String key) {
+        for (var c : key.toCharArray())
+            if (!Character.isLetterOrDigit(c) && c != '_')
+                return false;
+        return true;
+    }
+
     record Boolean(
             @NotNull String key,
             @NotNull Component label,
@@ -41,7 +48,7 @@ public sealed interface DialogInput {
                 Boolean::new);
 
         public Boolean {
-            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
         }
 
         @Override
@@ -71,7 +78,7 @@ public sealed interface DialogInput {
                 NumberRange::new);
 
         public NumberRange {
-            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
         }
 
         @Override
@@ -95,7 +102,7 @@ public sealed interface DialogInput {
                 SingleOption::new);
 
         public SingleOption {
-            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
             boolean found = false;
             for (var option : options) {
                 if (!option.initial) continue;
@@ -137,7 +144,7 @@ public sealed interface DialogInput {
                 Text::new);
 
         public Text {
-            Check.argCondition(!key.matches("^[a-z0-9_]+$"), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
         }
 
         @Override
