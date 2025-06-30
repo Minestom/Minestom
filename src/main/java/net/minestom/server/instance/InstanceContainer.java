@@ -54,6 +54,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static net.minestom.server.coordinate.CoordConversion.*;
@@ -268,42 +269,43 @@ public class InstanceContainer extends Instance {
             }
         }
 
-        if (blockCoords.isEmpty()) {
-            // Fast aligned batch
-            return BlockBatch.aligned(builder -> {
-                for (long sectionIdx : sectionIndexes) {
-                    final int sectionX = sectionIndexGetX(sectionIdx);
-                    final int sectionY = sectionIndexGetY(sectionIdx);
-                    final int sectionZ = sectionIndexGetZ(sectionIdx);
-                    Chunk chunk = getChunk(sectionX, sectionZ);
-                    if (chunk == null) continue;
-                    synchronized (chunk) {
-                        Section section = chunk.getSection(sectionY);
-                        Palette palette = section.blockPalette();
-                        builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+        Function<BlockBatch.Builder, Void> chunkRegister = builder -> {
+            for (long sectionIdx : sectionIndexes) {
+                final int sectionX = sectionIndexGetX(sectionIdx);
+                final int sectionY = sectionIndexGetY(sectionIdx);
+                final int sectionZ = sectionIndexGetZ(sectionIdx);
+                Chunk chunk = getChunk(sectionX, sectionZ);
+                if (chunk == null) continue;
+                synchronized (chunk) {
+                    Section section = chunk.getSection(sectionY);
+                    Palette palette = section.blockPalette();
+                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    if (chunk instanceof DynamicChunk dynamicChunk) {
+                        // Add block states
+                        for (Int2ObjectMap.Entry<Block> entry : dynamicChunk.entries.int2ObjectEntrySet()) {
+                            final int blockIndex = entry.getIntKey();
+                            final Block block = entry.getValue();
+                            final int localX = chunkBlockIndexGetX(blockIndex), localY = chunkBlockIndexGetY(blockIndex), localZ = chunkBlockIndexGetZ(blockIndex);
+                            final int globalX = (sectionX * 16) + localX, globalY = (sectionY * 16) + localY, globalZ = (sectionZ * 16) + localZ;
+                            builder.setBlock(globalX, globalY, globalZ, block);
+                        }
                     }
                 }
-            });
+            }
+            return null;
+        };
+
+        if (blockCoords.isEmpty()) {
+            // Fast aligned batch
+            return BlockBatch.aligned(chunkRegister::apply);
         } else {
             // Slower unaligned batch
             return BlockBatch.unaligned(builder -> {
-                // Add fully contained sections
-                for (long sectionIdx : sectionIndexes) {
-                    final int sectionX = sectionIndexGetX(sectionIdx);
-                    final int sectionY = sectionIndexGetY(sectionIdx);
-                    final int sectionZ = sectionIndexGetZ(sectionIdx);
-                    Chunk chunk = getChunk(sectionX, sectionZ);
-                    if (chunk == null) continue;
-                    synchronized (chunk) {
-                        Section section = chunk.getSection(sectionY);
-                        Palette palette = section.blockPalette();
-                        builder.copyPalette(sectionX, sectionY, sectionZ, palette);
-                    }
-                }
+                chunkRegister.apply(builder);
                 // Add individual blocks from partially contained sections
-                for (BlockVec coord : blockCoords) {
-                    final Block block = getBlock(coord);
-                    builder.setBlock(coord, block);
+                for (BlockVec vec : blockCoords) {
+                    final Block block = getBlock(vec);
+                    builder.setBlock(vec, block);
                 }
             });
         }
