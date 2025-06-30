@@ -122,6 +122,12 @@ public final class CoordConversion {
         return new Vec(x, y, z);
     }
 
+    public static Point chunkBlockRelativeGetGlobal(int sectionRelativeX, int y, int sectionRelativeZ, int chunkX, int chunkZ) {
+        final int x = sectionRelativeX + 16 * chunkX;
+        final int z = sectionRelativeZ + 16 * chunkZ;
+        return new Vec(x, y, z);
+    }
+
     // SECTION INDEX
 
     public static long sectionIndex(int sectionX, int sectionY, int sectionZ) {

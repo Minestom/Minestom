@@ -119,18 +119,16 @@ public class DynamicChunk extends Chunk {
         }
 
         // Update block handlers
-        var blockPosition = new Vec(x, y, z);
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
             // Previous destroy
             lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
+                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
         }
         if (handler != null) {
             // New placement
-
             final Block finalBlock = block;
             handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, blockPosition)));
+                    () -> new BlockHandler.Placement(finalBlock, instance, CoordConversion.chunkBlockRelativeGetGlobal(sectionRelativeX, y, sectionRelativeZ, chunkX, chunkZ))));
         }
 
         // UpdateHeightMaps
