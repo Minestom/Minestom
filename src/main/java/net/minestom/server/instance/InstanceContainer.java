@@ -284,9 +284,11 @@ public class InstanceContainer extends Instance {
                         // Add block states
                         for (Int2ObjectMap.Entry<Block> entry : dynamicChunk.entries.int2ObjectEntrySet()) {
                             final int blockIndex = entry.getIntKey();
-                            final Block block = entry.getValue();
                             final int localX = chunkBlockIndexGetX(blockIndex), localY = chunkBlockIndexGetY(blockIndex), localZ = chunkBlockIndexGetZ(blockIndex);
+                            final int blockSectionY = floorSection(localY);
+                            if (blockSectionY != sectionY) continue;
                             final int globalX = (sectionX * 16) + localX, globalY = (sectionY * 16) + localY, globalZ = (sectionZ * 16) + localZ;
+                            final Block block = entry.getValue();
                             builder.setBlock(globalX, globalY, globalZ, block);
                         }
                     }

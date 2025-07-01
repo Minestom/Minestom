@@ -725,4 +725,20 @@ public class BlockBatchIntegrationTest {
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
     }
+
+    @Test
+    public void instanceGetBatchOutboundHeight(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block chestWithItems = Block.CHEST.withNbt(CompoundBinaryTag.builder()
+                .putString("id", "minecraft:chest")
+                .putString("CustomName", "{\"text\":\"Test Chest\"}")
+                .build());
+        instance.setBlock(0, 32, 0, chestWithItems);
+        instance.setBlock(0, 16, 0, chestWithItems);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        assertNotNull(batch);
+        batch.getAll((x, y, z, block) -> assertEquals(Block.AIR, block));
+    }
 }
