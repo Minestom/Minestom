@@ -216,7 +216,9 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public @NotNull BlockBatch getBlockBatch(@NotNull Point p1, @NotNull Point p2) {
+    public @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+        final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
+        final boolean originAligned = sectionAligned(originX, originY, originZ);
         final int minX = Math.min(p1.blockX(), p2.blockX());
         final int minY = Math.min(p1.blockY(), p2.blockY());
         final int minZ = Math.min(p1.blockZ(), p2.blockZ());
@@ -279,7 +281,19 @@ public class InstanceContainer extends Instance {
                 synchronized (chunk) {
                     Section section = chunk.getSection(sectionY);
                     Palette palette = section.blockPalette();
-                    builder.copyPalette(sectionX, sectionY, sectionZ, palette);
+                    if (originAligned) {
+                        final int offsetX = origin.chunkX();
+                        final int offsetY = origin.section();
+                        final int offsetZ = origin.chunkZ();
+                        builder.copyPalette(sectionX - offsetX, sectionY - offsetY, sectionZ - offsetZ, palette);
+                    } else {
+                        // Unaligned: copy palette with offset
+                        System.out.println("not aligned copy");
+                        final int offsetX = sectionX * 16 - minX - originX;
+                        final int offsetY = sectionY * 16 - minY - originY;
+                        final int offsetZ = sectionZ * 16 - minZ - originZ;
+                        //builder.copyPalette(sectionX, sectionY, sectionZ, palette, offsetX, offsetY, offsetZ);
+                    }
                     if (chunk instanceof DynamicChunk dynamicChunk) {
                         // Add block states
                         for (Int2ObjectMap.Entry<Block> entry : dynamicChunk.entries.int2ObjectEntrySet()) {
@@ -288,8 +302,9 @@ public class InstanceContainer extends Instance {
                             final int blockSectionY = floorSection(localY);
                             if (blockSectionY != sectionY) continue;
                             final int globalX = (sectionX * 16) + localX, globalY = (sectionY * 16) + localY, globalZ = (sectionZ * 16) + localZ;
+                            final int bX = globalX - originX, bY = globalY - originY, bZ = globalZ - originZ;
                             final Block block = entry.getValue();
-                            builder.setBlock(globalX, globalY, globalZ, block);
+                            builder.setBlock(bX, bY, bZ, block);
                         }
                     }
                 }
@@ -306,8 +321,12 @@ public class InstanceContainer extends Instance {
                 chunkRegister.apply(builder);
                 // Add individual blocks from partially contained sections
                 for (BlockVec vec : blockCoords) {
-                    final Block block = getBlock(vec);
-                    builder.setBlock(vec, block);
+                    final int bX = vec.blockX() - originX, bY = vec.blockY() - originY, bZ = vec.blockZ() - originZ;
+                    try {
+                        final Block block = getBlock(vec);
+                        builder.setBlock(bX, bY, bZ, block);
+                    } catch (NullPointerException ignored) {
+                    }
                 }
             });
         }

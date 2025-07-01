@@ -41,7 +41,7 @@ public class BatchCommand extends Command {
 
             // Measure getBlockBatch timing
             long getStartTime = System.nanoTime();
-            final BlockBatch batch = instance.getBlockBatch(startVec, endVec);
+            final BlockBatch batch = instance.getBlockBatch(Vec.ZERO, startVec, endVec);
             long getEndTime = System.nanoTime();
             double getTimeMs = (getEndTime - getStartTime) / 1_000_000.0;
 

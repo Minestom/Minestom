@@ -281,7 +281,8 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
             return Objects.requireNonNull(getBlock(point, Condition.NONE));
         }
 
-        default @NotNull BlockBatch getBlockBatch(@NotNull Point p1, @NotNull Point p2) {
+        default @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+            final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
             final int minX = Math.min(p1.blockX(), p2.blockX());
             final int minY = Math.min(p1.blockY(), p2.blockY());
             final int minZ = Math.min(p1.blockZ(), p2.blockZ());
@@ -292,7 +293,7 @@ public sealed interface Block extends StaticProtocolObject<Block>, TagReadable, 
                 for (int x = minX; x <= maxX; x++) {
                     for (int y = minY; y <= maxY; y++) {
                         for (int z = minZ; z <= maxZ; z++) {
-                            final int bX = x - minX, bY = y - minY, bZ = z - minZ;
+                            final int bX = x - originX, bY = y - originY, bZ = z - originZ;
                             try {
                                 final Block block = getBlock(x, y, z);
                                 builder.setBlock(bX, bY, bZ, block);

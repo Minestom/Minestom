@@ -33,7 +33,7 @@ record BlockBatchImpl(
         // Stateless block
         final Palette palette = sectionState.palette;
         int index = palette.get(localX, localY, localZ);
-        if (!option.aligned) index--;
+        if (!option.aligned && --index < 0) return Block.AIR;
         return Block.fromStateId(index);
     }
 

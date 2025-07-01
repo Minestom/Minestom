@@ -675,7 +675,7 @@ public class BlockBatchIntegrationTest {
         Block chestWithItems = Block.CHEST;
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.ZERO);
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -691,7 +691,7 @@ public class BlockBatchIntegrationTest {
                 .build());
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO);
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.ZERO);
         assertNotNull(batch);
         assertEquals(1, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -704,7 +704,7 @@ public class BlockBatchIntegrationTest {
         Block chestWithItems = Block.CHEST;
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
         assertNotNull(batch);
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -720,7 +720,7 @@ public class BlockBatchIntegrationTest {
                 .build());
         instance.setBlock(0, 0, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
         assertNotNull(batch);
         assertEquals(SECTION_BLOCK_COUNT, batch.count());
         assertEquals(chestWithItems, batch.getBlock(0, 0, 0));
@@ -737,8 +737,104 @@ public class BlockBatchIntegrationTest {
         instance.setBlock(0, 32, 0, chestWithItems);
         instance.setBlock(0, 16, 0, chestWithItems);
 
-        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.SECTION.sub(1));
+        BlockBatch batch = instance.getBlockBatch(Vec.ZERO, Vec.ZERO, Vec.SECTION.sub(1));
         assertNotNull(batch);
         batch.getAll((x, y, z, block) -> assertEquals(Block.AIR, block));
+    }
+
+    @Test
+    public void instanceGetBatchOrigin(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(0, 0, 0, block);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.ONE, Vec.ZERO, Vec.ZERO);
+        assertNotNull(batch);
+        assertEquals(1, batch.count());
+        assertEquals(block, batch.getBlock(Vec.ONE.neg()));
+    }
+
+    @Test
+    public void instanceGetBatchOriginAligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(0, 0, 0, block);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.ZERO);
+        assertNotNull(batch);
+        assertEquals(1, batch.count());
+        batch.getAll((x, y, z, b) -> {
+            final Vec expected = Vec.SECTION.neg();
+            if (expected.samePoint(x, y, z)) {
+                assertEquals(block, b, "Block at (" + x + "," + y + "," + z + ") should be CHEST");
+            } else {
+                assertEquals(Block.AIR, b, "Block at (" + x + "," + y + "," + z + ") should be AIR");
+            }
+        });
+    }
+
+    @Test
+    public void instanceGetBatchSectionOriginAligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(0, 0, 0, block);
+
+        BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.SECTION.sub(1));
+        assertNotNull(batch);
+        assertEquals(SECTION_BLOCK_COUNT, batch.count());
+        batch.getAll((x, y, z, b) -> {
+            final Vec expected = Vec.SECTION.neg();
+            if (expected.samePoint(x, y, z)) {
+                assertEquals(block, b, "Block at (" + x + "," + y + "," + z + ") should be CHEST");
+            } else {
+                assertEquals(Block.AIR, b, "Block at (" + x + "," + y + "," + z + ") should be AIR");
+            }
+        });
+    }
+
+    @Test
+    public void instanceGetBatchOriginUnaligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(0, 0, 0, block);
+
+        final Vec origin = new Vec(4);
+
+        BlockBatch batch = instance.getBlockBatch(origin, Vec.ZERO, Vec.ZERO);
+        assertNotNull(batch);
+        assertEquals(1, batch.count());
+        assertEquals(block, batch.getBlock(origin.neg()));
+    }
+
+    @Test
+    public void instanceGetBatchUnalignedUnloaded(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(0, 0, 0, block);
+
+        final Vec origin = new Vec(4);
+
+        BlockBatch batch = instance.getBlockBatch(origin, Vec.ONE.neg(), Vec.ONE);
+        assertNotNull(batch);
+        assertEquals(block, batch.getBlock(origin.neg()));
+    }
+
+    @Test
+    public void instanceGetBatchAlignedOriginUnaligned(Env env) {
+        var instance = env.createEmptyInstance();
+
+        Block block = Block.CHEST;
+        instance.setBlock(Vec.ONE, block);
+
+        final Vec origin = new Vec(4);
+
+        BlockBatch batch = instance.getBlockBatch(origin, Vec.ZERO, Vec.SECTION.sub(1));
+        assertNotNull(batch);
+        assertEquals(block, batch.getBlock(origin.neg()));
     }
 }
