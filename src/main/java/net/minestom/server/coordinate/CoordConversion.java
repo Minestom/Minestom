@@ -26,13 +26,11 @@ public final class CoordConversion {
     }
 
     public static boolean sectionAligned(int xyz) {
-        // Check if the coordinate is aligned to a section (0-15)
-        return (xyz & 0xF) == 0;
+        return globalToSectionRelative(xyz) == 0;
     }
 
     public static boolean sectionAligned(int x, int y, int z) {
-        // Check if all coordinates are aligned to a section (0-15)
-        return (x & 0xF) == 0 && (y & 0xF) == 0 && (z & 0xF) == 0;
+        return globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
     }
 
     public static int chunkToRegion(int chunkCoordinate) {

@@ -746,7 +746,7 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchOrigin(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
         BlockBatch batch = instance.getBlockBatch(Vec.ONE, Vec.ZERO, Vec.ZERO);
@@ -759,7 +759,7 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchOriginAligned(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
         BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.ZERO);
@@ -779,7 +779,7 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchSectionOriginAligned(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
         BlockBatch batch = instance.getBlockBatch(Vec.SECTION, Vec.ZERO, Vec.SECTION.sub(1));
@@ -799,7 +799,7 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchOriginUnaligned(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
         final Vec origin = new Vec(4);
@@ -814,7 +814,7 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchUnalignedUnloaded(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(0, 0, 0, block);
 
         final Vec origin = new Vec(4);
@@ -828,13 +828,20 @@ public class BlockBatchIntegrationTest {
     public void instanceGetBatchAlignedOriginUnaligned(Env env) {
         var instance = env.createEmptyInstance();
 
-        Block block = Block.CHEST;
+        Block block = Block.STONE;
         instance.setBlock(Vec.ONE, block);
 
         final Vec origin = new Vec(4);
 
         BlockBatch batch = instance.getBlockBatch(origin, Vec.ZERO, Vec.SECTION.sub(1));
         assertNotNull(batch);
-        assertEquals(block, batch.getBlock(origin.neg()));
+        batch.getAll((x, y, z, b) -> {
+            final Vec expected = origin.neg().add(Vec.ONE);
+            if (expected.samePoint(x, y, z)) {
+                assertEquals(block, b, "Block at (" + x + "," + y + "," + z + ") should be CHEST");
+            } else {
+                assertEquals(Block.AIR, b, "Block at (" + x + "," + y + "," + z + ") should be AIR");
+            }
+        });
     }
 }

@@ -288,11 +288,20 @@ public class InstanceContainer extends Instance {
                         builder.copyPalette(sectionX - offsetX, sectionY - offsetY, sectionZ - offsetZ, palette);
                     } else {
                         // Unaligned: copy palette with offset
-                        System.out.println("not aligned copy");
-                        final int offsetX = sectionX * 16 - minX - originX;
-                        final int offsetY = sectionY * 16 - minY - originY;
-                        final int offsetZ = sectionZ * 16 - minZ - originZ;
-                        //builder.copyPalette(sectionX, sectionY, sectionZ, palette, offsetX, offsetY, offsetZ);
+                        palette.getAll((x, y, z, value) -> {
+                            final int globalX = (sectionX * 16) + x;
+                            final int globalY = (sectionY * 16) + y;
+                            final int globalZ = (sectionZ * 16) + z;
+                            if (globalX < minX || globalX > maxX ||
+                                    globalY < minY || globalY > maxY ||
+                                    globalZ < minZ || globalZ > maxZ) {
+                                return; // Skip blocks outside the requested bounds
+                            }
+                            final int bX = globalX - originX, bY = globalY - originY, bZ = globalZ - originZ;
+                            final Block block = Block.fromStateId(value);
+                            assert block != null;
+                            builder.setBlock(bX, bY, bZ, block);
+                        });
                     }
                     if (chunk instanceof DynamicChunk dynamicChunk) {
                         // Add block states
