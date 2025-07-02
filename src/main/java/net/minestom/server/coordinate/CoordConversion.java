@@ -33,6 +33,21 @@ public final class CoordConversion {
         return globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
     }
 
+    public static boolean sectionAligned(@NotNull Point point) {
+        return sectionAligned(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public static boolean sectionAligned(@NotNull Point p1, @NotNull Point p2) {
+        final int minX = Math.min(p1.blockX(), p2.blockX());
+        final int minY = Math.min(p1.blockY(), p2.blockY());
+        final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+        final int maxX = Math.max(p1.blockX(), p2.blockX());
+        final int maxY = Math.max(p1.blockY(), p2.blockY());
+        final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+        return sectionAligned(minX, minY, minZ) &&
+                globalToSectionRelative(maxX) == 15 && globalToSectionRelative(maxY) == 15 && globalToSectionRelative(maxZ) == 15;
+    }
+
     public static int chunkToRegion(int chunkCoordinate) {
         return chunkCoordinate >> 5;
     }

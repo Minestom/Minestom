@@ -11,6 +11,7 @@ import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.instance.Instance;
 
 import static net.minestom.server.command.builder.arguments.ArgumentType.RelativeBlockPosition;
+import static net.minestom.server.coordinate.CoordConversion.sectionAligned;
 
 public class BatchCommand extends Command {
     public BatchCommand() {
@@ -26,6 +27,7 @@ public class BatchCommand extends Command {
             final Vec startVec = context.get(start).from(player);
             final Vec endVec = context.get(end).from(player);
             final Vec targetVec = context.get(target).from(player);
+            final Vec originVec = Vec.ZERO;
 
             Instance instance = player.getInstance();
 
@@ -39,9 +41,14 @@ public class BatchCommand extends Command {
 
             int blockCount = (maxX - minX + 1) * (maxY - minY + 1) * (maxZ - minZ + 1);
 
+            // Check section alignment
+            final boolean originAligned = sectionAligned(originVec);
+            final boolean sectionAligned = sectionAligned(startVec, endVec);
+            final boolean targetAligned = sectionAligned(targetVec);
+
             // Measure getBlockBatch timing
             long getStartTime = System.nanoTime();
-            final BlockBatch batch = instance.getBlockBatch(Vec.ZERO, startVec, endVec);
+            final BlockBatch batch = instance.getBlockBatch(originVec, startVec, endVec);
             long getEndTime = System.nanoTime();
             double getTimeMs = (getEndTime - getStartTime) / 1_000_000.0;
 
@@ -58,6 +65,15 @@ public class BatchCommand extends Command {
                     .append(Component.text("• ", NamedTextColor.GRAY))
                     .append(Component.text("Block count: ", NamedTextColor.WHITE))
                     .append(Component.text(String.format("%,d blocks", blockCount), NamedTextColor.AQUA, TextDecoration.BOLD))
+                    .append(Component.newline())
+                    .append(Component.text("• ", NamedTextColor.GRAY))
+                    .append(Component.text("Section aligned: ", NamedTextColor.WHITE))
+                    .append(Component.text("Origin: ", NamedTextColor.GRAY))
+                    .append(Component.text(originAligned ? "✓" : "✗", originAligned ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" Bound: ", NamedTextColor.GRAY))
+                    .append(Component.text(sectionAligned ? "✓" : "✗", sectionAligned ? NamedTextColor.GREEN : NamedTextColor.RED))
+                    .append(Component.text(" Target: ", NamedTextColor.GRAY))
+                    .append(Component.text(targetAligned ? "✓" : "✗", targetAligned ? NamedTextColor.GREEN : NamedTextColor.RED))
                     .append(Component.newline())
                     .append(Component.text("• ", NamedTextColor.GRAY))
                     .append(Component.text("Get batch: ", NamedTextColor.WHITE))

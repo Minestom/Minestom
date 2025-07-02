@@ -1071,6 +1071,7 @@ public class InstanceContainer extends Instance {
      */
     private void clearSectionNbtData(@NotNull Chunk chunk, int sectionX, int sectionY, int sectionZ) {
         // Clear NBT data for all blocks in this section
+        if (chunk instanceof DynamicChunk dynamicChunk && dynamicChunk.entries.isEmpty()) return;
         for (int x = 0; x < 16; x++) {
             for (int y = 0; y < 16; y++) {
                 for (int z = 0; z < 16; z++) {
