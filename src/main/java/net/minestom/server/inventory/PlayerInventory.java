@@ -223,17 +223,76 @@ public non-sealed class PlayerInventory extends AbstractInventory {
     public boolean shiftClick(@NotNull Player player, int slot, int button) {
         final ItemStack cursor = getCursorItem();
         final ItemStack clicked = getItemStack(slot);
+        final boolean craftingGridClick = slot > 36 && slot <= 40;
+        final boolean craftingResultClick = slot == 36;
         final boolean hotBarClick = slot < 9;
-        final int start = hotBarClick ? 9 : 0;
-        final int end = hotBarClick ? getSize() - 9 : 9;
-        final InventoryClickResult clickResult = clickProcessor.shiftClick(
-                this, this,
-                start, end, 1,
-                player, slot, clicked, cursor);
+
+        // the client has different behavior for clicking based on where the item is in the inventory
+        InventoryClickResult clickResult;
+        final EquipmentSlot equipmentSlot = getEquipmentSlot(slot, player.getHeldSlot());
+        if (equipmentSlot != null && (equipmentSlot.isArmor() || equipmentSlot == EquipmentSlot.OFF_HAND)) {
+            // CASE: shift-clicking equipped armor or your off-hand item
+            // we want to go through the inventory slots first
+            // and then through the hotbar going left to right
+            clickResult = clickProcessor.shiftClick(
+                    this, this,
+                    9, INNER_INVENTORY_SIZE, 1,
+                    player, slot, clicked, cursor
+            );
+
+            if (clickResult.isCancel()) {
+                clickResult = clickProcessor.shiftClick(
+                        this, this,
+                        0, 9, 1,
+                        player, slot, clicked, cursor
+                );
+            }
+        } else if (craftingGridClick) {
+            // CASE: shift-clicking an item from the crafting grid into your inventory
+            // we want to prioritize the inventory from left-to-right and then the hotbar from left-to-right
+            clickResult = clickProcessor.shiftClick(
+                    this, this,
+                    9, INNER_INVENTORY_SIZE, 1,
+                    player, slot, clicked, cursor
+            );
+
+            if(clickResult.isCancel()) {
+                clickResult = clickProcessor.shiftClick(
+                        this, this,
+                        0, 9, 1,
+                        player, slot, clicked, cursor
+                );
+            }
+        } else if (craftingResultClick) {
+            // CASE: shift-clicking an item from the crafting grid result into your inventory
+            // we want to prioritize the hotbar from right-to-left and then the inventory from right-to-left
+            clickResult = clickProcessor.shiftClick(
+                    this, this,
+                    9, 0, -1,
+                    player, slot, clicked, cursor
+            );
+
+            if(clickResult.isCancel()) {
+                clickResult = clickProcessor.shiftClick(
+                        this, this,
+                        INNER_INVENTORY_SIZE, 9, -1,
+                        player, slot, clicked, cursor
+                );
+            }
+        } else {
+            // CASE: shift-clicking an item in the hotbar or inventory
+            clickResult = clickProcessor.shiftClick(
+                    this, this,
+                    (hotBarClick ? 9 : 0), (hotBarClick ? INNER_INVENTORY_SIZE : 9), 1,
+                    player, slot, clicked, cursor
+            );
+        }
+
         if (clickResult.isCancel()) {
             update();
             return false;
         }
+
         setItemStack(slot, clickResult.getClicked());
         setCursorItem(clickResult.getCursor());
         update(); // FIXME: currently not properly client-predicted

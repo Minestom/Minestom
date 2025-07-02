@@ -1,6 +1,5 @@
 package net.minestom.server.inventory.click.integration;
 
-
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
@@ -31,6 +30,8 @@ public class LeftClickIntegrationTest {
         var inventory = player.getInventory();
         var listener = env.listen(InventoryPreClickEvent.class);
         inventory.setItemStack(1, ItemStack.of(Material.DIAMOND));
+        inventory.setItemStack(2, ItemStack.of(Material.DIAMOND_HELMET));
+        inventory.setItemStack(3, ItemStack.of(Material.SHIELD));
         // Empty click
         {
             listener.followup(event -> {
@@ -61,6 +62,80 @@ public class LeftClickIntegrationTest {
             leftClick(player, 1);
             assertEquals(ItemStack.AIR, inventory.getCursorItem());
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
+        }
+        // Shift click an armor item into the armor slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(2), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getInventory().getItemStack(2));
+            });
+            shiftClick(player, 2);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(2));
+            assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+        }
+        // Shift click an armor slot item back into the inventory
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(41), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getHelmet());
+            });
+            shiftClick(player, 41);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.of(Material.AIR), player.getHelmet());
+            assertEquals(ItemStack.of(Material.DIAMOND_HELMET), player.getInventory().getItemStack(9));
+        }
+        // Shift click a shield into the off-hand slot
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(3), event.getClick());
+                assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(3));
+            });
+            shiftClick(player, 3);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(3));
+            assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(45));
+        }
+        // Shift click a shield in the off-hand slot to the inventory
+        {
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(45), event.getClick());
+                assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(45));
+            });
+            shiftClick(player, 45);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(45));
+            assertEquals(ItemStack.of(Material.SHIELD), player.getInventory().getItemStack(10));
+        }
+        // Shift click a player crafting inventory ingredient to the player inventory
+        {
+            player.getInventory().setItemStack(37, ItemStack.of(Material.GOLDEN_HELMET));
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(37), event.getClick());
+                assertEquals(ItemStack.of(Material.GOLDEN_HELMET), player.getInventory().getItemStack(37));
+            });
+            shiftClick(player, 37);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(37));
+            assertEquals(ItemStack.of(Material.GOLDEN_HELMET), player.getInventory().getItemStack(11));
+        }
+        // Shift click a player crafting inventory result to the player hotbar
+        {
+            player.getInventory().setItemStack(36, ItemStack.of(Material.IRON_HELMET));
+            listener.followup(event -> {
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(36), event.getClick());
+                assertEquals(ItemStack.of(Material.IRON_HELMET), player.getInventory().getItemStack(36));
+            });
+            shiftClick(player, 36);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.AIR, player.getInventory().getItemStack(36));
+            assertEquals(ItemStack.of(Material.IRON_HELMET), player.getInventory().getItemStack(8));
         }
         // Cancel event
         {
@@ -126,12 +201,49 @@ public class LeftClickIntegrationTest {
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
             assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
         }
+        // Shift click the item into the player's inventory
+        {
+            listener.followup(event -> {
+                assertEquals(inventory, event.getInventory());
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(1), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
+            });
+            shiftClickOpenInventory(player, 1);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem()); // When shift-clicking, the cursor item shouldn't change
+            assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getItemStack(8)); // The item should appear in the player's last hotbar slot
+        }
+        // Shift click the item back into the external inventory
+        {
+            listener.followup(event -> {
+                assertEquals(player.getInventory(), event.getInventory());
+                assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+                assertEquals(new Click.LeftShift(8), event.getClick());
+                assertEquals(ItemStack.of(Material.DIAMOND), player.getInventory().getItemStack(8));
+            });
+            shiftClick(player, 8);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem()); // When shift-clicking, the cursor item shouldn't change
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(0)); // The item should appear in the external inventory's first slot
+        }
+        // Shift click into the player's inventory when their hotbar is full
+        {
+            inventory.setItemStack(1, ItemStack.of(Material.GOLD_INGOT));
+            for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++) {
+                player.getInventory().setItemStack(hotbarSlot, ItemStack.of(Material.BRICK));
+            }
+            listener.followup(event -> {
+                assertEquals(inventory, event.getInventory());
+            });
+            shiftClickOpenInventory(player, 1);
+            assertEquals(ItemStack.AIR, player.getInventory().getCursorItem());
+            assertEquals(ItemStack.of(Material.GOLD_INGOT), player.getInventory().getItemStack(35)); // The item should appear in the bottom right of the player's inventory excluding the hotbar
+        }
         // Cancel event
         {
             listener.followup(event -> event.setCancelled(true));
-            leftClickOpenInventory(player, 1);
+            leftClickOpenInventory(player, 0);
             assertEquals(ItemStack.AIR, player.getInventory().getCursorItem(), "Left click cancellation did not work");
-            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(1));
+            assertEquals(ItemStack.of(Material.DIAMOND), inventory.getItemStack(0));
         }
         // Change items
         {
@@ -150,15 +262,23 @@ public class LeftClickIntegrationTest {
         }
     }
 
+    private void shiftClickOpenInventory(Player player, int slot) {
+        _leftClick(player.getOpenInventory(), true, player, slot, true);
+    }
+
+    private void shiftClick(Player player, int slot) {
+        _leftClick(player.getOpenInventory(), false, player, slot, true);
+    }
+
     private void leftClickOpenInventory(Player player, int slot) {
-        _leftClick(player.getOpenInventory(), true, player, slot);
+        _leftClick(player.getOpenInventory(), true, player, slot, false);
     }
 
     private void leftClick(Player player, int slot) {
-        _leftClick(player.getOpenInventory(), false, player, slot);
+        _leftClick(player.getOpenInventory(), false, player, slot, false);
     }
 
-    private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot) {
+    private void _leftClick(AbstractInventory openInventory, boolean clickOpenInventory, Player player, int slot, boolean shift) {
         final byte windowId = openInventory != null ? openInventory.getWindowId() : 0;
         if (clickOpenInventory) {
             assert openInventory != null;
@@ -171,7 +291,7 @@ public class LeftClickIntegrationTest {
             }
         }
         player.addPacketToQueue(new ClientClickWindowPacket(windowId, 0, (short) slot, (byte) 0,
-                ClientClickWindowPacket.ClickType.PICKUP, Map.of(), ItemStack.Hash.AIR));
+                shift ? ClientClickWindowPacket.ClickType.QUICK_MOVE : ClientClickWindowPacket.ClickType.PICKUP, Map.of(), ItemStack.Hash.AIR));
         player.interpretPacketQueue();
     }
 }
