@@ -257,6 +257,26 @@ public class PaletteTest {
     }
 
     @Test
+    public void setAllBig() {
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            assertEquals(palette.maxSize(), palette.count());
+            assertEquals(100, palette.get(0, 0, 0));
+            palette.getAll((x, y, z, value) -> {
+                int expected = x + y + z + 100;
+                assertEquals(expected, value);
+            });
+        }
+    }
+
+    @Test
+    public void getAllEmpty() {
+        for (Palette palette : testPalettes()) {
+            palette.getAll((x, y, z, value) -> assertEquals(0, value));
+        }
+    }
+
+    @Test
     public void getAllPresent() {
         for (Palette palette : testPalettes()) {
             palette.getAllPresent((x, y, z, value) -> fail("The palette should be empty"));
