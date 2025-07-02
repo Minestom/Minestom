@@ -128,11 +128,12 @@ public class CoordinateTest {
 
     @Test
     public void vecSameEpsilon() {
-        Vec v1 = new Vec(Vec.EPSILON, 0, 0);
+        final double TEST_EPSILON = 0.000000999999; // Less than 1e-6
+        Vec v1 = new Vec(TEST_EPSILON, 0, 0);
         Vec v2 = new Vec(0, 0, 0);
-        Vec v3 = new Vec(Vec.EPSILON, -Vec.EPSILON, Vec.EPSILON);
+        Vec v3 = new Vec(TEST_EPSILON, -TEST_EPSILON, TEST_EPSILON);
         Vec v4 = new Vec(0.001, 0, 0);
-        Vec v5 = v1.add(Vec.EPSILON);
+        Vec v5 = v1.add(TEST_EPSILON);
 
         // Vectors with small differences should be considered the same under epsilon
         assertTrue(v1.samePoint(v2, Vec.EPSILON));
