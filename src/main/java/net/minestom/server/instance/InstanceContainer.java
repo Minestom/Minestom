@@ -378,13 +378,13 @@ public class InstanceContainer extends Instance {
             final int targetSectionZ = batchSectionZ + globalToChunk(z);
 
             // Get the target chunk
-            final Chunk targetChunk = batch.option().generate() ?
+            final Chunk targetChunk = batch.generate() ?
                     loadOptionalChunk(targetSectionX, targetSectionZ).join() : getChunk(targetSectionX, targetSectionZ);
             if (targetChunk == null) continue;
             chunkIndexes.add(chunkIndex(targetSectionX, targetSectionZ));
             synchronized (targetChunk) {
                 final Section targetSection = targetChunk.getSection(targetSectionY);
-                if (batch.option().aligned()) {
+                if (batch.aligned()) {
                     clearSectionNbtData(targetChunk, targetSectionX, targetSectionY, targetSectionZ);
                     // Section-aligned: direct palette copy
                     targetSection.blockPalette().copyFrom(sectionState.palette());
@@ -400,7 +400,7 @@ public class InstanceContainer extends Instance {
                 }
 
                 // Handle block states if present (for blocks with NBT or handlers)
-                if (!batch.option().onlyState()) {
+                if (!batch.ignoreData()) {
                     // For blocks with NBT or handlers, we still need to set them individually
                     // as palette copy only handles the state IDs
                     for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
@@ -452,7 +452,7 @@ public class InstanceContainer extends Instance {
                 for (int instanceSectionY = minInstanceSectionY; instanceSectionY <= maxInstanceSectionY; instanceSectionY++) {
                     for (int instanceSectionZ = minInstanceSectionZ; instanceSectionZ <= maxInstanceSectionZ; instanceSectionZ++) {
                         // Get the target chunk
-                        final Chunk targetChunk = batch.option().generate() ?
+                        final Chunk targetChunk = batch.generate() ?
                                 loadOptionalChunk(instanceSectionX, instanceSectionZ).join() : getChunk(instanceSectionX, instanceSectionZ);
                         if (targetChunk == null) continue;
                         chunkIndexes.add(chunkIndex(instanceSectionX, instanceSectionZ));
@@ -471,7 +471,7 @@ public class InstanceContainer extends Instance {
                             final int overlapMinZ = Math.max(globalSectionZ, instanceGlobalZ);
                             final int overlapMaxZ = Math.min(globalSectionZ + 15, instanceGlobalZ + 15);
 
-                            if (batch.option().aligned()) {
+                            if (batch.aligned()) {
                                 // Use optimized copyFrom with offset for section-aligned batches
                                 final int offsetX = overlapMinX - instanceGlobalX;
                                 final int offsetY = overlapMinY - instanceGlobalY;
@@ -535,7 +535,7 @@ public class InstanceContainer extends Instance {
                             }
 
                             // Handle block states if present (for blocks with NBT or handlers)
-                            if (!batch.option().onlyState()) {
+                            if (!batch.ignoreData()) {
                                 for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
                                     final int blockIndex = blockEntry.getIntKey();
                                     final Block block = blockEntry.getValue();

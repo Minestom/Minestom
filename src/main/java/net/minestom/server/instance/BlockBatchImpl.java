@@ -14,7 +14,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import static net.minestom.server.coordinate.CoordConversion.*;
 
 record BlockBatchImpl(
-        OptionImpl option,
+        long options,
         Long2ObjectMap<SectionState> sectionStates
 ) implements BlockBatch {
     @Override
@@ -25,7 +25,7 @@ record BlockBatchImpl(
         final int localX = globalToSectionRelative(x);
         final int localY = globalToSectionRelative(y);
         final int localZ = globalToSectionRelative(z);
-        if (condition != Condition.TYPE && !option.onlyState) {
+        if (condition != Condition.TYPE && !ignoreData()) {
             final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
             Block block = sectionState.blockStates.get(sectionBlockIndex);
             if (block != null) return block;
@@ -33,7 +33,7 @@ record BlockBatchImpl(
         // Stateless block
         final Palette palette = sectionState.palette;
         int index = palette.get(localX, localY, localZ);
-        if (!option.aligned && --index < 0) return Block.AIR;
+        if (!aligned() && --index < 0) return Block.AIR;
         return Block.fromStateId(index);
     }
 
@@ -46,13 +46,13 @@ record BlockBatchImpl(
             final int sectionX = sectionIndexGetX(sectionIndex);
             final int sectionY = sectionIndexGetY(sectionIndex);
             final int sectionZ = sectionIndexGetZ(sectionIndex);
-            if (option.aligned) {
+            if (aligned()) {
                 // Direct palette copies
                 palette.getAll((x, y, z, value) -> {
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
-                    if (!option.onlyState) {
+                    if (!ignoreData()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
                         if (block != null) {
@@ -70,7 +70,7 @@ record BlockBatchImpl(
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
-                    if (!option.onlyState) {
+                    if (!ignoreData()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
                         if (block != null) {
@@ -88,7 +88,7 @@ record BlockBatchImpl(
 
     @Override
     public int count() {
-        if (option.aligned) {
+        if (aligned()) {
             return sectionStates.size() * SECTION_BLOCK_COUNT;
         } else {
             int count = 0;
@@ -99,22 +99,27 @@ record BlockBatchImpl(
         }
     }
 
-    record OptionImpl(boolean onlyState, boolean aligned, boolean generate) implements Option {
-    }
-
     final static class BuilderImpl implements Builder {
-        private final OptionImpl option;
+        private final long options;
         private final Long2ObjectMap<SectionState> sectionStates = new Long2ObjectOpenHashMap<>();
 
-        BuilderImpl(Option option) {
-            this.option = (OptionImpl) option;
+        BuilderImpl(long options) {
+            this.options = options;
         }
 
         SectionState sectionState(long sectionIndex) {
             return sectionStates.computeIfAbsent(
                     sectionIndex,
-                    k -> new SectionState(Palette.blocks(), option.onlyState ? null : new Int2ObjectOpenHashMap<>())
+                    k -> new SectionState(Palette.blocks(), ignoreData() ? null : new Int2ObjectOpenHashMap<>())
             );
+        }
+
+        private boolean ignoreData() {
+            return (options & BlockBatch.IGNORE_DATA_FLAG) != 0;
+        }
+
+        private boolean aligned() {
+            return (options & BlockBatch.ALIGNED_FLAG) != 0;
         }
 
         @Override
@@ -126,10 +131,10 @@ record BlockBatchImpl(
             final int localY = globalToSectionRelative(y);
             final int localZ = globalToSectionRelative(z);
             int index = block.stateId();
-            if (!option.aligned) index++;
+            if (!aligned()) index++;
             palette.set(localX, localY, localZ, index);
 
-            if (!option.onlyState) {
+            if (!ignoreData()) {
                 final CompoundBinaryTag compound = block.nbt();
                 final BlockHandler handler = block.handler();
                 final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
@@ -145,7 +150,7 @@ record BlockBatchImpl(
         @Override
         public void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette) {
             final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
-            if (!option.aligned) {
+            if (!aligned()) {
                 // Copy the palette with +1 for each value
                 Palette adjustedPalette = Palette.blocks();
                 palette.getAll((x, y, z, value) -> adjustedPalette.set(x, y, z, value + 1));
@@ -153,11 +158,11 @@ record BlockBatchImpl(
             } else {
                 palette = palette.clone();
             }
-            sectionStates.put(sectionIndex, new SectionState(palette, option.onlyState ? null : new Int2ObjectOpenHashMap<>()));
+            sectionStates.put(sectionIndex, new SectionState(palette, ignoreData() ? null : new Int2ObjectOpenHashMap<>()));
         }
 
         BlockBatchImpl build() {
-            return new BlockBatchImpl(option, sectionStates);
+            return new BlockBatchImpl(options, sectionStates);
         }
     }
 
