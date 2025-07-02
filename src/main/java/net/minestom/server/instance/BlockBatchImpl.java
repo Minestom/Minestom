@@ -25,7 +25,7 @@ record BlockBatchImpl(
         final int localX = globalToSectionRelative(x);
         final int localY = globalToSectionRelative(y);
         final int localZ = globalToSectionRelative(z);
-        if (condition != Condition.TYPE && !ignoreData()) {
+        if (condition != Condition.TYPE && !ignoreData() && !sectionState.blockStates.isEmpty()) {
             final int sectionBlockIndex = sectionBlockIndex(localX, localY, localZ);
             Block block = sectionState.blockStates.get(sectionBlockIndex);
             if (block != null) return block;
@@ -52,7 +52,7 @@ record BlockBatchImpl(
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
-                    if (!ignoreData()) {
+                    if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
                         if (block != null) {
@@ -70,7 +70,7 @@ record BlockBatchImpl(
                     final int globalX = sectionX * 16 + x;
                     final int globalY = sectionY * 16 + y;
                     final int globalZ = sectionZ * 16 + z;
-                    if (!ignoreData()) {
+                    if (!ignoreData() && !sectionState.blockStates.isEmpty()) {
                         final int sectionBlockIndex = sectionBlockIndex(x, y, z);
                         Block block = sectionState.blockStates.get(sectionBlockIndex);
                         if (block != null) {
