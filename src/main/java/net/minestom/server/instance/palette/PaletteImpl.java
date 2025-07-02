@@ -104,6 +104,15 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void offset(int offset) {
+        if (bitsPerEntry == 0) {
+            this.count += offset;
+        } else {
+            replaceAll((x, y, z, value) -> value + offset);
+        }
+    }
+
+    @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();

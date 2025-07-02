@@ -150,14 +150,8 @@ record BlockBatchImpl(
         @Override
         public void copyPalette(int sectionX, int sectionY, int sectionZ, @NotNull Palette palette) {
             final long sectionIndex = sectionIndex(sectionX, sectionY, sectionZ);
-            if (!aligned()) {
-                // Copy the palette with +1 for each value
-                Palette adjustedPalette = Palette.blocks();
-                palette.getAll((x, y, z, value) -> adjustedPalette.set(x, y, z, value + 1));
-                palette = adjustedPalette;
-            } else {
-                palette = palette.clone();
-            }
+            palette = palette.clone();
+            if (!aligned()) palette.offset(1);
             sectionStates.put(sectionIndex, new SectionState(palette, ignoreData() ? null : new Int2ObjectOpenHashMap<>()));
         }
 

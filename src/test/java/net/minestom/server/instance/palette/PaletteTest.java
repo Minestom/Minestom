@@ -129,6 +129,44 @@ public class PaletteTest {
     }
 
     @Test
+    public void offset() {
+        for (Palette palette : testPalettes()) {
+            palette.fill(0);
+            palette.offset(1);
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        assertEquals(1, palette.get(x, y, z));
+                    }
+                }
+            }
+
+            palette.fill(0);
+            palette.set(0, 0, 1, 2);
+            palette.offset(-1);
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        if (x == 0 && y == 0 && z == 1) {
+                            assertEquals(1, palette.get(x, y, z));
+                        } else {
+                            assertEquals(-1, palette.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            palette.offset(50);
+            palette.getAll((x, y, z, value) -> {
+                int expected = x + y + z + 100 + 50;
+                assertEquals(expected, value);
+            });
+        }
+    }
+
+    @Test
     public void bulk() {
         var palettes = testPalettes();
         for (Palette palette : palettes) {
@@ -243,6 +281,24 @@ public class PaletteTest {
                 return x + y + z + 2;
             });
             palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 2, value));
+        }
+
+        for (Palette palette : palettes) {
+            palette.fill(0);
+            palette.replaceAll((x, y, z, value) -> {
+                assertEquals(0, value);
+                return value + 1;
+            });
+            palette.getAll((x, y, z, value) -> assertEquals(1, value));
+        }
+
+        for (Palette palette : palettes) {
+            palette.fill(1);
+            palette.replaceAll((x, y, z, value) -> {
+                assertEquals(1, value);
+                return value + 1;
+            });
+            palette.getAll((x, y, z, value) -> assertEquals(2, value));
         }
     }
 

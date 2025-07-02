@@ -61,6 +61,8 @@ public sealed interface Palette permits PaletteImpl {
 
     void fill(int value);
 
+    void offset(int offset);
+
     void setAll(@NotNull EntrySupplier supplier);
 
     void replace(int x, int y, int z, @NotNull IntUnaryOperator operator);
