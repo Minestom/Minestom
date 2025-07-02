@@ -245,6 +245,11 @@ public class PaletteTest {
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
         }
+
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 100, value));
+        }
     }
 
     @Test

@@ -412,6 +412,7 @@ final class PaletteImpl implements Palette {
         if (hasPalette()) {
             clone.paletteToValueList = new IntArrayList(paletteToValueList);
             clone.valueToPaletteMap = new Int2IntOpenHashMap(valueToPaletteMap);
+            clone.valueToPaletteMap.defaultReturnValue(-1);
         }
         return clone;
     }
