@@ -24,8 +24,7 @@ public class PaletteTest {
 
     @Test
     public void placement() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             assertEquals(0, palette.get(0, 0, 0), "Default value should be 0");
             assertEquals(0, palette.count());
             palette.set(0, 0, 0, 64);
@@ -66,8 +65,7 @@ public class PaletteTest {
 
     @Test
     public void negPlacement() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             assertThrows(IllegalArgumentException.class, () -> palette.set(-1, 0, 0, 64));
             assertThrows(IllegalArgumentException.class, () -> palette.set(0, -1, 0, 64));
             assertThrows(IllegalArgumentException.class, () -> palette.set(0, 0, -1, 64));
@@ -99,8 +97,7 @@ public class PaletteTest {
 
     @Test
     public void fill() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             assertEquals(0, palette.count());
             palette.set(0, 0, 0, 5);
             assertEquals(1, palette.count());
@@ -168,8 +165,7 @@ public class PaletteTest {
 
     @Test
     public void bulk() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             final int dimension = palette.dimension();
             // Place
             for (int x = 0; x < dimension; x++) {
@@ -193,8 +189,7 @@ public class PaletteTest {
 
     @Test
     public void bulkAll() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             // Fill all entries
             palette.setAll((x, y, z) -> x + y + z + 1);
             palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 1, value,
@@ -207,12 +202,16 @@ public class PaletteTest {
             });
             palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 2, value));
         }
+
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 100, value));
+        }
     }
 
     @Test
     public void bulkAllOrder() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             AtomicInteger count = new AtomicInteger();
 
             // Ensure that the lambda is called for every entry
@@ -245,17 +244,11 @@ public class PaletteTest {
             count.set(0);
             palette.getAll((x, y, z, value) -> assertEquals(count.incrementAndGet(), value));
         }
-
-        for (Palette palette : testPalettes()) {
-            palette.setAll((x, y, z) -> x + y + z + 100);
-            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 100, value));
-        }
     }
 
     @Test
     public void setAllConstant() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.setAll((x, y, z) -> 1);
             palette.getAll((x, y, z, value) -> assertEquals(1, value));
         }
@@ -263,8 +256,7 @@ public class PaletteTest {
 
     @Test
     public void getAllPresent() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.getAllPresent((x, y, z, value) -> fail("The palette should be empty"));
             palette.set(0, 0, 1, 1);
             palette.getAllPresent((x, y, z, value) -> {
@@ -278,8 +270,7 @@ public class PaletteTest {
 
     @Test
     public void replaceAll() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.setAll((x, y, z) -> x + y + z + 1);
             palette.replaceAll((x, y, z, value) -> {
                 assertEquals(x + y + z + 1, value);
@@ -288,7 +279,7 @@ public class PaletteTest {
             palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 2, value));
         }
 
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.fill(0);
             palette.replaceAll((x, y, z, value) -> {
                 assertEquals(0, value);
@@ -297,7 +288,7 @@ public class PaletteTest {
             palette.getAll((x, y, z, value) -> assertEquals(1, value));
         }
 
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.fill(1);
             palette.replaceAll((x, y, z, value) -> {
                 assertEquals(1, value);
@@ -309,8 +300,7 @@ public class PaletteTest {
 
     @Test
     public void replace() {
-        var palettes = testPalettes();
-        for (Palette palette : palettes) {
+        for (Palette palette : testPalettes()) {
             palette.set(0, 0, 0, 1);
             palette.replace(0, 0, 0, operand -> {
                 assertEquals(1, operand);
