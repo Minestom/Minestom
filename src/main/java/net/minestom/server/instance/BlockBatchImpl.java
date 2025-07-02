@@ -14,7 +14,7 @@ import org.jetbrains.annotations.UnknownNullability;
 import static net.minestom.server.coordinate.CoordConversion.*;
 
 record BlockBatchImpl(
-        long options,
+        long flags,
         Long2ObjectMap<SectionState> sectionStates
 ) implements BlockBatch {
     @Override
@@ -100,11 +100,11 @@ record BlockBatchImpl(
     }
 
     final static class BuilderImpl implements Builder {
-        private final long options;
+        private final long flags;
         private final Long2ObjectMap<SectionState> sectionStates = new Long2ObjectOpenHashMap<>();
 
-        BuilderImpl(long options) {
-            this.options = options;
+        BuilderImpl(long flags) {
+            this.flags = flags;
         }
 
         SectionState sectionState(long sectionIndex) {
@@ -115,11 +115,11 @@ record BlockBatchImpl(
         }
 
         private boolean ignoreData() {
-            return (options & BlockBatch.IGNORE_DATA_FLAG) != 0;
+            return (flags & BlockBatch.IGNORE_DATA_FLAG) != 0;
         }
 
         private boolean aligned() {
-            return (options & BlockBatch.ALIGNED_FLAG) != 0;
+            return (flags & BlockBatch.ALIGNED_FLAG) != 0;
         }
 
         @Override
@@ -162,7 +162,7 @@ record BlockBatchImpl(
         }
 
         BlockBatchImpl build() {
-            return new BlockBatchImpl(options, sectionStates);
+            return new BlockBatchImpl(flags, sectionStates);
         }
     }
 

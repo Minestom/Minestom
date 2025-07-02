@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.palette.Palette;
+import org.intellij.lang.annotations.MagicConstant;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
@@ -15,8 +16,9 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
     long ALIGNED_FLAG = 1L << 1;      // Section-aligned optimization
     long GENERATE_FLAG = 1L << 2;     // Generate world if unloaded
 
-    static @NotNull BlockBatch batch(long options, @NotNull Consumer<@NotNull Builder> consumer) {
-        BuilderImpl builder = new BuilderImpl(options);
+    static @NotNull BlockBatch batch(@MagicConstant(flagsFromClass = BlockBatch.class) long flags,
+                                     @NotNull Consumer<@NotNull Builder> consumer) {
+        BuilderImpl builder = new BuilderImpl(flags);
         consumer.accept(builder);
         return builder.build();
     }
@@ -60,7 +62,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      */
     int count();
 
-    long options();
+    long flags();
 
     /**
      * Whether the batch only contains state data, not block instances.
@@ -70,7 +72,7 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * @return true if the batch only contains state data
      */
     default boolean ignoreData() {
-        return (options() & IGNORE_DATA_FLAG) != 0;
+        return (flags() & IGNORE_DATA_FLAG) != 0;
     }
 
     /**
@@ -82,14 +84,14 @@ public sealed interface BlockBatch extends Block.Getter permits BlockBatchImpl {
      * @return true if section aligned
      */
     default boolean aligned() {
-        return (options() & ALIGNED_FLAG) != 0;
+        return (flags() & ALIGNED_FLAG) != 0;
     }
 
     /**
      * Whether the batch should do world generation if unloaded.
      */
     default boolean generate() {
-        return (options() & GENERATE_FLAG) != 0;
+        return (flags() & GENERATE_FLAG) != 0;
     }
 
     @FunctionalInterface
