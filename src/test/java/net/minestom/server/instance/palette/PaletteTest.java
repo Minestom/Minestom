@@ -424,6 +424,8 @@ public class PaletteTest {
                 Palette.sized(2, 1, 5, 15, 3),
                 Palette.sized(4, 1, 5, 15, 3),
                 Palette.sized(8, 1, 5, 15, 3),
-                Palette.sized(16, 1, 5, 15, 3));
+                Palette.sized(16, 1, 5, 15, 3),
+                Palette.blocks()
+        );
     }
 }
