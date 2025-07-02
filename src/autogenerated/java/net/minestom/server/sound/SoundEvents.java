@@ -1883,6 +1883,8 @@ interface SoundEvents {
 
     SoundEvent MUSIC_DISC_FAR = BuiltinSoundEvent.get("music_disc.far");
 
+    SoundEvent MUSIC_DISC_LAVA_CHICKEN = BuiltinSoundEvent.get("music_disc.lava_chicken");
+
     SoundEvent MUSIC_DISC_MALL = BuiltinSoundEvent.get("music_disc.mall");
 
     SoundEvent MUSIC_DISC_MELLOHI = BuiltinSoundEvent.get("music_disc.mellohi");

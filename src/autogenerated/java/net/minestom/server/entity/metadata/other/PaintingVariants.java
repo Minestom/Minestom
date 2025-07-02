@@ -87,6 +87,8 @@ interface PaintingVariants {
 
     RegistryKey<PaintingVariant> GRAHAM = RegistryKey.unsafeOf("graham");
 
+    RegistryKey<PaintingVariant> DENNIS = RegistryKey.unsafeOf("dennis");
+
     RegistryKey<PaintingVariant> MEDITATIVE = RegistryKey.unsafeOf("meditative");
 
     RegistryKey<PaintingVariant> KEBAB = RegistryKey.unsafeOf("kebab");
