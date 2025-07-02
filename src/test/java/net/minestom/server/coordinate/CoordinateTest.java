@@ -139,12 +139,10 @@ public class CoordinateTest {
         assertTrue(v1.samePoint(v2, Vec.EPSILON));
         assertTrue(v2.samePoint(v3, Vec.EPSILON));
         assertTrue(v1.samePoint(v3, Vec.EPSILON));
+        assertTrue(v5.samePoint(v1, Vec.EPSILON));
 
         // Vectors with larger differences should not be considered the same
         assertFalse(v1.samePoint(v4, Vec.EPSILON));
-
-        // Vectors that are exactly the epsilon should be considered the same
-        assertTrue(v5.samePoint(v1, Vec.EPSILON));
 
         // 0 epsilon should throw an exception
         assertThrows(IllegalArgumentException.class, () -> v5.samePoint(v5, 0));
