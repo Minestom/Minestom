@@ -144,7 +144,9 @@ public class CoordinateTest {
 
         // Vectors that are exactly the epsilon should be considered the same
         assertTrue(v5.samePoint(v1, Vec.EPSILON));
-        assertTrue(v5.samePoint(v5, Vec.EPSILON));
+
+        // 0 epsilon should throw an exception
+        assertThrows(IllegalArgumentException.class, () -> v5.samePoint(v5, 0));
     }
 
     @Test
