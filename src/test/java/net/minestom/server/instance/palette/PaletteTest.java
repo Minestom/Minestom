@@ -205,7 +205,9 @@ public class PaletteTest {
 
         for (Palette palette : testPalettes()) {
             palette.setAll((x, y, z) -> x + y + z + 100);
-            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 100, value));
+            assertEquals(100, palette.get(0, 0, 0));
+            palette.getAll((x, y, z, value) -> assertEquals(x + y + z + 100, value,
+                    "x: " + x + ", y: " + y + ", z: " + z + ", dimension: " + palette.dimension()));
         }
     }
 
