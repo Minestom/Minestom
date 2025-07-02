@@ -25,6 +25,8 @@ interface JukeboxSongs {
 
     RegistryKey<JukeboxSong> _5 = RegistryKey.unsafeOf("5");
 
+    RegistryKey<JukeboxSong> LAVA_CHICKEN = RegistryKey.unsafeOf("lava_chicken");
+
     RegistryKey<JukeboxSong> OTHERSIDE = RegistryKey.unsafeOf("otherside");
 
     RegistryKey<JukeboxSong> TEARS = RegistryKey.unsafeOf("tears");
