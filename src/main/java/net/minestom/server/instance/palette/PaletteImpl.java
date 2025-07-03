@@ -109,7 +109,32 @@ final class PaletteImpl implements Palette {
         if (bitsPerEntry == 0) {
             this.count += offset;
         } else {
-            replaceAll((x, y, z, value) -> value + offset);
+            if (hasPalette()) {
+                paletteToValueList.replaceAll(integer -> integer + offset);
+                valueToPaletteMap.replaceAll((key, value) -> value + offset);
+            } else {
+                replaceAll((x, y, z, value) -> value + offset);
+            }
+        }
+    }
+
+    @Override
+    public void replace(int oldValue, int newValue) {
+        if (bitsPerEntry == 0) {
+            if (oldValue == count) fill(newValue);
+        } else {
+            if (hasPalette()) {
+                final int prev = valueToPaletteMap.replace(oldValue, newValue);
+                if (prev != -1) {
+                    for (int i = 0; i < paletteToValueList.size(); i++) {
+                        if (paletteToValueList.getInt(i) == oldValue) {
+                            paletteToValueList.set(i, newValue);
+                        }
+                    }
+                }
+            } else {
+                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            }
         }
     }
 

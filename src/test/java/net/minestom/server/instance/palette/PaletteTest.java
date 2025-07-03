@@ -161,6 +161,72 @@ public class PaletteTest {
                 assertEquals(expected, value);
             });
         }
+
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 1, 1);
+            palette.set(0, 1, 0, 2);
+            palette.set(1, 0, 0, 3);
+            palette.offset(50);
+            palette.getAll((x, y, z, value) -> {
+                if (x == 0 && y == 0 && z == 1) {
+                    assertEquals(51, value);
+                } else if (x == 0 && y == 1 && z == 0) {
+                    assertEquals(52, value);
+                } else if (x == 1 && y == 0 && z == 0) {
+                    assertEquals(53, value);
+                } else {
+                    assertEquals(50, value);
+                }
+            });
+        }
+    }
+
+    @Test
+    public void replace() {
+        for (Palette palette : testPalettes()) {
+            palette.fill(0);
+            palette.replace(0, 1);
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        assertEquals(1, palette.get(x, y, z));
+                    }
+                }
+            }
+
+            palette.fill(1);
+            palette.set(0, 0, 1, 2);
+            palette.replace(2, 3);
+            for (int x = 0; x < palette.dimension(); x++) {
+                for (int y = 0; y < palette.dimension(); y++) {
+                    for (int z = 0; z < palette.dimension(); z++) {
+                        if (x == 0 && y == 0 && z == 1) {
+                            assertEquals(3, palette.get(x, y, z));
+                        } else {
+                            assertEquals(1, palette.get(x, y, z));
+                        }
+                    }
+                }
+            }
+        }
+
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 1, 1);
+            palette.set(0, 1, 0, 2);
+            palette.set(1, 0, 0, 3);
+            palette.replace(0, 50);
+            palette.getAll((x, y, z, value) -> {
+                if (x == 0 && y == 0 && z == 1) {
+                    assertEquals(1, value);
+                } else if (x == 0 && y == 1 && z == 0) {
+                    assertEquals(2, value);
+                } else if (x == 1 && y == 0 && z == 0) {
+                    assertEquals(3, value);
+                } else {
+                    assertEquals(50, value);
+                }
+            });
+        }
     }
 
     @Test
@@ -321,7 +387,7 @@ public class PaletteTest {
     }
 
     @Test
-    public void replace() {
+    public void replaceUnary() {
         for (Palette palette : testPalettes()) {
             palette.set(0, 0, 0, 1);
             palette.replace(0, 0, 0, operand -> {

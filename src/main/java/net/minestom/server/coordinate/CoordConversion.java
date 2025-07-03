@@ -30,7 +30,7 @@ public final class CoordConversion {
     }
 
     public static boolean sectionAligned(int x, int y, int z) {
-        return globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
+        return sectionAligned(x) && sectionAligned(y) && sectionAligned(z);
     }
 
     public static boolean sectionAligned(@NotNull Point point) {

@@ -23,6 +23,7 @@ import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventHandler;
 import net.minestom.server.event.EventNode;
+import net.minestom.server.event.instance.InstanceSectionInvalidateEvent;
 import net.minestom.server.event.instance.InstanceTickEvent;
 import net.minestom.server.event.trait.InstanceEvent;
 import net.minestom.server.instance.block.Block;
@@ -281,7 +282,13 @@ public abstract class Instance implements Block.Getter, Block.Setter,
 
     public void invalidateSection(int sectionX, int sectionY, int sectionZ) {
         final Chunk chunk = getChunk(sectionX, sectionZ);
-        if (chunk != null) chunk.invalidate();
+        if (chunk != null) {
+            Section section = chunk.getSection(sectionY);
+            section.skyLight().invalidate();
+            section.blockLight().invalidate();
+            chunk.invalidate();
+            EventDispatcher.call(new InstanceSectionInvalidateEvent(this, sectionX, sectionY, sectionZ));
+        }
     }
 
     /**
