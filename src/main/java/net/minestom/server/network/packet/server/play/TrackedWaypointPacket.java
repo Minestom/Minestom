@@ -51,7 +51,8 @@ public record TrackedWaypointPacket(
 
         public static final NetworkBuffer.Type<Icon> NETWORK_TYPE = NetworkBufferTemplate.template(
                 NetworkBuffer.KEY, Icon::style,
-                Color.NETWORK_TYPE.optional(), Icon::color,
+                Color.RGB_BYTE_NETWORK_TYPE.optional(),
+                Icon::color,
                 Icon::new);
 
         public Icon(@NotNull Key style) {
@@ -110,6 +111,5 @@ public record TrackedWaypointPacket(
                 case Azimuth ignored -> Type.AZIMUTH;
             };
         }
-
     }
 }
