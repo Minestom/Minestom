@@ -70,7 +70,7 @@ public final class MinecraftServer implements MinecraftConstants {
     private static volatile ServerProcess serverProcess;
 
     private static int compressionThreshold = 256;
-    private static String brandName = "Minestom (" + Git.version().split("-")[0] + ")";
+    private static String brandName = "Minestom (" + Git.version() + ")";
     private static Difficulty difficulty = Difficulty.NORMAL;
 
     public static MinecraftServer init() {
