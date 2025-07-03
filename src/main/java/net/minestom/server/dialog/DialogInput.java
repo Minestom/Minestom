@@ -10,6 +10,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -24,11 +25,10 @@ public sealed interface DialogInput {
             Map.entry(Key.key("text"), Text.CODEC));
     @NotNull StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
 
-    static boolean keyIsValidate(String key) {
+    static void validateKey(String key) {
         for (var c : key.toCharArray())
             if (!Character.isLetterOrDigit(c) && c != '_')
-                return false;
-        return true;
+                throw new IllegalArgumentException(MessageFormat.format("Invalid input key: {0}. Must match [a-zA-Z0-9_]+", key));
     }
 
     record Boolean(
@@ -48,7 +48,7 @@ public sealed interface DialogInput {
                 Boolean::new);
 
         public Boolean {
-            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            validateKey(key);
         }
 
         @Override
@@ -78,7 +78,7 @@ public sealed interface DialogInput {
                 NumberRange::new);
 
         public NumberRange {
-            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            validateKey(key);
         }
 
         @Override
@@ -102,7 +102,7 @@ public sealed interface DialogInput {
                 SingleOption::new);
 
         public SingleOption {
-            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            validateKey(key);
             boolean found = false;
             for (var option : options) {
                 if (!option.initial) continue;
@@ -144,7 +144,7 @@ public sealed interface DialogInput {
                 Text::new);
 
         public Text {
-            Check.argCondition(keyIsValidate(key), "Invalid input key: " + key + ". Must match [a-zA-Z0-9_]+");
+            validateKey(key);
         }
 
         @Override
