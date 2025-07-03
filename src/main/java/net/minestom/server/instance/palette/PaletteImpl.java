@@ -119,6 +119,26 @@ final class PaletteImpl implements Palette {
     }
 
     @Override
+    public void replace(int oldValue, int newValue) {
+        if (bitsPerEntry == 0) {
+            if (oldValue == count) fill(newValue);
+        } else {
+            if (hasPalette()) {
+                final int prev = valueToPaletteMap.replace(oldValue, newValue);
+                if (prev != -1) {
+                    for (int i = 0; i < paletteToValueList.size(); i++) {
+                        if (paletteToValueList.getInt(i) == oldValue) {
+                            paletteToValueList.set(i, newValue);
+                        }
+                    }
+                }
+            } else {
+                replaceAll((x, y, z, value) -> value == oldValue ? newValue : value);
+            }
+        }
+    }
+
+    @Override
     public void setAll(@NotNull EntrySupplier supplier) {
         int[] cache = WRITE_CACHE.get();
         final int dimension = dimension();
