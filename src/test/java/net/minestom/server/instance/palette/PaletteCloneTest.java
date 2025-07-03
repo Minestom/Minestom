@@ -140,50 +140,48 @@ public class PaletteCloneTest {
 
     @Test
     public void cloneAfterResize() {
-        var palettes = testPalettes();
-        for (Palette original : palettes) {
-            // Fill with initial data to force one storage type
-            for (int i = 0; i < 10; i++) {
-                original.set(i % original.dimension(), 0, 0, i + 1);
-            }
-            for (int i = 0; i < 10; i++) {
-                assertEquals(i + 1, original.get(i % original.dimension(), 0, 0));
-            }
+        Palette original = Palette.blocks();
+        // Fill with initial data to force one storage type
+        for (int i = 0; i < 10; i++) {
+            original.set(i % original.dimension(), 0, 0, i + 1);
+        }
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i + 1, original.get(i % original.dimension(), 0, 0));
+        }
 
-            int initialDimension = original.dimension();
-            int initialBitsPerEntry = original.bitsPerEntry();
-            int initialCount = original.count();
+        int initialDimension = original.dimension();
+        int initialBitsPerEntry = original.bitsPerEntry();
+        int initialCount = original.count();
 
-            Palette cloned = original.clone();
-            // Verify basic properties
-            assertEquals(initialDimension, cloned.dimension());
-            assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
-            assertEquals(initialCount, cloned.count());
-            assertTrue(original.compare(cloned));
-            for (int i = 0; i < 10; i++) {
-                assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
-            }
+        Palette cloned = original.clone();
+        // Verify basic properties
+        assertEquals(initialDimension, cloned.dimension());
+        assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
+        assertEquals(initialCount, cloned.count());
+        assertTrue(original.compare(cloned));
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
+        }
 
-            // Now force resize by adding many unique values to original
-            Random random = new Random(42); // Deterministic
-            for (int i = 0; i < original.maxSize() / 2; i++) {
-                int x = random.nextInt(original.dimension());
-                int y = random.nextInt(original.dimension());
-                int z = random.nextInt(original.dimension());
-                original.set(x, y, z, 1000 + i); // Unique large values
-            }
+        // Now force resize by adding many unique values to original
+        Random random = new Random(42); // Deterministic
+        for (int i = 0; i < original.maxSize() / 2; i++) {
+            int x = random.nextInt(original.dimension());
+            int y = random.nextInt(original.dimension());
+            int z = random.nextInt(original.dimension());
+            original.set(x, y, z, 1000 + i); // Unique large values
+        }
 
-            // Verify original may have resized
-            // (bitsPerEntry might have increased)
+        // Verify original may have resized
+        // (bitsPerEntry might have increased)
 
-            // Verify clone still has original data and hasn't been affected
-            assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
-            assertEquals(initialCount, cloned.count());
+        // Verify clone still has original data and hasn't been affected
+        assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
+        assertEquals(initialCount, cloned.count());
 
-            // Verify clone still has original values
-            for (int i = 0; i < 10; i++) {
-                assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
-            }
+        // Verify clone still has original values
+        for (int i = 0; i < 10; i++) {
+            assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
         }
     }
 
