@@ -20,9 +20,10 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
 
       - id: version
+        name: Determine Version
         run: |
           DATE=$(date +'%Y.%m.%d')
-          MC_VERSION=$(./gradlew determineMinecraftVersion --quiet --console=plain)
+          MC_VERSION=$(./gradlew determineMinecraftVersion --quiet --console=plain --no-configuration-cache)
 
           TAGS=$(git tag --list "${DATE}*")
           echo "Existing tags: $TAGS"
