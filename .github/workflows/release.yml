@@ -19,6 +19,8 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      - name: Gradle pre-run
+        run: ./gradlew determineMinecraftVersion --no-configuration-cache
       - id: version
         name: Determine Version
         run: |
