@@ -58,7 +58,7 @@ jobs:
       - name: Create Tag
         run: |
           git tag ${{ steps.version.outputs.version }}
-          run: git push origin ${{ steps.version.outputs.version }}
+          git push origin ${{ steps.version.outputs.version }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
