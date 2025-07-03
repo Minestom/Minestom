@@ -61,8 +61,14 @@ loadScripts(document, 'script');</script>
 <button class="hide-sidebar"><span>Hide sidebar&nbsp;</span>&#10094;</button><button class="show-sidebar">&#10095;<span>&nbsp;Show sidebar</span></button>
 <ol class="toc-list">
 <li><a href="#" tabindex="0">Description</a></li>
+<li><a href="#field-summary" tabindex="0">Field Summary</a></li>
 <li><a href="#constructor-summary" tabindex="0">Constructor Summary</a></li>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
+<li><a href="#field-detail" tabindex="0">Field Details</a>
+<ol class="toc-list">
+<li><a href="#SECTION_BLOCK_COUNT" tabindex="0">SECTION_BLOCK_COUNT</a></li>
+</ol>
+</li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E()" tabindex="0">CoordConversion()</a></li>
@@ -74,6 +80,10 @@ loadScripts(document, 'script');</script>
 <li><a href="#globalToChunk(double)" tabindex="0">globalToChunk(double)</a></li>
 <li><a href="#globalToChunk(int)" tabindex="0">globalToChunk(int)</a></li>
 <li><a href="#globalToSectionRelative(int)" tabindex="0">globalToSectionRelative(int)</a></li>
+<li><a href="#sectionAligned(int)" tabindex="0">sectionAligned(int)</a></li>
+<li><a href="#sectionAligned(int,int,int)" tabindex="0">sectionAligned(int, int, int)</a></li>
+<li><a href="#sectionAligned(net.minestom.server.coordinate.Point)" tabindex="0">sectionAligned(Point)</a></li>
+<li><a href="#sectionAligned(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)" tabindex="0">sectionAligned(Point, Point)</a></li>
 <li><a href="#chunkToRegion(int)" tabindex="0">chunkToRegion(int)</a></li>
 <li><a href="#chunkToRegionLocal(int)" tabindex="0">chunkToRegionLocal(int)</a></li>
 <li><a href="#floorSection(int)" tabindex="0">floorSection(int)</a></li>
@@ -87,6 +97,11 @@ loadScripts(document, 'script');</script>
 <li><a href="#chunkBlockIndexGetY(int)" tabindex="0">chunkBlockIndexGetY(int)</a></li>
 <li><a href="#chunkBlockIndexGetZ(int)" tabindex="0">chunkBlockIndexGetZ(int)</a></li>
 <li><a href="#chunkBlockIndexGetGlobal(int,int,int)" tabindex="0">chunkBlockIndexGetGlobal(int, int, int)</a></li>
+<li><a href="#sectionIndex(int,int,int)" tabindex="0">sectionIndex(int, int, int)</a></li>
+<li><a href="#sectionIndexGetX(long)" tabindex="0">sectionIndexGetX(long)</a></li>
+<li><a href="#sectionIndexGetY(long)" tabindex="0">sectionIndexGetY(long)</a></li>
+<li><a href="#sectionIndexGetZ(long)" tabindex="0">sectionIndexGetZ(long)</a></li>
+<li><a href="#sectionIndexGlobal(int,int,int)" tabindex="0">sectionIndexGlobal(int, int, int)</a></li>
 <li><a href="#sectionBlockIndex(int,int,int)" tabindex="0">sectionBlockIndex(int, int, int)</a></li>
 <li><a href="#sectionBlockIndexGetX(int)" tabindex="0">sectionBlockIndexGetX(int)</a></li>
 <li><a href="#sectionBlockIndexGetY(int)" tabindex="0">sectionBlockIndexGetY(int)</a></li>
@@ -114,6 +129,21 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="summary">
 <ul class="summary-list">
+<!-- =========== FIELD SUMMARY =========== -->
+<li>
+<section class="field-summary" id="field-summary">
+<h2>Field Summary</h2>
+<div class="caption"><span>Fields</span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Field</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static final int</code></div>
+<div class="col-second even-row-color"><code><a href="#SECTION_BLOCK_COUNT" class="member-name-link">SECTION_BLOCK_COUNT</a></code></div>
+<div class="col-last even-row-color">&nbsp;</div>
+</div>
+</section>
+</li>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <li>
 <section class="constructor-summary" id="constructor-summary">
@@ -204,6 +234,21 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#globalToSectionRelative(int)" class="member-name-link">globalToSectionRelative</a><wbr>(int&nbsp;xyz)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionAligned(int)" class="member-name-link">sectionAligned</a><wbr>(int&nbsp;xyz)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionAligned(int,int,int)" class="member-name-link">sectionAligned</a><wbr>(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionAligned(net.minestom.server.coordinate.Point)" class="member-name-link">sectionAligned</a><wbr>(@NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionAligned(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)" class="member-name-link">sectionAligned</a><wbr>(@NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;p1,
+ @NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;p2)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndex(int,int,int)" class="member-name-link">sectionBlockIndex</a><wbr>(int&nbsp;x,
  int&nbsp;y,
@@ -218,6 +263,25 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionBlockIndexGetZ(int)" class="member-name-link">sectionBlockIndexGetZ</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionIndex(int,int,int)" class="member-name-link">sectionIndex</a><wbr>(int&nbsp;sectionX,
+ int&nbsp;sectionY,
+ int&nbsp;sectionZ)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionIndexGetX(long)" class="member-name-link">sectionIndexGetX</a><wbr>(long&nbsp;index)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionIndexGetY(long)" class="member-name-link">sectionIndexGetY</a><wbr>(long&nbsp;index)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionIndexGetZ(long)" class="member-name-link">sectionIndexGetZ</a><wbr>(long&nbsp;index)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static long</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#sectionIndexGlobal(int,int,int)" class="member-name-link">sectionIndexGlobal</a><wbr>(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -230,6 +294,30 @@ loadScripts(document, 'script');</script>
 </section>
 <section class="details">
 <ul class="details-list">
+<!-- ============ FIELD DETAIL =========== -->
+<li>
+<section class="field-details" id="field-detail">
+<h2>Field Details</h2>
+<ul class="member-list">
+<li>
+<section class="detail" id="SECTION_BLOCK_COUNT">
+<h3>SECTION_BLOCK_COUNT</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">SECTION_BLOCK_COUNT</span></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../../../../constant-values.html#net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT">Constant Field Values</a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
+</ul>
+</section>
+</li>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <li>
 <section class="constructor-details" id="constructor-detail">
@@ -280,6 +368,44 @@ loadScripts(document, 'script');</script>
 <h3>globalToSectionRelative</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">globalToSectionRelative</span><wbr><span class="parameters">(int&nbsp;xyz)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionAligned(int)">
+<h3>sectionAligned</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sectionAligned</span><wbr><span class="parameters">(int&nbsp;xyz)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionAligned(int,int,int)">
+<h3>sectionAligned</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sectionAligned</span><wbr><span class="parameters">(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionAligned(net.minestom.server.coordinate.Point)">
+<h3>sectionAligned</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sectionAligned</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;point)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionAligned(net.minestom.server.coordinate.Point,net.minestom.server.coordinate.Point)">
+<h3>sectionAligned</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">sectionAligned</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;p1,
+ @NotNull
+ @NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a>&nbsp;p2)</span></div>
 </div>
 </section>
 </li>
@@ -391,6 +517,50 @@ loadScripts(document, 'script');</script>
 </span><span class="modifiers">public static</span>&nbsp;<span class="return-type">@NotNull <a href="Point.html" title="interface in net.minestom.server.coordinate">Point</a></span>&nbsp;<span class="element-name">chunkBlockIndexGetGlobal</span><wbr><span class="parameters">(int&nbsp;index,
  int&nbsp;chunkX,
  int&nbsp;chunkZ)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionIndex(int,int,int)">
+<h3>sectionIndex</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">sectionIndex</span><wbr><span class="parameters">(int&nbsp;sectionX,
+ int&nbsp;sectionY,
+ int&nbsp;sectionZ)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionIndexGetX(long)">
+<h3>sectionIndexGetX</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionIndexGetX</span><wbr><span class="parameters">(long&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionIndexGetY(long)">
+<h3>sectionIndexGetY</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionIndexGetY</span><wbr><span class="parameters">(long&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionIndexGetZ(long)">
+<h3>sectionIndexGetZ</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">sectionIndexGetZ</span><wbr><span class="parameters">(long&nbsp;index)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="sectionIndexGlobal(int,int,int)">
+<h3>sectionIndexGlobal</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">sectionIndexGlobal</span><wbr><span class="parameters">(int&nbsp;x,
+ int&nbsp;y,
+ int&nbsp;z)</span></div>
 </div>
 </section>
 </li>

@@ -90,9 +90,13 @@ loadScripts(document, 'script');</script>
 <li><a href="#getAllPresent(net.minestom.server.instance.palette.Palette.EntryConsumer)" tabindex="0">getAllPresent(Palette.EntryConsumer)</a></li>
 <li><a href="#set(int,int,int,int)" tabindex="0">set(int, int, int, int)</a></li>
 <li><a href="#fill(int)" tabindex="0">fill(int)</a></li>
+<li><a href="#offset(int)" tabindex="0">offset(int)</a></li>
+<li><a href="#replace(int,int)" tabindex="0">replace(int, int)</a></li>
 <li><a href="#setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)" tabindex="0">setAll(Palette.EntrySupplier)</a></li>
 <li><a href="#replace(int,int,int,java.util.function.IntUnaryOperator)" tabindex="0">replace(int, int, int, IntUnaryOperator)</a></li>
 <li><a href="#replaceAll(net.minestom.server.instance.palette.Palette.EntryFunction)" tabindex="0">replaceAll(Palette.EntryFunction)</a></li>
+<li><a href="#copyFrom(net.minestom.server.instance.palette.Palette,int,int,int)" tabindex="0">copyFrom(Palette, int, int, int)</a></li>
+<li><a href="#copyFrom(net.minestom.server.instance.palette.Palette)" tabindex="0">copyFrom(Palette)</a></li>
 <li><a href="#count()" tabindex="0">count()</a></li>
 <li><a href="#bitsPerEntry()" tabindex="0">bitsPerEntry()</a></li>
 <li><a href="#dimension()" tabindex="0">dimension()</a></li>
@@ -228,6 +232,19 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Compare palettes content independently of their storage format.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copyFrom(net.minestom.server.instance.palette.Palette)" class="member-name-link">copyFrom</a><wbr>(@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;source)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Efficiently copies values from another palette starting at position (0, 0, 0).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#copyFrom(net.minestom.server.instance.palette.Palette,int,int,int)" class="member-name-link">copyFrom</a><wbr>(@NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;source,
+ int&nbsp;offsetX,
+ int&nbsp;offsetY,
+ int&nbsp;offsetZ)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Efficiently copies values from another palette with the given offset.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#count()" class="member-name-link">count</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
@@ -267,10 +284,17 @@ loadScripts(document, 'script');</script>
 <div class="block">Returns the maximum number of entries in this palette.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#optimize(net.minestom.server.instance.palette.Palette.Optimization)" class="member-name-link">optimize</a><wbr>(<a href="Palette.Optimization.html" title="enum class in net.minestom.server.instance.palette">Palette.Optimization</a>&nbsp;focus)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#offset(int)" class="member-name-link">offset</a><wbr>(int&nbsp;offset)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#paletteIndexToValue(int)" class="member-name-link">paletteIndexToValue</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#optimize(net.minestom.server.instance.palette.Palette.Optimization)" class="member-name-link">optimize</a><wbr>(<a href="Palette.Optimization.html" title="enum class in net.minestom.server.instance.palette">Palette.Optimization</a>&nbsp;focus)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>int</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#paletteIndexToValue(int)" class="member-name-link">paletteIndexToValue</a><wbr>(int&nbsp;value)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(int,int)" class="member-name-link">replace</a><wbr>(int&nbsp;oldValue,
+ int&nbsp;newValue)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#replace(int,int,int,java.util.function.IntUnaryOperator)" class="member-name-link">replace</a><wbr>(int&nbsp;x,
@@ -573,6 +597,23 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
+<section class="detail" id="offset(int)">
+<h3>offset</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">offset</span><wbr><span class="parameters">(int&nbsp;offset)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="replace(int,int)">
+<h3>replace</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">replace</span><wbr><span class="parameters">(int&nbsp;oldValue,
+ int&nbsp;newValue)</span></div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="setAll(net.minestom.server.instance.palette.Palette.EntrySupplier)">
 <h3>setAll</h3>
 <div class="horizontal-scroll">
@@ -599,6 +640,46 @@ loadScripts(document, 'script');</script>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">replaceAll</span><wbr><span class="parameters">(@NotNull
  @NotNull <a href="Palette.EntryFunction.html" title="interface in net.minestom.server.instance.palette">Palette.EntryFunction</a>&nbsp;function)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="copyFrom(net.minestom.server.instance.palette.Palette,int,int,int)">
+<h3>copyFrom</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">copyFrom</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;source,
+ int&nbsp;offsetX,
+ int&nbsp;offsetY,
+ int&nbsp;offsetZ)</span></div>
+<div class="block">Efficiently copies values from another palette with the given offset.
+ <p>
+ Both palettes must have the same dimension.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source palette to copy from</dd>
+<dd><code>offsetX</code> - the X offset to apply when copying</dd>
+<dd><code>offsetY</code> - the Y offset to apply when copying</dd>
+<dd><code>offsetZ</code> - the Z offset to apply when copying</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="copyFrom(net.minestom.server.instance.palette.Palette)">
+<h3>copyFrom</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="return-type">void</span>&nbsp;<span class="element-name">copyFrom</span><wbr><span class="parameters">(@NotNull
+ @NotNull <a href="Palette.html" title="interface in net.minestom.server.instance.palette">Palette</a>&nbsp;source)</span></div>
+<div class="block">Efficiently copies values from another palette starting at position (0, 0, 0).
+ <p>
+ Both palettes must have the same dimension.
+ <p>
+ This is a convenience method equivalent to calling <code>copyFrom(source, 0, 0, 0)</code>.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>source</code> - the source palette to copy from</dd>
+</dl>
 </div>
 </section>
 </li>
