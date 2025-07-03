@@ -88,7 +88,6 @@ final class PaletteImpl implements Palette {
     @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(dimension, x, y, z);
-        prepareWrite();
         value = valueToPaletteIndex(value);
         final int oldValue = Palettes.write(dimension(), bitsPerEntry, values, x, y, z, value);
         // Check if block count needs to be updated
@@ -510,12 +509,8 @@ final class PaletteImpl implements Palette {
         return values;
     }
 
-    void prepareWrite() {
-        if (bitsPerEntry == 0) resize(minBitsPerEntry);
-    }
-
     boolean hasPalette() {
-        return bitsPerEntry > 0 && bitsPerEntry <= maxBitsPerEntry;
+        return bitsPerEntry <= maxBitsPerEntry;
     }
 
     private static void validateCoord(int dimension, int x, int y, int z) {
