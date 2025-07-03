@@ -1,0 +1,64 @@
+name: Release
+on:
+  workflow_dispatch: { }
+permissions:
+  contents: write # Required to create tags
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with: # We have to fetch full history because we need old tags
+          fetch-depth: 0
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - id: version
+        run: |
+          DATE=$(date +'%Y.%m.%d')
+          MC_VERSION=$(./gradlew determineMinecraftVersion --quiet --console=plain)
+
+          TAGS=$(git tag --list "${DATE}*")
+          echo "Existing tags: $TAGS"
+          
+          if [ -z "$TAGS" ]; then
+            VERSION="$DATE-$MC_VERSION"
+          else
+            SUFFIXES=$(echo "$TAGS" | sed -n "s/^$DATE\([a-z]\)\-.*$/\1/p")
+            NEXT_SUFFIX="b"
+            if [ -n "$SUFFIXES" ]; then
+              LAST_SUFFIX=$(echo "$SUFFIXES" | sort | tail -n1)
+              NEXT_SUFFIX=$(printf "\\$(printf '%03o' $(( $(printf '%d' "'$LAST_SUFFIX") + 1 )) )")
+            fi
+            VERSION="${DATE}${NEXT_SUFFIX}-$MC_VERSION"
+          fi
+
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version: ${VERSION}" >> $GITHUB_STEP_SUMMARY
+
+      - name: Publish to Maven Central
+        if: github.repository_owner == 'Minestom'
+        run: ./gradlew publishAggregationToCentralPortal
+        env:
+          MINESTOM_VERSION: ${{ steps.version.outputs.version }}
+          SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+          SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
+
+      - name: Create Tag
+        run: |
+          git tag ${{ steps.version.outputs.version }}
+          run: git push origin ${{ steps.version.outputs.version }}
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.version }}
+          generate_release_notes: true
