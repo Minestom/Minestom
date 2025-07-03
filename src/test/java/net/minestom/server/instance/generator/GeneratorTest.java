@@ -17,8 +17,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
-import static net.minestom.server.coordinate.CoordConversion.ceilSection;
-import static net.minestom.server.coordinate.CoordConversion.floorSection;
+import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.instance.generator.GeneratorImpl.unit;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -172,7 +171,7 @@ public class GeneratorTest {
                 assertEquals(chunkZ, CoordConversion.globalToChunk(z));
                 return Block.STONE;
             });
-            assertEquals(16 * 16 * 16 * sectionCount, points.size());
+            assertEquals(SECTION_BLOCK_COUNT * sectionCount, points.size());
         };
         generator.generate(chunkUnits);
         for (var section : sections) {
@@ -228,7 +227,7 @@ public class GeneratorTest {
                 assertTrue(points.add(new Vec(x, y, z)), "Duplicate point: " + x + ", " + y + ", " + z);
                 return Block.STONE;
             });
-            assertEquals(16 * 16 * 16 * sectionCount, points.size());
+            assertEquals(SECTION_BLOCK_COUNT * sectionCount, points.size());
         };
         generator.generate(chunkUnits);
         for (var section : sections) {
