@@ -410,11 +410,8 @@ final class PaletteImpl implements Palette {
         clone.count = this.count;
         if (bitsPerEntry == 0) return clone;
         clone.values = values.clone();
-        if (hasPalette()) {
-            clone.paletteToValueList = new IntArrayList(paletteToValueList);
-            clone.valueToPaletteMap = new Int2IntOpenHashMap(valueToPaletteMap);
-            clone.valueToPaletteMap.defaultReturnValue(-1);
-        }
+        if (paletteToValueList != null) clone.paletteToValueList = paletteToValueList.clone();
+        if (valueToPaletteMap != null) clone.valueToPaletteMap = valueToPaletteMap.clone();
         return clone;
     }
 

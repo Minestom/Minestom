@@ -146,6 +146,9 @@ public class PaletteCloneTest {
             for (int i = 0; i < 10; i++) {
                 original.set(i % original.dimension(), 0, 0, i + 1);
             }
+            for (int i = 0; i < 10; i++) {
+                assertEquals(i + 1, original.get(i % original.dimension(), 0, 0));
+            }
 
             int initialDimension = original.dimension();
             int initialBitsPerEntry = original.bitsPerEntry();
@@ -154,7 +157,6 @@ public class PaletteCloneTest {
             Palette cloned = original.clone();
             // Verify basic properties
             assertEquals(initialDimension, cloned.dimension());
-            assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
             assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
             assertEquals(initialCount, cloned.count());
             assertTrue(original.compare(cloned));
