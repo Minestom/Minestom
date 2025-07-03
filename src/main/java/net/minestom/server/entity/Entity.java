@@ -645,35 +645,36 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
     }
 
     private void touchTick() {
-        if (!hasPhysics) return;
+        if (shouldSkipTouch()) return; // Early exit
 
-        // TODO do not call every tick (it is pretty expensive)
-        final Pos position = this.position;
-        final BoundingBox boundingBox = this.boundingBox;
-        ChunkCache cache = new ChunkCache(instance, currentChunk);
+        final Instance instance = getInstance();
+        final ChunkCache cache = new ChunkCache(instance, getChunk());
 
-        final int minX = (int) Math.floor(boundingBox.minX() + position.x());
-        final int maxX = (int) Math.ceil(boundingBox.maxX() + position.x());
-        final int minY = (int) Math.floor(boundingBox.minY() + position.y());
-        final int maxY = (int) Math.ceil(boundingBox.maxY() + position.y());
-        final int minZ = (int) Math.floor(boundingBox.minZ() + position.z());
-        final int maxZ = (int) Math.ceil(boundingBox.maxZ() + position.z());
-
-        for (int y = minY; y <= maxY; y++) {
-            for (int x = minX; x <= maxX; x++) {
-                for (int z = minZ; z <= maxZ; z++) {
-                    final Block block = cache.getBlock(x, y, z, Block.Getter.Condition.CACHED);
-                    if (block == null) continue;
-                    final BlockHandler handler = block.handler();
-                    if (handler != null) {
-                        // Move a small amount towards the entity. If the entity is within 0.01 blocks of the block, touch will trigger
-                        Vec blockPos = new Vec(x, y, z);
-                        Point blockEntityVector = (blockPos.sub(position)).normalize().mul(0.01);
-                        if (block.registry().collisionShape().intersectBox(position.sub(blockPos).add(blockEntityVector), boundingBox)) {
-                            handler.onTouch(new BlockHandler.Touch(block, instance, new Vec(x, y, z), this));
-                        }
-                    }
-                }
+        if (isFastTouch()) {
+            // We can use the cached physics result to avoid recomputing the collision shape positions for entities.
+            for (Point shapePosition : previousPhysicsResult.collisionShapePositions()) {
+                if (shapePosition == null) continue;
+                final Block block = cache.getBlock(shapePosition.blockX(), shapePosition.blockY(), shapePosition.blockZ(), Block.Getter.Condition.CACHED);
+                if (block == null) continue;
+                final BlockHandler handler = block.handler();
+                if (handler == null) continue;
+                handler.onTouch(new BlockHandler.Touch(block, instance, shapePosition, this));
+            }
+        } else {
+            // Fallback method, always this path for players.
+            final Pos position = getPosition();
+            final BoundingBox touchBoundingBox = getBoundingBox().growSymmetrically(Vec.EPSILON, Vec.EPSILON, Vec.EPSILON);
+            final BoundingBox.PointIterator pointIterator = touchBoundingBox.getBlocks(position);
+            while (pointIterator.hasNext()) {
+                final var point = pointIterator.next();
+                final Block block = cache.getBlock(point.blockX(), point.blockY(), point.blockZ(), Block.Getter.Condition.CACHED);
+                if (block == null) continue;
+                final BlockHandler handler = block.handler();
+                if (handler == null) continue;
+                final Vec blockPos = new Vec(point.blockX(), point.blockY(), point.blockZ());
+                final Pos modifiedPlayerPosition = position.sub(blockPos);
+                if (!block.registry().collisionShape().intersectBox(modifiedPlayerPosition, touchBoundingBox)) continue;
+                handler.onTouch(new BlockHandler.Touch(block, instance, blockPos, this));
             }
         }
     }
@@ -1844,4 +1845,23 @@ public class Entity implements Viewable, Tickable, Schedulable, Snapshotable, Ev
         return acquirable;
     }
 
+    /**
+     * Called every tick.
+     *
+     * @return true if {@link #touchTick()} should be called.
+     */
+    protected boolean shouldSkipTouch() {
+        return !hasPhysics || (previousPhysicsResult != null && previousPhysicsResult.cached());
+    }
+
+    /**
+     * Specifies if the entity can use fast touch method using the existing physics engine.
+     * <p>
+     * Used in the default implementation of {@link #touchTick()}
+     *
+     * @return true if can use the fast touch tick which uses the computed physics result.
+     */
+    protected boolean isFastTouch() {
+        return ServerFlag.USE_FAST_TOUCH;
+    }
 }
