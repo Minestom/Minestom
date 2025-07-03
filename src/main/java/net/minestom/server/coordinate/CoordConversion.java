@@ -3,6 +3,8 @@ package net.minestom.server.coordinate;
 import org.jetbrains.annotations.NotNull;
 
 public final class CoordConversion {
+    public static final int SECTION_BLOCK_COUNT = 16 * 16 * 16;
+
     // COORDINATE CONVERSIONS
 
     public static int globalToBlock(double xyz) {
@@ -21,6 +23,29 @@ public final class CoordConversion {
 
     public static int globalToSectionRelative(int xyz) {
         return xyz & 0xF;
+    }
+
+    public static boolean sectionAligned(int xyz) {
+        return globalToSectionRelative(xyz) == 0;
+    }
+
+    public static boolean sectionAligned(int x, int y, int z) {
+        return globalToSectionRelative(x) == 0 && globalToSectionRelative(y) == 0 && globalToSectionRelative(z) == 0;
+    }
+
+    public static boolean sectionAligned(@NotNull Point point) {
+        return sectionAligned(point.blockX(), point.blockY(), point.blockZ());
+    }
+
+    public static boolean sectionAligned(@NotNull Point p1, @NotNull Point p2) {
+        final int minX = Math.min(p1.blockX(), p2.blockX());
+        final int minY = Math.min(p1.blockY(), p2.blockY());
+        final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+        final int maxX = Math.max(p1.blockX(), p2.blockX());
+        final int maxY = Math.max(p1.blockY(), p2.blockY());
+        final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+        return sectionAligned(minX, minY, minZ) &&
+                globalToSectionRelative(maxX) == 15 && globalToSectionRelative(maxY) == 15 && globalToSectionRelative(maxZ) == 15;
     }
 
     public static int chunkToRegion(int chunkCoordinate) {
@@ -94,6 +119,42 @@ public final class CoordConversion {
         final int y = chunkBlockIndexGetY(index);
         final int z = chunkBlockIndexGetZ(index) + 16 * chunkZ;
         return new Vec(x, y, z);
+    }
+
+    // SECTION INDEX
+
+    public static long sectionIndex(int sectionX, int sectionY, int sectionZ) {
+        // Use 21 bits for each, with sign extension
+        final long x = sectionX & 0x1FFFFF;
+        final long y = sectionY & 0x1FFFFF;
+        final long z = sectionZ & 0x1FFFFF;
+        return (x << 42) | (y << 21) | z;
+    }
+
+    public static int sectionIndexGetX(long index) {
+        int x = (int) (index >> 42) & 0x1FFFFF;
+        // Sign extension for 21 bits
+        if ((x & 0x100000) != 0) x |= ~0x1FFFFF;
+        return x;
+    }
+
+    public static int sectionIndexGetY(long index) {
+        int y = (int) (index >> 21) & 0x1FFFFF;
+        if ((y & 0x100000) != 0) y |= ~0x1FFFFF;
+        return y;
+    }
+
+    public static int sectionIndexGetZ(long index) {
+        int z = (int) index & 0x1FFFFF;
+        if ((z & 0x100000) != 0) z |= ~0x1FFFFF;
+        return z;
+    }
+
+    public static long sectionIndexGlobal(int x, int y, int z) {
+        final int sectionX = globalToChunk(x);
+        final int sectionY = globalToChunk(y);
+        final int sectionZ = globalToChunk(z);
+        return sectionIndex(sectionX, sectionY, sectionZ);
     }
 
     // BLOCK INDEX FROM SECTION (0-15 for each coordinate)

@@ -61,11 +61,36 @@ public sealed interface Palette permits PaletteImpl {
 
     void fill(int value);
 
+    void offset(int offset);
+
     void setAll(@NotNull EntrySupplier supplier);
 
     void replace(int x, int y, int z, @NotNull IntUnaryOperator operator);
 
     void replaceAll(@NotNull EntryFunction function);
+
+    /**
+     * Efficiently copies values from another palette with the given offset.
+     * <p>
+     * Both palettes must have the same dimension.
+     *
+     * @param source  the source palette to copy from
+     * @param offsetX the X offset to apply when copying
+     * @param offsetY the Y offset to apply when copying
+     * @param offsetZ the Z offset to apply when copying
+     */
+    void copyFrom(@NotNull Palette source, int offsetX, int offsetY, int offsetZ);
+
+    /**
+     * Efficiently copies values from another palette starting at position (0, 0, 0).
+     * <p>
+     * Both palettes must have the same dimension.
+     * <p>
+     * This is a convenience method equivalent to calling {@code copyFrom(source, 0, 0, 0)}.
+     *
+     * @param source the source palette to copy from
+     */
+    void copyFrom(@NotNull Palette source);
 
     /**
      * Returns the number of entries in this palette.
