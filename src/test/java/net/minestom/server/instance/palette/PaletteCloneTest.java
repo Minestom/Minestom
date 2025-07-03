@@ -147,15 +147,20 @@ public class PaletteCloneTest {
                 original.set(i % original.dimension(), 0, 0, i + 1);
             }
 
+            int initialDimension = original.dimension();
             int initialBitsPerEntry = original.bitsPerEntry();
             int initialCount = original.count();
 
             Palette cloned = original.clone();
-
             // Verify basic properties
+            assertEquals(initialDimension, cloned.dimension());
+            assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
             assertEquals(initialBitsPerEntry, cloned.bitsPerEntry());
             assertEquals(initialCount, cloned.count());
             assertTrue(original.compare(cloned));
+            for (int i = 0; i < 10; i++) {
+                assertEquals(i + 1, cloned.get(i % cloned.dimension(), 0, 0));
+            }
 
             // Now force resize by adding many unique values to original
             Random random = new Random(42); // Deterministic
