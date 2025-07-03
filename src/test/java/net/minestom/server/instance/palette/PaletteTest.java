@@ -138,7 +138,7 @@ public class PaletteTest {
                 }
             }
 
-            palette.fill(0);
+            palette.fill(1);
             palette.set(0, 0, 1, 2);
             palette.offset(-1);
             for (int x = 0; x < palette.dimension(); x++) {
@@ -147,7 +147,7 @@ public class PaletteTest {
                         if (x == 0 && y == 0 && z == 1) {
                             assertEquals(1, palette.get(x, y, z));
                         } else {
-                            assertEquals(-1, palette.get(x, y, z));
+                            assertEquals(0, palette.get(x, y, z));
                         }
                     }
                 }

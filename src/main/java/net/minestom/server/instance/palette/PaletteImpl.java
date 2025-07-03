@@ -11,10 +11,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntUnaryOperator;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
 import static net.minestom.server.instance.palette.Palettes.*;
 
 final class PaletteImpl implements Palette {
-    private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[4096]);
+    private static final ThreadLocal<int[]> WRITE_CACHE = ThreadLocal.withInitial(() -> new int[SECTION_BLOCK_COUNT]);
     final byte dimension, minBitsPerEntry, maxBitsPerEntry, directBits;
 
     byte bitsPerEntry = 0;
@@ -87,6 +88,7 @@ final class PaletteImpl implements Palette {
     @Override
     public void set(int x, int y, int z, int value) {
         validateCoord(dimension, x, y, z);
+        prepareWrite();
         value = valueToPaletteIndex(value);
         final int oldValue = Palettes.write(dimension(), bitsPerEntry, values, x, y, z, value);
         // Check if block count needs to be updated
@@ -133,10 +135,7 @@ final class PaletteImpl implements Palette {
                         }
                     }
                     // Set value in cache
-                    if (value != 0) {
-                        value = valueToPaletteIndex(value);
-                        count++;
-                    }
+                    if (value != 0) count++;
                     cache[index++] = value;
                 }
             }
@@ -144,6 +143,7 @@ final class PaletteImpl implements Palette {
         assert index == maxSize();
         // Update palette content
         if (fillValue < 0) {
+            if (bitsPerEntry != directBits) resize(directBits);
             updateAll(cache);
             this.count = count;
         } else {
@@ -168,11 +168,12 @@ final class PaletteImpl implements Palette {
             final int newValue = function.apply(x, y, z, value);
             final int index = arrayIndex.getPlain();
             arrayIndex.setPlain(index + 1);
-            cache[index] = newValue != value ? valueToPaletteIndex(newValue) : value;
+            cache[index] = newValue;
             if (newValue != 0) count.setPlain(count.getPlain() + 1);
         });
         assert arrayIndex.getPlain() == maxSize();
         // Update palette content
+        if (bitsPerEntry != directBits) resize(directBits);
         updateAll(cache);
         this.count = count.getPlain();
     }
@@ -512,8 +513,12 @@ final class PaletteImpl implements Palette {
         return values;
     }
 
+    void prepareWrite() {
+        if (bitsPerEntry == 0) resize(minBitsPerEntry);
+    }
+
     boolean hasPalette() {
-        return bitsPerEntry <= maxBitsPerEntry;
+        return bitsPerEntry > 0 && bitsPerEntry <= maxBitsPerEntry;
     }
 
     private static void validateCoord(int dimension, int x, int y, int z) {
