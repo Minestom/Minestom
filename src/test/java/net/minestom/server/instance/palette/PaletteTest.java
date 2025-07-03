@@ -161,6 +161,24 @@ public class PaletteTest {
                 assertEquals(expected, value);
             });
         }
+
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 1, 1);
+            palette.set(0, 1, 0, 2);
+            palette.set(1, 0, 0, 3);
+            palette.offset(50);
+            palette.getAll((x, y, z, value) -> {
+                if (x == 0 && y == 0 && z == 1) {
+                    assertEquals(51, value);
+                } else if (x == 0 && y == 1 && z == 0) {
+                    assertEquals(52, value);
+                } else if (x == 1 && y == 0 && z == 0) {
+                    assertEquals(53, value);
+                } else {
+                    assertEquals(50, value);
+                }
+            });
+        }
     }
 
     @Test
