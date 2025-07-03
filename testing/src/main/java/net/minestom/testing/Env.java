@@ -53,6 +53,10 @@ public interface Env {
         return instance;
     }
 
+    default @NotNull Instance createEmptyInstance() {
+        return process().instance().createInstanceContainer();
+    }
+
     default void destroyInstance(Instance instance) {
         process().instance().unregisterInstance(instance);
     }
