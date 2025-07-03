@@ -259,8 +259,8 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public void invalidate() {
-        this.chunkCache.invalidate();
         this.needsCompleteHeightmapRefresh = true;
+        this.chunkCache.invalidate();
     }
 
     private @NotNull ChunkDataPacket createChunkPacket() {
