@@ -10,6 +10,7 @@ import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,12 @@ public sealed interface DialogInput {
             Map.entry(Key.key("text"), Text.CODEC));
     @NotNull StructCodec<DialogInput> CODEC = Codec.RegistryTaggedUnion(REGISTRY, DialogInput::codec, "type");
 
+    static void validateKey(String key) {
+        for (var c : key.toCharArray())
+            if (!Character.isLetterOrDigit(c) && c != '_')
+                throw new IllegalArgumentException(MessageFormat.format("Invalid input key: {0}. Must match [a-zA-Z0-9_]+", key));
+    }
+
     record Boolean(
             @NotNull String key,
             @NotNull Component label,
@@ -31,6 +38,7 @@ public sealed interface DialogInput {
             @NotNull String onTrue,
             @NotNull String onFalse
     ) implements DialogInput {
+
         public static final StructCodec<Boolean> CODEC = StructCodec.struct(
                 "key", Codec.STRING, Boolean::key,
                 "label", Codec.COMPONENT, Boolean::label,
@@ -38,6 +46,10 @@ public sealed interface DialogInput {
                 "on_true", StructCodec.STRING.optional("true"), Boolean::onTrue,
                 "on_false", StructCodec.STRING.optional("false"), Boolean::onFalse,
                 Boolean::new);
+
+        public Boolean {
+            validateKey(key);
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
@@ -53,6 +65,7 @@ public sealed interface DialogInput {
             @Nullable Float initial,
             @Nullable Float step
     ) implements DialogInput {
+
         public static final StructCodec<NumberRange> CODEC = StructCodec.struct(
                 "key", Codec.STRING, NumberRange::key,
                 "width", Codec.INT.optional(DEFAULT_WIDTH), NumberRange::width,
@@ -63,6 +76,10 @@ public sealed interface DialogInput {
                 "initial", Codec.FLOAT.optional(), NumberRange::initial,
                 "step", Codec.FLOAT.optional(), NumberRange::step,
                 NumberRange::new);
+
+        public NumberRange {
+            validateKey(key);
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
@@ -85,6 +102,7 @@ public sealed interface DialogInput {
                 SingleOption::new);
 
         public SingleOption {
+            validateKey(key);
             boolean found = false;
             for (var option : options) {
                 if (!option.initial) continue;
@@ -124,6 +142,10 @@ public sealed interface DialogInput {
                 "max_length", Codec.INT.optional(32), Text::maxLength,
                 "multiline", Multiline.CODEC.optional(), Text::multiline,
                 Text::new);
+
+        public Text {
+            validateKey(key);
+        }
 
         @Override
         public @NotNull StructCodec<? extends DialogInput> codec() {
