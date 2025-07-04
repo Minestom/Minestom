@@ -16,11 +16,13 @@ public class TestBlockHandler implements BlockHandler {
 
     @Override
     public @NotNull Block onPlace(@NotNull BlockChange blockChange) {
+        System.out.println("onPlace");
         return Block.DIAMOND_BLOCK;
     }
 
     @Override
     public @NotNull Block onDestroy(@NotNull BlockChange blockChange) {
+        System.out.println("onDestroy");
         return Block.EMERALD_BLOCK;
     }
 }
