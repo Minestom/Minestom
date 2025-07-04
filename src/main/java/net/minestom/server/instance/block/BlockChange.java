@@ -3,6 +3,7 @@ package net.minestom.server.instance.block;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.PlayerHand;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Player, BlockChange.Replacement {
 
@@ -20,12 +21,16 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
 
     record Instance(
         @NotNull Block.Getter instance, @NotNull Point blockPosition,
-        @NotNull Block block
+        @NotNull Block block, @Nullable net.minestom.server.coordinate.Vec offset
     ) implements BlockChange {
+
+        public Instance(@NotNull Block.Getter instance, @NotNull Point blockPosition, @NotNull Block block) {
+            this(instance, blockPosition, block, null);
+        }
 
         @Override
         public @NotNull BlockChange.Instance withBlock(@NotNull Block newBlock) {
-            return new Instance(instance, blockPosition, newBlock);
+            return new Instance(instance, blockPosition, newBlock, offset);
         }
     }
 

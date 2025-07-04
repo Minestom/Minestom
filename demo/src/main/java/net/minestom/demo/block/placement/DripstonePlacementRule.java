@@ -70,9 +70,4 @@ public class DripstonePlacementRule extends BlockPlacementRule {
         // Otherwise it is a middle
         return "middle";
     }
-
-    @Override
-    public int maxUpdateDistance() {
-        return 2;
-    }
 }

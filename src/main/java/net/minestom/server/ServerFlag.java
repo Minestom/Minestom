@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 public final class ServerFlag {
 
     // Server Behavior
+
     public static final boolean SHUTDOWN_ON_SIGNAL = booleanProperty("minestom.shutdown-on-signal", true);
     public static final int SERVER_TICKS_PER_SECOND = intProperty("minestom.tps", 20);
     public static final int SERVER_MAX_TICK_CATCH_UP = intProperty("minestom.max-tick-catch-up", 5);
@@ -40,6 +41,7 @@ public final class ServerFlag {
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
 
     // Chunk update
+    public static final int MAX_BLOCK_UPDATE_PER_TICK = intProperty("minestom.max-block-update-per-tick", 2048);
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
     public static final float MAX_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.max-per-tick", 64.0f);
     public static final float CHUNKS_PER_TICK_MULTIPLIER = floatProperty("minestom.chunk-queue.multiplier", 1f);
