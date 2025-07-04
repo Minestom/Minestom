@@ -41,11 +41,10 @@ public class FencePlacementRule extends BlockPlacementRule {
 
         if (!(instance instanceof Instance realInstance)) return this.block;
 
-        realInstance.loadChunk(position.add(0, 0, -1)).thenAccept(chunk -> connections.put("north", instance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false"));
-        realInstance.loadChunk(position.add(0, 0, 1)).thenAccept(chunk -> connections.put("south", instance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false"));
-        realInstance.loadChunk(position.add(-1, 0, 0)).thenAccept(chunk -> connections.put("west", instance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false"));
-        realInstance.loadChunk(position.add(1, 0, 0)).thenAccept(chunk -> connections.put("east", instance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false"));
-        realInstance.loadChunk(position);
+        connections.put("north", realInstance.isChunkLoaded(position.add(0, 0, -1)) && realInstance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false");
+        connections.put("south", realInstance.isChunkLoaded(position.add(0, 0, 1)) && realInstance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false");
+        connections.put("west", realInstance.isChunkLoaded(position.add(-1, 0, 0)) && realInstance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false");
+        connections.put("east", realInstance.isChunkLoaded(position.add(1, 0, 0)) && realInstance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false");
 
         return block.withProperties(
                 connections
