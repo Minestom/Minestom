@@ -4,6 +4,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
@@ -17,7 +18,6 @@ import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
@@ -33,7 +33,6 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
-import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
@@ -56,6 +55,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.instance.block.rule.BlockPlacementRule.DEFAULT_BLOCK_UPDATE_SHAPE;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -65,10 +65,6 @@ public class InstanceContainer extends Instance {
     private static final Logger LOGGER = LoggerFactory.getLogger(InstanceContainer.class);
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
-
-    private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
-    };
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
@@ -172,7 +168,8 @@ public class InstanceContainer extends Instance {
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
-                executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
+                List<Vec> updateShape = placementRule == null ? DEFAULT_BLOCK_UPDATE_SHAPE : placementRule.updateShape();
+                executeNeighboursBlockPlacementRule(blockPosition, updateShape, updateDistance);
             }
 
             final Block block = mutation.block();
@@ -216,11 +213,11 @@ public class InstanceContainer extends Instance {
             mutation = mutation.withBlock(blockBreakEvent.getResultBlock());
             UNSAFE_setBlock(chunk, mutation, doBlockUpdates, 0);
             // Send the block break effect packet
-            BlockChange.@NotNull Player finalMutation = mutation;
+            var player = mutation.player();
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
                     new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), mutation.blockPosition(), block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
-                    (viewer) -> !viewer.equals(finalMutation.player()));
+                    (viewer) -> !viewer.equals(player));
         }
         return allowed;
     }
@@ -646,28 +643,25 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull List<Vec> updateShape, int updateDistance) {
         ChunkCache cache = new ChunkCache(this, null, null);
-        for (var updateFace : BLOCK_UPDATE_FACES) {
-            var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
+        for (var offset : updateShape) {
+            final Point neighborPosition = blockPosition.add(offset);
+
+            if (neighborPosition.blockY() < getCachedDimensionType().minY() || neighborPosition.blockY() > getCachedDimensionType().height())
                 continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
+            final Block neighborBlock = cache.getBlock(neighborPosition, Condition.NONE);
             if (neighborBlock == null || neighborBlock.isAir())
                 continue;
             final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
+            if (neighborBlockPlacementRule == null || updateDistance >= ServerFlag.MAX_BLOCK_UPDATE_PER_TICK || !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
                 continue;
-
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
 
             BlockChange mutation = new BlockChange.Instance(
                     this,
                     neighborPosition,
-                    neighborBlock
+                    neighborBlock,
+                    offset
             );
 
             mutation = mutation.withBlock(neighborBlockPlacementRule.blockUpdate(mutation));
