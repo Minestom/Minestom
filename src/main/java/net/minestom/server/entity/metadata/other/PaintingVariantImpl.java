@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 record PaintingVariantImpl(
-        @NotNull Key assetId,
         int width,
         int height,
+        @NotNull Key assetId,
         @Nullable Component title,
         @Nullable Component author
 ) implements PaintingVariant {
