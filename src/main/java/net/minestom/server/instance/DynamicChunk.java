@@ -78,67 +78,69 @@ public class DynamicChunk extends Chunk {
 
     @Override
     public @NotNull Block setBlock(@NotNull BlockChange mutation) {
-        final DimensionType instanceDim = instance.getCachedDimensionType();
+        synchronized (this) {
+            final DimensionType instanceDim = instance.getCachedDimensionType();
 
-        final int x = mutation.blockPosition().blockX();
-        final int y = mutation.blockPosition().blockY();
-        final int z = mutation.blockPosition().blockZ();
+            final int x = mutation.blockPosition().blockX();
+            final int y = mutation.blockPosition().blockY();
+            final int z = mutation.blockPosition().blockZ();
 
-        Block block = mutation.block();
+            Block block = mutation.block();
 
-        if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
-                    instanceDim.minY(), instanceDim.maxY(), y);
+            if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
+                LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
+                        instanceDim.minY(), instanceDim.maxY(), y);
+                return block;
+            }
+            assertLock();
+
+            this.chunkCache.invalidate();
+
+            Section section = getSectionAt(y);
+
+            int sectionRelativeX = globalToSectionRelative(x);
+            int sectionRelativeZ = globalToSectionRelative(z);
+
+            final int index = CoordConversion.chunkBlockIndex(x, y, z);
+
+            // Handler
+            final BlockHandler handler = block.handler();
+            Block lastCachedBlock;
+
+            if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+                lastCachedBlock = this.entries.put(index, block);
+            } else {
+                lastCachedBlock = this.entries.remove(index);
+            }
+
+            if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
+                block = lastCachedBlock.handler().onDestroy(mutation);
+            }
+
+            if (handler != null) {
+                block = handler.onPlace(mutation);
+            }
+
+            if (handler != null && handler.isTickable()) {
+                this.tickableMap.put(index, block);
+            } else {
+                this.tickableMap.remove(index);
+            }
+
+            section.blockPalette().set(
+                    sectionRelativeX,
+                    globalToSectionRelative(y),
+                    sectionRelativeZ,
+                    block.stateId()
+            );
+
+            // UpdateHeightMaps
+            if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
+            motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+            worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+
             return block;
         }
-        assertLock();
-
-        this.chunkCache.invalidate();
-
-        Section section = getSectionAt(y);
-
-        int sectionRelativeX = globalToSectionRelative(x);
-        int sectionRelativeZ = globalToSectionRelative(z);
-
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
-
-        // Handler
-        final BlockHandler handler = block.handler();
-        Block lastCachedBlock;
-
-        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            lastCachedBlock = this.entries.put(index, block);
-        } else {
-            lastCachedBlock = this.entries.remove(index);
-        }
-
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            block = lastCachedBlock.handler().onDestroy(mutation);
-        }
-
-        if (handler != null) {
-            block = handler.onPlace(mutation);
-        }
-
-        if (handler != null && handler.isTickable()) {
-            this.tickableMap.put(index, block);
-        } else {
-            this.tickableMap.remove(index);
-        }
-
-        section.blockPalette().set(
-            sectionRelativeX,
-            globalToSectionRelative(y),
-            sectionRelativeZ,
-            block.stateId()
-        );
-
-        // UpdateHeightMaps
-        if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
-        motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
-        worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
-
-        return block;
     }
 
     @Override
