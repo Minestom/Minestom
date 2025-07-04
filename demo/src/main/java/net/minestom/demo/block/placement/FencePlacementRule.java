@@ -8,7 +8,6 @@ import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.utils.Direction;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,7 @@ public class FencePlacementRule extends BlockPlacementRule {
     }
 
     @Override
-    public @Nullable Block blockPlace(@NotNull BlockChange blockChange) {
+    public @NotNull Block blockPlace(@NotNull BlockChange blockChange) {
         var instance = blockChange.instance();
         var position = blockChange.blockPosition();
 
