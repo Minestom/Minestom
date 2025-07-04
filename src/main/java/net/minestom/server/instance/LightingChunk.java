@@ -8,6 +8,7 @@ import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.light.Light;
