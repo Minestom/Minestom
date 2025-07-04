@@ -1,11 +1,14 @@
 package net.minestom.server.instance;
 
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
+import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
+import it.unimi.dsi.fastutil.longs.LongOpenHashSet;
+import it.unimi.dsi.fastutil.longs.LongSet;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.BlockVec;
-import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
@@ -51,8 +54,10 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
+import static net.minestom.server.coordinate.CoordConversion.*;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -128,7 +133,7 @@ public class InstanceContainer extends Instance {
         if (chunk == null) {
             Check.stateCondition(!hasEnabledAutoChunkLoad(),
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
-            chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
+            chunk = loadChunk(globalToChunk(x), globalToChunk(z)).join();
         }
         if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
     }
@@ -211,6 +216,356 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
+    public @NotNull BlockBatch getBlockBatch(@NotNull Point origin, @NotNull Point p1, @NotNull Point p2) {
+        final int originX = origin.blockX(), originY = origin.blockY(), originZ = origin.blockZ();
+        final boolean originAligned = sectionAligned(originX, originY, originZ);
+        final int minX = Math.min(p1.blockX(), p2.blockX());
+        final int minY = Math.min(p1.blockY(), p2.blockY());
+        final int minZ = Math.min(p1.blockZ(), p2.blockZ());
+        final int maxX = Math.max(p1.blockX(), p2.blockX());
+        final int maxY = Math.max(p1.blockY(), p2.blockY());
+        final int maxZ = Math.max(p1.blockZ(), p2.blockZ());
+
+        final int minSectionX = globalToChunk(minX), minSectionY = globalToChunk(minY), minSectionZ = globalToChunk(minZ);
+        final int maxSectionX = globalToChunk(maxX), maxSectionY = globalToChunk(maxY), maxSectionZ = globalToChunk(maxZ);
+
+        LongSet sectionIndexes = new LongOpenHashSet();
+        Set<BlockVec> blockCoords = new HashSet<>();
+
+        // Iterate through all sections in the bounding box
+        for (int sectionX = minSectionX; sectionX <= maxSectionX; sectionX++) {
+            for (int sectionY = minSectionY; sectionY <= maxSectionY; sectionY++) {
+                for (int sectionZ = minSectionZ; sectionZ <= maxSectionZ; sectionZ++) {
+                    // Calculate section bounds in global coordinates
+                    final int sectionMinX = sectionX * 16;
+                    final int sectionMinY = sectionY * 16;
+                    final int sectionMinZ = sectionZ * 16;
+                    final int sectionMaxX = sectionMinX + 15;
+                    final int sectionMaxY = sectionMinY + 15;
+                    final int sectionMaxZ = sectionMinZ + 15;
+
+                    // Check if this section is fully contained within the requested bounds
+                    if (sectionMinX >= minX && sectionMaxX <= maxX &&
+                            sectionMinY >= minY && sectionMaxY <= maxY &&
+                            sectionMinZ >= minZ && sectionMaxZ <= maxZ) {
+                        // Section is fully contained - add to sectionIndexes
+                        sectionIndexes.add(sectionIndex(sectionX, sectionY, sectionZ));
+                    } else {
+                        // Section is partially contained - add individual blocks to blockCoords
+                        final int blockMinX = Math.max(sectionMinX, minX);
+                        final int blockMaxX = Math.min(sectionMaxX, maxX);
+                        final int blockMinY = Math.max(sectionMinY, minY);
+                        final int blockMaxY = Math.min(sectionMaxY, maxY);
+                        final int blockMinZ = Math.max(sectionMinZ, minZ);
+                        final int blockMaxZ = Math.min(sectionMaxZ, maxZ);
+
+                        for (int x = blockMinX; x <= blockMaxX; x++) {
+                            for (int y = blockMinY; y <= blockMaxY; y++) {
+                                for (int z = blockMinZ; z <= blockMaxZ; z++) {
+                                    blockCoords.add(new BlockVec(x, y, z));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Function<BlockBatch.Builder, Void> chunkRegister = builder -> {
+            for (long sectionIdx : sectionIndexes) {
+                final int sectionX = sectionIndexGetX(sectionIdx);
+                final int sectionY = sectionIndexGetY(sectionIdx);
+                final int sectionZ = sectionIndexGetZ(sectionIdx);
+                Chunk chunk = getChunk(sectionX, sectionZ);
+                if (chunk == null) continue;
+                synchronized (chunk) {
+                    Section section = chunk.getSection(sectionY);
+                    Palette palette = section.blockPalette();
+                    if (originAligned) {
+                        final int offsetX = origin.chunkX();
+                        final int offsetY = origin.section();
+                        final int offsetZ = origin.chunkZ();
+                        builder.copyPalette(sectionX - offsetX, sectionY - offsetY, sectionZ - offsetZ, palette);
+                    } else {
+                        // Unaligned: copy palette with offset
+                        palette.getAll((x, y, z, value) -> {
+                            final int globalX = (sectionX * 16) + x;
+                            final int globalY = (sectionY * 16) + y;
+                            final int globalZ = (sectionZ * 16) + z;
+                            if (globalX < minX || globalX > maxX ||
+                                    globalY < minY || globalY > maxY ||
+                                    globalZ < minZ || globalZ > maxZ) {
+                                return; // Skip blocks outside the requested bounds
+                            }
+                            final int bX = globalX - originX, bY = globalY - originY, bZ = globalZ - originZ;
+                            final Block block = Block.fromStateId(value);
+                            assert block != null;
+                            builder.setBlock(bX, bY, bZ, block);
+                        });
+                    }
+                    if (chunk instanceof DynamicChunk dynamicChunk) {
+                        // Add block states
+                        for (Int2ObjectMap.Entry<Block> entry : dynamicChunk.entries.int2ObjectEntrySet()) {
+                            final int blockIndex = entry.getIntKey();
+                            final int localX = chunkBlockIndexGetX(blockIndex), localY = chunkBlockIndexGetY(blockIndex), localZ = chunkBlockIndexGetZ(blockIndex);
+                            final int blockSectionY = floorSection(localY);
+                            if (blockSectionY != sectionY) continue;
+                            final int globalX = (sectionX * 16) + localX, globalY = (sectionY * 16) + localY, globalZ = (sectionZ * 16) + localZ;
+                            final int bX = globalX - originX, bY = globalY - originY, bZ = globalZ - originZ;
+                            final Block block = entry.getValue();
+                            builder.setBlock(bX, bY, bZ, block);
+                        }
+                    }
+                }
+            }
+            return null;
+        };
+
+        if (blockCoords.isEmpty()) {
+            // Fast aligned batch
+            return BlockBatch.aligned(chunkRegister::apply);
+        } else {
+            // Slower unaligned batch
+            return BlockBatch.unaligned(builder -> {
+                chunkRegister.apply(builder);
+                // Add individual blocks from partially contained sections
+                for (BlockVec vec : blockCoords) {
+                    final int bX = vec.blockX() - originX, bY = vec.blockY() - originY, bZ = vec.blockZ() - originZ;
+                    try {
+                        final Block block = getBlock(vec);
+                        builder.setBlock(bX, bY, bZ, block);
+                    } catch (NullPointerException ignored) {
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void setBlockBatch(int x, int y, int z, @NotNull BlockBatch batch) {
+        final BlockBatchImpl batchImpl = (BlockBatchImpl) batch;
+        LongSet chunkIndexes = new LongOpenHashSet();
+        if (sectionAligned(x, y, z)) {
+            setBlockBatchAligned(x, y, z, batchImpl, chunkIndexes);
+        } else {
+            setBlockBatchUnaligned(x, y, z, batchImpl, chunkIndexes);
+        }
+        // Invalidate all affected chunks
+        for (long chunkIndex : chunkIndexes) {
+            final int chunkX = chunkIndexGetX(chunkIndex);
+            final int chunkZ = chunkIndexGetZ(chunkIndex);
+            final Chunk chunk = getChunk(chunkX, chunkZ);
+            if (chunk == null) continue;
+            chunk.invalidate();
+            chunk.sendChunk();
+        }
+    }
+
+    private void setBlockBatchAligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
+        // Each batch section map to a single instance section
+        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
+            final long sectionIndex = entry.getLongKey();
+            final BlockBatchImpl.SectionState sectionState = entry.getValue();
+
+            // Extract section coordinates from the batch
+            final int batchSectionX = sectionIndexGetX(sectionIndex);
+            final int batchSectionY = sectionIndexGetY(sectionIndex);
+            final int batchSectionZ = sectionIndexGetZ(sectionIndex);
+
+            // Calculate target section coordinates with offset
+            final int targetSectionX = batchSectionX + globalToChunk(x);
+            final int targetSectionY = batchSectionY + globalToChunk(y);
+            final int targetSectionZ = batchSectionZ + globalToChunk(z);
+
+            // Get the target chunk
+            final Chunk targetChunk = batch.generate() ?
+                    loadOptionalChunk(targetSectionX, targetSectionZ).join() : getChunk(targetSectionX, targetSectionZ);
+            if (targetChunk == null) continue;
+            chunkIndexes.add(chunkIndex(targetSectionX, targetSectionZ));
+            synchronized (targetChunk) {
+                final Section targetSection = targetChunk.getSection(targetSectionY);
+                if (batch.aligned()) {
+                    clearSectionNbtData(targetChunk, targetSectionX, targetSectionY, targetSectionZ);
+                    // Section-aligned: direct palette copy
+                    targetSection.blockPalette().copyFrom(sectionState.palette());
+                } else {
+                    // For non-section-aligned, clear NBT for specific blocks being overwritten
+                    sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
+                        final int globalBlockX = (targetSectionX * 16) + localX;
+                        final int globalBlockY = (targetSectionY * 16) + localY;
+                        final int globalBlockZ = (targetSectionZ * 16) + localZ;
+                        clearBlockNbtData(targetChunk, globalBlockX, globalBlockY, globalBlockZ);
+                        targetSection.blockPalette().set(localX, localY, localZ, value - 1);
+                    });
+                }
+
+                // Handle block states if present (for blocks with NBT or handlers)
+                if (!batch.ignoreData()) {
+                    // For blocks with NBT or handlers, we still need to set them individually
+                    // as palette copy only handles the state IDs
+                    for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+                        final int blockIndex = blockEntry.getIntKey();
+                        final Block block = blockEntry.getValue();
+
+                        // Convert section block index back to coordinates
+                        final int localX = sectionBlockIndexGetX(blockIndex);
+                        final int localY = sectionBlockIndexGetY(blockIndex);
+                        final int localZ = sectionBlockIndexGetZ(blockIndex);
+
+                        final int globalBlockX = (batchSectionX * 16) + localX + x;
+                        final int globalBlockY = (batchSectionY * 16) + localY + y;
+                        final int globalBlockZ = (batchSectionZ * 16) + localZ + z;
+
+                        setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
+                    }
+                }
+            }
+        }
+    }
+
+    private void setBlockBatchUnaligned(int x, int y, int z, BlockBatchImpl batch, LongSet chunkIndexes) {
+        // For unaligned batches, a single batch section can affect multiple instance sections
+        for (Long2ObjectMap.Entry<BlockBatchImpl.SectionState> entry : batch.sectionStates().long2ObjectEntrySet()) {
+            final long sectionIndex = entry.getLongKey();
+            final BlockBatchImpl.SectionState sectionState = entry.getValue();
+
+            // Extract section coordinates from the batch
+            final int batchSectionX = sectionIndexGetX(sectionIndex);
+            final int batchSectionY = sectionIndexGetY(sectionIndex);
+            final int batchSectionZ = sectionIndexGetZ(sectionIndex);
+
+            // Calculate global coordinates of this batch section
+            final int globalSectionX = batchSectionX * 16 + x;
+            final int globalSectionY = batchSectionY * 16 + y;
+            final int globalSectionZ = batchSectionZ * 16 + z;
+
+            // Find all instance sections that this batch section affects
+            final int minInstanceSectionX = globalToChunk(globalSectionX);
+            final int maxInstanceSectionX = globalToChunk(globalSectionX + 15);
+            final int minInstanceSectionY = globalToChunk(globalSectionY);
+            final int maxInstanceSectionY = globalToChunk(globalSectionY + 15);
+            final int minInstanceSectionZ = globalToChunk(globalSectionZ);
+            final int maxInstanceSectionZ = globalToChunk(globalSectionZ + 15);
+
+            // Iterate through all affected instance sections
+            for (int instanceSectionX = minInstanceSectionX; instanceSectionX <= maxInstanceSectionX; instanceSectionX++) {
+                for (int instanceSectionY = minInstanceSectionY; instanceSectionY <= maxInstanceSectionY; instanceSectionY++) {
+                    for (int instanceSectionZ = minInstanceSectionZ; instanceSectionZ <= maxInstanceSectionZ; instanceSectionZ++) {
+                        // Get the target chunk
+                        final Chunk targetChunk = batch.generate() ?
+                                loadOptionalChunk(instanceSectionX, instanceSectionZ).join() : getChunk(instanceSectionX, instanceSectionZ);
+                        if (targetChunk == null) continue;
+                        chunkIndexes.add(chunkIndex(instanceSectionX, instanceSectionZ));
+                        synchronized (targetChunk) {
+                            final Section targetSection = targetChunk.getSection(instanceSectionY);
+
+                            // Calculate the overlap region
+                            final int instanceGlobalX = instanceSectionX * 16;
+                            final int instanceGlobalY = instanceSectionY * 16;
+                            final int instanceGlobalZ = instanceSectionZ * 16;
+
+                            final int overlapMinX = Math.max(globalSectionX, instanceGlobalX);
+                            final int overlapMaxX = Math.min(globalSectionX + 15, instanceGlobalX + 15);
+                            final int overlapMinY = Math.max(globalSectionY, instanceGlobalY);
+                            final int overlapMaxY = Math.min(globalSectionY + 15, instanceGlobalY + 15);
+                            final int overlapMinZ = Math.max(globalSectionZ, instanceGlobalZ);
+                            final int overlapMaxZ = Math.min(globalSectionZ + 15, instanceGlobalZ + 15);
+
+                            if (batch.aligned()) {
+                                // Use optimized copyFrom with offset for section-aligned batches
+                                final int offsetX = overlapMinX - instanceGlobalX;
+                                final int offsetY = overlapMinY - instanceGlobalY;
+                                final int offsetZ = overlapMinZ - instanceGlobalZ;
+
+                                // Clear NBT data for blocks that will be overwritten in the overlap region
+                                for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
+                                    for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
+                                        for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
+                                            final int globalX = overlapMinX + dx;
+                                            final int globalY = overlapMinY + dy;
+                                            final int globalZ = overlapMinZ + dz;
+                                            clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
+                                        }
+                                    }
+                                }
+
+                                // Create a temporary palette for the overlap region
+                                final Palette tempPalette = Palette.blocks();
+                                final int batchOffsetX = overlapMinX - globalSectionX;
+                                final int batchOffsetY = overlapMinY - globalSectionY;
+                                final int batchOffsetZ = overlapMinZ - globalSectionZ;
+
+                                // Copy the overlapping region from batch palette to temp palette
+                                for (int dx = 0; dx <= overlapMaxX - overlapMinX; dx++) {
+                                    for (int dy = 0; dy <= overlapMaxY - overlapMinY; dy++) {
+                                        for (int dz = 0; dz <= overlapMaxZ - overlapMinZ; dz++) {
+                                            final int value = sectionState.palette().get(batchOffsetX + dx, batchOffsetY + dy, batchOffsetZ + dz);
+                                            if (value != 0) { // Only copy non-air blocks
+                                                tempPalette.set(dx, dy, dz, value);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Copy from temp palette to target section with offset
+                                targetSection.blockPalette().copyFrom(tempPalette, offsetX, offsetY, offsetZ);
+                            } else {
+                                // Use getAllPresent for non-section-aligned batches
+                                sectionState.palette().getAllPresent((localX, localY, localZ, value) -> {
+                                    final int globalX = globalSectionX + localX;
+                                    final int globalY = globalSectionY + localY;
+                                    final int globalZ = globalSectionZ + localZ;
+
+                                    // Check if this block is within the current instance section
+                                    if (globalX >= overlapMinX && globalX <= overlapMaxX &&
+                                            globalY >= overlapMinY && globalY <= overlapMaxY &&
+                                            globalZ >= overlapMinZ && globalZ <= overlapMaxZ) {
+
+                                        final int targetX = globalX - instanceGlobalX;
+                                        final int targetY = globalY - instanceGlobalY;
+                                        final int targetZ = globalZ - instanceGlobalZ;
+
+                                        // Clear NBT data for this specific block position
+                                        clearBlockNbtData(targetChunk, globalX, globalY, globalZ);
+
+                                        // Values are +1 in non-section-aligned batches
+                                        targetSection.blockPalette().set(targetX, targetY, targetZ, value - 1);
+                                    }
+                                });
+                            }
+
+                            // Handle block states if present (for blocks with NBT or handlers)
+                            if (!batch.ignoreData()) {
+                                for (Int2ObjectMap.Entry<Block> blockEntry : sectionState.blockStates().int2ObjectEntrySet()) {
+                                    final int blockIndex = blockEntry.getIntKey();
+                                    final Block block = blockEntry.getValue();
+
+                                    // Convert section block index back to coordinates
+                                    final int localX = sectionBlockIndexGetX(blockIndex);
+                                    final int localY = sectionBlockIndexGetY(blockIndex);
+                                    final int localZ = sectionBlockIndexGetZ(blockIndex);
+
+                                    final int globalBlockX = globalSectionX + localX;
+                                    final int globalBlockY = globalSectionY + localY;
+                                    final int globalBlockZ = globalSectionZ + localZ;
+
+                                    // Check if this block is within the current instance section
+                                    if (globalBlockX >= overlapMinX && globalBlockX <= overlapMaxX &&
+                                            globalBlockY >= overlapMinY && globalBlockY <= overlapMaxY &&
+                                            globalBlockZ >= overlapMinZ && globalBlockZ <= overlapMaxZ) {
+
+                                        setBlock(globalBlockX, globalBlockY, globalBlockZ, block);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
         final Point blockPosition = placement.getBlockPosition();
         final Chunk chunk = getChunkAt(blockPosition);
@@ -273,7 +628,7 @@ public class InstanceContainer extends Instance {
         // Remove all entities in chunk
         getEntityTracker().chunkEntities(chunkX, chunkZ, EntityTracker.Target.ENTITIES).forEach(Entity::remove);
         // Clear cache
-        this.chunks.remove(CoordConversion.chunkIndex(chunkX, chunkZ));
+        this.chunks.remove(chunkIndex(chunkX, chunkZ));
         chunk.unload();
         chunkLoader.unloadChunk(chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
@@ -282,7 +637,7 @@ public class InstanceContainer extends Instance {
 
     @Override
     public Chunk getChunk(int chunkX, int chunkZ) {
-        return chunks.get(CoordConversion.chunkIndex(chunkX, chunkZ));
+        return chunks.get(chunkIndex(chunkX, chunkZ));
     }
 
     @Override
@@ -322,7 +677,7 @@ public class InstanceContainer extends Instance {
 
     protected @NotNull CompletableFuture<@NotNull Chunk> retrieveChunk(int chunkX, int chunkZ) {
         CompletableFuture<Chunk> completableFuture = new CompletableFuture<>();
-        final long index = CoordConversion.chunkIndex(chunkX, chunkZ);
+        final long index = chunkIndex(chunkX, chunkZ);
         final CompletableFuture<Chunk> prev = loadingChunks.putIfAbsent(index, completableFuture);
         if (prev != null) return prev;
         final IChunkLoader loader = chunkLoader;
@@ -408,7 +763,7 @@ public class InstanceContainer extends Instance {
                             forkChunk.invalidate();
                             forkChunk.sendChunk();
                         } else {
-                            final long index = CoordConversion.chunkIndex(start);
+                            final long index = chunkIndex(start);
                             this.generationForks.compute(index, (i, sectionModifiers) -> {
                                 if (sectionModifiers == null) sectionModifiers = new ArrayList<>();
                                 sectionModifiers.add(sectionModifier);
@@ -430,7 +785,7 @@ public class InstanceContainer extends Instance {
     }
 
     private void processFork(Chunk chunk) {
-        this.generationForks.compute(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
+        this.generationForks.compute(chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), (aLong, sectionModifiers) -> {
             if (sectionModifiers != null) {
                 for (var sectionModifier : sectionModifiers) {
                     applyFork(chunk, sectionModifier);
@@ -458,9 +813,9 @@ public class InstanceContainer extends Instance {
             Int2ObjectMaps.fastForEach(cache, blockEntry -> {
                 final int index = blockEntry.getIntKey();
                 final Block block = blockEntry.getValue();
-                final int x = CoordConversion.chunkBlockIndexGetX(index);
-                final int y = CoordConversion.chunkBlockIndexGetY(index) + height;
-                final int z = CoordConversion.chunkBlockIndexGetZ(index);
+                final int x = chunkBlockIndexGetX(index);
+                final int y = chunkBlockIndexGetY(index) + height;
+                final int z = chunkBlockIndexGetZ(index);
                 chunk.setBlock(x, y, z, block);
             });
         }
@@ -705,8 +1060,39 @@ public class InstanceContainer extends Instance {
     }
 
     private void cacheChunk(@NotNull Chunk chunk) {
-        this.chunks.put(CoordConversion.chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
+        this.chunks.put(chunkIndex(chunk.getChunkX(), chunk.getChunkZ()), chunk);
         var dispatcher = MinecraftServer.process().dispatcher();
         dispatcher.createPartition(chunk);
+    }
+
+    /**
+     * Clears NBT data for all blocks in a section.
+     * This is called when an entire section is being replaced by a batch operation.
+     */
+    private void clearSectionNbtData(@NotNull Chunk chunk, int sectionX, int sectionY, int sectionZ) {
+        // Clear NBT data for all blocks in this section
+        if (chunk instanceof DynamicChunk dynamicChunk && dynamicChunk.entries.isEmpty()) return;
+        for (int x = 0; x < 16; x++) {
+            for (int y = 0; y < 16; y++) {
+                for (int z = 0; z < 16; z++) {
+                    final int globalX = sectionX * 16 + x;
+                    final int globalY = sectionY * 16 + y;
+                    final int globalZ = sectionZ * 16 + z;
+                    clearBlockNbtData(chunk, globalX, globalY, globalZ);
+                }
+            }
+        }
+    }
+
+    /**
+     * Clears NBT data for a specific block position.
+     * This ensures that when a block is overwritten, any existing NBT data is properly removed.
+     */
+    private void clearBlockNbtData(@NotNull Chunk chunk, int x, int y, int z) {
+        final Block currentBlock = chunk.getBlock(x, y, z);
+        // If the current block has data, we need to clear it
+        if (currentBlock.hasNbt() || currentBlock.handler() != null) {
+            chunk.setBlock(x, y, z, Block.AIR);
+        }
     }
 }

@@ -7,12 +7,12 @@ import net.minestom.server.command.builder.arguments.Argument;
 import net.minestom.server.command.builder.arguments.number.ArgumentInteger;
 import net.minestom.server.command.builder.arguments.relative.ArgumentRelativeBlockPosition;
 import net.minestom.server.command.builder.condition.Conditions;
+import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.batch.RelativeBlockBatch;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.BlockBatch;
 import net.minestom.server.utils.location.RelativeVec;
-
 import org.jetbrains.annotations.NotNull;
 
 public class DebugGridCommand extends Command {
@@ -29,14 +29,15 @@ public class DebugGridCommand extends Command {
 
     private void execute(@NotNull CommandSender sender, @NotNull CommandContext context) {
         Player player = (Player) sender;
-        final RelativeBlockBatch relativeBlockBatch = new RelativeBlockBatch();
-        final Integer radius = context.get(this.radius);
-        for (int x = -radius / 2; x < radius / 2; x++) {
-            for (int z = -radius / 2; z < radius / 2; z++) {
-                relativeBlockBatch.setBlock(x, 0, z, ((x % 2 == 0) ^ (z % 2) == 0) ? Block.WHITE_CONCRETE : Block.BLACK_CONCRETE);
+        final Point point = context.get(center).from(player);
+        final BlockBatch blockBatch = BlockBatch.unaligned(builder -> {
+            final Integer radius = context.get(this.radius);
+            for (int x = -radius / 2; x < radius / 2; x++) {
+                for (int z = -radius / 2; z < radius / 2; z++) {
+                    builder.setBlock(x, 0, z, ((x % 2 == 0) ^ (z % 2) == 0) ? Block.WHITE_CONCRETE : Block.BLACK_CONCRETE);
+                }
             }
-        }
-        //noinspection ConstantConditions
-        relativeBlockBatch.apply(player.getInstance(), context.get(center).from(player), () -> {});
+        });
+        player.getInstance().setBlockBatch(point, blockBatch);
     }
 }
