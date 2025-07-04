@@ -81,4 +81,8 @@ public abstract class BlockPlacementRule {
     public @NotNull Block getBlock() {
         return block;
     }
+
+    public boolean isClientPredicted() {
+        return clientPredicted;
+    }
 }

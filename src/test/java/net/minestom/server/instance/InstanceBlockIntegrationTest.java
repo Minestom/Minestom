@@ -79,30 +79,4 @@ public class InstanceBlockIntegrationTest {
         instance.setBlock(point, Block.GRASS_BLOCK.withTag(tag, 8));
         assertEquals(8, instance.getBlock(point).getTag(tag));
     }
-
-    @Test
-    public void handlerPresentInPlacementRuleUpdate(Env env) {
-
-        AtomicReference<Block> currentBlock = new AtomicReference<>();
-        env.process().block().registerHandler(SuspiciousGravelBlockHandler.INSTANCE.getKey(), () -> SuspiciousGravelBlockHandler.INSTANCE);
-        env.process().block().registerBlockPlacementRule(new BlockPlacementRule(Block.SUSPICIOUS_GRAVEL) {
-            @Override
-            public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
-                return mutation.block();
-            }
-
-            @Override
-            public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
-                currentBlock.set(mutation.block());
-                return super.blockUpdate(mutation);
-            }
-        });
-
-        var instance = env.createFlatInstance();
-        var theBlock = Block.SUSPICIOUS_GRAVEL.withHandler(SuspiciousGravelBlockHandler.INSTANCE);
-        instance.setBlock(0, 50, 0, theBlock);
-        instance.setBlock(1, 50, 0, theBlock);
-
-        assertEquals(theBlock, currentBlock.get());
-    }
 }

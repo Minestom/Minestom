@@ -174,11 +174,22 @@ public class InstanceContainer extends Instance {
             final Block block = mutation.block();
 
             // Refresh player chunk block
-            chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-            RegistryData.BlockEntry registry = block.registry();
-            if (registry.isBlockEntity()) {
-                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+            if(placementRule != null && placementRule.isClientPredicted() && mutation instanceof BlockChange.Player playerMutation) {
+                PacketSendingUtils.sendGroupedPacket(chunk.getViewers(), new BlockChangePacket(blockPosition, block.stateId()),
+                        viewer -> !viewer.equals(playerMutation.player()));
+                RegistryData.BlockEntry registry = block.registry();
+                if (registry.isBlockEntity()) {
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                    PacketSendingUtils.sendGroupedPacket(chunk.getViewers(), new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data),
+                            viewer -> !viewer.equals(playerMutation.player()));
+                }
+            } else {
+                chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+                RegistryData.BlockEntry registry = block.registry();
+                if (registry.isBlockEntity()) {
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
+                }
             }
         }
     }
@@ -642,36 +653,6 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-//    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, @NotNull List<Vec> updateShape, int updateDistance) {
-//        ChunkCache cache = new ChunkCache(this, null, null);
-//        for (var offset : updateShape) {
-//            final Point neighborPosition = blockPosition.add(offset);
-//
-//            if (neighborPosition.blockY() < getCachedDimensionType().minY() || neighborPosition.blockY() > getCachedDimensionType().height())
-//                continue;
-//            final Block neighborBlock = cache.getBlock(neighborPosition, Condition.NONE);
-//            if (neighborBlock == null || neighborBlock.isAir())
-//                continue;
-//            final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-//            if (neighborBlockPlacementRule == null || updateDistance >= ServerFlag.MAX_BLOCK_UPDATE_PER_TICK || !neighborBlockPlacementRule.considerUpdate(offset, cache.getBlock(blockPosition)))
-//                continue;
-//
-//            BlockChange mutation = new BlockChange.Instance(
-//                    this,
-//                    neighborPosition,
-//                    neighborBlock,
-//                    offset
-//            );
-//
-//            mutation = mutation.withBlock(neighborBlockPlacementRule.blockUpdate(mutation));
-//
-//            if (neighborBlock != mutation.block()) {
-//                final Chunk chunk = getChunkAt(neighborPosition);
-//                if (!isLoaded(chunk)) continue;
-//                UNSAFE_setBlock(chunk, mutation, true, updateDistance + 1);
-//            }
-//        }
-//    }
     private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition) {
         Set<Point> visited = new HashSet<>(32);
         Deque<Point> queue = new ArrayDeque<>(32);
