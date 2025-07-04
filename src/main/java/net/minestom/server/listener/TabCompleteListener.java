@@ -13,10 +13,15 @@ public class TabCompleteListener {
     public static void listener(ClientTabCompletePacket packet, Player player) {
         final String text = packet.text();
         final Suggestion suggestion = getSuggestion(player, text);
+
         if (suggestion != null) {
+            // if the incoming ClientTabCompletePacket starts with a /, our Suggestion's start will be based off of the
+            // command string with the forward slash trimmed, and therefore off-by-one
+            final int startOffset = text.startsWith("/") ? 1 : 0;
+
             player.sendPacket(new TabCompletePacket(
                     packet.transactionId(),
-                    suggestion.getStart(),
+                    suggestion.getStart() + startOffset,
                     suggestion.getLength(),
                     suggestion.getEntries().stream()
                             .map(suggestionEntry -> new TabCompletePacket.Match(suggestionEntry.getEntry(), suggestionEntry.getTooltip()))
