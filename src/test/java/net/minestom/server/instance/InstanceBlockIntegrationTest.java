@@ -2,6 +2,7 @@ package net.minestom.server.instance;
 
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.SuspiciousGravelBlockHandler;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.tag.Tag;
