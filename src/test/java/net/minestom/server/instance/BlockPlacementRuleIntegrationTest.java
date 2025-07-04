@@ -30,11 +30,6 @@ public class BlockPlacementRuleIntegrationTest {
     @Test
     public void updateNeighborsTest(Env env) {
         var instance = env.createFlatInstance();
-        var connection = env.createConnection();
-
-        env.process().block().registerBlockPlacementRule(new FencePlacementRule(Block.OAK_FENCE));
-
-        connection.connect(instance, new Pos(0, 52, 0));
 
         instance.setBlock(1, 50, 0, Block.OAK_FENCE);
         instance.setBlock(-1, 50, 0, Block.OAK_FENCE);
@@ -46,24 +41,30 @@ public class BlockPlacementRuleIntegrationTest {
         assertEquals(Block.OAK_FENCE, instance.getBlock(0, 50, 1));
         assertEquals(Block.OAK_FENCE, instance.getBlock(0, 50, -1));
 
+        env.process().block().registerBlockPlacementRule(new FencePlacementRule(Block.OAK_FENCE));
+
         instance.setBlock(0, 50, 0, Block.OAK_FENCE);
 
-        env.tick();
+        for (int x = -3; x <= 3; x++) {
+            for (int z = -3; z <= 3; z++) {
+                instance.loadChunk(x, z).join();
+            }
+        }
 
         assertEquals(Block.OAK_FENCE.withProperties(
-                Map.of("north", "true", "south", "true", "west", "true", "east", "true")
+          Map.of("north", "true", "south", "true", "west", "true", "east", "true")
         ), instance.getBlock(0, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-                Map.of("north", "false", "south", "false", "west", "true", "east", "false")
+          Map.of("north", "false", "south", "false", "west", "true", "east", "false")
         ), instance.getBlock(1, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-                Map.of("north", "false", "south", "false", "west", "false", "east", "true")
+          Map.of("north", "false", "south", "false", "west", "false", "east", "true")
         ), instance.getBlock(-1, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-                Map.of("north", "true", "south", "false", "west", "false", "east", "false")
+          Map.of("north", "true", "south", "false", "west", "false", "east", "false")
         ), instance.getBlock(0, 50, 1));
         assertEquals(Block.OAK_FENCE.withProperties(
-                Map.of("north", "false", "south", "true", "west", "false", "east", "false")
+          Map.of("north", "false", "south", "true", "west", "false", "east", "false")
         ), instance.getBlock(0, 50, -1));
     }
 

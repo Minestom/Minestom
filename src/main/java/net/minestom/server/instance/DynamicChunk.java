@@ -92,7 +92,6 @@ public class DynamicChunk extends Chunk {
                         instanceDim.minY(), instanceDim.maxY(), y);
                 return block;
             }
-            assertLock();
 
             this.chunkCache.invalidate();
 
@@ -105,10 +104,7 @@ public class DynamicChunk extends Chunk {
 
             // Handler
             final BlockHandler handler = block.handler();
-
-            final Block lastCachedBlock = this.entries.get(index);
-
-            this.entries.remove(index);
+            final Block lastCachedBlock = this.entries.remove(index);
 
             if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
                 block = lastCachedBlock.handler().onDestroy(mutation);
