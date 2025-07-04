@@ -184,7 +184,6 @@ public class InstanceContainer extends Instance {
                 final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                 chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
             }
-            EventDispatcher.call(new InstanceBlockUpdateEvent(this, new BlockVec(blockPosition), block));
         }
     }
 
