@@ -199,7 +199,6 @@ public class PaletteTest {
             palette.set(0, 1, 0, 3);
             palette.set(1, 0, 0, 4);
             palette.offset(-1);
-            palette.getAllPresent((x, y, z, value) -> System.out.println("x: " + x + ", y: " + y + ", z: " + z + ", value: " + value));
             assertEquals(3, palette.count());
             palette.offset(1);
             assertEquals(palette.maxSize(), palette.count());
