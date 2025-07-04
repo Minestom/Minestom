@@ -21,8 +21,8 @@ public abstract class BlockPlacementRule {
             Direction.EAST.vec(),
             Direction.NORTH.vec(),
             Direction.SOUTH.vec(),
-            Direction.DOWN.vec(),
-            Direction.UP.vec()
+            Direction.UP.vec(),
+            Direction.DOWN.vec()
     );
 
     protected final Block block;
