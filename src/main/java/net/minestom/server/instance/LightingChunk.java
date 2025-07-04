@@ -158,7 +158,7 @@ public class LightingChunk extends DynamicChunk {
 
     @Override
     public @NotNull Block setBlock(@NotNull BlockChange mutation) {
-        super.setBlock(mutation);
+        final Block block = super.setBlock(mutation);
         this.occlusionMap = null;
 
         // Invalidate neighbor chunks, since they can be updated by this block change
@@ -169,7 +169,7 @@ public class LightingChunk extends DynamicChunk {
             this.partialLightCache.invalidate();
         }
 
-        return mutation.block();
+        return block;
     }
 
     public void sendLighting() {

@@ -105,18 +105,14 @@ public class DynamicChunk extends Chunk {
 
             // Handler
             final BlockHandler handler = block.handler();
-            Block lastCachedBlock;
 
-            if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-                lastCachedBlock = this.entries.put(index, block);
-            } else {
-                lastCachedBlock = this.entries.remove(index);
-            }
+            final Block lastCachedBlock = this.entries.get(index);
+
+            this.entries.remove(index);
 
             if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
                 block = lastCachedBlock.handler().onDestroy(mutation);
             }
-
             if (handler != null) {
                 block = handler.onPlace(mutation);
             }
@@ -125,6 +121,11 @@ public class DynamicChunk extends Chunk {
                 this.tickableMap.put(index, block);
             } else {
                 this.tickableMap.remove(index);
+            }
+
+            // Cache the new block if needed
+            if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+                this.entries.put(index, block);
             }
 
             section.blockPalette().set(
@@ -142,6 +143,7 @@ public class DynamicChunk extends Chunk {
             return block;
         }
     }
+
 
     @Override
     public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {

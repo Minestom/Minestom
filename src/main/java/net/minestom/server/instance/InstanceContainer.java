@@ -164,14 +164,12 @@ public class InstanceContainer extends Instance {
                 }
             }
 
-            mutation = mutation.withBlock(chunk.setBlock(mutation));
+            final Block block = chunk.setBlock(mutation);
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
                 executeNeighboursBlockPlacementRule(blockPosition);
             }
-
-            final Block block = mutation.block();
 
             // Refresh player chunk block
             if(placementRule != null && placementRule.isClientPredicted() && mutation instanceof BlockChange.Player playerMutation) {
