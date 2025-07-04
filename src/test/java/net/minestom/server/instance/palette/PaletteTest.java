@@ -182,6 +182,38 @@ public class PaletteTest {
     }
 
     @Test
+    public void offsetCount() {
+        for (Palette palette : testPalettes()) {
+            assertEquals(0, palette.count());
+            palette.fill(0);
+            assertEquals(0, palette.count());
+            palette.offset(1);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.offset(-1);
+            assertEquals(0, palette.count());
+        }
+        for (Palette palette : testPalettes()) {
+            palette.fill(1);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.set(0, 0, 1, 2);
+            palette.set(0, 1, 0, 3);
+            palette.set(1, 0, 0, 4);
+            palette.offset(-1);
+            assertEquals(3, palette.count());
+            palette.offset(1);
+            assertEquals(palette.maxSize(), palette.count());
+        }
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.offset(50);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.offset(-50);
+            assertEquals(palette.maxSize(), palette.count());
+        }
+    }
+
+    @Test
     public void replace() {
         for (Palette palette : testPalettes()) {
             palette.fill(0);
@@ -226,6 +258,32 @@ public class PaletteTest {
                     assertEquals(50, value);
                 }
             });
+        }
+    }
+
+    @Test
+    public void replaceCount() {
+        for (Palette palette : testPalettes()) {
+            palette.fill(0);
+            palette.replace(0, 1);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.replace(1, 0);
+            assertEquals(0, palette.count());
+        }
+        for (Palette palette : testPalettes()) {
+            palette.set(0, 0, 1, 1);
+            palette.set(1, 1, 1, 1);
+            palette.set(0, 1, 0, 2);
+            palette.set(1, 0, 0, 3);
+            assertEquals(4, palette.count());
+            palette.replace(1, 0);
+            assertEquals(2, palette.count());
+        }
+        for (Palette palette : testPalettes()) {
+            palette.setAll((x, y, z) -> x + y + z + 100);
+            assertEquals(palette.maxSize(), palette.count());
+            palette.replace(100, 0);
+            assertEquals(palette.maxSize() - 1, palette.count());
         }
     }
 
