@@ -33,6 +33,7 @@ import net.minestom.server.registry.DynamicRegistry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
+import net.minestom.server.utils.PacketViewableUtils;
 import net.minestom.server.utils.async.AsyncUtils;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.chunk.ChunkCache;
@@ -177,13 +178,11 @@ public class InstanceContainer extends Instance {
             final Block block = mutation.block();
 
             // Refresh player chunk block
-            if(placementRule != null && !placementRule.isClientPredicted()) {
-                chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                RegistryData.BlockEntry registry = block.registry();
-                if (registry.isBlockEntity()) {
-                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
-                    chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
-                }
+            chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
+            RegistryData.BlockEntry registry = block.registry();
+            if (registry.isBlockEntity()) {
+                final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
             }
             EventDispatcher.call(new InstanceBlockUpdateEvent(this, new BlockVec(blockPosition), block));
         }
