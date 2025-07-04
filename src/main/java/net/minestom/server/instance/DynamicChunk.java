@@ -104,24 +104,20 @@ public class DynamicChunk extends Chunk {
 
         // Handler
         final BlockHandler handler = block.handler();
-        final boolean shouldCache = handler != null || block.hasNbt() || block.registry().isBlockEntity();
+        Block lastCachedBlock;
 
-        final Block lastCachedBlock = this.entries.get(index);
-
-        this.entries.remove(index);
-
-        if (shouldCache) {
-            this.entries.put(index, block);
+        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+            lastCachedBlock = this.entries.put(index, block);
+        } else {
+            lastCachedBlock = this.entries.remove(index);
         }
 
         if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            block = lastCachedBlock.handler().onDestroy(new BlockChange.Instance(instance, mutation.blockPosition(), block));
+            block = lastCachedBlock.handler().onDestroy(mutation);
         }
 
         if (handler != null) {
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
-            block = handler.onPlace(new BlockChange.Instance(instance, absoluteBlockPosition, finalBlock));
+            block = handler.onPlace(mutation);
         }
 
         if (handler != null && handler.isTickable()) {

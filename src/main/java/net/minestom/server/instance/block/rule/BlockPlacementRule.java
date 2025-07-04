@@ -8,7 +8,7 @@ public abstract class BlockPlacementRule {
     public static final int DEFAULT_UPDATE_RANGE = 10;
 
     protected final Block block;
-    private boolean clientPredicted = false;
+    protected boolean clientPredicted = false;
 
     protected BlockPlacementRule(@NotNull Block block) {
         this.block = block;
@@ -44,14 +44,6 @@ public abstract class BlockPlacementRule {
      */
     public int maxUpdateDistance() {
         return DEFAULT_UPDATE_RANGE;
-    }
-
-    public boolean isClientPredicted() {
-        return clientPredicted;
-    }
-
-    public void setClientPredicted(boolean clientPredicted) {
-        this.clientPredicted = clientPredicted;
     }
 
 }
