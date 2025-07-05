@@ -47,7 +47,7 @@ public class FencePlacementRule extends BlockPlacementRule {
         realInstance.loadChunk(position.add(-1, 0, 0)).join();
         realInstance.loadChunk(position.add(1, 0, 0)).join();
 
-        connections.put("north",  realInstance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false");
+        connections.put("north", realInstance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false");
         connections.put("south", realInstance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false");
         connections.put("west", realInstance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false");
         connections.put("east", realInstance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false");

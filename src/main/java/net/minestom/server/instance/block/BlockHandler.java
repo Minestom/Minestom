@@ -3,8 +3,6 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
-import net.minestom.server.entity.PlayerHand;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
@@ -52,9 +50,11 @@ public interface BlockHandler {
      *
      * @param touch the contact details
      */
-    default void onTouch(@NotNull Touch touch) { }
+    default void onTouch(@NotNull Touch touch) {
+    }
 
-    default void tick(@NotNull Tick tick) { }
+    default void tick(@NotNull Tick tick) {
+    }
 
     default boolean isTickable() {
         return false;
@@ -85,14 +85,16 @@ public interface BlockHandler {
     Key getKey();
 
     record Touch(
-        @NotNull Block block, @NotNull Instance instance,
-        @NotNull Point blockPosition, @NotNull Entity touching
-    ) { }
+            @NotNull Block block, @NotNull Instance instance,
+            @NotNull Point blockPosition, @NotNull Entity touching
+    ) {
+    }
 
     record Tick(
-        @NotNull Block block, @NotNull Instance instance,
-        @NotNull Point blockPosition
-    ) { }
+            @NotNull Block block, @NotNull Instance instance,
+            @NotNull Point blockPosition
+    ) {
+    }
 
     /**
      * Handler used for loaded blocks with unknown namespace
@@ -101,15 +103,14 @@ public interface BlockHandler {
     @ApiStatus.Internal
     final class Dummy implements BlockHandler {
         private static final Map<String, BlockHandler> DUMMY_CACHE = new ConcurrentHashMap<>();
-
-        public static @NotNull BlockHandler get(@NotNull String namespace) {
-            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
-        }
-
         private final Key key;
 
         private Dummy(String name) {
             key = Key.key(name);
+        }
+
+        public static @NotNull BlockHandler get(@NotNull String namespace) {
+            return DUMMY_CACHE.computeIfAbsent(namespace, Dummy::new);
         }
 
         @Override
