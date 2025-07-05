@@ -58,7 +58,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main, HashMap<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(String namespace, @NotNull Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace, main, internCache, parent, parentProperties);
     }
 
@@ -172,29 +172,34 @@ public final class RegistryData {
     @ApiStatus.Internal
     static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
-        final HashMap<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
-        final DetourRegistry registry = MinecraftServer.detourRegistry();
+        final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
+        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         for (String tagName : tagJson.asMap().keySet()) {
-            final TagKeyImpl<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
-            Check.stateCondition(tags.get(tagKey) != null, "Duplicate tag key found: {0}", tagName);
-            RegistryTag<T> tag = RegistryTag.builder(tagKey, builder -> {
-                processTagValues(builder, tagJson, tagName);
-                if (registry != null) registry.consumeTag(tagKey, builder);
-            });
-            tags.put(tagKey, tag);
+            final TagKey<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
+            loadTag(detourRegistry, tags, tagKey, tagJson); // loadTag will add the tag to the map if it doesn't exist
         }
         return Map.copyOf(tags);
     }
 
-    private static <T> void processTagValues(@NotNull RegistryTag.Builder<T> builder, Properties main, String value) {
-        Properties section = main.section(value);
-        for (var tagString: section.<String>getList("values")) {
-            if (tagString.startsWith("#")) {
-                processTagValues(builder, main, tagString.substring(1));
-            } else {
-                builder.add(RegistryKey.unsafeOf(tagString));
+    private static <T> @NotNull RegistryTag<T> loadTag(@Nullable DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
+        final RegistryTag<T> registryTag = currentTags.get(tagKey);
+        if (registryTag != null) return registryTag;
+        // If the tag doesnt exist, we create it
+        Properties section = main.section(tagKey.key().asString());
+        final RegistryTag<T> computedTag = RegistryTag.builder(tagKey, builder -> {
+            for (var tagString: section.<String>getList("values")) {
+                if (tagString.startsWith("#")) {
+                    for (var key : loadTag(detourRegistry, currentTags, TagKey.ofHash(tagString), main)) {
+                        builder.add(key);
+                    }
+                } else {
+                    builder.add(RegistryKey.unsafeOf(tagString));
+                }
             }
-        }
+            if (detourRegistry != null) detourRegistry.consumeTag(tagKey, builder);
+        });
+        currentTags.put(tagKey, computedTag);
+        return computedTag;
     }
 
     public interface Loader<T extends StaticProtocolObject<T>> {

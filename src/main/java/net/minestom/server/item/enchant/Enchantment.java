@@ -53,7 +53,7 @@ public sealed interface Enchantment extends Enchantments permits EnchantmentImpl
             public @NotNull DynamicRegistry<Enchantment> enchantment() {
                 return registry;
             }
-        }, null, REGISTRY_CODEC);
+        });
     }
 
     @NotNull Component description();
