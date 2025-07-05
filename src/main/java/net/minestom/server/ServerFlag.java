@@ -41,7 +41,7 @@ public final class ServerFlag {
     public static final int POOLED_BUFFER_SIZE = intProperty("minestom.pooled-buffer-size", 16_383);
 
     // Chunk update
-    public static final int MAX_BLOCK_UPDATE_PER_TICK = intProperty("minestom.max-block-update-per-tick", 100_000);
+    public static final int MAX_BLOCK_UPDATE_PER_TICK = intProperty("minestom.max-block-update-per-tick", 1_000_000);
     public static final float MIN_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.min-per-tick", 0.01f);
     public static final float MAX_CHUNKS_PER_TICK = floatProperty("minestom.chunk-queue.max-per-tick", 64.0f);
     public static final float CHUNKS_PER_TICK_MULTIPLIER = floatProperty("minestom.chunk-queue.multiplier", 1f);

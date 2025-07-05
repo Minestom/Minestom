@@ -42,10 +42,15 @@ public class FencePlacementRule extends BlockPlacementRule {
 
         if (!(instance instanceof Instance realInstance)) return this.block;
 
-        connections.put("north", realInstance.isChunkLoaded(position.add(0, 0, -1)) && realInstance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false");
-        connections.put("south", realInstance.isChunkLoaded(position.add(0, 0, 1)) && realInstance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false");
-        connections.put("west", realInstance.isChunkLoaded(position.add(-1, 0, 0)) && realInstance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false");
-        connections.put("east", realInstance.isChunkLoaded(position.add(1, 0, 0)) && realInstance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false");
+        realInstance.loadChunk(position.add(0, 0, -1)).join();
+        realInstance.loadChunk(position.add(0, 0, 1)).join();
+        realInstance.loadChunk(position.add(-1, 0, 0)).join();
+        realInstance.loadChunk(position.add(1, 0, 0)).join();
+
+        connections.put("north",  realInstance.getBlock(position.add(0, 0, -1)).isSolid() ? "true" : "false");
+        connections.put("south", realInstance.getBlock(position.add(0, 0, 1)).isSolid() ? "true" : "false");
+        connections.put("west", realInstance.getBlock(position.add(-1, 0, 0)).isSolid() ? "true" : "false");
+        connections.put("east", realInstance.getBlock(position.add(1, 0, 0)).isSolid() ? "true" : "false");
 
         return block.withProperties(
                 connections
@@ -55,10 +60,10 @@ public class FencePlacementRule extends BlockPlacementRule {
     @Override
     public @NotNull @Unmodifiable List<Vec> updateShape() {
         return List.of(
-            Direction.NORTH.vec(),
-            Direction.SOUTH.vec(),
-            Direction.EAST.vec(),
-            Direction.WEST.vec()
+                Direction.NORTH.vec(),
+                Direction.SOUTH.vec(),
+                Direction.EAST.vec(),
+                Direction.WEST.vec()
         );
     }
 
