@@ -27,7 +27,7 @@ record PaintingVariantImpl(
     // See PaintingVariant for the documentation of its brokenness. TLDR: inline values are broken.
     @Override
     public @NotNull Either<RegistryKey<PaintingVariant>, PaintingVariant> unwrap() {
-        return Either.left(RegistryKey.unsafeOf(assetId));
+        return Either.left(asKey());
     }
 
     @Override
