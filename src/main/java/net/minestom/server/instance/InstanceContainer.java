@@ -652,9 +652,9 @@ public class InstanceContainer extends Instance {
      * @param blockPosition the position of the modified block
      */
     private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition) {
-        Set<Point> visited = new HashSet<>(32);
-        Deque<Point> queue = new ArrayDeque<>(32);
-        AbsoluteBlockBatch batch = new AbsoluteBlockBatch();
+        Set<Point> visited = new HashSet<>(64);
+        Deque<Point> queue = new ArrayDeque<>(64);
+        Map<Chunk, List<BlockChange>> batch = new HashMap<>();
         ChunkCache cache = new ChunkCache(this, null, null);
 
         queue.add(blockPosition);
@@ -701,13 +701,26 @@ public class InstanceContainer extends Instance {
 
                 final Block newBlock = rule.blockUpdate(mutation);
                 if (!neighborBlock.equals(newBlock)) {
-                    batch.setBlock(neighbor.blockX(), neighbor.blockY(), neighbor.blockZ(), newBlock);
+                    batch.computeIfAbsent(chunk, k -> new ArrayList<>())
+                        .add(new BlockChange.Instance(this, neighbor, newBlock, offset));
                     queue.add(neighbor);
                 }
             }
         }
 
-        batch.apply(this, () -> {});
+        // Apply the batch
+        for (Map.Entry<Chunk, List<BlockChange>> entry : batch.entrySet()) {
+            Chunk chunk = entry.getKey();
+            List<BlockChange> changes = entry.getValue();
+            if (changes.isEmpty()) continue;
+
+            // Lock the chunk to prevent concurrent modifications
+            synchronized (chunk) {
+                for (BlockChange change : changes) {
+                    chunk.setBlock(change);
+                }
+            }
+        }
     }
 
     private CompletableFuture<Chunk> loadOrRetrieve(int chunkX, int chunkZ, Supplier<CompletableFuture<Chunk>> supplier) {
