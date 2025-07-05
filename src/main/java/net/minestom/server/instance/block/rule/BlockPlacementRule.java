@@ -26,7 +26,6 @@ public abstract class BlockPlacementRule {
     );
 
     protected final Block block;
-    protected boolean clientPredicted = false;
 
     protected BlockPlacementRule(@NotNull Block block) {
         this.block = block;
@@ -83,6 +82,6 @@ public abstract class BlockPlacementRule {
     }
 
     public boolean isClientPredicted() {
-        return clientPredicted;
+        return false;
     }
 }
