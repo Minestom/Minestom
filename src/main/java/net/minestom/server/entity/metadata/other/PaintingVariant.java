@@ -34,6 +34,7 @@ public sealed interface PaintingVariant extends Holder.Direct<PaintingVariant>, 
     // This appears to be a mistake since stopping inline values was explicitly mentioned as a change in snapshot notes.
     // It would also not work on vanilla as serializing a painting entity with inline variant would fail.
     // However, we don't serialize painting entities, so we can allow this :) Use at your own risk.
+    // IMPL: Please remove the workaround later if this is fixed.
     @NotNull NetworkBuffer.Type<Holder<PaintingVariant>> NETWORK_TYPE = Holder.networkType(Registries::paintingVariant, REGISTRY_NETWORK_TYPE);
     @NotNull Codec<Holder<PaintingVariant>> CODEC = RegistryKey.codec(Registries::paintingVariant)
             .transform(key -> key, Holder::asKey);
