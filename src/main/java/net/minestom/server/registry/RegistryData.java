@@ -58,7 +58,7 @@ public final class RegistryData {
     }
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main, HashMap<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+    public static BlockEntry block(String namespace, @NotNull Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
         return new BlockEntry(namespace, main, internCache, parent, parentProperties);
     }
 
@@ -150,82 +150,60 @@ public final class RegistryData {
      * <p>Tags will be loaded from <code>/tags/{registryKey.path()}.json</code></p>
      */
     @ApiStatus.Internal
-    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull Key registryKey, @NotNull Loader<T> loader) {
+    public static <T extends StaticProtocolObject<T>> @NotNull Registry<T> createStaticRegistry(@NotNull RegistryKey<Registry<T>> registryKey, @NotNull Loader<T> loader) {
         // Create the registry (data)
-        var entries = RegistryData.load(String.format("%s.json", registryKey.value()), true);
+        var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
+        final DetourRegistry registry = MinecraftServer.detourRegistry();
         for (var entry : entries.asMap().keySet()) {
             final Properties properties = entries.section(entry);
             final T value = loader.get(entry, properties);
+            if (registry != null) Check.stateCondition(registry.hasDetour(value.key()), "Static registry object {0} has detours registered, which is not currently supported!", value.key());
             ids.set(value.id(), value);
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
-        Map<TagKey<T>, RegistryTagImpl.Backed<T>> tags = loadTags(registryKey);
+        Map<TagKey<T>, RegistryTag<T>> tags = loadTags(registryKey.key());
+        if (registry != null) Check.stateCondition(registry.hasDetour(registryKey), "Static registry {0} has detours registered, which is not currently supported!", registryKey);
         return new StaticRegistry<>(registryKey, namespaces, ids, tags);
     }
 
     @ApiStatus.Internal
-    static <T> @Unmodifiable Map<TagKey<T>, RegistryTagImpl.Backed<T>> loadTags(@NotNull Key registryKey) {
+    static <T> @Unmodifiable Map<TagKey<T>, RegistryTag<T>> loadTags(@NotNull Key registryKey) {
         final var tagJson = RegistryData.load(String.format("tags/%s.json", registryKey.value()), false);
-        final HashMap<TagKey<T>, RegistryTagImpl.Backed<T>> tags = new HashMap<>(tagJson.size());
+        final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
+        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         for (String tagName : tagJson.asMap().keySet()) {
-            final TagKeyImpl<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
-            final RegistryTagImpl.Backed<T> tagValue = tags.computeIfAbsent(tagKey, RegistryTagImpl.Backed::new);
-            getTagValues(tagValue, tagJson, tagName);
+            final TagKey<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
+            loadTag(detourRegistry, tags, tagKey, tagJson); // loadTag will add the tag to the map if it doesn't exist
         }
         return Map.copyOf(tags);
     }
 
-    private static <T> void getTagValues(@NotNull RegistryTagImpl.Backed<T> tag, Properties main, String value) {
-        Properties section = main.section(value);
-        final List<String> tagValues = section.getList("values");
-        tagValues.forEach(tagString -> {
-            if (tagString.startsWith("#")) {
-                getTagValues(tag, main, tagString.substring(1));
-            } else {
-                tag.add(RegistryKey.unsafeOf(tagString));
+    private static <T> @NotNull RegistryTag<T> loadTag(@Nullable DetourRegistry detourRegistry, Map<TagKey<T>, RegistryTag<T>> currentTags, TagKey<T> tagKey, Properties main) {
+        final RegistryTag<T> registryTag = currentTags.get(tagKey);
+        if (registryTag != null) return registryTag;
+        // If the tag doesnt exist, we create it
+        Properties section = main.section(tagKey.key().asString());
+        final RegistryTag<T> computedTag = RegistryTag.builder(tagKey, builder -> {
+            for (var tagString: section.<String>getList("values")) {
+                if (tagString.startsWith("#")) {
+                    for (var key : loadTag(detourRegistry, currentTags, TagKey.ofHash(tagString), main)) {
+                        builder.add(key);
+                    }
+                } else {
+                    builder.add(RegistryKey.unsafeOf(tagString));
+                }
             }
+            if (detourRegistry != null) detourRegistry.consumeTag(tagKey, builder);
         });
+        currentTags.put(tagKey, computedTag);
+        return computedTag;
     }
 
     public interface Loader<T extends StaticProtocolObject<T>> {
         T get(String namespace, Properties properties);
-    }
-
-    @ApiStatus.Internal
-    public enum Resource {
-        // Dynamic Registries
-        BANNER_PATTERNS("banner_pattern.json"),
-        BIOMES("biome.json"),
-        CAT_VARIANTS("cat_variant.json"),
-        CHAT_TYPES("chat_type.json"),
-        CHICKEN_VARIANTS("chicken_variant.json"),
-        COW_VARIANTS("cow_variant.json"),
-        DAMAGE_TYPES("damage_type.json"),
-        DIALOGS("dialog.json"),
-        DIMENSION_TYPES("dimension_type.json"),
-        ENCHANTMENTS("enchantment.json"),
-        FROG_VARIANTS("frog_variant.json"),
-        JUKEBOX_SONGS("jukebox_song.json"),
-        INSTRUMENTS("instrument.json"),
-        PAINTING_VARIANTS("painting_variant.json"),
-        PIG_VARIANTS("pig_variant.json"),
-        TRIM_MATERIALS("trim_material.json"),
-        TRIM_PATTERNS("trim_pattern.json"),
-        WOLF_VARIANTS("wolf_variant.json"),
-        WOLF_SOUND_VARIANTS("wolf_sound_variant.json");
-
-        private final String name;
-
-        Resource(String name) {
-            this.name = name;
-        }
-
-        public @NotNull String fileName() {
-            return name;
-        }
     }
 
     public record GameEventEntry(Key key, Properties main) implements Entry {

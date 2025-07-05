@@ -10,6 +10,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * A registry is a collection of objects that can be accessed by a unique identifier.
+ * <p>There are two types of registries, static and dynamic; Minestom handles each differently</p>
+ * @param <T> the type of the registry entries
+ */
 public sealed interface Registry<T> extends Keyed permits StaticRegistry, DynamicRegistry {
 
     @Nullable T get(int id);
@@ -106,4 +111,15 @@ public sealed interface Registry<T> extends Keyed permits StaticRegistry, Dynami
     @ApiStatus.Internal
     @NotNull TagsPacket.Registry tagRegistry();
 
+    /**
+     * <p>Returns the registry key associated with this registry</p>
+     *
+     * @return The key associated.
+     */
+    @NotNull RegistryKey<? extends Registry<T>> registryKey();
+
+    @Override
+    default @NotNull Key key() {
+        return registryKey().key();
+    };
 }
