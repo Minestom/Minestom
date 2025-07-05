@@ -4,20 +4,19 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.ServerFlag;
 import net.minestom.server.coordinate.BlockVec;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
-import net.minestom.server.entity.Player;
 import net.minestom.server.event.EventDispatcher;
 import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockFace;
-import net.minestom.server.instance.block.BlockHandler;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.rule.BlockPlacementRule;
 import net.minestom.server.instance.generator.Generator;
 import net.minestom.server.instance.generator.GeneratorImpl;
@@ -27,6 +26,7 @@ import net.minestom.server.network.packet.server.play.BlockEntityDataPacket;
 import net.minestom.server.network.packet.server.play.UnloadChunkPacket;
 import net.minestom.server.network.packet.server.play.WorldEventPacket;
 import net.minestom.server.registry.DynamicRegistry;
+import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.utils.PacketSendingUtils;
 import net.minestom.server.utils.async.AsyncUtils;
@@ -51,6 +51,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static net.minestom.server.instance.block.rule.BlockPlacementRule.DEFAULT_BLOCK_UPDATE_SHAPE;
 import static net.minestom.server.utils.chunk.ChunkUtils.isLoaded;
 
 /**
@@ -61,34 +62,25 @@ public class InstanceContainer extends Instance {
 
     private static final AnvilLoader DEFAULT_LOADER = new AnvilLoader("world");
 
-    private static final BlockFace[] BLOCK_UPDATE_FACES = new BlockFace[]{
-            BlockFace.WEST, BlockFace.EAST, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.BOTTOM, BlockFace.TOP
-    };
-
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
-
-    // the chunk generator used, can be null
-    private volatile Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
-
     private final Lock changingBlockLock = new ReentrantLock();
-    private final Map<Point, Block> currentlyChangingBlocks = new HashMap<>();
-
-    // the chunk loader, used when trying to load/save a chunk from another source
-    private IChunkLoader chunkLoader;
-
-    // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad = true;
-
-    // used to supply a new chunk object at a position when requested
-    private ChunkSupplier chunkSupplier;
-
+    private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+    // the chunk generator used, can be null
+    private volatile Generator generator;
+    // the chunk loader, used when trying to load/save a chunk from another source
+    private IChunkLoader chunkLoader;
+    // used to automatically enable the chunk loading or not
+    private boolean autoChunkLoad = true;
+    // used to supply a new chunk object at a position when requested
+    private ChunkSupplier chunkSupplier;
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
@@ -130,7 +122,8 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, x, y, z, block, null, null, doBlockUpdates, 0);
+        if (isLoaded(chunk))
+            UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x, y, z), block), doBlockUpdates);
     }
 
     /**
@@ -139,68 +132,49 @@ public class InstanceContainer extends Instance {
      * Unsafe because the method is not synchronized and it does not verify if the chunk is loaded or not.
      *
      * @param chunk the {@link Chunk} which should be loaded
-     * @param x     the block X
-     * @param y     the block Y
-     * @param z     the block Z
-     * @param block the block to place
      */
-    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, int x, int y, int z, @NotNull Block block,
-                                              @Nullable BlockHandler.Placement placement, @Nullable BlockHandler.Destroy destroy,
-                                              boolean doBlockUpdates, int updateDistance) {
+    private synchronized void UNSAFE_setBlock(@NotNull Chunk chunk, @NotNull BlockChange mutation, boolean doBlockUpdates) {
         if (chunk.isReadOnly()) return;
+
+        final Point blockPosition = mutation.blockPosition();
+
         final DimensionType dim = getCachedDimensionType();
-        if (y >= dim.maxY() || y < dim.minY()) {
-            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), y);
+        if (blockPosition.y() >= dim.maxY() || blockPosition.y() < dim.minY()) {
+            LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}", dim.minY(), dim.maxY(), blockPosition.y());
             return;
         }
 
         synchronized (chunk) {
-            // Refresh the last block change time
             this.lastBlockChangeTime = System.nanoTime();
-            final Vec blockPosition = new Vec(x, y, z);
-            if (isAlreadyChanged(blockPosition, block)) { // do NOT change the block again.
-                // Avoids StackOverflowExceptions when onDestroy tries to destroy the block itself
-                // This can happen with nether portals which break the entire frame when a portal block is broken
-                return;
-            }
-            this.currentlyChangingBlocks.put(blockPosition, block);
 
-            // Change id based on neighbors
-            final BlockPlacementRule blockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(block);
-            if (placement != null && blockPlacementRule != null && doBlockUpdates) {
-                BlockPlacementRule.PlacementState rulePlacement;
-                if (placement instanceof BlockHandler.PlayerPlacement pp) {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, pp.getBlockFace(), blockPosition,
-                            new Vec(pp.getCursorX(), pp.getCursorY(), pp.getCursorZ()),
-                            pp.getPlayer().getPosition(),
-                            pp.getPlayer().getItemInHand(pp.getHand()),
-                            pp.getPlayer().isSneaking()
-                    );
-                } else {
-                    rulePlacement = new BlockPlacementRule.PlacementState(
-                            this, block, null, blockPosition,
-                            null, null, null,
-                            false
-                    );
+            final BlockPlacementRule placementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(mutation.block());
+            if (placementRule != null && doBlockUpdates) {
+                Block placedBlock = placementRule.blockPlace(mutation);
+                if (placedBlock != null) { // idiot prevention
+                    mutation = mutation.withBlock(placedBlock);
                 }
-
-                block = blockPlacementRule.blockPlace(rulePlacement);
-                if (block == null) block = Block.AIR;
             }
 
-            // Set the block
-            chunk.setBlock(x, y, z, block, placement, destroy);
+            final Block block = chunk.setBlock(mutation);
 
             // Refresh neighbors since a new block has been placed
             if (doBlockUpdates) {
-                executeNeighboursBlockPlacementRule(blockPosition, updateDistance);
+                executeNeighboursBlockPlacementRule(blockPosition);
             }
 
             // Refresh player chunk block
-            {
+            if (placementRule != null && placementRule.isClientPredicted() && mutation instanceof BlockChange.Player playerMutation) {
+                PacketSendingUtils.sendGroupedPacket(chunk.getViewers(), new BlockChangePacket(blockPosition, block.stateId()),
+                        viewer -> !viewer.equals(playerMutation.player()));
+                RegistryData.BlockEntry registry = block.registry();
+                if (registry.isBlockEntity()) {
+                    final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
+                    PacketSendingUtils.sendGroupedPacket(chunk.getViewers(), new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data),
+                            viewer -> !viewer.equals(playerMutation.player()));
+                }
+            } else {
                 chunk.sendPacketToViewers(new BlockChangePacket(blockPosition, block.stateId()));
-                var registry = block.registry();
+                RegistryData.BlockEntry registry = block.registry();
                 if (registry.isBlockEntity()) {
                     final CompoundBinaryTag data = BlockUtils.extractClientNbt(block);
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
@@ -210,42 +184,37 @@ public class InstanceContainer extends Instance {
     }
 
     @Override
-    public boolean placeBlock(@NotNull BlockHandler.Placement placement, boolean doBlockUpdates) {
-        final Point blockPosition = placement.getBlockPosition();
-        final Chunk chunk = getChunkAt(blockPosition);
+    public boolean placeBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(mutation.blockPosition());
         if (!isLoaded(chunk)) return false;
-        UNSAFE_setBlock(chunk, blockPosition.blockX(), blockPosition.blockY(), blockPosition.blockZ(),
-                placement.getBlock(), placement, null, doBlockUpdates, 0);
+        UNSAFE_setBlock(chunk, mutation, doBlockUpdates);
         return true;
     }
 
     @Override
-    public boolean breakBlock(@NotNull Player player, @NotNull Point blockPosition, @NotNull BlockFace blockFace, boolean doBlockUpdates) {
-        final Chunk chunk = getChunkAt(blockPosition);
+    public boolean breakBlock(@NotNull BlockChange.Player mutation, boolean doBlockUpdates) {
+        final Chunk chunk = getChunkAt(mutation.blockPosition());
         Check.notNull(chunk, "You cannot break blocks in a null chunk!");
         if (chunk.isReadOnly()) return false;
         if (!isLoaded(chunk)) return false;
 
-        final Block block = getBlock(blockPosition);
-        final int x = blockPosition.blockX();
-        final int y = blockPosition.blockY();
-        final int z = blockPosition.blockZ();
+        final Block block = getBlock(mutation.blockPosition());
         if (block.isAir()) {
             // The player probably have a wrong version of this chunk section, send it
-            chunk.sendChunk(player);
+            chunk.sendChunk(mutation.player());
             return false;
         }
-        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(player, block, Block.AIR, new BlockVec(blockPosition), blockFace);
+        PlayerBlockBreakEvent blockBreakEvent = new PlayerBlockBreakEvent(mutation.player(), block, Block.AIR, new BlockVec(mutation.blockPosition()), mutation.blockFace());
         EventDispatcher.call(blockBreakEvent);
         final boolean allowed = !blockBreakEvent.isCancelled();
         if (allowed) {
             // Break or change the broken block based on event result
-            final Block resultBlock = blockBreakEvent.getResultBlock();
-            UNSAFE_setBlock(chunk, x, y, z, resultBlock, null,
-                    new BlockHandler.PlayerDestroy(block, this, blockPosition, player), doBlockUpdates, 0);
+            mutation = mutation.withBlock(blockBreakEvent.getResultBlock());
+            UNSAFE_setBlock(chunk, mutation, doBlockUpdates);
             // Send the block break effect packet
+            var player = mutation.player();
             PacketSendingUtils.sendGroupedPacket(chunk.getViewers(),
-                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), blockPosition, block.stateId(), false),
+                    new WorldEventPacket(WorldEvent.PARTICLES_DESTROY_BLOCK.id(), mutation.blockPosition(), block.stateId(), false),
                     // Prevent the block breaker to play the particles and sound two times
                     (viewer) -> !viewer.equals(player));
         }
@@ -362,8 +331,6 @@ public class InstanceContainer extends Instance {
         }
         return completableFuture;
     }
-
-    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
 
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
@@ -482,6 +449,17 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
+    }
+
+    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -496,17 +474,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
-    }
-
-    /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
     }
 
     /**
@@ -662,34 +629,74 @@ public class InstanceContainer extends Instance {
      *
      * @param blockPosition the position of the modified block
      */
-    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition, int updateDistance) {
+    private void executeNeighboursBlockPlacementRule(@NotNull Point blockPosition) {
+        Set<Point> visited = new HashSet<>(64);
+        Deque<Point> queue = new ArrayDeque<>(64);
+        Map<Chunk, List<BlockChange>> batch = new HashMap<>();
         ChunkCache cache = new ChunkCache(this, null, null);
-        for (var updateFace : BLOCK_UPDATE_FACES) {
-            var direction = updateFace.toDirection();
-            final int neighborX = blockPosition.blockX() + direction.normalX();
-            final int neighborY = blockPosition.blockY() + direction.normalY();
-            final int neighborZ = blockPosition.blockZ() + direction.normalZ();
-            if (neighborY < getCachedDimensionType().minY() || neighborY > getCachedDimensionType().height())
-                continue;
-            final Block neighborBlock = cache.getBlock(neighborX, neighborY, neighborZ, Condition.NONE);
-            if (neighborBlock == null || neighborBlock.isAir())
-                continue;
-            final BlockPlacementRule neighborBlockPlacementRule = MinecraftServer.getBlockManager().getBlockPlacementRule(neighborBlock);
-            if (neighborBlockPlacementRule == null || updateDistance >= neighborBlockPlacementRule.maxUpdateDistance())
-                continue;
 
-            final Vec neighborPosition = new Vec(neighborX, neighborY, neighborZ);
-            final Block newNeighborBlock = neighborBlockPlacementRule.blockUpdate(new BlockPlacementRule.UpdateState(
-                    this,
-                    neighborPosition,
-                    neighborBlock,
-                    updateFace.getOppositeFace()
-            ));
-            if (neighborBlock != newNeighborBlock) {
-                final Chunk chunk = getChunkAt(neighborPosition);
+        queue.add(blockPosition);
+        visited.add(blockPosition);
+
+        int bfsCount = 0;
+        final DimensionType dim = getCachedDimensionType();
+        final int minY = dim.minY();
+        final int maxY = dim.maxY();
+
+        var blockManager = MinecraftServer.getBlockManager();
+
+        while (!queue.isEmpty() && bfsCount < ServerFlag.MAX_BLOCK_UPDATE_PER_TICK) {
+            final Point current = queue.poll();
+            bfsCount++;
+            final Block currentBlock = cache.getBlock(current, Condition.NONE);
+            if (currentBlock == null) continue;
+            final BlockPlacementRule currRule = blockManager.getBlockPlacementRule(currentBlock);
+
+            List<Vec> shape = (currRule != null) ? currRule.updateShape() : DEFAULT_BLOCK_UPDATE_SHAPE;
+
+            for (final Vec offset : shape) {
+                final Point neighbor = current.add(offset);
+                if (!visited.add(neighbor)) continue;
+
+                final int y = neighbor.blockY();
+                if (y < minY || y >= maxY) continue;
+
+                final Chunk chunk = getChunkAt(neighbor);
                 if (!isLoaded(chunk)) continue;
-                UNSAFE_setBlock(chunk, neighborPosition.blockX(), neighborPosition.blockY(), neighborPosition.blockZ(), newNeighborBlock,
-                        null, null, true, updateDistance + 1);
+
+                final Block neighborBlock = cache.getBlock(neighbor, Condition.NONE);
+                if (neighborBlock == null || neighborBlock.isAir()) continue;
+
+                final BlockPlacementRule rule = blockManager.getBlockPlacementRule(neighborBlock);
+                if (rule == null || !rule.considerUpdate(offset, currentBlock)) continue;
+
+                BlockChange mutation = new BlockChange.Instance(
+                        this,
+                        neighbor,
+                        neighborBlock,
+                        offset
+                );
+
+                final Block newBlock = rule.blockUpdate(mutation);
+                if (!neighborBlock.equals(newBlock)) {
+                    batch.computeIfAbsent(chunk, k -> new ArrayList<>())
+                            .add(new BlockChange.Instance(this, neighbor, newBlock, offset));
+                    queue.add(neighbor);
+                }
+            }
+        }
+
+        // Apply the batch
+        for (Map.Entry<Chunk, List<BlockChange>> entry : batch.entrySet()) {
+            Chunk chunk = entry.getKey();
+            List<BlockChange> changes = entry.getValue();
+            if (changes.isEmpty()) continue;
+
+            // Lock the chunk to prevent concurrent modifications
+            synchronized (chunk) {
+                for (BlockChange change : changes) {
+                    chunk.setBlock(change);
+                }
             }
         }
     }

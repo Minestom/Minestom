@@ -6,9 +6,9 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
+import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
@@ -47,20 +47,15 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
  */
 public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
-
+    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     protected final List<Section> sections;
-
-    private boolean needsCompleteHeightmapRefresh = true;
-
-    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
-    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
-
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
-
+    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
+    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
+    private boolean needsCompleteHeightmapRefresh = true;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);
@@ -76,14 +71,19 @@ public class DynamicChunk extends Chunk {
     }
 
     @Override
-    public void setBlock(int x, int y, int z, @NotNull Block block,
-                         @Nullable BlockHandler.Placement placement,
-                         @Nullable BlockHandler.Destroy destroy) {
+    public @NotNull Block setBlock(@NotNull BlockChange mutation) {
         final DimensionType instanceDim = instance.getCachedDimensionType();
+
+        final int x = mutation.blockPosition().blockX();
+        final int y = mutation.blockPosition().blockY();
+        final int z = mutation.blockPosition().blockZ();
+
+        Block block = mutation.block();
+
         if (y >= instanceDim.maxY() || y < instanceDim.minY()) {
             LOGGER.warn("tried to set a block outside the world bounds, should be within [{}, {}): {}",
                     instanceDim.minY(), instanceDim.maxY(), y);
-            return;
+            return block;
         }
         assertLock();
 
@@ -94,6 +94,30 @@ public class DynamicChunk extends Chunk {
         int sectionRelativeX = globalToSectionRelative(x);
         int sectionRelativeZ = globalToSectionRelative(z);
 
+        final int index = CoordConversion.chunkBlockIndex(x, y, z);
+
+        // Handler
+        final BlockHandler handler = block.handler();
+        final Block lastCachedBlock = this.entries.remove(index);
+
+        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
+            block = lastCachedBlock.handler().onDestroy(mutation);
+        }
+        if (handler != null) {
+            block = handler.onPlace(mutation);
+        }
+
+        if (handler != null && handler.isTickable()) {
+            this.tickableMap.put(index, block);
+        } else {
+            this.tickableMap.remove(index);
+        }
+
+        // Cache the new block if needed
+        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
+            this.entries.put(index, block);
+        }
+
         section.blockPalette().set(
                 sectionRelativeX,
                 globalToSectionRelative(y),
@@ -101,43 +125,14 @@ public class DynamicChunk extends Chunk {
                 block.stateId()
         );
 
-        final int index = CoordConversion.chunkBlockIndex(x, y, z);
-        // Handler
-        final BlockHandler handler = block.handler();
-        final Block lastCachedBlock;
-        if (handler != null || block.hasNbt() || block.registry().isBlockEntity()) {
-            lastCachedBlock = this.entries.put(index, block);
-        } else {
-            lastCachedBlock = this.entries.remove(index);
-        }
-        // Block tick
-        if (handler != null && handler.isTickable()) {
-            this.tickableMap.put(index, block);
-        } else {
-            this.tickableMap.remove(index);
-        }
-
-        // Update block handlers
-        var blockPosition = new Vec(x, y, z);
-        if (lastCachedBlock != null && lastCachedBlock.handler() != null) {
-            // Previous destroy
-            lastCachedBlock.handler().onDestroy(Objects.requireNonNullElseGet(destroy,
-                    () -> new BlockHandler.Destroy(lastCachedBlock, instance, blockPosition)));
-        }
-        if (handler != null) {
-            // New placement
-
-            var absoluteBlockPosition = new Vec(getChunkX() * 16 + x, y, getChunkZ() * 16 + z);
-            final Block finalBlock = block;
-            handler.onPlace(Objects.requireNonNullElseGet(placement,
-                    () -> new BlockHandler.Placement(finalBlock, instance, absoluteBlockPosition)));
-        }
-
         // UpdateHeightMaps
         if (needsCompleteHeightmapRefresh) calculateFullHeightmap();
         motionBlocking.refresh(sectionRelativeX, y, sectionRelativeZ, block);
         worldSurface.refresh(sectionRelativeX, y, sectionRelativeZ, block);
+
+        return block;
     }
+
 
     @Override
     public void setBiome(int x, int y, int z, @NotNull RegistryKey<Biome> biome) {

@@ -29,7 +29,7 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
@@ -68,7 +68,7 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
@@ -108,7 +108,7 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
@@ -156,7 +156,7 @@ public class EntityBlockTouchTickIntegrationTest {
         var handler = new BlockHandler() {
             @Override
             public void onTouch(@NotNull Touch touch) {
-                assertTrue(positions.add(touch.getBlockPosition()));
+                assertTrue(positions.add(touch.blockPosition()));
             }
 
             @Override
