@@ -70,7 +70,7 @@ public sealed interface Dialog extends Holder.Direct<Dialog>, DialogLike {
             public @NotNull DynamicRegistry<Dialog> dialog() {
                 return registry;
             }
-        }, null, REGISTRY_CODEC);
+        });
     }
 
     record Notice(@NotNull DialogMetadata metadata, @NotNull DialogActionButton action) implements Dialog {

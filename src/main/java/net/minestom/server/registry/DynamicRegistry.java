@@ -90,7 +90,7 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec) {
-        return load(key, codec, null);
+        return load(key, codec, (Registries) null);
     }
 
     /**
@@ -100,7 +100,17 @@ public sealed interface DynamicRegistry<T> extends Registry<T> permits DynamicRe
      */
     @ApiStatus.Internal
     static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Registries registries) {
-        return load(key, codec, registries != null ? (ignored) -> registries : null, null, null);
+        return load(key, codec, registries != null ? (ignored) -> registries : null);
+    }
+
+    /**
+     * Creates a new registry of the given type. Should only be used internally.
+     *
+     * @see Registries
+     */
+    @ApiStatus.Internal
+    static <T> @NotNull DynamicRegistry<T> load(@NotNull RegistryKey<DynamicRegistry<T>> key, @NotNull Codec<T> codec, @Nullable Function<DynamicRegistry<T>, Registries> registryFunction) {
+        return load(key, codec, registryFunction, null, null);
     }
 
     /**

@@ -45,7 +45,7 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
         ObjectArray<Block> blockStateMap = ObjectArray.singleThread();
         ObjectArray<PropertyType[]> propertiesType = ObjectArray.singleThread();
         ObjectArray<Long2ObjectArrayMap<BlockImpl>> possibleStates = ObjectArray.singleThread();
-        HashMap<Object, Object> internCache = new HashMap<>();
+        Map<Object, Object> internCache = new HashMap<>();
 
         REGISTRY = RegistryData.createStaticRegistry(
                 BuiltinRegistries.BLOCK,
