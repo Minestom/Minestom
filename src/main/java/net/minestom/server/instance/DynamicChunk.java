@@ -6,11 +6,10 @@ import net.kyori.adventure.nbt.LongArrayBinaryTag;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.CoordConversion;
 import net.minestom.server.coordinate.Point;
-import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.block.Block;
-import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.block.BlockChange;
+import net.minestom.server.instance.block.BlockHandler;
 import net.minestom.server.instance.heightmap.Heightmap;
 import net.minestom.server.instance.heightmap.MotionBlockingHeightmap;
 import net.minestom.server.instance.heightmap.WorldSurfaceHeightmap;
@@ -48,20 +47,15 @@ import static net.minestom.server.network.NetworkBuffer.SHORT;
  */
 public class DynamicChunk extends Chunk {
     private static final Logger LOGGER = LoggerFactory.getLogger(DynamicChunk.class);
-
+    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
     protected final List<Section> sections;
-
-    private boolean needsCompleteHeightmapRefresh = true;
-
-    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
-    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
-
     // Key = ChunkUtils#getBlockIndex
     protected final Int2ObjectOpenHashMap<Block> entries = new Int2ObjectOpenHashMap<>(0);
     protected final Int2ObjectOpenHashMap<Block> tickableMap = new Int2ObjectOpenHashMap<>(0);
-
+    protected Heightmap motionBlocking = new MotionBlockingHeightmap(this);
+    protected Heightmap worldSurface = new WorldSurfaceHeightmap(this);
+    private boolean needsCompleteHeightmapRefresh = true;
     final CachedPacket chunkCache = new CachedPacket(this::createChunkPacket);
-    private static final DynamicRegistry<Biome> BIOME_REGISTRY = MinecraftServer.getBiomeRegistry();
 
     public DynamicChunk(@NotNull Instance instance, int chunkX, int chunkZ) {
         super(instance, chunkX, chunkZ, true);

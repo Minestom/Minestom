@@ -17,7 +17,6 @@ import net.minestom.server.event.instance.InstanceChunkLoadEvent;
 import net.minestom.server.event.instance.InstanceChunkUnloadEvent;
 import net.minestom.server.event.player.PlayerBlockBreakEvent;
 import net.minestom.server.instance.anvil.AnvilLoader;
-import net.minestom.server.instance.batch.AbsoluteBlockBatch;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.instance.block.BlockChange;
 import net.minestom.server.instance.block.BlockHandler;
@@ -69,28 +68,23 @@ public class InstanceContainer extends Instance {
 
     // the shared instances assigned to this instance
     private final List<SharedInstance> sharedInstances = new CopyOnWriteArrayList<>();
-
-    // the chunk generator used, can be null
-    private volatile Generator generator;
     // (chunk index -> chunk) map, contains all the chunks in the instance
     // used as a monitor when access is required
     private final Long2ObjectSyncMap<Chunk> chunks = Long2ObjectSyncMap.hashmap();
     private final Map<Long, CompletableFuture<Chunk>> loadingChunks = new ConcurrentHashMap<>();
-
     private final Lock changingBlockLock = new ReentrantLock();
     private final Map<BlockVec, Block> currentlyChangingBlocks = new HashMap<>();
-
-    // the chunk loader, used when trying to load/save a chunk from another source
-    private IChunkLoader chunkLoader;
-
-    // used to automatically enable the chunk loading or not
-    private boolean autoChunkLoad = true;
-
-    // used to supply a new chunk object at a position when requested
-    private ChunkSupplier chunkSupplier;
-
     // Fields for instance copy
     protected InstanceContainer srcInstance; // only present if this instance has been created using a copy
+    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
+    // the chunk generator used, can be null
+    private volatile Generator generator;
+    // the chunk loader, used when trying to load/save a chunk from another source
+    private IChunkLoader chunkLoader;
+    // used to automatically enable the chunk loading or not
+    private boolean autoChunkLoad = true;
+    // used to supply a new chunk object at a position when requested
+    private ChunkSupplier chunkSupplier;
     private long lastBlockChangeTime; // Time at which the last block change happened (#setBlock)
 
     public InstanceContainer(@NotNull UUID uuid, @NotNull RegistryKey<DimensionType> dimensionType) {
@@ -132,7 +126,8 @@ public class InstanceContainer extends Instance {
                     "Tried to set a block to an unloaded chunk with auto chunk load disabled");
             chunk = loadChunk(CoordConversion.globalToChunk(x), CoordConversion.globalToChunk(z)).join();
         }
-        if (isLoaded(chunk)) UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x,y,z), block), doBlockUpdates);
+        if (isLoaded(chunk))
+            UNSAFE_setBlock(chunk, new BlockChange.Instance(this, new Vec(x, y, z), block), doBlockUpdates);
     }
 
     /**
@@ -172,7 +167,7 @@ public class InstanceContainer extends Instance {
             }
 
             // Refresh player chunk block
-            if(placementRule != null && placementRule.isClientPredicted() && mutation instanceof BlockChange.Player playerMutation) {
+            if (placementRule != null && placementRule.isClientPredicted() && mutation instanceof BlockChange.Player playerMutation) {
                 PacketSendingUtils.sendGroupedPacket(chunk.getViewers(), new BlockChangePacket(blockPosition, block.stateId()),
                         viewer -> !viewer.equals(playerMutation.player()));
                 RegistryData.BlockEntry registry = block.registry();
@@ -352,8 +347,6 @@ public class InstanceContainer extends Instance {
         return completableFuture;
     }
 
-    Map<Long, List<GeneratorImpl.SectionModifierImpl>> generationForks = new ConcurrentHashMap<>();
-
     protected @NotNull Chunk createChunk(int chunkX, int chunkZ) {
         final Chunk chunk = chunkSupplier.createChunk(this, chunkX, chunkZ);
         Check.notNull(chunk, "Chunks supplied by a ChunkSupplier cannot be null.");
@@ -471,6 +464,17 @@ public class InstanceContainer extends Instance {
     }
 
     /**
+     * Gets the current {@link ChunkSupplier}.
+     * <p>
+     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
+     *
+     * @return the current {@link ChunkSupplier}
+     */
+    public ChunkSupplier getChunkSupplier() {
+        return chunkSupplier;
+    }
+
+    /**
      * Changes which type of {@link Chunk} implementation to use once one needs to be loaded.
      * <p>
      * Uses {@link DynamicChunk} by default.
@@ -485,17 +489,6 @@ public class InstanceContainer extends Instance {
     @Override
     public void setChunkSupplier(@NotNull ChunkSupplier chunkSupplier) {
         this.chunkSupplier = chunkSupplier;
-    }
-
-    /**
-     * Gets the current {@link ChunkSupplier}.
-     * <p>
-     * You shouldn't use it to generate a new chunk, but as a way to view which one is currently in use.
-     *
-     * @return the current {@link ChunkSupplier}
-     */
-    public ChunkSupplier getChunkSupplier() {
-        return chunkSupplier;
     }
 
     /**
@@ -693,16 +686,16 @@ public class InstanceContainer extends Instance {
                 if (rule == null || !rule.considerUpdate(offset, currentBlock)) continue;
 
                 BlockChange mutation = new BlockChange.Instance(
-                    this,
-                    neighbor,
-                    neighborBlock,
-                    offset
+                        this,
+                        neighbor,
+                        neighborBlock,
+                        offset
                 );
 
                 final Block newBlock = rule.blockUpdate(mutation);
                 if (!neighborBlock.equals(newBlock)) {
                     batch.computeIfAbsent(chunk, k -> new ArrayList<>())
-                        .add(new BlockChange.Instance(this, neighbor, newBlock, offset));
+                            .add(new BlockChange.Instance(this, neighbor, newBlock, offset));
                     queue.add(neighbor);
                 }
             }

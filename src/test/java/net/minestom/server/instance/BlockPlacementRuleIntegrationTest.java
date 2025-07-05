@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @EnvTest
 public class BlockPlacementRuleIntegrationTest {
@@ -52,19 +52,19 @@ public class BlockPlacementRuleIntegrationTest {
         }
 
         assertEquals(Block.OAK_FENCE.withProperties(
-          Map.of("north", "true", "south", "true", "west", "true", "east", "true")
+                Map.of("north", "true", "south", "true", "west", "true", "east", "true")
         ), instance.getBlock(0, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-          Map.of("north", "false", "south", "false", "west", "true", "east", "false")
+                Map.of("north", "false", "south", "false", "west", "true", "east", "false")
         ), instance.getBlock(1, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-          Map.of("north", "false", "south", "false", "west", "false", "east", "true")
+                Map.of("north", "false", "south", "false", "west", "false", "east", "true")
         ), instance.getBlock(-1, 50, 0));
         assertEquals(Block.OAK_FENCE.withProperties(
-          Map.of("north", "true", "south", "false", "west", "false", "east", "false")
+                Map.of("north", "true", "south", "false", "west", "false", "east", "false")
         ), instance.getBlock(0, 50, 1));
         assertEquals(Block.OAK_FENCE.withProperties(
-          Map.of("north", "false", "south", "true", "west", "false", "east", "false")
+                Map.of("north", "false", "south", "true", "west", "false", "east", "false")
         ), instance.getBlock(0, 50, -1));
     }
 
@@ -82,10 +82,12 @@ public class BlockPlacementRuleIntegrationTest {
             public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
                 return mutation.block();
             }
+
             @Override
             public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
                 return super.blockUpdate(mutation);
             }
+
             @Override
             public boolean isClientPredicted() {
                 return true;
@@ -103,8 +105,8 @@ public class BlockPlacementRuleIntegrationTest {
         boolean packetFoundPlayer1 = tracker1.collect().stream().anyMatch(p -> p instanceof BlockChangePacket);
         boolean packetFoundPlayer2 = tracker2.collect().stream().anyMatch(p -> p instanceof BlockChangePacket);
 
-        assertEquals(false, packetFoundPlayer1, "Player 1 should NOT have received a block change packet");
-        assertEquals(true, packetFoundPlayer2, "Player 2 should have received a block change packet");
+        assertFalse(packetFoundPlayer1, "Player 1 should NOT have received a block change packet");
+        assertTrue(packetFoundPlayer2, "Player 2 should have received a block change packet");
     }
 
     @Test
@@ -121,10 +123,12 @@ public class BlockPlacementRuleIntegrationTest {
             public @NotNull Block blockPlace(@NotNull BlockChange mutation) {
                 return mutation.block();
             }
+
             @Override
             public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
                 return super.blockUpdate(mutation);
             }
+
             @Override
             public boolean isClientPredicted() {
                 return false;
@@ -142,8 +146,8 @@ public class BlockPlacementRuleIntegrationTest {
         boolean packetFoundPlayer1 = tracker1.collect().stream().anyMatch(p -> p instanceof BlockChangePacket);
         boolean packetFoundPlayer2 = tracker2.collect().stream().anyMatch(p -> p instanceof BlockChangePacket);
 
-        assertEquals(true, packetFoundPlayer1, "Player 1 should have received a block change packet");
-        assertEquals(true, packetFoundPlayer2, "Player 2 should have received a block change packet");
+        assertTrue(packetFoundPlayer1, "Player 1 should have received a block change packet");
+        assertTrue(packetFoundPlayer2, "Player 2 should have received a block change packet");
     }
 
     @Test

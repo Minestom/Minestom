@@ -20,8 +20,8 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
     BlockChange withBlock(@NotNull Block newBlock);
 
     record Instance(
-        @NotNull Block.Getter instance, @NotNull Point blockPosition,
-        @NotNull Block block, @Nullable net.minestom.server.coordinate.Vec offset
+            @NotNull Block.Getter instance, @NotNull Point blockPosition,
+            @NotNull Block block, @Nullable net.minestom.server.coordinate.Vec offset
     ) implements BlockChange {
 
         public Instance(@NotNull Block.Getter instance, @NotNull Point blockPosition, @NotNull Block block) {
@@ -35,25 +35,25 @@ public sealed interface BlockChange permits BlockChange.Instance, BlockChange.Pl
     }
 
     record Player(
-        @NotNull Block.Getter instance, @NotNull Point blockPosition,
-        @NotNull Block block, @NotNull BlockFace blockFace,
-        @NotNull net.minestom.server.entity.Player player, @NotNull PlayerHand hand,
-        @NotNull Point cursorPosition
+            @NotNull Block.Getter instance, @NotNull Point blockPosition,
+            @NotNull Block block, @NotNull BlockFace blockFace,
+            @NotNull net.minestom.server.entity.Player player, @NotNull PlayerHand hand,
+            @NotNull Point cursorPosition
     ) implements BlockChange {
 
         @Override
         public @NotNull BlockChange.Player withBlock(@NotNull Block newBlock) {
             return new Player(instance, blockPosition,
-                                newBlock, blockFace,
-                                player, hand, cursorPosition);
+                    newBlock, blockFace,
+                    player, hand, cursorPosition);
         }
     }
 
     record Replacement(
-        @NotNull Block.Getter instance, @NotNull Point blockPosition,
-        @NotNull Block block, @NotNull BlockFace blockFace,
-        @NotNull Point cursorPosition, boolean isOffset,
-        @NotNull net.minestom.server.item.Material material
+            @NotNull Block.Getter instance, @NotNull Point blockPosition,
+            @NotNull Block block, @NotNull BlockFace blockFace,
+            @NotNull Point cursorPosition, boolean isOffset,
+            @NotNull net.minestom.server.item.Material material
     ) implements BlockChange {
 
         @Override

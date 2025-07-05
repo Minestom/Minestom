@@ -16,7 +16,8 @@ public abstract class BlockPlacementRule {
      * This is used when a block is placed and needs to determine which neighbors to update.
      * This is the same as the default block update shape & order in Minecraft.
      */
-    public static final @Unmodifiable @NotNull List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
+    public static final @Unmodifiable
+    @NotNull List<Vec> DEFAULT_BLOCK_UPDATE_SHAPE = List.of(
             Direction.WEST.vec(),
             Direction.EAST.vec(),
             Direction.NORTH.vec(),
@@ -56,7 +57,7 @@ public abstract class BlockPlacementRule {
      * @return {@code true} if the block will consider the update, {@code false} otherwise
      */
     public boolean considerUpdate(@NotNull Vec offset, @NotNull Block block) {
-        for(Vec off : updateShape()) {
+        for (Vec off : updateShape()) {
             if (off.samePoint(offset)) {
                 return true;
             }

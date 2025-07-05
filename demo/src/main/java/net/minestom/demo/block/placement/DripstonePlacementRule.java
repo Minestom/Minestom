@@ -27,7 +27,8 @@ public class DripstonePlacementRule extends BlockPlacementRule {
         var direction = switch (blockFace) {
             case TOP -> "up";
             case BOTTOM -> "down";
-            default -> Objects.requireNonNullElse(mut.player().getPosition().direction(), Vec.ZERO).y() < 0.5 ? "up" : "down";
+            default ->
+                    Objects.requireNonNullElse(mut.player().getPosition().direction(), Vec.ZERO).y() < 0.5 ? "up" : "down";
         };
         var thickness = getThickness(mut.instance(), mut.blockPosition(), direction.equals("up"));
         return block.withProperties(Map.of(
