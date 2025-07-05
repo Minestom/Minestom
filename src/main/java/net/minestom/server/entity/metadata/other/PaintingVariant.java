@@ -2,11 +2,13 @@ package net.minestom.server.entity.metadata.other;
 
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Codec;
 import net.minestom.server.codec.StructCodec;
 import net.minestom.server.network.NetworkBuffer;
 import net.minestom.server.network.NetworkBufferTemplate;
 import net.minestom.server.registry.*;
+import net.minestom.server.utils.validate.Check;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
