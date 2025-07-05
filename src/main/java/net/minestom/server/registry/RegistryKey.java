@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  *
  * @param <T> the type of the registry entry
  */
-@ApiStatus.NonExtendable
 public sealed interface RegistryKey<T> extends Holder<T>, Keyed permits RegistryKeyImpl, StaticProtocolObject {
 
     static <T> NetworkBuffer.@NotNull Type<RegistryKey<T>> networkType(@NotNull Registries.Selector<T> selector) {
