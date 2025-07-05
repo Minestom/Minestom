@@ -23,9 +23,25 @@ record PaintingVariantImpl(
         Check.argCondition(height <= 0, "height must be positive");
     }
 
+    // BELOW ARE WORKAROUND METHODS FOR BROKEN INLINE VALUES
     // See PaintingVariant for the documentation of its brokenness. TLDR: inline values are broken.
     @Override
     public @NotNull Either<RegistryKey<PaintingVariant>, PaintingVariant> unwrap() {
         return Either.left(RegistryKey.unsafeOf(assetId));
+    }
+
+    @Override
+    public @NotNull RegistryKey<PaintingVariant> asKey() {
+        return RegistryKey.unsafeOf(assetId);
+    }
+
+    @Override
+    public boolean isDirect() {
+        return false;
+    }
+
+    @Override
+    public @Nullable PaintingVariant asValue() {
+        return null;
     }
 }
