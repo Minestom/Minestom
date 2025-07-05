@@ -72,4 +72,9 @@ public class FencePlacementRule extends BlockPlacementRule {
         // Fences should only consider updates from solid blocks that are next to them
         return super.considerUpdate(offset, block) && block.isSolid() || block.isAir(); // ensure the block is solid
     }
+
+    @Override
+    public boolean isClientPredicted() {
+        return true;
+    }
 }
