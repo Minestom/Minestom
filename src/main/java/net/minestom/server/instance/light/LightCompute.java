@@ -11,9 +11,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.Objects;
 
+import static net.minestom.server.coordinate.CoordConversion.SECTION_BLOCK_COUNT;
+
 public final class LightCompute {
     static final Direction[] DIRECTIONS = Direction.values();
-    static final int LIGHT_LENGTH = 16 * 16 * 16 / 2;
+    static final int LIGHT_LENGTH = SECTION_BLOCK_COUNT / 2;
     static final int SECTION_SIZE = 16;
 
     public static final byte[] EMPTY_CONTENT = new byte[LIGHT_LENGTH];

@@ -34,13 +34,15 @@ This means you need to add Minestom as a dependency, add your code and compile b
 Minestom is available on [Maven Central](https://mvnrepository.com/artifact/net.minestom/minestom-snapshots),
 and can be installed like the following (Gradle/Groovy):
 
+[![](https://img.shields.io/maven-central/v/net.minestom/minestom)](https://mvnrepository.com/artifact/net.minestom/minestom)
+
 ```groovy
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'net.minestom:minestom-snapshots:<???>'
+    implementation 'net.minestom:minestom:<latest release>'
 }
 ```
 

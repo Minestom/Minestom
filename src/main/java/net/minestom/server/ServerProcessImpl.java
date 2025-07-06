@@ -364,7 +364,7 @@ final class ServerProcessImpl implements ServerProcess {
             throw new IllegalStateException("Server already started");
         }
 
-        LOGGER.info("Starting " + MinecraftServer.getBrandName() + " server.");
+        LOGGER.info("Starting {} ({}) server.", MinecraftServer.getBrandName(), Git.version());
 
         // Init server
         try {
