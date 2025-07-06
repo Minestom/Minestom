@@ -14,11 +14,15 @@ record BuiltinSoundEvent(Key key, int id) implements StaticProtocolObject<Builti
     static final Registry<BuiltinSoundEvent> REGISTRY =
             RegistryData.createStaticRegistry(
                     (RegistryKey<Registry<BuiltinSoundEvent>>) (RegistryKey<?>) BuiltinRegistries.SOUND_EVENT, // Cant expose RegistryKey<BuiltinSoundEvent> directly
-                    (namespace, properties) -> new BuiltinSoundEvent(Key.key(namespace), properties.getInt("id"))
+                    (namespace, properties) -> new BuiltinSoundEvent(namespace.key(), properties.getInt("id"))
             );
 
     static @UnknownNullability SoundEvent get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
+    }
+
+    static @UnknownNullability SoundEvent get(@NotNull RegistryKey<? extends SoundEvent> key) {
+        return REGISTRY.get((RegistryKey<BuiltinSoundEvent>) key);
     }
 
     @Override

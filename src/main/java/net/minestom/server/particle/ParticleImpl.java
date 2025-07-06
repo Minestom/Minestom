@@ -14,7 +14,7 @@ import org.jetbrains.annotations.UnknownNullability;
 
 final class ParticleImpl {
     static final Registry<Particle> REGISTRY = RegistryData.createStaticRegistry(BuiltinRegistries.PARTICLE,
-            (namespace, properties) -> defaultParticle(Key.key(namespace), properties.getInt("id")));
+            (namespace, properties) -> defaultParticle(namespace.key(), properties.getInt("id")));
 
     static @UnknownNullability Particle get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));

@@ -5,6 +5,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -23,7 +24,7 @@ record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) impl
      * @param properties the properties
      * @return a new {@link GameEventImpl}
      */
-    private static GameEventImpl createImpl(String namespace, RegistryData.Properties properties) {
+    private static GameEventImpl createImpl(RegistryKey<GameEvent> namespace, RegistryData.Properties properties) {
         return new GameEventImpl(RegistryData.gameEventEntry(namespace, properties));
     }
 
@@ -38,6 +39,10 @@ record GameEventImpl(RegistryData.GameEventEntry registry, Key key, int id) impl
 
     public static @UnknownNullability GameEvent get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
+    }
+
+    public static @UnknownNullability GameEvent get(@NotNull RegistryKey<GameEvent> key) {
+        return REGISTRY.get(key);
     }
 
 }

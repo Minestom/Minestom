@@ -8,6 +8,7 @@ import net.kyori.adventure.nbt.CompoundBinaryTag;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import net.minestom.server.tag.Tag;
 import net.minestom.server.utils.block.BlockUtils;
 import net.minestom.server.utils.collection.ObjectArray;
@@ -116,6 +117,9 @@ record BlockImpl(@NotNull RegistryData.BlockEntry registry,
 
     static @UnknownNullability Block get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
+    }
+    static @UnknownNullability Block get(@NotNull RegistryKey<Block> key) {
+        return REGISTRY.get(key);
     }
 
     static Block getState(int stateId) {

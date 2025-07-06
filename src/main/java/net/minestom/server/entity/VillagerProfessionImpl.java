@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -13,6 +14,10 @@ public record VillagerProfessionImpl(RegistryData.VillagerProfessionEntry regist
 
     static @UnknownNullability VillagerProfession get(@NotNull String key) {
         return REGISTRY.get(Key.key(key));
+    }
+
+    static @UnknownNullability VillagerProfession get(@NotNull RegistryKey<VillagerProfession> key) {
+        return REGISTRY.get(key);
     }
 
     @Override

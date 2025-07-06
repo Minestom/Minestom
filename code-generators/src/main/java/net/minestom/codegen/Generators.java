@@ -54,18 +54,23 @@ public final class Generators {
         // Static registries
         var staticRegistries = Generators.staticRegistries();
         for (var registry : staticRegistries) {
-            generator.generate(registry.resource(), registry.packageName(), registry.typeName(), registry.loaderName(), registry.generatedName());
+            generator.generateKeys(registry.resource(), registry.packageName(), registry.typeName(), registry.keysName(), true);
+            generator.generate(registry.resource(), registry.packageName(), registry.typeName(), registry.loaderName(), registry.keysName(), registry.generatedName());
         }
 
         // Dynamic registries
         var dynamicRegistries = Generators.dynamicRegistries();
         for (var registry : dynamicRegistries) {
             if (registry.ignoreKeys()) continue;
-            generator.generateKeys(registry.resource(), registry.packageName(), registry.typeName());
+            generator.generateKeys(registry.resource(), registry.packageName(), registry.typeName(), registry.generatedName(), false);
         }
-
         // Combine static registries with custom static registries to generate RegistryKeys
         var staticEntriesCombined = Stream.concat(staticRegistries.stream(), customStaticRegistries.stream()).toList();
+
+        // Generate tags if they exist.
+        for (var tag : Stream.concat(dynamicRegistries.stream(), staticEntriesCombined.stream()).toList()) {
+            generator.generateTags(tag.tagResource(), tag.packageName(), tag.typeName(), tag.tagsName());
+        }
 
         // Generate RegistryKeys
         generator.generateRegistryKeys(staticEntriesCombined, dynamicRegistries, "net.minestom.server.registry", "RegistryKey", "BuiltinRegistries");
@@ -95,7 +100,7 @@ public final class Generators {
                 new StaticEntry("entity_type", "net.minestom.server.entity", "EntityType"),
                 new StaticEntry("potion_effect", "net.minestom.server.potion", "PotionEffect"),
                 new StaticEntry("potion_type", "net.minestom.server.potion", "PotionType"),
-                new StaticEntry("sound_event", "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents", true),
+                new StaticEntry("sound_event", "net.minestom.server.sound", "SoundEvent", "BuiltinSoundEvent", "SoundEvents","SoundEventKeys", true),
                 new StaticEntry("custom_statistics", "net.minestom.server.statistic", "StatisticType"),
                 new StaticEntry("attribute", "net.minestom.server.entity.attribute", "Attribute"),
                 new StaticEntry("feature_flag", "net.minestom.server", "FeatureFlag"),
@@ -126,7 +131,7 @@ public final class Generators {
                 new DynamicEntry("frog_variant", "net.minestom.server.entity.metadata.animal", "FrogVariant"),
                 new DynamicEntry("pig_variant", "net.minestom.server.entity.metadata.animal", "PigVariant"),
                 new DynamicEntry("worldgen/biome", "net.minestom.server.world.biome", "Biome"),
-                new DynamicEntry("dialog", "net.minestom.server.dialog", "Dialog", true)
+                new DynamicEntry("dialog", "net.minestom.server.dialog", "Dialog", "Dialogs", true)
         );
     }
 
@@ -152,29 +157,40 @@ public final class Generators {
 
     public sealed interface Entry {
         String namespace();
+        String packageName();
+        String typeName();
+        String generatedName();
+
+        default String tagsName() {
+            return typeName() + "Tags";
+        }
 
         default InputStream resource() {
             return Generators.class.getResourceAsStream("/%s.json".formatted(namespace()));
         }
+
+        default InputStream tagResource() {
+            return Generators.class.getResourceAsStream("/tags/%s.json".formatted(namespace()));
+        }
     }
 
-    public record StaticEntry(String namespace, String packageName, String typeName, String loaderName, String generatedName, boolean wildcardKey) implements Entry {
+    public record StaticEntry(String namespace, String packageName, String typeName, String loaderName, String generatedName, String keysName, boolean wildcardKey) implements Entry {
         public StaticEntry {
             loaderName = Objects.requireNonNullElse(loaderName, typeName);
             generatedName = Objects.requireNonNullElse(generatedName, typeName);
         }
 
         StaticEntry(String namespace, String packageName, String typeName) {
-            this(namespace, packageName, typeName, typeName + "Impl", typeName + "s", false);
+            this(namespace, packageName, typeName, typeName + "Impl", typeName + "s", typeName + "Keys", false);
         }
         StaticEntry(String namespace, String packageName, String typeName, @Nullable String loaderName, @Nullable String generatedName) {
-            this(namespace, packageName, typeName, loaderName, generatedName, false);
+            this(namespace, packageName, typeName, loaderName, generatedName, typeName + "Keys", false);
         }
     }
 
-    public record DynamicEntry(String namespace, String packageName, String typeName, boolean ignoreKeys) implements Entry {
+    public record DynamicEntry(String namespace, String packageName, String typeName, String generatedName, boolean ignoreKeys) implements Entry {
         public DynamicEntry(String namespace, String packageName, String typeName) {
-            this(namespace, packageName, typeName, false);
+            this(namespace, packageName, typeName, typeName + "s", false);
         }
     }
 }

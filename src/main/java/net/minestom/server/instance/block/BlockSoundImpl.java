@@ -4,6 +4,7 @@ import net.kyori.adventure.key.Key;
 import net.minestom.server.registry.Registry;
 import net.minestom.server.registry.RegistryData;
 import net.minestom.server.registry.BuiltinRegistries;
+import net.minestom.server.registry.RegistryKey;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.UnknownNullability;
 
@@ -15,4 +16,7 @@ public record BlockSoundImpl(RegistryData.BlockSoundTypeEntry registry) implemen
         return REGISTRY.get(Key.key(key));
     }
 
+    static @UnknownNullability BlockSoundType get(@NotNull RegistryKey<BlockSoundType> key) {
+        return REGISTRY.get(key);
+    }
 }

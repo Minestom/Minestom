@@ -1,10 +1,9 @@
 package net.minestom.server.registry;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.ToNumberPolicy;
 import com.google.gson.stream.JsonReader;
 import net.kyori.adventure.key.Key;
+import net.kyori.adventure.key.Keyed;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.codec.Result;
 import net.minestom.server.codec.Transcoder;
@@ -50,59 +49,58 @@ import java.util.function.Supplier;
  * Use at your own risk.
  */
 public final class RegistryData {
-    static final Gson GSON = new GsonBuilder().disableHtmlEscaping().disableJdkUnsafe().create();
 
     @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main) {
-        return new BlockEntry(namespace, main, new HashMap<>(), null, null);
-    }
-
-    @ApiStatus.Internal
-    public static BlockEntry block(String namespace, @NotNull Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
-        return new BlockEntry(namespace, main, internCache, parent, parentProperties);
+    public static BlockEntry block(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new BlockEntry(namespace.key(), main, new HashMap<>(), null, null);
     }
 
     @ApiStatus.Internal
-    public static MaterialEntry material(String namespace, @NotNull Properties main) {
-        return new MaterialEntry(namespace, main);
+    public static BlockEntry block(@NotNull Keyed namespace, @NotNull Properties main, Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+        return new BlockEntry(namespace.key(), main, internCache, parent, parentProperties);
     }
 
     @ApiStatus.Internal
-    public static EntityEntry entity(String namespace, @NotNull Properties main) {
-        return new EntityEntry(namespace, main);
+    public static MaterialEntry material(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new MaterialEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static VillagerProfessionEntry villagerProfession(String namespace, @NotNull Properties main) {
-        return new VillagerProfessionEntry(namespace, main);
+    public static EntityEntry entity(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new EntityEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FeatureFlagEntry featureFlag(String namespace, @NotNull Properties main) {
-        return new FeatureFlagEntry(namespace, main);
+    public static VillagerProfessionEntry villagerProfession(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new VillagerProfessionEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static FluidEntry fluid(String namespace, @NotNull Properties main) {
-        return new FluidEntry(namespace, main);
+    public static FeatureFlagEntry featureFlag(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new FeatureFlagEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static PotionEffectEntry potionEffect(String namespace, @NotNull Properties main) {
-        return new PotionEffectEntry(namespace, main);
+    public static FluidEntry fluid(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new FluidEntry(namespace.key(), main);
     }
 
     @ApiStatus.Internal
-    public static AttributeEntry attribute(String namespace, @NotNull Properties main) {
-        return new AttributeEntry(namespace, main);
+    public static PotionEffectEntry potionEffect(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new PotionEffectEntry(namespace.key(), main);
     }
 
-    public static GameEventEntry gameEventEntry(String namespace, Properties properties) {
-        return new GameEventEntry(namespace, properties);
+    @ApiStatus.Internal
+    public static AttributeEntry attribute(@NotNull Keyed namespace, @NotNull Properties main) {
+        return new AttributeEntry(namespace.key(), main);
     }
 
-    public static BlockSoundTypeEntry blockSoundTypeEntry(String namespace, Properties properties) {
-        return new BlockSoundTypeEntry(namespace, properties);
+    public static GameEventEntry gameEventEntry(@NotNull Keyed namespace, Properties properties) {
+        return new GameEventEntry(namespace.key(), properties);
+    }
+
+    public static BlockSoundTypeEntry blockSoundTypeEntry(@NotNull Keyed namespace, Properties properties) {
+        return new BlockSoundTypeEntry(namespace.key(), properties);
     }
 
     /**
@@ -155,18 +153,20 @@ public final class RegistryData {
         var entries = RegistryData.load(String.format("%s.json", registryKey.key().value()), true);
         Map<Key, T> namespaces = new HashMap<>(entries.size());
         ObjectArray<T> ids = ObjectArray.singleThread(entries.size());
-        final DetourRegistry registry = MinecraftServer.detourRegistry();
+        final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         for (var entry : entries.asMap().keySet()) {
+            final RegistryKey<T> key = RegistryKey.unsafeOf(entry);
             final Properties properties = entries.section(entry);
-            final T value = loader.get(entry, properties);
-            if (registry != null) Check.stateCondition(registry.hasDetour(value.key()), "Static registry object {0} has detours registered, which is not currently supported!", value.key());
+            T value = loader.get(key, properties);
+            if (detourRegistry != null) value = detourRegistry.consume(key, value);
             ids.set(value.id(), value);
             namespaces.put(value.key(), value);
         }
         // Load tags if they exist
         Map<TagKey<T>, RegistryTag<T>> tags = loadTags(registryKey.key());
-        if (registry != null) Check.stateCondition(registry.hasDetour(registryKey), "Static registry {0} has detours registered, which is not currently supported!", registryKey);
-        return new StaticRegistry<>(registryKey, namespaces, ids, tags);
+        final Registry<T> staticRegistry = new StaticRegistry<>(registryKey, namespaces, ids, tags);
+        if (detourRegistry != null) detourRegistry.consume(registryKey, staticRegistry);
+        return staticRegistry;
     }
 
     @ApiStatus.Internal
@@ -175,7 +175,7 @@ public final class RegistryData {
         final Map<TagKey<T>, RegistryTag<T>> tags = new HashMap<>(tagJson.size());
         final DetourRegistry detourRegistry = MinecraftServer.detourRegistry();
         for (String tagName : tagJson.asMap().keySet()) {
-            final TagKey<T> tagKey = new TagKeyImpl<>(Key.key(tagName));
+            final TagKey<T> tagKey = new TagKeyImpl<>(Key.key(tagName)); // Value excludes hash.
             loadTag(detourRegistry, tags, tagKey, tagJson); // loadTag will add the tag to the map if it doesn't exist
         }
         return Map.copyOf(tags);
@@ -202,8 +202,9 @@ public final class RegistryData {
         return computedTag;
     }
 
+    @FunctionalInterface
     public interface Loader<T extends StaticProtocolObject<T>> {
-        T get(String namespace, Properties properties);
+        @NotNull T get(RegistryKey<T> key, Properties properties);
     }
 
     public record GameEventEntry(Key key, Properties main) implements Entry {
@@ -240,9 +241,9 @@ public final class RegistryData {
         private final Shape collisionShape;
         private final Shape occlusionShape;
 
-        private BlockEntry(String namespace, Properties main, @NotNull Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
+        private BlockEntry(Key namespace, Properties main, @NotNull Map<Object, Object> internCache, @Nullable BlockEntry parent, @Nullable Properties parentProperties) {
             assert parent == null || !main.asMap().isEmpty() : "BlockEntry cannot be empty if it has a parent";
-            this.key = parent != null ? parent.key : Key.key(namespace);
+            this.key = parent != null ? parent.key : namespace;
             this.id = fromParent(parent, BlockEntry::id, main, "id", Properties::getInt, null);
             this.stateId = fromParent(parent, BlockEntry::stateId, main, "stateId", Properties::getInt, 0); // Parent doesnt have stateId; so we default to 0
             this.translationKey = fromParent(parent, BlockEntry::translationKey, main, "translationKey", Properties::getString, null);
@@ -434,9 +435,9 @@ public final class RegistryData {
 
         private final EntityType entityType;
 
-        private MaterialEntry(String namespace, Properties main) {
+        private MaterialEntry(Key namespace, Properties main) {
             this.prototype = Either.left(main.section("components"));
-            this.key = Key.key(namespace);
+            this.key = namespace;
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
             {
@@ -528,8 +529,8 @@ public final class RegistryData {
         private final Map<String, List<Double>> entityOffsets;
         private final BoundingBox boundingBox;
 
-        public EntityEntry(String namespace, Properties main) {
-            this.key = Key.key(namespace);
+        public EntityEntry(Key namespace, Properties main) {
+            this.key = namespace;
             this.id = main.getInt("id");
             this.translationKey = main.getString("translationKey");
             this.drag = main.getDouble("drag", 0.02);
@@ -630,8 +631,8 @@ public final class RegistryData {
         private final int id;
         private final SoundEvent workSound;
 
-        public VillagerProfessionEntry(String namespace, Properties main) {
-            this.key = Key.key(namespace);
+        public VillagerProfessionEntry(Key namespace, Properties main) {
+            this.key = namespace;
             this.id = main.getInt("id");
             if (main.containsKey("workSound")) {
                 this.workSound = SoundEvent.fromKey(main.getString("workSound"));
@@ -654,14 +655,14 @@ public final class RegistryData {
     }
 
     public record FeatureFlagEntry(Key key, int id) implements Entry {
-        public FeatureFlagEntry(String namespace, Properties main) {
-            this(Key.key(namespace), main.getInt("id"));
+        public FeatureFlagEntry(Key namespace, Properties main) {
+            this(namespace, main.getInt("id"));
         }
     }
 
     public record FluidEntry(Key key, int id) implements Entry {
-        public FluidEntry(String namespace, Properties main) {
-            this(Key.key(namespace), main.getInt("id"));
+        public FluidEntry(Key namespace, Properties main) {
+            this(namespace, main.getInt("id"));
         }
     }
 
@@ -669,8 +670,8 @@ public final class RegistryData {
                                     String translationKey,
                                     int color,
                                     boolean isInstantaneous) implements Entry {
-        public PotionEffectEntry(String namespace, Properties main) {
-            this(Key.key(namespace),
+        public PotionEffectEntry(Key namespace, Properties main) {
+            this(namespace,
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getInt("color"),
@@ -682,8 +683,8 @@ public final class RegistryData {
                                  String translationKey, double defaultValue,
                                  boolean clientSync,
                                  double maxValue, double minValue) implements Entry {
-        public AttributeEntry(String namespace, Properties main) {
-            this(Key.key(namespace),
+        public AttributeEntry(Key namespace, Properties main) {
+            this(namespace,
                     main.getInt("id"),
                     main.getString("translationKey"),
                     main.getDouble("defaultValue"),
@@ -696,8 +697,8 @@ public final class RegistryData {
     public record BlockSoundTypeEntry(@NotNull Key key, float volume, float pitch,
                                       SoundEvent breakSound, SoundEvent hitSound, SoundEvent fallSound,
                                       SoundEvent placeSound, SoundEvent stepSound) {
-        public BlockSoundTypeEntry(String namespace, Properties main) {
-            this(Key.key(namespace), main.getFloat("volume"),
+        public BlockSoundTypeEntry(Key namespace, Properties main) {
+            this(namespace, main.getFloat("volume"),
                     main.getFloat("pitch"), SoundEvent.fromKey(main.getString("breakSound")), SoundEvent.fromKey(main.getString("hitSound")),
                     SoundEvent.fromKey(main.getString("fallSound")), SoundEvent.fromKey(main.getString("placeSound")), SoundEvent.fromKey(main.getString("stepSound")));
         }

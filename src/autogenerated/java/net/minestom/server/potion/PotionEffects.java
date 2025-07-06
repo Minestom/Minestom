@@ -5,81 +5,81 @@ package net.minestom.server.potion;
  */
 @SuppressWarnings("unused")
 interface PotionEffects {
-    PotionEffect SPEED = PotionEffectImpl.get("speed");
+    PotionEffect SPEED = PotionEffectImpl.get(PotionEffectKeys.SPEED);
 
-    PotionEffect SLOWNESS = PotionEffectImpl.get("slowness");
+    PotionEffect SLOWNESS = PotionEffectImpl.get(PotionEffectKeys.SLOWNESS);
 
-    PotionEffect HASTE = PotionEffectImpl.get("haste");
+    PotionEffect HASTE = PotionEffectImpl.get(PotionEffectKeys.HASTE);
 
-    PotionEffect MINING_FATIGUE = PotionEffectImpl.get("mining_fatigue");
+    PotionEffect MINING_FATIGUE = PotionEffectImpl.get(PotionEffectKeys.MINING_FATIGUE);
 
-    PotionEffect STRENGTH = PotionEffectImpl.get("strength");
+    PotionEffect STRENGTH = PotionEffectImpl.get(PotionEffectKeys.STRENGTH);
 
-    PotionEffect INSTANT_HEALTH = PotionEffectImpl.get("instant_health");
+    PotionEffect INSTANT_HEALTH = PotionEffectImpl.get(PotionEffectKeys.INSTANT_HEALTH);
 
-    PotionEffect INSTANT_DAMAGE = PotionEffectImpl.get("instant_damage");
+    PotionEffect INSTANT_DAMAGE = PotionEffectImpl.get(PotionEffectKeys.INSTANT_DAMAGE);
 
-    PotionEffect JUMP_BOOST = PotionEffectImpl.get("jump_boost");
+    PotionEffect JUMP_BOOST = PotionEffectImpl.get(PotionEffectKeys.JUMP_BOOST);
 
-    PotionEffect NAUSEA = PotionEffectImpl.get("nausea");
+    PotionEffect NAUSEA = PotionEffectImpl.get(PotionEffectKeys.NAUSEA);
 
-    PotionEffect REGENERATION = PotionEffectImpl.get("regeneration");
+    PotionEffect REGENERATION = PotionEffectImpl.get(PotionEffectKeys.REGENERATION);
 
-    PotionEffect RESISTANCE = PotionEffectImpl.get("resistance");
+    PotionEffect RESISTANCE = PotionEffectImpl.get(PotionEffectKeys.RESISTANCE);
 
-    PotionEffect FIRE_RESISTANCE = PotionEffectImpl.get("fire_resistance");
+    PotionEffect FIRE_RESISTANCE = PotionEffectImpl.get(PotionEffectKeys.FIRE_RESISTANCE);
 
-    PotionEffect WATER_BREATHING = PotionEffectImpl.get("water_breathing");
+    PotionEffect WATER_BREATHING = PotionEffectImpl.get(PotionEffectKeys.WATER_BREATHING);
 
-    PotionEffect INVISIBILITY = PotionEffectImpl.get("invisibility");
+    PotionEffect INVISIBILITY = PotionEffectImpl.get(PotionEffectKeys.INVISIBILITY);
 
-    PotionEffect BLINDNESS = PotionEffectImpl.get("blindness");
+    PotionEffect BLINDNESS = PotionEffectImpl.get(PotionEffectKeys.BLINDNESS);
 
-    PotionEffect NIGHT_VISION = PotionEffectImpl.get("night_vision");
+    PotionEffect NIGHT_VISION = PotionEffectImpl.get(PotionEffectKeys.NIGHT_VISION);
 
-    PotionEffect HUNGER = PotionEffectImpl.get("hunger");
+    PotionEffect HUNGER = PotionEffectImpl.get(PotionEffectKeys.HUNGER);
 
-    PotionEffect WEAKNESS = PotionEffectImpl.get("weakness");
+    PotionEffect WEAKNESS = PotionEffectImpl.get(PotionEffectKeys.WEAKNESS);
 
-    PotionEffect POISON = PotionEffectImpl.get("poison");
+    PotionEffect POISON = PotionEffectImpl.get(PotionEffectKeys.POISON);
 
-    PotionEffect WITHER = PotionEffectImpl.get("wither");
+    PotionEffect WITHER = PotionEffectImpl.get(PotionEffectKeys.WITHER);
 
-    PotionEffect HEALTH_BOOST = PotionEffectImpl.get("health_boost");
+    PotionEffect HEALTH_BOOST = PotionEffectImpl.get(PotionEffectKeys.HEALTH_BOOST);
 
-    PotionEffect ABSORPTION = PotionEffectImpl.get("absorption");
+    PotionEffect ABSORPTION = PotionEffectImpl.get(PotionEffectKeys.ABSORPTION);
 
-    PotionEffect SATURATION = PotionEffectImpl.get("saturation");
+    PotionEffect SATURATION = PotionEffectImpl.get(PotionEffectKeys.SATURATION);
 
-    PotionEffect GLOWING = PotionEffectImpl.get("glowing");
+    PotionEffect GLOWING = PotionEffectImpl.get(PotionEffectKeys.GLOWING);
 
-    PotionEffect LEVITATION = PotionEffectImpl.get("levitation");
+    PotionEffect LEVITATION = PotionEffectImpl.get(PotionEffectKeys.LEVITATION);
 
-    PotionEffect LUCK = PotionEffectImpl.get("luck");
+    PotionEffect LUCK = PotionEffectImpl.get(PotionEffectKeys.LUCK);
 
-    PotionEffect UNLUCK = PotionEffectImpl.get("unluck");
+    PotionEffect UNLUCK = PotionEffectImpl.get(PotionEffectKeys.UNLUCK);
 
-    PotionEffect SLOW_FALLING = PotionEffectImpl.get("slow_falling");
+    PotionEffect SLOW_FALLING = PotionEffectImpl.get(PotionEffectKeys.SLOW_FALLING);
 
-    PotionEffect CONDUIT_POWER = PotionEffectImpl.get("conduit_power");
+    PotionEffect CONDUIT_POWER = PotionEffectImpl.get(PotionEffectKeys.CONDUIT_POWER);
 
-    PotionEffect DOLPHINS_GRACE = PotionEffectImpl.get("dolphins_grace");
+    PotionEffect DOLPHINS_GRACE = PotionEffectImpl.get(PotionEffectKeys.DOLPHINS_GRACE);
 
-    PotionEffect BAD_OMEN = PotionEffectImpl.get("bad_omen");
+    PotionEffect BAD_OMEN = PotionEffectImpl.get(PotionEffectKeys.BAD_OMEN);
 
-    PotionEffect HERO_OF_THE_VILLAGE = PotionEffectImpl.get("hero_of_the_village");
+    PotionEffect HERO_OF_THE_VILLAGE = PotionEffectImpl.get(PotionEffectKeys.HERO_OF_THE_VILLAGE);
 
-    PotionEffect DARKNESS = PotionEffectImpl.get("darkness");
+    PotionEffect DARKNESS = PotionEffectImpl.get(PotionEffectKeys.DARKNESS);
 
-    PotionEffect TRIAL_OMEN = PotionEffectImpl.get("trial_omen");
+    PotionEffect TRIAL_OMEN = PotionEffectImpl.get(PotionEffectKeys.TRIAL_OMEN);
 
-    PotionEffect RAID_OMEN = PotionEffectImpl.get("raid_omen");
+    PotionEffect RAID_OMEN = PotionEffectImpl.get(PotionEffectKeys.RAID_OMEN);
 
-    PotionEffect WIND_CHARGED = PotionEffectImpl.get("wind_charged");
+    PotionEffect WIND_CHARGED = PotionEffectImpl.get(PotionEffectKeys.WIND_CHARGED);
 
-    PotionEffect WEAVING = PotionEffectImpl.get("weaving");
+    PotionEffect WEAVING = PotionEffectImpl.get(PotionEffectKeys.WEAVING);
 
-    PotionEffect OOZING = PotionEffectImpl.get("oozing");
+    PotionEffect OOZING = PotionEffectImpl.get(PotionEffectKeys.OOZING);
 
-    PotionEffect INFESTED = PotionEffectImpl.get("infested");
+    PotionEffect INFESTED = PotionEffectImpl.get(PotionEffectKeys.INFESTED);
 }

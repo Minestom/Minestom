@@ -5,95 +5,95 @@ package net.minestom.server.potion;
  */
 @SuppressWarnings("unused")
 interface PotionTypes {
-    PotionType WATER = PotionTypeImpl.get("water");
+    PotionType WATER = PotionTypeImpl.get(PotionTypeKeys.WATER);
 
-    PotionType MUNDANE = PotionTypeImpl.get("mundane");
+    PotionType MUNDANE = PotionTypeImpl.get(PotionTypeKeys.MUNDANE);
 
-    PotionType THICK = PotionTypeImpl.get("thick");
+    PotionType THICK = PotionTypeImpl.get(PotionTypeKeys.THICK);
 
-    PotionType AWKWARD = PotionTypeImpl.get("awkward");
+    PotionType AWKWARD = PotionTypeImpl.get(PotionTypeKeys.AWKWARD);
 
-    PotionType NIGHT_VISION = PotionTypeImpl.get("night_vision");
+    PotionType NIGHT_VISION = PotionTypeImpl.get(PotionTypeKeys.NIGHT_VISION);
 
-    PotionType LONG_NIGHT_VISION = PotionTypeImpl.get("long_night_vision");
+    PotionType LONG_NIGHT_VISION = PotionTypeImpl.get(PotionTypeKeys.LONG_NIGHT_VISION);
 
-    PotionType INVISIBILITY = PotionTypeImpl.get("invisibility");
+    PotionType INVISIBILITY = PotionTypeImpl.get(PotionTypeKeys.INVISIBILITY);
 
-    PotionType LONG_INVISIBILITY = PotionTypeImpl.get("long_invisibility");
+    PotionType LONG_INVISIBILITY = PotionTypeImpl.get(PotionTypeKeys.LONG_INVISIBILITY);
 
-    PotionType LEAPING = PotionTypeImpl.get("leaping");
+    PotionType LEAPING = PotionTypeImpl.get(PotionTypeKeys.LEAPING);
 
-    PotionType LONG_LEAPING = PotionTypeImpl.get("long_leaping");
+    PotionType LONG_LEAPING = PotionTypeImpl.get(PotionTypeKeys.LONG_LEAPING);
 
-    PotionType STRONG_LEAPING = PotionTypeImpl.get("strong_leaping");
+    PotionType STRONG_LEAPING = PotionTypeImpl.get(PotionTypeKeys.STRONG_LEAPING);
 
-    PotionType FIRE_RESISTANCE = PotionTypeImpl.get("fire_resistance");
+    PotionType FIRE_RESISTANCE = PotionTypeImpl.get(PotionTypeKeys.FIRE_RESISTANCE);
 
-    PotionType LONG_FIRE_RESISTANCE = PotionTypeImpl.get("long_fire_resistance");
+    PotionType LONG_FIRE_RESISTANCE = PotionTypeImpl.get(PotionTypeKeys.LONG_FIRE_RESISTANCE);
 
-    PotionType SWIFTNESS = PotionTypeImpl.get("swiftness");
+    PotionType SWIFTNESS = PotionTypeImpl.get(PotionTypeKeys.SWIFTNESS);
 
-    PotionType LONG_SWIFTNESS = PotionTypeImpl.get("long_swiftness");
+    PotionType LONG_SWIFTNESS = PotionTypeImpl.get(PotionTypeKeys.LONG_SWIFTNESS);
 
-    PotionType STRONG_SWIFTNESS = PotionTypeImpl.get("strong_swiftness");
+    PotionType STRONG_SWIFTNESS = PotionTypeImpl.get(PotionTypeKeys.STRONG_SWIFTNESS);
 
-    PotionType SLOWNESS = PotionTypeImpl.get("slowness");
+    PotionType SLOWNESS = PotionTypeImpl.get(PotionTypeKeys.SLOWNESS);
 
-    PotionType LONG_SLOWNESS = PotionTypeImpl.get("long_slowness");
+    PotionType LONG_SLOWNESS = PotionTypeImpl.get(PotionTypeKeys.LONG_SLOWNESS);
 
-    PotionType STRONG_SLOWNESS = PotionTypeImpl.get("strong_slowness");
+    PotionType STRONG_SLOWNESS = PotionTypeImpl.get(PotionTypeKeys.STRONG_SLOWNESS);
 
-    PotionType TURTLE_MASTER = PotionTypeImpl.get("turtle_master");
+    PotionType TURTLE_MASTER = PotionTypeImpl.get(PotionTypeKeys.TURTLE_MASTER);
 
-    PotionType LONG_TURTLE_MASTER = PotionTypeImpl.get("long_turtle_master");
+    PotionType LONG_TURTLE_MASTER = PotionTypeImpl.get(PotionTypeKeys.LONG_TURTLE_MASTER);
 
-    PotionType STRONG_TURTLE_MASTER = PotionTypeImpl.get("strong_turtle_master");
+    PotionType STRONG_TURTLE_MASTER = PotionTypeImpl.get(PotionTypeKeys.STRONG_TURTLE_MASTER);
 
-    PotionType WATER_BREATHING = PotionTypeImpl.get("water_breathing");
+    PotionType WATER_BREATHING = PotionTypeImpl.get(PotionTypeKeys.WATER_BREATHING);
 
-    PotionType LONG_WATER_BREATHING = PotionTypeImpl.get("long_water_breathing");
+    PotionType LONG_WATER_BREATHING = PotionTypeImpl.get(PotionTypeKeys.LONG_WATER_BREATHING);
 
-    PotionType HEALING = PotionTypeImpl.get("healing");
+    PotionType HEALING = PotionTypeImpl.get(PotionTypeKeys.HEALING);
 
-    PotionType STRONG_HEALING = PotionTypeImpl.get("strong_healing");
+    PotionType STRONG_HEALING = PotionTypeImpl.get(PotionTypeKeys.STRONG_HEALING);
 
-    PotionType HARMING = PotionTypeImpl.get("harming");
+    PotionType HARMING = PotionTypeImpl.get(PotionTypeKeys.HARMING);
 
-    PotionType STRONG_HARMING = PotionTypeImpl.get("strong_harming");
+    PotionType STRONG_HARMING = PotionTypeImpl.get(PotionTypeKeys.STRONG_HARMING);
 
-    PotionType POISON = PotionTypeImpl.get("poison");
+    PotionType POISON = PotionTypeImpl.get(PotionTypeKeys.POISON);
 
-    PotionType LONG_POISON = PotionTypeImpl.get("long_poison");
+    PotionType LONG_POISON = PotionTypeImpl.get(PotionTypeKeys.LONG_POISON);
 
-    PotionType STRONG_POISON = PotionTypeImpl.get("strong_poison");
+    PotionType STRONG_POISON = PotionTypeImpl.get(PotionTypeKeys.STRONG_POISON);
 
-    PotionType REGENERATION = PotionTypeImpl.get("regeneration");
+    PotionType REGENERATION = PotionTypeImpl.get(PotionTypeKeys.REGENERATION);
 
-    PotionType LONG_REGENERATION = PotionTypeImpl.get("long_regeneration");
+    PotionType LONG_REGENERATION = PotionTypeImpl.get(PotionTypeKeys.LONG_REGENERATION);
 
-    PotionType STRONG_REGENERATION = PotionTypeImpl.get("strong_regeneration");
+    PotionType STRONG_REGENERATION = PotionTypeImpl.get(PotionTypeKeys.STRONG_REGENERATION);
 
-    PotionType STRENGTH = PotionTypeImpl.get("strength");
+    PotionType STRENGTH = PotionTypeImpl.get(PotionTypeKeys.STRENGTH);
 
-    PotionType LONG_STRENGTH = PotionTypeImpl.get("long_strength");
+    PotionType LONG_STRENGTH = PotionTypeImpl.get(PotionTypeKeys.LONG_STRENGTH);
 
-    PotionType STRONG_STRENGTH = PotionTypeImpl.get("strong_strength");
+    PotionType STRONG_STRENGTH = PotionTypeImpl.get(PotionTypeKeys.STRONG_STRENGTH);
 
-    PotionType WEAKNESS = PotionTypeImpl.get("weakness");
+    PotionType WEAKNESS = PotionTypeImpl.get(PotionTypeKeys.WEAKNESS);
 
-    PotionType LONG_WEAKNESS = PotionTypeImpl.get("long_weakness");
+    PotionType LONG_WEAKNESS = PotionTypeImpl.get(PotionTypeKeys.LONG_WEAKNESS);
 
-    PotionType LUCK = PotionTypeImpl.get("luck");
+    PotionType LUCK = PotionTypeImpl.get(PotionTypeKeys.LUCK);
 
-    PotionType SLOW_FALLING = PotionTypeImpl.get("slow_falling");
+    PotionType SLOW_FALLING = PotionTypeImpl.get(PotionTypeKeys.SLOW_FALLING);
 
-    PotionType LONG_SLOW_FALLING = PotionTypeImpl.get("long_slow_falling");
+    PotionType LONG_SLOW_FALLING = PotionTypeImpl.get(PotionTypeKeys.LONG_SLOW_FALLING);
 
-    PotionType WIND_CHARGED = PotionTypeImpl.get("wind_charged");
+    PotionType WIND_CHARGED = PotionTypeImpl.get(PotionTypeKeys.WIND_CHARGED);
 
-    PotionType WEAVING = PotionTypeImpl.get("weaving");
+    PotionType WEAVING = PotionTypeImpl.get(PotionTypeKeys.WEAVING);
 
-    PotionType OOZING = PotionTypeImpl.get("oozing");
+    PotionType OOZING = PotionTypeImpl.get(PotionTypeKeys.OOZING);
 
-    PotionType INFESTED = PotionTypeImpl.get("infested");
+    PotionType INFESTED = PotionTypeImpl.get(PotionTypeKeys.INFESTED);
 }
