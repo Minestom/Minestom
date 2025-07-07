@@ -45,6 +45,11 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Version: ${VERSION}" >> $GITHUB_STEP_SUMMARY
 
+      - name: Build javadoc
+        run: ./gradlew javadoc
+        env:
+          MINESTOM_VERSION: ${{ steps.version.outputs.version }}
+
       - name: Publish to Maven Central
         if: github.repository_owner == 'Minestom'
         run: ./gradlew publishAggregationToCentralPortal
@@ -55,11 +60,20 @@ jobs:
           GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSWORD }}
 
+      - name: Deploy javadoc to its assigned branch
+        uses: s0/git-publish-subdir-action@develop
+        env:
+          REPO: self
+          BRANCH: javadoc
+          FOLDER: build/docs/javadoc
+          SKIP_EMPTY_COMMITS: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLEAR_GLOBS_FILE: ".github/javadoc-publish-clear"
+
       - name: Create Tag
         run: |
           git tag ${{ steps.version.outputs.version }}
           git push origin ${{ steps.version.outputs.version }}
-
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
