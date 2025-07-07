@@ -3,6 +3,7 @@ package net.minestom.server.instance.block;
 import net.kyori.adventure.key.Key;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.entity.Entity;
+import net.minestom.server.entity.MetadataDef;
 import net.minestom.server.instance.Instance;
 import net.minestom.server.tag.Tag;
 import org.jetbrains.annotations.ApiStatus;
@@ -60,7 +61,11 @@ public interface BlockHandler {
         return false;
     }
 
-    /**
+    default boolean onInteract(@NotNull MetadataDef.Interaction interaction) {
+        return true;
+    }
+
+  /**
      * Specifies which block entity tags should be sent to the player.
      *
      * @return The list of tags from this block's block entity that should be sent to the player
