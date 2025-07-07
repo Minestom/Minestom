@@ -128,11 +128,6 @@ public class BlockPlacementRuleIntegrationTest {
             public @NotNull Block blockUpdate(@NotNull BlockChange mutation) {
                 return super.blockUpdate(mutation);
             }
-
-            @Override
-            public boolean isClientPredicted() {
-                return false;
-            }
         });
 
         var tracker1 = connection1.trackIncoming();

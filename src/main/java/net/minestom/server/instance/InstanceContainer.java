@@ -184,6 +184,7 @@ public class InstanceContainer extends Instance {
                     chunk.sendPacketToViewers(new BlockEntityDataPacket(blockPosition, registry.blockEntityId(), data));
                 }
             }
+            EventDispatcher.call(new InstanceBlockUpdateEvent(this, new BlockVec(blockPosition), block));
         }
     }
 
