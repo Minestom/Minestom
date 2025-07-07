@@ -106,6 +106,7 @@ public final class PacketListenerManager {
         setPlayListener(ClientSelectBundleItemPacket.class, (packet, player) -> {/* noop for now */});
         setPlayListener(ClientSignedCommandChatPacket.class, ChatMessageListener::signedCommandChatListener);
         setPlayListener(ClientCustomClickActionPacket.class, CustomClickListener::listener);
+        setPlayListener(ClientUpdateSignPacket.class, EditSignListener::listener);
     }
 
     /**
